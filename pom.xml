@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.syncnapsis.syncnapsis-core</groupId>
+	<artifactId>syncnapsis-core-utils</artifactId>
+	<packaging>jar</packaging>
+	<version>${syncnapsis-core-utils.version}</version>
+
+	<parent>
+		<groupId>com.syncnapsis</groupId>
+		<artifactId>syncnapsis-core</artifactId>
+		<version>1.0.0</version>
+	</parent>
+
+	<build>
+		<defaultGoal>install</defaultGoal>
+	</build>
+
+	<dependencies>
+		<!-- BASE - START -->
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>${slf4j.version}</version>
+		</dependency>
+		<!-- BASE - END -->
+		<!-- SPRING - START -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-beans</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-core</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-jdbc</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-orm</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-aop</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-aspects</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context-support</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-web</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-webmvc</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		<!-- SPRING - END -->
+		<!-- DATABASE - START -->
+		<dependency>
+			<groupId>javax.persistence</groupId>
+			<artifactId>persistence-api</artifactId>
+			<version>${jpa.version}</version>
+			<optional>true</optional>
+		</dependency>
+		<!-- DATABASE - END -->
+		<!-- WEB - START -->
+		<dependency>
+			<groupId>org.glassfish</groupId>
+			<artifactId>javax.servlet</artifactId>
+			<version>${servlet.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>javax.mail</groupId>
+			<artifactId>mail</artifactId>
+			<version>${javamail.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+			<version>${jackson.version}</version>
+		</dependency>
+		<!-- WEB - END -->
+		<!-- COMMONS - START -->
+		<dependency>
+			<groupId>commons-beanutils</groupId>
+			<artifactId>commons-beanutils</artifactId>
+			<version>${commons.beanutils.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-collections</groupId>
+			<artifactId>commons-collections</artifactId>
+			<version>${commons.collections.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-dbcp</groupId>
+			<artifactId>commons-dbcp</artifactId>
+			<version>${commons.dbcp.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-fileupload</groupId>
+			<artifactId>commons-fileupload</artifactId>
+			<version>${commons.fileupload.version}</version>
+			<exclusions>
+				<exclusion>
+					<artifactId>commons-io</artifactId>
+					<groupId>commons-io</groupId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>commons-lang</groupId>
+			<artifactId>commons-lang</artifactId>
+			<version>${commons.lang.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-net</groupId>
+			<artifactId>commons-net</artifactId>
+			<version>${commons.net.version}</version>
+		</dependency>
+		<!-- COMMONS - END -->
+		<!-- TESTS - START -->
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>${junit.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-test</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.jmock</groupId>
+			<artifactId>jmock</artifactId>
+			<version>${jmock.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.subethamail</groupId>
+			<artifactId>subethasmtp-wiser</artifactId>
+			<version>${wiser.version}</version>
+		</dependency>
+		<!-- TESTS - END -->
+	</dependencies>
+
+	<profiles>
+	</profiles>
+
+	<properties>
+		<!-- Global-Dependencies -->
+		<!-- slf4j.version - see super pom -->
+		<!-- servlet.version - see super pom -->
+
+		<!-- Database-Dependecies -->
+		<jpa.version>1.0.2</jpa.version> <!-- 19.01.2012 -->
+
+		<!-- Web-Dependencies -->
+		<javamail.version>1.4.4</javamail.version> <!-- 19.01.2012 -->
+		<jackson.version>2.0.1</jackson.version> <!-- 02.05.2012 -->
+
+		<!-- Spring-Dependencies -->
+		<spring.version>3.1.0.RELEASE</spring.version> <!-- 19.01.2012 -->
+
+		<!-- Commons-Dependencies -->
+		<commons.beanutils.version>1.8.3</commons.beanutils.version> <!-- 19.01.2012 -->
+		<commons.collections.version>3.2.1</commons.collections.version> <!-- 19.01.2012 -->
+		<commons.dbcp.version>1.4</commons.dbcp.version> <!-- 19.01.2012 -->
+		<commons.fileupload.version>1.2.2</commons.fileupload.version> <!-- 19.01.2012 -->
+		<commons.io.version>2.1</commons.io.version> <!-- 19.01.2012 -->
+		<commons.lang.version>2.6</commons.lang.version> <!-- 19.01.2012 -->
+		<commons.net.version>3.0.1</commons.net.version> <!-- 19.01.2012 -->
+
+		<!-- Testing dependency versions -->
+		<jmock.version>2.5.1</jmock.version>
+		<junit.version>4.7</junit.version>
+		<wiser.version>1.2</wiser.version>
+	</properties>
+</project>
