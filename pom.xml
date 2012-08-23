@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.syncnapsis.syncnapsis-core</groupId>
+    <artifactId>syncnapsis-core-data</artifactId>
+    <packaging>jar</packaging>
+    <version>${syncnapsis-core-data.version}</version>
+	
+	<parent>
+		<groupId>com.syncnapsis</groupId>
+		<artifactId>syncnapsis-core</artifactId>
+		<version>1.0.0</version>
+	</parent>
+    
+    <build>
+        <defaultGoal>install</defaultGoal>
+    </build>
+	
+    <dependencies>
+        <dependency>
+            <groupId>com.syncnapsis.syncnapsis-core</groupId>
+            <artifactId>syncnapsis-core-utils</artifactId>
+            <version>${syncnapsis-core-utils.version}</version>
+        </dependency>
+		<!-- DATABASE - START -->
+		<dependency>
+			<groupId>${jdbc.groupId}</groupId>
+			<artifactId>${jdbc.artifactId}</artifactId>
+			<version>${jdbc.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-core</artifactId>
+			<version>${hibernate.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>commons-collections</groupId>
+					<artifactId>commons-collections</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<!-- DATABASE - END -->
+    </dependencies>
+
+    <profiles> 
+    </profiles>
+
+    <properties>
+    	<!-- Database-Dependencies -->
+		<hibernate.version>4.0.1.Final</hibernate.version> <!-- 19.01.2012 -->
+	</properties>
+</project>
