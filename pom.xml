@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.syncnapsis.syncnapsis-dev</groupId>
+    <artifactId>syncnapsis-dev-utils</artifactId>
+    <packaging>jar</packaging>
+    <version>${syncnapsis-dev-utils.version}</version>
+	
+	<parent>
+		<groupId>com.syncnapsis</groupId>
+		<artifactId>syncnapsis-dev</artifactId>
+		<version>1.0.0</version>
+	</parent>
+    
+    <build>
+        <defaultGoal>install</defaultGoal>
+    </build>
+	
+    <dependencies>
+        <dependency>
+            <groupId>com.syncnapsis.syncnapsis-core</groupId>
+            <artifactId>syncnapsis-core-game-base</artifactId>
+            <version>${syncnapsis-core-game-base.version}</version>
+            <scope>provided</scope>
+        </dependency>
+    	<!-- UTILS - START -->
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi</artifactId> 
+            <version>${poi.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.dbunit</groupId>
+            <artifactId>dbunit</artifactId>
+            <version>${dbunit.version}</version>
+           	<exclusions>
+           		<exclusion>
+		            <groupId>junit</groupId>
+		            <artifactId>junit</artifactId>
+           		</exclusion>
+           	</exclusions>
+        </dependency>
+    	<!-- UTILS - END -->
+    </dependencies>
+
+    <profiles> 
+    </profiles>
+
+    <properties>
+		<!-- Util-Dependencies -->
+        <poi.version>3.6</poi.version>
+		<dbunit.version>2.4.7</dbunit.version>
+    </properties>
+</project>
