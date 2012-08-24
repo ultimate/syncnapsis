@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.syncnapsis.syncnapsis-modules</groupId>
+    <artifactId>syncnapsis-modules-stats-api</artifactId>
+    <packaging>jar</packaging>
+    <version>${syncnapsis-modules-stats-api.version}</version>
+	
+	<parent>
+		<groupId>com.syncnapsis</groupId>
+		<artifactId>syncnapsis-modules</artifactId>
+		<version>1.0.0</version>
+	</parent>
+    
+    <build>
+        <defaultGoal>install</defaultGoal>
+    </build>
+	
+    <dependencies>
+        <dependency>
+            <groupId>com.syncnapsis.syncnapsis-core</groupId>
+            <artifactId>syncnapsis-core-data</artifactId>
+            <version>${syncnapsis-core-data.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.syncnapsis.syncnapsis-core</groupId>
+            <artifactId>syncnapsis-core-utils</artifactId>
+            <version>${syncnapsis-core-utils.version}</version>
+        </dependency>
+    </dependencies>
+
+    <profiles> 
+    </profiles>
+
+    <properties>
+    </properties>
+</project>
