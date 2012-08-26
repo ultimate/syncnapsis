@@ -1,0 +1,118 @@
+// Events-Package
+var Events = {};
+
+// Event-Names
+Events.CLICK = "click";
+Events.KEYUP = "keyup";
+Events.KEYDOWN = "keydown";
+
+// fix IE Events Names
+// do that before defining any further constants or functions!!!
+if(!document.addEventListener)
+	for(e in Events)
+		Events[e] = "on" + Events[e];
+
+// Event-Keys
+Events.KEY_ALT = (1 << 0);
+Events.KEY_CTRL = (1 << 1);
+Events.KEY_SHIFT = (1 << 2);
+// Event-Mouse-Buttons
+Events.BUTTON_LEFT = 0;
+Events.BUTTON_CENTER = 1;
+Events.BUTTON_RIGHT = 2;
+
+// Browser-dependant hack...
+if(document.addEventListener)
+{
+	Events.addEventListener = function(event, eventListener, component)
+	{
+		if(!component)
+			component = document;
+		component.addEventListener(event, eventListener, false);
+	};
+
+	Events.getKeyCode = function(event)
+	{
+		return event.which;
+	};
+}
+else
+{
+	Events.addEventListener = function(event, eventListener, component)
+	{
+		if(!component)
+			component = document;
+		component.attachEvent(event, eventListener);
+	};
+
+	Events.getKeyCode = function(event)
+	{
+		return event.keyCode;
+	};
+}
+
+Events.hasModifiers = function(event, modifiers)
+{
+	var hasAll = true;
+	if(modifiers & Events.KEY_ALT)
+		hasAll = hasAll && event.altKey;
+	else
+		hasAll = hasAll && !event.altKey;
+	if(modifiers & Events.KEY_CTRL)
+		hasAll = hasAll && event.ctrlKey;
+	else
+		hasAll = hasAll && !event.ctrlKey;
+	if(modifiers & Events.KEY_SHIFT)
+		hasAll = hasAll && event.shiftKey;
+	else
+		hasAll = hasAll && !event.shiftKey;
+	return hasAll;
+};
+
+Events.addKeyEvent = function(key, modifiers, eventListener)
+{
+	if(key.length > 1)
+		throw new Error("key Event should only be bound to single key + modifiers");
+
+	var keyCode = key.toUpperCase().charCodeAt(0);
+
+	Events.addEventListener(Events.KEYUP, function(e)
+	{
+		if((Events.getKeyCode(e) == keyCode) && Events.hasModifiers(e, modifiers))
+		{
+			eventListener.call(null, e);
+		}
+	});
+};
+
+Events.EventHandler = function(handlerObject, handlerMethod)
+{
+	this._handlerObject = handlerObject;
+	this._handlerMethod = handlerMethod;
+};
+
+Events.EventHandler.prototype.onEvent = function(e)
+{
+	return this._handlerMethod.call(this._handlerObject, e);
+};
+
+Events.EventHandler.prototype.anonymous = function()
+{
+//	return Events.wrapEventHandler(this._handlerObject, this._handlerMethod);
+	return Events.wrapEventHandler(this, this.onEvent);
+};
+
+Events.wrapEventHandler = function(handlerObject, handlerMethod)
+{
+	return function(e)
+	{
+		return handlerMethod.call(handlerObject, e);
+	};
+};
+
+Events.emptyEventHandler = function()
+{
+	return Events.wrapEventHandler(null, function()
+	{
+	});
+};

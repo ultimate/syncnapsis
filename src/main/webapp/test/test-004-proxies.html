@@ -1,0 +1,36 @@
+<html>
+	<head>	
+		<script type="text/javascript" src="../scripts/lib/date.format.js"></script>
+		<!-- 
+		<script type="text/javascript" src="../scripts/util/Events.js"></script>
+		<script type="text/javascript" src="../scripts/util/Console.js"></script>
+		 -->
+		<script type="text/javascript" src="../scripts/util/Strings.js"></script>
+		<script type="text/javascript" src="../scripts/util/Reflections.js"></script>
+		<script type="text/javascript" src="../scripts/util/Proxies.js"></script>
+		<script type="text/javascript">
+			myInterface = function()
+			{
+				this.doX = function(arg1) {};
+				this.doY = function(arg2, arg3) {};
+				this.doZ = function() {};
+			}
+			
+			var ih = new Proxies.InvocationHandler();
+			ih.invoke = function(proxy, method, args)
+			{
+				var proxyName = Reflections.resolveName(proxy);
+				var methodName = Reflections.resolveName(method, proxy);
+				
+				console.log(proxy + "." + method + "(" + args + ")");
+				console.log(proxyName + "." + methodName + "(" + args + ")");
+			}
+			
+			var proxy1 = Proxies.newProxyInstance(new myInterface(), ih);
+			var proxy2 = Proxies.newProxyInstance(myInterface, ih);
+		</script>
+	</head>
+	<body>
+		asdf
+	</body>
+</html>

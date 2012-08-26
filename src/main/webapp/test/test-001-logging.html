@@ -1,0 +1,26 @@
+<html>
+	<head>	
+		<script type="text/javascript" src="../scripts/lib/date.format.js"></script>
+		<script type="text/javascript" src="../scripts/util/Events.js"></script>
+		<script type="text/javascript" src="../scripts/util/Logging.js"></script>
+		
+		<script type="text/javascript">
+		 	var testlogger;
+		 	var timeout = 10000;
+		 	
+			function init()
+			{
+				testlogger = new Logging.Logger("test", Logging.LEVEL_TRACE);
+				setTimeout("log()", timeout);
+			}
+			
+			function log()
+			{
+				testlogger.debug("asldkjfh");
+				setTimeout("log()", timeout);
+			}		
+		</script>
+	</head>
+	<body onload="init();">
+	</body>
+</html>

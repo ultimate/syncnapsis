@@ -1,0 +1,82 @@
+package com.syncnapsis.tests;
+
+import java.lang.reflect.Method;
+import java.util.Arrays;
+
+import junit.framework.TestCase;
+
+import org.jmock.Mockery;
+import com.syncnapsis.utils.ReflectionsUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+public abstract class LoggerTestCase extends TestCase
+{
+	protected Logger	logger		= LoggerFactory.getLogger(getClass());
+	protected Mockery	mockContext	= new Mockery();
+	
+	@Override
+	protected void tearDown() throws Exception
+	{
+		super.tearDown();
+	}
+
+	protected class MethodCall
+	{
+		private String		method;
+		private Object		out;
+		private Object[]	in;
+
+		public MethodCall(String method, Object out, Object... in)
+		{
+			super();
+			this.method = method;
+			this.out = out;
+			this.in = in;
+		}
+
+		public String getMethod()
+		{
+			return method;
+		}
+
+		public Object getOut()
+		{
+			return out;
+		}
+
+		public Object[] getIn()
+		{
+			return in;
+		}
+	}
+
+	protected Method getMethod(Class<?> cls, MethodCall call)
+	{
+		return ReflectionsUtil.findMethod(cls, call.getMethod(), call.getIn());
+	}
+
+	/**
+	 * Asserts that two arrays are equal. If they are not
+	 * an AssertionFailedError is thrown.
+	 */
+	public static <T> void assertEquals(String message, T[] expected, T[] actual)
+	{
+		if(expected == null && actual == null)
+			return;
+		if(expected != null && expected.equals(actual))
+			return;
+		if(Arrays.equals(expected, actual))
+			return;
+		failNotEquals(message, Arrays.asList(expected), Arrays.asList(actual));
+	}
+
+	/**
+	 * Asserts that two arrays are equal. If they are not
+	 * an AssertionFailedError is thrown.
+	 */
+	public static <T> void assertEquals(T[] expected, T[] actual)
+	{
+		assertEquals(null, expected, actual);
+	}
+}

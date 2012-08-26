@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+            http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd
+            http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.0.xsd"
+       default-lazy-init="true">
+    
+    <!-- =================================================================== -->
+    <!-- Utilities					                                         -->
+    <!-- =================================================================== -->
+    
+    <bean id="applicationContextUtil" class="com.syncnapsis.utils.ApplicationContextUtil" lazy-init="false" /> 
+
+    <bean id="timeProvider" class="com.syncnapsis.providers.impl.SystemTimeProvider"/>
+        
+    <bean id="mockFilter" class="com.syncnapsis.mock.MockFilter"/>    
+
+    <bean id="mockServlet" class="com.syncnapsis.mock.MockServlet"/>    
+    
+    <bean id="duplicate" class="com.syncnapsis.mock.MockTimeProvider" name="dup1, dup2"/>
+</beans>
