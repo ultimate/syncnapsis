@@ -1,0 +1,86 @@
+package com.syncnapsis.data.service;
+
+import java.io.Serializable;
+import java.util.List;
+
+import com.syncnapsis.data.model.base.BaseObject;
+
+/**
+ * Generischer Manager, der die Standard CRUD-Operationen (Create, Retrieve,
+ * Update, Delete) generisch für alle Model-Klassen zur Verfügung stellt.
+ * 
+ * @param <T> die Model-Klasse
+ * @param <PK> die Klasse des Primärschlüssels
+ * @author ultimate
+ */
+public interface GenericManager<T extends BaseObject<PK>, PK extends Serializable>
+{
+	/**
+	 * Generische Methode um alle Objekte eines Typs zu laden (nur aktivierte).
+	 * 
+	 * @return eine Liste aller Objekte der Model-Klasse
+	 */
+	public List<T> getAll();
+
+	/**
+	 * Generische Methode um alle Objekte eines Typs zu laden. Es kann gewählt
+	 * werden, ob nur aktivierte oder aktiviert und deaktiviert Objekte geladen
+	 * werden sollen.
+	 * 
+	 * @return eine Liste aller Objekte der Model-Klasse
+	 */
+	public List<T> getAll(boolean returnOnlyActivated);
+
+	/**
+	 * Generische Methode um ein Objekt anhand seines Promärschlüssels zu laden.
+	 * 
+	 * @param id - der Primärschlüssel des Objektes
+	 * @return das Objekt
+	 */
+	public T get(PK id);
+
+	/**
+	 * Generische Methode um anhand einer Liste von Primärschlüsseln die
+	 * dazugehörigen Objekte zu laden. Die dazugehörigen Objekte befinden sich
+	 * in der Ergebnisliste an der gleichen Stelle, wie ihr Primärschlüssel in
+	 * der übergeben Liste. Wird zu einem Primärschlüssel kein Objekt gefunden,
+	 * so enthält die Liste an dieser Stelle null.
+	 * 
+	 * @param idList - die Liste der Primärschlüssel
+	 * @return die Liste der Objekte der Model-Klasse zu den übergebenen
+	 *         Primärschlüsseln
+	 */
+	public List<T> getByIdList(List<PK> idList);
+
+	/**
+	 * Prüft, ob ein Objekt dieser Modell-Klasse zu dem gegeben Primärschlüssel
+	 * existiert.
+	 * 
+	 * @param id - der zu prüfende Primärschlüssel
+	 * @return true oder false
+	 */
+	public boolean exists(PK id);
+
+	/**
+	 * Generische Methode um ein Objekt der Modell-Klasse zu speichern. Es
+	 * können sowohl neue Objekte, als auch Veränderungen an existieren Objekten
+	 * gespeichert werden. Nach dem Speichervorgang wird das geänderte Objekt
+	 * zurückgegeben. Es enthält eine neue Versionsnummer und bei
+	 * Neu-Speicherung den zugewiesenen Primärschlüssel.
+	 * 
+	 * @param object - das zu speichernde Objekt
+	 * @return das gespeichert Objekt
+	 */
+	public T save(T object);
+
+	/**
+	 * Generische Methode um eine Objekt der Modell-Klasse zu löschen. Handelt
+	 * es sich bei der Modell-Klasse um eine Subklasse von ActivatableInstance,
+	 * so wird das Objekt deaktiviert anstatt gelöscht zu werden.
+	 * 
+	 * @param object - das zu löschende Objekt
+	 * @return "deleted", wenn das Objekt gelöscht wurde, "deactivated", wenn es
+	 *         deaktiviert wurde
+	 */
+	public String remove(T object);
+}
