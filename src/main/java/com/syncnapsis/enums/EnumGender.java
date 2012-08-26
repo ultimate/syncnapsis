@@ -9,7 +9,7 @@ package com.syncnapsis.enums;
  * 
  * @author ultimate
  */
-public enum EnumSex
+public enum EnumGender
 {
 	/**
 	 * unbekanntes Geschlecht (default)
@@ -37,7 +37,7 @@ public enum EnumSex
 	 * 
 	 * @return das default Geschlect
 	 */
-	public static EnumSex getDefault()
+	public static EnumGender getDefault()
 	{
 		return unknown;
 	}
