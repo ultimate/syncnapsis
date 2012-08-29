@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+            http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd
+            http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.0.xsd"
+       default-lazy-init="true">
+    
+    <!-- =================================================================== -->
+    <!-- Utilities					                                         -->
+    <!-- =================================================================== -->
+    
+    <bean id="applicationContextUtil" class="com.syncnapsis.utils.ApplicationContextUtil" lazy-init="false" /> 
+    
+    <bean id="timeProvider" class="com.syncnapsis.providers.impl.SystemTimeProvider"/>  
+    
+    <!-- =================================================================== -->
+    <!-- Managers: For accessing DAOs                                        -->
+    <!-- =================================================================== -->     
+    
+    <bean id="guiActionManager" class="com.syncnapsis.data.service.impl.GUIActionManagerImpl">
+        <constructor-arg ref="guiActionDao"/>
+    </bean>  
+    
+    <bean id="guiWindowParamsManager" class="com.syncnapsis.data.service.impl.GUIWindowParamsManagerImpl">
+        <constructor-arg ref="guiWindowParamsDao"/>
+    </bean>  
+    
+    <bean id="menuItemManager" class="com.syncnapsis.data.service.impl.MenuItemManagerImpl">
+        <constructor-arg ref="menuItemDao"/>
+        <constructor-arg ref="userManager"/>
+    	<property name="optionHandlerClasses">
+    		<list>
+    			<value>com.syncnapsis.ui.menu.impl.EmpireMenuItemOptionHandler</value>
+    		</list>
+    	</property>
+    </bean>   
+    
+    <bean id="menuQuickLaunchItemManager" class="com.syncnapsis.data.service.impl.MenuQuickLaunchItemManagerImpl">
+        <constructor-arg ref="menuQuickLaunchItemDao"/>
+        <constructor-arg ref="menuItemManager"/>
+        <constructor-arg ref="userManager"/>
+    </bean>   
+    
+    <bean id="messengerContactManager" class="com.syncnapsis.data.service.impl.MessengerContactManagerImpl">
+        <constructor-arg ref="messengerContactDao"/>
+    </bean>
+    
+    <bean id="messengerManager" class="com.syncnapsis.data.service.impl.MessengerManagerImpl">
+        <constructor-arg ref="messengerDao"/>
+    </bean>
+    
+    <bean id="newsManager" class="com.syncnapsis.data.service.impl.NewsManagerImpl">
+        <constructor-arg ref="newsDao"/>
+        <constructor-arg ref="parameterManager"/>
+    </bean>
+    
+    <bean id="parameterManager" class="com.syncnapsis.data.service.impl.ParameterManagerImpl">
+        <constructor-arg ref="parameterDao"/>
+    </bean>
+    
+    <bean id="userManager" class="com.syncnapsis.data.service.impl.UserManagerImpl">
+        <constructor-arg ref="userDao"/>
+    </bean>
+    
+    <bean id="userContactManager" class="com.syncnapsis.data.service.impl.UserContactManagerImpl">
+        <constructor-arg ref="userContactDao"/>
+        <constructor-arg ref="userManager"/>
+    </bean>
+    
+    <bean id="userRoleManager" class="com.syncnapsis.data.service.impl.UserRoleManagerImpl">
+        <constructor-arg ref="userRoleDao"/>
+    </bean>
+    
+</beans>
