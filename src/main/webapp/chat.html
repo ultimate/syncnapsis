@@ -1,0 +1,80 @@
+<html>
+	<head>	
+		<script type="text/javascript" src="scripts/util/Requests.js"></script>
+		
+		<script type="text/javascript">
+		
+			DependencyManager.register("Strings", 		"util/Strings.js");
+		 	DependencyManager.register("Arrays", 		"util/Arrays.js");
+		 	DependencyManager.register("Events", 		"util/Events.js");
+		 	DependencyManager.register("Console", 		"util/Console.js");
+		 	DependencyManager.register("DateFormat", 	"lib/date.format.js");
+		 	DependencyManager.register("JSON",	 		"lib/json2.js");
+		 	
+		 	DependencyManager.register("WebSockets", 	"websockets/WebSockets.js");
+		 	DependencyManager.register("Fallback", 		"websockets/Fallback.js");
+		 	DependencyManager.register("RPCSocket", 	"websockets/RPCSocket.js");
+		 	
+		 	DependencyManager.afterLoading(init);
+		 	DependencyManager.registrationDone();
+		 	
+			function init()
+			{
+				// nothing yet
+			}
+					
+			var ws;
+			var div;
+			
+			function connect()
+			{
+				div = document.getElementById("ta");
+				var url = document.getElementById("tf_url").value;
+				ws = new WebSocket(url, "chat");
+				ws.onopen = function(e)
+				{
+					print("connection opened");
+				};
+				ws.onclose = function(e)
+				{
+					print("connection closed");
+				};
+				ws.onmessage = function(e)
+				{
+					print("received: " + e.data);
+				};
+				ws.onerror = function(e)
+				{
+					print("error: " + e.data);
+				};
+			}
+			
+			function disconnect()
+			{
+				ws.close();	
+			}
+			
+			function send()
+			{
+				var message = document.getElementById("tf_message").value;
+				print("sending: " + message);
+				ws.send(message);
+			}
+			
+			function print(text)
+			{
+				div.innerHTML = text + "<br>" + div.innerHTML;
+			}
+			
+		</script>
+	</head>
+	<body>
+		<input type="text" value="ws://localhost:8080/peu/ws" id="tf_url" />
+		<input type="button" value="connect" onclick="javascript:connect();"/>
+		<input type="button" value="disconnect" onclick="javascript:disconnect();"/><br/>
+		<input type="text" value="" id="tf_message"/>
+		<input type="button" value="send" onclick="javascript:send();"/><br/>
+		<div id="ta">
+		</div>
+	</body>
+</html>

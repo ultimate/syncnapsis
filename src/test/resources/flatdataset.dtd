@@ -1,0 +1,299 @@
+<!ELEMENT dataset (
+    alliance*,
+    authorities*,
+    alliancealliancecontact*,
+    app_user*,
+    empire*,
+    contactgroup*,
+    alliancealliancecontactgroup*,
+    alliancememberrank*,
+    alliancemember*,
+    alliancememberrankparent*,
+    alliancerank*,
+    authoritiesgranted*,
+    authoritiesnotgranted*,
+    empirealliancecontact*,
+    empirealliancecontactgroup*,
+    empireempirecontact*,
+    empireempirecontactgroup*,
+    empirerank*,
+    menuquicklaunchitem*,
+    messengercontact*,
+    sittingstatus*,
+    usercontact*,
+    usercurrentempire*,
+    userrank*)>
+
+<!ELEMENT alliance EMPTY>
+<!ATTLIST alliance
+    id CDATA #REQUIRED
+    version CDATA #IMPLIED
+    activated CDATA #REQUIRED
+    description CDATA #IMPLIED
+    shortname CDATA #REQUIRED
+    fullname CDATA #IMPLIED
+    imageurl CDATA #IMPLIED
+>
+
+<!ELEMENT authorities EMPTY>
+<!ATTLIST authorities
+    id CDATA #REQUIRED
+    version CDATA #IMPLIED
+>
+
+<!ELEMENT alliancealliancecontact EMPTY>
+<!ATTLIST alliancealliancecontact
+    id CDATA #REQUIRED
+    version CDATA #IMPLIED
+    equalcontactauthorities CDATA #REQUIRED
+    approvedbycontact1 CDATA #REQUIRED
+    changesapprovedbycontact1 CDATA #REQUIRED
+    defaultvisible1 CDATA #REQUIRED
+    approvedbycontact2 CDATA #REQUIRED
+    changesapprovedbycontact2 CDATA #REQUIRED
+    defaultvisible2 CDATA #REQUIRED
+    fkchangedcontactauthorities1 CDATA #IMPLIED
+    fkcontactauthorities2 CDATA #REQUIRED
+    fkcontact1 CDATA #REQUIRED
+    fkchangedcontactauthorities2 CDATA #IMPLIED
+    fkcontact2 CDATA #REQUIRED
+    fkcontactauthorities1 CDATA #REQUIRED
+>
+
+<!ELEMENT app_user EMPTY>
+<!ATTLIST app_user
+    id CDATA #REQUIRED
+    version CDATA #IMPLIED
+    activated CDATA #REQUIRED
+    description CDATA #IMPLIED
+    locale CDATA #REQUIRED
+    username CDATA #REQUIRED
+    password CDATA #REQUIRED
+    email CDATA #REQUIRED
+    imageurl CDATA #IMPLIED
+    title CDATA #IMPLIED
+    roleexpiredate CDATA #IMPLIED
+    registrationdate CDATA #REQUIRED
+    deletedate CDATA #IMPLIED
+    accountstatus CDATA #IMPLIED
+    accountstatusexpiredate CDATA #IMPLIED
+    nickname CDATA #IMPLIED
+    birthday CDATA #IMPLIED
+    city CDATA #IMPLIED
+    sex CDATA #IMPLIED
+    timezoneid CDATA #REQUIRED
+    dateformat CDATA #IMPLIED
+    usingadvancedmenu CDATA #REQUIRED
+    usingtooltips CDATA #REQUIRED
+    usinginfinitesession CDATA #REQUIRED
+    sessiontimeout CDATA #REQUIRED
+    lastactivedate CDATA #REQUIRED
+    showemail CDATA #REQUIRED
+    fkuserrole CDATA #REQUIRED
+>
+
+<!ELEMENT empire EMPTY>
+<!ATTLIST empire
+    id CDATA #REQUIRED
+    version CDATA #IMPLIED
+    activated CDATA #REQUIRED
+    description CDATA #IMPLIED
+    shortname CDATA #REQUIRED
+    fullname CDATA #IMPLIED
+    imageurl CDATA #IMPLIED
+    fkuser CDATA #REQUIRED
+>
+
+<!ELEMENT contactgroup EMPTY>
+<!ATTLIST contactgroup
+    id CDATA #REQUIRED
+    version CDATA #IMPLIED
+    name CDATA #REQUIRED
+    description CDATA #IMPLIED
+    defaultvisible CDATA #REQUIRED
+    fkowneralliance CDATA #IMPLIED
+    fkownerempire CDATA #IMPLIED
+>
+
+<!ELEMENT alliancealliancecontactgroup EMPTY>
+<!ATTLIST alliancealliancecontactgroup
+    fkalliancealliancecontact CDATA #REQUIRED
+    fkcontactgroup CDATA #REQUIRED
+>
+
+<!ELEMENT alliancememberrank EMPTY>
+<!ATTLIST alliancememberrank
+    id CDATA #REQUIRED
+    version CDATA #IMPLIED
+    rankname CDATA #REQUIRED
+    visible CDATA #REQUIRED
+    voteweight CDATA #REQUIRED
+    fkauthorities CDATA #IMPLIED
+    fkalliance CDATA #IMPLIED
+>
+
+<!ELEMENT alliancemember EMPTY>
+<!ATTLIST alliancemember
+    fkalliancememberrank CDATA #REQUIRED
+    fkempire CDATA #REQUIRED
+>
+
+<!ELEMENT alliancememberrankparent EMPTY>
+<!ATTLIST alliancememberrankparent
+    fkalliancememberrank CDATA #REQUIRED
+    fkparentalliancememberrank CDATA #IMPLIED
+>
+
+<!ELEMENT alliancerank EMPTY>
+<!ATTLIST alliancerank
+    id CDATA #REQUIRED
+    version CDATA #IMPLIED
+    timeofcalculation CDATA #REQUIRED
+    actual CDATA #REQUIRED
+    total CDATA #REQUIRED
+    numberofempires CDATA #REQUIRED
+    economy CDATA #REQUIRED
+    averageeconomy CDATA #REQUIRED
+    military CDATA #REQUIRED
+    averagemilitary CDATA #REQUIRED
+    science CDATA #REQUIRED
+    averagescience CDATA #REQUIRED
+    averagetotal CDATA #REQUIRED
+    fkentity CDATA #REQUIRED
+>
+
+<!ELEMENT authoritiesgranted EMPTY>
+<!ATTLIST authoritiesgranted
+    fkauthorities CDATA #REQUIRED
+    fkauthority CDATA #REQUIRED
+>
+
+<!ELEMENT authoritiesnotgranted EMPTY>
+<!ATTLIST authoritiesnotgranted
+    fkauthorities CDATA #REQUIRED
+    fkauthority CDATA #REQUIRED
+>
+
+<!ELEMENT empirealliancecontact EMPTY>
+<!ATTLIST empirealliancecontact
+    id CDATA #REQUIRED
+    version CDATA #IMPLIED
+    equalcontactauthorities CDATA #REQUIRED
+    approvedbycontact1 CDATA #REQUIRED
+    changesapprovedbycontact1 CDATA #REQUIRED
+    defaultvisible1 CDATA #REQUIRED
+    approvedbycontact2 CDATA #REQUIRED
+    changesapprovedbycontact2 CDATA #REQUIRED
+    defaultvisible2 CDATA #REQUIRED
+    fkchangedcontactauthorities1 CDATA #IMPLIED
+    fkcontact1 CDATA #REQUIRED
+    fkcontact2 CDATA #REQUIRED
+    fkchangedcontactauthorities2 CDATA #IMPLIED
+    fkcontactauthorities1 CDATA #REQUIRED
+    fkcontactauthorities2 CDATA #REQUIRED
+>
+
+<!ELEMENT empirealliancecontactgroup EMPTY>
+<!ATTLIST empirealliancecontactgroup
+    fkempirealliancecontact CDATA #REQUIRED
+    fkcontactgroup CDATA #REQUIRED
+>
+
+<!ELEMENT empireempirecontact EMPTY>
+<!ATTLIST empireempirecontact
+    id CDATA #REQUIRED
+    version CDATA #IMPLIED
+    equalcontactauthorities CDATA #REQUIRED
+    approvedbycontact1 CDATA #REQUIRED
+    changesapprovedbycontact1 CDATA #REQUIRED
+    defaultvisible1 CDATA #REQUIRED
+    approvedbycontact2 CDATA #REQUIRED
+    changesapprovedbycontact2 CDATA #REQUIRED
+    defaultvisible2 CDATA #REQUIRED
+    fkchangedcontactauthorities2 CDATA #IMPLIED
+    fkcontact1 CDATA #REQUIRED
+    fkcontact2 CDATA #REQUIRED
+    fkcontactauthorities1 CDATA #REQUIRED
+    fkchangedcontactauthorities1 CDATA #IMPLIED
+    fkcontactauthorities2 CDATA #REQUIRED
+>
+
+<!ELEMENT empireempirecontactgroup EMPTY>
+<!ATTLIST empireempirecontactgroup
+    fkempireempirecontact CDATA #REQUIRED
+    fkcontactgroup CDATA #REQUIRED
+>
+
+<!ELEMENT empirerank EMPTY>
+<!ATTLIST empirerank
+    id CDATA #REQUIRED
+    version CDATA #IMPLIED
+    timeofcalculation CDATA #REQUIRED
+    actual CDATA #REQUIRED
+    total CDATA #REQUIRED
+    economy CDATA #REQUIRED
+    military CDATA #REQUIRED
+    science CDATA #REQUIRED
+    fkentity CDATA #REQUIRED
+>
+
+<!ELEMENT menuquicklaunchitem EMPTY>
+<!ATTLIST menuquicklaunchitem
+    id CDATA #REQUIRED
+    version CDATA #IMPLIED
+    position CDATA #REQUIRED
+    parametervaluestring CDATA #IMPLIED
+    parametervaluelong CDATA #IMPLIED
+    fkuser CDATA #REQUIRED
+    fkmenuitem CDATA #REQUIRED
+>
+
+<!ELEMENT messengercontact EMPTY>
+<!ATTLIST messengercontact
+    id CDATA #REQUIRED
+    version CDATA #IMPLIED
+    address CDATA #IMPLIED
+    fkuser CDATA #REQUIRED
+    fkmessenger CDATA #REQUIRED
+>
+
+<!ELEMENT sittingstatus EMPTY>
+<!ATTLIST sittingstatus
+    fkuser CDATA #REQUIRED
+    fksitter CDATA #REQUIRED
+>
+
+<!ELEMENT usercontact EMPTY>
+<!ATTLIST usercontact
+    id CDATA #REQUIRED
+    version CDATA #IMPLIED
+    approvedbyuser1 CDATA #IMPLIED
+    approvedbyuser2 CDATA #IMPLIED
+    fkuser2 CDATA #REQUIRED
+    fkuser1 CDATA #REQUIRED
+>
+
+<!ELEMENT usercurrentempire EMPTY>
+<!ATTLIST usercurrentempire
+    fkuser CDATA #REQUIRED
+    fkempire CDATA #IMPLIED
+>
+
+<!ELEMENT userrank EMPTY>
+<!ATTLIST userrank
+    id CDATA #REQUIRED
+    version CDATA #IMPLIED
+    timeofcalculation CDATA #REQUIRED
+    actual CDATA #REQUIRED
+    total CDATA #REQUIRED
+    numberofempires CDATA #REQUIRED
+    economy CDATA #REQUIRED
+    averageeconomy CDATA #REQUIRED
+    military CDATA #REQUIRED
+    averagemilitary CDATA #REQUIRED
+    science CDATA #REQUIRED
+    averagescience CDATA #REQUIRED
+    averagetotal CDATA #REQUIRED
+    fkentity CDATA #REQUIRED
+>
+

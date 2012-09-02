@@ -1,0 +1,1680 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE dataset SYSTEM "dataset.dtd">
+<dataset>	
+	<table name="parameter">
+		<column>id</column>
+		<column>value</column>
+		<column>version</column>
+		<row>
+			<value description="id">universe.year</value>
+			<value description="value">3600</value>
+			<value description="version">1</value>
+		</row>
+		<row>
+			<value description="id">news.maxItems</value>
+			<value description="value">10</value>
+			<value description="version">1</value>
+		</row>
+		<row>
+			<value description="id">news.length1.maxAge</value>
+			<value description="value">86400</value>
+			<value description="version">1</value>
+		</row>
+		<row>
+			<value description="id">news.length2.maxAge</value>
+			<value description="value">172800</value>
+			<value description="version">1</value>
+		</row>
+		<row>
+			<value description="id">news.length3.maxAge</value>
+			<value description="value">259200</value>
+			<value description="version">1</value>
+		</row>
+		<row>
+			<value description="id">news.length4.maxAge</value>
+			<value description="value">432000</value>
+			<value description="version">1</value>
+		</row>
+		<row>
+			<value description="id">news.length5.maxAge</value>
+			<value description="value">604800</value>
+			<value description="version">1</value>
+		</row>
+		<row>
+			<value description="id">news.length6.maxAge</value>
+			<value description="value">1209600</value>
+			<value description="version">1</value>
+		</row>
+		<row>
+			<value description="id">news.length7.maxAge</value>
+			<value description="value">2419200</value>
+			<value description="version">1</value>
+		</row>
+		<row>
+			<value description="id">news.length8.maxAge</value>
+			<value description="value">4838400</value>
+			<value description="version">1</value>
+		</row>
+		<row>
+			<value description="id">news.length9.maxAge</value>
+			<value description="value">7257600</value>
+			<value description="version">1</value>
+		</row>
+		<row>
+			<value description="id">ranking.buttonRenderPosition</value>
+			<value description="value">TAILING</value>
+			<value description="version">1</value>
+		</row>
+	</table>
+	
+	<table name="guiwindowparams">
+		<column>id</column>
+		<column>version</column>	
+		<column>closable</column>	
+		<column>maximizable</column>	
+		<column>maximized</column>	
+		<column>minimizable</column>	
+		<column>minimized</column>	
+		<column>collapsible</column>	
+		<column>open</column>	
+		<column>sizable</column>	
+		<column>visible</column>			
+		<column>draggable</column>	
+		<column>droppable</column>			
+		<column>position</column>	
+		<column>positionLeft</column>	
+		<column>positionTop</column>	
+		<column>zindex</column>			
+		<column>height</column>	
+		<column>minheight</column>	
+		<column>width</column>	
+		<column>minwidth</column>	
+		<row>
+			<value description="id">1001</value>
+			<value description="version">1</value>	
+			<value description="closable">1</value>	
+			<value description="maximizable">0</value>	
+			<value description="maximized">0</value>	
+			<value description="minimizable">0</value>	
+			<value description="minimized">0</value>	
+			<value description="collapsible">1</value>	
+			<value description="open">1</value>	
+			<value description="sizable">0</value>	
+			<value description="visible">1</value>			
+			<null/>	
+			<null/>	
+			<value description="position">center</value>	
+			<value description="positionLeft">0px</value>	
+			<value description="positionTop">0px</value>	
+			<value description="zindex">0</value>			
+			<value description="height">200px</value>	
+			<value description="minheight">200</value>		
+			<value description="width">400px</value>	
+			<value description="minwidth">400</value>		
+		</row>	
+		<row>
+			<value description="id">1003</value>
+			<value description="version">1</value>	
+			<value description="closable">1</value>	
+			<value description="maximizable">0</value>	
+			<value description="maximized">0</value>	
+			<value description="minimizable">0</value>	
+			<value description="minimized">0</value>	
+			<value description="collapsible">1</value>	
+			<value description="open">1</value>	
+			<value description="sizable">0</value>	
+			<value description="visible">1</value>			
+			<null/>	
+			<null/>	
+			<value description="position">center</value>	
+			<value description="positionLeft">0px</value>	
+			<value description="positionTop">0px</value>	
+			<value description="zindex">0</value>			
+			<value description="height">500px</value>	
+			<value description="minheight">500</value>		
+			<value description="width">400px</value>	
+			<value description="minwidth">400</value>	
+		</row>
+		<row>
+			<value description="id">1004</value>
+			<value description="version">1</value>	
+			<value description="closable">1</value>	
+			<value description="maximizable">0</value>	
+			<value description="maximized">0</value>	
+			<value description="minimizable">0</value>	
+			<value description="minimized">0</value>	
+			<value description="collapsible">1</value>	
+			<value description="open">1</value>	
+			<value description="sizable">0</value>	
+			<value description="visible">1</value>			
+			<null/>	
+			<null/>	
+			<value description="position">center</value>	
+			<value description="positionLeft">0px</value>	
+			<value description="positionTop">0px</value>	
+			<value description="zindex">0</value>			
+			<value description="height">300px</value>	
+			<value description="minheight">300</value>		
+			<value description="width">400px</value>	
+			<value description="minwidth">400</value>	
+		</row>
+		<row>
+			<value description="id">1005</value>
+			<value description="version">1</value>	
+			<value description="closable">1</value>	
+			<value description="maximizable">1</value>	
+			<value description="maximized">0</value>	
+			<value description="minimizable">0</value>	
+			<value description="minimized">0</value>	
+			<value description="collapsible">1</value>	
+			<value description="open">1</value>	
+			<value description="sizable">1</value>	
+			<value description="visible">1</value>			
+			<null/>	
+			<null/>	
+			<value description="position">center</value>	
+			<value description="positionLeft">0px</value>	
+			<value description="positionTop">0px</value>	
+			<value description="zindex">0</value>			
+			<value description="height">500px</value>	
+			<value description="minheight">500</value>	
+			<value description="width">600px</value>	
+			<value description="minwidth">600</value>		
+		</row>
+		<row>
+			<value description="id">1006</value>
+			<value description="version">1</value>	
+			<value description="closable">1</value>	
+			<value description="maximizable">1</value>	
+			<value description="maximized">0</value>	
+			<value description="minimizable">0</value>	
+			<value description="minimized">0</value>	
+			<value description="collapsible">1</value>	
+			<value description="open">1</value>	
+			<value description="sizable">1</value>	
+			<value description="visible">1</value>			
+			<null/>	
+			<null/>	
+			<value description="position">center</value>	
+			<value description="positionLeft">0px</value>	
+			<value description="positionTop">0px</value>	
+			<value description="zindex">0</value>			
+			<value description="height">500px</value>	
+			<value description="minheight">500</value>		
+			<value description="width">600px</value>	
+			<value description="minwidth">600</value>		
+		</row>
+		<row>
+			<value description="id">2001</value>
+			<value description="version">1</value>	
+			<value description="closable">1</value>	
+			<value description="maximizable">1</value>	
+			<value description="maximized">0</value>	
+			<value description="minimizable">0</value>	
+			<value description="minimized">0</value>	
+			<value description="collapsible">1</value>	
+			<value description="open">1</value>	
+			<value description="sizable">1</value>	
+			<value description="visible">1</value>			
+			<null/>	
+			<null/>	
+			<value description="position">center</value>	
+			<value description="positionLeft">0px</value>	
+			<value description="positionTop">0px</value>	
+			<value description="zindex">0</value>			
+			<value description="height">500px</value>	
+			<value description="minheight">500</value>		
+			<value description="width">600px</value>	
+			<value description="minwidth">600</value>		
+		</row>
+		<row>
+			<value description="id">9001</value>
+			<value description="version">1</value>	
+			<value description="closable">1</value>	
+			<value description="maximizable">1</value>	
+			<value description="maximized">0</value>	
+			<value description="minimizable">0</value>	
+			<value description="minimized">0</value>	
+			<value description="collapsible">1</value>	
+			<value description="open">1</value>	
+			<value description="sizable">1</value>	
+			<value description="visible">1</value>			
+			<null/>	
+			<null/>	
+			<value description="position">center</value>	
+			<value description="positionLeft">0px</value>	
+			<value description="positionTop">0px</value>	
+			<value description="zindex">0</value>			
+			<value description="height">500px</value>	
+			<value description="minheight">500</value>		
+			<value description="width">600px</value>	
+			<value description="minwidth">600</value>		
+		</row>
+		<row>
+			<value description="id">9002</value>
+			<value description="version">1</value>	
+			<value description="closable">1</value>	
+			<value description="maximizable">1</value>	
+			<value description="maximized">0</value>	
+			<value description="minimizable">0</value>	
+			<value description="minimized">0</value>	
+			<value description="collapsible">1</value>	
+			<value description="open">1</value>	
+			<value description="sizable">1</value>	
+			<value description="visible">1</value>			
+			<null/>	
+			<null/>	
+			<value description="position">center</value>	
+			<value description="positionLeft">0px</value>	
+			<value description="positionTop">0px</value>	
+			<value description="zindex">0</value>			
+			<value description="height">500px</value>	
+			<value description="minheight">500</value>		
+			<value description="width">600px</value>	
+			<value description="minwidth">600</value>		
+		</row>
+		<row>
+			<value description="id">9003</value>
+			<value description="version">1</value>	
+			<value description="closable">1</value>	
+			<value description="maximizable">1</value>	
+			<value description="maximized">0</value>	
+			<value description="minimizable">0</value>	
+			<value description="minimized">0</value>	
+			<value description="collapsible">1</value>	
+			<value description="open">1</value>	
+			<value description="sizable">1</value>	
+			<value description="visible">1</value>			
+			<null/>	
+			<null/>	
+			<value description="position">center</value>	
+			<value description="positionLeft">0px</value>	
+			<value description="positionTop">0px</value>	
+			<value description="zindex">0</value>			
+			<value description="height">500px</value>	
+			<value description="minheight">500</value>		
+			<value description="width">600px</value>	
+			<value description="minwidth">600</value>		
+		</row>
+	</table>
+	
+	<table name="guiaction">
+		<column>id</column>
+		<column>version</column>
+		<column>action</column>
+		<column>windowId</column>
+		<column>titleKey</column>	
+		<column>windowAction</column>
+		<column>fkWindowParams</column>
+		<row>
+			<value description="id">1001</value>
+			<value description="version">1</value>
+			<value description="action">security/login</value>
+			<value description="windowId">loginWin</value>
+			<value description="titleKey">index.login</value>	
+			<value description="windowAction">1</value>	
+			<value description="fkWindowParams">1001</value>	
+		</row>
+		<row>
+			<value description="id">1002</value>
+			<value description="version">1</value>
+			<value description="action">security/relogin</value>
+			<value description="windowId">j_relogin</value>
+			<value description="titleKey">index.login</value>	
+			<value description="windowAction">1</value>	
+			<value description="fkWindowParams">1001</value>	
+		</row>
+		<row>
+			<value description="id">1003</value>
+			<value description="version">1</value>
+			<value description="action">public/register</value>
+			<value description="windowId">registerWin</value>
+			<value description="titleKey">index.register</value>
+			<value description="windowAction">1</value>	
+			<value description="fkWindowParams">1003</value>	
+		</row>
+		<row>
+			<value description="id">1004</value>
+			<value description="version">1</value>
+			<value description="action">public/demo</value>
+			<value description="windowId">demoWin</value>
+			<value description="titleKey">index.demo</value>
+			<value description="windowAction">1</value>	
+			<value description="fkWindowParams">1004</value>	
+		</row>
+		<row>
+			<value description="id">1005</value>
+			<value description="version">1</value>
+			<value description="action">public/faq</value>
+			<value description="windowId">faqWin</value>
+			<value description="titleKey">index.faq</value>
+			<value description="windowAction">1</value>		
+			<value description="fkWindowParams">1005</value>	
+		</row>
+		<row>
+			<value description="id">1006</value>
+			<value description="version">1</value>
+			<value description="action">public/about</value>
+			<value description="windowId">aboutWin</value>
+			<value description="titleKey">index.about</value>	
+			<value description="windowAction">1</value>	
+			<value description="fkWindowParams">1006</value>	
+		</row>
+		<row>
+			<value description="id">1007</value>
+			<value description="version">1</value>
+			<value description="action">logout</value>
+			<null/>
+			<null/>
+			<value description="windowAction">0</value>	
+			<null/>	
+		</row>
+		<row>
+			<value description="id">1008</value>
+			<value description="version">1</value>
+			<value description="action">changeEmpire</value>	
+			<null/>
+			<null/>
+			<value description="windowAction">0</value>	
+			<null/>	
+		</row>
+		<row>
+			<value description="id">2001</value>
+			<value description="version">1</value>
+			<value description="action">account/account</value>
+			<value description="windowId">accountWin</value>
+			<value description="titleKey">account.account</value>
+			<value description="windowAction">1</value>	
+			<value description="fkWindowParams">2001</value>	
+		</row>
+		<row>
+			<value description="id">9001</value>
+			<value description="version">1</value>
+			<value description="action">overview/userRanking</value>
+			<value description="windowId">userRankingWin</value>
+			<value description="titleKey">overview.userRanking</value>
+			<value description="windowAction">1</value>	
+			<value description="fkWindowParams">9001</value>	
+		</row>
+		<row>
+			<value description="id">9002</value>
+			<value description="version">1</value>
+			<value description="action">overview/empireRanking</value>
+			<value description="windowId">empireRankingWin</value>
+			<value description="titleKey">overview.empireRanking</value>
+			<value description="windowAction">1</value>	
+			<value description="fkWindowParams">9002</value>	
+		</row>
+		<row>
+			<value description="id">9003</value>
+			<value description="version">1</value>
+			<value description="action">overview/allianceRanking</value>
+			<value description="windowId">allianceRankingWin</value>
+			<value description="titleKey">overview.allianceRanking</value>
+			<value description="windowAction">1</value>	
+			<value description="fkWindowParams">9003</value>	
+		</row>
+	</table>
+	
+	<table name="messenger">
+		<column>id</column>
+		<column>version</column>
+		<column>name</column>
+		<column>activated</column>
+
+		<row>
+			<value description="id">1</value>
+			<value description="version">1</value>
+			<value description="name">ICQ</value>
+			<value description="activated">1</value>
+		</row>
+		<row>
+			<value description="id">2</value>
+			<value description="version">1</value>
+			<value description="name">AIM/AOL</value>
+			<value description="activated">1</value>
+		</row>
+		<row>
+			<value description="id">3</value>
+			<value description="version">1</value>
+			<value description="name">MSN/Windows Live</value>
+			<value description="activated">1</value>
+		</row>
+		<row>
+			<value description="id">4</value>
+			<value description="version">1</value>
+			<value description="name">Skype</value>
+			<value description="activated">1</value>
+		</row>
+		<row>
+			<value description="id">5</value>
+			<value description="version">1</value>
+			<value description="name">Yahoo</value>
+			<value description="activated">1</value>
+		</row>
+		<row>
+			<value description="id">6</value>
+			<value description="version">1</value>
+			<value description="name">Google Talk</value>
+			<value description="activated">1</value>
+		</row>
+	</table>
+	
+	<table name="menuitem">
+		<column>id</column>
+		<column>version</column>	
+		<column>titleKey</column>
+		<column>type</column>
+		<column>dynamicType</column>
+		<column>dynamicSubType</column>
+		<column>imageURL</column>
+		<column>fkGUIAction</column>
+		<column>parameterName</column>
+		<column>parameterValueString</column>
+		<column>parameterValueLong</column>
+		<column>quickLaunchEnabled</column>
+		<column>advancedItem</column>
+		<column>position</column>
+		
+		<!-- MAIN-MENU - START -->
+		<row>
+			<value description="id">MR</value>
+			<value description="version">1</value>
+			<null/>
+			<value description="type">root</value>
+			<null/>
+			<null/>
+			<null/>
+			<null/>
+			<null/>
+			<null/>
+			<null/>
+			<value description="quickLaunchEnabled">0</value>
+			<value description="advancedItem">0</value>
+			<value description="position">0</value>
+		</row>
+		<!-- OVERVIEW-MENU-->
+		<row>
+			<value description="id">OV</value>
+			<value description="version">1</value>
+			<value description="titleKey">overview</value>
+			<value description="type">node</value>
+			<null/>
+			<null/>
+			<value description="imageURL">default.png</value>
+			<null/>
+			<null/>
+			<null/>
+			<null/>
+			<value description="quickLaunchEnabled">0</value>
+			<value description="advancedItem">0</value>
+			<value description="position">1</value>
+		</row>
+		<row>
+			<value description="id">OV_USERS</value>
+			<value description="version">1</value>
+			<value description="titleKey">overview.userRanking</value>
+			<value description="type">node</value>
+			<value description="dynamicType">current</value>
+			<value description="dynamicSubType">user</value>
+			<value description="imageURL">default.png</value>
+			<value description="fkGUIAction">9001</value>
+			<null/>
+			<null/>
+			<null/>
+			<value description="quickLaunchEnabled">1</value>
+			<value description="advancedItem">0</value>
+			<value description="position">0</value>
+		</row>
+		<row>
+			<value description="id">OV_EMPIRES</value>
+			<value description="version">1</value>
+			<value description="titleKey">overview.empireRanking</value>
+			<value description="type">node</value>
+			<value description="dynamicType">current</value>
+			<value description="dynamicSubType">empire</value>
+			<value description="imageURL">default.png</value>
+			<value description="fkGUIAction">9002</value>
+			<null/>
+			<null/>
+			<null/>
+			<value description="quickLaunchEnabled">1</value>
+			<value description="advancedItem">0</value>
+			<value description="position">1</value>
+		</row>
+		<row>
+			<value description="id">OV_ALLIANCES</value>
+			<value description="version">1</value>
+			<value description="titleKey">overview.allianceRanking</value>
+			<value description="type">node</value>
+			<value description="dynamicType">current</value>
+			<value description="dynamicSubType">alliance</value>
+			<value description="imageURL">default.png</value>
+			<value description="fkGUIAction">9003</value>
+			<null/>
+			<null/>
+			<null/>
+			<value description="quickLaunchEnabled">1</value>
+			<value description="advancedItem">0</value>
+			<value description="position">1</value>
+		</row>
+		<!-- SEPARATOR -->
+		<row>
+			<value description="id">SEP001</value>
+			<value description="version">1</value>
+			<null/>
+			<value description="type">separator</value>
+			<null/>
+			<null/>
+			<null/>
+			<null/>
+			<null/>
+			<null/>
+			<null/>
+			<value description="quickLaunchEnabled">0</value>
+			<value description="advancedItem">0</value>
+			<value description="position">2</value>
+		</row>		
+		<!-- ACCOUNT-MENU-->
+		<row>
+			<value description="id">ACC</value>
+			<value description="version">1</value>
+			<value description="titleKey">account</value>
+			<value description="type">node</value>
+			<null/>
+			<null/>
+			<value description="imageURL">default.png</value>
+			<null/>
+			<null/>
+			<null/>
+			<null/>
+			<value description="quickLaunchEnabled">0</value>
+			<value description="advancedItem">0</value>
+			<value description="position">3</value>
+		</row>
+		<row>
+			<value description="id">ACC_OVER</value>
+			<value description="version">1</value>
+			<value description="titleKey">account.overview</value>
+			<value description="type">node</value>
+			<null/>
+			<null/>
+			<value description="imageURL">default.png</value>
+			<value description="fkGUIAction">2001</value>
+			<value description="parameterName">tab</value>
+			<value description="parameterValueString">account/overview</value>
+			<null/>
+			<value description="quickLaunchEnabled">1</value>
+			<value description="advancedItem">0</value>
+			<value description="position">1</value>
+		</row>
+		<row>
+			<value description="id">PROF</value>
+			<value description="version">1</value>
+			<value description="titleKey">account.profile</value>
+			<value description="type">node</value>
+			<null/>
+			<null/>
+			<value description="imageURL">default.png</value>
+			<value description="fkGUIAction">2001</value>
+			<value description="parameterName">tab</value>
+			<value description="parameterValueString">account/profile</value>
+			<null/>
+			<value description="quickLaunchEnabled">1</value>
+			<value description="advancedItem">0</value>
+			<value description="position">2</value>
+		</row>
+		<row>
+			<value description="id">SET</value>
+			<value description="version">1</value>
+			<value description="titleKey">account.settings</value>
+			<value description="type">node</value>
+			<null/>
+			<null/>
+			<value description="imageURL">default.png</value>
+			<value description="fkGUIAction">2001</value>
+			<value description="parameterName">tab</value>
+			<value description="parameterValueString">account/settings</value>
+			<null/>
+			<value description="quickLaunchEnabled">1</value>
+			<value description="advancedItem">0</value>
+			<value description="position">3</value>
+		</row>
+		<row>
+			<value description="id">SEC</value>
+			<value description="version">1</value>
+			<value description="titleKey">account.security</value>
+			<value description="type">node</value>
+			<null/>
+			<null/>
+			<value description="imageURL">default.png</value>
+			<value description="fkGUIAction">2001</value>
+			<value description="parameterName">tab</value>
+			<value description="parameterValueString">account/security</value>
+			<null/>
+			<value description="quickLaunchEnabled">1</value>
+			<value description="advancedItem">0</value>
+			<value description="position">4</value>
+		</row>
+		<row>
+			<value description="id">SIT</value>
+			<value description="version">1</value>
+			<value description="titleKey">account.sitting</value>
+			<value description="type">node</value>
+			<null/>
+			<null/>
+			<value description="imageURL">default.png</value>
+			<value description="fkGUIAction">2001</value>
+			<value description="parameterName">tab</value>
+			<value description="parameterValueString">account/sitting</value>
+			<null/>
+			<value description="quickLaunchEnabled">1</value>
+			<value description="advancedItem">0</value>
+			<value description="position">5</value>
+		</row>
+		<row>
+			<value description="id">ACC_CON</value>
+			<value description="version">1</value>
+			<value description="titleKey">account.contacts</value>
+			<value description="type">node</value>
+			<null/>
+			<null/>
+			<value description="imageURL">nachrichten.png</value>
+			<value description="fkGUIAction">2001</value>
+			<value description="parameterName">tab</value>
+			<value description="parameterValueString">account/contacts</value>
+			<null/>
+			<value description="quickLaunchEnabled">1</value>
+			<value description="advancedItem">0</value>
+			<value description="position">6</value>
+		</row>
+		<row>
+			<value description="id">ACC_CINF</value>
+			<value description="version">1</value>
+			<value description="titleKey">account.contactinformation</value>
+			<value description="type">node</value>
+			<null/>
+			<null/>
+			<value description="imageURL">nachrichten.png</value>
+			<value description="fkGUIAction">2001</value>
+			<value description="parameterName">tab</value>
+			<value description="parameterValueString">account/contactinformation</value>
+			<null/>
+			<value description="quickLaunchEnabled">1</value>
+			<value description="advancedItem">0</value>
+			<value description="position">7</value>
+		</row>
+		<!-- OWNEMPIRES-MENU -->
+		<row>
+			<value description="id">EMPS</value>
+			<value description="version">1</value>
+			<value description="titleKey">ownempires</value>
+			<value description="type">node</value>
+			<null/>
+			<null/>
+			<value description="imageURL">default.png</value>
+			<null/>
+			<null/>
+			<null/>
+			<null/>
+			<value description="quickLaunchEnabled">0</value>
+			<value description="advancedItem">0</value>
+			<value description="position">4</value>
+		</row>
+		<row>
+			<value description="id">EMPS_OVER</value>
+			<value description="version">1</value>
+			<value description="titleKey">ownempires.overview</value>
+			<value description="type">node</value>
+			<null/>
+			<null/>
+			<value description="imageURL">default.png</value>
+			<null/>
+			<null/>
+			<null/>
+			<null/>
+			<value description="quickLaunchEnabled">1</value>
+			<value description="advancedItem">0</value>
+			<value description="position">1</value>
+		</row>
+		<row>
+			<value description="id">CHA</value>
+			<value description="version">1</value>
+			<value description="titleKey">ownempires.change</value>
+			<value description="type">node</value>
+			<value description="dynamicType">list</value>
+			<value description="dynamicSubType">empire</value>
+			<value description="imageURL">default.png</value>
+			<null/>
+			<null/>
+			<null/>
+			<null/>
+			<value description="quickLaunchEnabled">1</value>
+			<value description="advancedItem">0</value>
+			<value description="position">3</value>
+		</row>
+		<row>
+			<value description="id">CHA_OPT</value>
+			<value description="version">1</value>
+			<value description="titleKey">ownempires.change.option</value>
+			<value description="type">node</value>
+			<value description="dynamicType">option</value>
+			<null/>
+			<value description="imageURL">default.png</value>
+			<value description="fkGUIAction">1008</value>
+			<null/>
+			<null/>
+			<null/>
+			<value description="quickLaunchEnabled">0</value>
+			<value description="advancedItem">0</value>
+			<value description="position">0</value>
+		</row>
+		<!-- SITTED-USERS-MENU -->
+		<row>
+			<value description="id">EMPSSIT</value>
+			<value description="version">1</value>
+			<value description="titleKey">sittedempires</value>
+			<value description="type">node</value>
+			<value description="dynamicType">list</value>
+			<value description="dynamicSubType">user</value>
+			<value description="imageURL">default.png</value>
+			<null/>
+			<null/>
+			<null/>
+			<null/>
+			<value description="quickLaunchEnabled">0</value>
+			<value description="advancedItem">0</value>
+			<value description="position">5</value>
+		</row>
+		<row>
+			<value description="id">CHASIT</value>
+			<value description="version">1</value>
+			<value description="titleKey">sittedempires.change</value>
+			<value description="type">node</value>
+			<value description="dynamicType">option_list</value>
+			<value description="dynamicSubType">empire</value>
+			<value description="imageURL">default.png</value>
+			<null/>
+			<null/>
+			<null/>
+			<null/>
+			<value description="quickLaunchEnabled">1</value>
+			<value description="advancedItem">0</value>
+			<value description="position">3</value>
+		</row>
+		<row>
+			<value description="id">CHASIT_OPT</value>
+			<value description="version">1</value>
+			<value description="titleKey">sittedempires.change.option</value>
+			<value description="type">node</value>
+			<value description="dynamicType">option</value>
+			<null/>
+			<value description="imageURL">default.png</value>
+			<value description="fkGUIAction">1008</value>
+			<null/>
+			<null/>
+			<null/>
+			<value description="quickLaunchEnabled">0</value>
+			<value description="advancedItem">0</value>
+			<value description="position">0</value>
+		</row>
+		<!-- SEPARATOR -->
+		<row>
+			<value description="id">SEP002</value>
+			<value description="version">1</value>
+			<null/>
+			<value description="type">separator</value>
+			<null/>
+			<null/>
+			<null/>
+			<null/>
+			<null/>
+			<null/>
+			<null/>
+			<value description="quickLaunchEnabled">0</value>
+			<value description="advancedItem">0</value>
+			<value description="position">6</value>
+		</row>
+		<!-- CURRENT-EMPIRE-MENU -->
+		<row>
+			<value description="id">EMP</value>
+			<value description="version">1</value>
+			<value description="titleKey">empire.current</value>
+			<value description="type">node</value>
+			<value description="dynamicType">current</value>
+			<value description="dynamicSubType">empire</value>
+			<value description="imageURL">default.png</value>
+			<null/>
+			<null/>
+			<null/>
+			<null/>
+			<value description="quickLaunchEnabled">1</value>
+			<value description="advancedItem">0</value>
+			<value description="position">7</value>
+		</row>
+		<row>
+			<value description="id">EMP_OVER</value>
+			<value description="version">1</value>
+			<value description="titleKey">empire.overview</value>
+			<value description="type">node</value>
+			<value description="dynamicType">current</value>
+			<value description="dynamicSubType">empire</value>
+			<value description="imageURL">default.png</value>
+			<null/>
+			<null/>
+			<null/>
+			<null/>
+			<value description="quickLaunchEnabled">1</value>
+			<value description="advancedItem">0</value>
+			<value description="position">1</value>
+		</row>
+		<row>
+			<value description="id">EMP_STAT</value>
+			<value description="version">1</value>
+			<value description="titleKey">empire.statistics</value>
+			<value description="type">node</value>
+			<value description="dynamicType">current</value>
+			<value description="dynamicSubType">empire</value>
+			<value description="imageURL">default.png</value>
+			<null/>
+			<null/>
+			<null/>
+			<null/>
+			<value description="quickLaunchEnabled">1</value>
+			<value description="advancedItem">0</value>
+			<value description="position">2</value>
+		</row>
+		<row>
+			<value description="id">EMP_MAN</value>
+			<value description="version">1</value>
+			<value description="titleKey">empire.management</value>
+			<value description="type">node</value>
+			<value description="dynamicType">current</value>
+			<value description="dynamicSubType">empire</value>
+			<value description="imageURL">default.png</value>
+			<null/>
+			<null/>
+			<null/>
+			<null/>
+			<value description="quickLaunchEnabled">1</value>
+			<value description="advancedItem">0</value>
+			<value description="position">3</value>
+		</row>
+		<row>
+			<value description="id">EMP_DESC</value>
+			<value description="version">1</value>
+			<value description="titleKey">empire.description</value>
+			<value description="type">node</value>
+			<value description="dynamicType">current</value>
+			<value description="dynamicSubType">empire</value>
+			<value description="imageURL">default.png</value>
+			<null/>
+			<null/>
+			<null/>
+			<null/>
+			<value description="quickLaunchEnabled">1</value>
+			<value description="advancedItem">0</value>
+			<value description="position">1</value>
+		</row>
+		<row>
+			<value description="id">EMP_DIP</value>
+			<value description="version">1</value>
+			<value description="titleKey">empire.diplomacy</value>
+			<value description="type">node</value>
+			<value description="dynamicType">current</value>
+			<value description="dynamicSubType">empire</value>
+			<value description="imageURL">default.png</value>
+			<null/>
+			<null/>
+			<null/>
+			<null/>
+			<value description="quickLaunchEnabled">1</value>
+			<value description="advancedItem">0</value>
+			<value description="position">4</value>
+		</row>
+		<row>
+			<value description="id">EMP_CONM</value>
+			<value description="version">1</value>
+			<value description="titleKey">empire.contacts.manage</value>
+			<value description="type">node</value>
+			<value description="dynamicType">current</value>
+			<value description="dynamicSubType">empire</value>
+			<value description="imageURL">nachrichten.png</value>
+			<null/>
+			<null/>
+			<null/>
+			<null/>
+			<value description="quickLaunchEnabled">1</value>
+			<value description="advancedItem">0</value>
+			<value description="position">1</value>
+		</row>
+		<row>
+			<value description="id">EMP_CONV</value>
+			<value description="version">1</value>
+			<value description="titleKey">empire.contacts.view</value>
+			<value description="type">node</value>
+			<value description="dynamicType">current</value>
+			<value description="dynamicSubType">empire</value>
+			<value description="imageURL">nachrichten.png</value>
+			<null/>
+			<null/>
+			<null/>
+			<null/>
+			<value description="quickLaunchEnabled">1</value>
+			<value description="advancedItem">0</value>
+			<value description="position">2</value>
+		</row>
+		<row>
+			<value description="id">EMP_CG</value>
+			<value description="version">1</value>
+			<value description="titleKey">empire.contactgroups</value>
+			<value description="type">node</value>
+			<value description="dynamicType">current</value>
+			<value description="dynamicSubType">empire</value>
+			<value description="imageURL">nachrichten.png</value>
+			<null/>
+			<null/>
+			<null/>
+			<null/>
+			<value description="quickLaunchEnabled">1</value>
+			<value description="advancedItem">1</value>
+			<value description="position">3</value>
+		</row>
+		<!-- ALLIANCES-MENU -->
+		<row>
+			<value description="id">ALL</value>
+			<value description="version">1</value>
+			<value description="titleKey">alliances</value>
+			<value description="type">node</value>
+			<value description="dynamicType">list</value>
+			<value description="dynamicSubType">alliance</value>
+			<value description="imageURL">default.png</value>
+			<null/>
+			<null/>
+			<null/>
+			<null/>
+			<value description="quickLaunchEnabled">1</value>
+			<value description="advancedItem">0</value>
+			<value description="position">8</value>
+		</row>
+		<row>
+			<value description="id">ALL_OPT</value>
+			<value description="version">1</value>
+			<value description="titleKey">alliances.option</value>
+			<value description="type">node</value>
+			<value description="dynamicType">option</value>
+			<null/>
+			<value description="imageURL">default.png</value>
+			<null/>
+			<null/>
+			<null/>
+			<null/>
+			<value description="quickLaunchEnabled">1</value>
+			<value description="advancedItem">0</value>
+			<value description="position">1</value>
+		</row>
+		<row>
+			<value description="id">ALL_OVER</value>
+			<value description="version">1</value>
+			<value description="titleKey">alliance.overview</value>
+			<value description="type">node</value>
+			<value description="dynamicType">choice</value>
+			<value description="dynamicSubType">alliance</value>
+			<value description="imageURL">default.png</value>
+			<null/>
+			<null/>
+			<null/>
+			<null/>
+			<value description="quickLaunchEnabled">1</value>
+			<value description="advancedItem">0</value>
+			<value description="position">1</value>
+		</row>
+		<row>
+			<value description="id">ALL_STAT</value>
+			<value description="version">1</value>
+			<value description="titleKey">alliance.statistics</value>
+			<value description="type">node</value>
+			<value description="dynamicType">choice</value>
+			<value description="dynamicSubType">alliance</value>
+			<value description="imageURL">default.png</value>
+			<null/>
+			<null/>
+			<null/>
+			<null/>
+			<value description="quickLaunchEnabled">1</value>
+			<value description="advancedItem">0</value>
+			<value description="position">2</value>
+		</row>
+		<row>
+			<value description="id">ALL_MAN</value>
+			<value description="version">1</value>
+			<value description="titleKey">alliance.management</value>
+			<value description="type">node</value>
+			<value description="dynamicType">choice</value>
+			<value description="dynamicSubType">alliance</value>
+			<value description="imageURL">default.png</value>
+			<null/>
+			<null/>
+			<null/>
+			<null/>
+			<value description="quickLaunchEnabled">1</value>
+			<value description="advancedItem">0</value>
+			<value description="position">3</value>
+		</row>
+		<row>
+			<value description="id">ALL_DESC</value>
+			<value description="version">1</value>
+			<value description="titleKey">alliance.description</value>
+			<value description="type">node</value>
+			<value description="dynamicType">choice</value>
+			<value description="dynamicSubType">alliance</value>
+			<value description="imageURL">default.png</value>
+			<null/>
+			<null/>
+			<null/>
+			<null/>
+			<value description="quickLaunchEnabled">1</value>
+			<value description="advancedItem">0</value>
+			<value description="position">1</value>
+		</row>
+		<row>
+			<value description="id">ALL_DIP</value>
+			<value description="version">1</value>
+			<value description="titleKey">alliance.diplomacy</value>
+			<value description="type">node</value>
+			<value description="dynamicType">choice</value>
+			<value description="dynamicSubType">alliance</value>
+			<value description="imageURL">default.png</value>
+			<null/>
+			<null/>
+			<null/>
+			<null/>
+			<value description="quickLaunchEnabled">1</value>
+			<value description="advancedItem">0</value>
+			<value description="position">4</value>
+		</row>
+		<row>
+			<value description="id">ALL_CONM</value>
+			<value description="version">1</value>
+			<value description="titleKey">alliance.contacts.manage</value>
+			<value description="type">node</value>
+			<value description="dynamicType">choice</value>
+			<value description="dynamicSubType">alliance</value>
+			<value description="imageURL">nachrichten.png</value>
+			<null/>
+			<null/>
+			<null/>
+			<null/>
+			<value description="quickLaunchEnabled">1</value>
+			<value description="advancedItem">0</value>
+			<value description="position">1</value>
+		</row>
+		<row>
+			<value description="id">ALL_CONV</value>
+			<value description="version">1</value>
+			<value description="titleKey">alliance.contacts.view</value>
+			<value description="type">node</value>
+			<value description="dynamicType">choice</value>
+			<value description="dynamicSubType">alliance</value>
+			<value description="imageURL">nachrichten.png</value>
+			<null/>
+			<null/>
+			<null/>
+			<null/>
+			<value description="quickLaunchEnabled">1</value>
+			<value description="advancedItem">0</value>
+			<value description="position">2</value>
+		</row>
+		<row>
+			<value description="id">ALL_CG</value>
+			<value description="version">1</value>
+			<value description="titleKey">alliance.contactgroups</value>
+			<value description="type">node</value>
+			<value description="dynamicType">choice</value>
+			<value description="dynamicSubType">alliance</value>
+			<value description="imageURL">nachrichten.png</value>
+			<null/>
+			<null/>
+			<null/>
+			<null/>
+			<value description="quickLaunchEnabled">1</value>
+			<value description="advancedItem">1</value>
+			<value description="position">3</value>
+		</row>
+		<!-- SEPARATOR -->
+		<row>
+			<value description="id">SEP003</value>
+			<value description="version">1</value>
+			<null/>
+			<value description="type">separator</value>
+			<null/>
+			<null/>
+			<null/>
+			<null/>
+			<null/>
+			<null/>
+			<null/>
+			<value description="quickLaunchEnabled">0</value>
+			<value description="advancedItem">0</value>
+			<value description="position">9</value>
+		</row>
+		<!-- SEPARATOR -->
+		<row>
+			<value description="id">SEP004</value>
+			<value description="version">1</value>
+			<null/>
+			<value description="type">separator</value>
+			<null/>
+			<null/>
+			<null/>
+			<null/>
+			<null/>
+			<null/>
+			<null/>
+			<value description="quickLaunchEnabled">0</value>
+			<value description="advancedItem">0</value>
+			<value description="position">10</value>
+		</row>
+		<!-- LOGOFF -->
+		<row>
+			<value description="id">LOGOUT</value>
+			<value description="version">1</value>
+			<value description="titleKey">menu.logout</value>
+			<value description="type">node</value>
+			<null/>
+			<null/>
+			<value description="imageURL">nachrichten.png</value>
+			<value description="fkGUIAction">1007</value>
+			<null/>
+			<null/>
+			<null/>
+			<value description="quickLaunchEnabled">0</value>
+			<value description="advancedItem">0</value>
+			<value description="position">11</value>
+		</row>
+		<!-- MAIN-MENU - END -->
+	</table>
+	
+	<table name="menuparent">
+		<column>fkMenuItem</column>
+		<column>fkParentMenuItem</column>
+		
+		<!-- MAIN-MENU - START -->
+		<!-- OVERVIEW-MENU -->
+		<row>
+			<value description="fkMenuItem">OV</value>
+			<value description="fkParentMenuItem">MR</value>
+		</row>
+		<row>
+			<value description="fkMenuItem">OV_USERS</value>
+			<value description="fkParentMenuItem">OV</value>
+		</row>
+		<row>
+			<value description="fkMenuItem">OV_EMPIRES</value>
+			<value description="fkParentMenuItem">OV</value>
+		</row>
+		<row>
+			<value description="fkMenuItem">OV_ALLIANCES</value>
+			<value description="fkParentMenuItem">OV</value>
+		</row>
+		<!-- SEPARATOR -->
+		<row>
+			<value description="fkMenuItem">SEP001</value>
+			<value description="fkParentMenuItem">MR</value>
+		</row>
+		<!-- ACCOUNT-MENU -->
+		<row>
+			<value description="fkMenuItem">ACC</value>
+			<value description="fkParentMenuItem">MR</value>
+		</row>
+		<row>
+			<value description="fkMenuItem">ACC_OVER</value>
+			<value description="fkParentMenuItem">ACC</value>
+		</row>
+		<row>
+			<value description="fkMenuItem">PROF</value>
+			<value description="fkParentMenuItem">ACC</value>
+		</row>
+		<row>
+			<value description="fkMenuItem">SET</value>
+			<value description="fkParentMenuItem">ACC</value>
+		</row>
+		<row>
+			<value description="fkMenuItem">SEC</value>
+			<value description="fkParentMenuItem">ACC</value>
+		</row>
+		<row>
+			<value description="fkMenuItem">SIT</value>
+			<value description="fkParentMenuItem">ACC</value>
+		</row>
+		<row>
+			<value description="fkMenuItem">ACC_CON</value>
+			<value description="fkParentMenuItem">ACC</value>
+		</row>
+		<row>
+			<value description="fkMenuItem">ACC_CINF</value>
+			<value description="fkParentMenuItem">ACC</value>
+		</row>
+		<!-- EMPIRES-MENU -->
+		<row>
+			<value description="fkMenuItem">EMPS</value>
+			<value description="fkParentMenuItem">MR</value>
+		</row>
+		<row>
+			<value description="fkMenuItem">EMPS_OVER</value>
+			<value description="fkParentMenuItem">EMPS</value>
+		</row>
+		<row>
+			<value description="fkMenuItem">CHA</value>
+			<value description="fkParentMenuItem">EMPS</value>
+		</row>
+		<row>
+			<value description="fkMenuItem">CHA_OPT</value>
+			<value description="fkParentMenuItem">CHA</value>
+		</row>
+		<row>
+			<value description="fkMenuItem">EMPSSIT</value>
+			<value description="fkParentMenuItem">MR</value>
+		</row>
+		<row>
+			<value description="fkMenuItem">CHASIT</value>
+			<value description="fkParentMenuItem">EMPSSIT</value>
+		</row>
+		<row>
+			<value description="fkMenuItem">CHASIT_OPT</value>
+			<value description="fkParentMenuItem">CHASIT</value>
+		</row>
+		<!-- SEPARATOR -->
+		<row>
+			<value description="fkMenuItem">SEP002</value>
+			<value description="fkParentMenuItem">MR</value>
+		</row>
+		<!-- CURRENT-EMPIRE-MENU -->
+		<row>
+			<value description="fkMenuItem">EMP</value>
+			<value description="fkParentMenuItem">MR</value>
+		</row>
+		<row>
+			<value description="fkMenuItem">EMP_OVER</value>
+			<value description="fkParentMenuItem">EMP</value>
+		</row>
+		<row>
+			<value description="fkMenuItem">EMP_STAT</value>
+			<value description="fkParentMenuItem">EMP</value>
+		</row>
+		<row>
+			<value description="fkMenuItem">EMP_MAN</value>
+			<value description="fkParentMenuItem">EMP</value>
+		</row>
+		<row>
+			<value description="fkMenuItem">EMP_DESC</value>
+			<value description="fkParentMenuItem">EMP_MAN</value>
+		</row>
+		<row>
+			<value description="fkMenuItem">EMP_DIP</value>
+			<value description="fkParentMenuItem">EMP</value>
+		</row>
+		<row>
+			<value description="fkMenuItem">EMP_CONM</value>
+			<value description="fkParentMenuItem">EMP_DIP</value>
+		</row>
+		<row>
+			<value description="fkMenuItem">EMP_CONV</value>
+			<value description="fkParentMenuItem">EMP_DIP</value>
+		</row>
+		<row>
+			<value description="fkMenuItem">EMP_CG</value>
+			<value description="fkParentMenuItem">EMP_DIP</value>
+		</row>
+		<!-- ALLIANCES-MENU -->
+		<row>
+			<value description="fkMenuItem">ALL</value>
+			<value description="fkParentMenuItem">MR</value>
+		</row>
+		<row>
+			<value description="fkMenuItem">ALL_OPT</value>
+			<value description="fkParentMenuItem">ALL</value>
+		</row>
+		<row>
+			<value description="fkMenuItem">ALL_OVER</value>
+			<value description="fkParentMenuItem">ALL_OPT</value>
+		</row>
+		<row>
+			<value description="fkMenuItem">ALL_STAT</value>
+			<value description="fkParentMenuItem">ALL_OPT</value>
+		</row>
+		<row>
+			<value description="fkMenuItem">ALL_MAN</value>
+			<value description="fkParentMenuItem">ALL_OPT</value>
+		</row>
+		<row>
+			<value description="fkMenuItem">ALL_DESC</value>
+			<value description="fkParentMenuItem">ALL_MAN</value>
+		</row>
+		<row>
+			<value description="fkMenuItem">ALL_DIP</value>
+			<value description="fkParentMenuItem">ALL_OPT</value>
+		</row>
+		<row>
+			<value description="fkMenuItem">ALL_CONM</value>
+			<value description="fkParentMenuItem">ALL_DIP</value>
+		</row>
+		<row>
+			<value description="fkMenuItem">ALL_CONV</value>
+			<value description="fkParentMenuItem">ALL_DIP</value>
+		</row>
+		<row>
+			<value description="fkMenuItem">ALL_CG</value>
+			<value description="fkParentMenuItem">ALL_DIP</value>
+		</row>
+		<!-- SEPARATOR -->
+		<row>
+			<value description="fkMenuItem">SEP003</value>
+			<value description="fkParentMenuItem">MR</value>
+		</row>
+		<!-- SEPARATOR -->
+		<row>
+			<value description="fkMenuItem">SEP004</value>
+			<value description="fkParentMenuItem">MR</value>
+		</row>
+		<!-- LOGOFF -->
+		<row>
+			<value description="fkMenuItem">LOGOUT</value>
+			<value description="fkParentMenuItem">MR</value>
+		</row>
+		<!-- MAIN-MENU - END -->
+	</table>
+	
+	<table name="app_userrole">
+		<column>id</column>
+		<column>version</column>
+		<column>rolename</column>
+		<column>onlyAllowedToSeeActivated</column>
+		<row>
+			<value description="id">1</value>
+			<value description="version">1</value>
+			<value description="rolename">ADMIN</value>
+			<value description="onlyAllowedToSeeActivated">0</value>
+		</row>
+		<row>
+			<value description="id">2</value>
+			<value description="version">1</value>
+			<value description="rolename">MODERATOR</value>
+			<value description="onlyAllowedToSeeActivated">1</value>
+		</row>
+		<row>
+			<value description="id">3</value>
+			<value description="version">1</value>
+			<value description="rolename">NORMAL_USER</value>
+			<value description="onlyAllowedToSeeActivated">1</value>
+		</row>
+		<row>
+			<value description="id">4</value>
+			<value description="version">1</value>
+			<value description="rolename">DEMO_USER</value>
+			<value description="onlyAllowedToSeeActivated">1</value>
+		</row>
+	</table>
+	
+	<table name="app_userrole_fallback">
+		<column>fkRole</column>
+		<column>fkFallbackRole</column>
+		<row>
+			<value description="fkRole">1</value>
+			<value description="fkFallbackRole">2</value>
+		</row>
+		<row>
+			<value description="fkRole">2</value>
+			<value description="fkFallbackRole">3</value>
+		</row>
+		<row>
+			<value description="fkRole">3</value>
+			<value description="fkFallbackRole">4</value>
+		</row>
+	</table>
+	
+	<table name="app_user">
+		<column>id</column>
+		<column>version</column>
+		<column>username</column>
+		<column>email</column>
+		<column>password</column>
+		<column>fkUserRole</column>
+		<column>roleExpireDate</column>
+		<column>activated</column>
+		<column>registrationDate</column>
+		<column>deleteDate</column>
+		<column>accountStatus</column>
+		<column>accountStatusExpireDate</column>
+		<column>nickname</column>
+		<column>title</column>
+		<column>birthday</column>
+		<column>city</column>
+		<column>sex</column>
+		<column>locale</column>
+		<column>timeZoneID</column>
+		<column>dateFormat</column>
+		<column>usingAdvancedMenu</column>
+		<column>usingTooltips</column>
+		<column>usingInfiniteSession</column>
+		<column>sessionTimeout</column>
+		<column>lastActiveDate</column>
+		<column>showEmail</column>
+		<column>description</column>
+		<column>imageURL</column>
+		<row>
+			<value description="id">0</value>
+			<value description="version">1</value>
+			<value description="username">admin</value>
+			<value description="email">admin@syncnapsis.com</value>
+			<value description="password">d033e22ae348aeb5660fc2140aec35850c4da997</value>
+			<value description="fkUserRole">1</value>
+			<null/>
+			<value description="activated">1</value>
+			<value description="registrationDate">2008-01-01</value>
+			<null/>
+			<value description="accountStatus">active</value>
+			<null/>
+			<value description="nickname">Administrator</value>
+			<value description="title">Mr.</value>
+			<null/>
+			<value description="city">Berlin</value>
+			<value description="sex">male</value>
+			<value description="locale">DE</value>
+			<value description="timeZoneID">Etc/GMT+1</value>
+			<value description="dateFormat">yMd24_minus</value>
+			<value description="usingAdvancedMenu">1</value>
+			<value description="usingTooltips">1</value>
+			<value description="usingInfiniteSession">0</value>
+			<value description="sessionTimeout">60</value>
+			<value description="lastActiveDate">2008-01-01</value>
+			<value description="showEmail">1</value>
+			<value description="description">Dies ist der Administrator</value>
+			<null/>
+		</row>
+	</table>	
+	
+	<table name="playerrole">
+		<column>id</column>
+		<column>version</column>
+		<column>rolename</column>
+		<column>maxEmpires</column>
+		<column>maxSitters</column>
+		<column>maxSitted</column>
+		<row>
+			<value description="id">1</value>
+			<value description="version">1</value>
+			<value description="rolename">PREMIUM_PLAYER</value>
+			<value description="maxEmpires">5</value>
+			<value description="maxSitters">5</value>
+			<value description="maxSitted">5</value>
+		</row>
+		<row>
+			<value description="id">2</value>
+			<value description="version">1</value>
+			<value description="rolename">NORMAL_PLAYER</value>
+			<value description="maxEmpires">2</value>
+			<value description="maxSitters">2</value>
+			<value description="maxSitted">2</value>
+		</row>
+		<row>
+			<value description="id">3</value>
+			<value description="version">1</value>
+			<value description="rolename">DEMO_PLAYER</value>
+			<value description="maxEmpires">1</value>
+			<value description="maxSitters">0</value>
+			<value description="maxSitted">0</value>
+		</row>
+	</table>
+	
+	<table name="playerrole_fallback">
+		<column>fkRole</column>
+		<column>fkFallbackRole</column>
+		<row>
+			<value description="fkRole">1</value>
+			<value description="fkFallbackRole">2</value>
+		</row>
+		<row>
+			<value description="fkRole">2</value>
+			<value description="fkFallbackRole">3</value>
+		</row>
+	</table>
+	
+	
+	<table name="authoritygroup">
+		<column>id</column>
+		<column>version</column>
+		<column>name</column>
+		<row>
+			<value description="id">1</value>
+			<value description="version">1</value>
+			<value description="name">contactauthorities</value>
+		</row>
+		<row>
+			<value description="id">2</value>
+			<value description="version">1</value>
+			<value description="name">allianceauthorities</value>
+		</row>
+	</table>
+	
+	<table name="authority">
+		<column>id</column>
+		<column>version</column>
+		<column>name</column>
+		<column>fkAuthorityGroup</column>
+		<row>
+			<value description="id">101</value>
+			<value description="version">1</value>
+			<value description="name">allowedToFlyIntoTerritory</value>
+			<value description="fkAuthorityGroup">1</value>
+		</row>
+		<row>
+			<value description="id">102</value>
+			<value description="version">1</value>
+			<value description="name">allowedToSeeEconomy</value>
+			<value description="fkAuthorityGroup">1</value>
+		</row>
+		<row>
+			<value description="id">103</value>
+			<value description="version">1</value>
+			<value description="name">allowedToSeeOnlineStatus</value>
+			<value description="fkAuthorityGroup">1</value>
+		</row>
+		<row>
+			<value description="id">104</value>
+			<value description="version">1</value>
+			<value description="name">allowedToSeeReports</value>
+			<value description="fkAuthorityGroup">1</value>
+		</row>
+		<row>
+			<value description="id">105</value>
+			<value description="version">1</value>
+			<value description="name">allowedToSeeSpecialOffersInMarketPlace</value>
+			<value description="fkAuthorityGroup">1</value>
+		</row>
+		<row>
+			<value description="id">106</value>
+			<value description="version">1</value>
+			<value description="name">allowedToSeeTroops</value>
+			<value description="fkAuthorityGroup">1</value>
+		</row>
+		<row>
+			<value description="id">107</value>
+			<value description="version">1</value>
+			<value description="name">allowedToUseScanners</value>
+			<value description="fkAuthorityGroup">1</value>
+		</row>
+		<row>
+			<value description="id">108</value>
+			<value description="version">1</value>
+			<value description="name">allowedToUseStargates</value>
+			<value description="fkAuthorityGroup">1</value>
+		</row>
+		<row>
+			<value description="id">109</value>
+			<value description="version">1</value>
+			<value description="name">notAllowedToAttack</value>
+			<value description="fkAuthorityGroup">1</value>
+		</row>
+		<row>
+			<value description="id">201</value>
+			<value description="version">1</value>
+			<value description="name">allowedToChangeAllianceDescription</value>
+			<value description="fkAuthorityGroup">2</value>
+		</row>
+		<row>
+			<value description="id">202</value>
+			<value description="version">1</value>
+			<value description="name">allowedToChangeDiplomacy</value>
+			<value description="fkAuthorityGroup">2</value>
+		</row>
+		<row>
+			<value description="id">203</value>
+			<value description="version">1</value>
+			<value description="name">allowedToCommandAllianceFleet</value>
+			<value description="fkAuthorityGroup">2</value>
+		</row>
+		<row>
+			<value description="id">204</value>
+			<value description="version">1</value>
+			<value description="name">allowedToDecruitMembers</value>
+			<value description="fkAuthorityGroup">2</value>
+		</row>
+		<row>
+			<value description="id">205</value>
+			<value description="version">1</value>
+			<value description="name">allowedToDefineDiplomacy</value>
+			<value description="fkAuthorityGroup">2</value>
+		</row>
+		<row>
+			<value description="id">206</value>
+			<value description="version">1</value>
+			<value description="name">allowedToDefinePosts</value>
+			<value description="fkAuthorityGroup">2</value>
+		</row>
+		<row>
+			<value description="id">207</value>
+			<value description="version">1</value>
+			<value description="name">allowedToManageForum</value>
+			<value description="fkAuthorityGroup">2</value>
+		</row>
+		<row>
+			<value description="id">208</value>
+			<value description="version">1</value>
+			<value description="name">allowedToPromoteMembers</value>
+			<value description="fkAuthorityGroup">2</value>
+		</row>
+		<row>
+			<value description="id">209</value>
+			<value description="version">1</value>
+			<value description="name">allowedToRecruitMembers</value>
+			<value description="fkAuthorityGroup">2</value>
+		</row>
+		<row>
+			<value description="id">210</value>
+			<value description="version">1</value>
+			<value description="name">allowedToSendAllianceMail</value>
+			<value description="fkAuthorityGroup">2</value>
+		</row>
+	</table>
+</dataset>
