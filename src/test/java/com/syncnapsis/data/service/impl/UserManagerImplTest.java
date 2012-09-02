@@ -1,20 +1,30 @@
 package com.syncnapsis.data.service.impl;
 
+import org.springframework.mock.web.MockHttpSession;
+
 import com.syncnapsis.data.dao.UserDao;
 import com.syncnapsis.data.model.User;
 import com.syncnapsis.data.service.UserManager;
 import com.syncnapsis.data.service.UserRoleManager;
 import com.syncnapsis.exceptions.UserNotFoundException;
+import com.syncnapsis.providers.SessionProvider;
+import com.syncnapsis.providers.UserProvider;
+import com.syncnapsis.security.BaseApplicationManager;
 import com.syncnapsis.tests.GenericNameManagerImplTestCase;
 import com.syncnapsis.tests.annotations.TestCoversClasses;
+import com.syncnapsis.tests.annotations.TestCoversMethods;
 import com.syncnapsis.tests.annotations.TestExcludesMethods;
+import com.syncnapsis.utils.StringUtil;
 
 @TestCoversClasses({ UserManager.class, UserManagerImpl.class })
-@TestExcludesMethods({"*etSecurityManager", "afterPropertiesSet"})
+@TestExcludesMethods({ "*etSecurityManager", "afterPropertiesSet" })
 public class UserManagerImplTest extends GenericNameManagerImplTestCase<User, Long, UserManager, UserDao>
 {
-	private UserManager	userManager;
-	private UserRoleManager userRoleManager;
+	private SessionProvider	sessionProvider;
+	private BaseApplicationManager	securityManager;
+	private UserProvider	userProvider;
+	private UserManager		userManager;
+	private UserRoleManager	userRoleManager;
 
 	@Override
 	protected void setUp() throws Exception
@@ -26,13 +36,26 @@ public class UserManagerImplTest extends GenericNameManagerImplTestCase<User, Lo
 		setMockManager(new UserManagerImpl(mockDao, userRoleManager));
 	}
 
-	public void testLogin() throws Exception
+	@TestCoversMethods({ "login", "logout" })
+	public void testLoginAndLogout() throws Exception
 	{
+		sessionProvider.set(new MockHttpSession());
+
 		String name, pw;
 
 		name = "user1";
 		pw = name;
 		assertEquals(userManager.getByName(name), userManager.login(name, pw));
+		assertNotNull(userProvider.get());
+		assertEquals(userManager.getByName(name), userProvider.get());
+		
+		assertTrue(userManager.logout());
+		assertNull(userProvider.get());
+	}
+
+	public void testLoginInvalid() throws Exception
+	{
+		String name, pw;
 
 		name = "user1";
 		pw = "other";
@@ -57,17 +80,35 @@ public class UserManagerImplTest extends GenericNameManagerImplTestCase<User, Lo
 			assertNotNull(e);
 			assertFalse(e.getMessage().endsWith("[wrong password]"));
 		}
+	}
 
-		fail("not implemented"); // TODO write the test
-	}
-	
-	public void testLogout() throws Exception
-	{
-		fail("not implemented"); // TODO write the test
-	}
-	
 	public void testRegister() throws Exception
 	{
-		fail("not implemented"); // TODO write the test	
+		String username = "a_new_user";
+		String email = "new@syncnapsis.com";
+		String password = "a_password";
+		
+		User newUser = userManager.register(username, email, password, password);
+		
+		assertNotNull(newUser);
+		assertEquals(username, newUser.getUsername());
+		assertEquals(email, newUser.getEmail());
+		assertEquals(StringUtil.encodePassword(password, securityManager.getEncryptionAlgorithm()), newUser.getPassword());
+		
+		assertNotNull(userManager.getByName(username));
+	}
+
+	public void testRegisterInvalid() throws Exception
+	{
+		String existingUserName = "user1";
+		User existingUser = userManager.getByName(existingUserName);
+		
+		String username = "a_new_user";
+		String email = "new@syncnapsis.com";
+		String password = "a_password";
+		
+		assertNull(userManager.register(existingUser.getUsername(), email, password, password));
+		assertNull(userManager.register(username, existingUser.getEmail(), password, password));
+		assertNull(userManager.register(username, email, password, password.toUpperCase()));
 	}
 }
