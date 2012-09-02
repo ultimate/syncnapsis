@@ -7,6 +7,7 @@ import java.lang.reflect.Method;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.BeanDefinitionStoreException;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.beans.factory.xml.XmlBeanDefinitionReader;
 import org.springframework.context.ApplicationContext;
@@ -334,7 +335,13 @@ public class ApplicationContextUtil implements ApplicationContextAware
 	 */
 	public static String[] getDefaultConfigLocations()
 	{
-		return new String[] { "classpath:/applicationContext-dao.xml", "classpath:/applicationContext-service.xml" };
+		// @formatter:off
+		return new String[] {
+				"classpath:/applicationContext-dao.xml",
+				"classpath:/applicationContext-security.xml",
+				"classpath:/applicationContext-service.xml"
+				};
+		// @formatter:on
 	}
 
 	/**
@@ -348,7 +355,19 @@ public class ApplicationContextUtil implements ApplicationContextAware
 	public static ConfigurableApplicationContext createApplicationContext(final String[] locations)
 	{
 		GenericApplicationContext context = new GenericApplicationContext();
-		new XmlBeanDefinitionReader(context).loadBeanDefinitions(locations);
+		XmlBeanDefinitionReader reader = new XmlBeanDefinitionReader(context);
+		for(String location: locations)
+		{
+			try
+			{
+				reader.loadBeanDefinitions(location);				
+				logger.debug("bean definition loaded: '" + location + "'");
+			}
+			catch(BeanDefinitionStoreException e)
+			{
+				logger.error("could not load bean definition: '" + location + "'");
+			}
+		}
 		context.refresh();
 		return context;
 	}
