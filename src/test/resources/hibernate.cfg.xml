@@ -1,0 +1,37 @@
+<!DOCTYPE hibernate-configuration PUBLIC "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+
+<hibernate-configuration>
+    <session-factory>
+    
+		<property name="connection.driver_class">${jdbc.driverClassName}</property>
+		<property name="connection.url">${jdbc.url}</property>
+		<property name="connection.username">${jdbc.username}</property>
+		<property name="connection.password">${jdbc.password}</property>
+		
+        <property name="connection.pool_size">1</property>
+ 
+		<property name="dialect">${hibernate.dialect}</property>		
+        <property name="current_session_context_class">thread</property>
+        <property name="cache.provider_class">org.hibernate.cache.NoCacheProvider</property>
+        <property name="show_sql">${hibernate.showSql}</property>
+        
+        <mapping class="com.syncnapsis.data.model.Alliance"/>
+        <mapping class="com.syncnapsis.data.model.AllianceMemberRank"/>
+        <mapping class="com.syncnapsis.data.model.AllianceRank"/>
+        <mapping class="com.syncnapsis.data.model.Authority"/>
+        <mapping class="com.syncnapsis.data.model.AuthorityGroup"/>
+        <mapping class="com.syncnapsis.data.model.AuthoritiesGenericImpl"/>   
+        <mapping class="com.syncnapsis.data.model.Empire"/>
+        <mapping class="com.syncnapsis.data.model.EmpireRank"/>
+        <mapping class="com.syncnapsis.data.model.Messenger"/>
+        <mapping class="com.syncnapsis.data.model.MessengerContact"/>
+        <mapping class="com.syncnapsis.data.model.Player"/>
+        <mapping class="com.syncnapsis.data.model.PlayerRank"/>
+        <mapping class="com.syncnapsis.data.model.PlayerRole"/>
+        <mapping class="com.syncnapsis.data.model.User"/>
+        <mapping class="com.syncnapsis.data.model.UserContact"/>
+        <mapping class="com.syncnapsis.data.model.UserRole"/>
+        
+    </session-factory>
+</hibernate-configuration>
