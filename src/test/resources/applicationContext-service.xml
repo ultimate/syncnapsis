@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+            http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd
+            http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.0.xsd"
+       default-lazy-init="true">
+    
+    <!-- =================================================================== -->
+    <!-- Managers: For accessing DAOs                                        -->
+    <!-- =================================================================== -->     
+    
+    <bean id="authoritiesManager" class="com.syncnapsis.data.service.impl.AuthoritiesGenericImplManagerImpl">
+        <constructor-arg ref="authoritiesDao"/>
+    </bean>  
+    
+    <bean id="authorityManager" class="com.syncnapsis.data.service.impl.AuthorityManagerImpl">
+        <constructor-arg ref="authorityDao"/>
+    </bean>  
+    
+    <bean id="authorityGroupManager" class="com.syncnapsis.data.service.impl.AuthorityGroupManagerImpl">
+        <constructor-arg ref="authorityGroupDao"/>
+    </bean>  
+
+    <bean id="allianceManager" class="com.syncnapsis.data.service.impl.AllianceManagerImpl">
+        <constructor-arg ref="allianceDao"/>
+    </bean>  
+    
+    <bean id="allianceMemberRankManager" class="com.syncnapsis.data.service.impl.AllianceMemberRankManagerImpl">
+        <constructor-arg ref="allianceMemberRankDao"/>
+    </bean>  
+
+    <bean id="allianceAllianceContactManager" class="com.syncnapsis.data.service.impl.AllianceAllianceContactManagerImpl">
+        <constructor-arg ref="allianceAllianceContactDao"/>
+    </bean> 
+     
+    <bean id="contactGroupManager" class="com.syncnapsis.data.service.impl.ContactGroupManagerImpl">
+        <constructor-arg ref="contactGroupDao"/>
+    </bean>  
+
+    <bean id="empireManager" class="com.syncnapsis.data.service.impl.EmpireManagerImpl">
+        <constructor-arg ref="empireDao"/>
+    </bean>  
+    
+    <bean id="empireAllianceContactManager" class="com.syncnapsis.data.service.impl.EmpireAllianceContactManagerImpl">
+        <constructor-arg ref="empireAllianceContactDao"/>
+    </bean>  
+
+    <bean id="empireEmpireContactManager" class="com.syncnapsis.data.service.impl.EmpireEmpireContactManagerImpl">
+        <constructor-arg ref="empireEmpireContactDao"/>
+    </bean>    
+    
+    <bean id="menuItemManager" class="com.syncnapsis.data.service.impl.MenuItemManagerImpl">
+        <constructor-arg ref="menuItemDao"/>
+        <constructor-arg ref="userManager"/>
+    	<property name="optionHandlerClasses">
+    		<list>
+    			<value>com.syncnapsis.ui.menu.impl.AllianceMenuItemOptionHandler</value>
+    			<value>com.syncnapsis.ui.menu.impl.EmpireMenuItemOptionHandler</value>
+    		</list>
+    	</property>
+    </bean>   
+    
+    <bean id="menuQuickLaunchItemManager" class="com.syncnapsis.data.service.impl.MenuQuickLaunchItemManagerImpl">
+        <constructor-arg ref="menuQuickLaunchItemDao"/>
+        <constructor-arg ref="menuItemManager"/>
+        <constructor-arg ref="userManager"/>
+    </bean>  
+    
+    <bean id="userManager" class="com.syncnapsis.data.service.impl.UserManagerImpl">
+        <constructor-arg ref="userDao"/>
+    </bean>
+    
+</beans>
