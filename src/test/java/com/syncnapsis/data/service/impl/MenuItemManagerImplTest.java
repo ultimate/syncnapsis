@@ -7,7 +7,6 @@ import com.syncnapsis.data.model.MenuItem;
 import com.syncnapsis.data.model.User;
 import com.syncnapsis.data.service.MenuItemManager;
 import com.syncnapsis.data.service.UserManager;
-import com.syncnapsis.providers.SessionProvider;
 import com.syncnapsis.providers.UserProvider;
 import com.syncnapsis.tests.GenericManagerImplTestCase;
 import com.syncnapsis.tests.annotations.TestCoversClasses;
@@ -19,7 +18,6 @@ import com.syncnapsis.utils.graphs.GenericTreeModel;
 @TestExcludesMethods({ "setOptionHandlerClasses", "addOptionHandler", "getOptionHandlers" })
 public class MenuItemManagerImplTest extends GenericManagerImplTestCase<MenuItem, String, MenuItemManager, MenuItemDao>
 {
-	private SessionProvider	sessionProvider;
 	private UserProvider	userProvider;
 	private UserManager		userManager;
 	private MenuItemManager	menuItemManager;
@@ -54,8 +52,6 @@ public class MenuItemManagerImplTest extends GenericManagerImplTestCase<MenuItem
 	{
 		User user = userManager.getByName("user1");
 		userProvider.set(user);
-		// sessionProvider.get().setAttribute(BaseApplicationConstants.SESSION_USER_KEY,
-		// user.getId());
 
 		GenericTreeModel<MenuItem> tree = menuItemManager.getMenuAsTree("MR");
 		assertNotNull(tree);

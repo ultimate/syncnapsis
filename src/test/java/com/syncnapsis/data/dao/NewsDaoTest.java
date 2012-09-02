@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.hibernate.ObjectNotFoundException;
+
 import com.syncnapsis.data.dao.hibernate.NewsDaoHibernate;
 import com.syncnapsis.data.model.News;
 import com.syncnapsis.enums.EnumLocale;
