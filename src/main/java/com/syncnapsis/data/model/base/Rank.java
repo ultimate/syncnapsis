@@ -19,39 +19,38 @@ import com.syncnapsis.data.model.annotations.RankCriterion;
 import com.syncnapsis.utils.ReflectionsUtil;
 
 /**
- * Abstrakte Oberklasse für die Punktebewertung in der Rangliste.
- * Bei Ableitung dieser Klasse können verschiedene Bewertungskriterien implementiert werden.
- * Die Punktebewertung muss in Punkten vom Typ int vorgenommen werden.
- * Die Klasse stellt dabei eine generische Erweiterung basierend auf Reflections zur Verfügung, über
- * die automatisch die definierten Felder der Subklasse ausgelesen werden und so die verfügbaren
- * Bewertungskriterien ermittelt werden. Des Weiteren wird das setzen und abfragen der Punkte über
- * Reflections realisiert.
+ * Abstract parent Class for Pointrankings within a Ranklist.<br>
+ * When subclassing this Class different rating criterions can be implemented.<br>
+ * The point rating has to be made by Fields of Type int.<br>
+ * This Class offers generic extensibility via Reflections, for being able to automatically scan the
+ * subclass for rating criterions marked with the {@link RankCriterion}-Annotation.<br>
+ * Furthermore setting and getting of points is implemented via Reflections.<br>
  * 
  * @author ultimate
- * @param <E> - die Klasse auf die sich die Bewertung bezieht
+ * @param <E> - the Class the rating refers to
  */
 @MappedSuperclass
 public abstract class Rank<E extends BaseObject<?>> extends BaseObject<Long>
 {
 	/**
-	 * Das Objekt, zu dem dieser Rang gehört.
+	 * The entity this Rank belongs to (e.g. User, Player, Empire, ...)
 	 */
 	protected E			entity;
 
 	/**
-	 * Der Zeitpunkt zu dem dieser Rang berechnet oder zuletzt aktualisiert wurde.
+	 * The time this Rank hast last been calculated or updated.
 	 */
 	protected Date		timeOfCalculation;
 
 	/**
-	 * Ist dies der aktuelle/neueste Rang zum Objekt?
+	 * Is this the current/newest Rank for the entity?
 	 */
 	protected boolean	actual;
 
 	/**
-	 * Das Objekt, zu dem dieser Rang gehört.
+	 * The entity this Rank belongs to (e.g. User, Player, Empire, ...)
 	 * 
-	 * @return das Objekt
+	 * @return the entity
 	 */
 	@ManyToOne
 	@JoinColumn(name = "fkEntity", nullable = false)
@@ -61,9 +60,9 @@ public abstract class Rank<E extends BaseObject<?>> extends BaseObject<Long>
 	}
 
 	/**
-	 * Der Zeitpunkt zu dem dieser Rang berechnet oder zuletzt aktualisiert wurde.
+	 * The time this Rank hast last been calculated or updated.
 	 * 
-	 * @return der Zeitpunkt
+	 * @return the time of calculation
 	 */
 	@Column(nullable = false)
 	public Date getTimeOfCalculation()
@@ -72,9 +71,9 @@ public abstract class Rank<E extends BaseObject<?>> extends BaseObject<Long>
 	}
 
 	/**
-	 * Ist dies der aktuelle/neueste Rang zum Objekt?
+	 * Is this the current/newest Rank for the entity?
 	 * 
-	 * @return true oder false
+	 * @return true or false
 	 */
 	@Column(nullable = false)
 	public boolean isActual()
@@ -83,9 +82,9 @@ public abstract class Rank<E extends BaseObject<?>> extends BaseObject<Long>
 	}
 
 	/**
-	 * Das Objekt, zu dem dieser Rang gehört.
+	 * The entity this Rank belongs to (e.g. User, Player, Empire, ...)
 	 * 
-	 * @param entity - das Objekt
+	 * @param entity - the entity
 	 */
 	public void setEntity(E entity)
 	{
@@ -93,9 +92,9 @@ public abstract class Rank<E extends BaseObject<?>> extends BaseObject<Long>
 	}
 
 	/**
-	 * Der Zeitpunkt zu dem dieser Rang berechnet oder zuletzt aktualisiert wurde.
+	 * The time this Rank hast last been calculated or updated.
 	 * 
-	 * @param timeOfCalculation - der Zeitpunkt
+	 * @param timeOfCalculation - the time of calculation
 	 */
 	public void setTimeOfCalculation(Date timeOfCalculation)
 	{
@@ -103,9 +102,9 @@ public abstract class Rank<E extends BaseObject<?>> extends BaseObject<Long>
 	}
 
 	/**
-	 * Ist dies der aktuelle/neueste Rang zum Objekt?
+	 * Is this the current/newest Rank for the entity?
 	 * 
-	 * @param actual - true oder false
+	 * @param actual - true or false
 	 */
 	public void setActual(boolean actual)
 	{
@@ -113,12 +112,13 @@ public abstract class Rank<E extends BaseObject<?>> extends BaseObject<Long>
 	}
 
 	/**
-	 * Setzt den Punktewert für ein bestimmtes Bewertungskriterium.
-	 * Das Bewertungskriterium kann sowohl ein Hauptbewertungskriterium, als auch ein
-	 * Subbewertungskriteriun sein.
+	 * Set the point value for a rating criterion via Reflections (so exactly knowledge of the
+	 * subclass is not necessary). The criterion either be a main rating criterion or a
+	 * subcriterion.
 	 * 
-	 * @param criterion - das zu setzende Bewertungskriterium
-	 * @return die Differenz zum vorherigen Punktewert
+	 * @param criterion - the rating criterion to set
+	 * @param points - the new point value to set
+	 * @return the difference to the last point value
 	 */
 	@Transient
 	public final int setPoints(String criterion, int points)
@@ -140,12 +140,12 @@ public abstract class Rank<E extends BaseObject<?>> extends BaseObject<Long>
 	}
 
 	/**
-	 * Setzt den Punktewert für ein bestimmtes Bewertungskriterium.
-	 * Das Bewertungskriterium kann sowohl ein Hauptbewertungskriterium, als auch ein
-	 * Subbewertungskriteriun sein.
+	 * Get the point value for a rating criterion via Reflections (so exactly knowledge of the
+	 * subclass is not necessary). The criterion either be a main rating criterion or a
+	 * subcriterion.
 	 * 
-	 * @param criterion - das zu setzende Bewertungskriterium
-	 * @return der Punktewert
+	 * @param criterion - the rating criterion to get
+	 * @return the point value
 	 */
 	@Transient
 	public final int getPoints(String criterion)
@@ -213,10 +213,10 @@ public abstract class Rank<E extends BaseObject<?>> extends BaseObject<Long>
 	}
 
 	/**
-	 * Nicht-Statischer Zugriff auf getCategories
+	 * Not-static access to {@link Rank#getCategories(Class)}
 	 * 
 	 * @see Rank#getCategories(Class)
-	 * @return die Kategorien
+	 * @return the categories
 	 */
 	@SuppressWarnings("unchecked")
 	@Transient
@@ -226,11 +226,11 @@ public abstract class Rank<E extends BaseObject<?>> extends BaseObject<Long>
 	}
 
 	/**
-	 * Nicht-Statischer Zugriff auf getPrimaryCriterion
+	 * Not-static access to {@link Rank#getPrimaryCriterion(Class, String)}
 	 * 
-	 * @see Rank#getPrimaryCriterion(Class)
-	 * @param category - die Bewertungs-Kategorie
-	 * @return das Bewertungskriterium
+	 * @see Rank#getPrimaryCriterion(Class, String)
+	 * @param category - the category
+	 * @return the criterion
 	 */
 	@SuppressWarnings("unchecked")
 	@Transient
@@ -240,11 +240,11 @@ public abstract class Rank<E extends BaseObject<?>> extends BaseObject<Long>
 	}
 
 	/**
-	 * Nicht-Statischer Zugriff auf getAvailableCriterions
+	 * Not-static access to {@link Rank#getAvailableCriterions(Class, String)}
 	 * 
-	 * @see Rank#getAvailableCriterions(Class)
-	 * @param category - die Bewertungs-Kategorie
-	 * @return die Liste der Bewertungskriterien
+	 * @see Rank#getAvailableCriterions(Class, String)
+	 * @param category - the category
+	 * @return the List of criterions
 	 */
 	@SuppressWarnings("unchecked")
 	@Transient
@@ -254,11 +254,11 @@ public abstract class Rank<E extends BaseObject<?>> extends BaseObject<Long>
 	}
 
 	/**
-	 * Nicht-Statischer Zugriff auf getAverageCriterion
+	 * Not-static access to {@link Rank#getAverageCriterion(Class, String)}
 	 * 
-	 * @see Rank#getAverageCriterion(Class)
-	 * @param criterion - das eine Bewertungskriterium
-	 * @return das andere Bewertungskriterium
+	 * @see Rank#getAverageCriterion(Class, String)
+	 * @param criterion - the criterion to get the average for
+	 * @return the average criterion
 	 */
 	@SuppressWarnings("unchecked")
 	@Transient
@@ -268,10 +268,10 @@ public abstract class Rank<E extends BaseObject<?>> extends BaseObject<Long>
 	}
 
 	/**
-	 * Nicht-Statischer Zugriff auf getAverageAmount
+	 * Not-static access to {@link Rank#getAverageAmount(Class)}
 	 * 
 	 * @see Rank#getAverageAmount(Class)
-	 * @return das Bewertungskriterium
+	 * @return the criterion
 	 */
 	@SuppressWarnings("unchecked")
 	@Transient
@@ -281,10 +281,10 @@ public abstract class Rank<E extends BaseObject<?>> extends BaseObject<Long>
 	}
 
 	/**
-	 * Nicht-Statischer Zugriff auf getAllCriterions
+	 * Not-static access to {@link Rank#getAllCriterions(Class)}
 	 * 
 	 * @see Rank#getAllCriterions(Class)
-	 * @return die Kriterien
+	 * @return the List of criterions
 	 */
 	@SuppressWarnings("unchecked")
 	@Transient
@@ -293,15 +293,17 @@ public abstract class Rank<E extends BaseObject<?>> extends BaseObject<Long>
 		return getAllCriterions((Class<? extends Rank<?>>) getClass());
 	}
 
+	// STATIC PART //
+
 	/**
-	 * Eine Map mit allen primären Bewertungskriterien zu allen Kategorien der Rank-Klassen
+	 * A Map of all primary criterions for all categories of all Rank-Classes
 	 * 
 	 * @see Rank#getPrimaryCriterion()
 	 */
 	protected static final Map<Class<? extends Rank<?>>, Map<String, String>>		primaryCriterions	= new HashMap<Class<? extends Rank<?>>, Map<String, String>>();
 
 	/**
-	 * Eine Map mit allen Bewertungskriterien zu allen Kategorien der Rank-Klassen
+	 * A Map of all criterions for all categerories of all Rank-Classes
 	 * 
 	 * @see Rank#getCategories(Class)
 	 * @see Rank#getAvailableCriterions(Class)
@@ -309,29 +311,29 @@ public abstract class Rank<E extends BaseObject<?>> extends BaseObject<Long>
 	protected static final Map<Class<? extends Rank<?>>, Map<String, List<String>>>	categoryCriterions	= new HashMap<Class<? extends Rank<?>>, Map<String, List<String>>>();
 
 	/**
-	 * Eine Map mit allen Bewertungskriterien, die Durchschnitte enthalten
+	 * A Map of all criterions contaning average values for all Rank-Classes
 	 * 
 	 * @see Rank#getAverageCriterion(Class, String)
 	 */
 	protected static final Map<Class<? extends Rank<?>>, Map<String, String>>		averageCriterions	= new HashMap<Class<? extends Rank<?>>, Map<String, String>>();
 
 	/**
-	 * Eine Map mit allen Durchschnittsmengen für die Durchschnittsberechnung
+	 * A Map of all average amounts for the average-calculation for all Rank-Classes
 	 * 
 	 * @see Rank#getAverageAmount(Class)
 	 */
 	protected static final Map<Class<? extends Rank<?>>, String>					averageAmounts		= new HashMap<Class<? extends Rank<?>>, String>();
 
 	/**
-	 * Eine Map mit allen Kriterien für eine Klasse
+	 * A Map of all criterions for all Rank-Classes
 	 */
 	protected static final Map<Class<? extends Rank<?>>, List<String>>				allCriterions		= new HashMap<Class<? extends Rank<?>>, List<String>>();
 
 	/**
-	 * Gibt alle verfügbaren Bewertungskategorien einer Rank-Klasse zurück.
+	 * Get all available categories for a Rank-Class
 	 * 
-	 * @param rankClass - die Rank-Klasse
-	 * @return die Kategorien
+	 * @param rankClass - the Rank-Class
+	 * @return the Set of categories
 	 */
 	public static final Set<String> getCategories(Class<? extends Rank<?>> rankClass)
 	{
@@ -341,11 +343,11 @@ public abstract class Rank<E extends BaseObject<?>> extends BaseObject<Long>
 	}
 
 	/**
-	 * Gibt das primäre Bewertungskriterium zu einer Kategorie einer Rank-Klasse zurück.
+	 * Get the primary criterion for a category for a Rank-Class
 	 * 
-	 * @param rankClass - die Rank-Klasse
-	 * @param category - die Bewertungs-Kategorie
-	 * @return das Bewertungskriterium
+	 * @param rankClass - the Rank-Class
+	 * @param category - the category
+	 * @return the primary criterion
 	 */
 	public static final String getPrimaryCriterion(Class<? extends Rank<?>> rankClass, String category)
 	{
@@ -357,14 +359,13 @@ public abstract class Rank<E extends BaseObject<?>> extends BaseObject<Long>
 	}
 
 	/**
-	 * Gibt eine Liste der enthaltenen Bewertungskriterien zurück zu einer Kategorie einer
-	 * Rank-Klasse. Die Reihenfolge dieser Kriterien in der Liste entspricht der Reihenfolge der
-	 * Felddefinitionen in der Klasse und repräsentiert die Reihenfolge der Spalten in der späteren
-	 * Rangliste.
+	 * Get the List of criterions for a category of a Rank-Class. The order of the criterions will
+	 * match the order of the Fields within th Class and should represent the order of the columns
+	 * in the ranking.
 	 * 
-	 * @param rankClass - die Rank-Klasse
-	 * @param category - die Bewertungs-Kategorie
-	 * @return die Liste der Bewertungskriterien
+	 * @param rankClass - the Rank-Class
+	 * @param category - the category
+	 * @return the List of criterions
 	 */
 	public static final List<String> getAvailableCriterions(Class<? extends Rank<?>> rankClass, String category)
 	{
@@ -376,13 +377,13 @@ public abstract class Rank<E extends BaseObject<?>> extends BaseObject<Long>
 	}
 
 	/**
-	 * Gibt den Namen des Bewertungskriteriums zurück, dass für das gegebene Kriterium den
-	 * Durchschnitt repräsentiert, sofern, dies über averageFor() definiert wurde.
+	 * Get the name of the criterions that represents the average for the given criterion of a
+	 * Rank-Class as far as the average defines {@link RankCriterion#averageFor()}
 	 * 
 	 * @see RankCriterion#averageFor()
-	 * @param rankClass - die Rank-Klasse
-	 * @param criterion - das eine Bewertungskriterium
-	 * @return das andere Bewertungskriterium
+	 * @param rankClass - the Rank-Class
+	 * @param criterion - the criterion to get the average for
+	 * @return the average criterion
 	 */
 	public static final String getAverageCriterion(Class<? extends Rank<?>> rankClass, String criterion)
 	{
@@ -394,11 +395,10 @@ public abstract class Rank<E extends BaseObject<?>> extends BaseObject<Long>
 	}
 
 	/**
-	 * Gibt das Kriterium zurück, dass für die Anzahl bei der Durchschnittsberechnung verantwortlich
-	 * ist.
+	 * Get the criterion that represent the amount for average calculation for a Rank-Class.
 	 * 
-	 * @param rankClass - die Rank-Klasse
-	 * @return das Bewertungskriterium
+	 * @param rankClass - the Rank-Class
+	 * @return the criterion
 	 */
 	public static final String getAverageAmount(Class<? extends Rank<?>> rankClass)
 	{
@@ -408,10 +408,10 @@ public abstract class Rank<E extends BaseObject<?>> extends BaseObject<Long>
 	}
 
 	/**
-	 * Gibt alle verfügbaren Bewertungskriterien einer Rank-Klasse zurück.
+	 * Get all available criterions for a Rank-Class
 	 * 
-	 * @param rankClass - die Rank-Klasse
-	 * @return die Kriterien
+	 * @param rankClass - the Rank-Class
+	 * @return the List of criterions
 	 */
 	public static final List<String> getAllCriterions(Class<? extends Rank<?>> rankClass)
 	{
@@ -421,9 +421,9 @@ public abstract class Rank<E extends BaseObject<?>> extends BaseObject<Long>
 	}
 
 	/**
-	 * Liest über Reflections die Bewertungskriterien für eine Subklasse aus.
+	 * Read all criterions marked with {@link RankCriterion} from the subclass via Reflections.
 	 * 
-	 * @param rankClass - die Rang-Subklasse
+	 * @param rankClass - the Rank-subclass
 	 */
 	@SuppressWarnings("unchecked")
 	private static synchronized void readCriterions(Class<? extends Rank<?>> rankClass)

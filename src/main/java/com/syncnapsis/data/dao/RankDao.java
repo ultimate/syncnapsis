@@ -7,44 +7,43 @@ import com.syncnapsis.data.model.base.BaseObject;
 import com.syncnapsis.data.model.base.Rank;
 
 /**
- * 
- * Dao-Interface für den Zugriff auf Rank.
+ * Dao-Interface for accessing Rank
  * 
  * @author ultimate
- * @param <R> - die Rank-Klasse
- * @param <T> - die Klasse auf die sich die Bewertung bezieht
- * @param <PK> - der Primary-Key-Typ des vom Rank aus referenzierten Objekts
+ * @param <R> - the Rank-Class
+ * @param <T> - the Class the rating refers to
+ * @param <PK> - der Primary-Key-Type of the Object referenced by the Rank
  */
 public interface RankDao<R extends Rank<T>, T extends BaseObject<PK>, PK extends Serializable> extends GenericDao<R, Long>
 {
 	/**
-	 * Gibt den aktuellen Rang zu einem Objekt zurück
+	 * Get the current Rank for an Object
 	 * 
-	 * @param entityId - die ID des Objekts
+	 * @param entityId - the ID of the Object
 	 * @return der Rang
 	 */
 	public R getByEntity(PK entityId);
 
 	/**
-	 * Gibt die Historie der Ränge zu einem Objekt zurück
+	 * Get the history of Ranks for an Object
 	 * 
-	 * @param entityId - die ID des Objekts
-	 * @return der Historie der Ränge
+	 * @param entityId - the ID of the Object
+	 * @return the history of Ranks
 	 */
 	public List<R> getHistoryByEntity(PK entityId);
 
 	/**
-	 * Gibt alle aktuellen Ränge sortiert nach dem Bewertungskriterium zurück.
+	 * Get all current Ranks ordered by the given rating criterion
 	 * 
-	 * @param criterion - das Bewertungskriterium
-	 * @return die Liste der Ränge
+	 * @param criterion - the rating criterion
+	 * @return the List of Ranks
 	 */
 	public List<R> getByCriterion(String criterion);
 
 	/**
-	 * Gibt alle aktuellen Ränge sortiert nach dem primären Bewertungskriterium der Default-Kategorie zurück.
+	 * Get all current Ranks ordered by the primary rating criterion of the default category.
 	 * 
-	 * @return die Liste der Ränge
+	 * @return the List of Ranks
 	 */
 	public List<R> getByDefaultPrimaryCriterion();
 }

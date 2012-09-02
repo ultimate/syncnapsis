@@ -9,25 +9,26 @@ import com.syncnapsis.data.model.base.Rank;
 import com.syncnapsis.data.service.RankManager;
 
 /**
- * Manager-Implementierung für den generischen Zugriff auf die Methoden der RankDao durch einfache
- * Weiterleitung der RankManager-Aufrufe.
+ * Manager-Implementation for generic access to methods of RankDao using simple forwarding of the
+ * method calls.
  * 
  * @author ultimate
- * @param <R> - die Rank-Klasse
- * @param <T> - die Klasse auf die sich die Bewertung bezieht
- * @param <PK> - der Primary-Key-Typ des vom Rank aus referenzierten Objekts
+ * @param <R> - the Rank-Class
+ * @param <T> - the Class the rating refers to
+ * @param <PK> - der Primary-Key-Type of the Object referenced by the Rank
  */
-public abstract class GenericRankManagerImpl<R extends Rank<T>, T extends BaseObject<PK>, PK extends Serializable> extends GenericManagerImpl<R, Long> implements RankManager<R, T, PK>
+public abstract class GenericRankManagerImpl<R extends Rank<T>, T extends BaseObject<PK>, PK extends Serializable> extends
+		GenericManagerImpl<R, Long> implements RankManager<R, T, PK>
 {
 	/**
-	 * RankDao für den Datenbankzugriff.
+	 * RankDao for database access
 	 */
 	protected RankDao<R, T, PK>	rankDao;
 
 	/**
-	 * Standard Constructor, der die DAOs speichert.
+	 * Standard Constructor
 	 * 
-	 * @param rankDao - RankDao für den Datenbankzugriff
+	 * @param rankDao - RankDao for database access
 	 */
 	public GenericRankManagerImpl(final RankDao<R, T, PK> rankDao)
 	{
@@ -36,7 +37,7 @@ public abstract class GenericRankManagerImpl<R extends Rank<T>, T extends BaseOb
 	}
 
 	/*
-	 * 	@Override(non-Javadoc)
+	 * @Override(non-Javadoc)
 	 * @see com.syncnapsis.data.service.RankManager#getByCriterion(java.lang.String)
 	 */
 	public List<R> getByCriterion(String criterion)
@@ -53,7 +54,7 @@ public abstract class GenericRankManagerImpl<R extends Rank<T>, T extends BaseOb
 	{
 		return rankDao.getByEntity(entityId);
 	}
-	
+
 	/*
 	 * (non-Javadoc)
 	 * @see com.syncnapsis.data.service.RankManager#getHistoryByEntity(java.io.Serializable)

@@ -6,51 +6,52 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Annotation für die Kennzeichnung von Kriterien für die Darstellung von Objekten in Ranking-Listen
+ * Annotation for marking criterions when subclassing Rank.<br>
+ * Rank offers generic functionality to scan the subclass for criterions marked by this Annotation.
  * 
  * @author ultimate
  */
-@Target( { ElementType.FIELD })
+@Target({ ElementType.FIELD })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface RankCriterion
 {
 	/**
-	 * Die default Kategorie
+	 * The default category
 	 */
-	public static final String defaultCategory = "main";
-	
+	public static final String	defaultCategory	= "main";
+
 	/**
-	 * Gibt die Kategorie eines Bewertungskriteriums an. Die Kriterien werden in Kategorien
-	 * zusammengefasst, um so gemeinsam ausgegeben werden zu können.
+	 * Get the category for a rating criterion. The criterions are grouped in categories to be able
+	 * to evaluate or display them together.
 	 * 
 	 * @return category
 	 */
 	String category() default defaultCategory;
 
 	/**
-	 * Kennzeichnung des primärenen Kriteriums einer Kategorie. Es sollte nur ein primäres Kriterium
-	 * geben.
+	 * Marking of the primary criterion within a category. There should only be one primary
+	 * criterion per category.
 	 * 
 	 * @return primary
 	 */
 	boolean primary() default false;
 
 	/**
-	 * Ist dieses Kriterium ein Durchschnittswert eines anderen Kriteriums?
+	 * Is this the average value of another criterion?
 	 * 
 	 * @return average
 	 */
 	boolean average() default false;
 
 	/**
-	 * Das Kriterium, zu dem dieses Kriterium ein Durchschnittswert ist.
+	 * The criterion this criterion is the average for.
 	 * 
 	 * @return averageFor
 	 */
 	String averageFor() default "";
 
 	/**
-	 * Kennzeichnung dieses Kriteriums als Anzahl für die Durchschnittsberechnung.
+	 * Marking of this criterion for the amount used for average calculation.
 	 * 
 	 * @return averageAmount
 	 */

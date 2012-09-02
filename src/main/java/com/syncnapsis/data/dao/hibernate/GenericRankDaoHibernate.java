@@ -9,23 +9,26 @@ import com.syncnapsis.data.model.base.BaseObject;
 import com.syncnapsis.data.model.base.Rank;
 
 /**
- * Dao-Implementierung für Hibernate für den generischen Zugriff auf Rank-Klassen
+ * Dao-Implementatino for hibernate for generic access to Rank-Classes
  * 
  * @author ultimate
- * @param <R> - die Rank-Klasse
- * @param <T> - die Klasse auf die sich die Bewertung bezieht
- * @param <PK> - der Primary-Key-Typ des vom Rank aus referenzierten Objekts
+ * @param <R> - the Rank-Class
+ * @param <T> - the Class the rating refers to
+ * @param <PK> - der Primary-Key-Type of the Object referenced by the Rank
  */
-public abstract class GenericRankDaoHibernate<R extends Rank<T>, T extends BaseObject<PK>, PK extends Serializable> extends GenericDaoHibernate<R, Long> implements RankDao<R, T, PK>
+public abstract class GenericRankDaoHibernate<R extends Rank<T>, T extends BaseObject<PK>, PK extends Serializable> extends
+		GenericDaoHibernate<R, Long> implements RankDao<R, T, PK>
 {
 	/**
-	 * Die Spalte nach der bei Punktgleichheit sortiert wird.
+	 * The column to sort by if two ranks have equal points.
 	 */
-	private String secondarySortString;
-	
+	private String	secondarySortString;
+
 	/**
-	 * Erzeugt eine neue DAO-Instanz durch die Super-Klasse GenericDaoHibernate
-	 * mit der übergebenen Rank-Modell-Klasse
+	 * Create a new DAO-Instance (subtype of GenericDaoHiberate) with the given Rank-Model-Class
+	 * 
+	 * @param persistentClass - the Rank-Model-Class
+	 * @param secondarySortString - The column to sort by if two ranks have equal points.
 	 */
 	public GenericRankDaoHibernate(final Class<R> persistentClass, String secondarySortString)
 	{
@@ -43,7 +46,8 @@ public abstract class GenericRankDaoHibernate<R extends Rank<T>, T extends BaseO
 	{
 		if(criterion == null)
 			criterion = Rank.getPrimaryCriterion(persistentClass, RankCriterion.defaultCategory);
-		return createQuery("from " + this.persistentClass.getName() + " where actual=true order by " + criterion + " desc" + secondarySortString).list();
+		return createQuery("from " + this.persistentClass.getName() + " where actual=true order by " + criterion + " desc" + secondarySortString)
+				.list();
 	}
 
 	/*
