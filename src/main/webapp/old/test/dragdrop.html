@@ -1,0 +1,85 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<script type="text/javascript" src="../gui/dragdrop/layout/horizontal.js"></script>
+<script type="text/javascript" src="../gui/dragdrop/layout/vertical.js"></script>
+<script type="text/javascript">var lastZ = 100;</script>
+<script type="text/javascript" src="../utility/Arrays.js"></script>
+<script type="text/javascript" src="../utility/Strings.js"></script>
+<script type="text/javascript" src="../utility/HtmlElements.js"></script>
+<script type="text/javascript" src="../gui/BrowserFunctionsFF.js"></script>
+<script type="text/javascript" src="../gui/dragdrop/dragdrop.js"></script>
+<script type="text/javascript" src="../debug.js"></script>
+
+
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Untitled Document</title>
+</head>
+<body ondragstart="return false;">
+
+<div id="test1" style="background-color:#FF1100; position:absolute; top: 10px; left: 10px; height:60px; width:10px;"></div>
+<div id="test2" style="background-color:#FF2200; position:absolute; top: 10px; left: 10px; height:70px; width:20px;"></div>
+<div id="test3" style="background-color:#FF3300; position:absolute; top: 10px; left: 10px; height:80px; width:30px;"></div>
+<div id="test4" style="background-color:#FF4400; position:absolute; top: 10px; left: 10px; height:10px; width:40px;"></div>
+<div id="test5" style="background-color:#FF5500; position:absolute; top: 10px; left: 10px; height:20px; width:50px;"></div>
+<div id="test6" style="background-color:#FF6600; position:absolute; top: 10px; left: 10px; height:30px; width:60px;"></div>
+<div id="test7" style="background-color:#FF7700; position:absolute; top: 10px; left: 10px; height:40px; width:70px;"></div>
+<div id="test8" style="background-color:#FF8800; position:absolute; top: 10px; left: 10px; height:70px; width:80px;"></div>
+<div id="test9" style="background-color:#FF9900; position:absolute; top: 10px; left: 10px; height:50px; width:90px;"></div>
+<div id="test10" style="background-color:#FF0011; position:absolute; top: 10px; left: 10px; height:90px; width:100px;">
+	<div id="test15" style="background-color:#00AA00; position:absolute; top: 10px; left: 10px; height:70px; width:80px;"></div>
+</div>
+<div id="test11" style="background-color:#FF0022; position:absolute; top: 10px; left: 10px; height:10px; width:500px;"></div>
+
+<div id="test12" style="background-color:#00FF00; position:absolute; top: 10px; left: 400px; height:400px; width:400px;"></div>
+<div id="text" style="background-color:#FF1100; position:absolute; top: 100px; left: 10px; height:60px; width:200px;"></div>
+<div id="test13" style="background-color:#0000FF; position:absolute; top: 500px; left: 400px; height:500px; width:500px;"></div>
+</body>
+</html>
+<script type="text/javascript"> 
+enableDrag(document.getElementById("test1"),new Array("hallo2", "hallo"), false, null);
+enableDrag(document.getElementById("test2"),new Array("hallo2", "hallo"), false, null);
+enableDrag(document.getElementById("test3"),new Array("hallo2", "hallo"), false, null);
+enableDrag(document.getElementById("test4"),new Array("hallo2", "hallo"), false, null);
+enableDrag(document.getElementById("test5"),new Array("hallo2", "hallo"), false, null);
+enableDrag(document.getElementById("test6"),new Array("hallo2", "hallo"), false, null);
+enableDrag(document.getElementById("test7"),new Array("hallo2", "hallo"), false, null);
+enableDrag(document.getElementById("test8"),new Array("hallo2", "hallo"), false, null);
+enableDrag(document.getElementById("test9"),new Array("hallo2", "hallo"), false, null);
+enableDrag(document.getElementById("test10"),new Array("hallo2", "hallo"), false, null);
+enableDrag(document.getElementById("test11"),new Array("hallo2", "hallo"), false, null);
+enableDrag(document.getElementById("test12"),new Array("hallo2"), false, null);
+
+enableDrop(document.getElementById("test12"),"hallo", new verticalLayout(), true, false, null, null);
+enableDrop(document.getElementById("test13"),"hallo2", new verticalLayout(), true, true, null, null);
+
+disableSelect(document.getElementById("test1"));
+disableSelect(document.getElementById("test2"));
+disableSelect(document.getElementById("test3"));
+disableSelect(document.getElementById("test4"));
+disableSelect(document.getElementById("test5"));
+disableSelect(document.getElementById("test6"));
+disableSelect(document.getElementById("test7"));
+disableSelect(document.getElementById("test8"));
+disableSelect(document.getElementById("test9"));
+disableSelect(document.getElementById("test10"));
+disableSelect(document.getElementById("test11"));
+disableSelect(document.getElementById("test12"));
+disableSelect(document.getElementById("test13"));
+//disableSelect(document);
+disableSelect(document.body);
+/*setOpacity(document.getElementById("test1"), 100);
+setOpacity(document.getElementById("test2"), 100);
+setOpacity(document.getElementById("test3"), 100);
+setOpacity(document.getElementById("test4"), 100);
+setOpacity(document.getElementById("test5"), 100);
+setOpacity(document.getElementById("test6"), 100);
+setOpacity(document.getElementById("test7"), 100);
+setOpacity(document.getElementById("test8"), 100);
+setOpacity(document.getElementById("test9"), 100);
+*/
+//setOpacity(document.getElementById("test10"), 40);
+/*
+setOpacity(document.getElementById("test11"), 100);
+*/
+</script>

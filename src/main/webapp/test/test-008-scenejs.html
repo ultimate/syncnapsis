@@ -1,0 +1,363 @@
+<html>
+<head>
+<meta charset="utf-8">
+<style type="text/css">
+body {
+	margin: 0px;
+}
+</style>
+<script type="text/javascript" src="scripts/util/Requests.js"></script>
+
+<script type="text/javascript">
+	var testlogger;
+	DependencyManager.register("Arrays", 					"util/Arrays.js");
+	DependencyManager.register("Events", 					"util/Events.js");
+	DependencyManager.register("Logging", 					"util/Logging.js");
+	DependencyManager.register("Requests", 					"util/Requests.js");
+	DependencyManager.register("DateFormat", 				"lib/date.format.js");
+	DependencyManager.register("Raphael", 					"lib/raphael-min.js");
+	DependencyManager.register("Stats", 					"lib/Stats.js");
+	DependencyManager.register("SceneJS", 					"scenejs/scenejs.min.js");
+	DependencyManager.register("SceneJS-Query-Nodepos",		"scenejs/utils/query/scenejs-query-node-pos.js", false, ["SceneJS"]);
+	
+	DependencyManager.afterLoading(init0);
+
+	var yaw = 30;
+	var pitch = -30;
+	var lastX;
+	var lastY;
+	var dragging = false;
+
+	var canvas;
+	var stats;
+
+	var c = new Array();
+
+	/* Render loop until error or reset
+	 * (which IDE does whenever you hit that run again button)
+	 */
+	var pInterval;
+	
+	var query, query2;
+	
+	var xstart = 0;
+	var ystart = 10.0;
+	var zstart = -55;
+	var zoom = 1;
+
+	var amount = 1000;
+
+	function init0()
+	{
+		testlogger = new Logging.Logger("test", Logging.LEVEL_DEBUG);
+
+		SceneJS.createNode({
+			type : "scene",
+			id : "the-scene",
+			canvasId : "theCanvas",
+			loggingElementId : "theLoggingDiv",
+
+			nodes : [ {
+				type : "lookAt",
+				id : "lookAt",
+				eye : {
+					x : xstart,
+					y : ystart,
+					z : zstart
+				},
+				look : {
+					y : 1.0
+				},
+				up : {
+					y : 1.0
+				},
+
+				nodes : [ {
+					type : "camera",
+					id: "camera",
+					optics : {
+						type : "perspective",
+						fovy : 25.0,
+						aspect : 1.47,
+						near : zoom,
+						far : 3000.0
+					},
+
+					nodes : [ {
+						type : "light",
+						mode : "dir",
+						color : {
+							r : 0.5,
+							g : 0.5,
+							b : 0.5
+						},
+						diffuse : true,
+						specular : true,
+						dir : {
+							x : 1.0,
+							y : 1.0,
+							z : -1.0
+						}
+					}, {
+						type : "light",
+						mode : "dir",
+						color : {
+							r : 0.7,
+							g : 0.7,
+							b : 0.7
+						},
+						diffuse : true,
+						specular : true,
+						dir : {
+							x : 0.0,
+							y : 1.0,
+							z : -1.0
+						}
+					}, {
+						type : "light",
+						mode : "dir",
+						color : {
+							r : 0.8,
+							g : 0.8,
+							b : 0.8
+						},
+						diffuse : true,
+						specular : true,
+						dir : {
+							x : -1.0,
+							y : 0.0,
+							z : -1.0
+						}
+					},
+
+					/* Next, modelling transforms to orient our geometry
+					 * by a given angles. The rotate nodes have IDs that we'll locate them with below.
+					 */
+					{
+						type : "rotate",
+						id : "pitch",
+						angle : 0.0,
+						x : 1.0,
+
+						nodes : [ {
+							type : "rotate",
+							id : "yaw",
+							angle : 0.0,
+							y : 1.0,
+
+							nodes : [
+							]
+						} ]
+					} ]
+				} ]
+			} ]
+		});
+
+		canvas = document.getElementById("theCanvas");
+		document.addEventListener('mousedown', mouseDown, true);
+		document.addEventListener('mousemove', mouseMove, true);
+		document.addEventListener('mouseup', mouseUp, true);
+		document.addEventListener('mousewheel', mouseWheel, true);
+		document.addEventListener('DOMMouseScroll', mouseWheel, true);
+		
+		SceneJS.bind("error", function()
+		{
+			window.clearInterval(pInterval);
+		});
+
+		SceneJS.bind("reset", function()
+		{
+			window.clearInterval(pInterval);
+		});
+		
+		query = new SceneJS.utils.query.QueryNodePos({
+		    canvasWidth : canvas.clientWidth,
+		    canvasHeight : canvas.clientHeight
+		});
+		
+		paper = Raphael(0,0,800,600);		
+
+		for(i = 0; i < amount; i++)
+		{
+			(function(i) {
+			SceneJS.withNode("yaw").add("node", {
+				type : "translate",
+				x : Math.random()*1000-500,
+				y : Math.random()*1000-500,
+				z : Math.random()*1000-500,
+				nodes : [ {
+					type : "scale",
+					x : 10,
+					y : 10,
+					z : 10,
+					nodes : [ {
+						type : "node",
+						id : "corner" + i,
+						nodes : [ {
+						    type: "sphere",
+						    id: "sphere" + i,
+						    slices: 6,
+						    rings: 12
+						} ]
+					} ]
+				} ]
+			});
+			SceneJS.withNode("corner" + i).bind("picked", (function(i) {
+				return function(event)
+				{
+					ci = paper.circle(50*i, 50*i, 20).attr({stroke: "#F00", "stroke-width": 5});
+					ci.moveTo = function(x,y) { this.attr({cx: x, cy: y}) };
+					query.execute({
+				        nodeId: "corner" + i
+				    });
+					var results = query.getResults();
+					ci.moveTo(results.canvasPos.x,results.canvasPos.y);
+				}
+			})(i) );
+			}(i));
+		}
+		
+		/*
+		for(var i = 0; i < 8; i++)
+		{
+			c[i] = paper.circle(50*i, 50*i, 20).attr({stroke: "#F00", "stroke-width": 5});
+			c[i].moveTo = function(x,y) { this.attr({cx: x, cy: y}) };
+			c[i].hide();
+			
+			SceneJS.withNode("corner" + i).bind("picked", (function(i) {
+				return function(event)
+				{
+					if(c[i].node.style.display == "none")
+						c[i].show();
+					else
+						c[i].hide();
+				}
+			})(i) );	
+		}
+		*/
+		
+		stats = new Stats();
+		stats.domElement.style.position = 'absolute';
+		stats.domElement.style.top = '0px';
+		document.body.appendChild( stats.domElement );
+		
+		pInterval = window.setInterval("window.render()", 10);
+	}
+
+	function mouseDown(event)
+	{
+		dragging = true;
+	    var coords = clickCoordsWithinElement(event);
+		lastX = coords.x;
+		lastY = coords.y;
+	    SceneJS.withNode("the-scene").pick(lastX, lastY);
+	}
+
+	function mouseUp()
+	{
+		dragging = false;
+	}
+
+	/* On a mouse drag, we'll re-render the scene, passing in
+	 * incremented angles in each time.
+	 */
+	function mouseMove(event)
+	{
+		if (dragging)
+		{
+			yaw += (event.clientX - lastX) * 0.5;
+			pitch += (event.clientY - lastY) * -0.5;
+
+			lastX = event.clientX;
+			lastY = event.clientY;
+		}
+	}
+	
+	function mouseWheel(event) {
+	    var delta = 0;
+	    if (!event) event = window.event;
+	    if (event.wheelDelta) {
+	        delta = event.wheelDelta / 120;
+	        if (window.opera) delta = -delta;
+	    } else if (event.detail) {
+	        delta = -event.detail / 3;
+	    }
+	    if (delta) {
+	        if (delta < 0) {
+	        	zoom += 1;
+	        } else {
+	        	zoom -= 1;
+	        }
+	    }
+	    testlogger.debug(zoom);
+	    if (event.preventDefault)
+	        event.preventDefault();
+	    event.returnValue = false;
+	}
+	
+	function clickCoordsWithinElement(event)
+	{
+		var coords = {
+			x : 0,
+			y : 0
+		};
+		if (!event)
+		{
+			event = window.event;
+			coords.x = event.x;
+			coords.y = event.y;
+		}
+		else
+		{
+			var element = event.target;
+			var totalOffsetLeft = 0;
+			var totalOffsetTop = 0;
+
+			while (element.offsetParent)
+			{
+				totalOffsetLeft += element.offsetLeft;
+				totalOffsetTop += element.offsetTop;
+				element = element.offsetParent;
+			}
+			coords.x = event.pageX - totalOffsetLeft;
+			coords.y = event.pageY - totalOffsetTop;
+		}
+		return coords;
+	}
+
+	window.render = function()
+	{
+		SceneJS.withNode("pitch").set("angle", pitch);
+		SceneJS.withNode("yaw").set("angle", yaw);
+		
+		SceneJS.withNode("lookAt").get("eye").x = zoom*xstart;
+		SceneJS.withNode("lookAt").get("eye").y = zoom*ystart;
+		SceneJS.withNode("lookAt").get("eye").z = zoom*zstart;
+		SceneJS.withNode("lookAt").set("eye", {x: zoom*xstart, y: zoom*ystart, z: zoom*zstart });
+		SceneJS.withNode("the-scene").render();
+		
+		/*
+		for(var i = 0; i < 8; i++)
+		{
+			query.execute({
+		        nodeId: "sphere" + i
+		    });
+			var results = query.getResults();
+			
+			//for(x in results.canvasPos)
+			//	testlogger.debug(x);
+			c[i].moveTo(results.canvasPos.x,results.canvasPos.y);
+			
+			//var scale = 1/Math.pow(zoom, 1.6);
+			//c[i].scale(scale, scale);
+		}
+		*/
+		
+		stats.update();
+	};
+</script>
+</head>
+<body onload="DependencyManager.registrationDone();">
+	<canvas id="theCanvas" width="800" height="600" style="zIndex: 1000;"></canvas>
+</body>
+</html>

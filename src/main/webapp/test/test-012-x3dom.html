@@ -1,0 +1,114 @@
+<html>
+<head>
+	<style>
+		body
+		{
+			background-color: #000000;
+			margin: 0px;
+			overflow: hidden;
+		}
+		#the_element
+		{
+			width: 100%;
+			height: 100%;
+		    border: none;
+		    position: relative;
+		}
+		#adder
+		{
+		    position: absolute;
+		    float: left;
+		    z-index: 1;
+		    top: 0px;
+		    left: 0px;
+		    width: 10em;
+		    height: 2em;
+		    border: none;
+		    background-color: #202021;
+		    color: #ccc;
+		}
+		#adder:hover
+		{
+		    background-color:blue;
+		}
+	</style>
+    <script type="text/javascript" 
+            src="http://www.x3dom.org/x3dom/release/x3dom.js">
+    </script>
+	<script type="text/javascript" src="scripts/util/Requests.js"></script>
+	<!-- script type="text/javascript" src="scripts/lib/x3dom-v1.1.js"></script> -->
+
+	<script type="text/javascript">
+		 	var testlogger;
+		 	DependencyManager.register("Arrays", 						"util/Arrays.js");
+		 	DependencyManager.register("Events", 						"util/Events.js");
+		 	DependencyManager.register("Logging", 						"util/Logging.js");
+		 	DependencyManager.register("Requests", 						"util/Requests.js");
+		 	DependencyManager.register("DateFormat", 					"lib/date.format.js");
+		 	DependencyManager.register("Raphael", 						"lib/raphael-min.js");
+		 	DependencyManager.register("Stats", 						"lib/Stats.js");
+		 	//DependencyManager.register("x3dom", 						"lib/x3dom-v1.1.js");
+		 	DependencyManager.register("RequestAnimationFrame", 		"lib/RequestAnimationFrame.js");
+		 	DependencyManager.register("Sectors", 						"sectors-small.js", true);
+		 	DependencyManager.afterLoading(init);
+		 	
+		 	var index = 0;
+		 	var stepSize = 10000;
+		 	var loaded = false;
+		 	
+		 	var coordinate;
+		 	var pointAttr;
+		 	var color;
+		 	var colorAttr;
+		 	
+		 	var testlogger;
+		 	
+		 	function init()
+		 	{
+		 		testlogger = new Logging.Logger("test", Logging.LEVEL_DEBUG);
+		 		loaded = true;
+		 		
+		 		stars = document.getElementById("stars");
+		 		coordinate = stars.getElementsByTagName("coordinate")[0];
+		 		color = stars.getElementsByTagName("color")[0];
+		 		pointAttr = coordinate.getAttribute("point");
+		 		colorAttr = color.getAttribute("color");
+		 	}
+		 	
+		 	function add()
+		 	{
+		 		if(!loaded)
+		 		{
+		 			alert("loading not yet finished");
+		 			return;
+		 		}
+		 		if(index >= sectors.length)
+		 			return;
+		 		for(var i = index; i < sectors.length && i < index+stepSize ; i++)
+	 			{
+		 			pointAttr += sectors[i][0] + " " + sectors[i][1] + " " + sectors[i][2] + " ";
+		 			colorAttr += Math.random() + " " + Math.random() + " " + Math.random() + " ";
+	 			}
+		 		coordinate.setAttribute("point", pointAttr);
+		 		color.setAttribute("color", colorAttr);
+		 		index = index+stepSize;
+		 		if(index >= sectors.length)
+		 			index = sectors.length;
+		 		testlogger.debug("sectors added. now containing: " + index);
+		 	}
+	</script>
+</head>
+<body onload="DependencyManager.registrationDone();">
+	<x3d width="100%" height="100%">
+		<button id="adder" onclick="add();return false;" style="position: absolute; top: 0px; left: 0px; width: 100px; height: 20px">add</button>
+		<scene>
+			<Shape> 
+                <PointSet id="stars"> 
+                    <Coordinate point="0.0 0.0 0.0 1.0 0.0 0.0 " ></Coordinate>
+					<Color color="1.0 1.0 1.0 1.0 1.0 1.0 " ></Color>
+				</PointSet>
+			</Shape>
+		</scene>
+	</x3d>
+</body>
+</html>

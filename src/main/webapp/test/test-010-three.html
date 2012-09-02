@@ -1,0 +1,208 @@
+<html>
+<head>
+<style>
+body
+{
+	background-color: #000000;
+	margin: 0px;
+	overflow: hidden;
+}
+</style>
+<script type="text/javascript" src="scripts/util/Requests.js"></script>
+
+<script type="text/javascript">
+		 	var testlogger;
+		 	DependencyManager.register("Arrays", 						"util/Arrays.js");
+		 	DependencyManager.register("Events", 						"util/Events.js");
+		 	DependencyManager.register("Logging", 						"util/Logging.js");
+		 	DependencyManager.register("Requests", 						"util/Requests.js");
+		 	DependencyManager.register("DateFormat", 					"lib/date.format.js");
+		 	DependencyManager.register("Raphael", 						"lib/raphael-min.js");
+		 	DependencyManager.register("Stats", 						"lib/Stats.js");
+		 	DependencyManager.register("Three", 						"lib/Three.js");
+		 	DependencyManager.register("Detector", 						"lib/Detector.js");
+		 	DependencyManager.register("RequestAnimationFrame", 		"lib/RequestAnimationFrame.js");
+		 	DependencyManager.register("Sectors", 						"sectors-small.js", true);
+		 	DependencyManager.afterLoading(function(){
+		 		if ( ! Detector.webgl ) Detector.addGetWebGLMessage();
+		 		init();
+		 		render();
+		 	});
+		 	
+			var container, stats;
+			var camera, scene, renderer;
+			var geometry, particles, colors;
+			var dragging;
+			var zoom = 10;
+			var dist = 1000;
+			var ry = 0;
+			var rx = 0;
+			var lastX, lastY, lastRy, lastTheta;
+
+			function init() {
+				
+				testlogger = new Logging.Logger("test", Logging.LEVEL_DEBUG);
+
+				container = document.getElementById( 'container' );
+
+				renderer = new THREE.WebGLRenderer();
+				container.appendChild( renderer.domElement );
+				
+				stats = new Stats();
+				stats.domElement.style.position = 'absolute';
+				stats.domElement.style.top = '0px';
+				container.appendChild( stats.domElement );
+				
+				camera = new THREE.Camera( 70, window.innerWidth / window.innerHeight, 1, 100000 );
+				camera.position.x = 0;
+				camera.position.y = 0;
+				camera.position.z = dist*zoom;
+				camera.target.position.x = 0;
+				camera.target.position.y = 0;
+				camera.target.position.z = 0;
+
+				onWindowResize();
+				
+				scene = new THREE.Scene();
+				
+				for(x in scene)
+					testlogger.debug(x);
+				
+				geometry = new THREE.Geometry();
+				geometry.colors = [];
+				for ( i = 0; i < sectors.length; i++ )
+				{
+					x = sectors[i][0];
+					y = sectors[i][1];
+					z = sectors[i][2];
+					vector = new THREE.Vector3( x, y, z );
+					//vector.normalize();
+					vector.multiplyScalar( 10 );
+					geometry.vertices.push( new THREE.Vertex( vector ) );
+
+					geometry.colors[ i ] = new THREE.Color( 0xffffff );
+					//geometry.colors[ i ].setRGB(Math.random(), Math.random(), Math.random());
+					geometry.colors[ i ].setHSV(Math.random(), Math.random(), 1.0);
+				}
+
+				material = new THREE.ParticleBasicMaterial( { size: 85, map: ImageUtils.loadTexture( "star.png" ), vertexColors: true, blending: THREE.AdditiveBlending } );
+				//material = new THREE.ParticleBasicMaterial( { size: 10, vertexColors: true, blending: THREE.AdditiveBlending } );
+				//material = new THREE.ColorFillMaterial(0xFFFFFF, .4)
+				
+				particles = new THREE.ParticleSystem( geometry, material );
+				particles.sortParticles = true;
+				particles.updateMatrix();
+				scene.addObject( particles );
+				
+				document.addEventListener('mousedown', mouseDown, false);
+				document.addEventListener('mousemove', mouseMove, false);
+				document.addEventListener('mouseup', mouseUp, false);
+				document.addEventListener('mousewheel', mouseWheel, false);
+				document.addEventListener('DOMMouseScroll', mouseWheel, false);
+				window.addEventListener('resize', onWindowResize, false);
+			}
+			
+			function onWindowResize( event )
+			{
+				var width = window.innerWidth, height = window.innerHeight;
+
+				camera.aspect = width / height;
+				camera.updateProjectionMatrix();
+
+				renderer.setSize( width, height );
+				renderer.domElement.style.width = window.innerWidth + 'px';
+				renderer.domElement.style.height = window.innerHeight + 'px';
+			}
+
+			function mouseDown(event)
+			{
+				dragging = true;
+			    var coords = clickCoordsWithinElement(event);
+				lastX = coords.x;
+				lastY = coords.y;
+				lastRy = ry;
+				lastRx = rx;				
+			}
+
+			function mouseUp()
+			{
+				dragging = false;
+			}
+			
+			function mouseMove(event)
+			{
+				if (dragging)
+				{							
+					ry = ( event.clientX - lastX ) * 10 * 0.0003 + lastRy;
+					rx = ( event.clientY - lastY ) * 10 * 0.0003 + lastRx;
+				}
+			}
+			
+			function mouseWheel(event)
+			{
+			    var delta = 0;
+			    if (!event) event = window.event;
+			    if (event.wheelDelta) {
+			        delta = event.wheelDelta / 120;
+			        if (window.opera) delta = -delta;
+			    } else if (event.detail) {
+			        delta = -event.detail / 3;
+			    }
+			    if (delta) {
+			        if (delta < 0) {
+			        	zoom *= 1.1;
+			        } else {
+			        	zoom /= 1.1;
+			        }
+			    }
+			    testlogger.debug(zoom);
+			    if (event.preventDefault)
+			        event.preventDefault();
+			    event.returnValue = false;
+			}
+			
+			function clickCoordsWithinElement(event)
+			{
+				var coords = {
+					x : 0,
+					y : 0
+				};
+				if (!event)
+				{
+					event = window.event;
+					coords.x = event.x;
+					coords.y = event.y;
+				}
+				else
+				{
+					var element = event.target;
+					var totalOffsetLeft = 0;
+					var totalOffsetTop = 0;
+
+					while (element.offsetParent)
+					{
+						totalOffsetLeft += element.offsetLeft;
+						totalOffsetTop += element.offsetTop;
+						element = element.offsetParent;
+					}
+					coords.x = event.pageX - totalOffsetLeft;
+					coords.y = event.pageY - totalOffsetTop;
+				}
+				return coords;
+			}
+
+			function render()
+			{
+				camera.position.z = dist*zoom;
+				particles.rotation.x = rx;
+				particles.rotation.y = ry;
+				renderer.render( scene, camera );
+				stats.update();
+				setTimeout(render, 1000/60);
+			}
+		</script>
+</head>
+<body onload="DependencyManager.registrationDone();">
+	<div id="container"></div>
+</body>
+</html>
