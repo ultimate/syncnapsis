@@ -117,8 +117,8 @@
 		</dependency>
 		<dependency>
 			<groupId>com.syncnapsis.syncnapsis-core</groupId>
-			<artifactId>syncnapsis-core-data</artifactId>
-			<version>${syncnapsis-core-data.version}</version>
+			<artifactId>syncnapsis-core-application-base</artifactId>
+			<version>${syncnapsis-core-application-base.version}</version>
 		</dependency>
 		<!-- DATABASE - START -->
 		<dependency>
@@ -138,6 +138,34 @@
 			</exclusions>
 		</dependency>
 		<!-- DATABASE - END -->
+		<!-- WEB - START -->
+		<dependency>
+			<groupId>org.glassfish</groupId>
+			<artifactId>javax.servlet</artifactId>
+			<version>${servlet.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<!-- WEB - END -->
+		<!-- websockets - START -->
+		<dependency>
+			<groupId>org.eclipse.jetty</groupId>
+			<artifactId>jetty-websocket</artifactId>
+			<version>${jetty.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.jetty</groupId>
+			<artifactId>jetty-server</artifactId>
+			<version>${jetty.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.jetty</groupId>
+			<artifactId>jetty-servlet</artifactId>
+			<version>${jetty.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<!-- websockets - END -->
 	</dependencies>
 
 	<profiles>
@@ -165,5 +193,7 @@
 
 		<!-- Database-Dependencies -->
 		<hibernate.version>4.0.1.Final</hibernate.version> <!-- 19.01.2012 -->
+    	<!-- Web-Dependencies -->
+    	<jetty.version>8.1.0.v20120127</jetty.version> <!-- 27.01.2012 -->
 	</properties>
 </project>
