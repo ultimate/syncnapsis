@@ -5,19 +5,7 @@
             http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd
             http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.0.xsd"
        default-lazy-init="true">
-    
-    <!-- =================================================================== -->
-    <!-- Utilities					                                         -->
-    <!-- =================================================================== -->
-    
-    <bean id="applicationContextUtil" class="com.syncnapsis.utils.ApplicationContextUtil" lazy-init="false" /> 
-    
-    <bean id="timeProvider" class="com.syncnapsis.providers.impl.SystemTimeProvider"/>  
-    
-    <!-- =================================================================== -->
-    <!-- Managers: For accessing DAOs                                        -->
-    <!-- =================================================================== -->     
-    
+       
     <bean id="guiActionManager" class="com.syncnapsis.data.service.impl.GUIActionManagerImpl">
         <constructor-arg ref="guiActionDao"/>
     </bean>  
@@ -61,6 +49,8 @@
     
     <bean id="userManager" class="com.syncnapsis.data.service.impl.UserManagerImpl">
         <constructor-arg ref="userDao"/>
+        <constructor-arg ref="userRoleManager"/>
+        <property name="securityManager" ref="securityManager" />
     </bean>
     
     <bean id="userContactManager" class="com.syncnapsis.data.service.impl.UserContactManagerImpl">
@@ -70,6 +60,6 @@
     
     <bean id="userRoleManager" class="com.syncnapsis.data.service.impl.UserRoleManagerImpl">
         <constructor-arg ref="userRoleDao"/>
-    </bean>
+    </bean>  
     
 </beans>
