@@ -64,7 +64,7 @@
 			<version>${syncnapsis-modules-stats-base-impl.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>com.syncnapsis.syncnapsis-univers</groupId>
+			<groupId>com.syncnapsis.syncnapsis-universe</groupId>
 			<artifactId>syncnapsis-universe-utils</artifactId>
 			<version>${syncnapsis-universe-utils.version}</version>
 		</dependency>
