@@ -85,6 +85,17 @@
 			<version>${jpa.version}</version>
 			<optional>true</optional>
 		</dependency>
+        <dependency>
+            <groupId>org.dbunit</groupId>
+            <artifactId>dbunit</artifactId>
+            <version>${dbunit.version}</version>
+           	<exclusions>
+           		<exclusion>
+		            <groupId>junit</groupId>
+		            <artifactId>junit</artifactId>
+           		</exclusion>
+           	</exclusions>
+        </dependency>
 		<!-- DATABASE - END -->
 		<!-- WEB - START -->
 		<dependency>
@@ -176,6 +187,7 @@
 
 		<!-- Database-Dependecies -->
 		<jpa.version>1.0.2</jpa.version> <!-- 19.01.2012 -->
+		<dbunit.version>2.4.7</dbunit.version>
 
 		<!-- Web-Dependencies -->
 		<javamail.version>1.4.4</javamail.version> <!-- 19.01.2012 -->
