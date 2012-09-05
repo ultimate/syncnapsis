@@ -7,7 +7,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 
-import com.syncnapsis.data.model.base.Authorities;
 import com.syncnapsis.data.model.base.BaseObject;
 import com.syncnapsis.data.model.base.Contact;
 
@@ -44,6 +43,6 @@ public abstract class PoliticsDataGenerator implements DataGenerator, Initializi
 		throw new UnsupportedOperationException();
 	}
 
-	public abstract <C1 extends BaseObject<?>, C2 extends BaseObject<?>, A extends Authorities> Contact<C1, C2, A> createContact(C1 contact1, C2 contact2,
+	public abstract <C1 extends BaseObject<?>, C2 extends BaseObject<?>> Contact<C1, C2, ?> createContact(C1 contact1, C2 contact2,
 			Map<String, Boolean> authoritiesMap1, Map<String, Boolean> authoritiesMap2);
 }
