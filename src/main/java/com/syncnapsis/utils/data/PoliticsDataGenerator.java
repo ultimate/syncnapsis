@@ -45,4 +45,5 @@ public abstract class PoliticsDataGenerator implements DataGenerator, Initializi
 
 	public abstract <C1 extends BaseObject<?>, C2 extends BaseObject<?>> Contact<C1, C2, ?> createContact(C1 contact1, C2 contact2,
 			Map<String, Boolean> authoritiesMap1, Map<String, Boolean> authoritiesMap2);
+	
 }
