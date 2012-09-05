@@ -1,0 +1,3 @@
+[submodule "syncnapsis-core-utils"]
+	path = syncnapsis-core-utils
+	url = https://github.com/syncnapsis/syncnapsis-core-utils.git
