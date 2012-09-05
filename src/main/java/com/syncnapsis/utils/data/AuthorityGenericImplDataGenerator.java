@@ -10,7 +10,7 @@ import com.syncnapsis.data.model.AuthoritiesGenericImpl;
 import com.syncnapsis.data.model.Authority;
 import com.syncnapsis.data.service.AuthorityManager;
 
-public class GenericAuthorityDataGenerator extends AuthorityDataGenerator<AuthoritiesGenericImpl>
+public class AuthorityGenericImplDataGenerator extends AuthorityDataGenerator<AuthoritiesGenericImpl>
 {
 	protected AuthorityManager authorityManager;
 	
