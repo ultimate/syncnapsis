@@ -21,26 +21,14 @@
     <dependencies>
         <dependency>
             <groupId>com.syncnapsis.syncnapsis-core</groupId>
-            <artifactId>syncnapsis-core-game-base</artifactId>
-            <version>${syncnapsis-core-game-base.version}</version>
-            <scope>provided</scope>
+            <artifactId>syncnapsis-core-data</artifactId>
+            <version>${syncnapsis-core-data.version}</version>
         </dependency>
     	<!-- UTILS - START -->
         <dependency>
             <groupId>org.apache.poi</groupId>
             <artifactId>poi</artifactId> 
             <version>${poi.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.dbunit</groupId>
-            <artifactId>dbunit</artifactId>
-            <version>${dbunit.version}</version>
-           	<exclusions>
-           		<exclusion>
-		            <groupId>junit</groupId>
-		            <artifactId>junit</artifactId>
-           		</exclusion>
-           	</exclusions>
         </dependency>
     	<!-- UTILS - END -->
     </dependencies>
@@ -51,6 +39,5 @@
     <properties>
 		<!-- Util-Dependencies -->
         <poi.version>3.6</poi.version>
-		<dbunit.version>2.4.7</dbunit.version>
     </properties>
 </project>
