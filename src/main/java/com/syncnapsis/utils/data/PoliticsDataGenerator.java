@@ -11,7 +11,7 @@ import com.syncnapsis.data.model.base.Authorities;
 import com.syncnapsis.data.model.base.BaseObject;
 import com.syncnapsis.data.model.base.Contact;
 
-public abstract class PolititcsDataGenerator implements DataGenerator, InitializingBean
+public abstract class PoliticsDataGenerator implements DataGenerator, InitializingBean
 {
 	protected transient final Logger	logger	= LoggerFactory.getLogger(getClass());
 
