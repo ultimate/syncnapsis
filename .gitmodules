@@ -1,3 +1,15 @@
 [submodule "syncnapsis-core-utils"]
 	path = syncnapsis-core-utils
 	url = https://github.com/syncnapsis/syncnapsis-core-utils.git
+[submodule "syncnapsis-core-data"]
+	path = syncnapsis-core-data
+	url = https://github.com/syncnapsis/syncnapsis-core-data
+[submodule "syncnapsis-core-application-base"]
+	path = syncnapsis-core-application-base
+	url = https://github.com/syncnapsis/syncnapsis-core-application-base.git
+[submodule "syncnapsis-core-game-base"]
+	path = syncnapsis-core-game-base
+	url = https://github.com/syncnapsis/syncnapsis-core-game-base.git
+[submodule "syncnapsis-core-websockets"]
+	path = syncnapsis-core-websockets
+	url = https://github.com/syncnapsis/syncnapsis-core-websockets.git
