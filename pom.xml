@@ -30,6 +30,11 @@
             <version>${syncnapsis-modules-authority-generic-impl.version}</version>
         </dependency>
         <dependency>
+            <groupId>com.syncnapsis.syncnapsis-modules</groupId>
+            <artifactId>syncnapsis-modules-stats-base-impl</artifactId>
+            <version>${syncnapsis-modules-stats-base-impl.version}</version>
+        </dependency>
+        <dependency>
             <groupId>com.syncnapsis.syncnapsis-core</groupId>
             <artifactId>syncnapsis-core-game-base</artifactId>
             <version>${syncnapsis-core-game-base.version}</version>
