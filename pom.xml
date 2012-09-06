@@ -25,11 +25,6 @@
             <version>${syncnapsis-modules-stats-api.version}</version>
         </dependency>
         <dependency>
-            <groupId>com.syncnapsis.syncnapsis-modules</groupId>
-            <artifactId>syncnapsis-modules-politics-complex-impl</artifactId>
-            <version>${syncnapsis-modules-politics-complex-impl.version}</version>
-        </dependency>
-        <dependency>
             <groupId>com.syncnapsis.syncnapsis-core</groupId>
             <artifactId>syncnapsis-core-game-base</artifactId>
             <version>${syncnapsis-core-game-base.version}</version>

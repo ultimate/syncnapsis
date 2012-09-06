@@ -12,21 +12,11 @@ import org.springframework.util.Assert;
 import com.syncnapsis.data.model.annotations.RankCriterion;
 import com.syncnapsis.data.model.base.BaseObject;
 import com.syncnapsis.data.model.base.Rank;
-import com.syncnapsis.data.service.AllianceAllianceContactManager;
-import com.syncnapsis.data.service.EmpireAllianceContactManager;
-import com.syncnapsis.data.service.EmpireEmpireContactManager;
 import com.syncnapsis.providers.TimeProvider;
 
 public class StatsBaseImplDataGenerator extends StatsDataGenerator
 {
 	protected TimeProvider timeProvider;
-	
-	protected AuthorityGenericImplDataGenerator authorityDataGenerator;
-	protected PoliticsComplexImplDataGenerator politicsDataGenerator;
-	
-	protected AllianceAllianceContactManager allianceAllianceContactManager;
-	protected EmpireAllianceContactManager empireAllianceContactManager;
-	protected EmpireEmpireContactManager empireEmpireContactManager;
 	
 	public TimeProvider getTimeProvider()
 	{
@@ -38,56 +28,6 @@ public class StatsBaseImplDataGenerator extends StatsDataGenerator
 		this.timeProvider = timeProvider;
 	}
 
-	public AuthorityGenericImplDataGenerator getAuthorityDataGenerator()
-	{
-		return authorityDataGenerator;
-	}
-
-	public void setAuthorityDataGenerator(AuthorityGenericImplDataGenerator authorityDataGenerator)
-	{
-		this.authorityDataGenerator = authorityDataGenerator;
-	}
-
-	public PoliticsComplexImplDataGenerator getPoliticsDataGenerator()
-	{
-		return politicsDataGenerator;
-	}
-
-	public void setPoliticsDataGenerator(PoliticsComplexImplDataGenerator politicsDataGenerator)
-	{
-		this.politicsDataGenerator = politicsDataGenerator;
-	}
-
-	public AllianceAllianceContactManager getAllianceAllianceContactManager()
-	{
-		return allianceAllianceContactManager;
-	}
-
-	public void setAllianceAllianceContactManager(AllianceAllianceContactManager allianceAllianceContactManager)
-	{
-		this.allianceAllianceContactManager = allianceAllianceContactManager;
-	}
-
-	public EmpireAllianceContactManager getEmpireAllianceContactManager()
-	{
-		return empireAllianceContactManager;
-	}
-
-	public void setEmpireAllianceContactManager(EmpireAllianceContactManager empireAllianceContactManager)
-	{
-		this.empireAllianceContactManager = empireAllianceContactManager;
-	}
-
-	public EmpireEmpireContactManager getEmpireEmpireContactManager()
-	{
-		return empireEmpireContactManager;
-	}
-
-	public void setEmpireEmpireContactManager(EmpireEmpireContactManager empireEmpireContactManager)
-	{
-		this.empireEmpireContactManager = empireEmpireContactManager;
-	}
-
 	@Override
 	public void afterPropertiesSet()
 	{
@@ -95,12 +35,6 @@ public class StatsBaseImplDataGenerator extends StatsDataGenerator
 		
 		Assert.notNull(timeProvider, "timeProvider must not be null!");
 
-		Assert.notNull(authorityDataGenerator, "authorityDataGenerator must not be null!");
-		Assert.notNull(politicsDataGenerator, "politicsDataGenerator must not be null!");
-
-		Assert.notNull(allianceAllianceContactManager, "allianceAllianceContactManager must not be null!");
-		Assert.notNull(empireAllianceContactManager, "empireAllianceContactManager must not be null!");
-		Assert.notNull(empireEmpireContactManager, "empireEmpireContactManager must not be null!");
 	}
 
 	public <T extends BaseObject<?>, R extends Rank<T>> R createRankSimple(Class<? extends R> rankClass, T entity, int totalPoints)
