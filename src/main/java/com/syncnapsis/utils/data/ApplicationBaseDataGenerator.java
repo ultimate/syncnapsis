@@ -36,13 +36,13 @@ public class ApplicationBaseDataGenerator implements DataGenerator, Initializing
 
 	protected TimeProvider				timeProvider;
 
-	protected MessengerManager				messengerManager;
-	protected MessengerContactManager				messengerContactManager;
+	protected MessengerManager			messengerManager;
+	protected MessengerContactManager	messengerContactManager;
 	protected UserManager				userManager;
-	protected UserContactManager			userContactManager;
+	protected UserContactManager		userContactManager;
 	protected UserRoleManager			userRoleManager;
 
-	protected List<Messenger>		messengers;
+	protected List<Messenger>			messengers;
 	protected Map<String, User>			users	= new TreeMap<String, User>();
 
 	public TimeProvider getTimeProvider()
@@ -200,7 +200,7 @@ public class ApplicationBaseDataGenerator implements DataGenerator, Initializing
 		user.setVersion(null);
 
 		user = userManager.save(user);
-		
+
 		MessengerContact messengerContact;
 
 		int prob = RandomData.randomInt(0, messengers.size());
@@ -219,7 +219,7 @@ public class ApplicationBaseDataGenerator implements DataGenerator, Initializing
 			}
 		}
 
-//		menuQuickLaunchItemManager.addQuickLaunchItem(user.getId(), "ACC_OVER", 0);
+		// menuQuickLaunchItemManager.addQuickLaunchItem(user.getId(), "ACC_OVER", 0);
 
 		return user;
 	}
