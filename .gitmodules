@@ -1,3 +1,6 @@
 [submodule "syncnapsis-dev-utils"]
 	path = syncnapsis-dev-utils
 	url = https://github.com/syncnapsis/syncnapsis-dev-utils.git
+[submodule "syncnapsis-dev-archive"]
+	path = syncnapsis-dev-archive
+	url = https://github.com/syncnapsis/syncnapsis-dev-archive.git
