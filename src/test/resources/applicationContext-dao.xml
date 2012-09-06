@@ -5,15 +5,7 @@
 	default-lazy-init="true">
 
 	<bean id="empireDao" class="com.syncnapsis.data.dao.hibernate.EmpireDaoHibernate" />
-	
-	<bean id="guiActionDao" class="com.syncnapsis.data.dao.hibernate.GUIActionDaoHibernate" />
-	
-	<bean id="guiWindowParamsDao" class="com.syncnapsis.data.dao.hibernate.GUIWindowParamsDaoHibernate" />
-	
-	<bean id="menuItemDao" class="com.syncnapsis.data.dao.hibernate.MenuItemDaoHibernate" />
-	
-	<bean id="menuQuickLaunchItemDao" class="com.syncnapsis.data.dao.hibernate.MenuQuickLaunchItemDaoHibernate" />
-	
+
 	<bean id="messengerContactDao" class="com.syncnapsis.data.dao.hibernate.MessengerContactDaoHibernate" />
 	
 	<bean id="messengerDao" class="com.syncnapsis.data.dao.hibernate.MessengerDaoHibernate" />

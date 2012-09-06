@@ -10,30 +10,6 @@
         <constructor-arg ref="empireDao"/>
     </bean>  
     
-    <bean id="guiActionManager" class="com.syncnapsis.data.service.impl.GUIActionManagerImpl">
-        <constructor-arg ref="guiActionDao"/>
-    </bean>  
-    
-    <bean id="guiWindowParamsManager" class="com.syncnapsis.data.service.impl.GUIWindowParamsManagerImpl">
-        <constructor-arg ref="guiWindowParamsDao"/>
-    </bean>  
-    
-    <bean id="menuItemManager" class="com.syncnapsis.data.service.impl.MenuItemManagerImpl">
-        <constructor-arg ref="menuItemDao"/>
-        <constructor-arg ref="userManager"/>
-    	<property name="optionHandlerClasses">
-    		<list>
-    			<value>com.syncnapsis.ui.menu.impl.EmpireMenuItemOptionHandler</value>
-    		</list>
-    	</property>
-    </bean>   
-    
-    <bean id="menuQuickLaunchItemManager" class="com.syncnapsis.data.service.impl.MenuQuickLaunchItemManagerImpl">
-        <constructor-arg ref="menuQuickLaunchItemDao"/>
-        <constructor-arg ref="menuItemManager"/>
-        <constructor-arg ref="userManager"/>
-    </bean>   
-    
     <bean id="messengerContactManager" class="com.syncnapsis.data.service.impl.MessengerContactManagerImpl">
         <constructor-arg ref="messengerContactDao"/>
     </bean>
