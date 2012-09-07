@@ -10,3 +10,7 @@
 .classpath
 .settings/
 target/
+
+# Workspace Files #
+.metadata/
+RemoteSystemsTempFiles/
