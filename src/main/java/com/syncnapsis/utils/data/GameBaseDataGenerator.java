@@ -19,14 +19,14 @@ import com.syncnapsis.data.service.PlayerRoleManager;
 import com.syncnapsis.enums.EnumAccountStatus;
 
 public class GameBaseDataGenerator extends ApplicationBaseDataGenerator implements InitializingBean
-{
+{	
 	protected EmpireManager			empireManager;
 	protected PlayerManager			playerManager;
 	protected PlayerRoleManager		playerRoleManager;
 
 	protected Map<String, Empire>	empires	= new TreeMap<String, Empire>();
 	protected Map<String, Player>	players	= new TreeMap<String, Player>();
-
+	
 	@Override
 	public void afterPropertiesSet() throws Exception
 	{
@@ -77,13 +77,6 @@ public class GameBaseDataGenerator extends ApplicationBaseDataGenerator implemen
 		generateDummyData(dummyUsers);
 	}
 
-	/**
-	 * Create a user with the given name and role
-	 * 
-	 * @param name
-	 * @param rolename
-	 * @return
-	 */
 	public Player createPlayer(String name, String userrolename, String playerrolename)
 	{
 		User user = getOrCreateUser(name, userrolename);
@@ -104,11 +97,6 @@ public class GameBaseDataGenerator extends ApplicationBaseDataGenerator implemen
 
 		player = playerManager.save(player);
 
-		/*
-		 * PlayerRank playerRank = createRankSimple(PlayerRank.class, player, 0);
-		 * playerRank = (PlayerRank) playerRankManager.save(playerRank);
-		 */
-
 		return player;
 	}
 
@@ -125,46 +113,6 @@ public class GameBaseDataGenerator extends ApplicationBaseDataGenerator implemen
 		empire.setVersion(null);
 
 		empire = empireManager.save(empire);
-		/*
-		if(contactAuthoritiesMap != null)
-		{
-			ContactGroup contactGroup;
-			for(Entry<String, Map<String, Boolean>> e : contactAuthoritiesMap.entrySet())
-			{
-				contactGroup = new ContactGroup();
-				contactGroup.setAllianceContacts(null);
-				contactGroup.setDefaultVisible(true);
-				contactGroup.setDescription(e.getKey());
-				contactGroup.setEmpireContacts(null);
-				contactGroup.setName(e.getKey());
-				contactGroup.setOwnerAlliance(null);
-				contactGroup.setOwnerEmpire(empire);
-
-				contactGroup = contactGroupManager.save(contactGroup);
-			}
-		}
-		*/
-
-		// TODO colonies & blocks
-
-		// TODO später durch echte Berechnung ersetzen
-		/*
-		int points = (int) (level * 100 * (Math.random() / 5 + 1));
-		EmpireRank empireRank = createRankSimple(EmpireRank.class, empire, points);
-		empireRank = (EmpireRank) empireRankManager.save(empireRank);
-
-		PlayerRank playerRank = (PlayerRank) playerRankManager.getByEntity(player.getId());
-		playerRank.setNumberOfEmpires(playerRank.getNumberOfEmpires() + 1);
-		playerRank.setEconomy(playerRank.getEconomy() + empireRank.getEconomy());
-		playerRank.setMilitary(playerRank.getMilitary() + empireRank.getMilitary());
-		playerRank.setScience(playerRank.getScience() + empireRank.getScience());
-		playerRank.setTotal(playerRank.getTotal() + empireRank.getTotal());
-		playerRank.setAverageEconomy(playerRank.getEconomy() / playerRank.getNumberOfEmpires());
-		playerRank.setAverageMilitary(playerRank.getMilitary() / playerRank.getNumberOfEmpires());
-		playerRank.setAverageScience(playerRank.getScience() / playerRank.getNumberOfEmpires());
-		playerRank.setAverageTotal(playerRank.getTotal() / playerRank.getNumberOfEmpires());
-		playerRank = (PlayerRank) playerRankManager.save(playerRank);
-		*/
 		
 		return empire;
 	}
