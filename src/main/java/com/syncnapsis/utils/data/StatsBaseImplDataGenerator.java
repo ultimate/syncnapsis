@@ -29,7 +29,7 @@ public class StatsBaseImplDataGenerator extends StatsDataGenerator
 	}
 
 	@Override
-	public void afterPropertiesSet()
+	public void afterPropertiesSet() throws Exception
 	{
 		super.afterPropertiesSet();
 		
