@@ -11,7 +11,7 @@ import org.springframework.util.Assert;
 import com.syncnapsis.data.model.base.Authorities;
 import com.syncnapsis.data.service.AuthoritiesManager;
 
-public abstract class AuthorityDataGenerator<A extends Authorities> implements DataGenerator, InitializingBean
+public abstract class AuthorityDataGenerator<A extends Authorities> extends DataGenerator implements InitializingBean
 {
 	protected transient final Logger	logger	= LoggerFactory.getLogger(getClass());
 
@@ -32,8 +32,10 @@ public abstract class AuthorityDataGenerator<A extends Authorities> implements D
 	 * @see org.springframework.beans.factory.InitializingBean#afterPropertiesSet()
 	 */
 	@Override
-	public void afterPropertiesSet()
+	public void afterPropertiesSet() throws Exception
 	{
+		super.afterPropertiesSet();
+		
 		Assert.notNull(authoritiesManager, "authoritiesManager must not be null!");
 	}
 
