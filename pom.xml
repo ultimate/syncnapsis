@@ -230,6 +230,7 @@
 		<syncnapsis-core-game-base.version>0.2.0</syncnapsis-core-game-base.version>
 		<syncnapsis-core-utils.version>0.5.0</syncnapsis-core-utils.version>
 		<syncnapsis-core-websockets.version>0.7.0</syncnapsis-core-websockets.version>
+		<syncnapsis-dev-archive.version>0.9.0</syncnapsis-dev-archive.version>
 		<syncnapsis-dev-utils.version>0.9.0</syncnapsis-dev-utils.version>
 		<syncnapsis-examples-HelloWorld.version>0.6.5</syncnapsis-examples-HelloWorld.version>
 		<syncnapsis-examples-ui-playground.version>0.1.0</syncnapsis-examples-ui-playground.version>
