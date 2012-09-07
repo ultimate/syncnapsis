@@ -3,24 +3,21 @@ package com.syncnapsis.utils.data;
 import java.util.Map;
 import java.util.Properties;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 
 import com.syncnapsis.data.model.base.BaseObject;
 import com.syncnapsis.data.model.base.Rank;
 
-public abstract class StatsDataGenerator implements DataGenerator, InitializingBean
+public abstract class StatsDataGenerator extends DataGenerator implements InitializingBean
 {
-	protected transient final Logger	logger	= LoggerFactory.getLogger(getClass());
-
 	/*
 	 * (non-Javadoc)
 	 * @see org.springframework.beans.factory.InitializingBean#afterPropertiesSet()
 	 */
 	@Override
-	public void afterPropertiesSet()
+	public void afterPropertiesSet() throws Exception
 	{
+		super.afterPropertiesSet();
 	}
 
 	/*
