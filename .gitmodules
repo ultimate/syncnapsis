@@ -1,0 +1,15 @@
+[submodule "syncnapsis-dev"]
+	path = syncnapsis-dev
+	url = https://github.com/syncnapsis/syncnapsis-dev.git
+[submodule "syncnapsis-modules"]
+	path = syncnapsis-modules
+	url = https://github.com/syncnapsis/syncnapsis-modules.git
+[submodule "syncnapsis-universe"]
+	path = syncnapsis-universe
+	url = https://github.com/syncnapsis/syncnapsis-universe.git
+[submodule "syncnapsis-examples"]
+	path = syncnapsis-examples
+	url = https://github.com/syncnapsis/syncnapsis-examples.git
+[submodule "syncnapsis-core"]
+	path = syncnapsis-core
+	url = https://github.com/syncnapsis/syncnapsis-core.git
