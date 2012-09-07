@@ -17,23 +17,38 @@ import org.hibernate.service.ServiceRegistry;
 import org.hibernate.service.ServiceRegistryBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.InitializingBean;
+import org.springframework.util.Assert;
 
 import com.syncnapsis.utils.HibernateUtil;
 import com.syncnapsis.utils.PropertiesUtil;
 
-public abstract class DataGenerator
+public abstract class DataGenerator implements InitializingBean
 {
 	protected transient final Logger	logger	= LoggerFactory.getLogger(getClass());
-	
-	protected String projectDirectory;
-//	new String[] { "app_userrole", "app_userrole_fallback", "playerrole", "playerrole_fallback", "parameter",
-//			"guiwindowparams", "guiaction", "messenger", "menuitem", "menuparent", "news", "authority", "authoritygroup" }
-	protected String[] excludeTableList;
-	
-	public DataGenerator(String projectDirectory, String[] excludeTableList)
+
+	protected String					projectDirectory;
+	protected String[]					excludeTableList;
+
+	// "app_userrole"
+	// "app_userrole_fallback"
+	// "playerrole"
+	// "playerrole_fallback"
+	// "parameter"
+	// "guiwindowparams"
+	// "guiaction"
+	// "messenger"
+	// "menuitem"
+	// "menuparent"
+	// "news"
+	// "authority"
+	// "authoritygroup"
+
+	@Override
+	public void afterPropertiesSet() throws Exception
 	{
-		this.projectDirectory = projectDirectory;
-		this.excludeTableList = excludeTableList;
+		Assert.notNull(projectDirectory, "projectDirectory must not be null!");
+		Assert.notNull(excludeTableList, "excludeTableList must not be null!");
 	}
 
 	public void generateData()
