@@ -7,8 +7,6 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.TreeMap;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.util.Assert;
 
@@ -30,10 +28,8 @@ import com.syncnapsis.enums.EnumLocale;
 import com.syncnapsis.providers.TimeProvider;
 import com.syncnapsis.utils.StringUtil;
 
-public class ApplicationBaseDataGenerator implements DataGenerator, InitializingBean
+public class ApplicationBaseDataGenerator extends DataGenerator implements InitializingBean
 {
-	protected transient final Logger	logger	= LoggerFactory.getLogger(getClass());
-
 	protected TimeProvider				timeProvider;
 
 	protected MessengerManager			messengerManager;
@@ -43,8 +39,8 @@ public class ApplicationBaseDataGenerator implements DataGenerator, Initializing
 	protected UserRoleManager			userRoleManager;
 
 	protected List<Messenger>			messengers;
-	protected Map<String, User>			users	= new TreeMap<String, User>();
-
+	protected Map<String, User>			users				= new TreeMap<String, User>();
+	
 	public TimeProvider getTimeProvider()
 	{
 		return timeProvider;
@@ -108,6 +104,8 @@ public class ApplicationBaseDataGenerator implements DataGenerator, Initializing
 	@Override
 	public void afterPropertiesSet() throws Exception
 	{
+		super.afterPropertiesSet();
+		
 		Assert.notNull(timeProvider, "timeProvider must not be null!");
 
 		Assert.notNull(messengerManager, "messengerManager must not be null!");
