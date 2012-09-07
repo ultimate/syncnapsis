@@ -1,0 +1,257 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com</groupId>
+	<artifactId>syncnapsis</artifactId>
+	<packaging>pom</packaging>
+	<version>1.0.0</version>
+	<name>syncnapsis-framework</name>
+	<url>http://github.com/organizations/syncnapsis</url>
+
+	<modules>
+		<module>syncnapsis-core</module>
+		<module>syncnapsis-dev</module>
+		<module>syncnapsis-examples</module>
+		<module>syncnapsis-modules</module>
+		<module>syncnapsis-universe</module>
+	</modules>
+
+	<prerequisites>
+		<maven>2.2.1</maven>
+	</prerequisites>
+
+	<developers>
+		<developer>
+			<name>ultimate</name>
+			<email>ultimate@syncnapsis.com</email>
+		</developer>
+		<developer>
+			<name>moronicjoker</name>
+			<email>moronicjoker@syncnapsis.com</email>
+		</developer>
+	</developers>
+
+	<organization>
+		<name>syncnapsis</name>
+		<url>http://github.com/organizations/syncnapsis</url>
+	</organization>
+
+	<build>
+		<defaultGoal>install</defaultGoal>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<source>1.6</source>
+					<target>1.6</target>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-eclipse-plugin</artifactId>
+				<version>2.8</version>
+				<configuration>
+					<downloadSources>true</downloadSources>
+					<downloadJavadocs>true</downloadJavadocs>
+					<projectNameTemplate>[artifactId]</projectNameTemplate>
+					<workspace>${basedir}</workspace>
+					<workspaceActiveCodeStyleProfileName>format-java</workspaceActiveCodeStyleProfileName>
+					<workspaceCodeStylesURL>file:format-java.xml</workspaceCodeStylesURL>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>2.5</version>
+				<configuration>
+					<useFile>false</useFile>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-deploy-plugin</artifactId>
+				<version>2.7</version>
+				<configuration>
+					<skip>${mvn.deploy.skip}</skip>
+				</configuration>
+			</plugin>
+		</plugins>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>true</filtering>
+				<excludes>
+					<exclude>**/*.xls</exclude>
+				</excludes>
+			</resource>
+		</resources>
+		<testResources>
+			<testResource>
+				<directory>src/test/resources</directory>
+				<filtering>true</filtering>
+			</testResource>
+			<testResource>
+				<directory>src/main/webapp</directory>
+				<filtering>true</filtering>
+				<includes>
+					<include>**/*.xml</include>
+				</includes>
+			</testResource>
+		</testResources>
+		<extensions>
+		</extensions>
+	</build>
+
+	<repositories>
+		<repository>
+			<id>central</id>
+			<url>http://repo1.maven.org/maven2</url>
+		</repository>
+		<repository>
+			<id>mvnrepository.com</id>
+			<url>http://mvnrepository.com</url>
+		</repository>
+		<repository>
+			<id>maven2-repository.dev.java.net</id>
+			<url>http://download.java.net/maven/2</url>
+		</repository>
+		<repository>
+			<id>glassfish-repository.dev.java.net</id>
+			<url>http://download.java.net/maven/glassfish</url>
+		</repository>
+		<repository>
+			<id>appfuse</id>
+			<url>http://static.appfuse.org/repository</url>
+		</repository>
+	</repositories>
+
+	<pluginRepositories>
+		<!-- no additional plugin repos -->
+	</pluginRepositories>
+
+	<distributionManagement>
+		<repository>
+			<id>central</id>
+			<name>ishare central</name>
+			<url>http://netbin.de:8090/artifactory/libs-release-local</url>
+		</repository>
+		<snapshotRepository>
+			<id>snapshots</id>
+			<name>ishare snapshots</name>
+			<url>http://netbin.de:8090/artifactory/libs-snapshot-local</url>
+		</snapshotRepository>
+	</distributionManagement>
+
+	<dependencies>
+		<!-- BASE - START -->
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<version>${log4j.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<version>${log4j.version}</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-log4j12</artifactId>
+			<version>${slf4j.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-log4j12</artifactId>
+			<version>${slf4j.version}</version>
+			<scope>compile</scope>
+		</dependency>
+		<!-- BASE - END -->
+	</dependencies>
+
+	<profiles>
+		<profile>
+			<id>fullInstall</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-source-plugin</artifactId>
+						<version>2.1.2</version>
+						<executions>
+							<execution>
+								<id>attach-sources</id>
+								<goals>
+									<goal>jar-no-fork</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-javadoc-plugin</artifactId>
+						<version>2.8</version>
+						<executions>
+							<execution>
+								<id>attach-javadoc</id>
+								<goals>
+									<goal>jar</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
+
+	<properties>
+		<!-- Database settings - Start -->
+		<hibernate.dialect>org.hibernate.dialect.PostgreSQLDialect</hibernate.dialect>
+		<hibernate.showSql>false</hibernate.showSql>
+		<jdbc.groupId>postgresql</jdbc.groupId>
+		<jdbc.artifactId>postgresql</jdbc.artifactId>
+		<jdbc.version>9.1-901.jdbc4</jdbc.version> <!-- 19.01.2012 -->
+		<jdbc.driverClassName>org.postgresql.Driver</jdbc.driverClassName>
+		<jdbc.url><![CDATA[jdbc:postgresql://localhost:5432/syncnapsis_test]]></jdbc.url>
+		<jdbc.username>syncnapsis_test</jdbc.username>
+		<jdbc.password>syncnapsis_test</jdbc.password>
+		<!-- Database settings - End -->
+
+		<!-- Versions of Dependencies -->
+		<!-- pe-Dependencies (newest Versions) -->
+		<syncnapsis-core-application-base.version>0.2.0</syncnapsis-core-application-base.version>
+		<syncnapsis-core-data.version>0.5.0</syncnapsis-core-data.version>
+		<syncnapsis-core-game-base.version>0.2.0</syncnapsis-core-game-base.version>
+		<syncnapsis-core-utils.version>0.5.0</syncnapsis-core-utils.version>
+		<syncnapsis-core-websockets.version>0.7.0</syncnapsis-core-websockets.version>
+		<syncnapsis-dev-utils.version>0.9.0</syncnapsis-dev-utils.version>
+		<syncnapsis-examples-HelloWorld.version>0.6.5</syncnapsis-examples-HelloWorld.version>
+		<syncnapsis-examples-ui-playground.version>0.1.0</syncnapsis-examples-ui-playground.version>
+		<syncnapsis-modules-authority-api.version>0.2.0</syncnapsis-modules-authority-api.version>
+		<syncnapsis-modules-authority-generic-impl.version>0.2.0</syncnapsis-modules-authority-generic-impl.version>
+		<syncnapsis-modules-politics-api.version>0.2.0</syncnapsis-modules-politics-api.version>
+		<syncnapsis-modules-politics-complex-impl.version>0.2.0</syncnapsis-modules-politics-complex-impl.version>
+		<syncnapsis-modules-stats-api.version>0.2.0</syncnapsis-modules-stats-api.version>
+		<syncnapsis-modules-stats-base-impl.version>0.2.0</syncnapsis-modules-stats-base-impl.version>
+		<syncnapsis-universe-conquest.version>0.1.0</syncnapsis-universe-conquest.version>
+		<syncnapsis-universe-evolution.version>0.2.0</syncnapsis-universe-evolution.version>
+		<syncnapsis-universe-utils.version>0.2.0</syncnapsis-universe-utils.version>
+
+		<!-- Global-Dependencies -->
+		<servlet.version>3.1.1</servlet.version> <!-- 19.01.2012 -->
+		<slf4j.version>1.6.4</slf4j.version> <!-- 19.01.2012 -->
+		<log4j.version>1.2.16</log4j.version> <!-- 19.01.2012 -->
+
+		<!-- Deployment -->
+		<mvn.deploy.skip>false</mvn.deploy.skip>
+
+		<!-- Other -->
+		<maven.build.timestamp.format>yyyy-MM-dd</maven.build.timestamp.format>
+	</properties>
+</project>
