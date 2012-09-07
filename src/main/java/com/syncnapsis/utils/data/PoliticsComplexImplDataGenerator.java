@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.TreeMap;
 
 import org.springframework.util.Assert;
 
@@ -30,18 +31,24 @@ import com.syncnapsis.data.service.EmpireManager;
 
 public class PoliticsComplexImplDataGenerator extends PoliticsDataGenerator
 {
-	protected AuthorityGenericImplDataGenerator authorityDataGenerator;
-	protected StatsBaseImplDataGenerator statsDataGenerator;
-	
-	protected AllianceManager allianceManager;
-	protected AllianceMemberRankManager allianceMemberRankManager;
-	protected AllianceRankManager allianceRankManager;
-	protected ContactGroupManager contactGroupManager;
-	protected EmpireManager empireManager;
-	protected AllianceAllianceContactManager allianceAllianceContactManager;
-	protected EmpireAllianceContactManager empireAllianceContactManager;
-	protected EmpireEmpireContactManager empireEmpireContactManager;
-	
+	protected AuthorityGenericImplDataGenerator	authorityDataGenerator;
+	protected StatsBaseImplDataGenerator		statsDataGenerator;
+
+	protected AllianceManager					allianceManager;
+	protected AllianceMemberRankManager			allianceMemberRankManager;
+	protected AllianceRankManager				allianceRankManager;
+	protected ContactGroupManager				contactGroupManager;
+	protected EmpireManager						empireManager;
+	protected AllianceAllianceContactManager	allianceAllianceContactManager;
+	protected EmpireAllianceContactManager		empireAllianceContactManager;
+	protected EmpireEmpireContactManager		empireEmpireContactManager;
+
+	protected Map<String, Alliance>				alliances	= new TreeMap<String, Alliance>();
+
+	protected Map<String, Map<String, Boolean>>	defaultContactAuthorities;
+	protected Map<String, Map<String, Boolean>>	defaultAllianceAuthorities;
+	protected Map<String, String>				defaultAllianceMemberRanks;
+
 	public AuthorityGenericImplDataGenerator getAuthorityDataGenerator()
 	{
 		return authorityDataGenerator;
@@ -142,11 +149,34 @@ public class PoliticsComplexImplDataGenerator extends PoliticsDataGenerator
 		this.empireEmpireContactManager = empireEmpireContactManager;
 	}
 
+	public Map<String, Map<String, Boolean>> getDefaultContactAuthorities()
+	{
+		return defaultContactAuthorities;
+	}
+
+	public Map<String, Map<String, Boolean>> getDefaultAllianceAuthorities()
+	{
+		return defaultAllianceAuthorities;
+	}
+
+	public Map<String, String> getDefaultAllianceMemberRanks()
+	{
+		return defaultAllianceMemberRanks;
+	}
+
+	public void initiate(Map<String, Map<String, Boolean>> defaultContactAuthorities, Map<String, Map<String, Boolean>> defaultAllianceAuthorities,
+			Map<String, String> defaultAllianceMemberRanks)
+	{
+		this.defaultContactAuthorities = defaultContactAuthorities;
+		this.defaultAllianceAuthorities = defaultAllianceAuthorities;
+		this.defaultAllianceMemberRanks = defaultAllianceMemberRanks;
+	}
+
 	@Override
-	public void afterPropertiesSet()
+	public void afterPropertiesSet() throws Exception
 	{
 		super.afterPropertiesSet();
-		
+
 		Assert.notNull(authorityDataGenerator, "authorityDataGenerator must not be null!");
 		Assert.notNull(statsDataGenerator, "statsDataGenerator must not be null!");
 
@@ -214,7 +244,7 @@ public class PoliticsComplexImplDataGenerator extends PoliticsDataGenerator
 			return (ContactExtension<C1, C2>) empireEmpireContactManager.save((EmpireEmpireContact) contact);
 		return null;
 	}
-	
+
 	public Alliance createAlliance(String name, Map<String, Map<String, Boolean>> contactAuthoritiesMap,
 			Map<String, Map<String, Boolean>> allianceAuthoritiesMap, Map<String, String> allianceMemberRanksMap)
 	{
@@ -298,5 +328,13 @@ public class PoliticsComplexImplDataGenerator extends PoliticsDataGenerator
 		alliance.setAllianceMemberRanks(allianceMemberRanks);
 
 		return alliance;
+	}
+
+	public Alliance getOrCreateAlliance(String alliancename)
+	{
+		if(!alliances.containsKey(alliancename))
+			alliances.put(alliancename,
+					createAlliance(alliancename, defaultContactAuthorities, defaultAllianceAuthorities, defaultAllianceMemberRanks));
+		return alliances.get(alliancename);
 	}
 }
