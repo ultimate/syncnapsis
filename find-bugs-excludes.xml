@@ -1,0 +1,13 @@
+<FindBugsFilter>
+	<Match>
+		<Class name="~com\.syncnapsis\.data\.model\..*" />
+       	<Bug pattern="EI_EXPOSE_REP,EI_EXPOSE_REP2" />
+	</Match>
+	<Match>
+		<Or>
+	       	<Class name="~.*Test" />
+	       	<Class name="~.*ImplTest.*" />
+	       	<Class name="~.*Mock.*" />
+		</Or>
+	</Match>
+</FindBugsFilter>
