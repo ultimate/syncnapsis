@@ -1,0 +1,129 @@
+package com.syncnapsis.utils.dev;
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+public class ResourceBundleProcessor
+{
+	public static final String			RESOURCE_BUNDLE_PREFIX_DEFAULT	= "i3-label";
+	public static final String			RESOURCE_BUNDLE_SUFFIX_DEFAULT	= ".properties";
+
+	public static final String			RESOURCE_VALUE_START			= " = ";
+	public static final String			RESOURCE_VALUE_LINEBREAK		= "\\r\\n";
+
+	protected transient final Logger	logger							= LoggerFactory.getLogger(getClass());
+
+	protected File						classesDir;
+	
+	protected String					resourceBundlePrefix;
+
+	protected String					resourceBundleSuffix;
+
+	public ResourceBundleProcessor(File classesDir)
+	{
+		this(classesDir, RESOURCE_BUNDLE_PREFIX_DEFAULT, RESOURCE_BUNDLE_SUFFIX_DEFAULT);
+	}
+
+	public ResourceBundleProcessor(File classesDir, String resourceBundlePrefix, String resourceBundleSuffix)
+	{
+		super();
+		this.classesDir = classesDir;
+		this.resourceBundlePrefix = resourceBundlePrefix;
+		this.resourceBundleSuffix = resourceBundleSuffix;
+	}
+
+	public File getClassesDir()
+	{
+		return classesDir;
+	}
+
+	public String getResourceBundlePrefix()
+	{
+		return resourceBundlePrefix;
+	}
+
+	public String getResourceBundleSuffix()
+	{
+		return resourceBundleSuffix;
+	}
+
+	public void processResourceBundles()
+	{
+		for(File file : classesDir.listFiles())
+		{
+			if(file.getName().startsWith(resourceBundlePrefix) && file.getName().endsWith(resourceBundleSuffix))
+			{
+				try
+				{
+					processResourceBundle(file);
+				}
+				catch(IOException e)
+				{
+					logger.error("could not process file: " + file.getName());
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+
+	public void processResourceBundle(File file) throws IOException
+	{
+		logger.info("processing file: " + file.getName());
+
+		File tmp = new File(System.currentTimeMillis() + ".tmp");
+
+		BufferedReader br = new BufferedReader(new FileReader(file));
+		BufferedWriter bw = new BufferedWriter(new FileWriter(tmp));
+
+		String line;
+		int start, end;
+
+		while((line = br.readLine()) != null)
+		{
+			if(!line.contains(RESOURCE_VALUE_LINEBREAK))
+			{
+				bw.write(line);
+				bw.newLine();
+			}
+			else
+			{
+				start = 0;
+				end = line.indexOf(RESOURCE_VALUE_START) + RESOURCE_VALUE_START.length();
+
+				// key schreiben mit "{"
+				bw.write(line.substring(start, end));
+				bw.write("{");
+				bw.newLine();
+
+				start = end;
+				// value in mehreren Zeilen schreiben
+				while((end = line.indexOf(RESOURCE_VALUE_LINEBREAK, start + 1)) > 0)
+				{
+					bw.write(line.substring(start, end));
+					bw.newLine();
+					start = end + RESOURCE_VALUE_LINEBREAK.length();
+				}
+				bw.write(line.substring(start));
+				bw.newLine();
+
+				// ende von "{" schreiben
+				bw.write("}");
+				bw.newLine();
+			}
+		}
+
+		bw.flush();
+		bw.close();
+		br.close();
+
+		file.delete();
+		tmp.renameTo(file);
+	}
+}
