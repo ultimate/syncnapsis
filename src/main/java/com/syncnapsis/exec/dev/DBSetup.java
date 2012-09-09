@@ -14,7 +14,7 @@ import java.util.TreeMap;
 
 import org.postgresql.util.PSQLException;
 
-public abstract class DBSetup extends DevUtil
+public abstract class DBSetup
 {
 	private static TreeMap<String, TreeMap<String, String>> queries;
 	
