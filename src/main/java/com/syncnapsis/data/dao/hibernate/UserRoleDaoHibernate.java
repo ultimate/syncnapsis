@@ -6,7 +6,7 @@ import com.syncnapsis.data.model.UserRole;
 import com.syncnapsis.exceptions.UserRoleExistsException;
 
 /**
- * Dao-Implementierung für Hibernate für den Zugriff auf AllianceAllianceContactGroup
+ * Dao-Implementierung für Hibernate für den Zugriff auf UserRole
  * 
  * @author ultimate
  */

@@ -6,7 +6,7 @@ import com.syncnapsis.data.dao.MessengerContactDao;
 import com.syncnapsis.data.model.MessengerContact;
 
 /**
- * Dao-Implementierung für Hibernate für den Zugriff auf AllianceAllianceContactGroup
+ * Dao-Implementierung für Hibernate für den Zugriff auf MessengerContact
  * 
  * @author ultimate
  */
