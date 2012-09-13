@@ -1,0 +1,41 @@
+package ${package}.data.dao;
+
+import ${package}.data.dao.hibernate.${model}DaoHibernate;
+import ${package}.data.model.${model};
+import ${package}.tests.GenericDaoTestCase;
+import ${package}.tests.GenericNameDaoTestCase;
+import ${package}.tests.annotations.TestCoversClasses;
+
+@TestCoversClasses({${model}Dao.class, ${model}DaoHibernate.class})
+public class ${model}DaoTest extends GenericNameDaoTestCase<${model}, ${pkType}>
+// public class ${model}DaoTest extends GenericDaoTestCase<${model}, ${pkType}>
+{
+	private ${model}Dao ${entity}Dao;
+	
+	@Override
+	protected void setUp() throws Exception
+	{
+		super.setUp();
+		
+		String existingName = /* existing name */; // for GenericNameDao only
+		${pkType} existingId = ${entity}Dao.getByName(existingName).getId(); // GenericNameDao
+		${pkType} existingId = ${entity}Dao.getAll().get(0).getId(); // GenericDao
+		
+		${model} ${entity} = new ${model}();
+		// set individual properties here
+		
+		setEntity(${entity});
+		
+		setEntityProperty(/* a valid property name */);
+		setEntityPropertyValue(/* a valid property value */);
+		
+		setExistingEntityId(existingId);
+		setBadEntityId(-1L);
+		setExistingEntityName(existingName); // for GenericNameDao only
+		
+		setGenericNameDao(${entity}Dao); // GenericNameDao
+		// setGenericDao(${entity}Dao); // GenericDao
+	}
+	
+	// insert individual Tests here
+}

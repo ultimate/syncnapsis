@@ -1,0 +1,12 @@
+package ${package}.data.dao;
+
+import ${package}.data.model.${model};
+
+/**
+ * Dao-Interface for access to ${model}
+ * 
+ * @author ultimate
+ */
+public interface ${model}Dao extends GenericDao<${model}, ${pkType}>
+{
+}

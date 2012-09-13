@@ -1,0 +1,21 @@
+package ${package}.data.dao.hibernate;
+
+import ${package}.data.dao.${model}Dao;
+import ${package}.data.model.${model};
+
+/**
+ * Dao-Implementation for Hibernate for access to ${model}
+ * 
+ * @author ultimate
+ */
+public class ${model}DaoHibernate extends GenericNameDaoHibernate<${model}, ${pkType}> implements ${model}Dao
+{
+	/**
+	 * Create a new DAO-Instance using the super-class GenericNameDaoHibernate
+	 * with the model-Class ${model} and the specified name-property
+	 */
+	public ${model}DaoHibernate()
+	{
+		super(${model}.class, /* a valid name property name*/);
+	}
+}

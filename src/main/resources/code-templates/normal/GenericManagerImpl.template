@@ -1,0 +1,29 @@
+package ${package}.data.service.impl;
+
+import ${package}.data.dao.${model}Dao;
+import ${package}.data.model.${model};
+import ${package}.data.service.${model}Manager;
+
+/**
+ * Manager-Implementation for access to ${model}.
+ * 
+ * @author ultimate
+ */
+public class ${model}ManagerImpl extends GenericManagerImpl<${model}, ${pkType}> implements ${model}Manager
+{
+	/**
+	 * ${model}Dao for database access
+	 */
+	protected ${model}Dao			${entity}Dao;
+
+	/**
+	 * Standard Constructor
+	 * 
+	 * @param ${entity}Dao - ${model}Dao for database access
+	 */
+	public ${model}ManagerImpl(${model}Dao ${entity}Dao)
+	{
+		super(${entity}Dao);
+		this.${entity}Dao = ${entity}Dao;
+	}
+}

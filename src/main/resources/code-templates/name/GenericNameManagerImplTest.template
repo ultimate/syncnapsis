@@ -1,0 +1,22 @@
+package ${package}.data.service.impl;
+
+import ${package}.data.dao.${model}Dao;
+import ${package}.data.model.${model};
+import ${package}.data.service.${model}Manager;
+import ${package}.tests.GenericNameManagerImplTestCase;
+import ${package}.tests.annotations.TestCoversClasses;
+
+@TestCoversClasses( { ${model}Manager.class, ${model}ManagerImpl.class })
+public class ${model}ManagerImplTest extends GenericNameManagerImplTestCase<${model}, ${pkType}, ${model}Manager, ${model}Dao>
+// public class ${model}ManagerImplTest extends GenericManagerImplTestCase<${model}, ${pkType}, ${model}Manager, ${model}Dao>
+{
+	@Override
+	protected void setUp() throws Exception
+	{
+		super.setUp();
+		setEntity(new ${model}());
+		setDaoClass(${model}Dao.class);
+		setMockDao(mockContext.mock(${model}Dao.class));
+		setMockManager(new ${model}ManagerImpl(mockDao));
+	}
+}

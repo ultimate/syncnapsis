@@ -1,0 +1,12 @@
+package ${package}.data.service;
+
+import ${package}.data.model.${model};
+
+/**
+ * Manager-Interface for access to ${model}.
+ * 
+ * @author ultimate
+ */
+public interface ${model}Manager  extends GenericNameManager<${model}, ${pkType}>
+{
+}
