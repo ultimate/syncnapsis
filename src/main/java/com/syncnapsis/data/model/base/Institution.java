@@ -27,6 +27,15 @@ public abstract class Institution<PK extends Serializable> extends ActivatableIn
 	protected String	imageURL;
 
 	/**
+	 * The primary color for this institution
+	 */
+	protected String	primaryColor;
+	/**
+	 * The primary color for this institution
+	 */
+	protected String	secondaryColor;
+
+	/**
 	 * Kurzname bzw. Abkürzung des Imperiums. Muss einmalig sein.
 	 * 
 	 * @return shortName
@@ -71,6 +80,28 @@ public abstract class Institution<PK extends Serializable> extends ActivatableIn
 	}
 
 	/**
+	 * The primary color for this institution
+	 * 
+	 * @return primaryColor
+	 */
+	@Column(nullable = false, length = LENGTH_NAME_NORMAL)
+	public String getPrimaryColor()
+	{
+		return primaryColor;
+	}
+
+	/**
+	 * The secondary color for this institution
+	 * 
+	 * @return secondaryColor
+	 */
+	@Column(nullable = true, length = LENGTH_NAME_NORMAL)
+	public String getSecondaryColor()
+	{
+		return secondaryColor;
+	}
+
+	/**
 	 * Kurzname bzw. Abkürzung des Imperiums. Muss einmalig sein.
 	 * 
 	 * @param shortName - der Kurzname
@@ -110,6 +141,26 @@ public abstract class Institution<PK extends Serializable> extends ActivatableIn
 		this.imageURL = imageURL;
 	}
 
+	/**
+	 * The primary color for this institution
+	 * 
+	 * @param primaryColor - the primary color
+	 */
+	public void setPrimaryColor(String primaryColor)
+	{
+		this.primaryColor = primaryColor;
+	}
+
+	/**
+	 * The secondary color for this institution
+	 * 
+	 * @param secondaryColor - the secondary color
+	 */
+	public void setSecondaryColor(String secondaryColor)
+	{
+		this.secondaryColor = secondaryColor;
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * @see com.syncnapsis.data.model.base.BaseObject#hashCode()
@@ -123,6 +174,8 @@ public abstract class Institution<PK extends Serializable> extends ActivatableIn
 		result = prime * result + ((fullName == null) ? 0 : fullName.hashCode());
 		result = prime * result + ((imageURL == null) ? 0 : imageURL.hashCode());
 		result = prime * result + ((shortName == null) ? 0 : shortName.hashCode());
+		result = prime * result + ((primaryColor == null) ? 0 : primaryColor.hashCode());
+		result = prime * result + ((secondaryColor == null) ? 0 : secondaryColor.hashCode());
 		return result;
 	}
 
@@ -168,6 +221,20 @@ public abstract class Institution<PK extends Serializable> extends ActivatableIn
 				return false;
 		}
 		else if(!shortName.equals(other.shortName))
+			return false;
+		if(primaryColor == null)
+		{
+			if(other.primaryColor != null)
+				return false;
+		}
+		else if(!primaryColor.equals(other.primaryColor))
+			return false;
+		if(secondaryColor == null)
+		{
+			if(other.secondaryColor != null)
+				return false;
+		}
+		else if(!secondaryColor.equals(other.secondaryColor))
 			return false;
 		return true;
 	}

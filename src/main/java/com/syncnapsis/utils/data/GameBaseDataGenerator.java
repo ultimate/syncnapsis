@@ -110,6 +110,8 @@ public class GameBaseDataGenerator extends ApplicationBaseDataGenerator implemen
 		empire.setImageURL(null);
 		empire.setShortName(name);
 		empire.setPlayer(player);
+		empire.setPrimaryColor("#FF0000");
+		empire.setSecondaryColor("#FF0000");
 		empire.setVersion(null);
 
 		empire = empireManager.save(empire);
