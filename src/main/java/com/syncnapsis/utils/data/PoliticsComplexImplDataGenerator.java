@@ -253,6 +253,8 @@ public class PoliticsComplexImplDataGenerator extends PoliticsDataGenerator
 		alliance.setDescription(RandomData.randomString(RandomData.randomInt(20, 2000), DefaultData.STRING_ASCII_COMPLETE_NO_CONTROLCHARS));
 		alliance.setFullName("full_" + name);
 		alliance.setImageURL(null);
+		alliance.setPrimaryColor("#FF0000");
+		alliance.setSecondaryColor("#FF0000");
 		alliance.setShortName(name);
 
 		alliance = allianceManager.save(alliance);
