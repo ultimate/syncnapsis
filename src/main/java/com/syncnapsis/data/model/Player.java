@@ -117,6 +117,7 @@ public class Player extends ActivatableInstance<Long>
 	 * 
 	 * @return roleExpireDate
 	 */
+	@Temporal(TemporalType.TIMESTAMP)
 	@Column(nullable = true)
 	public Date getRoleExpireDate()
 	{
