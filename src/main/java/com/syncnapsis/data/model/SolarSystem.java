@@ -6,7 +6,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import com.syncnapsis.data.model.base.BaseObject;
+import com.syncnapsis.data.model.base.ActivatableInstance;
 
 /**
  * Entity representation of a simple solar system.<br>
@@ -18,12 +18,17 @@ import com.syncnapsis.data.model.base.BaseObject;
  */
 @Entity
 @Table(name = "solarsystem")
-public class SolarSystem extends BaseObject<Long>
+public class SolarSystem extends ActivatableInstance<Long>
 {
 	/**
 	 * The Galaxy this solar system is in
 	 */
 	protected Galaxy	galaxy;
+
+	/**
+	 * The name of this solar system
+	 */
+	protected String	name;
 
 	/**
 	 * The X-Component of the Coordinates/Position of this solar system
@@ -58,6 +63,17 @@ public class SolarSystem extends BaseObject<Long>
 	public Galaxy getGalaxy()
 	{
 		return galaxy;
+	}
+
+	/**
+	 * The name of this solar system
+	 * 
+	 * @return name
+	 */
+	@Column(nullable = true, length = LENGTH_NAME_NORMAL)
+	public String getName()
+	{
+		return name;
 	}
 
 	/**
@@ -126,6 +142,16 @@ public class SolarSystem extends BaseObject<Long>
 	}
 
 	/**
+	 * The name of this solar system
+	 * 
+	 * @param name - the name
+	 */
+	public void setName(String name)
+	{
+		this.name = name;
+	}
+
+	/**
 	 * The X-Component of the Coordinates/Position of this solar system
 	 * 
 	 * @param coordinateX - the coordinate's component
@@ -175,10 +201,6 @@ public class SolarSystem extends BaseObject<Long>
 		this.habitability = habitability;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * @see com.syncnapsis.data.model.base.BaseObject#hashCode()
-	 */
 	@Override
 	public int hashCode()
 	{
@@ -189,14 +211,11 @@ public class SolarSystem extends BaseObject<Long>
 		result = prime * result + coordinateZ;
 		result = prime * result + ((galaxy == null) ? 0 : galaxy.getId().hashCode());
 		result = prime * result + habitability;
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
 		result = prime * result + size;
 		return result;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * @see com.syncnapsis.data.model.base.BaseObject#equals(java.lang.Object)
-	 */
 	@Override
 	public boolean equals(Object obj)
 	{
@@ -221,6 +240,13 @@ public class SolarSystem extends BaseObject<Long>
 		else if(!galaxy.getId().equals(other.galaxy.getId()))
 			return false;
 		if(habitability != other.habitability)
+			return false;
+		if(name == null)
+		{
+			if(other.name != null)
+				return false;
+		}
+		else if(!name.equals(other.name))
 			return false;
 		if(size != other.size)
 			return false;

@@ -9,19 +9,21 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
-import com.syncnapsis.data.model.base.BaseObject;
+import com.syncnapsis.data.model.base.ActivatableInstance;
 
 /**
  * Entity representing a galaxy usable to create matches.<br>
  * A galaxy consists of it's basic information (name, creator, etc.) the 3-dimenstional size and a
- * list of solar systems.
+ * list of solar systems mapped to the galaxy.
  * 
  * @author ultimate
  */
 @Entity
 @Table(name = "galaxy")
-public class Galaxy extends BaseObject<Long>
+public class Galaxy extends ActivatableInstance<Long>
 {
 	/**
 	 * The name of this galaxy
@@ -62,15 +64,24 @@ public class Galaxy extends BaseObject<Long>
 	/**
 	 * The matches taking place in this galaxy
 	 */
-
 	protected List<Match>		matches;
 
+	/**
+	 * The name of this galaxy
+	 * 
+	 * @return name
+	 */
 	@Column(nullable = false, length = LENGTH_NAME_LONG)
 	public String getName()
 	{
 		return name;
 	}
 
+	/**
+	 * The creator of this galaxy
+	 * 
+	 * @return creator
+	 */
 	@ManyToOne
 	@JoinColumn(name = "fkCreator", nullable = false)
 	public Player getCreator()
@@ -78,82 +89,163 @@ public class Galaxy extends BaseObject<Long>
 		return creator;
 	}
 
+	/**
+	 * The date and time this galaxy was created
+	 * 
+	 * @return creationDate
+	 */
+	@Temporal(TemporalType.TIMESTAMP)
 	@Column(nullable = false)
 	public Date getCreationDate()
 	{
 		return creationDate;
 	}
 
+	/**
+	 * The x-size (width) of the galaxy.<br>
+	 * This means x-coordinates are within the interval [ -sizeX/2 ; sizeX/2 ]
+	 * 
+	 * @return sizeX
+	 */
 	@Column(nullable = false)
 	public int getSizeX()
 	{
 		return sizeX;
 	}
 
+	/**
+	 * The y-size of the galaxy.<br>
+	 * This means y-coordinates are within the interval [ -sizeY/2 ; sizeY/2 ]
+	 * 
+	 * @return sizeY
+	 */
 	@Column(nullable = false)
 	public int getSizeY()
 	{
 		return sizeY;
 	}
 
+	/**
+	 * The z-size of the galaxy.<br>
+	 * This means z-coordinates are within the interval [ -sizeZ/2 ; sizeZ/2 ]
+	 * 
+	 * @return sizeZ
+	 */
 	@Column(nullable = false)
 	public int getSizeZ()
 	{
 		return sizeZ;
 	}
 
+	/**
+	 * The solar systems belonging to this galaxy
+	 * 
+	 * @return solarSystems
+	 */
 	@OneToMany(mappedBy = "galaxy")
 	public List<SolarSystem> getSolarSystems()
 	{
 		return solarSystems;
 	}
 
+	/**
+	 * The matches taking place in this galaxy
+	 * 
+	 * @return matches
+	 */
 	@OneToMany(mappedBy = "galaxy")
 	public List<Match> getMatches()
 	{
 		return matches;
 	}
 
+	/**
+	 * The name of this galaxy
+	 * 
+	 * @param name - the name
+	 */
 	public void setName(String name)
 	{
 		this.name = name;
 	}
 
+	/**
+	 * The creator of this galaxy
+	 * 
+	 * @param creator - the creator
+	 */
 	public void setCreator(Player creator)
 	{
 		this.creator = creator;
 	}
 
+	/**
+	 * The date and time this galaxy was created
+	 * 
+	 * @param creationDate - the date and time
+	 */
 	public void setCreationDate(Date creationDate)
 	{
 		this.creationDate = creationDate;
 	}
 
+	/**
+	 * The x-size (width) of the galaxy.<br>
+	 * This means x-coordinates are within the interval [ -sizeX/2 ; sizeX/2 ]
+	 * 
+	 * @param sizeX - the x-size
+	 */
 	public void setSizeX(int sizeX)
 	{
 		this.sizeX = sizeX;
 	}
 
+	/**
+	 * The y-size of the galaxy.<br>
+	 * This means y-coordinates are within the interval [ -sizeY/2 ; sizeY/2 ]
+	 * 
+	 * @param sizeY - the y-size
+	 */
 	public void setSizeY(int sizeY)
 	{
 		this.sizeY = sizeY;
 	}
 
+	/**
+	 * The z-size of the galaxy.<br>
+	 * This means z-coordinates are within the interval [ -sizeZ/2 ; sizeZ/2 ]
+	 * 
+	 * @param sizeZ - the z-size
+	 */
 	public void setSizeZ(int sizeZ)
 	{
 		this.sizeZ = sizeZ;
 	}
 
+	/**
+	 * The solar systems belonging to this galaxy
+	 * 
+	 * @param solarSystems - the list of solar system
+	 */
 	public void setSolarSystems(List<SolarSystem> solarSystems)
 	{
 		this.solarSystems = solarSystems;
 	}
 
+	/**
+	 * The matches taking place in this galaxy
+	 * 
+	 * @param matches - the list of matches
+	 */
 	public void setMatches(List<Match> matches)
 	{
 		this.matches = matches;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see com.syncnapsis.data.model.base.BaseObject#hashCode()
+	 */
 	@Override
 	public int hashCode()
 	{
@@ -168,6 +260,10 @@ public class Galaxy extends BaseObject<Long>
 		return result;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see com.syncnapsis.data.model.base.BaseObject#equals(java.lang.Object)
+	 */
 	@Override
 	public boolean equals(Object obj)
 	{
