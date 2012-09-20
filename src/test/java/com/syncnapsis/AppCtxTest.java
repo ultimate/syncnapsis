@@ -1,6 +1,7 @@
 package com.syncnapsis;
-import com.syncnapsis.utils.ApplicationContextUtil;
 import org.springframework.context.ApplicationContext;
+
+import com.syncnapsis.utils.ApplicationContextUtil;
 
 /**
  * Just a simple Test-Class for checking if your application-context-configuration is valid and
@@ -32,5 +33,6 @@ public class AppCtxTest
 		// @formatter:on
 		ApplicationContext ctx = ApplicationContextUtil.createApplicationContext(locations);
 		System.out.println("ready");
+		
 	}
 }
