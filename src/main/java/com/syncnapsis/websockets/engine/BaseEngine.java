@@ -480,7 +480,7 @@ public abstract class BaseEngine implements Engine, InitializingBean
 	 * 
 	 * @see org.springframework.beans.factory.InitializingBean#afterPropertiesSet()
 	 */
-	public void afterPropertiesSet()
+	public void afterPropertiesSet() throws Exception
 	{
 		// only check at start procedure
 		if(this.locked)

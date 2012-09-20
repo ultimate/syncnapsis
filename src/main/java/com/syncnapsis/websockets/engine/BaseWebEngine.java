@@ -3,6 +3,7 @@ package com.syncnapsis.websockets.engine;
 import com.syncnapsis.enums.EnumEngineSupport;
 import com.syncnapsis.utils.JettyUtil;
 import com.syncnapsis.websockets.Engine;
+import com.syncnapsis.websockets.engine.jetty.JettyServerEngine;
 
 /**
  * Abstract base Class for ServletEngine and Filter/ServletEngine offering the support for a context path
@@ -63,7 +64,7 @@ public abstract class BaseWebEngine extends BaseEngine
 	 * @see org.springframework.beans.factory.InitializingBean#afterPropertiesSet()
 	 */
 	@Override
-	public void afterPropertiesSet()
+	public void afterPropertiesSet() throws Exception
 	{
 		super.afterPropertiesSet();
 		if(this.path == null)
