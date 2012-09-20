@@ -10,9 +10,9 @@ import com.syncnapsis.mock.MockRPCHandler;
 import com.syncnapsis.tests.LoggerTestCase;
 import com.syncnapsis.utils.serialization.JacksonStringSerializer;
 import com.syncnapsis.utils.serialization.Mapable;
-import com.syncnapsis.websockets.service.RPCService;
 import com.syncnapsis.websockets.service.rpc.RPCCall;
 import com.syncnapsis.websockets.service.rpc.RPCMessage;
+import com.syncnapsis.websockets.service.rpc.RPCService;
 
 public class RPCServiceTest extends LoggerTestCase
 {

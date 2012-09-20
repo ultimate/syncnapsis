@@ -9,7 +9,6 @@ import java.util.Arrays;
 import com.syncnapsis.security.AccessController;
 import com.syncnapsis.utils.serialization.Serializer;
 import com.syncnapsis.websockets.Connection;
-import com.syncnapsis.websockets.service.RPCService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
