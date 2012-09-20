@@ -7,12 +7,14 @@ import com.syncnapsis.data.dao.UniversalDao;
 import com.syncnapsis.data.service.UniversalManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Universelle Manager-Implementierung für den Zugriff auf beliebige Klassen
  * 
  * @author ultimate
  */
+@Transactional
 public class UniversalManagerImpl implements UniversalManager
 {
 	/**
