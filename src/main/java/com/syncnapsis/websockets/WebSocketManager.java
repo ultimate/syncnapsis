@@ -166,7 +166,7 @@ public class WebSocketManager extends BaseEngine implements InitializingBean, Di
 	 * @see org.springframework.beans.factory.InitializingBean#afterPropertiesSet()
 	 */
 	@Override
-	public void afterPropertiesSet()
+	public void afterPropertiesSet() throws Exception
 	{
 		super.afterPropertiesSet();
 

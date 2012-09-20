@@ -93,7 +93,7 @@ public abstract class BaseTCPEngine extends BaseEngine
 	 * @see org.springframework.beans.factory.InitializingBean#afterPropertiesSet()
 	 */
 	@Override
-	public void afterPropertiesSet()
+	public void afterPropertiesSet() throws Exception
 	{
 		super.afterPropertiesSet();
 		Assert.isTrue(this.port != null || this.sslPort != null, "either port or sslPort must not be null");

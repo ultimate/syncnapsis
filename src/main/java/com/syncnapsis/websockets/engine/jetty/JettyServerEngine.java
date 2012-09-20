@@ -57,7 +57,14 @@ public class JettyServerEngine extends BaseTCPEngine implements InitializingBean
 		this.contextPath = contextPath;
 		this.port = port;
 		this.sslPort = sslPort;
-		afterPropertiesSet();
+		try
+		{
+			afterPropertiesSet();
+		}
+		catch(Exception e)
+		{
+			throw new IllegalArgumentException(e);
+		}
 	}
 
 	/**
@@ -95,7 +102,7 @@ public class JettyServerEngine extends BaseTCPEngine implements InitializingBean
 	 * @see org.springframework.beans.factory.InitializingBean#afterPropertiesSet()
 	 */
 	@Override
-	public void afterPropertiesSet()
+	public void afterPropertiesSet() throws Exception
 	{
 		super.afterPropertiesSet();
 		if(this.contextPath == null)
