@@ -10,7 +10,7 @@ import com.syncnapsis.security.annotations.Authority;
 import com.syncnapsis.providers.ConnectionProvider;
 import com.syncnapsis.utils.ApplicationContextUtil;
 import com.syncnapsis.websockets.Connection;
-import com.syncnapsis.websockets.service.RPCService;
+import com.syncnapsis.websockets.service.rpc.RPCService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
