@@ -59,8 +59,6 @@ public class Player extends ActivatableInstance<Long>
 	 */
 	protected Date				accountStatusExpireDate;
 	
-	// TODO Color?
-
 	/**
 	 * Liste der Sitter
 	 */
@@ -156,7 +154,7 @@ public class Player extends ActivatableInstance<Long>
 	 * @return sitters
 	 */
 	@ManyToMany
-	@JoinTable(name = "sittingstatus", joinColumns = { @JoinColumn(name = "fkUser") }, inverseJoinColumns = { @JoinColumn(name = "fkSitter") })
+	@JoinTable(name = "sittingstatus", joinColumns = { @JoinColumn(name = "fkPlayer") }, inverseJoinColumns = { @JoinColumn(name = "fkSitter") })
 	public List<Player> getSitters()
 	{
 		return sitters;
