@@ -38,7 +38,7 @@
 	
 	<bean id="logService" class="com.syncnapsis.websockets.service.BaseService" />
 
-	<bean id="rpcService" class="com.syncnapsis.websockets.service.RPCService">
+	<bean id="rpcService" class="com.syncnapsis.websockets.service.rpc.RPCService">
 		<property name="serializer" ref="serializer" />
 		<property name="rpcHandler" ref="rpcHandler" />
 		<!-- <property name="authorityProvider" ref="" /> -->

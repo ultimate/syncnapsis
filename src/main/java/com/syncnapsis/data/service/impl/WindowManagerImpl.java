@@ -7,7 +7,7 @@ import com.syncnapsis.data.model.Window;
 import com.syncnapsis.data.service.WindowManager;
 import com.syncnapsis.websockets.Connection;
 import com.syncnapsis.websockets.WebSocketManager;
-import com.syncnapsis.websockets.service.RPCService;
+import com.syncnapsis.websockets.service.rpc.RPCService;
 
 /**
  * A simple WindowManager-Impl
