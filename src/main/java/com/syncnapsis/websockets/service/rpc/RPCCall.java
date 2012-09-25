@@ -5,10 +5,11 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.syncnapsis.utils.serialization.Mapable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.Assert;
+
+import com.syncnapsis.utils.serialization.Mapable;
 
 /**
  * Class respresenting the Information required for an RPC call (object, method, arguments).
@@ -104,16 +105,6 @@ public class RPCCall implements Mapable<RPCCall>
 		Map<String, Object> m = new HashMap<String, Object>();
 		m.put("object", object);
 		m.put("method", method);
-		// this will be handled by SerializationUtil
-		// Object[] args2 = new Object[args.length];
-		// for(int i = 0; i < args2.length; i++)
-		// {
-		// if(args[i] instanceof Mapable)
-		// args2[i] = ((Mapable<?>) args[i]).toMap(authorities);
-		// else
-		// args2[i] = args[i];
-		// }
-		// m.put("args", args2);
 		m.put("args", args);
 		return m;
 	}
