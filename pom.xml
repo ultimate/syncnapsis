@@ -24,6 +24,12 @@
 			<artifactId>syncnapsis-core-data</artifactId>
 			<version>${syncnapsis-core-data.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>com.syncnapsis.syncnapsis-core</groupId>
+			<artifactId>syncnapsis-core-websockets</artifactId>
+			<version>${syncnapsis-core-websockets.version}</version>
+			<optional>true</optional>
+		</dependency>
 		<!-- WEB - START -->
 		<dependency>
 			<groupId>org.glassfish</groupId>
