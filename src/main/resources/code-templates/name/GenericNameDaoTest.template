@@ -8,7 +8,6 @@ import ${package}.tests.annotations.TestCoversClasses;
 
 @TestCoversClasses({${model}Dao.class, ${model}DaoHibernate.class})
 public class ${model}DaoTest extends GenericNameDaoTestCase<${model}, ${pkType}>
-// public class ${model}DaoTest extends GenericDaoTestCase<${model}, ${pkType}>
 {
 	private ${model}Dao ${entity}Dao;
 	
@@ -17,9 +16,8 @@ public class ${model}DaoTest extends GenericNameDaoTestCase<${model}, ${pkType}>
 	{
 		super.setUp();
 		
-		String existingName = /* existing name */; // for GenericNameDao only
-		${pkType} existingId = ${entity}Dao.getByName(existingName).getId(); // GenericNameDao
-		${pkType} existingId = ${entity}Dao.getAll().get(0).getId(); // GenericDao
+		${pkType} existingId = ${entity}Dao.getByName(existingName).getId();
+		String existingName = ${entity}Dao.getAll().get(0).get/*name property*/();
 		
 		${model} ${entity} = new ${model}();
 		// set individual properties here
@@ -31,10 +29,9 @@ public class ${model}DaoTest extends GenericNameDaoTestCase<${model}, ${pkType}>
 		
 		setExistingEntityId(existingId);
 		setBadEntityId(-1L);
-		setExistingEntityName(existingName); // for GenericNameDao only
+		setExistingEntityName(existingName);
 		
-		setGenericNameDao(${entity}Dao); // GenericNameDao
-		// setGenericDao(${entity}Dao); // GenericDao
+		setGenericNameDao(${entity}Dao);
 	}
 	
 	// insert individual Tests here

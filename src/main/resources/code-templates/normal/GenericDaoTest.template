@@ -1,7 +1,5 @@
 package ${package}.data.dao;
 
-import java.util.List;
-
 import ${package}.data.dao.hibernate.${model}DaoHibernate;
 import ${package}.data.model.${model};
 import ${package}.tests.GenericDaoTestCase;

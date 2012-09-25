@@ -3,7 +3,7 @@ package ${package}.data.service.impl;
 import ${package}.data.dao.${model}Dao;
 import ${package}.data.model.${model};
 import ${package}.data.service.${model}Manager;
-import ${package}.tests.GenericNameManagerImplTestCase;
+import ${package}.tests.GenericManagerImplTestCase;
 import ${package}.tests.annotations.TestCoversClasses;
 
 @TestCoversClasses( { ${model}Manager.class, ${model}ManagerImpl.class })

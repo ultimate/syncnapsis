@@ -8,7 +8,6 @@ import ${package}.tests.annotations.TestCoversClasses;
 
 @TestCoversClasses( { ${model}Manager.class, ${model}ManagerImpl.class })
 public class ${model}ManagerImplTest extends GenericNameManagerImplTestCase<${model}, ${pkType}, ${model}Manager, ${model}Dao>
-// public class ${model}ManagerImplTest extends GenericManagerImplTestCase<${model}, ${pkType}, ${model}Manager, ${model}Dao>
 {
 	@Override
 	protected void setUp() throws Exception
