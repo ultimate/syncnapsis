@@ -16,8 +16,8 @@ public class ${model}DaoTest extends GenericNameDaoTestCase<${model}, ${pkType}>
 	{
 		super.setUp();
 		
-		${pkType} existingId = ${entity}Dao.getByName(existingName).getId();
 		String existingName = ${entity}Dao.getAll().get(0).get/*name property*/();
+		${pkType} existingId = ${entity}Dao.getByName(existingName).getId();
 		
 		${model} ${entity} = new ${model}();
 		// set individual properties here
