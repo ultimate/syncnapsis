@@ -56,17 +56,18 @@ public abstract class StringUtil
 
 	/**
 	 * Encode a byte Array to a Hex String.<br>
-	 * In order to guarantee 2 Hex digits per byte each byte is checked for values < 0x10 and prefix with '0' if neccessary.<br>
+	 * In order to guarantee 2 Hex digits per byte each byte is checked for values < 0x10 and prefix
+	 * with '0' if neccessary.<br>
 	 * <code><pre>
 	 * for(byte b : bytes)
 	 * {
 	 *   if((b & 0xff) < 0x10)
 	 *   {
 	 *     buf.append("0");
-     *   }
+	 *   }
 	 *   buf.append(Long.toString(b & 0xff, 16));
 	 * }
-	 * </pre></code> 
+	 * </pre></code>
 	 * 
 	 * @param bytes - the byte Array
 	 * @return the Hex String
@@ -157,5 +158,40 @@ public abstract class StringUtil
 		if(locale == null)
 			logger.warn("locale is null! Using EnumLocale.getDefault().");
 		return new MessageFormat(pattern, locale != null ? locale : EnumLocale.getDefault().getLocale());
+	}
+
+	/**
+	 * Equal to <code>StringUtil.fillup("" + n, minLength, ' ', true)</code>
+	 * 
+	 * @see StringUtil#fillup(String, int, char, boolean)
+	 * @param n - the number to convert to a string
+	 * @param minLength - the minimun length to reach
+	 * @return the number as a string
+	 */
+	public static String fillupNumber(Number n, int minLength)
+	{
+		return fillup("" + n, minLength, ' ', true);
+	}
+
+	/**
+	 * Fillup a String to the required minimum length by appending the fillup-char to the beginning
+	 * or end of the string until it reaches the required length.
+	 * 
+	 * @param s - the string to fillup
+	 * @param minLength - the minimun length to reach
+	 * @param fillup - the char to append
+	 * @param begin - true for prefixing, false for suffixing
+	 * @return the modified string
+	 */
+	public static String fillup(String s, int minLength, char fillup, boolean begin)
+	{
+		while(s.length() < minLength)
+		{
+			if(begin)
+				s = fillup + s;
+			else
+				s = s + fillup;
+		}
+		return s;
 	}
 }
