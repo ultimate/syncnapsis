@@ -4,13 +4,14 @@
  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
  xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"> 
 
-	<description><![CDATA[HelloWeb]]></description>
-	<display-name>HelloWeb</display-name>
+	<description><![CDATA[HelloWorld]]></description>
+	<display-name>HelloWorld</display-name>
 
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
 		<param-value>
             classpath:/applicationContext-dao.xml
+            classpath:/applicationContext-security.xml
             classpath:/applicationContext-service.xml
             classpath:/applicationContext-hibernate.xml
 			/WEB-INF/websockets.xml
@@ -29,6 +30,20 @@
     <filter-mapping>
       	<filter-name>httpWebSocketFilter</filter-name>
       	<url-pattern>/ws</url-pattern>
+    </filter-mapping>	
+    
+    <filter>
+        <filter-name>actionFilter</filter-name>
+        <filter-class>com.syncnapsis.utils.spring.FilterToBeanProxy</filter-class>
+        <init-param>
+            <param-name>targetBean</param-name>
+            <param-value>rpcFilter</param-value>
+        </init-param>
+    </filter>
+
+    <filter-mapping>
+      	<filter-name>actionFilter</filter-name>
+      	<url-pattern>/action</url-pattern>
     </filter-mapping>	
     
     <servlet>

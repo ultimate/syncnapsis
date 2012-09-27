@@ -53,4 +53,10 @@
 	<bean id="mapper" class="com.syncnapsis.utils.serialization.BaseMapper">
 		<property name="securityManager" ref="securityManager" />
 	</bean>
+	
+	<bean id="rpcFilter" class="com.syncnapsis.websockets.service.rpc.ActionFilter">
+		<property name="securityManager" ref="securityManager" />
+		<property name="rpcHandler" ref="rpcHandler" />
+	</bean>
+	
 </beans>
