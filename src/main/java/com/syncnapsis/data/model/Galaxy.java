@@ -39,7 +39,7 @@ public class Galaxy extends ActivatableInstance<Long>
 	 * The date and time this galaxy was created
 	 */
 	protected Date				creationDate;
-
+	
 	/**
 	 * The x-size (width) of the galaxy.<br>
 	 * This means x-coordinates are within the interval [ -sizeX/2 ; sizeX/2 ]

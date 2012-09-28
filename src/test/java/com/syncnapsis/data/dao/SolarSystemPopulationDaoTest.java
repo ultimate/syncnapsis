@@ -5,6 +5,7 @@ import java.util.Date;
 import com.syncnapsis.data.dao.hibernate.SolarSystemPopulationDaoHibernate;
 import com.syncnapsis.data.model.SolarSystemPopulation;
 import com.syncnapsis.enums.EnumDestructionType;
+import com.syncnapsis.enums.EnumPopulationPriority;
 import com.syncnapsis.tests.GenericDaoTestCase;
 import com.syncnapsis.tests.annotations.TestCoversClasses;
 
@@ -23,6 +24,8 @@ public class SolarSystemPopulationDaoTest extends GenericDaoTestCase<SolarSystem
 		Long existingId = solarSystemPopulationDao.getAll().get(0).getId();
 
 		SolarSystemPopulation solarSystemPopulation = new SolarSystemPopulation();
+		solarSystemPopulation.setAttackPriority(EnumPopulationPriority.balanced);
+		solarSystemPopulation.setBuildPriority(EnumPopulationPriority.balanced);
 		solarSystemPopulation.setColonizationDate(new Date(timeProvider.get()));
 		solarSystemPopulation.setDestructionDate(new Date(timeProvider.get()));
 		solarSystemPopulation.setDestructionType(EnumDestructionType.destroyed);

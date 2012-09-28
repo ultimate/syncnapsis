@@ -12,6 +12,7 @@ import javax.persistence.TemporalType;
 
 import com.syncnapsis.data.model.base.ActivatableInstance;
 import com.syncnapsis.enums.EnumDestructionType;
+import com.syncnapsis.enums.EnumPopulationPriority;
 
 /**
  * Entity representation of an empires/players population for a specific {@link SolarSystem} within
@@ -56,6 +57,23 @@ public class SolarSystemPopulation extends ActivatableInstance<Long>
 	 * The current amount/value of population
 	 */
 	protected int						population;
+
+	/**
+	 * The priority to use for building a colony (population).<br>
+	 * If set to {@link EnumPopulationPriority#population} population will increase faster than
+	 * usual but infrastructure will increase less fast. For
+	 * {@link EnumPopulationPriority#infrastructure} vice versa and for
+	 * {@link EnumPopulationPriority#balanced} both will increase with normal speed.
+	 */
+	protected EnumPopulationPriority	buildPriority;
+
+	/**
+	 * The priority to use for attacking a colony (population).<br>
+	 * If set to {@link EnumPopulationPriority#population} population will attacked most to preserve
+	 * infrastructure.For {@link EnumPopulationPriority#infrastructure} vice versa and for
+	 * {@link EnumPopulationPriority#balanced} both will be attacked evenly.
+	 */
+	protected EnumPopulationPriority	attackPriority;
 
 	/**
 	 * The solar system this population "lives" in.<br>
@@ -130,6 +148,37 @@ public class SolarSystemPopulation extends ActivatableInstance<Long>
 	}
 
 	/**
+	 * The priority to use for building a colony (population).<br>
+	 * If set to {@link EnumPopulationPriority#population} population will increase faster than
+	 * usual but infrastructure will increase less fast. For
+	 * {@link EnumPopulationPriority#infrastructure} vice versa and for
+	 * {@link EnumPopulationPriority#balanced} both will increase with normal speed.
+	 * 
+	 * @return buildPriority
+	 */
+	@Enumerated(EnumType.STRING)
+	@Column(nullable = false, length = LENGTH_NAME_NORMAL)
+	public EnumPopulationPriority getBuildPriority()
+	{
+		return buildPriority;
+	}
+
+	/**
+	 * The priority to use for attacking a colony (population).<br>
+	 * If set to {@link EnumPopulationPriority#population} population will attacked most to preserve
+	 * infrastructure.For {@link EnumPopulationPriority#infrastructure} vice versa and for
+	 * {@link EnumPopulationPriority#balanced} both will be attacked evenly.
+	 * 
+	 * @return attackPriority
+	 */
+	@Enumerated(EnumType.STRING)
+	@Column(nullable = false, length = LENGTH_NAME_NORMAL)
+	public EnumPopulationPriority getAttackPriority()
+	{
+		return attackPriority;
+	}
+
+	/**
 	 * The solar system this population "lives" in.<br>
 	 * The solar system is associated via it's match-specific infrastructure-representation.
 	 * 
@@ -188,6 +237,33 @@ public class SolarSystemPopulation extends ActivatableInstance<Long>
 	public void setPopulation(int population)
 	{
 		this.population = population;
+	}
+
+	/**
+	 * The priority to use for building a colony (population).<br>
+	 * If set to {@link EnumPopulationPriority#population} population will increase faster than
+	 * usual but infrastructure will increase less fast. For
+	 * {@link EnumPopulationPriority#infrastructure} vice versa and for
+	 * {@link EnumPopulationPriority#balanced} both will increase with normal speed.
+	 * 
+	 * @param buildPriority - the priority
+	 */
+	public void setBuildPriority(EnumPopulationPriority buildPriority)
+	{
+		this.buildPriority = buildPriority;
+	}
+
+	/**
+	 * The priority to use for attacking a colony (population).<br>
+	 * If set to {@link EnumPopulationPriority#population} population will attacked most to preserve
+	 * infrastructure.For {@link EnumPopulationPriority#infrastructure} vice versa and for
+	 * {@link EnumPopulationPriority#balanced} both will be attacked evenly.
+	 * 
+	 * @param attackPriority - the priority
+	 */
+	public void setAttackPriority(EnumPopulationPriority attackPriority)
+	{
+		this.attackPriority = attackPriority;
 	}
 
 	/*
