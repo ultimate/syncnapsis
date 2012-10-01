@@ -1,6 +1,6 @@
 package com.syncnapsis.exceptions;
 
-import com.syncnapsis.constants.BaseApplicationConstants;
+import com.syncnapsis.constants.ApplicationBaseConstants;
 import com.syncnapsis.data.model.User;
 import com.syncnapsis.data.service.UserManager;
 import com.syncnapsis.data.service.UserRoleManager;
@@ -24,7 +24,7 @@ public class UserExistsExceptionTest extends BaseDaoTestCase
 		BeanUtils.copyProperties(user, user2);
 		user2.setId(null);
 		user2.setVersion(null);
-		user2.setRole(userRoleManager.getByName(BaseApplicationConstants.ROLE_NORMAL_USER));
+		user2.setRole(userRoleManager.getByName(ApplicationBaseConstants.ROLE_NORMAL_USER));
 		user2.setMessengerContacts(null);
 		user2.setUserContacts1(null);
 		user2.setUserContacts2(null);

@@ -2,7 +2,7 @@ package com.syncnapsis.providers.impl;
 
 import org.springframework.mock.web.MockHttpSession;
 
-import com.syncnapsis.constants.BaseApplicationConstants;
+import com.syncnapsis.constants.ApplicationBaseConstants;
 import com.syncnapsis.data.model.User;
 import com.syncnapsis.providers.SessionProvider;
 import com.syncnapsis.providers.UserProvider;
@@ -26,7 +26,7 @@ public class SessionBasedUserProviderTest extends LoggerTestCase
 		
 		p.set(value);
 		
-		assertEquals(BaseApplicationConstants.SESSION_USER_KEY, p.getAttributeName());
+		assertEquals(ApplicationBaseConstants.SESSION_USER_KEY, p.getAttributeName());
 		assertEquals(value, p.get());
 		assertNotNull(sp.get().getAttribute(p.getAttributeName()));
 		assertEquals(value, sp.get().getAttribute(p.getAttributeName()));

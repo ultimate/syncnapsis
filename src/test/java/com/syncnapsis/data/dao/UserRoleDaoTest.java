@@ -1,6 +1,6 @@
 package com.syncnapsis.data.dao;
 
-import com.syncnapsis.constants.BaseApplicationConstants;
+import com.syncnapsis.constants.ApplicationBaseConstants;
 import com.syncnapsis.data.dao.hibernate.UserRoleDaoHibernate;
 import com.syncnapsis.data.model.UserRole;
 import com.syncnapsis.exceptions.UserRoleExistsException;
@@ -18,7 +18,7 @@ public class UserRoleDaoTest extends GenericNameDaoTestCase<UserRole, Long>
 	{
 		super.setUp();
 		
-		String existingName = BaseApplicationConstants.ROLE_DEMO_USER;
+		String existingName = ApplicationBaseConstants.ROLE_DEMO_USER;
 		Long existingId = userRoleDao.getByName(existingName).getId();
 		
 		UserRole userRole = new UserRole();

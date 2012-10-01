@@ -1,6 +1,6 @@
 package com.syncnapsis.enums;
 
-import com.syncnapsis.constants.BaseApplicationConstants;
+import com.syncnapsis.constants.ApplicationBaseConstants;
 
 /**
  * Enum für die Spezifizierung des Alters eines News-Objekts. Bei der Suche nach
@@ -59,6 +59,6 @@ public enum EnumNewsAge
 	 */
 	public String getParameterKey()
 	{
-		return BaseApplicationConstants.PARAM_NEWS_MAXAGE.replace("%L", this.toString());
+		return ApplicationBaseConstants.PARAM_NEWS_MAXAGE.replace("%L", this.toString());
 	}
 }

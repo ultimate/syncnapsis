@@ -2,7 +2,7 @@ package com.syncnapsis.data.service.impl;
 
 import java.util.Date;
 
-import com.syncnapsis.constants.BaseApplicationConstants;
+import com.syncnapsis.constants.ApplicationBaseConstants;
 import com.syncnapsis.data.dao.UserDao;
 import com.syncnapsis.data.model.User;
 import com.syncnapsis.data.service.UserManager;
@@ -146,7 +146,7 @@ public class UserManagerImpl extends GenericNameManagerImpl<User, Long> implemen
 		// user.setNickname(nickname); // TODO = username?
 		user.setPassword(StringUtil.encodePassword(password, securityManager.getEncryptionAlgorithm()));
 		user.setRegistrationDate(new Date());
-		user.setRole(userRoleManager.getByName(BaseApplicationConstants.ROLE_NORMAL_USER));
+		user.setRole(userRoleManager.getByName(ApplicationBaseConstants.ROLE_NORMAL_USER));
 		user.setRoleExpireDate(null);
 		user.setSessionTimeout(60); // TODO set default somewhere else?
 		user.setGender(EnumGender.unknown);

@@ -10,7 +10,7 @@ import java.util.TreeMap;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.util.Assert;
 
-import com.syncnapsis.constants.BaseApplicationConstants;
+import com.syncnapsis.constants.ApplicationBaseConstants;
 import com.syncnapsis.data.model.Messenger;
 import com.syncnapsis.data.model.MessengerContact;
 import com.syncnapsis.data.model.User;
@@ -130,7 +130,7 @@ public class ApplicationBaseDataGenerator extends DataGenerator implements Initi
 		{
 			name = RandomData.randomString(RandomData.randomInt(3, 10), nameSource);
 
-			user = getOrCreateUser(name, BaseApplicationConstants.ROLE_NORMAL_USER);
+			user = getOrCreateUser(name, ApplicationBaseConstants.ROLE_NORMAL_USER);
 			logger.debug("created user #" + i + ": " + user.getUsername() + " [" + user.getId() + "]");
 		}
 	}
@@ -162,7 +162,7 @@ public class ApplicationBaseDataGenerator extends DataGenerator implements Initi
 			name = RandomData.randomString(RandomData.randomInt(3, 10), DefaultData.STRING_ASCII_COMPLETE_NO_CONTROLCHARS);
 
 		if(rolename == null)
-			rolename = BaseApplicationConstants.ROLE_NORMAL_USER;
+			rolename = ApplicationBaseConstants.ROLE_NORMAL_USER;
 
 		User user = new User();
 		user.setAccountStatus(EnumAccountStatus.active);

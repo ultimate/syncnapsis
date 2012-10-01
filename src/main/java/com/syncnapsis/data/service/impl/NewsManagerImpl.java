@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import com.syncnapsis.constants.BaseApplicationConstants;
+import com.syncnapsis.constants.ApplicationBaseConstants;
 import com.syncnapsis.data.dao.NewsDao;
 import com.syncnapsis.data.model.News;
 import com.syncnapsis.data.service.NewsManager;
@@ -89,7 +89,7 @@ public class NewsManagerImpl extends GenericManagerImpl<News, Long> implements N
 			else
 				newsList.add(news);
 		}
-		int maxItems = parameterManager.getInteger(BaseApplicationConstants.PARAM_NEWS_MAXITEMS);
+		int maxItems = parameterManager.getInteger(ApplicationBaseConstants.PARAM_NEWS_MAXITEMS);
 		maxItems = maxItems - newsListHP.size();
 		SortUtil.sortListDescending(newsList, "getDate");
 		if(newsList.size() > maxItems)

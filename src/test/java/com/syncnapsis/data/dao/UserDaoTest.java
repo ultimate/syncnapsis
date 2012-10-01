@@ -2,7 +2,7 @@ package com.syncnapsis.data.dao;
 
 import java.util.Date;
 
-import com.syncnapsis.constants.BaseApplicationConstants;
+import com.syncnapsis.constants.ApplicationBaseConstants;
 import com.syncnapsis.data.dao.hibernate.UserDaoHibernate;
 import com.syncnapsis.data.model.User;
 import com.syncnapsis.enums.EnumLocale;
@@ -33,7 +33,7 @@ public class UserDaoTest extends GenericNameDaoTestCase<User, Long>
 		user.setLocale(EnumLocale.getDefault());
 		user.setPassword("pw");
 		user.setRegistrationDate(new Date(timeProvider.get()));
-		user.setRole(userRoleDao.getByName(BaseApplicationConstants.ROLE_DEMO_USER));
+		user.setRole(userRoleDao.getByName(ApplicationBaseConstants.ROLE_DEMO_USER));
 		user.setTimeZoneID("tzid");
 
 		setEntity(user);

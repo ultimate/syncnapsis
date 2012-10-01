@@ -1,6 +1,6 @@
 package com.syncnapsis.providers.impl;
 
-import com.syncnapsis.constants.BaseApplicationConstants;
+import com.syncnapsis.constants.ApplicationBaseConstants;
 import com.syncnapsis.data.model.User;
 import com.syncnapsis.providers.SessionBasedProvider;
 import com.syncnapsis.providers.UserProvider;
@@ -14,10 +14,10 @@ public class SessionBasedUserProvider extends SessionBasedProvider<User> impleme
 {
 	/**
 	 * Default-Constructor configuring SessionBasedProvider with
-	 * {@link BaseApplicationConstants#SESSION_USER_KEY}.
+	 * {@link ApplicationBaseConstants#SESSION_USER_KEY}.
 	 */
 	public SessionBasedUserProvider()
 	{
-		super(BaseApplicationConstants.SESSION_USER_KEY);
+		super(ApplicationBaseConstants.SESSION_USER_KEY);
 	}
 }
