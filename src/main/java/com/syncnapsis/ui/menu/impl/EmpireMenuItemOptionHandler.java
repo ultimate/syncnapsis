@@ -3,7 +3,7 @@ package com.syncnapsis.ui.menu.impl;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.syncnapsis.constants.BaseGameConstants;
+import com.syncnapsis.constants.GameBaseConstants;
 import com.syncnapsis.data.model.Empire;
 import com.syncnapsis.data.model.MenuItem;
 import com.syncnapsis.data.service.EmpireManager;
