@@ -2,7 +2,7 @@ package com.syncnapsis.data.dao;
 
 import java.sql.Date;
 
-import com.syncnapsis.constants.BaseGameConstants;
+import com.syncnapsis.constants.GameBaseConstants;
 import com.syncnapsis.data.dao.hibernate.PlayerDaoHibernate;
 import com.syncnapsis.data.model.Player;
 import com.syncnapsis.data.model.User;
@@ -28,7 +28,7 @@ public class PlayerDaoTest extends GenericDaoTestCase<Player, Long>
 		Long existingId = playerDao.getByUsername(existingName).getId();
 
 		Player player = new Player();
-		player.setRole(playerRoleDao.getByName(BaseGameConstants.ROLE_DEMO_PLAYER));
+		player.setRole(playerRoleDao.getByName(GameBaseConstants.ROLE_DEMO_PLAYER));
 
 		setEntity(player);
 

@@ -1,6 +1,6 @@
 package com.syncnapsis.providers.impl;
 
-import com.syncnapsis.constants.BaseGameConstants;
+import com.syncnapsis.constants.GameBaseConstants;
 import com.syncnapsis.data.model.Empire;
 import com.syncnapsis.providers.EmpireProvider;
 import com.syncnapsis.providers.SessionBasedProvider;
@@ -14,10 +14,10 @@ public class SessionBasedEmpireProvider extends SessionBasedProvider<Empire> imp
 {
 	/**
 	 * Default-Constructor configuring SessionBasedProvider with
-	 * {@link BaseGameConstants#SESSION_EMPIRE_KEY}.
+	 * {@link GameBaseConstants#SESSION_EMPIRE_KEY}.
 	 */
 	public SessionBasedEmpireProvider()
 	{
-		super(BaseGameConstants.SESSION_EMPIRE_KEY);
+		super(GameBaseConstants.SESSION_EMPIRE_KEY);
 	}
 }

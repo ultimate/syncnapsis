@@ -1,6 +1,6 @@
 package com.syncnapsis.data.service.impl;
 
-import com.syncnapsis.constants.BaseGameConstants;
+import com.syncnapsis.constants.GameBaseConstants;
 import com.syncnapsis.data.dao.PlayerDao;
 import com.syncnapsis.data.model.Player;
 import com.syncnapsis.data.model.User;
@@ -134,7 +134,7 @@ public class PlayerManagerImpl extends GenericManagerImpl<Player, Long> implemen
 		player.setAccountStatusExpireDate(user.getAccountStatusExpireDate());
 		player.setActivated(true);
 		// player.setCurrentEmpire(null);
-		player.setRole(playerRoleManager.getByName(BaseGameConstants.ROLE_NORMAL_PLAYER));
+		player.setRole(playerRoleManager.getByName(GameBaseConstants.ROLE_NORMAL_PLAYER));
 		player.setRoleExpireDate(user.getRoleExpireDate());
 		player.setUser(user);
 

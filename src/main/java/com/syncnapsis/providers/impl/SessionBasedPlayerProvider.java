@@ -1,6 +1,6 @@
 package com.syncnapsis.providers.impl;
 
-import com.syncnapsis.constants.BaseGameConstants;
+import com.syncnapsis.constants.GameBaseConstants;
 import com.syncnapsis.data.model.Player;
 import com.syncnapsis.providers.PlayerProvider;
 import com.syncnapsis.providers.SessionBasedProvider;
@@ -14,10 +14,10 @@ public class SessionBasedPlayerProvider extends SessionBasedProvider<Player> imp
 {
 	/**
 	 * Default-Constructor configuring SessionBasedProvider with
-	 * {@link BaseGameConstants#SESSION_PLAYER_KEY}.
+	 * {@link GameBaseConstants#SESSION_PLAYER_KEY}.
 	 */
 	public SessionBasedPlayerProvider()
 	{
-		super(BaseGameConstants.SESSION_PLAYER_KEY);
+		super(GameBaseConstants.SESSION_PLAYER_KEY);
 	}
 }

@@ -1,6 +1,6 @@
 package com.syncnapsis.exceptions;
 
-import com.syncnapsis.constants.BaseGameConstants;
+import com.syncnapsis.constants.GameBaseConstants;
 import com.syncnapsis.data.model.PlayerRole;
 import com.syncnapsis.data.service.PlayerRoleManager;
 import com.syncnapsis.tests.BaseDaoTestCase;
@@ -15,7 +15,7 @@ public class PlayerRoleExistsExceptionTest extends BaseDaoTestCase
 		logger.debug("testing add existing playerRole...");
 		assertNotNull(playerRoleManager);
 
-		PlayerRole playerRole = playerRoleManager.getByName(BaseGameConstants.ROLE_DEMO_PLAYER);
+		PlayerRole playerRole = playerRoleManager.getByName(GameBaseConstants.ROLE_DEMO_PLAYER);
 
 		// create new object with null id - Hibernate doesn't like setId(null)
 		PlayerRole playerRole2 = new PlayerRole();

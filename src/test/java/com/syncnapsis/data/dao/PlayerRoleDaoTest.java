@@ -1,6 +1,6 @@
 package com.syncnapsis.data.dao;
 
-import com.syncnapsis.constants.BaseGameConstants;
+import com.syncnapsis.constants.GameBaseConstants;
 import com.syncnapsis.data.dao.hibernate.PlayerRoleDaoHibernate;
 import com.syncnapsis.data.model.PlayerRole;
 import com.syncnapsis.exceptions.PlayerRoleExistsException;
@@ -18,7 +18,7 @@ public class PlayerRoleDaoTest extends GenericNameDaoTestCase<PlayerRole, Long>
 	{
 		super.setUp();
 		
-		String existingName = BaseGameConstants.ROLE_DEMO_PLAYER;
+		String existingName = GameBaseConstants.ROLE_DEMO_PLAYER;
 		Long existingId = playerRoleDao.getByName(existingName).getId();
 		
 		PlayerRole playerRole = new PlayerRole();

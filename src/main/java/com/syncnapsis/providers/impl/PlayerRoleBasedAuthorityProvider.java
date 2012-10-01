@@ -1,6 +1,6 @@
 package com.syncnapsis.providers.impl;
 
-import com.syncnapsis.constants.BaseApplicationConstants;
+import com.syncnapsis.constants.ApplicationBaseConstants;
 import com.syncnapsis.data.model.Player;
 import com.syncnapsis.data.model.User;
 import com.syncnapsis.providers.AuthorityProvider;
@@ -18,7 +18,7 @@ public class PlayerRoleBasedAuthorityProvider implements AuthorityProvider
 
 	/**
 	 * Default-Constructor configuring SessionBasedProvider with
-	 * {@link BaseApplicationConstants#SESSION_USER_KEY}.
+	 * {@link ApplicationBaseConstants#SESSION_USER_KEY}.
 	 */
 	public PlayerRoleBasedAuthorityProvider(PlayerProvider playerProvider)
 	{

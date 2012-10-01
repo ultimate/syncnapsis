@@ -8,8 +8,8 @@ import java.util.TreeMap;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.util.Assert;
 
-import com.syncnapsis.constants.BaseApplicationConstants;
-import com.syncnapsis.constants.BaseGameConstants;
+import com.syncnapsis.constants.ApplicationBaseConstants;
+import com.syncnapsis.constants.GameBaseConstants;
 import com.syncnapsis.data.model.Empire;
 import com.syncnapsis.data.model.Player;
 import com.syncnapsis.data.model.User;
@@ -53,7 +53,7 @@ public class GameBaseDataGenerator extends ApplicationBaseDataGenerator implemen
 		{
 			name = RandomData.randomString(RandomData.randomInt(3, 10), nameSource);
 
-			player = getOrCreatePlayer(name, BaseApplicationConstants.ROLE_NORMAL_USER, BaseGameConstants.ROLE_NORMAL_PLAYER);
+			player = getOrCreatePlayer(name, ApplicationBaseConstants.ROLE_NORMAL_USER, GameBaseConstants.ROLE_NORMAL_PLAYER);
 			logger.debug("created user #" + i + ": " + player.getUser().getUsername() + " [" + player.getUser().getId() + "]");
 
 			empire = getOrCreateEmpire(name, player);
@@ -82,7 +82,7 @@ public class GameBaseDataGenerator extends ApplicationBaseDataGenerator implemen
 		User user = getOrCreateUser(name, userrolename);
 
 		if(playerrolename == null)
-			playerrolename = BaseGameConstants.ROLE_NORMAL_PLAYER;
+			playerrolename = GameBaseConstants.ROLE_NORMAL_PLAYER;
 
 		Player player = new Player();
 		player.setAccountStatus(EnumAccountStatus.active);
