@@ -328,8 +328,12 @@ public class ApplicationContextUtil implements ApplicationContextAware
 
 	/**
 	 * An Array with the most common xml-Files used to build an ApplicationContext:<br>
-	 * - classpath:/applicationContext-dao.xml<br>
-	 * - classpath:/applicationContext-service.xml<br>
+	 * <ul>
+	 * <li>classpath:/applicationContext-dao.xml</li>
+	 * <li>classpath:/applicationContext-hibernate.xml</li>
+	 * <li>classpath:/applicationContext-security.xml</li>
+	 * <li>classpath:/applicationContext-service.xml</li>
+	 * </ul>
 	 * 
 	 * @return the Array
 	 */
@@ -338,6 +342,7 @@ public class ApplicationContextUtil implements ApplicationContextAware
 		// @formatter:off
 		return new String[] {
 				"classpath:/applicationContext-dao.xml",
+				"classpath:/applicationContext-hibernate.xml",
 				"classpath:/applicationContext-security.xml",
 				"classpath:/applicationContext-service.xml"
 				};
