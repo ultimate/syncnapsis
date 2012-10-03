@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com</groupId>
@@ -208,6 +207,92 @@
 				</plugins>
 			</build>
 		</profile>
+		<profile>
+			<id>prepare-testdb</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>hibernate3-maven-plugin</artifactId>
+						<version>2.0-alpha-1</version>
+						<configuration>
+							<components>
+								<component>
+									<name>hbm2ddl</name>
+									<implementation>annotationconfiguration</implementation>
+								</component>
+							</components>
+							<componentProperties>
+								<drop>true</drop>
+								<jdk5>true</jdk5>
+								<propertyfile>target/classes/jdbc.properties</propertyfile>
+								<skip>${maven.test.skip}</skip>
+							</componentProperties>
+						</configuration>
+						<executions>
+							<execution>
+								<id>prepare-db</id>
+								<phase>generate-test-resources</phase>
+								<goals>
+									<goal>hbm2ddl</goal>
+								</goals>
+							</execution>
+						</executions>
+						<dependencies>
+							<dependency>
+								<groupId>${jdbc.groupId}</groupId>
+								<artifactId>${jdbc.artifactId}</artifactId>
+								<version>${jdbc.version}</version>
+							</dependency>
+							<dependency>
+								<groupId>org.hibernate</groupId>
+								<artifactId>hibernate-core</artifactId>
+								<version>${hibernate.version}</version>
+								<exclusions>
+									<exclusion>
+										<groupId>commons-collections</groupId>
+										<artifactId>commons-collections</artifactId>
+									</exclusion>
+								</exclusions>
+							</dependency>
+						</dependencies>
+					</plugin>
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>dbunit-maven-plugin</artifactId>
+						<version>1.0-beta-1</version>
+						<configuration>
+							<dataTypeFactoryName>${dbunit.dataTypeFactoryName}</dataTypeFactoryName>
+							<driver>${jdbc.driverClassName}</driver>
+							<username>${jdbc.username}</username>
+							<password>${jdbc.password}</password>
+							<url>${jdbc.url}</url>
+							<schema>${dbunit.schema}</schema>
+							<skip>${maven.test.skip}</skip>
+						</configuration>
+						<executions>
+							<execution>
+								<phase>process-test-resources</phase>
+								<configuration>
+									<type>CLEAN_INSERT</type>
+									<src>src/test/resources/data-test.xml</src>
+								</configuration>
+								<goals>
+									<goal>operation</goal>
+								</goals>
+							</execution>
+						</executions>
+						<dependencies>
+							<dependency>
+								<groupId>${jdbc.groupId}</groupId>
+								<artifactId>${jdbc.artifactId}</artifactId>
+								<version>${jdbc.version}</version>
+							</dependency>
+						</dependencies>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
 	</profiles>
 
 	<properties>
@@ -248,10 +333,13 @@
 		<servlet.version>3.1.1</servlet.version> <!-- 19.01.2012 -->
 		<slf4j.version>1.6.4</slf4j.version> <!-- 19.01.2012 -->
 		<log4j.version>1.2.16</log4j.version> <!-- 19.01.2012 -->
+		<!-- For Profiles only -->
+		<hibernate.version>4.0.1.Final</hibernate.version> <!-- 19.01.2012 -->
 
-		<!-- Deployment -->
+		<!-- Profiles, Deployment etc. -->
 		<mvn.deploy.skip>false</mvn.deploy.skip>
-		
+		<dbunit.dataTypeFactoryName>org.dbunit.dataset.datatype.DefaultDataTypeFactory</dbunit.dataTypeFactoryName>
+
 		<!-- Tests -->
 		<surefire.useFile>false</surefire.useFile>
 
