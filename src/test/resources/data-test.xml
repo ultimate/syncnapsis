@@ -1,0 +1,797 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE dataset SYSTEM "dataset.dtd">
+<dataset>	<table name="parameter">
+		<column>id</column>
+		<column>value</column>
+		<column>version</column>
+		<row>
+			<value description="id">universe.year</value>
+			<value description="value">3600</value>
+			<value description="version">1</value>
+		</row>
+		<row>
+			<value description="id">news.maxItems</value>
+			<value description="value">10</value>
+			<value description="version">1</value>
+		</row>
+		<row>
+			<value description="id">news.length1.maxAge</value>
+			<value description="value">86400</value>
+			<value description="version">1</value>
+		</row>
+		<row>
+			<value description="id">news.length2.maxAge</value>
+			<value description="value">172800</value>
+			<value description="version">1</value>
+		</row>
+		<row>
+			<value description="id">news.length3.maxAge</value>
+			<value description="value">259200</value>
+			<value description="version">1</value>
+		</row>
+		<row>
+			<value description="id">news.length4.maxAge</value>
+			<value description="value">432000</value>
+			<value description="version">1</value>
+		</row>
+		<row>
+			<value description="id">news.length5.maxAge</value>
+			<value description="value">604800</value>
+			<value description="version">1</value>
+		</row>
+		<row>
+			<value description="id">news.length6.maxAge</value>
+			<value description="value">1209600</value>
+			<value description="version">1</value>
+		</row>
+		<row>
+			<value description="id">news.length7.maxAge</value>
+			<value description="value">2419200</value>
+			<value description="version">1</value>
+		</row>
+		<row>
+			<value description="id">news.length8.maxAge</value>
+			<value description="value">4838400</value>
+			<value description="version">1</value>
+		</row>
+		<row>
+			<value description="id">news.length9.maxAge</value>
+			<value description="value">7257600</value>
+			<value description="version">1</value>
+		</row>
+		<row>
+			<value description="id">ranking.buttonRenderPosition</value>
+			<value description="value">TAILING</value>
+			<value description="version">1</value>
+		</row>
+	</table>
+	
+	<table name="action">
+		<column>id</column>
+		<column>version</column>
+		<column>code</column>
+		<column>object</column>
+		<column>method</column>	
+		<column>args</column>
+		<column>uses</column>
+		<column>maxUses</column>
+		<row>
+			<value description="id">1</value>
+			<value description="version">1</value>
+			<value description="action">1a2b3c</value>
+			<value description="object">a bean</value>
+			<value description="method">a method</value>	
+			<value description="args">insert binary data</value>	
+			<value description="uses">1</value>	
+			<value description="maxUses">10</value>	
+		</row>
+	</table>
+	
+	<table name="messenger">
+		<column>id</column>
+		<column>version</column>
+		<column>name</column>
+		<column>activated</column>
+
+		<row>
+			<value description="id">1</value>
+			<value description="version">1</value>
+			<value description="name">ICQ</value>
+			<value description="activated">1</value>
+		</row>
+		<row>
+			<value description="id">2</value>
+			<value description="version">1</value>
+			<value description="name">AIM/AOL</value>
+			<value description="activated">1</value>
+		</row>
+		<row>
+			<value description="id">3</value>
+			<value description="version">1</value>
+			<value description="name">MSN/Windows Live</value>
+			<value description="activated">1</value>
+		</row>
+		<row>
+			<value description="id">4</value>
+			<value description="version">1</value>
+			<value description="name">Skype</value>
+			<value description="activated">1</value>
+		</row>
+		<row>
+			<value description="id">5</value>
+			<value description="version">1</value>
+			<value description="name">Yahoo</value>
+			<value description="activated">1</value>
+		</row>
+		<row>
+			<value description="id">6</value>
+			<value description="version">1</value>
+			<value description="name">Google Talk</value>
+			<value description="activated">1</value>
+		</row>
+	</table>
+	
+	<table name="app_userrole">
+		<column>id</column>
+		<column>version</column>
+		<column>rolename</column>
+		<column>onlyAllowedToSeeActivated</column>
+		<row>
+			<value description="id">1</value>
+			<value description="version">1</value>
+			<value description="rolename">ADMIN</value>
+			<value description="onlyAllowedToSeeActivated">0</value>
+		</row>
+		<row>
+			<value description="id">2</value>
+			<value description="version">1</value>
+			<value description="rolename">MODERATOR</value>
+			<value description="onlyAllowedToSeeActivated">1</value>
+		</row>
+		<row>
+			<value description="id">3</value>
+			<value description="version">1</value>
+			<value description="rolename">NORMAL_USER</value>
+			<value description="onlyAllowedToSeeActivated">1</value>
+		</row>
+		<row>
+			<value description="id">4</value>
+			<value description="version">1</value>
+			<value description="rolename">DEMO_USER</value>
+			<value description="onlyAllowedToSeeActivated">1</value>
+		</row>
+	</table>
+	
+	<table name="app_userrole_fallback">
+		<column>fkRole</column>
+		<column>fkFallbackRole</column>
+		<row>
+			<value description="fkRole">1</value>
+			<value description="fkFallbackRole">2</value>
+		</row>
+		<row>
+			<value description="fkRole">2</value>
+			<value description="fkFallbackRole">3</value>
+		</row>
+		<row>
+			<value description="fkRole">3</value>
+			<value description="fkFallbackRole">4</value>
+		</row>
+	</table>
+	
+	<table name="app_user">
+		<column>id</column>
+		<column>version</column>
+		<column>username</column>
+		<column>email</column>
+		<column>password</column>
+		<column>fkUserRole</column>
+		<column>roleExpireDate</column>
+		<column>activated</column>
+		<column>registrationDate</column>
+		<column>deleteDate</column>
+		<column>accountStatus</column>
+		<column>accountStatusExpireDate</column>
+		<column>nickname</column>
+		<column>title</column>
+		<column>birthday</column>
+		<column>city</column>
+		<column>sex</column>
+		<column>locale</column>
+		<column>timeZoneID</column>
+		<column>dateFormat</column>
+		<column>usingAdvancedMenu</column>
+		<column>usingTooltips</column>
+		<column>usingInfiniteSession</column>
+		<column>sessionTimeout</column>
+		<column>lastActiveDate</column>
+		<column>showEmail</column>
+		<column>description</column>
+		<column>imageURL</column>
+		<row>
+			<value description="id">0</value>
+			<value description="version">1</value>
+			<value description="username">admin</value>
+			<value description="email">admin@syncnapsis.com</value>
+			<value description="password">d033e22ae348aeb5660fc2140aec35850c4da997</value>
+			<value description="fkUserRole">1</value>
+			<null/>
+			<value description="activated">1</value>
+			<value description="registrationDate">2008-01-01</value>
+			<null/>
+			<value description="accountStatus">active</value>
+			<null/>
+			<value description="nickname">Administrator</value>
+			<value description="title">Mr.</value>
+			<null/>
+			<value description="city">Berlin</value>
+			<value description="sex">male</value>
+			<value description="locale">DE</value>
+			<value description="timeZoneID">Etc/GMT+1</value>
+			<value description="dateFormat">yMd24_minus</value>
+			<value description="usingAdvancedMenu">1</value>
+			<value description="usingTooltips">1</value>
+			<value description="usingInfiniteSession">0</value>
+			<value description="sessionTimeout">60</value>
+			<value description="lastActiveDate">2008-01-01</value>
+			<value description="showEmail">1</value>
+			<value description="description">Dies ist der Administrator</value>
+			<null/>
+		</row>
+	</table>
+	
+	
+	<table name="authoritygroup">
+		<column>id</column>
+		<column>version</column>
+		<column>name</column>
+		<row>
+			<value description="id">1</value>
+			<value description="version">1</value>
+			<value description="name">contactauthorities</value>
+		</row>
+		<row>
+			<value description="id">2</value>
+			<value description="version">1</value>
+			<value description="name">allianceauthorities</value>
+		</row>
+	</table>
+	
+	<table name="authority">
+		<column>id</column>
+		<column>version</column>
+		<column>name</column>
+		<column>fkAuthorityGroup</column>
+		<row>
+			<value description="id">101</value>
+			<value description="version">1</value>
+			<value description="name">allowedToFlyIntoTerritory</value>
+			<value description="fkAuthorityGroup">1</value>
+		</row>
+		<row>
+			<value description="id">102</value>
+			<value description="version">1</value>
+			<value description="name">allowedToSeeEconomy</value>
+			<value description="fkAuthorityGroup">1</value>
+		</row>
+		<row>
+			<value description="id">103</value>
+			<value description="version">1</value>
+			<value description="name">allowedToSeeOnlineStatus</value>
+			<value description="fkAuthorityGroup">1</value>
+		</row>
+		<row>
+			<value description="id">104</value>
+			<value description="version">1</value>
+			<value description="name">allowedToSeeReports</value>
+			<value description="fkAuthorityGroup">1</value>
+		</row>
+		<row>
+			<value description="id">105</value>
+			<value description="version">1</value>
+			<value description="name">allowedToSeeSpecialOffersInMarketPlace</value>
+			<value description="fkAuthorityGroup">1</value>
+		</row>
+		<row>
+			<value description="id">106</value>
+			<value description="version">1</value>
+			<value description="name">allowedToSeeTroops</value>
+			<value description="fkAuthorityGroup">1</value>
+		</row>
+		<row>
+			<value description="id">107</value>
+			<value description="version">1</value>
+			<value description="name">allowedToUseScanners</value>
+			<value description="fkAuthorityGroup">1</value>
+		</row>
+		<row>
+			<value description="id">108</value>
+			<value description="version">1</value>
+			<value description="name">allowedToUseStargates</value>
+			<value description="fkAuthorityGroup">1</value>
+		</row>
+		<row>
+			<value description="id">109</value>
+			<value description="version">1</value>
+			<value description="name">notAllowedToAttack</value>
+			<value description="fkAuthorityGroup">1</value>
+		</row>
+		<row>
+			<value description="id">201</value>
+			<value description="version">1</value>
+			<value description="name">allowedToChangeAllianceDescription</value>
+			<value description="fkAuthorityGroup">2</value>
+		</row>
+		<row>
+			<value description="id">202</value>
+			<value description="version">1</value>
+			<value description="name">allowedToChangeDiplomacy</value>
+			<value description="fkAuthorityGroup">2</value>
+		</row>
+		<row>
+			<value description="id">203</value>
+			<value description="version">1</value>
+			<value description="name">allowedToCommandAllianceFleet</value>
+			<value description="fkAuthorityGroup">2</value>
+		</row>
+		<row>
+			<value description="id">204</value>
+			<value description="version">1</value>
+			<value description="name">allowedToDecruitMembers</value>
+			<value description="fkAuthorityGroup">2</value>
+		</row>
+		<row>
+			<value description="id">205</value>
+			<value description="version">1</value>
+			<value description="name">allowedToDefineDiplomacy</value>
+			<value description="fkAuthorityGroup">2</value>
+		</row>
+		<row>
+			<value description="id">206</value>
+			<value description="version">1</value>
+			<value description="name">allowedToDefinePosts</value>
+			<value description="fkAuthorityGroup">2</value>
+		</row>
+		<row>
+			<value description="id">207</value>
+			<value description="version">1</value>
+			<value description="name">allowedToManageForum</value>
+			<value description="fkAuthorityGroup">2</value>
+		</row>
+		<row>
+			<value description="id">208</value>
+			<value description="version">1</value>
+			<value description="name">allowedToPromoteMembers</value>
+			<value description="fkAuthorityGroup">2</value>
+		</row>
+		<row>
+			<value description="id">209</value>
+			<value description="version">1</value>
+			<value description="name">allowedToRecruitMembers</value>
+			<value description="fkAuthorityGroup">2</value>
+		</row>
+		<row>
+			<value description="id">210</value>
+			<value description="version">1</value>
+			<value description="name">allowedToSendAllianceMail</value>
+			<value description="fkAuthorityGroup">2</value>
+		</row>
+	</table>
+		
+	<table name="news">
+		<column>id</column>
+		<column>version</column>
+		<column>newsId</column>
+		<column>locale</column>
+		<column>maxAge</column>
+		<column>type</column>
+		<column>highPriority</column>
+		<column>date</column>
+		<column>title</column>
+		<column>text</column>
+		<column>fkUser</column>
+		<row>
+			<value description="id">-10</value>
+			<value description="version">1</value>
+			<value description="newsId">T1</value>
+			<value description="locale">DE</value>
+			<value description="maxAge">length1</value>
+			<value description="type">others</value>
+			<value description="highPriority">0</value>
+			<value description="date">2008-01-01 00:00:00</value>
+			<value description="title">Test Neuigkeiten</value>
+			<value description="text">Ein Text der einfach alles sagt...</value>
+			<value description="fkUser">0</value>
+		</row>
+		<row>
+			<value description="id">-11</value>
+			<value description="version">1</value>
+			<value description="newsId">T1</value>
+			<value description="locale">EN</value>
+			<value description="maxAge">length1</value>
+			<value description="type">others</value>
+			<value description="highPriority">0</value>
+			<value description="date">2008-01-01 00:00:00</value>
+			<value description="title">Test News</value>
+			<value description="text">A text that simply says everything...</value>
+			<value description="fkUser">0</value>
+		</row>
+		<row>
+			<value description="id">-111</value>
+			<value description="version">1</value>
+			<value description="newsId">T1HIDE</value>
+			<value description="locale">EN</value>
+			<value description="maxAge">length1</value>
+			<value description="type">others</value>
+			<value description="highPriority">0</value>
+			<value description="date">2008-01-28 11:30:00</value>
+			<value description="title">Test News</value>
+			<value description="text">A text that simply says everything...</value>
+			<value description="fkUser">0</value>
+		</row>
+		<row>
+			<value description="id">-112</value>
+			<value description="version">1</value>
+			<value description="newsId">T1SHOW</value>
+			<value description="locale">EN</value>
+			<value description="maxAge">length1</value>
+			<value description="type">others</value>
+			<value description="highPriority">0</value>
+			<value description="date">2008-01-29 11:08:00</value>
+			<value description="title">Test News</value>
+			<value description="text">A text that simply says everything...</value>
+			<value description="fkUser">0</value>
+		</row>
+		<row>
+			<value description="id">-113</value>
+			<value description="version">1</value>
+			<value description="newsId">T1SHOW2</value>
+			<value description="locale">EN</value>
+			<value description="maxAge">length1</value>
+			<value description="type">others</value>
+			<value description="highPriority">0</value>
+			<value description="date">2008-01-28 12:15:00</value>
+			<value description="title">Test News</value>
+			<value description="text">A text that simply says everything...</value>
+			<value description="fkUser">0</value>
+		</row>
+		<row>
+			<value description="id">-114</value>
+			<value description="version">1</value>
+			<value description="newsId">T1SHOW3</value>
+			<value description="locale">EN</value>
+			<value description="maxAge">length1</value>
+			<value description="type">others</value>
+			<value description="highPriority">1</value>
+			<value description="date">2008-01-28 12:05:00</value>
+			<value description="title">Test News</value>
+			<value description="text">A text that simply says everything...</value>
+			<value description="fkUser">0</value>
+		</row>
+		<row>
+			<value description="id">-121</value>
+			<value description="version">1</value>
+			<value description="newsId">T2HIDE</value>
+			<value description="locale">EN</value>
+			<value description="maxAge">length2</value>
+			<value description="type">others</value>
+			<value description="highPriority">0</value>
+			<value description="date">2008-01-27 11:30:00</value>
+			<value description="title">Test News</value>
+			<value description="text">A text that simply says everything...</value>
+			<value description="fkUser">0</value>
+		</row>
+		<row>
+			<value description="id">-122</value>
+			<value description="version">1</value>
+			<value description="newsId">T2SHOW</value>
+			<value description="locale">EN</value>
+			<value description="maxAge">length2</value>
+			<value description="type">others</value>
+			<value description="highPriority">0</value>
+			<value description="date">2008-01-29 11:07:00</value>
+			<value description="title">Test News</value>
+			<value description="text">A text that simply says everything...</value>
+			<value description="fkUser">0</value>
+		</row>
+		<row>
+			<value description="id">-123</value>
+			<value description="version">1</value>
+			<value description="newsId">T2SHOW2</value>
+			<value description="locale">EN</value>
+			<value description="maxAge">length2</value>
+			<value description="type">others</value>
+			<value description="highPriority">0</value>
+			<value description="date">2008-01-27 12:15:00</value>
+			<value description="title">Test News</value>
+			<value description="text">A text that simply says everything...</value>
+			<value description="fkUser">0</value>
+		</row>
+		<row>
+			<value description="id">-124</value>
+			<value description="version">1</value>
+			<value description="newsId">T2SHOW3</value>
+			<value description="locale">EN</value>
+			<value description="maxAge">length2</value>
+			<value description="type">others</value>
+			<value description="highPriority">1</value>
+			<value description="date">2008-01-27 12:20:00</value>
+			<value description="title">Test News</value>
+			<value description="text">A text that simply says everything...</value>
+			<value description="fkUser">0</value>
+		</row>
+		<row>
+			<value description="id">-131</value>
+			<value description="version">1</value>
+			<value description="newsId">T3HIDE</value>
+			<value description="locale">EN</value>
+			<value description="maxAge">length3</value>
+			<value description="type">others</value>
+			<value description="highPriority">0</value>
+			<value description="date">2008-01-26 11:30:00</value>
+			<value description="title">Test News</value>
+			<value description="text">A text that simply says everything...</value>
+			<value description="fkUser">0</value>
+		</row>
+		<row>
+			<value description="id">-132</value>
+			<value description="version">1</value>
+			<value description="newsId">T3SHOW</value>
+			<value description="locale">EN</value>
+			<value description="maxAge">length3</value>
+			<value description="type">others</value>
+			<value description="highPriority">0</value>
+			<value description="date">2008-01-29 11:06:00</value>
+			<value description="title">Test News</value>
+			<value description="text">A text that simply says everything...</value>
+			<value description="fkUser">0</value>
+		</row>
+		<row>
+			<value description="id">-133</value>
+			<value description="version">1</value>
+			<value description="newsId">T3SHOW2</value>
+			<value description="locale">EN</value>
+			<value description="maxAge">length3</value>
+			<value description="type">others</value>
+			<value description="highPriority">0</value>
+			<value description="date">2008-01-26 12:15:00</value>
+			<value description="title">Test News</value>
+			<value description="text">A text that simply says everything...</value>
+			<value description="fkUser">0</value>
+		</row>
+		<row>
+			<value description="id">-141</value>
+			<value description="version">1</value>
+			<value description="newsId">T4HIDE</value>
+			<value description="locale">EN</value>
+			<value description="maxAge">length4</value>
+			<value description="type">others</value>
+			<value description="highPriority">0</value>
+			<value description="date">2008-01-24 11:30:00</value>
+			<value description="title">Test News</value>
+			<value description="text">A text that simply says everything...</value>
+			<value description="fkUser">0</value>
+		</row>
+		<row>
+			<value description="id">-142</value>
+			<value description="version">1</value>
+			<value description="newsId">T4SHOW</value>
+			<value description="locale">EN</value>
+			<value description="maxAge">length4</value>
+			<value description="type">others</value>
+			<value description="highPriority">0</value>
+			<value description="date">2008-01-29 11:05:00</value>
+			<value description="title">Test News</value>
+			<value description="text">A text that simply says everything...</value>
+			<value description="fkUser">0</value>
+		</row>
+		<row>
+			<value description="id">-143</value>
+			<value description="version">1</value>
+			<value description="newsId">T4SHOW2</value>
+			<value description="locale">EN</value>
+			<value description="maxAge">length4</value>
+			<value description="type">others</value>
+			<value description="highPriority">0</value>
+			<value description="date">2008-01-24 12:15:00</value>
+			<value description="title">Test News</value>
+			<value description="text">A text that simply says everything...</value>
+			<value description="fkUser">0</value>
+		</row>
+		<row>
+			<value description="id">-151</value>
+			<value description="version">1</value>
+			<value description="newsId">T5HIDE</value>
+			<value description="locale">EN</value>
+			<value description="maxAge">length5</value>
+			<value description="type">others</value>
+			<value description="highPriority">0</value>
+			<value description="date">2008-01-22 11:30:00</value>
+			<value description="title">Test News</value>
+			<value description="text">A text that simply says everything...</value>
+			<value description="fkUser">0</value>
+		</row>
+		<row>
+			<value description="id">-152</value>
+			<value description="version">1</value>
+			<value description="newsId">T5SHOW</value>
+			<value description="locale">EN</value>
+			<value description="maxAge">length5</value>
+			<value description="type">others</value>
+			<value description="highPriority">0</value>
+			<value description="date">2008-01-29 11:04:00</value>
+			<value description="title">Test News</value>
+			<value description="text">A text that simply says everything...</value>
+			<value description="fkUser">0</value>
+		</row>
+		<row>
+			<value description="id">-153</value>
+			<value description="version">1</value>
+			<value description="newsId">T5SHOW2</value>
+			<value description="locale">EN</value>
+			<value description="maxAge">length5</value>
+			<value description="type">others</value>
+			<value description="highPriority">0</value>
+			<value description="date">2008-01-22 12:15:00</value>
+			<value description="title">Test News</value>
+			<value description="text">A text that simply says everything...</value>
+			<value description="fkUser">0</value>
+		</row>
+		<row>
+			<value description="id">-161</value>
+			<value description="version">1</value>
+			<value description="newsId">T6HIDE</value>
+			<value description="locale">EN</value>
+			<value description="maxAge">length6</value>
+			<value description="type">others</value>
+			<value description="highPriority">0</value>
+			<value description="date">2008-01-15 11:30:00</value>
+			<value description="title">Test News</value>
+			<value description="text">A text that simply says everything...</value>
+			<value description="fkUser">0</value>
+		</row>
+		<row>
+			<value description="id">-162</value>
+			<value description="version">1</value>
+			<value description="newsId">T6SHOW</value>
+			<value description="locale">EN</value>
+			<value description="maxAge">length6</value>
+			<value description="type">others</value>
+			<value description="highPriority">0</value>
+			<value description="date">2008-01-29 11:03:00</value>
+			<value description="title">Test News</value>
+			<value description="text">A text that simply says everything...</value>
+			<value description="fkUser">0</value>
+		</row>
+		<row>
+			<value description="id">-163</value>
+			<value description="version">1</value>
+			<value description="newsId">T6SHOW2</value>
+			<value description="locale">EN</value>
+			<value description="maxAge">length6</value>
+			<value description="type">others</value>
+			<value description="highPriority">0</value>
+			<value description="date">2008-01-15 12:15:00</value>
+			<value description="title">Test News</value>
+			<value description="text">A text that simply says everything...</value>
+			<value description="fkUser">0</value>
+		</row>
+		<row>
+			<value description="id">-171</value>
+			<value description="version">1</value>
+			<value description="newsId">T7HIDE</value>
+			<value description="locale">EN</value>
+			<value description="maxAge">length7</value>
+			<value description="type">others</value>
+			<value description="highPriority">0</value>
+			<value description="date">2008-01-01 11:30:00</value>
+			<value description="title">Test News</value>
+			<value description="text">A text that simply says everything...</value>
+			<value description="fkUser">0</value>
+		</row>
+		<row>
+			<value description="id">-172</value>
+			<value description="version">1</value>
+			<value description="newsId">T7SHOW</value>
+			<value description="locale">EN</value>
+			<value description="maxAge">length7</value>
+			<value description="type">others</value>
+			<value description="highPriority">0</value>
+			<value description="date">2008-01-29 11:02:00</value>
+			<value description="title">Test News</value>
+			<value description="text">A text that simply says everything...</value>
+			<value description="fkUser">0</value>
+		</row>
+		<row>
+			<value description="id">-173</value>
+			<value description="version">1</value>
+			<value description="newsId">T7SHOW2</value>
+			<value description="locale">EN</value>
+			<value description="maxAge">length7</value>
+			<value description="type">others</value>
+			<value description="highPriority">0</value>
+			<value description="date">2008-01-01 12:15:00</value>
+			<value description="title">Test News</value>
+			<value description="text">A text that simply says everything...</value>
+			<value description="fkUser">0</value>
+		</row>
+		<row>
+			<value description="id">-181</value>
+			<value description="version">1</value>
+			<value description="newsId">T8HIDE</value>
+			<value description="locale">EN</value>
+			<value description="maxAge">length8</value>
+			<value description="type">others</value>
+			<value description="highPriority">0</value>
+			<value description="date">2007-12-04 11:30:00</value>
+			<value description="title">Test News</value>
+			<value description="text">A text that simply says everything...</value>
+			<value description="fkUser">0</value>
+		</row>
+		<row>
+			<value description="id">-182</value>
+			<value description="version">1</value>
+			<value description="newsId">T8SHOW</value>
+			<value description="locale">EN</value>
+			<value description="maxAge">length8</value>
+			<value description="type">others</value>
+			<value description="highPriority">0</value>
+			<value description="date">2008-01-29 11:01:00</value>
+			<value description="title">Test News</value>
+			<value description="text">A text that simply says everything...</value>
+			<value description="fkUser">0</value>
+		</row>
+		<row>
+			<value description="id">-183</value>
+			<value description="version">1</value>
+			<value description="newsId">T8SHOW2</value>
+			<value description="locale">EN</value>
+			<value description="maxAge">length8</value>
+			<value description="type">others</value>
+			<value description="highPriority">0</value>
+			<value description="date">2007-12-04 12:15:00</value>
+			<value description="title">Test News</value>
+			<value description="text">A text that simply says everything...</value>
+			<value description="fkUser">0</value>
+		</row>
+		<row>
+			<value description="id">-191</value>
+			<value description="version">1</value>
+			<value description="newsId">T9HIDE</value>
+			<value description="locale">EN</value>
+			<value description="maxAge">length9</value>
+			<value description="type">others</value>
+			<value description="highPriority">0</value>
+			<value description="date">2007-11-06 11:30:00</value>
+			<value description="title">Test News</value>
+			<value description="text">A text that simply says everything...</value>
+			<value description="fkUser">0</value>
+		</row>
+		<row>
+			<value description="id">-192</value>
+			<value description="version">1</value>
+			<value description="newsId">T9SHOW</value>
+			<value description="locale">EN</value>
+			<value description="maxAge">length9</value>
+			<value description="type">others</value>
+			<value description="highPriority">0</value>
+			<value description="date">2008-01-29 11:00:00</value>
+			<value description="title">Test News</value>
+			<value description="text">A text that simply says everything...</value>
+			<value description="fkUser">0</value>
+		</row>
+		<row>
+			<value description="id">-193</value>
+			<value description="version">1</value>
+			<value description="newsId">T9SHOW2</value>
+			<value description="locale">EN</value>
+			<value description="maxAge">length9</value>
+			<value description="type">others</value>
+			<value description="highPriority">0</value>
+			<value description="date">2007-11-06 12:15:00</value>
+			<value description="title">Test News</value>
+			<value description="text">A text that simply says everything...</value>
+			<value description="fkUser">0</value>
+		</row>
+	</table>
+</dataset>
