@@ -103,7 +103,15 @@ public class StringUtilTest extends LoggerTestCase
 
 	public void testFillupNumber()
 	{
-		// for(int i = -100; i <= 100; i++)
+		for(int i = 1; i <= 10000000; i=i*10)
+		{
+			assertTrue(StringUtil.fillupNumber(i, 6).endsWith("" + i));
+			assertTrue(StringUtil.fillupNumber(-i, 6).endsWith("" + (-i)));
+			if(i < 1000000)
+				assertEquals(6, StringUtil.fillupNumber(i, 6).length());
+			else
+				assertEquals((""+i).length(), StringUtil.fillupNumber(i, 6).length());
+		}
 
 	}
 
