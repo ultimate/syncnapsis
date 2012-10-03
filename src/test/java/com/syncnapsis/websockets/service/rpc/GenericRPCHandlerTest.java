@@ -21,13 +21,13 @@ public class GenericRPCHandlerTest extends LoggerTestCase
 	public void testFindMethodAndConvertArgs() throws Exception
 	{
 		GenericRPCHandler rpcHandler = new GenericRPCHandler() {
-
 			@Override
 			public Object getTarget(String objectName)
 			{
 				return null;
 			}
 		};
+		rpcHandler.setSerializer(serializer);
 
 		@SuppressWarnings("unused")
 		Object tmp = new Object() {
