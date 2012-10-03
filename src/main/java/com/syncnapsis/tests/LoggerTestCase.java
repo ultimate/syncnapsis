@@ -15,6 +15,12 @@ public abstract class LoggerTestCase extends TestCase
 	protected Logger	logger		= LoggerFactory.getLogger(getClass());
 	protected Mockery	mockContext	= new Mockery();
 	
+	@Override 
+	protected void setUp() throws Exception
+	{
+		super.setUp();
+	}
+	
 	@Override
 	protected void tearDown() throws Exception
 	{

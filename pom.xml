@@ -207,7 +207,7 @@
 
 		<!-- Testing dependency versions -->
 		<jmock.version>2.5.1</jmock.version>
-		<junit.version>4.7</junit.version>
+		<junit.version>4.10</junit.version>
 		<wiser.version>1.2</wiser.version>
 	</properties>
 </project>
