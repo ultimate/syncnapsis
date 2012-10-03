@@ -3,6 +3,8 @@ package com.syncnapsis.data.model;
 import java.util.Arrays;
 
 import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import com.syncnapsis.data.model.base.BaseObject;
@@ -17,6 +19,8 @@ import com.syncnapsis.websockets.service.rpc.RPCHandler;
  * 
  * @author ultimate
  */
+@Entity
+@Table(name = "action")
 public class Action extends BaseObject<Long>
 {
 	/**

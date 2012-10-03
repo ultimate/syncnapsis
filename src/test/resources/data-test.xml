@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE dataset SYSTEM "dataset.dtd">
-<dataset>	<table name="parameter">
+<dataset>
+	<table name="parameter">
 		<column>id</column>
 		<column>value</column>
 		<column>version</column>
@@ -65,13 +66,13 @@
 			<value description="version">1</value>
 		</row>
 	</table>
-	
+
 	<table name="action">
 		<column>id</column>
 		<column>version</column>
 		<column>code</column>
 		<column>object</column>
-		<column>method</column>	
+		<column>method</column>
 		<column>args</column>
 		<column>uses</column>
 		<column>maxUses</column>
@@ -80,13 +81,14 @@
 			<value description="version">1</value>
 			<value description="action">1a2b3c</value>
 			<value description="object">a bean</value>
-			<value description="method">a method</value>	
-			<value description="args">insert binary data</value>	
-			<value description="uses">1</value>	
-			<value description="maxUses">10</value>	
+			<value description="method">a method</value>
+			<value description="args">rO0ABXVyABNbTGphdmEubGFuZy5PYmplY3Q7kM5YnxBzKWwCAAB4cAAAAAA=</value>
+			<!-- Base64 for new Object[]{} -->
+			<value description="uses">1</value>
+			<value description="maxUses">10</value>
 		</row>
 	</table>
-	
+
 	<table name="messenger">
 		<column>id</column>
 		<column>version</column>
@@ -130,7 +132,7 @@
 			<value description="activated">1</value>
 		</row>
 	</table>
-	
+
 	<table name="app_userrole">
 		<column>id</column>
 		<column>version</column>
@@ -161,7 +163,7 @@
 			<value description="onlyAllowedToSeeActivated">1</value>
 		</row>
 	</table>
-	
+
 	<table name="app_userrole_fallback">
 		<column>fkRole</column>
 		<column>fkFallbackRole</column>
@@ -178,7 +180,7 @@
 			<value description="fkFallbackRole">4</value>
 		</row>
 	</table>
-	
+
 	<table name="app_user">
 		<column>id</column>
 		<column>version</column>
@@ -196,7 +198,7 @@
 		<column>title</column>
 		<column>birthday</column>
 		<column>city</column>
-		<column>sex</column>
+		<column>gender</column>
 		<column>locale</column>
 		<column>timeZoneID</column>
 		<column>dateFormat</column>
@@ -215,17 +217,17 @@
 			<value description="email">admin@syncnapsis.com</value>
 			<value description="password">d033e22ae348aeb5660fc2140aec35850c4da997</value>
 			<value description="fkUserRole">1</value>
-			<null/>
+			<null />
 			<value description="activated">1</value>
 			<value description="registrationDate">2008-01-01</value>
-			<null/>
+			<null />
 			<value description="accountStatus">active</value>
-			<null/>
+			<null />
 			<value description="nickname">Administrator</value>
 			<value description="title">Mr.</value>
-			<null/>
+			<null />
 			<value description="city">Berlin</value>
-			<value description="sex">male</value>
+			<value description="gender">male</value>
 			<value description="locale">DE</value>
 			<value description="timeZoneID">Etc/GMT+1</value>
 			<value description="dateFormat">yMd24_minus</value>
@@ -236,148 +238,70 @@
 			<value description="lastActiveDate">2008-01-01</value>
 			<value description="showEmail">1</value>
 			<value description="description">Dies ist der Administrator</value>
-			<null/>
+			<null />
 		</row>
-	</table>
-	
-	
-	<table name="authoritygroup">
-		<column>id</column>
-		<column>version</column>
-		<column>name</column>
 		<row>
 			<value description="id">1</value>
 			<value description="version">1</value>
-			<value description="name">contactauthorities</value>
+			<value description="username">user1</value>
+			<value description="email">user1@syncnapsis.com</value>
+			<value description="password">b3daa77b4c04a9551b8781d03191fe098f325e67</value>
+			<value description="fkUserRole">1</value>
+			<null />
+			<value description="activated">1</value>
+			<value description="registrationDate">2008-01-01</value>
+			<null />
+			<value description="accountStatus">active</value>
+			<null />
+			<value description="nickname">user1</value>
+			<value description="title">Mr.</value>
+			<null />
+			<value description="city">Berlin</value>
+			<value description="gender">male</value>
+			<value description="locale">DE</value>
+			<value description="timeZoneID">Etc/GMT+1</value>
+			<value description="dateFormat">yMd24_minus</value>
+			<value description="usingAdvancedMenu">1</value>
+			<value description="usingTooltips">1</value>
+			<value description="usingInfiniteSession">0</value>
+			<value description="sessionTimeout">60</value>
+			<value description="lastActiveDate">2008-01-01</value>
+			<value description="showEmail">1</value>
+			<value description="description">The user #1</value>
+			<null />
 		</row>
 		<row>
 			<value description="id">2</value>
 			<value description="version">1</value>
-			<value description="name">allianceauthorities</value>
+			<value description="username">user2</value>
+			<value description="email">user2@syncnapsis.com</value>
+			<value description="password">a1881c06eec96db9901c7bbfe41c42a3f08e9cb4</value>
+			<value description="fkUserRole">1</value>
+			<null />
+			<value description="activated">1</value>
+			<value description="registrationDate">2008-01-01</value>
+			<null />
+			<value description="accountStatus">active</value>
+			<null />
+			<value description="nickname">user2</value>
+			<value description="title">Mr.</value>
+			<null />
+			<value description="city">Berlin</value>
+			<value description="gender">male</value>
+			<value description="locale">DE</value>
+			<value description="timeZoneID">Etc/GMT+1</value>
+			<value description="dateFormat">yMd24_minus</value>
+			<value description="usingAdvancedMenu">1</value>
+			<value description="usingTooltips">1</value>
+			<value description="usingInfiniteSession">0</value>
+			<value description="sessionTimeout">60</value>
+			<value description="lastActiveDate">2008-01-01</value>
+			<value description="showEmail">1</value>
+			<value description="description">The user #2</value>
+			<null />
 		</row>
 	</table>
-	
-	<table name="authority">
-		<column>id</column>
-		<column>version</column>
-		<column>name</column>
-		<column>fkAuthorityGroup</column>
-		<row>
-			<value description="id">101</value>
-			<value description="version">1</value>
-			<value description="name">allowedToFlyIntoTerritory</value>
-			<value description="fkAuthorityGroup">1</value>
-		</row>
-		<row>
-			<value description="id">102</value>
-			<value description="version">1</value>
-			<value description="name">allowedToSeeEconomy</value>
-			<value description="fkAuthorityGroup">1</value>
-		</row>
-		<row>
-			<value description="id">103</value>
-			<value description="version">1</value>
-			<value description="name">allowedToSeeOnlineStatus</value>
-			<value description="fkAuthorityGroup">1</value>
-		</row>
-		<row>
-			<value description="id">104</value>
-			<value description="version">1</value>
-			<value description="name">allowedToSeeReports</value>
-			<value description="fkAuthorityGroup">1</value>
-		</row>
-		<row>
-			<value description="id">105</value>
-			<value description="version">1</value>
-			<value description="name">allowedToSeeSpecialOffersInMarketPlace</value>
-			<value description="fkAuthorityGroup">1</value>
-		</row>
-		<row>
-			<value description="id">106</value>
-			<value description="version">1</value>
-			<value description="name">allowedToSeeTroops</value>
-			<value description="fkAuthorityGroup">1</value>
-		</row>
-		<row>
-			<value description="id">107</value>
-			<value description="version">1</value>
-			<value description="name">allowedToUseScanners</value>
-			<value description="fkAuthorityGroup">1</value>
-		</row>
-		<row>
-			<value description="id">108</value>
-			<value description="version">1</value>
-			<value description="name">allowedToUseStargates</value>
-			<value description="fkAuthorityGroup">1</value>
-		</row>
-		<row>
-			<value description="id">109</value>
-			<value description="version">1</value>
-			<value description="name">notAllowedToAttack</value>
-			<value description="fkAuthorityGroup">1</value>
-		</row>
-		<row>
-			<value description="id">201</value>
-			<value description="version">1</value>
-			<value description="name">allowedToChangeAllianceDescription</value>
-			<value description="fkAuthorityGroup">2</value>
-		</row>
-		<row>
-			<value description="id">202</value>
-			<value description="version">1</value>
-			<value description="name">allowedToChangeDiplomacy</value>
-			<value description="fkAuthorityGroup">2</value>
-		</row>
-		<row>
-			<value description="id">203</value>
-			<value description="version">1</value>
-			<value description="name">allowedToCommandAllianceFleet</value>
-			<value description="fkAuthorityGroup">2</value>
-		</row>
-		<row>
-			<value description="id">204</value>
-			<value description="version">1</value>
-			<value description="name">allowedToDecruitMembers</value>
-			<value description="fkAuthorityGroup">2</value>
-		</row>
-		<row>
-			<value description="id">205</value>
-			<value description="version">1</value>
-			<value description="name">allowedToDefineDiplomacy</value>
-			<value description="fkAuthorityGroup">2</value>
-		</row>
-		<row>
-			<value description="id">206</value>
-			<value description="version">1</value>
-			<value description="name">allowedToDefinePosts</value>
-			<value description="fkAuthorityGroup">2</value>
-		</row>
-		<row>
-			<value description="id">207</value>
-			<value description="version">1</value>
-			<value description="name">allowedToManageForum</value>
-			<value description="fkAuthorityGroup">2</value>
-		</row>
-		<row>
-			<value description="id">208</value>
-			<value description="version">1</value>
-			<value description="name">allowedToPromoteMembers</value>
-			<value description="fkAuthorityGroup">2</value>
-		</row>
-		<row>
-			<value description="id">209</value>
-			<value description="version">1</value>
-			<value description="name">allowedToRecruitMembers</value>
-			<value description="fkAuthorityGroup">2</value>
-		</row>
-		<row>
-			<value description="id">210</value>
-			<value description="version">1</value>
-			<value description="name">allowedToSendAllianceMail</value>
-			<value description="fkAuthorityGroup">2</value>
-		</row>
-	</table>
-		
+
 	<table name="news">
 		<column>id</column>
 		<column>version</column>

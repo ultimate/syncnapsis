@@ -39,8 +39,8 @@ public class ApplicationBaseDataGenerator extends DataGenerator implements Initi
 	protected UserRoleManager			userRoleManager;
 
 	protected List<Messenger>			messengers;
-	protected Map<String, User>			users				= new TreeMap<String, User>();
-	
+	protected Map<String, User>			users	= new TreeMap<String, User>();
+
 	public TimeProvider getTimeProvider()
 	{
 		return timeProvider;
@@ -104,8 +104,18 @@ public class ApplicationBaseDataGenerator extends DataGenerator implements Initi
 	@Override
 	public void afterPropertiesSet() throws Exception
 	{
+		// @formatter:off
+		this.setExcludeTableList(new String[] { 
+				"app_userrole", 
+				"app_userrole_fallback", 
+				"parameter", "action", 
+				"messenger", 
+				"news" 
+				});
+		// @formatter:on
+
 		super.afterPropertiesSet();
-		
+
 		Assert.notNull(timeProvider, "timeProvider must not be null!");
 
 		Assert.notNull(messengerManager, "messengerManager must not be null!");
@@ -113,6 +123,8 @@ public class ApplicationBaseDataGenerator extends DataGenerator implements Initi
 		Assert.notNull(userManager, "userManager must not be null!");
 		Assert.notNull(userContactManager, "userContactManager must not be null!");
 		Assert.notNull(userRoleManager, "userRoleManager must not be null!");
+
+		messengers = messengerManager.getAll();
 	}
 
 	/*

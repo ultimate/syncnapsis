@@ -1,11 +1,12 @@
 package com.syncnapsis.utils.data;
 
+import java.io.File;
+
 import com.syncnapsis.constants.ApplicationBaseConstants;
 import com.syncnapsis.data.model.User;
 import com.syncnapsis.data.model.UserContact;
 import com.syncnapsis.data.service.UserManager;
 import com.syncnapsis.tests.BaseDaoTestCase;
-import com.syncnapsis.tests.BaseSpringContextTestCase;
 import com.syncnapsis.tests.annotations.TestExcludesMethods;
 import com.syncnapsis.utils.ApplicationContextUtil;
 
@@ -21,6 +22,8 @@ public class ApplicationBaseDataGeneratorTest extends BaseDaoTestCase
 	{
 		super.setUp();
 		ApplicationContextUtil.autowire(applicationContext, gen);
+		gen.setProjectDirectory(new File(".").getAbsolutePath());
+		gen.afterPropertiesSet();
 	}
 
 	public void testCreateUser()
