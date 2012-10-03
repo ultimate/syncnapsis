@@ -1,10 +1,13 @@
 package com.syncnapsis.utils;
 
 import java.text.MessageFormat;
+import java.util.Arrays;
 import java.util.Locale;
+import java.util.Random;
 
 import com.syncnapsis.enums.EnumLocale;
 import com.syncnapsis.tests.LoggerTestCase;
+import com.syncnapsis.tests.annotations.TestCoversMethods;
 
 public class StringUtilTest extends LoggerTestCase
 {
@@ -22,32 +25,32 @@ public class StringUtilTest extends LoggerTestCase
 		// Test correct forwarding of arguments
 		String pattern = "aPattern";
 		EnumLocale locale = EnumLocale.DE;
-		Object[] args = new Object[]{1L, "abc", true};
-		
+		Object[] args = new Object[] { 1L, "abc", true };
+
 		MessageFormat mf_locale = StringUtil.getFormat(pattern, locale.getLocale());
 		MessageFormat mf_default = StringUtil.getFormat(pattern, null);
-		
+
 		String res_util_enumlocale;
 		String res_util_locale;
 		String res_util_null_enumlocale;
 		String res_util_null_locale;
 		String res_locale;
 		String res_default;
-		
+
 		res_util_enumlocale = StringUtil.format(pattern, locale, args);
 		res_util_locale = StringUtil.format(pattern, locale.getLocale(), args);
 		res_util_null_enumlocale = StringUtil.format(pattern, (EnumLocale) null, args);
 		res_util_null_locale = StringUtil.format(pattern, (Locale) null, args);
 		res_locale = mf_locale.format(args, new StringBuffer(), null).toString();
 		res_default = mf_default.format(args, new StringBuffer(), null).toString();
-		
+
 		assertNotNull(res_util_enumlocale);
 		assertNotNull(res_util_locale);
 		assertNotNull(res_util_null_enumlocale);
 		assertNotNull(res_util_null_locale);
 		assertNotNull(res_locale);
 		assertNotNull(res_default);
-		
+
 		assertEquals(res_locale, res_util_enumlocale);
 		assertEquals(res_locale, res_util_locale);
 		assertEquals(res_default, res_util_null_enumlocale);
@@ -66,7 +69,45 @@ public class StringUtilTest extends LoggerTestCase
 		assertEquals(pattern, mf.toPattern());
 	}
 
-	public void testToHexString()
+	public void testFillup()
+	{
+		String org = "test";
+
+		assertEquals("      " + org, StringUtil.fillup(org, 10, ' ', true));
+		assertEquals(org + "      ", StringUtil.fillup(org, 10, ' ', false));
+
+		assertEquals(" " + org, StringUtil.fillup(org, 5, ' ', true));
+		assertEquals(org + " ", StringUtil.fillup(org, 5, ' ', false));
+
+		assertEquals(org, StringUtil.fillup(org, 1, ' ', true));
+		assertEquals(org, StringUtil.fillup(org, 1, ' ', false));
+
+		assertEquals("aaaaaa" + org, StringUtil.fillup(org, 10, 'a', true));
+		assertEquals(org + "aaaaaa", StringUtil.fillup(org, 10, 'a', false));
+
+		assertEquals("a" + org, StringUtil.fillup(org, 5, 'a', true));
+		assertEquals(org + "a", StringUtil.fillup(org, 5, 'a', false));
+
+		assertEquals(org, StringUtil.fillup(org, 1, 'a', true));
+		assertEquals(org, StringUtil.fillup(org, 1, 'a', false));
+
+		assertEquals("      " + null, StringUtil.fillup(null, 10, ' ', true));
+		assertEquals(null + "      ", StringUtil.fillup(null, 10, ' ', false));
+
+		assertEquals(" " + null, StringUtil.fillup(null, 5, ' ', true));
+		assertEquals(null + " ", StringUtil.fillup(null, 5, ' ', false));
+
+		assertEquals("" + null, StringUtil.fillup(null, 1, ' ', true));
+		assertEquals(null + "", StringUtil.fillup(null, 1, ' ', false));
+	}
+
+	public void testFillupNumber()
+	{
+		// for(int i = -100; i <= 100; i++)
+
+	}
+
+	public void testToHexString_old()
 	{
 		String hex1 = "af";
 		String hex2 = "03";
@@ -79,5 +120,35 @@ public class StringUtilTest extends LoggerTestCase
 		String result = StringUtil.toHexString(bytes);
 
 		assertEquals(hex1 + hex2 + hex3 + hex4, result);
+	}
+
+	@TestCoversMethods("*HexString")
+	public void testHexStringConversion()
+	{
+		Random r = new Random();
+		
+		byte[] bytes;
+		for(int i = 0; i < 100; i++)
+		{
+			bytes = new byte[r.nextInt(10)];
+			r.nextBytes(bytes);
+			
+			assertTrue(Arrays.equals(bytes, StringUtil.fromHexString(StringUtil.toHexString(bytes))));
+		}
+	}
+
+	@TestCoversMethods("*BinaryString")
+	public void testBinaryStringConversion()
+	{
+		Random r = new Random();
+		
+		byte[] bytes;
+		for(int i = 0; i < 100; i++)
+		{
+			bytes = new byte[r.nextInt(10)];
+			r.nextBytes(bytes);
+			
+			assertTrue(Arrays.equals(bytes, StringUtil.fromBinaryString(StringUtil.toBinaryString(bytes))));
+		}
 	}
 }
