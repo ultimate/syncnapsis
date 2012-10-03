@@ -56,7 +56,7 @@ public class HibernateUtil
 	 */
 	public void setSessionFactory(SessionFactory sessionFactory)
 	{
-		logger.debug("setting SessionFactory");
+		logger.debug("setting SessionFactory: " + (sessionFactory == null ? null : sessionFactory.getClass().getName()));
 		if(HibernateUtil.sessionFactory != null)
 			logger.warn("SessionFactory is not null but will be overwritten!");
 		HibernateUtil.sessionFactory = sessionFactory;

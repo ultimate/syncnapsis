@@ -1,6 +1,7 @@
 package com.syncnapsis.tests;
 
 import org.hibernate.Transaction;
+
 import com.syncnapsis.utils.HibernateUtil;
 
 public abstract class BaseDaoTestCase extends BaseSpringContextTestCase

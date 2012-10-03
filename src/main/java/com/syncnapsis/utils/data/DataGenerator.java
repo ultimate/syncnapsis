@@ -44,6 +44,26 @@ public abstract class DataGenerator implements InitializingBean
 	// "authority"
 	// "authoritygroup"
 
+	public String getProjectDirectory()
+	{
+		return projectDirectory;
+	}
+
+	public void setProjectDirectory(String projectDirectory)
+	{
+		this.projectDirectory = projectDirectory;
+	}
+
+	public String[] getExcludeTableList()
+	{
+		return excludeTableList;
+	}
+
+	public void setExcludeTableList(String[] excludeTableList)
+	{
+		this.excludeTableList = excludeTableList;
+	}
+
 	@Override
 	public void afterPropertiesSet() throws Exception
 	{

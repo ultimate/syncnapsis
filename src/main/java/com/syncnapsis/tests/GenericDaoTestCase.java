@@ -137,7 +137,7 @@ public abstract class GenericDaoTestCase<T extends BaseObject<PK>, PK extends Se
 	@SuppressWarnings("rawtypes")
 	public void testGetAll() throws Exception
 	{
-		logger.debug("testing getByIdList...");
+		logger.debug("testing getAll...");
 
 		List<T> result;
 
