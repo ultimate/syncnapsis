@@ -134,7 +134,9 @@ public abstract class RandomData
 	}
 
 	/**
-	 * Erzeute eine zufällige Ganzzahl als Integer im Interval [min; max]
+	 * Erzeute eine zufällige Ganzzahl als Integer im Interval [min; max].<br>
+	 * Falls min und max vertauscht werden, werden die Werte intern vertauscht um das Interval zu
+	 * bilden.
 	 * 
 	 * @param min - die untere Grenze des Intervals
 	 * @param max - die obere Grenze des Intervals
@@ -144,11 +146,16 @@ public abstract class RandomData
 	{
 		if(min == max)
 			return min;
-		return random.nextInt(max - min + 1) + min;
+		if(min < max)
+			return random.nextInt(max - min + 1) + min;
+		else
+			return random.nextInt(min - max + 1) + max;
 	}
 
 	/**
-	 * Erzeute eine zufällige Ganzzahl als Long im Interval [min; max]
+	 * Erzeute eine zufällige Ganzzahl als Long im Interval [min; max].<br>
+	 * Falls min und max vertauscht werden, werden die Werte intern vertauscht um das Interval zu
+	 * bilden.
 	 * 
 	 * @param min - die untere Grenze des Intervals
 	 * @param max - die obere Grenze des Intervals
@@ -158,7 +165,10 @@ public abstract class RandomData
 	{
 		if(min == max)
 			return min;
-		return ((long) (random.nextDouble() * (max - min)) + min);
+		if(min < max)
+			return ((long) (random.nextDouble() * (max - min + 1)) + min);
+		else
+			return ((long) (random.nextDouble() * (min - max + 1)) + max);
 	}
 
 	/**
