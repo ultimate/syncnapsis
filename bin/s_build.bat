@@ -1,1 +1,1 @@
-mvn install -Dsurefire.useFile=false
+mvn install -Dsurefire.useFile=false -P!prepare-testdb-hibernate,!prepare-testdb-dbunit

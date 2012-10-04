@@ -195,7 +195,12 @@
 			</build>
 		</profile>
 		<profile>
-			<id>prepare-testdb</id>
+			<id>prepare-testdb-hibernate</id>
+			<activation>
+				<file>
+					<exists>src/test/resources/hibernate.cfg.xml</exists>					
+				</file>
+			</activation>
 			<build>
 				<plugins>
 					<plugin>
@@ -219,7 +224,7 @@
 						</configuration>
 						<executions>
 							<execution>
-								<id>prepare-db</id>
+								<id>prepare-testdb</id>
 								<phase>generate-test-resources</phase>
 								<goals>
 									<goal>hbm2ddl</goal>
@@ -245,6 +250,18 @@
 							</dependency>
 						</dependencies>
 					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		<profile>
+			<id>prepare-testdb-dbunit</id>
+			<activation>
+				<file>
+					<exists>src/test/resources/data-test.xml</exists>					
+				</file>
+			</activation>
+			<build>
+				<plugins>
 					<plugin>
 						<groupId>org.codehaus.mojo</groupId>
 						<artifactId>dbunit-maven-plugin</artifactId>
@@ -260,6 +277,7 @@
 						</configuration>
 						<executions>
 							<execution>
+								<id>prepare-testdb</id>
 								<phase>process-test-resources</phase>
 								<configuration>
 									<type>CLEAN_INSERT</type>

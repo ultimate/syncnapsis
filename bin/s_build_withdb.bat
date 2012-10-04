@@ -1,1 +1,1 @@
-mvn install -Dsurefire.useFile=false -Pprepare-testdb
+mvn install -Dsurefire.useFile=false
