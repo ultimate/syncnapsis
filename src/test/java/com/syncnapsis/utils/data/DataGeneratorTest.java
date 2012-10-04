@@ -4,7 +4,7 @@ import com.syncnapsis.tests.LoggerTestCase;
 import com.syncnapsis.tests.annotations.TestCoversMethods;
 import com.syncnapsis.tests.annotations.TestExcludesMethods;
 
-@TestExcludesMethods({"afterPropertiesSet", "initHibernate"})
+@TestExcludesMethods({"afterPropertiesSet", "initHibernate", "get*", "set*"})
 public class DataGeneratorTest extends LoggerTestCase
 {
 	@TestCoversMethods("generate*")
