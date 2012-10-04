@@ -15,7 +15,28 @@ import org.slf4j.LoggerFactory;
  */
 public abstract class StringUtil
 {
-	protected static transient final Logger	logger	= LoggerFactory.getLogger(StringUtil.class);
+	protected static transient final Logger	logger			= LoggerFactory.getLogger(StringUtil.class);
+
+	/**
+	 * Regular Expression for HEX-Values.<br>
+	 * (odd number of hex-digits allowed)
+	 */
+	public static String					REGEXP_HEX		= "[0-9A-Fa-f]*";
+	/**
+	 * Regular Expression for HEX-Values.<br>
+	 * (odd number of hex-digits not allowed, always containing full byte)
+	 */
+	public static String					REGEXP_HEX_2	= "([0-9A-Fa-f]{2})*";
+	/**
+	 * Regular Expression for HEX-Values.<br>
+	 * (arbitrary number of binary-digits allowed)
+	 */
+	public static String					REGEXP_BINARY	= "[0-1]*";
+	/**
+	 * Regular Expression for HEX-Values.<br>
+	 * (arbitrary number of binary-digits allowed, always containing full byte)
+	 */
+	public static String					REGEXP_BINARY_8	= "([0-1]{8})*";
 
 	/**
 	 * Encode a password with the given algorithm using MessageDigest
@@ -52,38 +73,6 @@ public abstract class StringUtil
 		byte[] encodedPassword = md.digest();
 
 		return toHexString(encodedPassword);
-	}
-
-	/**
-	 * Encode a byte Array to a Hex String.<br>
-	 * In order to guarantee 2 Hex digits per byte each byte is checked for values < 0x10 and prefix
-	 * with '0' if neccessary.<br>
-	 * <code><pre>
-	 * for(byte b : bytes)
-	 * {
-	 *   if((b & 0xff) < 0x10)
-	 *   {
-	 *     buf.append("0");
-	 *   }
-	 *   buf.append(Long.toString(b & 0xff, 16));
-	 * }
-	 * </pre></code>
-	 * 
-	 * @param bytes - the byte Array
-	 * @return the Hex String
-	 */
-	public static String toHexString(byte[] bytes)
-	{
-		StringBuffer buf = new StringBuffer();
-		for(byte b : bytes)
-		{
-			if((b & 0xff) < 0x10)
-			{
-				buf.append("0");
-			}
-			buf.append(Long.toString(b & 0xff, 16));
-		}
-		return buf.toString();
 	}
 
 	/**
@@ -161,6 +150,30 @@ public abstract class StringUtil
 	}
 
 	/**
+	 * Fillup a String to the required minimum length by appending the fillup-char to the beginning
+	 * or end of the string until it reaches the required length.
+	 * 
+	 * @param s - the string to fillup
+	 * @param minLength - the minimun length to reach
+	 * @param fillup - the char to append
+	 * @param begin - true for prefixing, false for suffixing
+	 * @return the modified string
+	 */
+	public static String fillup(String s, int minLength, char fillup, boolean begin)
+	{
+		if(s == null)
+			s = "" + null;
+		while(s.length() < minLength)
+		{
+			if(begin)
+				s = fillup + s;
+			else
+				s = s + fillup;
+		}
+		return s;
+	}
+
+	/**
 	 * Equal to <code>StringUtil.fillup("" + n, minLength, ' ', true)</code>
 	 * 
 	 * @see StringUtil#fillup(String, int, char, boolean)
@@ -174,24 +187,118 @@ public abstract class StringUtil
 	}
 
 	/**
-	 * Fillup a String to the required minimum length by appending the fillup-char to the beginning
-	 * or end of the string until it reaches the required length.
+	 * Encode a byte Array to a Hex String.<br>
+	 * In order to guarantee 2 Hex digits per byte each byte is checked for values < 0x10 and
+	 * prefixed with '0' if neccessary.
 	 * 
-	 * @param s - the string to fillup
-	 * @param minLength - the minimun length to reach
-	 * @param fillup - the char to append
-	 * @param begin - true for prefixing, false for suffixing
-	 * @return the modified string
+	 * @param bytes - the byte Array
+	 * @return the Hex String
 	 */
-	public static String fillup(String s, int minLength, char fillup, boolean begin)
+	public static String toHexString(byte[] bytes, int offset, int length)
 	{
-		while(s.length() < minLength)
+		StringBuffer buf = new StringBuffer();
+		for(int i = offset; i < offset + length; i++)
 		{
-			if(begin)
-				s = fillup + s;
-			else
-				s = s + fillup;
+			if((bytes[i] & 0xff) < 0x10)
+				buf.append("0");
+			buf.append(Integer.toHexString(bytes[i] & 0xff));
 		}
-		return s;
+		return buf.toString();
+	}
+
+	/**
+	 * See {@link StringUtil#toHexString(byte[], int, int)}:
+	 * <code>toHexString(bytes, 0, bytes.length)</code>
+	 * 
+	 * @see StringUtil#toHexString(byte[], int, int)
+	 * @param bytes
+	 * @return
+	 */
+	public static String toHexString(byte[] bytes)
+	{
+		return toHexString(bytes, 0, bytes.length);
+	}
+
+	/**
+	 * Decode a Hex-String to a byte Array.
+	 * 
+	 * @param s - the Hex-String to decode
+	 * @return the byte Array
+	 */
+	public static byte[] fromHexString(String s)
+	{
+		if(!s.matches(REGEXP_HEX))
+			throw new IllegalArgumentException("cannot parse '" + s + "'");
+
+		int length = (int) Math.ceil(s.length() / 2.0);
+		byte[] bytes = new byte[length];
+
+		int c = s.length() - 2;
+		for(int i = length - 1; i >= 0; i--)
+		{
+			bytes[i] = (byte) Integer.parseInt(s.substring(c < 0 ? 0 : c, c + 2), 16);
+			c = c - 2;
+		}
+
+		return bytes;
+	}
+
+	/**
+	 * Encode a byte Array to a Binary String.<br>
+	 * In order to guarantee 8 Binary digits per byte each byte is checked for lengths < 8 and
+	 * prefixed with '0' if neccessary.
+	 * 
+	 * @param bytes - the byte Array
+	 * @return the Hex String
+	 */
+	public static String toBinaryString(byte[] bytes, int offset, int length)
+	{
+		StringBuffer buf = new StringBuffer();
+		String s;
+		for(int i = offset; i < offset + length; i++)
+		{
+			s = Integer.toBinaryString(bytes[i]);
+			for(int c = 8; c > s.length(); c--)
+				buf.append("0");
+			buf.append(s.substring(Math.max(s.length() - 8, 0), s.length()));
+		}
+		return buf.toString();
+	}
+
+	/**
+	 * See {@link StringUtil#toBinaryString(byte[], int, int)}:
+	 * <code>toBinaryString(bytes, 0, bytes.length)</code>
+	 * 
+	 * @see StringUtil#toBinaryString(byte[], int, int)
+	 * @param bytes
+	 * @return
+	 */
+	public static String toBinaryString(byte[] bytes)
+	{
+		return toBinaryString(bytes, 0, bytes.length);
+	}
+
+	/**
+	 * Decode a Binary-String to a byte Array.
+	 * 
+	 * @param s - the Binary-String to decode
+	 * @return the byte Array
+	 */
+	public static byte[] fromBinaryString(String s)
+	{
+		if(!s.matches(REGEXP_BINARY))
+			throw new IllegalArgumentException("cannot parse '" + s + "'");
+
+		int length = (int) Math.ceil(s.length() / 8.0);
+		byte[] bytes = new byte[length];
+
+		int c = s.length() - 8;
+		for(int i = length - 1; i >= 0; i--)
+		{
+			bytes[i] = (byte) Integer.parseInt(s.substring(c < 0 ? 0 : c, c + 8), 2);
+			c = c - 8;
+		}
+
+		return bytes;
 	}
 }
