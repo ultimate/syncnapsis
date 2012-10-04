@@ -4,17 +4,7 @@
 <hibernate-configuration>
     <session-factory>
     
-		<property name="connection.driver_class">${jdbc.driverClassName}</property>
-		<property name="connection.url">${jdbc.url}</property>
-		<property name="connection.username">${jdbc.username}</property>
-		<property name="connection.password">${jdbc.password}</property>
-		
-        <property name="connection.pool_size">1</property>
- 
-		<property name="dialect">${hibernate.dialect}</property>		
-        <property name="current_session_context_class">thread</property>
-        <property name="cache.provider_class">org.hibernate.cache.NoCacheProvider</property>
-        <property name="show_sql">${hibernate.showSql}</property>
-                
+	<!-- empty dummy file -->
+
     </session-factory>
 </hibernate-configuration>
