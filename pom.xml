@@ -68,13 +68,6 @@
 				<configuration>
 					<useFile>${surefire.useFile}</useFile>
 				</configuration>
-    <dependencies>
-      <dependency>
-        <groupId>org.apache.maven.surefire</groupId>
-        <artifactId>surefire-junit47</artifactId>
-        <version>2.12.4</version>
-      </dependency>
-    </dependencies>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -137,20 +130,7 @@
 	<pluginRepositories>
 		<!-- no additional plugin repos -->
 	</pluginRepositories>
-
-	<distributionManagement>
-		<repository>
-			<id>central</id>
-			<name>ishare central</name>
-			<url>http://netbin.de:8090/artifactory/libs-release-local</url>
-		</repository>
-		<snapshotRepository>
-			<id>snapshots</id>
-			<name>ishare snapshots</name>
-			<url>http://netbin.de:8090/artifactory/libs-snapshot-local</url>
-		</snapshotRepository>
-	</distributionManagement>
-
+	
 	<dependencies>
 		<!-- BASE - START -->
 		<dependency>
