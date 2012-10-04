@@ -281,9 +281,11 @@ public class BaseMapper implements Mapper, InitializingBean
 		if(cls != null && cls.isArray())
 		{
 			if(prepared instanceof Collection)
-				return (T) mergeToArray((Collection<Object>) prepared,cls.getComponentType(), authorities);
-			else
+				return (T) mergeToArray((Collection<Object>) prepared, cls.getComponentType(), authorities);
+			else if(prepared.getClass().isArray())
 				return (T) mergeToArray((Object[]) prepared, cls.getComponentType(), authorities);
+			else
+				return null;
 		}
 		if(cls != null && Collection.class.isAssignableFrom(cls))
 		{
