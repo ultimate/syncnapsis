@@ -29,6 +29,12 @@
 			<artifactId>syncnapsis-modules-stats-api</artifactId>
 			<version>${syncnapsis-modules-stats-api.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>com.syncnapsis.syncnapsis-core</groupId>
+			<artifactId>syncnapsis-core-websockets</artifactId>
+			<version>${syncnapsis-core-websockets.version}</version>
+			<optional>true</optional>
+		</dependency>
 		<!-- WEB - START -->
 		<dependency>
 			<groupId>org.glassfish</groupId>
@@ -45,5 +51,9 @@
 	<properties>
 		<!-- Global-Dependencies -->
 		<!-- servlet.version - see super pom -->
+		
+		<!-- Profiles, Deployment etc. -->
+		<db.dbunit.skip>false</db.dbunit.skip>
+		<db.hibernate.skip>false</db.hibernate.skip>
 	</properties>
 </project>
