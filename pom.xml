@@ -18,38 +18,6 @@
 		<defaultGoal>install</defaultGoal>
 		<plugins>
 			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>dbunit-maven-plugin</artifactId>
-				<version>1.0-beta-1</version>
-				<configuration>
-					<dataTypeFactoryName>${dbunit.dataTypeFactoryName}</dataTypeFactoryName>
-					<driver>${jdbc.driverClassName}</driver>
-					<username>${jdbc.username}</username>
-					<password>${jdbc.password}</password>
-					<url>${jdbc.url}</url>
-					<type>${dbunit.operation.type}</type>
-					<schema>${dbunit.schema}</schema>
-					<skip>${maven.test.skip}</skip>
-					<src>${dbunit.src}</src>
-				</configuration>
-				<dependencies>
-					<dependency>
-						<groupId>${jdbc.groupId}</groupId>
-						<artifactId>${jdbc.artifactId}</artifactId>
-						<version>${jdbc.version}</version>
-					</dependency>
-				</dependencies>
-				<executions>
-					<execution>
-						<id>db-data</id>
-						<phase>process-test-resources</phase>
-						<goals>
-							<goal>operation</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-war-plugin</artifactId>
 				<version>2.0</version>
@@ -57,52 +25,6 @@
 					<webappDirectory>target/webapp</webappDirectory>
 					<attachClasses>true</attachClasses>
 				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>hibernate3-maven-plugin</artifactId>
-				<version>2.0-alpha-1</version>
-				<configuration>
-					<components>
-						<component>
-							<name>hbm2ddl</name>
-							<implementation>annotationconfiguration</implementation>
-						</component>
-					</components>
-					<componentProperties>
-						<drop>true</drop>
-						<jdk5>true</jdk5>
-						<propertyfile>target/classes/jdbc.properties</propertyfile>
-						<skip>${maven.test.skip}</skip>
-					</componentProperties>
-				</configuration>
-				<executions>
-					<execution>
-						<id>full-db</id>
-						<phase>generate-test-resources</phase>
-						<goals>
-							<goal>hbm2ddl</goal>
-						</goals>
-					</execution>
-				</executions>
-				<dependencies>
-					<dependency>
-						<groupId>${jdbc.groupId}</groupId>
-						<artifactId>${jdbc.artifactId}</artifactId>
-						<version>${jdbc.version}</version>
-					</dependency>
-					<dependency>
-						<groupId>org.hibernate</groupId>
-						<artifactId>hibernate-core</artifactId>
-						<version>${hibernate.version}</version>
-						<exclusions>
-							<exclusion>
-								<groupId>commons-collections</groupId>
-								<artifactId>commons-collections</artifactId>
-							</exclusion>
-						</exclusions>
-					</dependency>
-				</dependencies>
 			</plugin>
 		</plugins>
 	</build>
@@ -177,22 +99,12 @@
 		<!-- configure properties here for better overview -->
 
 		<!-- Database settings - Start -->
-		<hibernate.dialect>org.hibernate.dialect.PostgreSQLDialect</hibernate.dialect>
-		<hibernate.showSql>false</hibernate.showSql>
-		<jdbc.groupId>postgresql</jdbc.groupId>
-		<jdbc.artifactId>postgresql</jdbc.artifactId>
-		<jdbc.version>9.1-901.jdbc4</jdbc.version> <!-- 19.01.2012 -->
-		<jdbc.driverClassName>org.postgresql.Driver</jdbc.driverClassName>
+		<!-- only overwrite changed properties -->
 		<jdbc.url><![CDATA[jdbc:postgresql://localhost:5432/test]]></jdbc.url>
 		<jdbc.username>testuser</jdbc.username>
 		<jdbc.password>testpw</jdbc.password>
-		<dbunit.src>src/test/resources/testdata.xml</dbunit.src>
-		<dbunit.operation.type>CLEAN_INSERT</dbunit.operation.type>
-		<dbunit.dataTypeFactoryName>org.dbunit.dataset.datatype.DefaultDataTypeFactory</dbunit.dataTypeFactoryName>
 		<!-- Database settings - End -->
 
-		<!-- Database-Dependencies -->
-		<hibernate.version>4.0.1.Final</hibernate.version> <!-- 19.01.2012 -->
     	<!-- Web-Dependencies -->
     	<jetty.version>8.1.0.v20120127</jetty.version> <!-- 27.01.2012 -->
 	</properties>
