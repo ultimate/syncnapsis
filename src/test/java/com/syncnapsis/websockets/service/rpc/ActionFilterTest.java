@@ -5,12 +5,14 @@ import org.jmock.Expectations;
 import com.syncnapsis.data.service.ActionManager;
 import com.syncnapsis.tests.BaseDaoTestCase;
 import com.syncnapsis.tests.annotations.TestCoversMethods;
+import com.syncnapsis.utils.serialization.Serializer;
 
 public class ActionFilterTest extends BaseDaoTestCase
 {
 	private ActionManager	mockActionManager;
 	private ActionFilter	actionFilter;
 
+	@SuppressWarnings("unchecked")
 	@Override
 	protected void setUp() throws Exception
 	{
@@ -18,6 +20,8 @@ public class ActionFilterTest extends BaseDaoTestCase
 		mockActionManager = mockContext.mock(ActionManager.class);
 		actionFilter = new ActionFilter();
 		actionFilter.setActionManager(mockActionManager);
+		actionFilter.setSerializer(mockContext.mock(Serializer.class));
+		actionFilter.setRpcHandler(mockContext.mock(RPCHandler.class));
 		actionFilter.afterPropertiesSet();
 	}
 

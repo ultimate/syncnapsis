@@ -15,8 +15,8 @@ public class ActionDaoTest extends GenericNameDaoTestCase<Action, Long>
 	{
 		super.setUp();
 
-		Long existingId = actionDao.getAll().get(0).getId();
-		String existingName = actionDao.getAll().get(0).getCode();
+		Long existingId = 1L;
+		String existingName = actionDao.get(existingId).getCode();
 
 		Action action = new Action();
 		// set individual properties here
