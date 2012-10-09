@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE dataset SYSTEM "dataset.dtd">
+<dataset>
+
+	<table name="playerrole">
+		<column>id</column>
+		<column>version</column>
+		<column>rolename</column>
+		<column>maxEmpires</column>
+		<column>maxSitters</column>
+		<column>maxSitted</column>
+		<row>
+			<value description="id">1</value>
+			<value description="version">1</value>
+			<value description="rolename">PREMIUM_PLAYER</value>
+			<value description="maxEmpires">5</value>
+			<value description="maxSitters">5</value>
+			<value description="maxSitted">5</value>
+		</row>
+		<row>
+			<value description="id">2</value>
+			<value description="version">1</value>
+			<value description="rolename">NORMAL_PLAYER</value>
+			<value description="maxEmpires">2</value>
+			<value description="maxSitters">2</value>
+			<value description="maxSitted">2</value>
+		</row>
+		<row>
+			<value description="id">3</value>
+			<value description="version">1</value>
+			<value description="rolename">DEMO_PLAYER</value>
+			<value description="maxEmpires">1</value>
+			<value description="maxSitters">0</value>
+			<value description="maxSitted">0</value>
+		</row>
+	</table>
+
+	<table name="playerrole_fallback">
+		<column>fkRole</column>
+		<column>fkFallbackRole</column>
+		<row>
+			<value description="fkRole">1</value>
+			<value description="fkFallbackRole">2</value>
+		</row>
+		<row>
+			<value description="fkRole">2</value>
+			<value description="fkFallbackRole">3</value>
+		</row>
+	</table>
+	
+	<table name="player">
+		<column>id</column>
+		<column>version</column>
+		<column>activated</column>
+		<column>fkUser</column>
+		<column>fkPlayerrole</column>
+		<column>roleExpireDate</column>
+		<column>accountStatus</column>
+		<column>accountStatusExpireDate</column>
+		<row>
+			<value description="id">0</value>
+			<value description="version">0</value>
+			<value description="activated">1</value>
+			<value description="fkUser">0</value>
+			<value description="fkPlayerrole">1</value>
+			<null />
+			<value description="accountStatus">active</value>
+			<null />
+		</row>
+		<row>
+			<value description="id">1</value>
+			<value description="version">0</value>
+			<value description="activated">1</value>
+			<value description="fkUser">1</value>
+			<value description="fkPlayerrole">2</value>
+			<null />
+			<value description="accountStatus">active</value>
+			<null />
+		</row>
+		<row>
+			<value description="id">2</value>
+			<value description="version">0</value>
+			<value description="activated">1</value>
+			<value description="fkUser">2</value>
+			<value description="fkPlayerrole">2</value>
+			<null />
+			<value description="accountStatus">active</value>
+			<null />
+		</row>
+	</table>
+	
+	<table name="empire">
+		<column>id</column>
+		<column>version</column>
+		<column>activated</column>
+		<column>fkPlayer</column>
+		<column>shortName</column>
+		<column>fullName</column>
+		<column>description</column>
+		<column>imageURL</column>
+		<column>primaryColor</column>
+		<column>secondaryColor</column>
+		<row>
+			<value description="id">0</value>
+			<value description="version">0</value>
+			<value description="activated">1</value>
+			<value description="fkPlayer">0</value>
+			<value description="shortName">E0</value>
+			<value description="fullName">Empire #0</value>
+			<value description="description">The admins empire</value>
+			<null/>
+			<value description="primaryColor">#000000</value>
+			<value description="secondaryColor">#000000</value>
+		</row>
+		<row>
+			<value description="id">1</value>
+			<value description="version">0</value>
+			<value description="activated">1</value>
+			<value description="fkPlayer">1</value>
+			<value description="shortName">E1</value>
+			<value description="fullName">Empire #1</value>
+			<value description="description">The empire of user #1</value>
+			<null/>
+			<value description="primaryColor">#FF0000</value>
+			<value description="secondaryColor">#FF0000</value>
+		</row>
+		<row>
+			<value description="id">2</value>
+			<value description="version">0</value>
+			<value description="activated">1</value>
+			<value description="fkPlayer">2</value>
+			<value description="shortName">E2</value>
+			<value description="fullName">Empire #2</value>
+			<value description="description">The empire of user #2</value>
+			<null/>
+			<value description="primaryColor">#00FF00</value>
+			<value description="secondaryColor">#00FF00</value>
+		</row>
+	</table>
+	
+	<table name="sittingstatus">
+		<column>fkPlayer</column>
+		<column>fkSitter</column>
+		<row>
+			<value description="fkPlayer">1</value>
+			<value description="fkSitter">2</value>
+		</row>
+	</table>
+	
+	<table name="playercurrentempire">
+		<column>fkPlayer</column>
+		<column>fkEmpire</column>
+		<row>
+			<value description="fkPlayer">0</value>
+			<value description="fkEmpire">0</value>
+		</row>
+		<row>
+			<value description="fkPlayer">1</value>
+			<value description="fkEmpire">1</value>
+		</row>
+		<row>
+			<value description="fkPlayer">2</value>
+			<value description="fkEmpire">2</value>
+		</row>
+	</table>
+
+</dataset>

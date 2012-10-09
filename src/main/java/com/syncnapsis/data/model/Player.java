@@ -102,7 +102,7 @@ public class Player extends ActivatableInstance<Long>
 	 * @return role
 	 */
 	@ManyToOne
-	@JoinColumn(name = "fkUserRole", nullable = false)
+	@JoinColumn(name = "fkPlayerRole", nullable = false)
 	public PlayerRole getRole()
 	{
 		return role;
@@ -188,7 +188,7 @@ public class Player extends ActivatableInstance<Long>
 	 * @return currentEmpire
 	 */
 	@OneToOne
-	@JoinTable(name = "UserCurrentEmpire", joinColumns = @JoinColumn(name = "fkUser"), inverseJoinColumns = @JoinColumn(name = "fkEmpire"))
+	@JoinTable(name = "PlayerCurrentEmpire", joinColumns = @JoinColumn(name = "fkPlayer"), inverseJoinColumns = @JoinColumn(name = "fkEmpire"))
 	public Empire getCurrentEmpire()
 	{
 		return currentEmpire;
