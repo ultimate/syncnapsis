@@ -1,2 +1,3 @@
-mvn process-test-resources ... DB-profiles
+s_db_drop
+s_db_prepare
 s_db_sequence

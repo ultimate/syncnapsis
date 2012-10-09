@@ -48,6 +48,10 @@ SET S_CP=%S_CP%;"%M2_REPO%\org\slf4j\slf4j-api\%SLF4J_VERSION%\slf4j-api-%SLF4J_
 SET S_CP=%S_CP%;"%M2_REPO%\org\slf4j\slf4j-log4j12\%SLF4J_VERSION%\slf4j-log4j12-%SLF4J_VERSION%.jar"
 SET LOG4J_VERSION=1.2.16
 SET S_CP=%S_CP%;"%M2_REPO%\log4j\log4j\%LOG4J_VERSION%\log4j-%LOG4J_VERSION%.jar"
+SET SPRING_VERSION=3.1.0.RELEASE
+SET S_CP=%S_CP%;"%M2_REPO%\org\springframework\spring-core\%SPRING_VERSION%\spring-core-%SPRING_VERSION%.jar"
+SET POSTGRESQL_VERSION=9.1-901.jdbc4
+SET S_CP=%S_CP%;"%M2_REPO%\postgresql\postgresql\%POSTGRESQL_VERSION%\postgresql-%POSTGRESQL_VERSION%.jar"
 :runS
 @echo on
 %S_JAVA_EXE% -cp %S_CP% %S_ARGS%

@@ -1,1 +1,0 @@
-mvn install -Dsurefire.useFile=false

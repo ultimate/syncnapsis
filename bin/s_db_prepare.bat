@@ -1,0 +1,1 @@
+mvn hibernate3:hbm2ddl dbunit:operation
