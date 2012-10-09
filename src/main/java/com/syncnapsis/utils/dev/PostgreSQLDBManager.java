@@ -79,7 +79,14 @@ public class PostgreSQLDBManager extends DBManager
 		
 		try
 		{
-			execute(argsList, new PostgreSQLDBManager(PropertiesUtil.loadProperties(new File(properties))));
+			File propertiesFile = new File(properties);
+			if(!propertiesFile.exists())
+				propertiesFile = new File("target/classes/" + properties);
+			if(!propertiesFile.exists())
+				propertiesFile = new File("target/test-classes/" + properties);
+			if(!propertiesFile.exists())
+				throw new IOException("Neither '" + properties + "' nor 'target/classes/" + properties + "' nor 'target/test-classes/" + properties + "' found!");
+			execute(argsList, new PostgreSQLDBManager(PropertiesUtil.loadProperties(propertiesFile)));
 		}
 		catch(ClassNotFoundException e)
 		{
