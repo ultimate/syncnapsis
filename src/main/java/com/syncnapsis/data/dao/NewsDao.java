@@ -18,11 +18,12 @@ public interface NewsDao extends GenericDao<News, Long>
 	 * Lade alle NewsIds bis zu einem bestimmten maximalen Alter, ausgehend von
 	 * einem Referenzdatum.
 	 * 
-	 * @param maxAge - die Konstante für das maximale Alter
+	 * @param maxAge - the max age enum value
+	 * @param maxAgeValue - the max age in millis for the enum value
 	 * @param referenceDate - das Referenzdatum
 	 * @return eine Liste mit den NewsIds
 	 */
-	public List<String> getIdsByMaxAge(EnumNewsAge maxAge, Date referenceDate);
+	public List<String> getIdsByMaxAge(EnumNewsAge maxAge, long maxAgeValue, Date referenceDate);
 
 	/**
 	 * Lade ein News-Objekt anhand einer NewsId und einer vorgegebene Sprache.

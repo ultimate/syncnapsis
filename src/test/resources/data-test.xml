@@ -3,66 +3,67 @@
 <dataset>
 	<table name="parameter">
 		<column>id</column>
+		<column>name</column>
 		<column>value</column>
 		<column>version</column>
 		<row>
-			<value description="id">universe.year</value>
-			<value description="value">3600</value>
-			<value description="version">1</value>
-		</row>
-		<row>
-			<value description="id">news.maxItems</value>
+			<value description="id">1</value>
+			<value description="name">news.maxItems</value>
 			<value description="value">10</value>
 			<value description="version">1</value>
 		</row>
 		<row>
-			<value description="id">news.length1.maxAge</value>
+			<value description="id">2</value>
+			<value description="name">news.length1.maxAge</value>
 			<value description="value">86400</value>
 			<value description="version">1</value>
 		</row>
 		<row>
-			<value description="id">news.length2.maxAge</value>
+			<value description="id">3</value>
+			<value description="name">news.length2.maxAge</value>
 			<value description="value">172800</value>
 			<value description="version">1</value>
 		</row>
 		<row>
-			<value description="id">news.length3.maxAge</value>
+			<value description="id">4</value>
+			<value description="name">news.length3.maxAge</value>
 			<value description="value">259200</value>
 			<value description="version">1</value>
 		</row>
 		<row>
-			<value description="id">news.length4.maxAge</value>
+			<value description="id">5</value>
+			<value description="name">news.length4.maxAge</value>
 			<value description="value">432000</value>
 			<value description="version">1</value>
 		</row>
 		<row>
-			<value description="id">news.length5.maxAge</value>
+			<value description="id">6</value>
+			<value description="name">news.length5.maxAge</value>
 			<value description="value">604800</value>
 			<value description="version">1</value>
 		</row>
 		<row>
-			<value description="id">news.length6.maxAge</value>
+			<value description="id">7</value>
+			<value description="name">news.length6.maxAge</value>
 			<value description="value">1209600</value>
 			<value description="version">1</value>
 		</row>
 		<row>
-			<value description="id">news.length7.maxAge</value>
+			<value description="id">8</value>
+			<value description="name">news.length7.maxAge</value>
 			<value description="value">2419200</value>
 			<value description="version">1</value>
 		</row>
 		<row>
-			<value description="id">news.length8.maxAge</value>
+			<value description="id">9</value>
+			<value description="name">news.length8.maxAge</value>
 			<value description="value">4838400</value>
 			<value description="version">1</value>
 		</row>
 		<row>
-			<value description="id">news.length9.maxAge</value>
+			<value description="id">10</value>
+			<value description="name">news.length9.maxAge</value>
 			<value description="value">7257600</value>
-			<value description="version">1</value>
-		</row>
-		<row>
-			<value description="id">ranking.buttonRenderPosition</value>
-			<value description="value">TAILING</value>
 			<value description="version">1</value>
 		</row>
 	</table>
@@ -299,6 +300,49 @@
 			<value description="showEmail">1</value>
 			<value description="description">The user #2</value>
 			<null />
+		</row>
+	</table>
+	
+	<table name="messengercontact">
+		<column>id</column>
+		<column>version</column>
+		<column>address</column>
+		<column>fkUser</column>
+		<column>fkMessenger</column>
+		<row>
+			<value description="id">1</value>
+			<value description="version">0</value>
+			<value description="address">not available</value>
+			<value description="fkUser">1</value>
+			<value description="fkMessenger">4</value>
+		</row>
+		<row>
+			<value description="id">2</value>
+			<value description="version">0</value>
+			<value description="address">not available</value>
+			<value description="fkUser">1</value>
+			<value description="fkMessenger">4</value>
+		</row>
+		<row>
+			<value description="id">3</value>
+			<value description="version">0</value>
+			<value description="address">not available</value>
+			<value description="fkUser">1</value>
+			<value description="fkMessenger">4</value>
+		</row>
+		<row>
+			<value description="id">4</value>
+			<value description="version">0</value>
+			<value description="address">not available</value>
+			<value description="fkUser">1</value>
+			<value description="fkMessenger">4</value>
+		</row>
+		<row>
+			<value description="id">5</value>
+			<value description="version">0</value>
+			<value description="address">not available</value>
+			<value description="fkUser">1</value>
+			<value description="fkMessenger">5</value>
 		</row>
 	</table>
 

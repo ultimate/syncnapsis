@@ -5,6 +5,7 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
+
 import com.syncnapsis.data.model.base.BaseObject;
 
 /**
@@ -15,8 +16,12 @@ import com.syncnapsis.data.model.base.BaseObject;
  */
 @Entity
 @Table(name = "parameter")
-public class Parameter extends BaseObject<String>
+public class Parameter extends BaseObject<Long>
 {
+	/**
+	 * The parameter name
+	 */
+	private String	name;
 	/**
 	 * The parameter value
 	 */
@@ -28,7 +33,29 @@ public class Parameter extends BaseObject<String>
 	public Parameter()
 	{
 	}
+	
+	/**
+	 * The parameter name
+	 * 
+	 * @return name
+	 */
+	@Column(nullable = false, length = LENGTH_NAME_NORMAL)
+	public String getName()
+	{
+		return name;
+	}
 
+	/**
+	 * The parameter name
+	 * 
+	 * @param name - the name
+	 */
+	public void setName(String name)
+	{
+		this.name = name;
+	}
+
+	
 	/**
 	 * The parameter value
 	 * 

@@ -13,11 +13,12 @@ import com.syncnapsis.enums.EnumNewsType;
 import com.syncnapsis.tests.BaseDaoTestCase;
 import com.syncnapsis.tests.annotations.TestCoversClasses;
 
-@TestCoversClasses( { NewsDao.class, NewsDaoHibernate.class })
+@TestCoversClasses({ NewsDao.class, NewsDaoHibernate.class })
 public class NewsDaoTest extends BaseDaoTestCase
 {
-	private NewsDao	newsDao;
-	private UserDao	userDao;
+	private NewsDao			newsDao;
+	private ParameterDao	parameterDao;
+	private UserDao			userDao;
 
 	public void testGetNewsInvalid() throws Exception
 	{
@@ -126,7 +127,10 @@ public class NewsDaoTest extends BaseDaoTestCase
 
 		news3 = newsDao.save(news3);
 
-		List<String> newsIds = newsDao.getIdsByMaxAge(EnumNewsAge.length1, new Date(timeProvider.get()));
+		EnumNewsAge maxAge = EnumNewsAge.length1;
+		long maxAgeValue = parameterDao.getLong(maxAge.getParameterKey()) * 1000;
+
+		List<String> newsIds = newsDao.getIdsByMaxAge(maxAge, maxAgeValue, new Date(timeProvider.get()));
 		assertNotNull(newsIds);
 		assertEquals(2, newsIds.size());
 		assertEquals("T2", newsIds.get(0));

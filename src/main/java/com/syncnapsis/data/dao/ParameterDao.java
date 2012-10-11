@@ -9,77 +9,77 @@ import com.syncnapsis.data.model.Parameter;
  * 
  * @author ultimate
  */
-public interface ParameterDao extends GenericDao<Parameter, String>
+public interface ParameterDao extends GenericNameDao<Parameter, Long>
 {
 	/**
 	 * Lädt den Wert eines Parameters als String
 	 * 
-	 * @param id - die ID des Parameters
+	 * @param name - der Name des Parameters
 	 * @return der Parameter als String
 	 */
-	public String getString(String id);
+	public String getString(String name);
 
 	/**
 	 * Lädt den Wert eines Parameters als Long
 	 * 
-	 * @param id - die ID des Parameters
+	 * @param name - der Name des Parameters
 	 * @return der Parameter als Long
 	 */
-	public Long getLong(String id);
+	public Long getLong(String name);
 
 	/**
 	 * Lädt den Wert eines Parameters als Integer
 	 * 
-	 * @param id - die ID des Parameters
+	 * @param name - der Name des Parameters
 	 * @return der Parameter als Integer
 	 */
-	public Integer getInteger(String id);
+	public Integer getInteger(String name);
 
 	/**
 	 * Lädt den Wert eines Parameters als Short
 	 * 
-	 * @param id - die ID des Parameters
+	 * @param name - der Name des Parameters
 	 * @return der Parameter als Short
 	 */
-	public Short getShort(String id);
+	public Short getShort(String name);
 
 	/**
 	 * Lädt den Wert eines Parameters als Byte
 	 * 
-	 * @param id - die ID des Parameters
+	 * @param name - der Name des Parameters
 	 * @return der Parameter als Byte
 	 */
-	public Byte getByte(String id);
+	public Byte getByte(String name);
 
 	/**
 	 * Lädt den Wert eines Parameters als Double
 	 * 
-	 * @param id - die ID des Parameters
+	 * @param name - der Name des Parameters
 	 * @return der Parameter als Double
 	 */
-	public Double getDouble(String id);
+	public Double getDouble(String name);
 
 	/**
 	 * Lädt den Wert eines Parameters als Float
 	 * 
-	 * @param id - die ID des Parameters
+	 * @param name - der Name des Parameters
 	 * @return der Parameter als Float
 	 */
-	public Float getFloat(String id);
+	public Float getFloat(String name);
 
 	/**
 	 * Lädt den Wert eines Parameters als Boolean
 	 * 
-	 * @param id - die ID des Parameters
+	 * @param name - der Name des Parameters
 	 * @return der Parameter als Boolean
 	 */
-	public Boolean getBoolean(String id);
+	public Boolean getBoolean(String name);
 
 	/**
 	 * Lädt den Wert eines Parameters als Date
 	 * 
-	 * @param id - die ID des Parameters
+	 * @param name - der Name des Parameters
 	 * @return der Parameter als Date
 	 */
-	public Date getDate(String id);
+	public Date getDate(String name);
 }

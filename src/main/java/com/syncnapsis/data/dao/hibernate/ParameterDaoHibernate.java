@@ -12,7 +12,7 @@ import com.syncnapsis.enums.EnumDateFormat;
  * 
  * @author ultimate
  */
-public class ParameterDaoHibernate extends GenericDaoHibernate<Parameter, String> implements ParameterDao
+public class ParameterDaoHibernate extends GenericNameDaoHibernate<Parameter, Long> implements ParameterDao
 {
 	/**
 	 * Erzeugt eine neue DAO-Instanz durch die Super-Klasse GenericDaoHibernate
@@ -20,7 +20,7 @@ public class ParameterDaoHibernate extends GenericDaoHibernate<Parameter, String
 	 */
 	public ParameterDaoHibernate()
 	{
-		super(Parameter.class, true);
+		super(Parameter.class, "name");
 	}
 
 	/*
@@ -28,9 +28,9 @@ public class ParameterDaoHibernate extends GenericDaoHibernate<Parameter, String
 	 * @see com.syncnapsis.dao.ParameterDao#getString(java.lang.String)
 	 */
 	@Override
-	public String getString(String id)
+	public String getString(String name)
 	{
-		Parameter parameter = get(id);
+		Parameter parameter = getByName(name);
 		if(parameter != null)
 			return parameter.getValue();
 		return null;
@@ -41,9 +41,9 @@ public class ParameterDaoHibernate extends GenericDaoHibernate<Parameter, String
 	 * @see com.syncnapsis.dao.ParameterDao#getBoolean(java.lang.String)
 	 */
 	@Override
-	public Boolean getBoolean(String id)
+	public Boolean getBoolean(String name)
 	{
-		String parameterString = getString(id);
+		String parameterString = getString(name);
 		if(parameterString != null)
 			return Boolean.valueOf(parameterString);
 		return false;
@@ -54,9 +54,9 @@ public class ParameterDaoHibernate extends GenericDaoHibernate<Parameter, String
 	 * @see com.syncnapsis.dao.ParameterDao#getByte(java.lang.String)
 	 */
 	@Override
-	public Byte getByte(String id)
+	public Byte getByte(String name)
 	{
-		String parameterString = getString(id);
+		String parameterString = getString(name);
 		if(parameterString != null)
 			return Byte.parseByte(parameterString);
 		return null;
@@ -67,9 +67,9 @@ public class ParameterDaoHibernate extends GenericDaoHibernate<Parameter, String
 	 * @see com.syncnapsis.dao.ParameterDao#getDate(java.lang.String)
 	 */
 	@Override
-	public Date getDate(String id)
+	public Date getDate(String name)
 	{
-		String parameterString = getString(id);
+		String parameterString = getString(name);
 		if(parameterString != null)
 		{
 			try
@@ -89,9 +89,9 @@ public class ParameterDaoHibernate extends GenericDaoHibernate<Parameter, String
 	 * @see com.syncnapsis.dao.ParameterDao#getDouble(java.lang.String)
 	 */
 	@Override
-	public Double getDouble(String id)
+	public Double getDouble(String name)
 	{
-		String parameterString = getString(id);
+		String parameterString = getString(name);
 		if(parameterString != null)
 			return Double.parseDouble(parameterString);
 		return null;
@@ -102,9 +102,9 @@ public class ParameterDaoHibernate extends GenericDaoHibernate<Parameter, String
 	 * @see com.syncnapsis.dao.ParameterDao#getFloat(java.lang.String)
 	 */
 	@Override
-	public Float getFloat(String id)
+	public Float getFloat(String name)
 	{
-		String parameterString = getString(id);
+		String parameterString = getString(name);
 		if(parameterString != null)
 			return Float.parseFloat(parameterString);
 		return null;
@@ -115,9 +115,9 @@ public class ParameterDaoHibernate extends GenericDaoHibernate<Parameter, String
 	 * @see com.syncnapsis.dao.ParameterDao#getInteger(java.lang.String)
 	 */
 	@Override
-	public Integer getInteger(String id)
+	public Integer getInteger(String name)
 	{
-		String parameterString = getString(id);
+		String parameterString = getString(name);
 		if(parameterString != null)
 			return Integer.parseInt(parameterString);
 		return null;
@@ -128,9 +128,9 @@ public class ParameterDaoHibernate extends GenericDaoHibernate<Parameter, String
 	 * @see com.syncnapsis.dao.ParameterDao#getLong(java.lang.String)
 	 */
 	@Override
-	public Long getLong(String id)
+	public Long getLong(String name)
 	{
-		String parameterString = getString(id);
+		String parameterString = getString(name);
 		if(parameterString != null)
 			return Long.parseLong(parameterString);
 		return null;
@@ -141,9 +141,9 @@ public class ParameterDaoHibernate extends GenericDaoHibernate<Parameter, String
 	 * @see com.syncnapsis.dao.ParameterDao#getShort(java.lang.String)
 	 */
 	@Override
-	public Short getShort(String id)
+	public Short getShort(String name)
 	{
-		String parameterString = getString(id);
+		String parameterString = getString(name);
 		if(parameterString != null)
 			return Short.parseShort(parameterString);
 		return null;

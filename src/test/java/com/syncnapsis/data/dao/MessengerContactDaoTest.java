@@ -20,10 +20,12 @@ public class MessengerContactDaoTest extends GenericDaoTestCase<MessengerContact
 	{
 		super.setUp();
 		
-		Long existingId = messengerContactDao.getAll().get(0).getId();
+		User user1 = userDao.getByName("user1");
+		
+		Long existingId = user1.getMessengerContacts().get(0).getId();
 		
 		MessengerContact messengerContact = new MessengerContact();
-		messengerContact.setUser(userDao.getByName("user1"));
+		messengerContact.setUser(user1);
 		messengerContact.setMessenger(messengerDao.getByName("Skype"));
 		
 		setEntity(messengerContact);

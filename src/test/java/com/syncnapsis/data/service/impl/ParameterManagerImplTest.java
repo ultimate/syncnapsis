@@ -9,7 +9,7 @@ import com.syncnapsis.tests.GenericManagerImplTestCase;
 import com.syncnapsis.tests.annotations.TestCoversClasses;
 
 @TestCoversClasses({ParameterManager.class, ParameterManagerImpl.class})
-public class ParameterManagerImplTest extends GenericManagerImplTestCase<Parameter, String, ParameterManager, ParameterDao>
+public class ParameterManagerImplTest extends GenericManagerImplTestCase<Parameter, Long, ParameterManager, ParameterDao>
 {
 	@Override
 	protected void setUp() throws Exception
@@ -23,63 +23,63 @@ public class ParameterManagerImplTest extends GenericManagerImplTestCase<Paramet
 	
 	public void testGetString() throws Exception
 	{
-		MethodCall managerCall = new MethodCall("getString", new String("1"), "id");
+		MethodCall managerCall = new MethodCall("getString", new String("1"), "name");
 		MethodCall daoCall = managerCall;
 		simpleGenericTest(managerCall, daoCall);
 	}
 	
 	public void testGetLong() throws Exception
 	{
-		MethodCall managerCall = new MethodCall("getLong", new Long(1L), "id");
+		MethodCall managerCall = new MethodCall("getLong", new Long(1), "name");
 		MethodCall daoCall = managerCall;
 		simpleGenericTest(managerCall, daoCall);
 	}
 	
 	public void testGetInteger() throws Exception
 	{
-		MethodCall managerCall = new MethodCall("getInteger", new Integer(1), "id");
+		MethodCall managerCall = new MethodCall("getInteger", new Integer(1), "name");
 		MethodCall daoCall = managerCall;
 		simpleGenericTest(managerCall, daoCall);
 	}
 	
 	public void testGetShort() throws Exception
 	{
-		MethodCall managerCall = new MethodCall("getShort", new Short("1"), "id");
+		MethodCall managerCall = new MethodCall("getShort", new Short("1"), "name");
 		MethodCall daoCall = managerCall;
 		simpleGenericTest(managerCall, daoCall);
 	}
 	
 	public void testGetByte() throws Exception
 	{
-		MethodCall managerCall = new MethodCall("getByte", new Byte("1"), "id");
+		MethodCall managerCall = new MethodCall("getByte", new Byte("1"), "name");
 		MethodCall daoCall = managerCall;
 		simpleGenericTest(managerCall, daoCall);
 	}
 	
 	public void testGetDouble() throws Exception
 	{
-		MethodCall managerCall = new MethodCall("getDouble", new Double("1"), "id");
+		MethodCall managerCall = new MethodCall("getDouble", new Double("1"), "name");
 		MethodCall daoCall = managerCall;
 		simpleGenericTest(managerCall, daoCall);
 	}
 	
 	public void testGetFloat() throws Exception
 	{
-		MethodCall managerCall = new MethodCall("getFloat", new Float("1"), "id");
+		MethodCall managerCall = new MethodCall("getFloat", new Float("1"), "name");
 		MethodCall daoCall = managerCall;
 		simpleGenericTest(managerCall, daoCall);
 	}
 	
 	public void testGetBoolean() throws Exception
 	{
-		MethodCall managerCall = new MethodCall("getBoolean", new Boolean(true), "id");
+		MethodCall managerCall = new MethodCall("getBoolean", new Boolean(true), "name");
 		MethodCall daoCall = managerCall;
 		simpleGenericTest(managerCall, daoCall);
 	}
 	
 	public void testGetDate() throws Exception
 	{
-		MethodCall managerCall = new MethodCall("getDate", new Date(timeProvider.get()), "id");
+		MethodCall managerCall = new MethodCall("getDate", new Date(timeProvider.get()), "name");
 		MethodCall daoCall = managerCall;
 		simpleGenericTest(managerCall, daoCall);
 	}

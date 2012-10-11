@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.jmock.Expectations;
+
 import com.syncnapsis.data.dao.NewsDao;
 import com.syncnapsis.data.model.News;
 import com.syncnapsis.data.model.Parameter;
@@ -62,7 +63,8 @@ public class NewsManagerImplTest extends GenericManagerImplTestCase<News, Long, 
 			{
 				for(EnumNewsAge age : EnumNewsAge.values())
 				{
-					oneOf(mockDao).getIdsByMaxAge(age, d);
+					long ageValue = parameterManager.getLong(age.getParameterKey()) * 1000;
+					oneOf(mockDao).getIdsByMaxAge(age, ageValue, d);
 					will(returnValue(testDatas));
 				}
 			}
@@ -81,7 +83,7 @@ public class NewsManagerImplTest extends GenericManagerImplTestCase<News, Long, 
 		assertNotNull(newsManager);
 
 		// setting maxItems to 12 for test-case
-		Parameter p = parameterManager.get("news.maxItems");
+		Parameter p = parameterManager.getByName("news.maxItems");
 		p.setValue("12");
 		parameterManager.save(p);
 
@@ -91,7 +93,7 @@ public class NewsManagerImplTest extends GenericManagerImplTestCase<News, Long, 
 				"T5SHOW", "T5SHOW2", "T6SHOW", "T6SHOW2", "T7SHOW", "T7SHOW2", "T8SHOW", "T8SHOW2", "T9SHOW", "T9SHOW2" };
 		String[] expectedNewsIdsLimited = { "T1SHOW3", "T2SHOW3", "T1SHOW", "T2SHOW", "T3SHOW", "T4SHOW", "T5SHOW", "T6SHOW", "T7SHOW", "T8SHOW",
 				"T9SHOW", "T1SHOW2" };
-		assertEquals(new Integer(parameterManager.get("news.maxItems").getValue()), (Integer) expectedNewsIdsLimited.length);
+		assertEquals(new Integer(parameterManager.getByName("news.maxItems").getValue()), (Integer) expectedNewsIdsLimited.length);
 
 		List<String> newsIdsAll = newsManager.getActualIds(referenceDate);
 		assertEquals(expectedNewsIdsAll.length, newsIdsAll.size());
@@ -107,7 +109,7 @@ public class NewsManagerImplTest extends GenericManagerImplTestCase<News, Long, 
 		}
 
 		// resetting maxItems to 10 after test-case
-		p = parameterManager.get("news.maxItems");
+		p = parameterManager.getByName("news.maxItems");
 		p.setValue("10");
 		parameterManager.save(p);
 	}

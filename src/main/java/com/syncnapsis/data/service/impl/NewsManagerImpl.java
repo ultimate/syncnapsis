@@ -52,7 +52,8 @@ public class NewsManagerImpl extends GenericManagerImpl<News, Long> implements N
 	@Override
 	public List<String> getIdsByMaxAge(EnumNewsAge maxAge, Date referenceDate)
 	{
-		return newsDao.getIdsByMaxAge(maxAge, referenceDate);
+		Long maxAgeValue = parameterManager.getLong(maxAge.getParameterKey()) * 1000;
+		return newsDao.getIdsByMaxAge(maxAge, maxAgeValue, referenceDate);
 	}
 
 	/*

@@ -5,7 +5,6 @@ import java.util.List;
 
 import com.syncnapsis.data.dao.NewsDao;
 import com.syncnapsis.data.model.News;
-import com.syncnapsis.data.model.Parameter;
 import com.syncnapsis.enums.EnumLocale;
 import com.syncnapsis.enums.EnumNewsAge;
 
@@ -27,13 +26,12 @@ public class NewsDaoHibernate extends GenericDaoHibernate<News, Long> implements
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.syncnapsis.dao.NewsDao#getIdsByMaxAge(com.syncnapsis.enums.EnumNewsAge, java.util.Date)
+	 * @see com.syncnapsis.data.dao.NewsDao#getIdsByMaxAge(long, java.util.Date)
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<String> getIdsByMaxAge(EnumNewsAge maxAge, Date referenceDate)
+	public List<String> getIdsByMaxAge(EnumNewsAge maxAge, long maxAgeValue, Date referenceDate)
 	{
-		Long maxAgeValue = new Long( get(Parameter.class, maxAge.getParameterKey()).getValue() ) * 1000;
 		Date minDate = new Date(referenceDate.getTime() - maxAgeValue);
 		return (List<String>) createQuery("select distinct n.newsId from News n where n.maxAge=? and n.date>=? and n.date<=? order by n.newsId", maxAge,
 				minDate, referenceDate).list();

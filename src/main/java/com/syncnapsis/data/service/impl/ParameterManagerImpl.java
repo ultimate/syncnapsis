@@ -11,7 +11,7 @@ import com.syncnapsis.data.service.ParameterManager;
  * 
  * @author ultimate
  */
-public class ParameterManagerImpl extends GenericManagerImpl<Parameter, String> implements ParameterManager
+public class ParameterManagerImpl extends GenericNameManagerImpl<Parameter, Long> implements ParameterManager
 {
 	/**
 	 * ParameterDao für den Datenbankzugriff
@@ -34,9 +34,9 @@ public class ParameterManagerImpl extends GenericManagerImpl<Parameter, String> 
 	 * @see com.syncnapsis.service.ParameterManager#getString(java.lang.String)
 	 */
 	@Override
-	public String getString(String id)
+	public String getString(String name)
 	{
-		return parameterDao.getString(id);
+		return parameterDao.getString(name);
 	}
 
 	/*
@@ -44,9 +44,9 @@ public class ParameterManagerImpl extends GenericManagerImpl<Parameter, String> 
 	 * @see com.syncnapsis.service.ParameterManager#getBoolean(java.lang.String)
 	 */
 	@Override
-	public Boolean getBoolean(String id)
+	public Boolean getBoolean(String name)
 	{
-		return parameterDao.getBoolean(id);
+		return parameterDao.getBoolean(name);
 	}
 
 	/*
@@ -54,9 +54,9 @@ public class ParameterManagerImpl extends GenericManagerImpl<Parameter, String> 
 	 * @see com.syncnapsis.service.ParameterManager#getByte(java.lang.String)
 	 */
 	@Override
-	public Byte getByte(String id)
+	public Byte getByte(String name)
 	{
-		return parameterDao.getByte(id);
+		return parameterDao.getByte(name);
 	}
 
 	/*
@@ -64,9 +64,9 @@ public class ParameterManagerImpl extends GenericManagerImpl<Parameter, String> 
 	 * @see com.syncnapsis.service.ParameterManager#getDate(java.lang.String)
 	 */
 	@Override
-	public Date getDate(String id)
+	public Date getDate(String name)
 	{
-		return parameterDao.getDate(id);
+		return parameterDao.getDate(name);
 	}
 
 	/*
@@ -74,9 +74,9 @@ public class ParameterManagerImpl extends GenericManagerImpl<Parameter, String> 
 	 * @see com.syncnapsis.service.ParameterManager#getDouble(java.lang.String)
 	 */
 	@Override
-	public Double getDouble(String id)
+	public Double getDouble(String name)
 	{
-		return parameterDao.getDouble(id);
+		return parameterDao.getDouble(name);
 	}
 
 	/*
@@ -84,9 +84,9 @@ public class ParameterManagerImpl extends GenericManagerImpl<Parameter, String> 
 	 * @see com.syncnapsis.service.ParameterManager#getFloat(java.lang.String)
 	 */
 	@Override
-	public Float getFloat(String id)
+	public Float getFloat(String name)
 	{
-		return parameterDao.getFloat(id);
+		return parameterDao.getFloat(name);
 	}
 
 	/*
@@ -94,9 +94,9 @@ public class ParameterManagerImpl extends GenericManagerImpl<Parameter, String> 
 	 * @see com.syncnapsis.service.ParameterManager#getInteger(java.lang.String)
 	 */
 	@Override
-	public Integer getInteger(String id)
+	public Integer getInteger(String name)
 	{
-		return parameterDao.getInteger(id);
+		return parameterDao.getInteger(name);
 	}
 
 	/*
@@ -104,9 +104,9 @@ public class ParameterManagerImpl extends GenericManagerImpl<Parameter, String> 
 	 * @see com.syncnapsis.service.ParameterManager#getLong(java.lang.String)
 	 */
 	@Override
-	public Long getLong(String id)
+	public Long getLong(String name)
 	{
-		return parameterDao.getLong(id);
+		return parameterDao.getLong(name);
 	}
 
 	/*
@@ -114,8 +114,8 @@ public class ParameterManagerImpl extends GenericManagerImpl<Parameter, String> 
 	 * @see com.syncnapsis.service.ParameterManager#getShort(java.lang.String)
 	 */
 	@Override
-	public Short getShort(String id)
+	public Short getShort(String name)
 	{
-		return parameterDao.getShort(id);
+		return parameterDao.getShort(name);
 	}
 }
