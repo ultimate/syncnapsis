@@ -10,9 +10,10 @@ import javax.persistence.MappedSuperclass;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Version;
 
-import com.syncnapsis.security.annotations.Accessible;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.syncnapsis.security.annotations.Accessible;
 
 /**
  * Abstrakte Oberklasse als Basis für alle Model-Klassen und somit alle
