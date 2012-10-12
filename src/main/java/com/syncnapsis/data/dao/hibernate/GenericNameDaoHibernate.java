@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.syncnapsis.data.dao.GenericNameDao;
 import com.syncnapsis.data.model.base.BaseObject;
+import com.syncnapsis.exceptions.ObjectNotFoundException;
 
 /**
  * Dao-Implementierung für Hibernate für den generischen Zugriff auf beliebige
@@ -120,7 +121,14 @@ public class GenericNameDaoHibernate<T extends BaseObject<PK>, PK extends Serial
 	@Override
 	public boolean isNameAvailable(String name)
 	{
-		T t = this.getByName(name);
-		return (t == null);
+		try
+		{
+			T t = this.getByName(name);
+			return (t == null);
+		}
+		catch(ObjectNotFoundException e)
+		{
+			return true;
+		}
 	}
 }
