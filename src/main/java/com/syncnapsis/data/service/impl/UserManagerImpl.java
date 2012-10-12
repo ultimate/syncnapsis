@@ -2,6 +2,9 @@ package com.syncnapsis.data.service.impl;
 
 import java.util.Date;
 
+import org.springframework.beans.factory.InitializingBean;
+import org.springframework.util.Assert;
+
 import com.syncnapsis.constants.ApplicationBaseConstants;
 import com.syncnapsis.data.dao.UserDao;
 import com.syncnapsis.data.model.User;
@@ -9,13 +12,12 @@ import com.syncnapsis.data.service.UserManager;
 import com.syncnapsis.data.service.UserRoleManager;
 import com.syncnapsis.enums.EnumAccountStatus;
 import com.syncnapsis.enums.EnumDateFormat;
-import com.syncnapsis.enums.EnumLocale;
 import com.syncnapsis.enums.EnumGender;
+import com.syncnapsis.enums.EnumLocale;
 import com.syncnapsis.exceptions.UserNotFoundException;
 import com.syncnapsis.security.BaseApplicationManager;
 import com.syncnapsis.utils.StringUtil;
-import org.springframework.beans.factory.InitializingBean;
-import org.springframework.util.Assert;
+import com.syncnapsis.utils.TimeZoneUtil;
 
 /**
  * Manager-Implementierung für den Zugriff auf User.
@@ -27,7 +29,6 @@ public class UserManagerImpl extends GenericNameManagerImpl<User, Long> implemen
 	/**
 	 * UserDao für den Datenbankzugriff
 	 */
-	@SuppressWarnings("unused")
 	private UserDao					userDao;
 	/**
 	 * The UserRoleManager
@@ -121,6 +122,8 @@ public class UserManagerImpl extends GenericNameManagerImpl<User, Long> implemen
 	{
 		if(!isNameAvailable(username))
 			return null;
+		if(isEmailRegistered(email))
+			return null;
 		if(password == null)
 			return null;
 		if(!password.equals(passwordConfirm))
@@ -141,17 +144,17 @@ public class UserManagerImpl extends GenericNameManagerImpl<User, Long> implemen
 		// user.setDescription(description);
 		user.setEmail(email);
 		// user.setImageURL(imageURL);
-		// user.setLastActiveDate(lastActiveDate);
+		user.setLastActiveDate(new Date(securityManager.getTimeProvider().get()));
 		user.setLocale(EnumLocale.getDefault()); // TODO get current locale from session
 		// user.setNickname(nickname); // TODO = username?
 		user.setPassword(StringUtil.encodePassword(password, securityManager.getEncryptionAlgorithm()));
-		user.setRegistrationDate(new Date());
+		user.setRegistrationDate(new Date(securityManager.getTimeProvider().get()));
 		user.setRole(userRoleManager.getByName(ApplicationBaseConstants.ROLE_NORMAL_USER));
 		user.setRoleExpireDate(null);
 		user.setSessionTimeout(60); // TODO set default somewhere else?
 		user.setGender(EnumGender.unknown);
 		user.setShowEmail(false);
-		// user.setTimeZoneID(timeZoneID); // TODO get from session?
+		user.setTimeZoneID(TimeZoneUtil.getDefaultID()); // TODO get from session?
 		// user.setTitle(title);
 		user.setUsername(username);
 		user.setUsingAdvancedMenu(false);
@@ -161,5 +164,25 @@ public class UserManagerImpl extends GenericNameManagerImpl<User, Long> implemen
 		user = save(user);
 
 		return user;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see com.syncnapsis.data.service.UserManager#getByEmail(java.lang.String)
+	 */
+	@Override
+	public User getByEmail(String email) throws UserNotFoundException
+	{
+		return userDao.getByEmail(email);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see com.syncnapsis.data.service.UserManager#isEmailRegistered(java.lang.String)
+	 */
+	@Override
+	public boolean isEmailRegistered(String email)
+	{
+		return userDao.isEmailRegistered(email);
 	}
 }

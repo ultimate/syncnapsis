@@ -41,7 +41,7 @@ public class MessengerContactDaoTest extends GenericDaoTestCase<MessengerContact
 	
 	public void testGetByUser() throws Exception
 	{		
-		User user = messengerContactDao.getAll().get(0).getUser();
+		User user = userDao.getByName("user1");
 		List<MessengerContact> result = messengerContactDao.getByUser(user.getId());
 		
 		assertNotNull(result);

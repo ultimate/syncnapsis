@@ -96,4 +96,33 @@ public class UserDaoTest extends GenericNameDaoTestCase<User, Long>
 			assertNotNull(e);
 		}
 	}
+	
+	public void testGetByEmail() throws Exception
+	{
+		User valid = userDao.getByName("admin");
+		
+		User found = userDao.getByEmail(valid.getEmail());
+		
+		assertEquals(valid.getEmail(), found.getEmail());
+		assertEquals(valid.getId(), found.getId());
+		
+		// invalid
+		try
+		{
+			userDao.getByEmail("fake@example.com");
+			fail("Expected Exception nolt occurred!");
+		}
+		catch(UserNotFoundException e)
+		{
+			assertNotNull(e);
+		}
+	}
+	
+	public void testIsEmailRegistered() throws Exception
+	{
+		User valid = userDao.getByName("admin");
+		
+		assertTrue(userDao.isEmailRegistered(valid.getEmail()));
+		assertFalse(userDao.isEmailRegistered("fake@example.com"));
+	}
 }

@@ -11,6 +11,23 @@ import com.syncnapsis.exceptions.UserNotFoundException;
 public interface UserManager extends GenericNameManager<User, Long>
 {
 	/**
+	 * Load a User by it's email address
+	 * 
+	 * @param email - the user's email
+	 * @return the user
+	 * @throws UserNotFoundException - if an invalid email is passed
+	 */
+	public User getByEmail(String email) throws UserNotFoundException;
+
+	/**
+	 * Check wether there is a user registered with the given email.
+	 * 
+	 * @param email - the email to check
+	 * @return true or false
+	 */
+	public boolean isEmailRegistered(String email);
+
+	/**
 	 * Perform the login for a user.<br>
 	 * The password will be encrypted and checked against the database entry.<br>
 	 * If the password matches the session will be initialized with the specified user and the user

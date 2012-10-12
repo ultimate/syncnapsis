@@ -13,8 +13,8 @@ public class UserContactExistsExceptionTest extends BaseDaoTestCase
 	@TestCoversMethods("get*")
 	public void testAddExistingUserContact() throws Exception
 	{
-		Long userId1 = userManager.getByName("user2").getId();
-		Long userId2 = userManager.getByName("user12").getId();
+		Long userId1 = userManager.getByName("user1").getId();
+		Long userId2 = userManager.getByName("user2").getId();
 		
 		try
 		{

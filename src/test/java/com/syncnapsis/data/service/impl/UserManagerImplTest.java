@@ -91,6 +91,7 @@ public class UserManagerImplTest extends GenericNameManagerImplTestCase<User, Lo
 		User newUser = userManager.register(username, email, password, password);
 		
 		assertNotNull(newUser);
+		assertNotNull(newUser.getId());
 		assertEquals(username, newUser.getUsername());
 		assertEquals(email, newUser.getEmail());
 		assertEquals(StringUtil.encodePassword(password, securityManager.getEncryptionAlgorithm()), newUser.getPassword());
@@ -110,5 +111,19 @@ public class UserManagerImplTest extends GenericNameManagerImplTestCase<User, Lo
 		assertNull(userManager.register(existingUser.getUsername(), email, password, password));
 		assertNull(userManager.register(username, existingUser.getEmail(), password, password));
 		assertNull(userManager.register(username, email, password, password.toUpperCase()));
+	}
+	
+	public void testGetByEmail() throws Exception
+	{
+		MethodCall managerCall = new MethodCall("getByEmail", new User(), "mail@example.com");
+		MethodCall daoCall = managerCall;
+		simpleGenericTest(managerCall, daoCall);
+	}
+	
+	public void testIsEmailRegistered() throws Exception
+	{
+		MethodCall managerCall = new MethodCall("isEmailRegistered", true, "mail@example.com");
+		MethodCall daoCall = managerCall;
+		simpleGenericTest(managerCall, daoCall);
 	}
 }

@@ -345,6 +345,23 @@
 			<value description="fkMessenger">5</value>
 		</row>
 	</table>
+	
+	<table name="usercontact">
+		<column>id</column>
+		<column>version</column>
+		<column>fkUser1</column>
+		<column>fkUser2</column>
+		<column>approvedByUser1</column>
+		<column>approvedByUser2</column>
+		<row>
+			<value description="id">1</value>
+			<value description="version">0</value>
+			<value description="fkUser1">1</value>
+			<value description="fkUser2">2</value>
+			<value description="approvedByUser1">1</value>
+			<value description="approvedByUser2">1</value>
+		</row>
+	</table>
 
 	<table name="news">
 		<column>id</column>

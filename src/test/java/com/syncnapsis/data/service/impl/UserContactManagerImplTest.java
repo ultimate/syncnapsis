@@ -47,10 +47,11 @@ public class UserContactManagerImplTest extends GenericManagerImplTestCase<UserC
 	{
 		Long userId1 = userManager.getByName("user1").getId();
 		Long userId2 = userManager.getByName("user2").getId();
-		Long userId3 = userManager.getByName("user12").getId();
+		Long userId3 = userManager.getByName("admin").getId();
 		
 		try
 		{
+			// same user
 			userContactManager.addUserContact(userId1, userId1);
 			fail("expected exception not occurred");
 		}
@@ -60,7 +61,8 @@ public class UserContactManagerImplTest extends GenericManagerImplTestCase<UserC
 		}		
 		try
 		{
-			userContactManager.addUserContact(userId2, userId3);
+			// contact already exists
+			userContactManager.addUserContact(userId1, userId2);
 			fail("expected exception not occurred");
 		}
 		catch(UserContactExistsException e)
@@ -68,10 +70,10 @@ public class UserContactManagerImplTest extends GenericManagerImplTestCase<UserC
 			assertNotNull(e);
 		}
 		
-		UserContact userContact = userContactManager.addUserContact(userId1, userId2);
+		UserContact userContact = userContactManager.addUserContact(userId2, userId3);
 		assertNotNull(userContact);
-		assertEquals(userId1, userContact.getUser1().getId());
-		assertEquals(userId2, userContact.getUser2().getId());
+		assertEquals(userId2, userContact.getUser1().getId());
+		assertEquals(userId3, userContact.getUser2().getId());
 		
 		userContactManager.remove(userContact);
 		

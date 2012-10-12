@@ -1,6 +1,7 @@
 package com.syncnapsis.data.dao.hibernate;
 
 import org.hibernate.exception.ConstraintViolationException;
+
 import com.syncnapsis.data.dao.UserDao;
 import com.syncnapsis.data.model.User;
 import com.syncnapsis.exceptions.UserExistsException;
@@ -24,7 +25,9 @@ public class UserDaoHibernate extends GenericNameDaoHibernate<User, Long> implem
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.syncnapsis.data.dao.hibernate.GenericDaoHibernate#save(com.syncnapsis.data.model.base.BaseObject)
+	 * @see
+	 * com.syncnapsis.data.dao.hibernate.GenericDaoHibernate#save(com.syncnapsis.data.model.base
+	 * .BaseObject)
 	 */
 	@Override
 	public User save(User user)
@@ -53,5 +56,36 @@ public class UserDaoHibernate extends GenericNameDaoHibernate<User, Long> implem
 		if(user == null)
 			throw new UserNotFoundException(name);
 		return user;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see com.syncnapsis.data.dao.UserDao#getByEmail(java.lang.String)
+	 */
+	@Override
+	public User getByEmail(String email) throws UserNotFoundException
+	{
+		User user = (User) createQuery("from User where lower(email)=lower(?) and activated=true", email).uniqueResult();
+		if(user == null)
+			throw new UserNotFoundException(email);
+		return user;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see com.syncnapsis.data.dao.UserDao#isEmailRegistered(java.lang.String)
+	 */
+	@Override
+	public boolean isEmailRegistered(String email)
+	{
+		try
+		{
+			User u = this.getByEmail(email);
+			return (u != null);
+		}
+		catch(UserNotFoundException e)
+		{
+			return false;
+		}
 	}
 }

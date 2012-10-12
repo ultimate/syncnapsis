@@ -19,7 +19,7 @@ public class UserContactDaoTest extends GenericDaoTestCase<UserContact, Long>
 	{
 		super.setUp();
 		
-		Long existingId = userContactDao.getAll().get(0).getId();
+		Long existingId = 1L;
 		
 		UserContact userContact = new UserContact();
 		userContact.setUser1(userDao.getByName("user1"));
@@ -52,8 +52,8 @@ public class UserContactDaoTest extends GenericDaoTestCase<UserContact, Long>
 	
 	public void testGetUserContact() throws Exception
 	{		
-		User user1 = userDao.getByName("user2");
-		User user2 = userDao.getByName("user12");
+		User user1 = userDao.getByName("user1");
+		User user2 = userDao.getByName("user2");
 		UserContact userContact;
 		
 		userContact = userContactDao.getUserContact(user1.getId(), user2.getId());		

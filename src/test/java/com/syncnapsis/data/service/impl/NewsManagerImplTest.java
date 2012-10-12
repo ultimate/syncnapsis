@@ -36,9 +36,22 @@ public class NewsManagerImplTest extends GenericManagerImplTestCase<News, Long, 
 
 	public void testGetIdsByMaxAge() throws Exception
 	{
-		MethodCall managerCall = new MethodCall("getIdsByMaxAge", new ArrayList<Long>(), EnumNewsAge.length1, new Date(timeProvider.get()));
-		MethodCall daoCall = managerCall;
-		simpleGenericTest(managerCall, daoCall);
+		final EnumNewsAge maxAge = EnumNewsAge.length1;
+		final long maxAgeValue = parameterManager.getLong(maxAge.getParameterKey()) * 1000;
+		final Date date = new Date(timeProvider.get());
+		final ArrayList<String> list = new ArrayList<String>();
+
+		mockContext.checking(new Expectations() {
+			{
+				oneOf(mockDao).getIdsByMaxAge(maxAge, maxAgeValue, date);
+				will(returnValue(list));
+			}
+		});
+		
+		List<String> result = mockManager.getIdsByMaxAge(maxAge, date);
+		
+		assertSame(list, result);
+		mockContext.assertIsSatisfied();
 	}
 
 	public void testGetByNewsIdAndLocale() throws Exception
