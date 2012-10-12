@@ -7,7 +7,7 @@ package com.syncnapsis.exceptions;
  * 
  * @author ultimate
  */
-public class UserNotFoundException extends RuntimeException
+public class UserNotFoundException extends ObjectNotFoundException
 {
 	/**
 	 * Default serialVersionUID
@@ -21,6 +21,6 @@ public class UserNotFoundException extends RuntimeException
 	 */
 	public UserNotFoundException(String username)
 	{
-		super("Could not load user: " + username);
+		super("User", username);
 	}
 }
