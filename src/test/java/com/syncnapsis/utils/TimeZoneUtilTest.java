@@ -9,7 +9,7 @@ public class TimeZoneUtilTest extends BaseSpringContextTestCase
 	public void testTimeZoneUtil() throws Exception
 	{
 		logger.debug("testing TimeZoneUtil...");
-
+		
 		assertNotNull(TimeZoneUtil.getRegions());
 		assertEquals(17, TimeZoneUtil.getRegions().size());
 		String lastRegion = "";
@@ -29,5 +29,11 @@ public class TimeZoneUtilTest extends BaseSpringContextTestCase
 			}
 			logger.debug("-> timezone contains " + TimeZoneUtil.getIdsByRegions(currentRegion).size() + " ids");
 		}
+	}
+	
+	public void testGetDefaultID() throws Exception
+	{
+		assertNotNull(TimeZoneUtil.getDefaultID());
+		assertNotNull(TimeZoneUtil.getTimeZone(TimeZoneUtil.getDefaultID()));
 	}
 }

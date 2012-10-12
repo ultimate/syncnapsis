@@ -92,6 +92,16 @@ public abstract class TimeZoneUtil
 	}
 
 	/**
+	 * Return the Default TimeZoneID (e.g. for user registration or first application visits).
+	 * 
+	 * @return the default ID
+	 */
+	public static String getDefaultID()
+	{
+		return TimeZone.getDefault().getID();
+	}
+
+	/**
 	 * Initialisiert die Liste der Regionen und die Map der IDs für die weitere Benutzung.
 	 * Es werden dafür alle verfügbaren timeZondIds aus TimeZone analysiert. Der Teil der timeZoneId
 	 * vor '/' wird als Region interpretiert, der Teil dahinter als ID innerhalb der Region.
