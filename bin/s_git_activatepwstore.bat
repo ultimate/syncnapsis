@@ -10,5 +10,6 @@ if "%accept%"=="n" goto no
 echo invalid selection
 goto accept
 :yes
+git config credential.helper store
 git submodule foreach --recursive git config credential.helper store
 :no
