@@ -30,5 +30,7 @@
     </profiles>
 
     <properties>
+    	<!-- Skip tests, because this is only an archive -->
+    	<maven.test.skip>true</maven.test.skip>
     </properties>
 </project>
