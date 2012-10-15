@@ -13,6 +13,10 @@
 	<bean id="newsDao" class="com.syncnapsis.data.dao.hibernate.NewsDaoHibernate" />
 
 	<bean id="parameterDao" class="com.syncnapsis.data.dao.hibernate.ParameterDaoHibernate" />
+
+	<bean id="playerDao" class="com.syncnapsis.data.dao.hibernate.PlayerDaoHibernate" />
+
+	<bean id="playerRoleDao" class="com.syncnapsis.data.dao.hibernate.PlayerRoleDaoHibernate" />
 	
 	<bean id="userContactDao" class="com.syncnapsis.data.dao.hibernate.UserContactDaoHibernate" />
 	

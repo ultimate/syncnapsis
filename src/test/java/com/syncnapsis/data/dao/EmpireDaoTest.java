@@ -19,7 +19,7 @@ public class EmpireDaoTest extends GenericNameDaoTestCase<Empire, Long>
 	{
 		super.setUp();
 		
-		String existingName = "emp1";
+		String existingName = "E0";
 		Long existingId = empireDao.getByName(existingName).getId();
 		
 		Empire empire = new Empire();
@@ -44,7 +44,7 @@ public class EmpireDaoTest extends GenericNameDaoTestCase<Empire, Long>
 		List<Empire> result = empireDao.getByPlayer(player.getId());
 		
 		assertNotNull(result);
-		assertEquals(5, result.size());
+		assertEquals(1, result.size());
 		
 		for(Empire e: result)
 		{

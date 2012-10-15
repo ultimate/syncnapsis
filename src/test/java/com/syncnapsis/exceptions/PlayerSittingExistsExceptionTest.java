@@ -11,8 +11,8 @@ public class PlayerSittingExistsExceptionTest extends BaseDaoTestCase
 	@TestCoversMethods("get*")
 	public void testAddExistingSitter() throws Exception
 	{
-		Long playerId1 = playerManager.getByUsername("user2").getId();
-		Long playerId2 = playerManager.getByUsername("user25").getId();
+		Long playerId1 = playerManager.getByUsername("user1").getId();
+		Long playerId2 = playerManager.getByUsername("admin").getId();
 		
 		try
 		{

@@ -82,7 +82,7 @@
 			<value description="version">0</value>
 			<value description="activated">1</value>
 			<value description="fkUser">2</value>
-			<value description="fkPlayerrole">2</value>
+			<value description="fkPlayerrole">3</value>
 			<null />
 			<value description="accountStatus">active</value>
 			<null />
@@ -143,7 +143,7 @@
 		<column>fkSitter</column>
 		<row>
 			<value description="fkPlayer">1</value>
-			<value description="fkSitter">2</value>
+			<value description="fkSitter">0</value>
 		</row>
 	</table>
 	

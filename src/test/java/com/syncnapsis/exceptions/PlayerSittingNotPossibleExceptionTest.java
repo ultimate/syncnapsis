@@ -12,7 +12,7 @@ public class PlayerSittingNotPossibleExceptionTest extends BaseDaoTestCase
 	public void testAddFullSitter() throws Exception
 	{
 		Long playerId1 = playerManager.getByUsername("user1").getId();
-		Long playerId2 = playerManager.getByUsername("user25").getId();
+		Long playerId2 = playerManager.getByUsername("user2").getId();
 		
 		try
 		{
@@ -30,7 +30,7 @@ public class PlayerSittingNotPossibleExceptionTest extends BaseDaoTestCase
 	public void testAddFullSitted() throws Exception
 	{
 		Long playerId1 = playerManager.getByUsername("user1").getId();
-		Long playerId2 = playerManager.getByUsername("user25").getId();
+		Long playerId2 = playerManager.getByUsername("user2").getId();
 		
 		try
 		{

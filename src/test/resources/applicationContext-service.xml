@@ -49,10 +49,6 @@
         <constructor-arg ref="userManager"/>
     </bean>
     
-    <bean id="userRankManager" class="com.syncnapsis.data.service.impl.UserRankManagerImpl">
-        <constructor-arg ref="userRankDao"/>
-    </bean>  
-    
     <bean id="userRoleManager" class="com.syncnapsis.data.service.impl.UserRoleManagerImpl">
         <constructor-arg ref="userRoleDao"/>
     </bean>  

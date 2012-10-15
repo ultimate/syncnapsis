@@ -27,6 +27,36 @@ public class GameBaseDataGenerator extends ApplicationBaseDataGenerator implemen
 	protected Map<String, Empire>	empires	= new TreeMap<String, Empire>();
 	protected Map<String, Player>	players	= new TreeMap<String, Player>();
 	
+	public EmpireManager getEmpireManager()
+	{
+		return empireManager;
+	}
+
+	public PlayerManager getPlayerManager()
+	{
+		return playerManager;
+	}
+
+	public PlayerRoleManager getPlayerRoleManager()
+	{
+		return playerRoleManager;
+	}
+
+	public void setEmpireManager(EmpireManager empireManager)
+	{
+		this.empireManager = empireManager;
+	}
+
+	public void setPlayerManager(PlayerManager playerManager)
+	{
+		this.playerManager = playerManager;
+	}
+
+	public void setPlayerRoleManager(PlayerRoleManager playerRoleManager)
+	{
+		this.playerRoleManager = playerRoleManager;
+	}
+
 	@Override
 	public void afterPropertiesSet() throws Exception
 	{

@@ -51,7 +51,7 @@ public class PlayerManagerImplTest extends GenericManagerImplTestCase<Player, Lo
 	{
 		Long playerId1 = playerManager.getByUsername("user1").getId();
 		Long playerId2 = playerManager.getByUsername("user2").getId();
-		Long playerId3 = playerManager.getByUsername("user25").getId();
+		Long playerId3 = playerManager.getByUsername("admin").getId();
 
 		try
 		{
@@ -64,7 +64,7 @@ public class PlayerManagerImplTest extends GenericManagerImplTestCase<Player, Lo
 		}
 		try
 		{
-			playerManager.addSitter(playerId2, playerId3);
+			playerManager.addSitter(playerId1, playerId3);
 			fail("Expected exception not occurred!");
 		}
 		catch(PlayerSittingExistsException e)
@@ -74,34 +74,34 @@ public class PlayerManagerImplTest extends GenericManagerImplTestCase<Player, Lo
 		}
 		try
 		{
-			playerManager.addSitter(playerId3, playerId1);
+			playerManager.addSitter(playerId2, playerId1);
 			fail("Expected exception not occurred!");
 		}
 		catch(PlayerSittingNotPossibleException e)
 		{
 			assertNotNull(e);
-			assertEquals(playerId3, e.getPlayer().getId());
+			assertEquals(playerId2, e.getPlayer().getId());
 		}
 		try
 		{
-			playerManager.addSitter(playerId1, playerId3);
+			playerManager.addSitter(playerId1, playerId2);
 			fail("Expected exception not occurred!");
 		}
 		catch(PlayerSittingNotPossibleException e)
 		{
 			assertNotNull(e);
-			assertEquals(playerId3, e.getPlayer().getId());
+			assertEquals(playerId2, e.getPlayer().getId());
 		}
 
-		Player player1 = playerManager.get(playerId1);
-		Player player2 = playerManager.get(playerId2);
+		Player player1 = playerManager.get(playerId3);
+		Player player2 = playerManager.get(playerId1);
 		int sittersBefore = player1.getSitters().size();
 		int sittedBefore = player2.getSitted().size();
 
 		// add sitter valid
-		player1 = playerManager.addSitter(playerId1, playerId2);
+		player1 = playerManager.addSitter(player1.getId(), player2.getId());
 		assertNotNull(player1);
-		assertEquals(playerId1, player1.getId());
+		assertEquals(playerId3, player1.getId());
 
 		HibernateUtil.getInstance().getSessionFactory().getCurrentSession().flush();
 		HibernateUtil.getInstance().getSessionFactory().getCurrentSession().refresh(player1);
@@ -111,9 +111,9 @@ public class PlayerManagerImplTest extends GenericManagerImplTestCase<Player, Lo
 		assertEquals(sittedBefore + 1, player2.getSitted().size());
 
 		// remove sitter
-		player1 = playerManager.removeSitter(playerId1, playerId2);
+		player1 = playerManager.removeSitter(player1.getId(), player2.getId());
 		assertNotNull(player1);
-		assertEquals(playerId1, player1.getId());
+		assertEquals(playerId3, player1.getId());
 
 		HibernateUtil.getInstance().getSessionFactory().getCurrentSession().flush();
 		HibernateUtil.getInstance().getSessionFactory().getCurrentSession().refresh(player1);

@@ -2,7 +2,7 @@ package com.syncnapsis.providers.impl;
 
 import org.springframework.mock.web.MockHttpSession;
 
-import com.syncnapsis.constants.ApplicationBaseConstants;
+import com.syncnapsis.constants.GameBaseConstants;
 import com.syncnapsis.data.model.Empire;
 import com.syncnapsis.providers.EmpireProvider;
 import com.syncnapsis.providers.SessionProvider;
@@ -24,7 +24,7 @@ public class SessionBasedEmpireProviderTest extends LoggerTestCase
 		
 		p.set(value);
 		
-		assertEquals(ApplicationBaseConstants.SESSION_USER_KEY, p.getAttributeName());
+		assertEquals(GameBaseConstants.SESSION_EMPIRE_KEY, p.getAttributeName());
 		assertEquals(value, p.get());
 		assertNotNull(sp.get().getAttribute(p.getAttributeName()));
 		assertEquals(value, sp.get().getAttribute(p.getAttributeName()));

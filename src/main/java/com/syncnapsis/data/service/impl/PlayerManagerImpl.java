@@ -125,7 +125,7 @@ public class PlayerManagerImpl extends GenericManagerImpl<Player, Long> implemen
 	@Override
 	public Player register(String username, String email, String password, String passwordConfirm)
 	{
-		User user = userManager.register(username, email, password, password);
+		User user = userManager.register(username, email, password, passwordConfirm);
 		if(user == null)
 			return null;
 

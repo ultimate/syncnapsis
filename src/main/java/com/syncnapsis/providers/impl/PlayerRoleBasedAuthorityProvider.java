@@ -23,6 +23,7 @@ public class PlayerRoleBasedAuthorityProvider implements AuthorityProvider
 	public PlayerRoleBasedAuthorityProvider(PlayerProvider playerProvider)
 	{
 		Assert.notNull(playerProvider, "playerProvider must not be null!");
+		this.playerProvider = playerProvider;
 	}
 
 	/*
