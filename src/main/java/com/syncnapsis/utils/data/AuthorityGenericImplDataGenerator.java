@@ -27,6 +27,11 @@ public class AuthorityGenericImplDataGenerator extends AuthorityDataGenerator<Au
 	@Override
 	public void afterPropertiesSet() throws Exception
 	{
+		// @formatter:off
+		this.setExcludeTableList(new String[] {
+				});
+		// @formatter:on
+		
 		super.afterPropertiesSet();
 		
 		Assert.notNull(authorityManager, "authorityManager must not be null!");

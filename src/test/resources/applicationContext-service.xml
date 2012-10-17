@@ -6,10 +6,6 @@
             http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.0.xsd"
        default-lazy-init="true">
     
-    <!-- =================================================================== -->
-    <!-- Managers: For accessing DAOs                                        -->
-    <!-- =================================================================== -->     
-    
     <bean id="authoritiesManager" class="com.syncnapsis.data.service.impl.AuthoritiesGenericImplManagerImpl">
         <constructor-arg ref="authoritiesDao"/>
     </bean>  

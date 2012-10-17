@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE dataset SYSTEM "dataset.dtd">
-<dataset>
-	
+<dataset>	
 	
 	<table name="authoritygroup">
 		<column>id</column>
@@ -137,6 +136,16 @@
 			<value description="version">1</value>
 			<value description="name">allowedToSendAllianceMail</value>
 			<value description="fkAuthorityGroup">2</value>
+		</row>
+	</table>
+	
+	<table name="authorities">
+		<column>id</column>
+		<column>version</column>
+		<row>
+			<!-- dummy -->
+			<value description="id">1</value>
+			<value description="version">0</value>
 		</row>
 	</table>
 </dataset>
