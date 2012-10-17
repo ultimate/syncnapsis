@@ -175,6 +175,11 @@ public class PoliticsComplexImplDataGenerator extends PoliticsDataGenerator
 	@Override
 	public void afterPropertiesSet() throws Exception
 	{
+		// @formatter:off
+		this.setExcludeTableList(new String[] {
+				});
+		// @formatter:on
+		
 		super.afterPropertiesSet();
 
 		Assert.notNull(authorityDataGenerator, "authorityDataGenerator must not be null!");
@@ -279,6 +284,8 @@ public class PoliticsComplexImplDataGenerator extends PoliticsDataGenerator
 				contactGroup = contactGroupManager.save(contactGroup);
 
 				logger.debug("created contact group '" + e.getKey() + "' for alliance '" + alliance.getShortName() + "'");
+				
+				// TODO process authorities?
 			}
 		}
 
