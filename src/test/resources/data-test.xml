@@ -57,6 +57,7 @@
 		<column>roleExpireDate</column>
 		<column>accountStatus</column>
 		<column>accountStatusExpireDate</column>
+		<column>bot</column>
 		<row>
 			<value description="id">0</value>
 			<value description="version">0</value>
@@ -66,6 +67,7 @@
 			<null />
 			<value description="accountStatus">active</value>
 			<null />
+			<value description="bot">0</value>
 		</row>
 		<row>
 			<value description="id">1</value>
@@ -76,6 +78,7 @@
 			<null />
 			<value description="accountStatus">active</value>
 			<null />
+			<value description="bot">0</value>
 		</row>
 		<row>
 			<value description="id">2</value>
@@ -86,6 +89,7 @@
 			<null />
 			<value description="accountStatus">active</value>
 			<null />
+			<value description="bot">0</value>
 		</row>
 	</table>
 	

@@ -60,6 +60,11 @@ public class Player extends ActivatableInstance<Long>
 	protected Date				accountStatusExpireDate;
 	
 	/**
+	 * Is this player played by a bot?
+	 */
+	protected boolean			bot;
+	
+	/**
 	 * Liste der Sitter
 	 */
 	protected List<Player>		sitters;
@@ -146,6 +151,17 @@ public class Player extends ActivatableInstance<Long>
 	public Date getAccountStatusExpireDate()
 	{
 		return accountStatusExpireDate;
+	}
+
+	/**
+	 * 
+	 * Is this player played by a bot?
+	 * @return bot
+	 */
+	@Column(nullable = false)
+	public boolean isBot()
+	{
+		return bot;
 	}
 
 	/**
@@ -246,6 +262,16 @@ public class Player extends ActivatableInstance<Long>
 	public void setAccountStatusExpireDate(Date accountStatusExpireDate)
 	{
 		this.accountStatusExpireDate = accountStatusExpireDate;
+	}
+
+	/**
+	 * 
+	 * Is this player played by a bot?
+	 * @param bot - true or false
+	 */
+	public void setBot(boolean bot)
+	{
+		this.bot = bot;
 	}
 
 	/**
