@@ -76,13 +76,4 @@ public interface Model
 	 * Standard-Länge für Sprach-Schlüssel
 	 */
 	public static final int	LENGTH_LANGUAGE_KEY		= 100;
-
-	/**
-	 * Standard-Länge für ZK-Drag&Drop-Spezifikationen
-	 */
-	public static final int	LENGTH_ZK_DRAG_AND_DROP	= 100;
-	/**
-	 * Standard-Länge für Positionsangaben
-	 */
-	public static final int	LENGTH_ZK_POSITION		= 20;
 }
