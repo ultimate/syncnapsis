@@ -4,10 +4,28 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd"
 	default-lazy-init="true">
 
-	<bean id="playerRankDao" class="com.syncnapsis.data.dao.hibernate.PlayerRankDaoHibernate" />
+	<bean id="empireDao" class="com.syncnapsis.data.dao.hibernate.EmpireDaoHibernate" />
 
 	<bean id="empireRankDao" class="com.syncnapsis.data.dao.hibernate.EmpireRankDaoHibernate" />
 
-	<bean id="allianceRankDao" class="com.syncnapsis.data.dao.hibernate.AllianceRankDaoHibernate" />
+	<bean id="messengerContactDao" class="com.syncnapsis.data.dao.hibernate.MessengerContactDaoHibernate" />
+	
+	<bean id="messengerDao" class="com.syncnapsis.data.dao.hibernate.MessengerDaoHibernate" />
+
+	<bean id="newsDao" class="com.syncnapsis.data.dao.hibernate.NewsDaoHibernate" />
+
+	<bean id="parameterDao" class="com.syncnapsis.data.dao.hibernate.ParameterDaoHibernate" />
+
+	<bean id="playerDao" class="com.syncnapsis.data.dao.hibernate.PlayerDaoHibernate" />
+
+	<bean id="playerRankDao" class="com.syncnapsis.data.dao.hibernate.PlayerRankDaoHibernate" />
+
+	<bean id="playerRoleDao" class="com.syncnapsis.data.dao.hibernate.PlayerRoleDaoHibernate" />
+	
+	<bean id="userContactDao" class="com.syncnapsis.data.dao.hibernate.UserContactDaoHibernate" />
+	
+	<bean id="userDao" class="com.syncnapsis.data.dao.hibernate.UserDaoHibernate" />
+	
+	<bean id="userRoleDao" class="com.syncnapsis.data.dao.hibernate.UserRoleDaoHibernate" />
 	
 </beans>

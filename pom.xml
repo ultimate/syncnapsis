@@ -35,5 +35,11 @@
     </profiles>
 
     <properties>
+		<!-- Global-Dependencies -->
+		<!-- servlet.version - see super pom -->
+		
+		<!-- Profiles, Deployment etc. -->
+		<db.dbunit.skip>false</db.dbunit.skip>
+		<db.hibernate.skip>false</db.hibernate.skip>
     </properties>
 </project>

@@ -31,10 +31,14 @@ public class StatsBaseImplDataGenerator extends StatsDataGenerator
 	@Override
 	public void afterPropertiesSet() throws Exception
 	{
+		// @formatter:off
+		this.setExcludeTableList(new String[] {
+				});
+		// @formatter:on
+		
 		super.afterPropertiesSet();
 		
 		Assert.notNull(timeProvider, "timeProvider must not be null!");
-
 	}
 
 	public <T extends BaseObject<?>, R extends Rank<T>> R createRankSimple(Class<? extends R> rankClass, T entity, int totalPoints)
@@ -53,34 +57,67 @@ public class StatsBaseImplDataGenerator extends StatsDataGenerator
 		{
 			int categoryCount = 0;
 			int criterionCount = 0;
-			for(String category : categories)
+			
+			if(categories.size() == 1)
 			{
-				if(category.equals(RankCriterion.defaultCategory))
-					continue;
-				categoryCount++;
-				if(categoryCount == categories.size() - 1)
-					currentPoints = pointsRemaining;
-				else
-					currentPoints = totalPoints / (categories.size() - 1);
-				pointsRemaining -= currentPoints;
-
-				points.put(category, currentPoints);
+				// only default/main category
+				String category = categories.toArray(new String[1])[0];
 
 				criterions = Rank.getAvailableCriterions(rankClass, category);
-				subpointsRemaining = currentPoints;
+				subpointsRemaining = totalPoints;
 
 				criterionCount = 0;
 				for(String criterion : criterions)
 				{
+					if(criterion.equals(Rank.getPrimaryCriterion(rankClass, category)))
+						continue;
 					criterionCount++;
-					if(criterionCount == criterions.size())
+					if(criterionCount == criterions.size() - 1)
 						currentSubpoints = subpointsRemaining;
 					else
-						currentSubpoints = currentPoints / criterions.size();
+						currentSubpoints = totalPoints / (criterions.size() - 1);
 					subpointsRemaining -= currentSubpoints;
 
 					points.put(criterion, currentSubpoints);
 				}
+				
+				points.put(Rank.getPrimaryCriterion(rankClass, category), totalPoints);
+			}
+			else
+			{
+			
+				for(String category : categories)
+				{
+					if(category.equals(RankCriterion.defaultCategory))
+						continue;
+					categoryCount++;
+					if(categoryCount == categories.size() - 1)
+						currentPoints = pointsRemaining;
+					else
+						currentPoints = totalPoints / (categories.size() - 1);
+					pointsRemaining -= currentPoints;
+	
+					points.put(category, currentPoints);
+	
+					criterions = Rank.getAvailableCriterions(rankClass, category);
+					subpointsRemaining = currentPoints;
+	
+					criterionCount = 0;
+					for(String criterion : criterions)
+					{
+						if(criterion.equals(Rank.getPrimaryCriterion(rankClass, category)))
+							continue;
+						criterionCount++;
+						if(criterionCount == criterions.size())
+							currentSubpoints = subpointsRemaining;
+						else
+							currentSubpoints = currentPoints / criterions.size();
+						subpointsRemaining -= currentSubpoints;
+	
+						points.put(criterion, currentSubpoints);
+					}
+				}
+				points.put(Rank.getPrimaryCriterion(rankClass, RankCriterion.defaultCategory), totalPoints);
 			}
 		}
 		catch(Exception e)

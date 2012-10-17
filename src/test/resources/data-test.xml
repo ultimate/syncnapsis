@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE dataset SYSTEM "dataset.dtd">
+<dataset>	
+	
+	<table name="empirerank">
+		<column>id</column>
+		<column>version</column>
+		<column>fkEntity</column>
+		<column>timeOfCalculation</column>
+		<column>actual</column>
+		<column>economy</column>
+		<column>military</column>
+		<column>science</column>
+		<column>total</column>
+		<row>
+			<value description="id">0</value>
+			<value description="version">1</value>
+			<value description="fkEntity">0</value>
+			<value description="timeOfCalculation">2012-01-01</value>
+			<value description="actual">1</value>
+			<value description="economy">100</value>
+			<value description="military">100</value>
+			<value description="science">100</value>
+			<value description="total">300</value>
+		</row>
+		<row>
+			<value description="id">1</value>
+			<value description="version">1</value>
+			<value description="fkEntity">1</value>
+			<value description="timeOfCalculation">2012-01-01</value>
+			<value description="actual">1</value>
+			<value description="economy">100</value>
+			<value description="military">100</value>
+			<value description="science">100</value>
+			<value description="total">300</value>
+		</row>
+		<row>
+			<value description="id">2</value>
+			<value description="version">1</value>
+			<value description="fkEntity">2</value>
+			<value description="timeOfCalculation">2012-01-01</value>
+			<value description="actual">1</value>
+			<value description="economy">100</value>
+			<value description="military">100</value>
+			<value description="science">100</value>
+			<value description="total">300</value>
+		</row>
+	</table>
+	
+	<table name="playerrank">
+		<column>id</column>
+		<column>version</column>
+		<column>fkEntity</column>
+		<column>timeOfCalculation</column>
+		<column>actual</column>
+		<column>numberOfEmpires</column>
+		<column>economy</column>
+		<column>averageEconomy</column>
+		<column>military</column>
+		<column>averageMilitary</column>
+		<column>averageScience</column>
+		<column>science</column>
+		<column>averageTotal</column>
+		<column>total</column>
+		<row>
+			<value description="id">0</value>
+			<value description="version">1</value>
+			<value description="fkEntity">0</value>
+			<value description="timeOfCalculation">2012-01-01</value>
+			<value description="actual">1</value>
+			<value description="numberOfEmpires">1</value>
+			<value description="economy">100</value>
+			<value description="averageEconomy">100</value>
+			<value description="military">100</value>
+			<value description="averageMilitary">100</value>
+			<value description="science">100</value>
+			<value description="averageScience">100</value>
+			<value description="total">300</value>
+			<value description="averageTotal">300</value>
+		</row>
+		<row>
+			<value description="id">1</value>
+			<value description="version">1</value>
+			<value description="fkEntity">1</value>
+			<value description="timeOfCalculation">2012-01-01</value>
+			<value description="actual">1</value>
+			<value description="numberOfEmpires">1</value>
+			<value description="economy">100</value>
+			<value description="averageEconomy">100</value>
+			<value description="military">100</value>
+			<value description="averageMilitary">100</value>
+			<value description="science">100</value>
+			<value description="averageScience">100</value>
+			<value description="total">300</value>
+			<value description="averageTotal">300</value>
+		</row>
+		<row>
+			<value description="id">2</value>
+			<value description="version">1</value>
+			<value description="fkEntity">2</value>
+			<value description="timeOfCalculation">2012-01-01</value>
+			<value description="actual">1</value>
+			<value description="numberOfEmpires">1</value>
+			<value description="economy">100</value>
+			<value description="averageEconomy">100</value>
+			<value description="military">100</value>
+			<value description="averageMilitary">100</value>
+			<value description="science">100</value>
+			<value description="averageScience">100</value>
+			<value description="total">300</value>
+			<value description="averageTotal">300</value>
+		</row>
+	</table>
+</dataset>
