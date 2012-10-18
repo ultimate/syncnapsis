@@ -12,13 +12,19 @@
 
 	<bean id="allianceRankDao" class="com.syncnapsis.data.dao.hibernate.AllianceRankDaoHibernate" />
 
+	<bean id="authoritiesDao" class="com.syncnapsis.data.dao.hibernate.AuthoritiesGenericImplDaoHibernate" />
+
+	<bean id="authorityGroupDao" class="com.syncnapsis.data.dao.hibernate.AuthorityGroupDaoHibernate" />
+
+	<bean id="authorityDao" class="com.syncnapsis.data.dao.hibernate.AuthorityDaoHibernate" />
+	
 	<bean id="contactGroupDao" class="com.syncnapsis.data.dao.hibernate.ContactGroupDaoHibernate" />
 
 	<bean id="empireAllianceContactDao" class="com.syncnapsis.data.dao.hibernate.EmpireAllianceContactDaoHibernate" />
 
 	<bean id="empireDao" class="com.syncnapsis.data.dao.hibernate.EmpireDaoHibernate" />
 
-	<bean id="empireEmpireContactDao" class="com.syncnapsis.data.dao.hibernate.EmpireAllianceContactDaoHibernate" />
+	<bean id="empireEmpireContactDao" class="com.syncnapsis.data.dao.hibernate.EmpireEmpireContactDaoHibernate" />
 	
 	<bean id="empireRankDao" class="com.syncnapsis.data.dao.hibernate.EmpireRankDaoHibernate" />
 

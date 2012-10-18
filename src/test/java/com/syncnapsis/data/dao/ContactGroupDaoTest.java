@@ -39,11 +39,11 @@ public class ContactGroupDaoTest extends GenericDaoTestCase<ContactGroup, Long>
 	
 	public void testGetByEmpire() throws Exception
 	{
-		Empire empire = empireDao.getByName("emp1");
+		Empire empire = empireDao.getByName("E1");
 		List<ContactGroup> result = contactGroupDao.getByEmpire(empire.getId());
 		
 		assertNotNull(result);
-		assertEquals(6, result.size());
+		assertEquals(1, result.size());
 		
 		for(ContactGroup cg: result)
 		{
@@ -53,11 +53,11 @@ public class ContactGroupDaoTest extends GenericDaoTestCase<ContactGroup, Long>
 	
 	public void testGetByAlliance() throws Exception
 	{
-		Alliance alliance = allianceDao.getByName("alliance1");
+		Alliance alliance = allianceDao.getByName("A1");
 		List<ContactGroup> result = contactGroupDao.getByAlliance(alliance.getId());
 		
 		assertNotNull(result);
-		assertEquals(6, result.size());
+		assertEquals(1, result.size());
 		
 		for(ContactGroup cg: result)
 		{

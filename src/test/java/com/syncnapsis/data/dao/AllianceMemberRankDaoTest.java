@@ -39,11 +39,11 @@ public class AllianceMemberRankDaoTest extends GenericDaoTestCase<AllianceMember
 	
 	public void testGetByEmpire() throws Exception
 	{
-		Empire empire = empireDao.getByName("emp10");
+		Empire empire = empireDao.getByName("E1");
 		List<AllianceMemberRank> result = allianceMemberRankDao.getByEmpire(empire.getId());
 		
 		assertNotNull(result);
-		assertEquals(2, result.size());
+		assertEquals(1, result.size());
 		
 		for(AllianceMemberRank allianceMemberRank: result)
 		{

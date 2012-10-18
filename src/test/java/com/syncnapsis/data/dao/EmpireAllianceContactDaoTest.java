@@ -21,10 +21,10 @@ public class EmpireAllianceContactDaoTest extends GenericDaoTestCase<EmpireAllia
 		Long existingId = empireAllianceContactDao.getAll().get(0).getId();
 
 		EmpireAllianceContact empireAllianceContact = new EmpireAllianceContact();
-		empireAllianceContact.setContact1(empireDao.getAll().get(0));
-		empireAllianceContact.setContact2(allianceDao.getAll().get(0));
-		empireAllianceContact.setContactAuthorities1(authoritiesDao.getAll().get(0));
-		empireAllianceContact.setContactAuthorities2(authoritiesDao.getAll().get(1));
+		empireAllianceContact.setContact1(empireDao.get(0L));
+		empireAllianceContact.setContact2(allianceDao.get(0L));
+		empireAllianceContact.setContactAuthorities1(authoritiesDao.get(1L));
+		empireAllianceContact.setContactAuthorities2(authoritiesDao.get(1L));
 		empireAllianceContact.setApprovedByContact1(true);
 		empireAllianceContact.setApprovedByContact2(true);
 

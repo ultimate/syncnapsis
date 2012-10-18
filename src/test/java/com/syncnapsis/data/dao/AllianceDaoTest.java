@@ -20,7 +20,7 @@ public class AllianceDaoTest extends GenericNameDaoTestCase<Alliance, Long>
 	{
 		super.setUp();
 
-		String existingName = "alliance1";
+		String existingName = "A0";
 		Long existingId = allianceDao.getByName(existingName).getId();
 
 		Alliance alliance = new Alliance();
@@ -40,11 +40,11 @@ public class AllianceDaoTest extends GenericNameDaoTestCase<Alliance, Long>
 	
 	public void testGetByEmpire() throws Exception
 	{
-		Empire empire = empireDao.getByName("emp10");
+		Empire empire = empireDao.getByName("E1");
 		List<Alliance> result = allianceDao.getByEmpire(empire.getId());
 		
 		assertNotNull(result);
-		assertEquals(2, result.size());
+		assertEquals(1, result.size());
 		
 		boolean found;
 		for(Alliance alliance: result)

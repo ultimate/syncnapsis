@@ -5,10 +5,10 @@ import com.syncnapsis.data.model.contacts.EmpireEmpireContact;
 import com.syncnapsis.tests.GenericDaoTestCase;
 import com.syncnapsis.tests.annotations.TestCoversClasses;
 
-@TestCoversClasses( { EmpireEmpireContactDao.class, EmpireEmpireContactDaoHibernate.class })
+@TestCoversClasses({ EmpireEmpireContactDao.class, EmpireEmpireContactDaoHibernate.class })
 public class EmpireEmpireContactDaoTest extends GenericDaoTestCase<EmpireEmpireContact, Long>
 {
-	private EmpireEmpireContactDao	empireEmpireContactDao;
+	private EmpireEmpireContactDao		empireEmpireContactDao;
 	private EmpireDao					empireDao;
 	private AuthoritiesGenericImplDao	authoritiesDao;
 
@@ -20,10 +20,10 @@ public class EmpireEmpireContactDaoTest extends GenericDaoTestCase<EmpireEmpireC
 		Long existingId = empireEmpireContactDao.getAll().get(0).getId();
 
 		EmpireEmpireContact empireEmpireContact = new EmpireEmpireContact();
-		empireEmpireContact.setContact1(empireDao.getAll().get(0));
-		empireEmpireContact.setContact2(empireDao.getAll().get(1));
-		empireEmpireContact.setContactAuthorities1(authoritiesDao.getAll().get(0));
-		empireEmpireContact.setContactAuthorities2(authoritiesDao.getAll().get(1));
+		empireEmpireContact.setContact1(empireDao.get(0L));
+		empireEmpireContact.setContact2(empireDao.get(1L));
+		empireEmpireContact.setContactAuthorities1(authoritiesDao.get(1L));
+		empireEmpireContact.setContactAuthorities2(authoritiesDao.get(1L));
 		empireEmpireContact.setApprovedByContact1(true);
 		empireEmpireContact.setApprovedByContact2(true);
 

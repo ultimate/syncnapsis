@@ -20,10 +20,10 @@ public class AllianceAllianceContactDaoTest extends GenericDaoTestCase<AllianceA
 		Long existingId = allianceAllianceContactDao.getAll().get(0).getId();
 
 		AllianceAllianceContact allianceAllianceContact = new AllianceAllianceContact();
-		allianceAllianceContact.setContact1(allianceDao.getAll().get(0));
-		allianceAllianceContact.setContact2(allianceDao.getAll().get(1));
-		allianceAllianceContact.setContactAuthorities1(authoritiesDao.getAll().get(0));
-		allianceAllianceContact.setContactAuthorities2(authoritiesDao.getAll().get(1));
+		allianceAllianceContact.setContact1(allianceDao.get(0L));
+		allianceAllianceContact.setContact2(allianceDao.get(1L));
+		allianceAllianceContact.setContactAuthorities1(authoritiesDao.get(1L));
+		allianceAllianceContact.setContactAuthorities2(authoritiesDao.get(1L));
 		allianceAllianceContact.setApprovedByContact1(true);
 		allianceAllianceContact.setApprovedByContact2(true);
 

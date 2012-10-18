@@ -34,7 +34,7 @@
 			<value description="secondaryColor">#000000</value>
 		</row>
 	</table>
-	
+
 	<table name="alliancerank">
 		<column>id</column>
 		<column>version</column>
@@ -96,7 +96,7 @@
 			<value description="id">0</value>
 			<value description="version">1</value>
 			<value description="fkAlliance">0</value>
-			<value description="fkAuthorities">2</value>
+			<value description="fkAuthorities">1</value>
 			<value description="rankName">default Rank</value>
 			<value description="voteWeight">1</value>
 			<value description="visible">1</value>
@@ -105,13 +105,13 @@
 			<value description="id">1</value>
 			<value description="version">1</value>
 			<value description="fkAlliance">1</value>
-			<value description="fkAuthorities">2</value>
+			<value description="fkAuthorities">1</value>
 			<value description="rankName">default Rank</value>
 			<value description="voteWeight">1</value>
 			<value description="visible">1</value>
 		</row>
 	</table>
-	
+
 	<table name="alliancemember">
 		<column>fkAllianceMemberRank</column>
 		<column>fkEmpire</column>
@@ -124,7 +124,7 @@
 			<value description="fkEmpire">2</value>
 		</row>
 	</table>
-	
+
 	<table name="contactGroup">
 		<column>id</column>
 		<column>version</column>
@@ -170,37 +170,148 @@
 			<value description="defaultVisible">1</value>
 		</row>
 	</table>
+
+	<table name="alliancealliancecontact">
+		<column>id</column>
+		<column>version</column>
+		<column>equalContactAuthorities</column>
+		<column>fkContact1</column>
+		<column>fkContactAuthorities1</column>
+		<column>fkChangedContactAuthorities1</column>
+		<column>approvedByContact1</column>
+		<column>changesApprovedByContact1</column>
+		<column>defaultVisible1</column>
+		<column>fkContact2</column>
+		<column>fkContactAuthorities2</column>
+		<column>fkChangedContactAuthorities2</column>
+		<column>approvedByContact2</column>
+		<column>changesApprovedByContact2</column>
+		<column>defaultVisible2</column>
+		<row>
+			<value description="id">1</value>
+			<value description="version">1</value>
+			<value description="equalContactAuthorities">1</value>
+			<value description="fkContact1">0</value>
+			<value description="fkContactAuthorities1">1</value>
+			<null />
+			<value description="approvedByContact1">1</value>
+			<value description="changesApprovedByContact1">1</value>
+			<value description="defaultVisible1">1</value>
+			<value description="fkContact2">1</value>
+			<value description="fkContactAuthorities2">1</value>
+			<null />
+			<value description="approvedByContact2">1</value>
+			<value description="changesApprovedByContact2">1</value>
+			<value description="defaultVisible2">1</value>
+		</row>
+	</table>
+
+	<table name="empirealliancecontact">
+		<column>id</column>
+		<column>version</column>
+		<column>equalContactAuthorities</column>
+		<column>fkContact1</column>
+		<column>fkContactAuthorities1</column>
+		<column>fkChangedContactAuthorities1</column>
+		<column>approvedByContact1</column>
+		<column>changesApprovedByContact1</column>
+		<column>defaultVisible1</column>
+		<column>fkContact2</column>
+		<column>fkContactAuthorities2</column>
+		<column>fkChangedContactAuthorities2</column>
+		<column>approvedByContact2</column>
+		<column>changesApprovedByContact2</column>
+		<column>defaultVisible2</column>
+		<row>
+			<value description="id">1</value>
+			<value description="version">1</value>
+			<value description="equalContactAuthorities">1</value>
+			<value description="fkContact1">2</value>
+			<value description="fkContactAuthorities1">1</value>
+			<null />
+			<value description="approvedByContact1">1</value>
+			<value description="changesApprovedByContact1">1</value>
+			<value description="defaultVisible1">1</value>
+			<value description="fkContact2">1</value>
+			<value description="fkContactAuthorities2">1</value>
+			<null />
+			<value description="approvedByContact2">1</value>
+			<value description="changesApprovedByContact2">1</value>
+			<value description="defaultVisible2">1</value>
+		</row>
+	</table>
 	
-	aac
-	
-	eac
-	
-	eec
+	<table name="empireempirecontact">
+		<column>id</column>
+		<column>version</column>
+		<column>equalContactAuthorities</column>
+		<column>fkContact1</column>
+		<column>fkContactAuthorities1</column>
+		<column>fkChangedContactAuthorities1</column>
+		<column>approvedByContact1</column>
+		<column>changesApprovedByContact1</column>
+		<column>defaultVisible1</column>
+		<column>fkContact2</column>
+		<column>fkContactAuthorities2</column>
+		<column>fkChangedContactAuthorities2</column>
+		<column>approvedByContact2</column>
+		<column>changesApprovedByContact2</column>
+		<column>defaultVisible2</column>
+		<row>
+			<value description="id">1</value>
+			<value description="version">1</value>
+			<value description="equalContactAuthorities">1</value>
+			<value description="fkContact1">1</value>
+			<value description="fkContactAuthorities1">1</value>
+			<null />
+			<value description="approvedByContact1">1</value>
+			<value description="changesApprovedByContact1">1</value>
+			<value description="defaultVisible1">1</value>
+			<value description="fkContact2">2</value>
+			<value description="fkContactAuthorities2">1</value>
+			<null />
+			<value description="approvedByContact2">1</value>
+			<value description="changesApprovedByContact2">1</value>
+			<value description="defaultVisible2">1</value>
+		</row>
+	</table>
 	
 	<table name="alliancealliancecontactgroup">
 		<column>fkAllianceAllianceContact</column>
 		<column>fkContactGroup</column>
-		<row>	
-			<value description="fkAllianceAllianceContact"></value>
-			<value description="fkContactGroup"></value>
+		<row>
+			<value description="fkAllianceAllianceContact">1</value>
+			<value description="fkContactGroup">0</value>
+		</row>
+		<row>
+			<value description="fkAllianceAllianceContact">1</value>
+			<value description="fkContactGroup">1</value>
 		</row>
 	</table>
-	
+
 	<table name="empirealliancecontactgroup">
 		<column>fkEmpireAllianceContact</column>
 		<column>fkContactGroup</column>
-		<row>	
-			<value description="fkEmpireAllianceContact"></value>
-			<value description="fkContactGroup"></value>
+		<row>
+			<value description="fkEmpireAllianceContact">1</value>
+			<value description="fkContactGroup">0</value>
+		</row>
+		<row>
+			<value description="fkEmpireAllianceContact">1</value>
+			<value description="fkContactGroup">3</value>
 		</row>
 	</table>
-	
+
 	<table name="empireempirecontactgroup">
 		<column>fkEmpireEmpireContact</column>
 		<column>fkContactGroup</column>
-		<row>	
-			<value description="fkEmpireEmpireContact"></value>
-			<value description="fkContactGroup"></value>
+		<row>
+			<value description="fkEmpireEmpireContact">1</value>
+			<value description="fkContactGroup">2</value>
+		</row>
+		<row>
+			<value description="fkEmpireEmpireContact">1</value>
+			<value description="fkContactGroup">3</value>
 		</row>
 	</table>
 </dataset>
