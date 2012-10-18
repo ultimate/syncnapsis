@@ -25,11 +25,6 @@
 			<version>${syncnapsis-core-application-base.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>com.syncnapsis.syncnapsis-modules</groupId>
-			<artifactId>syncnapsis-modules-stats-api</artifactId>
-			<version>${syncnapsis-modules-stats-api.version}</version>
-		</dependency>
-		<dependency>
 			<groupId>com.syncnapsis.syncnapsis-core</groupId>
 			<artifactId>syncnapsis-core-websockets</artifactId>
 			<version>${syncnapsis-core-websockets.version}</version>
