@@ -220,7 +220,7 @@ public class GUIWindowParams extends BaseObject<Long>
 	 * (non-Javadoc)
 	 * @see com.syncnapsis.ui.components.GUIWindow#getDraggable()
 	 */
-	@Column(nullable = true, length = LENGTH_ZK_DRAG_AND_DROP)
+	@Column(nullable = true, length = LENGTH_PARAMETERVALUE)
 	public String getDraggable()
 	{
 		return draggable;
@@ -230,7 +230,7 @@ public class GUIWindowParams extends BaseObject<Long>
 	 * (non-Javadoc)
 	 * @see com.syncnapsis.ui.components.GUIWindow#getDroppable()
 	 */
-	@Column(nullable = true, length = LENGTH_ZK_DRAG_AND_DROP)
+	@Column(nullable = true, length = LENGTH_PARAMETERVALUE)
 	public String getDroppable()
 	{
 		return droppable;
@@ -240,7 +240,7 @@ public class GUIWindowParams extends BaseObject<Long>
 	 * (non-Javadoc)
 	 * @see com.syncnapsis.ui.components.GUIWindow#getPosition()
 	 */
-	@Column(nullable = true, length = LENGTH_ZK_POSITION)
+	@Column(nullable = true, length = LENGTH_PARAMETERVALUE)
 	public String getPosition()
 	{
 		return position;
@@ -251,7 +251,7 @@ public class GUIWindowParams extends BaseObject<Long>
 	 * @see com.syncnapsis.ui.components.GUIWindow#getLeft()
 	 */
 	// left ist ein reserviertes Wort und darf nicht als Spalte vorkommen
-	@Column(name = "positionLeft", nullable = false, length = LENGTH_ZK_POSITION)
+	@Column(name = "positionLeft", nullable = false, length = LENGTH_PARAMETERVALUE)
 	public String getLeft()
 	{
 		return left;
@@ -262,7 +262,7 @@ public class GUIWindowParams extends BaseObject<Long>
 	 * @see com.syncnapsis.ui.components.GUIWindow#getTop()
 	 */
 	// top wird analog zu left angepasst (damit es einheitlich ist)
-	@Column(name = "positionTop", nullable = false, length = LENGTH_ZK_POSITION)
+	@Column(name = "positionTop", nullable = false, length = LENGTH_PARAMETERVALUE)
 	public String getTop()
 	{
 		return top;
@@ -282,7 +282,7 @@ public class GUIWindowParams extends BaseObject<Long>
 	 * (non-Javadoc)
 	 * @see com.syncnapsis.ui.components.GUIWindow#getHeight()
 	 */
-	@Column(nullable = false, length = LENGTH_ZK_POSITION)
+	@Column(nullable = false, length = LENGTH_PARAMETERVALUE)
 	public String getHeight()
 	{
 		return height;
@@ -302,7 +302,7 @@ public class GUIWindowParams extends BaseObject<Long>
 	 * (non-Javadoc)
 	 * @see com.syncnapsis.ui.components.GUIWindow#getWidth()
 	 */
-	@Column(nullable = false, length = LENGTH_ZK_POSITION)
+	@Column(nullable = false, length = LENGTH_PARAMETERVALUE)
 	public String getWidth()
 	{
 		return width;
