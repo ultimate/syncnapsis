@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+            http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd
+            http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.0.xsd"
+       default-lazy-init="true">
+    
+    <bean id="empireManager" class="com.syncnapsis.data.service.impl.EmpireManagerImpl">
+        <constructor-arg ref="empireDao"/>
+    </bean>  
+    
+    <bean id="galaxyManager" class="com.syncnapsis.data.service.impl.GalaxyManagerImpl">
+        <constructor-arg ref="galaxyDao"/>
+    </bean>  
+    
+    <bean id="matchManager" class="com.syncnapsis.data.service.impl.MatchManagerImpl">
+        <constructor-arg ref="matchDao"/>
+    </bean>  
+    
+    <bean id="messengerContactManager" class="com.syncnapsis.data.service.impl.MessengerContactManagerImpl">
+        <constructor-arg ref="messengerContactDao"/>
+    </bean>
+    
+    <bean id="messengerManager" class="com.syncnapsis.data.service.impl.MessengerManagerImpl">
+        <constructor-arg ref="messengerDao"/>
+    </bean>
+    
+    <bean id="newsManager" class="com.syncnapsis.data.service.impl.NewsManagerImpl">
+        <constructor-arg ref="newsDao"/>
+        <constructor-arg ref="parameterManager"/>
+    </bean>
+    
+    <bean id="parameterManager" class="com.syncnapsis.data.service.impl.ParameterManagerImpl">
+        <constructor-arg ref="parameterDao"/>
+    </bean>
+    
+    <bean id="participantManager" class="com.syncnapsis.data.service.impl.ParticipantManagerImpl">
+        <constructor-arg ref="participantDao"/>
+    </bean>
+    
+    <bean id="playerManager" class="com.syncnapsis.data.service.impl.PlayerManagerImpl">
+        <constructor-arg ref="playerDao"/>
+        <constructor-arg ref="playerRoleManager"/>
+        <constructor-arg ref="userManager"/>
+        <property name="securityManager" ref="securityManager" />
+    </bean>
+    
+    <bean id="playerRoleManager" class="com.syncnapsis.data.service.impl.PlayerRoleManagerImpl">
+        <constructor-arg ref="playerRoleDao"/>
+    </bean>  
+    
+    <bean id="solarSystemManager" class="com.syncnapsis.data.service.impl.SolarSystemManagerImpl">
+        <constructor-arg ref="solarSystemDao"/>
+    </bean>  
+    
+    <bean id="solarSystemInfrastructureManager" class="com.syncnapsis.data.service.impl.SolarSystemInfrastructureManagerImpl">
+        <constructor-arg ref="solarSystemInfrastructureDao"/>
+    </bean>  
+    
+    <bean id="solarSystemPopulationManager" class="com.syncnapsis.data.service.impl.SolarSystemPopulationManagerImpl">
+        <constructor-arg ref="solarSystemPopulationDao"/>
+    </bean>  
+    
+    <bean id="userManager" class="com.syncnapsis.data.service.impl.UserManagerImpl">
+        <constructor-arg ref="userDao"/>
+        <constructor-arg ref="userRoleManager"/>
+        <property name="securityManager" ref="securityManager" />
+    </bean>
+    
+    <bean id="userContactManager" class="com.syncnapsis.data.service.impl.UserContactManagerImpl">
+        <constructor-arg ref="userContactDao"/>
+        <constructor-arg ref="userManager"/>
+    </bean>
+    
+    <bean id="userRoleManager" class="com.syncnapsis.data.service.impl.UserRoleManagerImpl">
+        <constructor-arg ref="userRoleDao"/>
+    </bean>  
+    
+</beans>

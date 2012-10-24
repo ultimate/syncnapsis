@@ -7,6 +7,6 @@ import com.syncnapsis.data.model.SolarSystem;
  * 
  * @author ultimate
  */
-public interface SolarSystemDao extends GenericNameDao<SolarSystem, Long>
+public interface SolarSystemDao extends GenericDao<SolarSystem, Long>
 {
 }

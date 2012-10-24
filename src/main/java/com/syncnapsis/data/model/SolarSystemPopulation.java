@@ -1,12 +1,17 @@
 package com.syncnapsis.data.model;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
@@ -24,39 +29,50 @@ import com.syncnapsis.enums.EnumPopulationPriority;
  * 
  * @author ultimate
  */
+@Entity
+@Table(name = "solarsystempopulation")
 public class SolarSystemPopulation extends ActivatableInstance<Long>
 {
 	/**
 	 * The solar system this population "lives" in.<br>
 	 * The solar system is associated via it's match-specific infrastructure-representation.
 	 */
-	protected SolarSystemInfrastructure	infrastructure;
+	protected SolarSystemInfrastructure		infrastructure;
 
 	/**
 	 * The participant (empire/player) this population belongs to
 	 */
-	protected Participant				participant;
+	protected Participant					participant;
+
+	/**
+	 * The population this population originated from
+	 */
+	protected SolarSystemPopulation			origin;
+	/**
+	 * The date this population originated from it's origin
+	 */
+	protected Date							originationDate;
 
 	/**
 	 * The date this population arrived at the associated solar system
 	 */
-	protected Date						colonizationDate;
+	protected Date							colonizationDate;
 
 	/**
 	 * The date the population has been destroyed
 	 */
-	protected Date						destructionDate;
+	protected Date							destructionDate;
 	/**
 	 * The way this population was destroyed
 	 * 
 	 * @see EnumDestructionType
 	 */
-	protected EnumDestructionType		destructionType;
+	protected EnumDestructionType			destructionType;
 
 	/**
 	 * The current amount/value of population
 	 */
-	protected int						population;
+	protected int							population;
 
 	/**
 	 * The priority to use for building a colony (population).<br>
@@ -65,7 +81,7 @@ public class SolarSystemPopulation extends ActivatableInstance<Long>
 	 * {@link EnumPopulationPriority#infrastructure} vice versa and for
 	 * {@link EnumPopulationPriority#balanced} both will increase with normal speed.
 	 */
-	protected EnumPopulationPriority	buildPriority;
+	protected EnumPopulationPriority		buildPriority;
 
 	/**
 	 * The priority to use for attacking a colony (population).<br>
@@ -73,7 +89,12 @@ public class SolarSystemPopulation extends ActivatableInstance<Long>
 	 * infrastructure.For {@link EnumPopulationPriority#infrastructure} vice versa and for
 	 * {@link EnumPopulationPriority#balanced} both will be attacked evenly.
 	 */
-	protected EnumPopulationPriority	attackPriority;
+	protected EnumPopulationPriority		attackPriority;
+
+	/**
+	 * The secessions that orginated from this population
+	 */
+	protected List<SolarSystemPopulation>	secessions;
 
 	/**
 	 * The solar system this population "lives" in.<br>
@@ -98,6 +119,30 @@ public class SolarSystemPopulation extends ActivatableInstance<Long>
 	public Participant getParticipant()
 	{
 		return participant;
+	}
+
+	/**
+	 * The population this population originated from
+	 * 
+	 * @return origin
+	 */
+	@ManyToOne
+	@JoinTable(name = "solarsystempopulation_origin", joinColumns = @JoinColumn(name = "fkPopulation"), inverseJoinColumns = @JoinColumn(name = "fkOrigin"))
+	public SolarSystemPopulation getOrigin()
+	{
+		return origin;
+	}
+
+	/**
+	 * The date this population originated from it's origin
+	 * 
+	 * @return originationDate
+	 */
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(nullable = true)
+	public Date getOriginationDate()
+	{
+		return originationDate;
 	}
 
 	/**
@@ -129,8 +174,8 @@ public class SolarSystemPopulation extends ActivatableInstance<Long>
 	 * 
 	 * @return destructionType
 	 */
+	@Column(nullable = true, length = LENGTH_ENUM)
 	@Enumerated(value = EnumType.STRING)
-	@Column(nullable = false)
 	public EnumDestructionType getDestructionType()
 	{
 		return destructionType;
@@ -179,6 +224,17 @@ public class SolarSystemPopulation extends ActivatableInstance<Long>
 	}
 
 	/**
+	 * The secessions that orginated from this population
+	 * 
+	 * @return secessions
+	 */
+	@OneToMany(mappedBy = "origin")
+	public List<SolarSystemPopulation> getSecessions()
+	{
+		return secessions;
+	}
+
+	/**
 	 * The solar system this population "lives" in.<br>
 	 * The solar system is associated via it's match-specific infrastructure-representation.
 	 * 
@@ -197,6 +253,26 @@ public class SolarSystemPopulation extends ActivatableInstance<Long>
 	public void setParticipant(Participant participant)
 	{
 		this.participant = participant;
+	}
+
+	/**
+	 * The population this population originated from
+	 * 
+	 * @param origin - the origin population
+	 */
+	public void setOrigin(SolarSystemPopulation origin)
+	{
+		this.origin = origin;
+	}
+
+	/**
+	 * The date this population originated from it's origin
+	 * 
+	 * @param originationDate - the date and time
+	 */
+	public void setOriginationDate(Date originationDate)
+	{
+		this.originationDate = originationDate;
 	}
 
 	/**
@@ -266,6 +342,16 @@ public class SolarSystemPopulation extends ActivatableInstance<Long>
 		this.attackPriority = attackPriority;
 	}
 
+	/**
+	 * The secessions that orginatef from this population
+	 * 
+	 * @param secessions - the list of originated populations
+	 */
+	public void setSecessions(List<SolarSystemPopulation> secessions)
+	{
+		this.secessions = secessions;
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * @see com.syncnapsis.data.model.base.BaseObject#hashCode()
@@ -279,6 +365,8 @@ public class SolarSystemPopulation extends ActivatableInstance<Long>
 		result = prime * result + ((destructionType == null) ? 0 : destructionType.hashCode());
 		result = prime * result + ((destructionDate == null) ? 0 : destructionDate.hashCode());
 		result = prime * result + ((infrastructure == null) ? 0 : infrastructure.getId().hashCode());
+		result = prime * result + ((origin == null) ? 0 : origin.getId().hashCode());
+		result = prime * result + ((originationDate == null) ? 0 : originationDate.hashCode());
 		result = prime * result + ((participant == null) ? 0 : participant.getId().hashCode());
 		result = prime * result + population;
 		return result;
@@ -320,6 +408,20 @@ public class SolarSystemPopulation extends ActivatableInstance<Long>
 				return false;
 		}
 		else if(!infrastructure.getId().equals(other.infrastructure.getId()))
+			return false;
+		if(origin == null)
+		{
+			if(other.origin != null)
+				return false;
+		}
+		else if(!origin.getId().equals(other.origin.getId()))
+			return false;
+		if(originationDate == null)
+		{
+			if(other.originationDate != null)
+				return false;
+		}
+		else if(!originationDate.equals(other.originationDate))
 			return false;
 		if(participant == null)
 		{

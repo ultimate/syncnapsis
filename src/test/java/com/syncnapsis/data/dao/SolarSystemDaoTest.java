@@ -2,11 +2,11 @@ package com.syncnapsis.data.dao;
 
 import com.syncnapsis.data.dao.hibernate.SolarSystemDaoHibernate;
 import com.syncnapsis.data.model.SolarSystem;
-import com.syncnapsis.tests.GenericNameDaoTestCase;
+import com.syncnapsis.tests.GenericDaoTestCase;
 import com.syncnapsis.tests.annotations.TestCoversClasses;
 
 @TestCoversClasses({ SolarSystemDao.class, SolarSystemDaoHibernate.class })
-public class SolarSystemDaoTest extends GenericNameDaoTestCase<SolarSystem, Long>
+public class SolarSystemDaoTest extends GenericDaoTestCase<SolarSystem, Long>
 {
 	private GalaxyDao		galaxyDao;
 	private SolarSystemDao	solarSystemDao;
@@ -16,8 +16,7 @@ public class SolarSystemDaoTest extends GenericNameDaoTestCase<SolarSystem, Long
 	{
 		super.setUp();
 
-		String existingName = solarSystemDao.getAll().get(0).getName();
-		Long existingId = solarSystemDao.getByName(existingName).getId();
+		Long existingId = solarSystemDao.getAll().get(0).getId();
 
 		SolarSystem solarSystem = new SolarSystem();
 		solarSystem.setCoordinateX(1);
@@ -36,9 +35,8 @@ public class SolarSystemDaoTest extends GenericNameDaoTestCase<SolarSystem, Long
 
 		setExistingEntityId(existingId);
 		setBadEntityId(-1L);
-		setExistingEntityName(existingName);
 
-		setGenericNameDao(solarSystemDao);
+		setGenericDao(solarSystemDao);
 	}
 
 	// insert individual Tests here

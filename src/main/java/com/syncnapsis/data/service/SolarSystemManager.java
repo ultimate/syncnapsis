@@ -7,6 +7,6 @@ import com.syncnapsis.data.model.SolarSystem;
  * 
  * @author ultimate
  */
-public interface SolarSystemManager  extends GenericNameManager<SolarSystem, Long>
+public interface SolarSystemManager  extends GenericManager<SolarSystem, Long>
 {
 }

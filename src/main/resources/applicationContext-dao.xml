@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd"
+	default-lazy-init="true">
+
+	<bean id="empireDao" class="com.syncnapsis.data.dao.hibernate.EmpireDaoHibernate" />
+
+	<bean id="galaxyDao" class="com.syncnapsis.data.dao.hibernate.GalaxyDaoHibernate" />
+
+	<bean id="matchDao" class="com.syncnapsis.data.dao.hibernate.MatchDaoHibernate" />
+
+	<bean id="messengerContactDao" class="com.syncnapsis.data.dao.hibernate.MessengerContactDaoHibernate" />
+	
+	<bean id="messengerDao" class="com.syncnapsis.data.dao.hibernate.MessengerDaoHibernate" />
+
+	<bean id="newsDao" class="com.syncnapsis.data.dao.hibernate.NewsDaoHibernate" />
+
+	<bean id="parameterDao" class="com.syncnapsis.data.dao.hibernate.ParameterDaoHibernate" />
+
+	<bean id="participantDao" class="com.syncnapsis.data.dao.hibernate.ParticipantDaoHibernate" />
+
+	<bean id="playerDao" class="com.syncnapsis.data.dao.hibernate.PlayerDaoHibernate" />
+
+	<bean id="playerRoleDao" class="com.syncnapsis.data.dao.hibernate.PlayerRoleDaoHibernate" />
+	
+	<bean id="solarSystemDao" class="com.syncnapsis.data.dao.hibernate.SolarSystemDaoHibernate" />
+	
+	<bean id="solarSystemInfrastructureDao" class="com.syncnapsis.data.dao.hibernate.SolarSystemInfrastructureDaoHibernate" />
+	
+	<bean id="solarSystemPopulationDao" class="com.syncnapsis.data.dao.hibernate.SolarSystemPopulationDaoHibernate" />
+	
+	<bean id="userContactDao" class="com.syncnapsis.data.dao.hibernate.UserContactDaoHibernate" />
+	
+	<bean id="userDao" class="com.syncnapsis.data.dao.hibernate.UserDaoHibernate" />
+	
+	<bean id="userRoleDao" class="com.syncnapsis.data.dao.hibernate.UserRoleDaoHibernate" />
+	
+</beans>

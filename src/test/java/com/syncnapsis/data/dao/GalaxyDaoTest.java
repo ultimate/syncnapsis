@@ -18,7 +18,7 @@ public class GalaxyDaoTest extends GenericNameDaoTestCase<Galaxy, Long>
 	{
 		super.setUp();
 		
-		Long existingId = galaxyDao.getByName("galaxy1").getId();
+		Long existingId = galaxyDao.getByName("Cube").getId();
 		String existingName = galaxyDao.getAll().get(0).getName();
 		
 		Galaxy galaxy = new Galaxy();

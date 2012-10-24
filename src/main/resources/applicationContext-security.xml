@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+            http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd
+            http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.0.xsd"
+	default-lazy-init="true">
+
+	<bean id="applicationContextUtil" class="com.syncnapsis.utils.ApplicationContextUtil" lazy-init="false" />
+
+	<bean id="securityManager" class="com.syncnapsis.security.BaseGameManager">
+		<property name="accessControllers">
+			<list>
+				<ref bean="fieldAccessController" />
+				<ref bean="methodAccessController" />
+			</list>
+		</property>
+		<property name="timeProvider" ref="timeProvider" />
+		<property name="sessionProvider" ref="sessionProvider" />
+		<property name="userProvider" ref="userProvider" />
+		<property name="playerProvider" ref="playerProvider" />
+		<property name="authorityProvider" ref="authorityProvider" />
+	</bean>
+
+	<bean id="fieldAccessController" class="com.syncnapsis.security.accesscontrol.FieldAccessController" />
+
+	<bean id="methodAccessController" class="com.syncnapsis.security.accesscontrol.MethodAccessController" />
+
+	<bean id="timeProvider" class="com.syncnapsis.providers.impl.SystemTimeProvider" />
+
+	<bean id="sessionProvider" class="com.syncnapsis.providers.impl.ThreadLocalSessionProvider" />
+
+	<bean id="userProvider" class="com.syncnapsis.providers.impl.SessionBasedUserProvider">
+		<property name="sessionProvider" ref="sessionProvider" />
+		<property name="attributeName" value="j_user" />
+	</bean>
+
+	<bean id="playerProvider" class="com.syncnapsis.providers.impl.SessionBasedPlayerProvider">
+		<property name="sessionProvider" ref="sessionProvider" />
+		<property name="attributeName" value="j_player" />
+	</bean>
+
+	<bean id="authorityProvider" class="com.syncnapsis.providers.impl.PlayerRoleBasedAuthorityProvider">
+		<constructor-arg ref="playerProvider" />
+	</bean>
+
+</beans>

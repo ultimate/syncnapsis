@@ -30,6 +30,8 @@ public class SolarSystemPopulationDaoTest extends GenericDaoTestCase<SolarSystem
 		solarSystemPopulation.setDestructionDate(new Date(timeProvider.get()));
 		solarSystemPopulation.setDestructionType(EnumDestructionType.destroyed);
 		solarSystemPopulation.setInfrastructure(solarSystemInfrastructureDao.getAll().get(0));
+		solarSystemPopulation.setOrigin(solarSystemPopulationDao.get(existingId));
+		solarSystemPopulation.setOriginationDate(new Date(timeProvider.get()));
 		solarSystemPopulation.setParticipant(participantDao.getAll().get(0));
 		solarSystemPopulation.setPopulation(200);
 		// set individual properties here

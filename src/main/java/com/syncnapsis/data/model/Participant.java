@@ -145,7 +145,7 @@ public class Participant extends ActivatableInstance<Long>
 	 * @see EnumDestructionType
 	 * @return destructionType
 	 */
-	@Column(nullable = true)
+	@Column(nullable = true, length = LENGTH_ENUM)
 	@Enumerated(value = EnumType.STRING)
 	public EnumDestructionType getDestructionType()
 	{

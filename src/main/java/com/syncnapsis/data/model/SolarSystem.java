@@ -70,7 +70,7 @@ public class SolarSystem extends ActivatableInstance<Long>
 	 * 
 	 * @return name
 	 */
-	@Column(nullable = true, length = LENGTH_NAME_NORMAL)
+	@Column(nullable = false, length = LENGTH_NAME_NORMAL)
 	public String getName()
 	{
 		return name;

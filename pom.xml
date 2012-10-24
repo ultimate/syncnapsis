@@ -266,16 +266,14 @@
 	</profiles>
 
 	<properties>
-		<!-- Database settings - Start -->
-		<dbunit.dataTypeFactoryName>org.dbunit.dataset.datatype.DefaultDataTypeFactory</dbunit.dataTypeFactoryName>
-		<dbunit.src.tables>src/test/resources/data-tables.xml</dbunit.src.tables>
-		<dbunit.src.base>src/test/resources/data-base.xml</dbunit.src.base>
-		<dbunit.src.test>src/test/resources/data-test.xml</dbunit.src.test>
-		<dbunit.src.dummy>src/test/resources/data-dummy.xml</dbunit.src.dummy>
-		<dbunit.src.generated>src/test/resources/data-generated.xml</dbunit.src.generated>
-		<dbunit.src>${dbunit.src.base}</dbunit.src>
 		
 		<!-- used to fix hibernate-plugin-dtd-bug -->
 		<hibernate.version>4.0.1.Final</hibernate.version> <!-- 19.01.2012 -->
+		
+		<!-- Profiles, Deployment etc. -->
+		<jdbc.properties>target/classes/jdbc.properties</jdbc.properties>
+		<db.dbunit.skip>false</db.dbunit.skip>
+		<db.hibernate.skip>false</db.hibernate.skip>
+		<db.hibernate.cfg>src/main/resources/hibernate.cfg.xml</db.hibernate.cfg>
 	</properties>
 </project>

@@ -1,0 +1,28 @@
+<!DOCTYPE hibernate-configuration PUBLIC "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+
+<hibernate-configuration>
+    <session-factory>
+     
+        <mapping class="com.syncnapsis.data.model.Action"/>
+        <mapping class="com.syncnapsis.data.model.Messenger"/>
+        <mapping class="com.syncnapsis.data.model.MessengerContact"/>
+        <mapping class="com.syncnapsis.data.model.News"/>
+        <mapping class="com.syncnapsis.data.model.Parameter"/>
+        <mapping class="com.syncnapsis.data.model.User"/>
+        <mapping class="com.syncnapsis.data.model.UserContact"/>
+        <mapping class="com.syncnapsis.data.model.UserRole"/>
+        
+        <mapping class="com.syncnapsis.data.model.Empire"/>
+        <mapping class="com.syncnapsis.data.model.Player"/>
+        <mapping class="com.syncnapsis.data.model.PlayerRole"/>
+        
+        <mapping class="com.syncnapsis.data.model.Galaxy"/>
+        <mapping class="com.syncnapsis.data.model.Match"/>
+        <mapping class="com.syncnapsis.data.model.Participant"/>
+        <mapping class="com.syncnapsis.data.model.SolarSystem"/>
+        <mapping class="com.syncnapsis.data.model.SolarSystemInfrastructure"/>
+        <mapping class="com.syncnapsis.data.model.SolarSystemPopulation"/>
+
+    </session-factory>
+</hibernate-configuration>

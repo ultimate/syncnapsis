@@ -8,7 +8,7 @@ import com.syncnapsis.data.model.SolarSystem;
  * 
  * @author ultimate
  */
-public class SolarSystemDaoHibernate extends GenericNameDaoHibernate<SolarSystem, Long> implements SolarSystemDao
+public class SolarSystemDaoHibernate extends GenericDaoHibernate<SolarSystem, Long> implements SolarSystemDao
 {
 	/**
 	 * Create a new DAO-Instance using the super-class GenericNameDaoHibernate
@@ -16,6 +16,6 @@ public class SolarSystemDaoHibernate extends GenericNameDaoHibernate<SolarSystem
 	 */
 	public SolarSystemDaoHibernate()
 	{
-		super(SolarSystem.class, "name");
+		super(SolarSystem.class);
 	}
 }

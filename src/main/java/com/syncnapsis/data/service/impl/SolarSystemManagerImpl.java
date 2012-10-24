@@ -9,7 +9,7 @@ import com.syncnapsis.data.service.SolarSystemManager;
  * 
  * @author ultimate
  */
-public class SolarSystemManagerImpl extends GenericNameManagerImpl<SolarSystem, Long> implements SolarSystemManager
+public class SolarSystemManagerImpl extends GenericManagerImpl<SolarSystem, Long> implements SolarSystemManager
 {
 	/**
 	 * SolarSystemDao for database access

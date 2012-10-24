@@ -4,9 +4,11 @@ import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
@@ -21,18 +23,24 @@ import com.syncnapsis.data.model.base.ActivatableInstance;
  * 
  * @author ultimate
  */
+@Entity
+@Table(name = "solarsysteminfrastructure")
 public class SolarSystemInfrastructure extends ActivatableInstance<Long>
 {
 	/**
-	 * The solar system this infrastructure is for
+	 * The solar system this infrastructure is for in the specified match
 	 */
 	protected SolarSystem					solarSystem;
+	/**
+	 * The match this solar system infrastructure is for
+	 */
+	protected Match							match;
 
 	/**
 	 * The first date of colonization of the solar system within this game (or null if the system
 	 * has not yet been colonized)
 	 */
-	protected Date							colonizationDate;
+	protected Date							firstColonizationDate;
 
 	/**
 	 * The current amount/value of infrastructure
@@ -57,6 +65,18 @@ public class SolarSystemInfrastructure extends ActivatableInstance<Long>
 	}
 
 	/**
+	 * The match this solar system infrastructure is for
+	 * 
+	 * @return match
+	 */
+	@ManyToOne
+	@JoinColumn(name = "fkMatch", nullable = false)
+	public Match getMatch()
+	{
+		return match;
+	}
+
+	/**
 	 * The first date of colonization of the solar system within this game (or null if the system
 	 * has not yet been colonized)
 	 * 
@@ -64,9 +84,9 @@ public class SolarSystemInfrastructure extends ActivatableInstance<Long>
 	 */
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(nullable = true)
-	public Date getColonizationDate()
+	public Date getFirstColonizationDate()
 	{
-		return colonizationDate;
+		return firstColonizationDate;
 	}
 
 	/**
@@ -102,14 +122,24 @@ public class SolarSystemInfrastructure extends ActivatableInstance<Long>
 	}
 
 	/**
+	 * 
+	 * The match this solar system infrastructure is for
+	 * @param match - the Match
+	 */
+	public void setMatch(Match match)
+	{
+		this.match = match;
+	}
+
+	/**
 	 * The first date of colonization of the solar system within this game (or null if the system
 	 * has not yet been colonized)
 	 * 
-	 * @param colonizationDate - the date and time
+	 * @param firstColonizationDate - the date and time
 	 */
-	public void setColonizationDate(Date colonizationDate)
+	public void setFirstColonizationDate(Date firstColonizationDate)
 	{
-		this.colonizationDate = colonizationDate;
+		this.firstColonizationDate = firstColonizationDate;
 	}
 
 	/**
@@ -141,8 +171,9 @@ public class SolarSystemInfrastructure extends ActivatableInstance<Long>
 	{
 		final int prime = 31;
 		int result = super.hashCode();
-		result = prime * result + ((colonizationDate == null) ? 0 : colonizationDate.hashCode());
+		result = prime * result + ((firstColonizationDate == null) ? 0 : firstColonizationDate.hashCode());
 		result = prime * result + infrastructure;
+		result = prime * result + ((match == null) ? 0 : match.getId().hashCode());
 		result = prime * result + ((solarSystem == null) ? 0 : solarSystem.getId().hashCode());
 		return result;
 	}
@@ -161,12 +192,12 @@ public class SolarSystemInfrastructure extends ActivatableInstance<Long>
 		if(getClass() != obj.getClass())
 			return false;
 		SolarSystemInfrastructure other = (SolarSystemInfrastructure) obj;
-		if(colonizationDate == null)
+		if(firstColonizationDate == null)
 		{
-			if(other.colonizationDate != null)
+			if(other.firstColonizationDate != null)
 				return false;
 		}
-		else if(!colonizationDate.equals(other.colonizationDate))
+		else if(!firstColonizationDate.equals(other.firstColonizationDate))
 			return false;
 		if(infrastructure != other.infrastructure)
 			return false;
@@ -176,6 +207,13 @@ public class SolarSystemInfrastructure extends ActivatableInstance<Long>
 				return false;
 		}
 		else if(!solarSystem.getId().equals(other.solarSystem.getId()))
+			return false;
+		if(match == null)
+		{
+			if(other.match != null)
+				return false;
+		}
+		else if(!match.getId().equals(other.match.getId()))
 			return false;
 		return true;
 	}
