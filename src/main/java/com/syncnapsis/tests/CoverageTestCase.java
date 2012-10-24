@@ -17,6 +17,7 @@ import junit.framework.TestCase;
 import com.syncnapsis.tests.annotations.TestCoversClasses;
 import com.syncnapsis.tests.annotations.TestCoversMethods;
 import com.syncnapsis.tests.annotations.TestExcludesMethods;
+import com.syncnapsis.tests.annotations.Untested;
 import com.syncnapsis.utils.ClassUtil;
 import org.slf4j.LoggerFactory;
 
@@ -265,6 +266,8 @@ public class CoverageTestCase extends LoggerTestCase
 			return "Inner class"; 
 		if(TestCase.class.isAssignableFrom(c))
 			return "TestCase-Class";
+		if(c.isAnnotationPresent(Untested.class))
+			return "Untested (by annotation)";
 		if(this.specialClasses.contains(c))
 			return "Special-Class-Ignore-List";
 		if(c.getName().startsWith(generalPackage + ".constants"))
@@ -285,6 +288,8 @@ public class CoverageTestCase extends LoggerTestCase
 			return "Serializable Method";
 		if(m.getName().equals("writeObject") && m.getParameterTypes().length == 1 && m.getParameterTypes()[0].equals(ObjectOutputStream.class))
 			return "Serializable Method";
+		if(m.isAnnotationPresent(Untested.class))
+			return "Untested (by annotation)";
 		if(this.specialMethods.contains(m.getName()))
 			return "Special-Method-Ignore-List";
 		return null;
