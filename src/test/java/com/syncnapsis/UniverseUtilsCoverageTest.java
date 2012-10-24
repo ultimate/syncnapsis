@@ -10,4 +10,12 @@ public class UniverseUtilsCoverageTest extends CoverageTestCase
 		logger.debug("checking test-coverage...");
 		super.testCoverage();
 	}
+
+	@Override
+	protected String ignoreSpecialClass(Class<?> c)
+	{
+		if(c.getPackage().getName().equals(this.getClass().getPackage().getName() + ".universe.galaxy.visualization"))
+			return "Experimental-Tool";
+		return super.ignoreSpecialClass(c);
+	}
 }
