@@ -5,7 +5,9 @@ import java.io.File;
 import org.dbunit.util.Base64;
 
 import com.syncnapsis.utils.StringUtil;
+import com.syncnapsis.tests.annotations.Untested;
 
+@Untested
 public class TestSomething
 {
 	public static void main(String[] args) throws Exception
