@@ -1,0 +1,21 @@
+body {
+	background: #000000;
+	color: #EEEEEE;
+	font-family: monospace;
+}
+
+a {
+	color: #EEEEEE;
+}
+
+ol li {
+	margin-bottom: 12pt;
+}
+
+ol li ol li, ol li ul li {
+	margin-bottom: 0;
+}
+
+.hidden, li.hidden {
+	display: none; 
+}
