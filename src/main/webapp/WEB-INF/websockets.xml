@@ -54,7 +54,7 @@
 		<property name="securityManager" ref="securityManager" />
 	</bean>
 	
-	<bean id="rpcFilter" class="com.syncnapsis.websockets.service.rpc.ActionFilter">
+	<bean id="rpcFilter" class="com.syncnapsis.http.ActionFilter">
 		<property name="securityManager" ref="securityManager" />
 		<property name="rpcHandler" ref="rpcHandler" />
 	</bean>
