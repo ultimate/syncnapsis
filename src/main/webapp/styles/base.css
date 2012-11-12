@@ -1,0 +1,58 @@
+body {
+	background: #000000;
+}
+
+* {
+	padding: 0px;
+	margin: 0px;
+}
+
+.ad {
+	background: #FF0000;
+	width: 100px; /* = AD_WIDTH // set via JS */
+	height: 100%;
+	position: absolute;
+	top: 0px;
+}
+
+#ad_left {
+	left: 0px;
+}
+
+#ad_right{
+	right: 0px;
+}
+
+#center {
+	background: #00FF00;
+	height: 100%;
+	width: 500px; /* = window.width - 2 * AD_WIDTH // set via JS */
+	position: absolute;
+	top: 0px;
+	left: 100px; /* = AD_WIDTH // set via JS */
+}
+
+.bar {
+	background: #0000FF;
+	height: 20px; /* = BAR_HEIGHT // set via JS */
+	position: absolute;
+	left: 0px; 
+	width: 100%;
+}
+
+#bar_top {
+	top: 0px;
+}
+
+#bar_bottom {
+	bottom: 0px;
+}
+
+#content {
+	background: #FFFF00;
+	width: 100%;
+	height: 300px; /* = window.height - 2 * BAR_HEIGHT // set via JS */
+	position: absolute;
+	left: 0px;
+	top: 20px;  /* = BAR_HEIGHT // set via JS */
+}
