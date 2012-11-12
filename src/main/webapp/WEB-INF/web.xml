@@ -46,6 +46,34 @@
       	<url-pattern>/ws</url-pattern>
     </servlet-mapping>
     
+    <filter>
+        <filter-name>actionFilter</filter-name>
+        <filter-class>com.syncnapsis.utils.spring.FilterToBeanProxy</filter-class>
+        <init-param>
+            <param-name>targetBean</param-name>
+            <param-value>actionFilter</param-value>
+        </init-param>
+    </filter>
+
+    <filter-mapping>
+      	<filter-name>actionFilter</filter-name>
+      	<url-pattern>/action</url-pattern>
+    </filter-mapping>	
+    
+    <filter>
+        <filter-name>localeFilter</filter-name>
+        <filter-class>com.syncnapsis.utils.spring.FilterToBeanProxy</filter-class>
+        <init-param>
+            <param-name>targetBean</param-name>
+            <param-value>localeFilter</param-value>
+        </init-param>
+    </filter>
+
+    <filter-mapping>
+      	<filter-name>actionFilter</filter-name>
+      	<url-pattern>/static</url-pattern>
+    </filter-mapping>	
+    
 	<listener>
 		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
 	</listener>

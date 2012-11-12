@@ -53,4 +53,14 @@
 	<bean id="mapper" class="com.syncnapsis.utils.serialization.BaseMapper">
 		<property name="securityManager" ref="securityManager" />
 	</bean>
+	
+	<!-- Servlets -->	
+	
+	<bean id="actionFilter" class="com.syncnapsis.http.ActionFilter">
+		<property name="securityManager" ref="securityManager" />
+		<property name="rpcHandler" ref="rpcHandler" />
+	</bean>
+	
+	<bean id="localeFilter" class="com.syncnapsis.http.LocaleFilter">
+	</bean>
 </beans>

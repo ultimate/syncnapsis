@@ -24,18 +24,24 @@ var AD_TOGGLE_DELAY = 10;
 var AD_SHOW_INTERVAL = 300000;
 var AD_SHOW_DURATION = 10000;
 var AD_SHOW_USER = true;
+var AD_TOGGLE_IMG_SHOW = "images/toggle-show.png";
+var AD_TOGGLE_IMG_HIDE = "images/toggle-hide.png";
 
 toggleAd = function(user)
 {
 	if(layout_horizontal.elementSizes[0] == 0)
 	{
 		AD_TOGGLE_DIR = AD_TOGGLE_STEP;
+		document.getElementById("ad_left_toggle").src = AD_TOGGLE_IMG_HIDE;
+		document.getElementById("ad_right_toggle").src = AD_TOGGLE_IMG_HIDE;
 		if(user)
 			AD_SHOW_USER = true;
 	}
 	else if(layout_horizontal.elementSizes[0] == AD_WIDTH)
 	{
 		AD_TOGGLE_DIR = -AD_TOGGLE_STEP;
+		document.getElementById("ad_left_toggle").src = AD_TOGGLE_IMG_SHOW;
+		document.getElementById("ad_right_toggle").src = AD_TOGGLE_IMG_SHOW;
 		if(user)
 			AD_SHOW_USER = false;
 	}
