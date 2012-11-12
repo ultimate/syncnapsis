@@ -1,5 +1,6 @@
 body {
 	background: #000000;
+	overflow: hidden;
 }
 
 * {
@@ -7,52 +8,72 @@ body {
 	margin: 0px;
 }
 
-.ad {
-	background: #FF0000;
-	width: 100px; /* = AD_WIDTH // set via JS */
+.ad, .ad_inner, .ad_border {
+	background: #333333;
+	/*width set via JS */
 	height: 100%;
 	position: absolute;
+	/* left set via JS */
 	top: 0px;
+	text-align: center;
 }
 
-#ad_left {
+.ad .ad_img {
+	position: absolute;
+	/* centering via position:absolute and auto-margin*/
+	top: 0px;
+	bottom: 0px;
+	left: 0px;
+	right: 0px;
+	margin: auto;
+}
+
+.ad_border {
+	background: #000000;
+	overflow: visible;
+}
+
+.ad .ad_toggle {
+	position: absolute;
+	/* centering via position:absolute and auto-margin*/
+	top: 0px;
+	bottom: 0px;
+	margin: auto;
+	z-index: 1;	
+}
+
+#ad_left_toggle {	
 	left: 0px;
 }
 
-#ad_right{
+#ad_right_toggle {	
 	right: 0px;
+	
 }
 
 #center {
 	background: #00FF00;
+	/*width set via JS */
 	height: 100%;
-	width: 500px; /* = window.width - 2 * AD_WIDTH // set via JS */
 	position: absolute;
+	/* left set via JS */
 	top: 0px;
-	left: 100px; /* = AD_WIDTH // set via JS */
 }
 
 .bar {
 	background: #0000FF;
-	height: 20px; /* = BAR_HEIGHT // set via JS */
-	position: absolute;
-	left: 0px; 
 	width: 100%;
-}
-
-#bar_top {
-	top: 0px;
-}
-
-#bar_bottom {
-	bottom: 0px;
+	/*height set via JS */
+	position: absolute;
+	left: 0px;
+	/*top set via JS */
 }
 
 #content {
 	background: #FFFF00;
 	width: 100%;
-	height: 300px; /* = window.height - 2 * BAR_HEIGHT // set via JS */
-	position: absolute;
+	/*height set via JS */ position : absolute;
 	left: 0px;
-	top: 20px;  /* = BAR_HEIGHT // set via JS */
+	position: absolute;
+	/*top set via JS */
 }

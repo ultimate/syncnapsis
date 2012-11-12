@@ -2,8 +2,27 @@
 <html>
 <head>
 <title>syncnapsis</title>
+<meta charset="UTF-8">
+<script type="text/javascript"
+	src="../../../../../syncnapsis-core/syncnapsis-core-utils/src/main/webapp/scripts/util/Requests.js"></script>
+<script type="text/javascript"
+	src="../../../../../syncnapsis-core/syncnapsis-core-utils/src/main/webapp/scripts/util/Arrays.js"></script>
+<script type="text/javascript"
+	src="../../../../../syncnapsis-core/syncnapsis-core-utils/src/main/webapp/scripts/util/Events.js"></script>
+<script type="text/javascript"
+	src="../../../../../syncnapsis-core/syncnapsis-core-utils/src/main/webapp/scripts/lib/date.format.js"></script>
+<script type="text/javascript"
+	src="../../../../../syncnapsis-core/syncnapsis-core-utils/src/main/webapp/scripts/util/Console.js"></script>
+<script type="text/javascript"
+	src="../../../../../syncnapsis-core/syncnapsis-core-utils/src/main/webapp/scripts/util/Reflections.js"></script>
+
+<link rel="stylesheet" type="text/css" href="../../../../../syncnapsis-core/syncnapsis-core-utils/src/main/webapp/styles/default.css" />
+
 <link rel="stylesheet" type="text/css" href="styles/base.css" />
 <script type="text/javascript" src="scripts/styles.js"></script>
+<script type="text/javascript" src="scripts/ad.js"></script>
+
+<!-- 
 <script type="text/javascript" src="scripts/util/Requests.js"></script>
 <script type="text/javascript">
 	// register Util-JS-Dependencies
@@ -22,13 +41,36 @@
 	DependencyManager.registrationDone();
 	// TODO add site scripts (including init and effects etc.)
 	// TODO add generic WS-URL-detection
-	
-	new FillLayout({"ad_left", "center", "ad_right"}, {100, null 100});
 </script>
+ -->
+<script type="text/javascript">
+	var layout_horizontal;
+	var layout_vertical;
+	var layout_ad_left;
+	var layout_ad_right;
+	var AD_WIDTH = 170;
+	var AD_BORDER = 2;
+	var BAR_HEIGHT = 30;
+	function init()
+	{
+		layout_horizontal = new Styles.FillLayout([ "ad_left", "center", "ad_right" ], [ AD_WIDTH, null, AD_WIDTH ], Styles.layout.HORIZONTAL);
+		layout_vertical = new Styles.FillLayout([ "bar_top", "content", "bar_bottom" ], [ BAR_HEIGHT, null, BAR_HEIGHT ], Styles.layout.VERTICAL);
+		
+		layout_ad_left = new Styles.FillLayout([ "ad_left_inner", "ad_left_border" ], [ null, AD_BORDER ], Styles.layout.HORIZONTAL);
+		layout_ad_right = new Styles.FillLayout([ "ad_right_border", "ad_right_inner" ], [ AD_BORDER, null ], Styles.layout.HORIZONTAL);
+		Events.fireEvent(window, Events.ONRESIZE);
+	}
+</script>
+
 </head>
-<body> 
+<body onLoad="javascript: init();">
 	<div id="ad_left" class="ad">
-		AD
+		<div id="ad_left_inner" class="ad_inner">
+			<img id="ad_left_img" class="ad_img" src="images/banner-160x600.png" />
+		</div>
+		<div id="ad_left_border" class="ad_border">
+			<img id="ad_left_toggle" class="ad_toggle" src="images/toggle.png"" onclick="javascript: toggleAd(true);"/>
+		</div>
 	</div>
 	<div id="center">
 		<div id="bar_top" class="bar">BAR</div>
@@ -36,7 +78,12 @@
 		<div id="bar_bottom" class="bar">BAR</div>
 	</div>
 	<div id="ad_right" class="ad">
-		AD
+		<div id="ad_right_border" class="ad_border">
+			<img id="ad_right_toggle" class="ad_toggle flip-horizontal" src="images/toggle.png" onclick="javascript: toggleAd(true);"/>
+		</div>
+		<div id="ad_right_inner" class="ad_inner">
+			<img id="ad_right_img" class="ad_img" src="images/banner-160x600.png" />
+		</div>
 	</div>
 </body>
 </html>
