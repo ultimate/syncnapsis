@@ -1,11 +1,14 @@
-package com.syncnapsis.websockets.service.rpc;
+package com.syncnapsis.http;
 
 import org.jmock.Expectations;
 
 import com.syncnapsis.data.service.ActionManager;
+import com.syncnapsis.http.ActionFilter;
 import com.syncnapsis.tests.BaseDaoTestCase;
 import com.syncnapsis.tests.annotations.TestCoversMethods;
 import com.syncnapsis.utils.serialization.Serializer;
+import com.syncnapsis.websockets.service.rpc.RPCCall;
+import com.syncnapsis.websockets.service.rpc.RPCHandler;
 
 public class ActionFilterTest extends BaseDaoTestCase
 {

@@ -1,9 +1,11 @@
-package com.syncnapsis.websockets.service.rpc;
+package com.syncnapsis.http;
 
 import org.springframework.util.Assert;
 
 import com.syncnapsis.data.model.Action;
 import com.syncnapsis.data.service.ActionManager;
+import com.syncnapsis.websockets.service.rpc.RPCCall;
+import com.syncnapsis.websockets.service.rpc.RPCFilter;
 
 /**
  * Extension of {@link RPCFilter} obtaining the required RPCCall from the {@link Action} associated
