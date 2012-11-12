@@ -5,7 +5,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.syncnapsis.syncnapsis-universe</groupId>
 	<artifactId>syncnapsis-universe-conquest</artifactId>
-	<packaging>jar</packaging>
+	<packaging>war</packaging>
 	<version>${syncnapsis-universe-conquest.version}</version>
 
 	<parent>
