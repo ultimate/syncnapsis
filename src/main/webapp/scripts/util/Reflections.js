@@ -1,5 +1,12 @@
 var Reflections = {};
 
+Reflections.type = {};
+Reflections.type.UNDEFINED 	= "undefined";
+Reflections.type.NULL 		= "null";
+Reflections.type.BOOLEAN 	= "boolean";
+Reflections.type.STRING 	= "string";
+Reflections.type.NUMBER 	= "number";
+
 Reflections.arguments = function(func)
 {
 	if(typeof func != "function")

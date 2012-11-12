@@ -5,6 +5,7 @@ var Events = {};
 Events.CLICK = "click";
 Events.KEYUP = "keyup";
 Events.KEYDOWN = "keydown";
+Events.ONRESIZE = "resize";
 
 // fix IE Events Names
 // do that before defining any further constants or functions!!!
@@ -85,6 +86,21 @@ Events.addKeyEvent = function(key, modifiers, eventListener)
 	});
 };
 
+Events.fireEvent = function(component,eventname)
+{
+	if(document.createEvent)
+	{
+		var evt = document.createEvent("Events");
+		evt.initEvent(eventname, true, true);
+		component.dispatchEvent(evt);
+	}
+	else if(document.createEventObject)
+	{
+		var evt = document.createEventObject();
+		component.fireEvent(eventname, evt);
+	}
+};
+
 Events.EventHandler = function(handlerObject, handlerMethod)
 {
 	this._handlerObject = handlerObject;
@@ -98,7 +114,7 @@ Events.EventHandler.prototype.onEvent = function(e)
 
 Events.EventHandler.prototype.anonymous = function()
 {
-//	return Events.wrapEventHandler(this._handlerObject, this._handlerMethod);
+	// return Events.wrapEventHandler(this._handlerObject, this._handlerMethod);
 	return Events.wrapEventHandler(this, this.onEvent);
 };
 
