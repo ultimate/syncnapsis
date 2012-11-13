@@ -36,6 +36,7 @@ public class Assembler
 		Assert.isTrue(parentDir.exists(), "parentDir not existing!");
 		Assert.notNull(webappDir, "webappDir must not be null!");
 		Assert.isTrue(webappDir.exists(), "webappDir not existing!");
+		this.parentDir = parentDir;
 		this.webappDir = webappDir;
 		this.jarNamePrefix = jarNamePrefix;
 	}
@@ -48,6 +49,11 @@ public class Assembler
 	public File getWebappDir()
 	{
 		return webappDir;
+	}
+
+	public void copyRequiredModules()
+	{
+		copyRequiredModules(findModules());
 	}
 
 	public void copyRequiredModules(Map<String, File> modulesFound)
@@ -150,6 +156,7 @@ public class Assembler
 				if(isModule(child))
 				{
 					modules.put(child.getName(), child);
+					logger.info("module found: " + child.getName());
 				}
 				else
 				{
@@ -180,5 +187,23 @@ public class Assembler
 			}
 		}
 		return pomFound && srcFound;
+	}
+
+	public static void main(String[] args)
+	{
+		Assembler a = null;
+		if(args.length == 2)
+			a = new Assembler(new File(args[0]), new File(args[1]));
+		else if(args.length == 3)
+			a = new Assembler(new File(args[0]), new File(args[1]), args[2]);
+		else
+		{
+			System.out.println("usage:");
+			System.out.println("  java -cp [cp] Assembler [parentDir] [webappDir]");
+			System.out.println("or");
+			System.out.println("  java -cp [cp] Assembler [parentDir] [webappDir] [jarNamePrefix]");
+			System.exit(0);
+		}
+		a.copyRequiredModules();
 	}
 }

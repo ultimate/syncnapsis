@@ -56,13 +56,18 @@ public class ResourceBundleProcessor
 
 	public void processResourceBundles()
 	{
+		int processed = 0;
+		int matching = 0;
 		for(File file : classesDir.listFiles())
 		{
 			if(file.getName().startsWith(resourceBundlePrefix) && file.getName().endsWith(resourceBundleSuffix))
 			{
+				matching++;
 				try
 				{
+					logger.info("processing file: " + file.getName());
 					processResourceBundle(file);
+					processed++;
 				}
 				catch(IOException e)
 				{
@@ -71,6 +76,7 @@ public class ResourceBundleProcessor
 				}
 			}
 		}
+		logger.info("files processed: " + processed + " (of " + matching + " matching)");
 	}
 
 	public void processResourceBundle(File file) throws IOException
@@ -125,5 +131,23 @@ public class ResourceBundleProcessor
 
 		file.delete();
 		tmp.renameTo(file);
+	}
+	
+	public static void main(String[] args)
+	{
+		ResourceBundleProcessor p = null;
+		if(args.length == 1)
+			p = new ResourceBundleProcessor(new File(args[0]));
+		else if(args.length == 3)
+			p = new ResourceBundleProcessor(new File(args[2]));
+		else
+		{
+			System.out.println("usage:");
+			System.out.println("  java -cp [cp] ResourceBundleProcessor [classesDir]");
+			System.out.println("or");
+			System.out.println("  java -cp [cp] ResourceBundleProcessor [classesDir] [rbPrefix] [rbSuffix]");
+			System.exit(0);
+		}
+		p.processResourceBundles();			
 	}
 }
