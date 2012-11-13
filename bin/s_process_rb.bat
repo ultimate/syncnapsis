@@ -1,0 +1,1 @@
+s_java com.syncnapsis.utils.dev.ResourceBundleProcessor target/classes

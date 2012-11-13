@@ -34,7 +34,7 @@ goto error
 set S_ARGS=%*
 :endInit
 SET S_JAVA_EXE="%JAVA_HOME%\bin\java.exe"
-SET S_CP=.
+SET S_CP=.;target\classes
 @REM syncnapsis dependencies
 SET S_CP=%S_CP%;"%S_HOME%\syncnapsis-core\syncnapsis-core-application-base\target\classes"
 SET S_CP=%S_CP%;"%S_HOME%\syncnapsis-core\syncnapsis-core-data\target\classes"
