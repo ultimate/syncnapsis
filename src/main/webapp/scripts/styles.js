@@ -12,9 +12,6 @@ Styles.layout = {};
 Styles.layout.HORIZONTAL = 1;
 Styles.layout.VERTICAL = 2;
 
-window[Styles.constant.WIDTH] = window.innerWidth;
-window[Styles.constant.HEIGHT] = window.innerHeight;
-
 Styles.FillLayout = function(elements, elementSizes, direction)
 {
 	if(elements.length != elementSizes.length)

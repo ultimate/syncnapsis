@@ -3,67 +3,37 @@
 <head>
 <title>syncnapsis</title>
 <meta charset="UTF-8">
-<script type="text/javascript"
-	src="../../../../../syncnapsis-core/syncnapsis-core-utils/src/main/webapp/scripts/util/Requests.js"></script>
-<script type="text/javascript"
-	src="../../../../../syncnapsis-core/syncnapsis-core-utils/src/main/webapp/scripts/util/Arrays.js"></script>
-<script type="text/javascript"
-	src="../../../../../syncnapsis-core/syncnapsis-core-utils/src/main/webapp/scripts/util/Events.js"></script>
-<script type="text/javascript"
-	src="../../../../../syncnapsis-core/syncnapsis-core-utils/src/main/webapp/scripts/lib/date.format.js"></script>
-<script type="text/javascript"
-	src="../../../../../syncnapsis-core/syncnapsis-core-utils/src/main/webapp/scripts/util/Console.js"></script>
-<script type="text/javascript"
-	src="../../../../../syncnapsis-core/syncnapsis-core-utils/src/main/webapp/scripts/util/Reflections.js"></script>
-
-<link rel="stylesheet" type="text/css" href="../../../../../syncnapsis-core/syncnapsis-core-utils/src/main/webapp/styles/default.css" />
-
+<link rel="stylesheet" type="text/css" href="styles/default.css" />
 <link rel="stylesheet" type="text/css" href="styles/base.css" />
-<script type="text/javascript" src="scripts/styles.js"></script>
-<script type="text/javascript" src="scripts/ad.js"></script>
-
-<!-- 
 <script type="text/javascript" src="scripts/util/Requests.js"></script>
 <script type="text/javascript">
-	// register Util-JS-Dependencies
+	// register util-JS
 	DependencyManager.register("Arrays", "util/Arrays.js");
 	DependencyManager.register("Console", "util/Console.js");
 	DependencyManager.register("Events", "util/Events.js");
 	DependencyManager.register("Proxies", "util/Proxies.js");
 	DependencyManager.register("Reflections", "util/Reflections.js");
 	DependencyManager.register("Strings", "util/Strings.js");
+	// register lib-JS
 	DependencyManager.register("DateFormat", "lib/date.format.js");
 	DependencyManager.register("JSON", "lib/json2.js");
+	// register WebSocket-JS
 	DependencyManager.register("WebSockets", "websockets/WebSockets.js");
 	DependencyManager.register("Fallback", "websockets/Fallback.js");
 	DependencyManager.register("RPCSocket", "websockets/RPCSocket.js");
-	DependencyManager.onLoadingFinished(init);
+	// register site-specific-JS
+	DependencyManager.register("Ad", "ad.js");
+	DependencyManager.register("Base", "base.js");
+	DependencyManager.register("Styles", "styles.js");
+	DependencyManager.register("Lang", "lang/lang.js", true);
+	// complete registration
+	DependencyManager.onLoadingFinished("init()");
 	DependencyManager.registrationDone();
-	// TODO add site scripts (including init and effects etc.)
 	// TODO add generic WS-URL-detection
-</script>
- -->
-<script type="text/javascript">
-	var layout_horizontal;
-	var layout_vertical;
-	var layout_ad_left;
-	var layout_ad_right;
-	var AD_WIDTH = 170;
-	var AD_BORDER = 2;
-	var BAR_HEIGHT = 30;
-	function init()
-	{
-		layout_horizontal = new Styles.FillLayout([ "ad_left", "center", "ad_right" ], [ AD_WIDTH, null, AD_WIDTH ], Styles.layout.HORIZONTAL);
-		layout_vertical = new Styles.FillLayout([ "bar_top", "content", "bar_bottom" ], [ BAR_HEIGHT, null, BAR_HEIGHT ], Styles.layout.VERTICAL);
-		
-		layout_ad_left = new Styles.FillLayout([ "ad_left_inner", "ad_left_border" ], [ null, AD_BORDER ], Styles.layout.HORIZONTAL);
-		layout_ad_right = new Styles.FillLayout([ "ad_right_border", "ad_right_inner" ], [ AD_BORDER, null ], Styles.layout.HORIZONTAL);
-		Events.fireEvent(window, Events.ONRESIZE);
-	}
 </script>
 
 </head>
-<body onLoad="javascript: init();">
+<body>
 	<div id="ad_left" class="ad">
 		<div id="ad_left_inner" class="ad_inner">
 			<img id="ad_left_img" class="ad_img" src="images/banner-160x600.png" />

@@ -1,3 +1,5 @@
+//@requires("Events")
+
 shrinkAd = function()
 {
 	// reset height
