@@ -6,6 +6,7 @@ Reflections.type.NULL 		= "null";
 Reflections.type.BOOLEAN 	= "boolean";
 Reflections.type.STRING 	= "string";
 Reflections.type.NUMBER 	= "number";
+Reflections.type.FUNCTION	= "function";
 
 Reflections.arguments = function(func)
 {

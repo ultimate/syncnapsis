@@ -161,14 +161,17 @@ DependencyManager.doOnLoadingFinished = new Array();
 DependencyManager.doOnLoadingProgressed = new Array();
 
 DependencyManager.scripts = new Array();
+DependencyManager.scriptPaths = new Array();
 DependencyManager.scriptAdded = new Array();
 DependencyManager.scriptContents = new Array();
+DependencyManager.scriptContentChanged = new Array();
 DependencyManager.scriptDependencies = new Array();
 
 DependencyManager.scriptsLoaded = 1; // because of this script
 
 // add this script
 DependencyManager.scripts[0] = "Requests";
+DependencyManager.scriptPaths[0] = null; // don't know this script's path
 DependencyManager.scriptAdded[0] = true;
 DependencyManager.scriptDependencies[0] = {};
 DependencyManager.scriptContents[0] = "";
@@ -178,28 +181,58 @@ DependencyManager.register = function(scriptName, scriptPath, external, dependen
 	if(DependencyManager.indexOf(scriptName) == -1)
 	{
 		var scriptIndex = DependencyManager.scripts.length;
+
 		DependencyManager.scripts[scriptIndex] = scriptName;
+		DependencyManager.scriptPaths[scriptIndex] = (external ? "" : DependencyManager.scriptSubpath) + scriptPath;
 		DependencyManager.scriptAdded[scriptIndex] = false;
 		DependencyManager.scriptContents[scriptIndex] = null;
 		DependencyManager.scriptDependencies[scriptIndex] = dependencies;
-		AJAX.sendRequestUrlEncoded((external ? "" : DependencyManager.scriptSubpath) + scriptPath, null, HTTP.GET, function(request)
-		{
-			DependencyManager.scriptLoaded(scriptIndex, request.responseText);
-		}, function(request)
-		{
-			DependencyManager.scriptNotLoaded(scriptIndex)
-		}, null);
+
+		DependencyManager.loadScript(scriptName);
 	}
+};
+
+DependencyManager.loadScript = function(scriptName)
+{
+	var scriptIndex = DependencyManager.indexOf(scriptName);
+
+	AJAX.sendRequestUrlEncoded(DependencyManager.scriptPaths[scriptIndex], null, HTTP.GET, function(request)
+	{
+		DependencyManager.scriptLoaded(scriptIndex, request.responseText);
+	}, function(request)
+	{
+		DependencyManager.scriptNotLoaded(scriptIndex);
+	}, null);
+};
+
+DependencyManager.reloadScript = function(scriptName)
+{
+	var scriptIndex = DependencyManager.indexOf(scriptName);
+
+	AJAX.sendRequestUrlEncoded(DependencyManager.scriptPaths[scriptIndex], null, HTTP.GET, function(request)
+	{
+		DependencyManager.scriptReloaded(scriptIndex, request.responseText);
+	}, function(request)
+	{
+		DependencyManager.scriptNotLoaded(scriptIndex);
+	}, null);
 };
 
 DependencyManager.scriptLoaded = function(scriptIndex, content)
 {
+	DependencyManager.scriptContents[scriptIndex] = content;
 	DependencyManager.scriptsLoaded++;
 	DependencyManager.loadingProgressed();
 
-	DependencyManager.scriptContents[scriptIndex] = content;
 	DependencyManager.addDependencies(scriptIndex, content);
 	DependencyManager.checkScripts();
+};
+
+DependencyManager.scriptReloaded = function(scriptIndex, content)
+{
+	DependencyManager.scriptContents[scriptIndex] = content;
+	if(DependencyManager.dependenciesSatisfied(scriptIndex))
+		DependencyManager.addScript(scriptIndex);	
 };
 
 DependencyManager.scriptNotLoaded = function(scriptIndex)
@@ -219,11 +252,18 @@ DependencyManager.indexOf = function(scriptName)
 
 DependencyManager.addScript = function(scriptIndex)
 {
+	var id = "script_" + scriptIndex;
+
 	var content = DependencyManager.scriptContents[scriptIndex];
-	var newScriptNode = document.createElement("script");
-	newScriptNode.type = "text/javascript";
-	newScriptNode.text = content;
-	document.getElementsByTagName("head")[0].appendChild(newScriptNode);
+	var scriptNode = document.getElementById(id);
+	if(scriptNode == null)
+	{
+		scriptNode = document.createElement("script");
+		scriptNode.id = id;
+		scriptNode.type = "text/javascript";
+		document.getElementsByTagName("head")[0].appendChild(scriptNode);
+	}
+	scriptNode.text = content;
 	// mark script loaded
 	DependencyManager.scriptAdded[scriptIndex] = true;
 };
@@ -285,14 +325,17 @@ DependencyManager.checkScripts = function()
 		for( var i = 0; i < DependencyManager.scripts.length; i++)
 		{
 			allScriptsAdded = allScriptsAdded && DependencyManager.scriptAdded[i];
-			if((!DependencyManager.scriptAdded[i]) && (DependencyManager.scriptContents[i] != null))
+			if(DependencyManager.scriptContents[i] != null)
 			{
-				// script loaded but not yet added
-				// check dependencies before adding
-				if(DependencyManager.dependenciesSatisfied(i))
+				if(!DependencyManager.scriptAdded[i])
 				{
-					DependencyManager.addScript(i);
-					newScriptsAdded++;
+					// script loaded but not yet added
+					// check dependencies before adding
+					if(DependencyManager.dependenciesSatisfied(i))
+					{
+						DependencyManager.addScript(i);
+						newScriptsAdded++;
+					}
 				}
 			}
 		}
@@ -304,18 +347,22 @@ DependencyManager.checkScripts = function()
 
 DependencyManager.onLoadingProgressed = function(doOnLoadingProgressed)
 {
+	if(typeof(doOnLoadingProgresses) != "function" && typeof(doOnLoadingProgressed) != "string")
+		throw new Error("callback must be either function or string for evaluation");
 	DependencyManager.doOnLoadingProgressed[DependencyManager.doOnLoadingProgressed.length] = doOnLoadingProgressed;
 };
 
 DependencyManager.onLoadingFinished = function(doOnLoadingFinished)
 {
+	if(typeof(doOnLoadingFinished) != "function" && typeof(doOnLoadingFinished) != "string")
+		throw new Error("callback must be either function or string for evaluation");
 	DependencyManager.doOnLoadingFinished[DependencyManager.doOnLoadingFinished.length] = doOnLoadingFinished;
 };
 
 DependencyManager.registrationDone = function(doOnLoadingFinished)
 {
 	if(doOnLoadingFinished)
-		DependencyManager.doOnLoadingFinished(doOnLoadingFinished);
+		DependencyManager.onLoadingFinished(doOnLoadingFinished);
 
 	DependencyManager.registrationIsDone = true;
 	DependencyManager.checkScripts();
@@ -325,7 +372,10 @@ DependencyManager.loadingFinished = function()
 {
 	for( var i = 0; i < DependencyManager.doOnLoadingFinished.length; i++)
 	{
-		DependencyManager.doOnLoadingFinished[i].call(null);
+		if(typeof(DependencyManager.doOnLoadingFinished[i]) == "function")
+			DependencyManager.doOnLoadingFinished[i].call(null);
+		else if(typeof(DependencyManager.doOnLoadingFinished[i]) == "string")
+			eval(DependencyManager.doOnLoadingFinished[i]);
 	}
 	DependencyManager.doOnLoadingFinished = new Array();
 };
@@ -334,6 +384,9 @@ DependencyManager.loadingProgressed = function()
 {
 	for( var i = 0; i < DependencyManager.doOnLoadingProgressed.length; i++)
 	{
-		DependencyManager.doOnLoadingProgressed[i].call(null, DependencyManager.scriptsLoaded, DependencyManager.scripts.length);
+		if(typeof(DependencyManager.doOnLoadingProgressed[i]) == "function")
+			DependencyManager.doOnLoadingProgressed[i].call(null, DependencyManager.scriptsLoaded, DependencyManager.scripts.length);
+		else if(typeof(DependencyManager.doOnLoadingProgressed[i]) == "string")
+			eval(DependencyManager.doOnLoadingProgressed[i]);
 	}
 };
