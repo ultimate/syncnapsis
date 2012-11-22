@@ -54,9 +54,12 @@
 		<property name="securityManager" ref="securityManager" />
 	</bean>
 	
-	<bean id="rpcFilter" class="com.syncnapsis.http.ActionFilter">
-		<property name="securityManager" ref="securityManager" />
+	<!-- 
+	<bean id="rpcFilter" class="com.syncnapsis.web.ActionFilter">
 		<property name="rpcHandler" ref="rpcHandler" />
+		<property name="serializer" ref="serializer" />
+		<property name="actionManager" ref="actionManager" />
 	</bean>
+	 -->
 	
 </beans>

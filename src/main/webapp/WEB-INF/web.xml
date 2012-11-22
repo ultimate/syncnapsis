@@ -32,6 +32,7 @@
       	<url-pattern>/ws</url-pattern>
     </filter-mapping>	
     
+    <!-- 
     <filter>
         <filter-name>actionFilter</filter-name>
         <filter-class>com.syncnapsis.utils.spring.FilterToBeanProxy</filter-class>
@@ -45,6 +46,7 @@
       	<filter-name>actionFilter</filter-name>
       	<url-pattern>/action</url-pattern>
     </filter-mapping>	
+     -->
     
     <servlet>
     	<servlet-name>jettyWebSocketServlet</servlet-name>
