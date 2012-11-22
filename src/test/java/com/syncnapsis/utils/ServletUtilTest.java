@@ -1,7 +1,10 @@
 package com.syncnapsis.utils;
 
-import com.syncnapsis.tests.LoggerTestCase;
+import javax.servlet.ServletException;
+
 import org.springframework.mock.web.MockHttpServletRequest;
+
+import com.syncnapsis.tests.LoggerTestCase;
 
 public class ServletUtilTest extends LoggerTestCase
 {
@@ -31,5 +34,42 @@ public class ServletUtilTest extends LoggerTestCase
 		assertTrue(s.contains(pv));
 		
 		assertEquals(req.getInputStream().markSupported(), s.contains(content));		
+	}
+	
+	public void testInsertDirectory() throws Exception
+	{
+		String path = "/a/b/c/d";
+		String directory = "x";
+		
+		assertEquals("/x/a/b/c/d", ServletUtil.insertDirectory(path, directory, 0));
+		assertEquals("/a/x/b/c/d", ServletUtil.insertDirectory(path, directory, 1));
+		assertEquals("/a/b/x/c/d", ServletUtil.insertDirectory(path, directory, 2));
+		assertEquals("/a/b/c/x/d", ServletUtil.insertDirectory(path, directory, 3));
+		
+		try
+		{
+			ServletUtil.insertDirectory(path, directory, 4);
+			
+			fail("expected Exception not occurred!");
+		}
+		catch(ServletException e)
+		{
+			assertNotNull(e);
+		}
+	}
+	
+	public void testCountDirectories() throws Exception
+	{
+		assertEquals(1, ServletUtil.countDirectories("/a"));
+		assertEquals(1, ServletUtil.countDirectories("//a"));
+		assertEquals(1, ServletUtil.countDirectories("/a/"));
+		assertEquals(1, ServletUtil.countDirectories("//a/"));
+		assertEquals(1, ServletUtil.countDirectories("//a//"));
+		
+		assertEquals(2, ServletUtil.countDirectories("/a/b"));
+		assertEquals(2, ServletUtil.countDirectories("//a//b"));
+		assertEquals(2, ServletUtil.countDirectories("/a/b/"));
+		assertEquals(2, ServletUtil.countDirectories("//a//b/"));
+		assertEquals(2, ServletUtil.countDirectories("//a//b//"));
 	}
 }

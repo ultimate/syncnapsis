@@ -3,7 +3,11 @@ package com.syncnapsis.utils;
 import java.io.IOException;
 import java.util.Enumeration;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Util class offering debug methods for HttpRequests and HttpResponses.
@@ -12,11 +16,22 @@ import javax.servlet.http.HttpServletRequest;
  */
 public abstract class ServletUtil
 {
-	// /**
-	// * Logger-Instance
-	// */
-	// private static transient final Logger logger = LoggerFactory.getLogger(ServletUtil.class);
+	/**
+	 * The directory separator inside URLs
+	 */
+	protected static final char				DIRECTORY_SEPARATOR	= '/';
+	/**
+	 * Logger-Instance
+	 */
+	@SuppressWarnings("unused")
+	private static transient final Logger	logger				= LoggerFactory.getLogger(ServletUtil.class);
 
+	/**
+	 * Create a String representing all relevant Information of the given HttpServletRequest.
+	 * 
+	 * @param req - the request
+	 * @return the request info as a String
+	 */
 	public static String toString(HttpServletRequest req)
 	{
 		StringBuilder sb = new StringBuilder();
@@ -94,5 +109,55 @@ public abstract class ServletUtil
 		}
 
 		return sb.toString();
+	}
+
+	/**
+	 * Insert a (sub)-directory in the given path at the required directory level.<br>
+	 * e.g.<br>
+	 * <ul>
+	 * <li>transform /a/b/c with directory x and level 0 --> /x/a/b/c</li>
+	 * <li>transform /a/b/c with directory x and level 1 --> /a/x/b/c</li>
+	 * <li>transform /a/b/c with directory x and level 2 --> /a/b/x/c</li>
+	 * </ul>
+	 * 
+	 * @param path - the path to transform
+	 * @param directory - the (sub)-directory to insert
+	 * @param directoryLevel - the level to insert the (sub)-directory at
+	 * @return the tranformed path
+	 * @throws ServletException - if transforming fails (e.g. directoryLevel is higher than the
+	 *             number of available directories
+	 */
+	public static String insertDirectory(String path, String directory, int directoryLevel) throws ServletException
+	{
+		int insertIndex = 0;
+		for(int i = 0; i < directoryLevel && insertIndex >= 0; i++)
+		{
+			insertIndex = path.indexOf(DIRECTORY_SEPARATOR, insertIndex + 1);
+		}
+		if(insertIndex == -1)
+			throw new ServletException("directoryLevel (" + directoryLevel + ")to high for given url: " + path);
+		StringBuilder sb = new StringBuilder();
+		sb.append(path.substring(0, insertIndex));
+		sb.append(DIRECTORY_SEPARATOR);
+		sb.append(directory);
+		sb.append(path.substring(insertIndex));
+		return sb.toString();
+	}
+
+	/**
+	 * Count the number of directories in the given path
+	 * 
+	 * @param path - the path to scan
+	 * @return the amount of directories
+	 */
+	public static int countDirectories(String path)
+	{
+		int dirs = 0;
+		for(int i = 1; i < path.length(); i++)
+		{
+			if(path.charAt(i) != DIRECTORY_SEPARATOR && path.charAt(i-1) == DIRECTORY_SEPARATOR)
+				dirs++;
+		}
+		return dirs;
 	}
 }
