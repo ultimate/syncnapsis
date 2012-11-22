@@ -1,4 +1,4 @@
-package com.syncnapsis.http;
+package com.syncnapsis.web;
 
 import org.springframework.util.Assert;
 

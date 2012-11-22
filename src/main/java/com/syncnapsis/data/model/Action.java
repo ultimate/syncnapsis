@@ -8,7 +8,7 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import com.syncnapsis.data.model.base.BaseObject;
-import com.syncnapsis.http.ActionFilter;
+import com.syncnapsis.web.ActionFilter;
 import com.syncnapsis.websockets.service.rpc.RPCCall;
 import com.syncnapsis.websockets.service.rpc.RPCHandler;
 
