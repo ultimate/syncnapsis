@@ -25,7 +25,7 @@ public abstract class FilterEngine extends BaseWebEngine implements Filter
 	}
 
 	/**
-	 * Construct a new BaseFilterEngine with a given Filter and path.
+	 * Construct a new BaseFilterEngine with a given path.
 	 * 
 	 * @param path - an optional path for the Filter to listen at
 	 */
