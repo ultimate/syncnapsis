@@ -71,7 +71,7 @@
 
     <filter-mapping>
       	<filter-name>localeFilter</filter-name>
-      	<url-pattern>/static</url-pattern>
+      	<url-pattern>/lang/*</url-pattern>
     </filter-mapping>	
     
 	<listener>

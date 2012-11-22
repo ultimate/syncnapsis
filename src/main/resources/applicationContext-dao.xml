@@ -3,6 +3,8 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd"
 	default-lazy-init="true">
+	
+	<bean id="actionDao" class="com.syncnapsis.data.dao.hibernate.ActionDaoHibernate" />
 
 	<bean id="empireDao" class="com.syncnapsis.data.dao.hibernate.EmpireDaoHibernate" />
 
@@ -29,6 +31,8 @@
 	<bean id="solarSystemInfrastructureDao" class="com.syncnapsis.data.dao.hibernate.SolarSystemInfrastructureDaoHibernate" />
 	
 	<bean id="solarSystemPopulationDao" class="com.syncnapsis.data.dao.hibernate.SolarSystemPopulationDaoHibernate" />
+	
+	<bean id="universalDao" class="com.syncnapsis.data.dao.hibernate.UniversalDaoHibernate" />
 	
 	<bean id="userContactDao" class="com.syncnapsis.data.dao.hibernate.UserContactDaoHibernate" />
 	

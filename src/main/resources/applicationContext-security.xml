@@ -29,6 +29,11 @@
 
 	<bean id="sessionProvider" class="com.syncnapsis.providers.impl.ThreadLocalSessionProvider" />
 
+	<bean id="localeProvider" class="com.syncnapsis.providers.impl.SessionBasedLocaleProvider">
+		<property name="sessionProvider" ref="sessionProvider" />
+		<property name="attributeName" value="j_locale" />
+	</bean>
+
 	<bean id="userProvider" class="com.syncnapsis.providers.impl.SessionBasedUserProvider">
 		<property name="sessionProvider" ref="sessionProvider" />
 		<property name="attributeName" value="j_user" />
