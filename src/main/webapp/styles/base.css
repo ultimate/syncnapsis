@@ -1,11 +1,21 @@
 body {
 	background: #000000;
 	overflow: hidden;
+	color: #EEEEEE;
+	font-family: monospace;
 }
 
 * {
 	padding: 0px;
 	margin: 0px;
+}
+
+a {
+	color: #EEEEEE;
+}
+
+.hidden {
+	display: none; 
 }
 
 .ad, .ad_inner, .ad_border {
@@ -47,8 +57,7 @@ body {
 }
 
 #ad_right_toggle {	
-	right: 0px;
-	
+	right: 0px;	
 }
 
 #center {
@@ -67,6 +76,56 @@ body {
 	position: absolute;
 	left: 0px;
 	/*top set via JS */
+}
+
+.bar span {	
+	position: relative;
+	top: 4px;
+	font-size: 13px;
+}
+
+.bar .bar_left {
+	position: absolute;
+	top: 0px;
+	height: 100%;
+	text-align: left;
+}
+
+.bar_left span {
+	left: 20px;
+}
+
+.bar .bar_right{
+	position: absolute;
+	top: 0px;
+	height: 100%;
+	text-align: right;
+}
+
+.bar_right span {
+	right: 20px;
+}
+
+.bar .bar_center{
+	position: absolute;
+	width: 400px;
+	height: 35px;
+	margin: auto;
+	z-index: 1;	
+	background: #0000FF;
+	text-align: center;
+}
+
+.bar #bar_bottom_center span {
+	top: 15px;
+}
+
+#bar_top_center {
+	top: 0px;
+}
+
+#bar_bottom_center {
+	bottom: 0px;
 }
 
 #content {
