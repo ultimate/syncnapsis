@@ -23,7 +23,11 @@
 
 	<bean id="fieldAccessController" class="com.syncnapsis.security.accesscontrol.FieldAccessController" />
 
-	<bean id="methodAccessController" class="com.syncnapsis.security.accesscontrol.MethodAccessController" />
+	<bean id="methodAccessController" class="com.syncnapsis.security.accesscontrol.MethodAccessController">
+	<!-- 
+		<property name="defaultAccessible" value="false" />
+	 -->
+	</bean>
 
 	<bean id="timeProvider" class="com.syncnapsis.providers.impl.SystemTimeProvider" />
 
