@@ -25,37 +25,52 @@
 	DependencyManager.register("Ad", "ad.js");
 	DependencyManager.register("Base", "base.js");
 	DependencyManager.register("Styles", "styles.js");
+	DependencyManager.register("UI", "ui.js");
 	DependencyManager.register("Locale", "locale.js");
 	DependencyManager.register("Lang", "lang/lang.js", true);
+	// register services
+	DependencyManager.register("PlayerManager", "service/PlayerManager.js");
 	// complete registration
 	DependencyManager.onLoadingFinished("init()");
 	DependencyManager.registrationDone();
-	// TODO add generic WS-URL-detection
 </script>
 
 </head>
 <body>
-	<div id="main"> <!-- TODO class="hidden" + progress bar & overlay -->
+	<div id="main">
+		
+		<!-- TODO class="hidden" + progress bar & overlay -->
+		
 		<div id="ad_left" class="ad">
 			<div id="ad_left_inner" class="ad_inner">
 				<img id="ad_left_img" class="ad_img" src="images/banner-160x600.png" />
 			</div>
 			<div id="ad_left_border" class="ad_border">
-				<img id="ad_left_toggle" class="ad_toggle" src="images/toggle-hide.png" onclick="javascript: toggleAd(true);" />
+				<img id="ad_left_toggle" class="ad_toggle" src="images/toggle-hide.png" onclick="javascript: Ad.toggle(true);" />
 			</div>
 		</div>
 		<div id="center">
 			<div id="bar_top" class="bar">
 				<div id="bar_top_left" class="bar_left">
-					<span><a href=""><label key="menu.x"></label></a></span>
+					<div id="bar_top_left_loggedin">
+						<span><a href=""><label key="menu.x"></label></a></span>
+					</div>
+					<div id="bar_top_left_loggedout">
+						<span><select id="locale_chooser" size="1" onselect="Locale.select();"></select></span>
+					</div>
 				</div>
 				<div id="bar_top_center"  class="bar_center">
 					<span>www.syncnapsis.com</span>
 				</div>
 				<div id="bar_top_right" class="bar_right">
-					<span><label key="menu.login_info"></label>&nbsp;<b id="username">anonymous</b>&nbsp;:</span>
-					<span><a href=""><label key="menu.profile"></label></a></span>
-					<span><a href="javascript: playerManager.logout();"><label key="menu.logout"></label></a></span>
+					<div id="bar_top_right_loggedin">
+						<span><label key="menu.login_info"></label>&nbsp;<b id="username">anonymous</b>&nbsp;:</span>
+						<span><a href=""><label key="menu.profile"></label></a></span>
+						<span><a href="javascript: playerManager.logout();"><label key="menu.logout"></label></a></span>
+					</div>
+					<div id="bar_top_right_loggedout">
+						<span><a href=""><label key="menu.login"></label></a></span>
+					</div>
 				</div>
 			</div>
 			<div id="content">the content</div>
@@ -63,6 +78,7 @@
 				<div id="bar_bottom_left" class="bar_left">
 					<span><a href=""><label key="menu.pinboard"></label></a></span>
 					<span><a href=""><label key="menu.news"></label></a></span>
+					<span><a href=""><label key="menu.stats"></label></a></span>
 				</div>
 				<div id="bar_bottom_center"  class="bar_center">
 					<span>www.syncnapsis.com</span>
@@ -76,7 +92,7 @@
 		</div>
 		<div id="ad_right" class="ad">
 			<div id="ad_right_border" class="ad_border">
-				<img id="ad_right_toggle" class="ad_toggle flip-horizontal" src="images/toggle-hide.png" onclick="javascript: toggleAd(true);" />
+				<img id="ad_right_toggle" class="ad_toggle flip-horizontal" src="images/toggle-hide.png" onclick="javascript: Ad.toggle(true);" />
 			</div>
 			<div id="ad_right_inner" class="ad_inner">
 				<img id="ad_right_img" class="ad_img" src="images/banner-160x600.png" />

@@ -1,6 +1,9 @@
 //@requires("Events")
+//@requires("UI")
 
-shrinkAd = function()
+var Ad = {};
+
+Ad.shrink = function()
 {
 	// reset height
 	document.getElementById("ad_left_img").style.height = "";
@@ -18,59 +21,59 @@ shrinkAd = function()
 	document.getElementById("ad_right_img").style.height = height + "px";
 };
 
-Events.addEventListener(Events.ONRESIZE, shrinkAd, window);
+Events.addEventListener(Events.ONRESIZE, Events.wrapEventHandler(Ad, Ad.shrink), window);
 
-var AD_TOGGLE_DIR = 0;
-var AD_TOGGLE_STEP = 10;
-var AD_TOGGLE_DELAY = 10;
-var AD_SHOW_INTERVAL = 300000;
-var AD_SHOW_DURATION = 10000;
-var AD_SHOW_USER = true;
-var AD_TOGGLE_IMG_SHOW = "images/toggle-show.png";
-var AD_TOGGLE_IMG_HIDE = "images/toggle-hide.png";
+Ad.TOGGLE_DIR = 0;
+Ad.TOGGLE_STEP = 10;
+Ad.TOGGLE_DELAY = 10;
+Ad.SHOW_INTERVAL = 300000;
+Ad.SHOW_DURATION = 10000;
+Ad.SHOW_USER = true;
+Ad.TOGGLE_IMG_SHOW = "images/toggle-show.png";
+Ad.TOGGLE_IMG_HIDE = "images/toggle-hide.png";
 
-toggleAd = function(user)
+Ad.toggle = function(user)
 {
-	if(layout_horizontal.elementSizes[0] == 0)
+	if(UI.layout_horizontal.elementSizes[0] == 0)
 	{
-		AD_TOGGLE_DIR = AD_TOGGLE_STEP;
-		document.getElementById("ad_left_toggle").src = AD_TOGGLE_IMG_HIDE;
-		document.getElementById("ad_right_toggle").src = AD_TOGGLE_IMG_HIDE;
+		Ad.TOGGLE_DIR = Ad.TOGGLE_STEP;
+		document.getElementById("ad_left_toggle").src = Ad.TOGGLE_IMG_HIDE;
+		document.getElementById("ad_right_toggle").src = Ad.TOGGLE_IMG_HIDE;
 		if(user)
-			AD_SHOW_USER = true;
+			Ad.SHOW_USER = true;
 	}
-	else if(layout_horizontal.elementSizes[0] == AD_WIDTH)
+	else if(UI.layout_horizontal.elementSizes[0] == UI.constants.AD_WIDTH)
 	{
-		AD_TOGGLE_DIR = -AD_TOGGLE_STEP;
-		document.getElementById("ad_left_toggle").src = AD_TOGGLE_IMG_SHOW;
-		document.getElementById("ad_right_toggle").src = AD_TOGGLE_IMG_SHOW;
+		Ad.TOGGLE_DIR = -Ad.TOGGLE_STEP;
+		document.getElementById("ad_left_toggle").src = Ad.TOGGLE_IMG_SHOW;
+		document.getElementById("ad_right_toggle").src = Ad.TOGGLE_IMG_SHOW;
 		if(user)
-			AD_SHOW_USER = false;
+			Ad.SHOW_USER = false;
 	}
-	layout_horizontal.elementSizes[0] += AD_TOGGLE_DIR;
-	layout_horizontal.elementSizes[2] += AD_TOGGLE_DIR;
-	layout_horizontal.fill();
-	layout_ad_left.fill();
-	layout_ad_right.fill();
-	if(layout_horizontal.elementSizes[0] == 0)
-		AD_TOGGLE_DIR = 0;
-	else if(layout_horizontal.elementSizes[0] == AD_WIDTH)
-		AD_TOGGLE_DIR = 0;
-	if(AD_TOGGLE_DIR != 0)
-		setTimeout(toggleAd, AD_TOGGLE_DELAY);
+	UI.layout_horizontal.elementSizes[0] += Ad.TOGGLE_DIR;
+	UI.layout_horizontal.elementSizes[2] += Ad.TOGGLE_DIR;
+	UI.layout_horizontal.fill();
+	UI.layout_ad_left.fill();
+	UI.layout_ad_right.fill();
+	if(UI.layout_horizontal.elementSizes[0] == 0)
+		Ad.TOGGLE_DIR = 0;
+	else if(UI.layout_horizontal.elementSizes[0] == UI.constants.AD_WIDTH)
+		Ad.TOGGLE_DIR = 0;
+	if(Ad.TOGGLE_DIR != 0)
+		setTimeout("Ad.toggle()", Ad.TOGGLE_DELAY);
 };
 
-showAd = function()
+Ad.show = function()
 {
-	if(layout_horizontal.elementSizes[0] == 0)
-		toggleAd(false);
-	setTimeout(hideAd, AD_SHOW_DURATION);
+	if(UI.layout_horizontal.elementSizes[0] == 0)
+		Ad.toggle(false);
+	setTimeout("Ad.hide()", Ad.SHOW_DURATION);
 };
 
-hideAd = function()
+Ad.hide = function()
 {
-	if(!AD_SHOW_USER && layout_horizontal.elementSizes[0] == AD_WIDTH)
-		toggleAd(false);
+	if(!Ad.SHOW_USER && UI.layout_horizontal.elementSizes[0] == UI.constants.AD_WIDTH)
+		Ad.toggle(false);
 };
 
-setInterval(showAd, AD_SHOW_INTERVAL);
+setInterval("Ad.show()", Ad.SHOW_INTERVAL);

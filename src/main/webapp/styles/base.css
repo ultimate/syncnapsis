@@ -15,10 +15,10 @@ a {
 }
 
 .hidden {
-	display: none; 
+	display: none;
 }
 
-.ad, .ad_inner, .ad_border {
+.ad,.ad_inner,.ad_border {
 	background: #333333;
 	/*width set via JS */
 	height: 100%;
@@ -49,15 +49,15 @@ a {
 	top: 0px;
 	bottom: 0px;
 	margin: auto;
-	z-index: 1;	
+	z-index: 1;
 }
 
-#ad_left_toggle {	
+#ad_left_toggle {
 	left: 0px;
 }
 
-#ad_right_toggle {	
-	right: 0px;	
+#ad_right_toggle {
+	right: 0px;
 }
 
 #center {
@@ -78,7 +78,7 @@ a {
 	/*top set via JS */
 }
 
-.bar span {	
+.bar span {
 	position: relative;
 	top: 4px;
 	font-size: 13px;
@@ -95,7 +95,7 @@ a {
 	left: 20px;
 }
 
-.bar .bar_right{
+.bar .bar_right {
 	position: absolute;
 	top: 0px;
 	height: 100%;
@@ -106,12 +106,12 @@ a {
 	right: 20px;
 }
 
-.bar .bar_center{
+.bar .bar_center {
 	position: absolute;
 	width: 400px;
 	height: 35px;
 	margin: auto;
-	z-index: 1;	
+	z-index: 1;
 	background: #0000FF;
 	text-align: center;
 }
@@ -131,8 +131,75 @@ a {
 #content {
 	background: #FFFF00;
 	width: 100%;
-	/*height set via JS */ position : absolute;
+	/*height set via JS */
+	position: absolute;
 	left: 0px;
 	position: absolute;
 	/*top set via JS */
+}
+
+#locale_chooser {
+	width: 100px;
+	height: 20px;
+	font-family: monospace;
+    font-size: 13px;
+    margin-top: -2px;
+}
+
+/*
+ * initial positioning
+ * assuming inner (!) window width of
+ * 1280 x 600
+ */
+#ad_left {
+	width: 170px;
+	left: 0px;
+}
+#center {
+	width: 940px;
+	left: 170px;
+}
+#ad_right {
+	width: 170px;
+	left: 1110px;
+}
+#ad_left_inner {
+	width: 168px;
+	left: 0px;
+}
+#ad_left_border {
+	width: 2px;
+	left: 168px;
+}
+#ad_right_border {
+	width: 2px;
+	left: 0px;
+}
+#ad_right_inner {
+	width: 168px;
+	left: 2px;
+}
+#bar_top {
+	height: 24px;
+	top: 0px;
+}
+#content {
+	height: 552px;
+	top: 24px;
+}
+#bar_bottom {
+	height: 24px;
+	top: 576px;
+}
+.bar_left {
+	width: 300px;
+	left: 0px;
+}
+.bar_center {
+	width: 340px;
+	left: 300px;
+}
+.bar_right {
+	width: 300px;
+	left: 640px;
 }
