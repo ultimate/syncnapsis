@@ -1,29 +1,35 @@
-//@requires("Styles")
-//@requires("Events")
+//@requires("UI")
+//@requires("RPCSocket")
+//@requires("PlayerManager")
 
-var layout_horizontal;
-var layout_vertical;
-var layout_ad_left;
-var layout_ad_right;
-var layout_bar_top;
-var layout_bar_bottom;
-var AD_WIDTH = 170;
-var AD_BORDER = 2;
-var BAR_HEIGHT = 24;
-var BAR_OUTER_WIDTH = 300;
+var WSConfiguration = {};
+WSConfiguration.protocol = "rpc";
+WSConfiguration.path = "/ws";
+
+var client = {};
+var server = {};
+var rpcSocket;
 
 init = function()
 {
-	layout_horizontal = new Styles.FillLayout([ "ad_left", "center", "ad_right" ], [ AD_WIDTH, null, AD_WIDTH ], Styles.layout.HORIZONTAL);
-	layout_vertical = new Styles.FillLayout([ "bar_top", "content", "bar_bottom" ], [ BAR_HEIGHT, null, BAR_HEIGHT ], Styles.layout.VERTICAL);
+	UI.init();
+	connect();
+};
 
-	layout_ad_left = new Styles.FillLayout([ "ad_left_inner", "ad_left_border" ], [ null, AD_BORDER ], Styles.layout.HORIZONTAL);
-	layout_ad_right = new Styles.FillLayout([ "ad_right_border", "ad_right_inner" ], [ AD_BORDER, null ], Styles.layout.HORIZONTAL);
+connect = function()
+{
+	// do the WS-connection stuff
+	var genericRPCHandler = new WebSockets.rpc.GenericRPCHandler(client);
+	var url = WebSockets.getRelativeURL(WSConfiguration.path);
+	rpcSocket = new WebSockets.RPCSocket(url, WSConfiguration.protocol, genericRPCHandler.anonymous(), null, null);
+	var genericRPCInvocationHandler = new WebSockets.rpc.GenericRPCInvocationHandler(rpcSocket, client);
+	// init client-side managers
+	client.playerManager = new PlayerManager();
+	// init server-side managers as proxies (may use same "class/interface") 
+	server.playerManager = Proxies.newProxyInstance(PlayerManager, genericRPCInvocationHandler);
+};
 
-	layout_bar_top = new Styles.FillLayout([ "bar_top_left", "bar_top_center", "bar_top_right" ], [ BAR_OUTER_WIDTH, null, BAR_OUTER_WIDTH ], Styles.layout.HORIZONTAL);
-	layout_bar_bottom = new Styles.FillLayout([ "bar_bottom_left", "bar_bottom_center", "bar_bottom_right" ], [ BAR_OUTER_WIDTH, null, BAR_OUTER_WIDTH ], Styles.layout.HORIZONTAL);
-	
-	Events.fireEvent(window, Events.ONRESIZE);
-	
-	Locale.update();
+disconnect = function()
+{
+	rpcSocket.close();
 };
