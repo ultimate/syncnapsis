@@ -21,32 +21,36 @@ Proxies.InvocationHandler.prototype.invoke = function(proxy, method, args)
 // param invocationHandler - the InvocationHandler that handles the Method calls
 Proxies.newProxyInstance = function(stub, invocationHandler)
 {
-	var proxy;
+	var proxy = {};
+	// set the invocationHandler for the stub
+	proxy.invocationHandler = invocationHandler;
+	// set the stub for this proxy
+	// (the stub is the "original" object this proxy will replace)
 	// check wether the stub is a constructor
-	if(typeof stub == "function")
+	if(typeof stub == Reflections.type.FUNCTION)
 	{
 		// if so create a new instance
-		proxy = new (stub)();
+		proxy.stub = new (stub)();
 	}
 	else
 	{
 		// an object has been given
 		// simply use this one
-		proxy = stub;
-	}
-		
-	// set the invocationHandler for the stub
-	proxy.invocationHandler = invocationHandler;
+		proxy.stub = stub;
+	}	
 	
 	var func;
 	var args;
 	var funcDecl;
-	for(var prop in proxy)
+	for(var prop in proxy.stub)
 	{
-		if(typeof proxy[prop] == "function")
+		if(typeof proxy.stub[prop] == Reflections.type.FUNCTION)
 		{
+			// create a new function definition in the
+			// proxy using the information of the stub
+			
 			// this is the old function
-			func = proxy[prop];
+			func = proxy.stub[prop];
 			// the arguments of the function
 			args = Reflections.arguments(func);
 			
@@ -82,12 +86,17 @@ Proxies.newProxyInstance = function(stub, invocationHandler)
 			funcDecl.append("  }\n");
 			// do the forwarding to the InvocationHandler
 			funcDecl.append("  return this.invocationHandler.invoke(object, method, args);\n")
-			funcDecl.append("};");
+			funcDecl.append("}"); // no semicolon, or the eval will not work!
 			
 //			console.log(funcDecl.toString());
 			
-			// override the old function
-			proxy[prop] = eval(funcDecl.toString());
+			// add the newly created function
+			proxy[prop] = eval("(" + funcDecl.toString() + ")");
+		}
+		else
+		{
+			// simply copy the property
+			proxy[prop] = proxy.stub[prop];
 		}
 	}
 	

@@ -166,6 +166,7 @@ DependencyManager.scriptAdded = new Array();
 DependencyManager.scriptContents = new Array();
 DependencyManager.scriptContentChanged = new Array();
 DependencyManager.scriptDependencies = new Array();
+DependencyManager.scriptDoOnReload = new Array();
 
 DependencyManager.scriptsLoaded = 1; // because of this script
 
@@ -173,8 +174,10 @@ DependencyManager.scriptsLoaded = 1; // because of this script
 DependencyManager.scripts[0] = "Requests";
 DependencyManager.scriptPaths[0] = null; // don't know this script's path
 DependencyManager.scriptAdded[0] = true;
-DependencyManager.scriptDependencies[0] = {};
 DependencyManager.scriptContents[0] = "";
+DependencyManager.scriptContentChanged[0] = false;
+DependencyManager.scriptDependencies[0] = {};
+DependencyManager.scriptDoOnReload[0] = null;
 
 DependencyManager.register = function(scriptName, scriptPath, external, dependencies)
 {
@@ -205,9 +208,10 @@ DependencyManager.loadScript = function(scriptName)
 	}, null);
 };
 
-DependencyManager.reloadScript = function(scriptName)
+DependencyManager.reloadScript = function(scriptName, doOnReload)
 {
 	var scriptIndex = DependencyManager.indexOf(scriptName);
+	DependencyManager.scriptDoOnReload[scriptIndex] = doOnReload;
 
 	AJAX.sendRequestUrlEncoded(DependencyManager.scriptPaths[scriptIndex], null, HTTP.GET, function(request)
 	{
@@ -216,6 +220,14 @@ DependencyManager.reloadScript = function(scriptName)
 	{
 		DependencyManager.scriptNotLoaded(scriptIndex);
 	}, null);
+};
+
+DependencyManager.eval = function(func)
+{
+	if(typeof(func) == "function")
+		func.call(null);
+	else if(typeof(func) == "string")
+		eval(func);
 };
 
 DependencyManager.scriptLoaded = function(scriptIndex, content)
@@ -232,7 +244,8 @@ DependencyManager.scriptReloaded = function(scriptIndex, content)
 {
 	DependencyManager.scriptContents[scriptIndex] = content;
 	if(DependencyManager.dependenciesSatisfied(scriptIndex))
-		DependencyManager.addScript(scriptIndex);	
+		DependencyManager.addScript(scriptIndex);
+	DependencyManager.eval(DependencyManager.scriptDoOnReload[scriptIndex]);
 };
 
 DependencyManager.scriptNotLoaded = function(scriptIndex)
@@ -261,6 +274,9 @@ DependencyManager.addScript = function(scriptIndex)
 		scriptNode = document.createElement("script");
 		scriptNode.id = id;
 		scriptNode.type = "text/javascript";
+		scriptNode.setAttribute("name", DependencyManager.scripts[scriptIndex]);
+		if(console)
+			console.debug("adding script_" + scriptIndex + ": " + DependencyManager.scripts[scriptIndex]);
 		document.getElementsByTagName("head")[0].appendChild(scriptNode);
 	}
 	scriptNode.text = content;
@@ -370,12 +386,11 @@ DependencyManager.registrationDone = function(doOnLoadingFinished)
 
 DependencyManager.loadingFinished = function()
 {
+	if(console)
+		console.debug("loading finished!");
 	for( var i = 0; i < DependencyManager.doOnLoadingFinished.length; i++)
 	{
-		if(typeof(DependencyManager.doOnLoadingFinished[i]) == "function")
-			DependencyManager.doOnLoadingFinished[i].call(null);
-		else if(typeof(DependencyManager.doOnLoadingFinished[i]) == "string")
-			eval(DependencyManager.doOnLoadingFinished[i]);
+		DependencyManager.eval(DependencyManager.doOnLoadingFinished[i]);
 	}
 	DependencyManager.doOnLoadingFinished = new Array();
 };
@@ -384,9 +399,6 @@ DependencyManager.loadingProgressed = function()
 {
 	for( var i = 0; i < DependencyManager.doOnLoadingProgressed.length; i++)
 	{
-		if(typeof(DependencyManager.doOnLoadingProgressed[i]) == "function")
-			DependencyManager.doOnLoadingProgressed[i].call(null, DependencyManager.scriptsLoaded, DependencyManager.scripts.length);
-		else if(typeof(DependencyManager.doOnLoadingProgressed[i]) == "string")
-			eval(DependencyManager.doOnLoadingProgressed[i]);
+		DependencyManager.eval(DependencyManager.doOnLoadingProgressed[i]);
 	}
 };

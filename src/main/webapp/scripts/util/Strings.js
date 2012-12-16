@@ -17,6 +17,11 @@ String.prototype.endsWith = function(suffix)
 	return this.substring(this.length - suffix.length, this.length) == suffix;
 };
 
+String.prototype.contains = function(part)
+{
+	return (this.indexOf(part) != -1);
+};
+
 // Initializes a new instance of the StringBuilder class
 // and appends the given value if supplied
 StringBuilder = function(value)
