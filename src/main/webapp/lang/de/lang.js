@@ -23,3 +23,4 @@ lang.menu.pinboard 				= "Pinwand";
 lang.menu.pinboard_tooltip		= lang.menu.pinboard;
 lang.menu.profile 				= "Profil";
 lang.menu.register 				= "Registrieren";
+lang.menu.stats 				= "Statistik";

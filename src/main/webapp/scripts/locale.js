@@ -1,4 +1,4 @@
-
+//@requires("Lang")
 
 var Locale = {};
 
@@ -10,18 +10,23 @@ Locale.STRING_VARIABLE = "lang";
 Locale.populateChooser = function()
 {
 	var localeChooser = document.getElementById(Locale.CHOOSER_ID);
-	localeChooser.childNodes.clear(); // clear children?
-	var select;
+	// clear children
+	while(localeChooser.hasChildNodes())
+	{
+		localeChooser.removeChild(localeChooser.lastChild);
+	}
+	// add options
+	var option;
 	for(var i in lang.EnumLocale)
 	{
-		select = document.createElement("select");
-		select.value = i;
-		select.text = lang.EnumLocale[i];
+		option = document.createElement("option");
+		option.value = i;
+		option.text = lang.EnumLocale[i];
 		if("EnumLocale." + i == lang.current)
 		{
-			select.setAttribute("selected", "selected");
+			option.setAttribute("selected", "selected");
 		}
-		localeChooser.appendChild(select);
+		localeChooser.appendChild(option);
 	}
 };
 
@@ -37,4 +42,10 @@ Locale.update = function()
 	{
 		elements[i].innerHTML = Locale.getString(elements[i].getAttribute(Locale.KEY_ATTRIBUTE));
 	}
+};
+
+Locale.select = function()
+{
+	// TODO select locale on server via WS
+	DependencyManager.reloadScript("Lang", Events.wrapEventHandler(Locale, Locale.update));
 };
