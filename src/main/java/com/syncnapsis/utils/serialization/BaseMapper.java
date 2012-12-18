@@ -95,6 +95,8 @@ public class BaseMapper implements Mapper, InitializingBean
 			return entity;
 		if(entity instanceof Boolean)
 			return entity;
+		if(entity.getClass().isEnum())
+			return entity;
 		if(entity instanceof Collection)
 			return prepare((Collection<Object>) entity, authorities);
 		if(entity.getClass().isArray())
@@ -201,6 +203,7 @@ public class BaseMapper implements Mapper, InitializingBean
 				{
 					try
 					{
+						logger.debug("adding field " + entity.getClass().getSimpleName() + "." + field.getName() + ": " + field.get(entity));
 						map.put(field.getName(), prepare(field.get(entity)));
 					}
 					catch(IllegalAccessException e)

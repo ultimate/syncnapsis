@@ -11,6 +11,7 @@ import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.Set;
 
+import com.syncnapsis.enums.EnumLocale;
 import com.syncnapsis.security.SecurityManager;
 import com.syncnapsis.security.accesscontrol.FieldAccessController;
 import com.syncnapsis.security.annotations.Accessible;
@@ -323,6 +324,14 @@ public class BaseMapperTest extends LoggerTestCase
 			assertTrue(map.containsKey(entries[i]));
 			assertEquals(entries[i + 1], map.get(entries[i]));
 		}
+	}
+	
+	@TestCoversMethods("prepare")
+	public void testPrepare_Enum() throws Exception
+	{
+		EnumLocale e = EnumLocale.DE;
+		
+		assertEquals(e, mapper.prepare(e, (Object[]) null));
 	}
 
 	@TestCoversMethods({ "isReadable", "isWritable" })
