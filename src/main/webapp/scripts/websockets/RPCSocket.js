@@ -275,7 +275,7 @@ WebSockets.rpc.GenericRPCInvocationHandler.prototype.invoke = function(proxy, me
 	
 	// check wether the original method for the method invoked returns a function
 	// the original method is stored within the stub of the proxy
-	var originalResult = (proxy.stub[method])();
+	var originalResult = (proxy.stub[methodName])();
 	if(typeof originalResult == Reflections.type.FUNCTION)
 		resultHandler = originalResult;
 
