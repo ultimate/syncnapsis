@@ -142,7 +142,7 @@ public class RPCService extends BaseService implements InitializingBean
 			return;
 		}
 		Object result = this.rpcHandler.doRPC((RPCCall) message.getData(), getAuthorities());
-		if(result != null)
+		if(result != Void.TYPE)
 		{
 			try
 			{

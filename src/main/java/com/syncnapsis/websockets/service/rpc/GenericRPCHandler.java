@@ -88,11 +88,16 @@ public abstract class GenericRPCHandler implements RPCHandler, InitializingBean
 		for(Object arg : call.getArgs())
 			logger.debug("                 " + arg + (arg != null ? " (" + arg.getClass() + ")" : ""));
 		logger.debug("Method found: " + method);
-
+		
 		try
 		{
 			if(isAccessible(method, authorities))
-				return method.invoke(target, call.getArgs());
+			{
+				Object result = method.invoke(target, call.getArgs());
+				if(method.getReturnType().equals(void.class))
+					return Void.TYPE;
+				return result;
+			}
 			else
 			{
 				logger.warn("Trying to call not accessible method '" + method.getDeclaringClass().getName() + "." + method.getName()
