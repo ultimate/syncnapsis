@@ -8,6 +8,7 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -94,6 +95,8 @@ public class BaseMapper implements Mapper, InitializingBean
 		if(entity instanceof Number)
 			return entity;
 		if(entity instanceof Boolean)
+			return entity;
+		if(entity instanceof Date)
 			return entity;
 		if(entity.getClass().isEnum())
 			return entity;

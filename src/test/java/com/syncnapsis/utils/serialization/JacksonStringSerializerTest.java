@@ -115,6 +115,33 @@ public class JacksonStringSerializerTest extends LoggerTestCase
 		logger.debug(pp1 + " vs. " + pp3);
 		assertEquals(pp1, pp3);
 	}
+	
+	/*
+	public void testSerialize_withCycle() throws Exception
+	{
+		JacksonStringSerializer ser = new JacksonStringSerializer();
+
+		POJOParent pp1, pp2, pExpected;
+		String s1;
+		
+		pp1 = new POJOParent();
+		pp2 = new POJOParent();
+		
+		pp1.sibling = pp2;
+		pp2.sibling = pp1;
+		
+		s1 = ser.serialize(pp1); 
+		logger.debug(s1);
+		
+		Map<String, Object> m1 = new HashMap<String, Object>();
+		Map<String, Object> m2 = new HashMap<String, Object>();
+		m1.put("sibling", m2);
+		m2.put("sibling", m1);
+		
+		s1 = ser.serialize(m1);
+		logger.debug(s1);
+	}
+	*/
 
 	public static class POJO implements Mapable<POJO>
 	{
