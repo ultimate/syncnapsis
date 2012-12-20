@@ -24,7 +24,10 @@
 		<property name="protocols">
 			<map key-type="java.lang.String" value-type="java.lang.String">
 				<entry key="chat" value-ref="chatService" />
+				<entry key="rpc" value-ref="openSessionInViewService"/>
+				<!-- 
 				<entry key="rpc" value-ref="rpcService" />
+				 -->
 			</map>
 		</property>
 	</bean>
@@ -32,6 +35,12 @@
 	<bean id="chatService" class="com.syncnapsis.websockets.service.BroadcastService" />
 
 	<bean id="logService" class="com.syncnapsis.websockets.service.BaseService" />
+
+	<bean id="openSessionInViewService" class="com.syncnapsis.websockets.service.OpenSessionInViewService">
+		<property name="interceptedService" ref="rpcService" />
+		<property name="sessionFactory" ref="sessionFactory" />
+		<property name="flushMode" value="COMMIT" />
+	</bean>
 
 	<bean id="rpcService" class="com.syncnapsis.websockets.service.rpc.RPCService">
 		<property name="serializer" ref="serializer" />

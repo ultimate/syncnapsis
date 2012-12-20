@@ -22,7 +22,7 @@ connect = function()
 	var genericRPCHandler = new WebSockets.rpc.GenericRPCHandler(client);
 	var url = WebSockets.getRelativeURL(WSConfiguration.path);
 	rpcSocket = new WebSockets.RPCSocket(url, WSConfiguration.protocol, genericRPCHandler.anonymous(), null, null);
-	var genericRPCInvocationHandler = new WebSockets.rpc.GenericRPCInvocationHandler(rpcSocket, client);
+	var genericRPCInvocationHandler = new WebSockets.rpc.GenericRPCInvocationHandler(rpcSocket, server);
 	// init client-side managers
 	client.playerManager = new PlayerManager();
 	// init server-side managers as proxies (may use same "class/interface") 
