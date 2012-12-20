@@ -11,13 +11,51 @@
  */
 package com.syncnapsis.websockets.service;
 
-import com.syncnapsis.tests.annotations.TestExcludesMethods;
+import org.hibernate.FlushMode;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 
-@TestExcludesMethods("*")
-public class OpenSessionInViewServiceTest
+import com.syncnapsis.tests.BaseSpringContextTestCase;
+import com.syncnapsis.tests.annotations.TestCoversMethods;
+import com.syncnapsis.tests.annotations.TestExcludesMethods;
+import com.syncnapsis.utils.HibernateUtil;
+import com.syncnapsis.utils.reflections.Invocation;
+
+@TestExcludesMethods({ "get*", "set*", "afterPropertiesSet" })
+public class OpenSessionInViewServiceTest extends BaseSpringContextTestCase
 {
-	public void testNothing() throws Exception
+	private SessionFactory	sessionFactory;
+
+	@TestCoversMethods({ "intercept", "openSession" })
+	public void testIntercept() throws Exception
 	{
-		// no testing since all code has been copied from Spring
+		OpenSessionInViewService s = new OpenSessionInViewService();
+		s.setFlushMode(FlushMode.AUTO);
+		s.setSessionFactory(sessionFactory);
+		// s.setDelegate(delegate);
+
+		Invocation<Session> i = new Invocation<Session>() {
+			@Override
+			public Session invoke()
+			{
+				logger.debug("inside invocation");
+				Session session = HibernateUtil.currentSession();
+				assertNotNull(session);
+				assertTrue(session.isOpen());
+				return session;
+			}
+		};
+		
+		// close session to force new one
+		Session before = HibernateUtil.currentSession();
+		before.close();
+		assertFalse(before.isOpen());
+		
+		// this is the current session
+		Session session = s.intercept(i);
+		
+		assertNotNull(session);
+		assertNotSame(before, session);
+//		assertFalse(session.isOpen()); // not working?! maybe this is not the right session?
 	}
 }
