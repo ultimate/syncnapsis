@@ -245,7 +245,7 @@ public class RPCService extends BaseService implements InitializingBean
 	 */
 	protected void respond(RPCMessage message, Object result) throws IOException
 	{
-		RPCMessage response = new RPCMessage(message.getCcid(), null, result);
+		RPCMessage response = new RPCMessage(message.getConnection(), message.getCcid(), null, result);
 		this.send(response);
 	}
 
