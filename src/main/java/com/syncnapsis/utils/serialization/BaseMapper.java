@@ -88,17 +88,7 @@ public class BaseMapper implements Mapper, InitializingBean
 	@SuppressWarnings("unchecked")
 	public Object prepare(Object entity, Object... authorities)
 	{
-		if(entity == null)
-			return entity;
-		if(entity instanceof String)
-			return entity;
-		if(entity instanceof Number)
-			return entity;
-		if(entity instanceof Boolean)
-			return entity;
-		if(entity instanceof Date)
-			return entity;
-		if(entity.getClass().isEnum())
+		if(isInvariant(entity))
 			return entity;
 		if(entity instanceof Collection)
 			return prepare((Collection<Object>) entity, authorities);
@@ -524,6 +514,23 @@ public class BaseMapper implements Mapper, InitializingBean
 			}
 		}
 		return entity;
+	}
+	
+	protected boolean isInvariant(Object entity)
+	{
+		if(entity == null)
+			return true;
+		if(entity instanceof String)
+			return true;
+		if(entity instanceof Number)
+			return true;
+		if(entity instanceof Boolean)
+			return true;
+		if(entity instanceof Date)
+			return true;
+		if(entity.getClass().isEnum())
+			return true;
+		return false;
 	}
 
 	protected boolean isReadable(Field field, Object... authorities)
