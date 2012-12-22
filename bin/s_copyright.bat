@@ -1,0 +1,1 @@
+s_java com.syncnapsis.utils.dev.CopyRightAdder -t="%S_HOME%/syncnapsis-dev/syncnapsis-dev-utils/src/main/resources/copy-right-templates"
