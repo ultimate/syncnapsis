@@ -56,7 +56,8 @@ Proxies.newProxyInstance = function(stub, invocationHandler)
 			
 			funcDecl = new StringBuilder();
 			// create a new function declaration
-			funcDecl.append("function(");
+			// starting with "(" to enable eval
+			funcDecl.append("(function(");
 			// append the arguments
 			for(var i = 0; i < args.length; i++)
 			{
@@ -86,12 +87,12 @@ Proxies.newProxyInstance = function(stub, invocationHandler)
 			funcDecl.append("  }\n");
 			// do the forwarding to the InvocationHandler
 			funcDecl.append("  return this.invocationHandler.invoke(object, method, args);\n")
-			funcDecl.append("}"); // no semicolon, or the eval will not work!
+			funcDecl.append("})"); // no semicolon, or the eval will not work!
 			
 //			console.log(funcDecl.toString());
 			
 			// add the newly created function
-			proxy[prop] = eval("(" + funcDecl.toString() + ")");
+			proxy[prop] = eval(funcDecl.toString());
 		}
 		else
 		{

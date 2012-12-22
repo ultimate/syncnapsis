@@ -3,6 +3,7 @@ package com.syncnapsis.utils.serialization;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -11,6 +12,7 @@ import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.Set;
 
+import com.syncnapsis.enums.EnumLocale;
 import com.syncnapsis.security.SecurityManager;
 import com.syncnapsis.security.accesscontrol.FieldAccessController;
 import com.syncnapsis.security.annotations.Accessible;
@@ -324,6 +326,14 @@ public class BaseMapperTest extends LoggerTestCase
 			assertEquals(entries[i + 1], map.get(entries[i]));
 		}
 	}
+	
+	@TestCoversMethods("prepare")
+	public void testPrepare_Enum() throws Exception
+	{
+		EnumLocale e = EnumLocale.DE;
+		
+		assertEquals(e, mapper.prepare(e, (Object[]) null));
+	}
 
 	@TestCoversMethods({ "isReadable", "isWritable" })
 	public void testIsAccessible() throws Exception
@@ -386,6 +396,18 @@ public class BaseMapperTest extends LoggerTestCase
 		POJO1[] array = mapper.createArray(POJO1.class, 5);
 		assertEquals(POJO1[].class, array.getClass());
 		assertEquals(5, array.length);
+	}
+	
+	public void testIsInvariant() throws Exception
+	{
+		assertTrue(mapper.isInvariant(null));
+		assertTrue(mapper.isInvariant(1));
+		assertTrue(mapper.isInvariant(true));
+		assertTrue(mapper.isInvariant("a"));
+		assertTrue(mapper.isInvariant(EnumLocale.DE));
+		assertTrue(mapper.isInvariant(new Date()));
+		
+		assertFalse(mapper.isInvariant(new Object()));
 	}
 
 	public static class POJO1
