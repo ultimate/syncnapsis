@@ -3,6 +3,7 @@ package com.syncnapsis.utils;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileFilter;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -36,7 +37,22 @@ public abstract class FileUtil
 	 */
 	public static File[] listFilesIncludingSubfolders(File file)
 	{
-		List<File> files = listFilesIncludingSubfoldersAsList(file);
+		return listFilesIncludingSubfolders(file, null);
+	}
+	
+	/**
+	 * Listet alle Dateien auf, die sich innerhalb eines Ordners oder einem seiner Subordner
+	 * befinden.
+	 * Das Ergebnis wird in eine File-Array konvertiert.
+	 * 
+	 * @see FileUtil#listFilesIncludingSubfoldersAsList(File)
+	 * @param file - der Ordner
+	 * @param filter - the FileFilter to use
+	 * @return die Liste der Dateien
+	 */
+	public static File[] listFilesIncludingSubfolders(File file, FileFilter filter)
+	{
+		List<File> files = listFilesIncludingSubfoldersAsList(file, filter);
 		return files.toArray(new File[files.size()]);
 	}
 
@@ -50,6 +66,21 @@ public abstract class FileUtil
 	 * @return die Liste der Dateien
 	 */
 	public static String[] listFilesIncludingSubfoldersAsString(File file)
+	{
+		return listFilesIncludingSubfoldersAsString(file, null);
+	}
+
+	/**
+	 * Listet alle Dateien auf, die sich innerhalb eines Ordners oder einem seiner Subordner
+	 * befinden.
+	 * Das Ergebnis wird in eine String-Array konvertiert.
+	 * 
+	 * @see FileUtil#listFilesIncludingSubfoldersAsList(File)
+	 * @param file - der Ordner
+	 * @param filter - the FileFilter to use
+	 * @return die Liste der Dateien
+	 */
+	public static String[] listFilesIncludingSubfoldersAsString(File file, FileFilter filter)
 	{
 		File[] files = listFilesIncludingSubfolders(file);
 		String[] fileNames = new String[files.length];
@@ -69,20 +100,33 @@ public abstract class FileUtil
 	 */
 	public static List<File> listFilesIncludingSubfoldersAsList(File file)
 	{
+		return listFilesIncludingSubfoldersAsList(file, null);
+	}
+
+	/**
+	 * Listet alle Dateien auf, die sich innerhalb eines Ordners oder einem seiner Subordner
+	 * befinden.
+	 * 
+	 * @param file - der Ordner
+	 * @param filter - the FileFilter to use
+	 * @return die Liste der Dateien
+	 */
+	public static List<File> listFilesIncludingSubfoldersAsList(File file, FileFilter filter)
+	{
 		List<File> subFiles = new ArrayList<File>();
 
-		if(file.listFiles() != null)
-			subFiles.addAll(Arrays.asList(file.listFiles()));
+		if(file.listFiles(filter) != null)
+			subFiles.addAll(Arrays.asList(file.listFiles(filter)));
 
 		List<File> subSubFiles = new ArrayList<File>();
 
 		for(File subFile : subFiles)
 		{
+			subSubFiles.add(subFile);
 			if(subFile.isDirectory())
 			{
-				subSubFiles.addAll(listFilesIncludingSubfoldersAsList(subFile));
+				subSubFiles.addAll(listFilesIncludingSubfoldersAsList(subFile, filter));
 			}
-			subSubFiles.add(subFile);
 		}
 
 		return subSubFiles;
