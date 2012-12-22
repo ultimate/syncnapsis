@@ -23,8 +23,8 @@ public abstract class FileUtil
 	/**
 	 * Logger-Instanz
 	 */
-	protected static final Logger logger = LoggerFactory.getLogger(FileUtil.class);
-	
+	protected static final Logger	logger	= LoggerFactory.getLogger(FileUtil.class);
+
 	/**
 	 * Listet alle Dateien auf, die sich innerhalb eines Ordners oder einem seiner Subordner
 	 * befinden.
@@ -90,6 +90,7 @@ public abstract class FileUtil
 
 	/**
 	 * Kopiert eine Datei von einer Stelle an eine andere
+	 * 
 	 * @param source - die Ursprungsdatei
 	 * @param target - die Zieldatei
 	 * @throws IOException wenn ein Fehler auftritt
@@ -121,7 +122,75 @@ public abstract class FileUtil
 				fos.close();
 		}
 	}
-	
+
+	/**
+	 * Read a file into a String
+	 * 
+	 * @param source - the file to read
+	 * @return the file content
+	 * @throws IOException - if reading the file fails
+	 */
+	public static String readFile(File source) throws IOException
+	{
+		logger.debug("reading file: " + source);
+		BufferedInputStream fis = new BufferedInputStream(new FileInputStream(source));
+		StringBuffer sb = new StringBuffer();
+		try
+		{
+			int c;
+			while((c = fis.read()) != -1)
+			{
+				sb.append((char) c);
+			}
+		}
+		catch(IOException e)
+		{
+			throw e;
+		}
+		finally
+		{
+			if(fis != null)
+				fis.close();
+		}
+		return sb.toString();
+	}
+
+	/**
+	 * Write the content of a String to a file
+	 * 
+	 * @param target - the file to write to
+	 * @param content - the content to write
+	 * @throws IOException - if writing the file fails
+	 */
+	public static void writeFile(File target, String content) throws IOException
+	{
+		logger.debug("writing file: " + target);
+		if(!target.getAbsoluteFile().getParentFile().exists())
+			target.getAbsoluteFile().getParentFile().mkdirs();
+		BufferedOutputStream fos = new BufferedOutputStream(new FileOutputStream(target));
+		try
+		{
+			byte[] bytes = content.getBytes();
+			fos.write(bytes);
+			fos.flush();
+		}
+		catch(IOException e)
+		{
+			throw e;
+		}
+		finally
+		{
+			if(fos != null)
+				fos.close();
+		}
+	}
+
+	/**
+	 * Get the extension of a file
+	 * 
+	 * @param file - the file
+	 * @return the file extension
+	 */
 	public static String getExtension(File file)
 	{
 		if(file.isDirectory())
