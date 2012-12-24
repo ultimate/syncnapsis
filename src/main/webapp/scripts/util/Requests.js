@@ -1,11 +1,25 @@
+/**
+ * Syncnapsis Framework - Copyright (c) 2012 ultimate
+ * 
+ * This program is free software; you can redistribute it and/or modify it under the terms of
+ * the GNU General Public License as published by the Free Software Foundation; either version
+ * 3 of the License, or any later version.
+ * 
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+ * without even the implied warranty of MECHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Plublic License along with this program;
+ * if not, see <http://www.gnu.org/licenses/>.
+ */
 var HTTP = {};
 
 // HTTP STATUS CODES
-// 1XX – Informationen
+// 1XX ? Informationen
 HTTP.STATUS_CONTINUE = 100;
 HTTP.STATUS_SWITCHING_PROTOCOLS = 101;
 HTTP.STATUS_PROCESSING = 102;
-// 2XX – Erfolgreiche Operation
+// 2XX ? Erfolgreiche Operation
 HTTP.STATUS_OK = 200;
 HTTP.STATUS_CREATED = 201;
 HTTP.STATUS_ACCEPTED = 202;
@@ -14,7 +28,7 @@ HTTP.STATUS_NO_CONTENT = 204;
 HTTP.STATUS_RESET_CONTENT = 205;
 HTTP.STATUS_PARTIAL_CONTENT = 206;
 HTTP.STATUS_MULTI_STATUS = 207;
-// 3XX – Umleitung
+// 3XX ? Umleitung
 HTTP.STATUS_MULTIPLE_CHOICE = 300;
 HTTP.STATUS_MOVED_PERMANENTLY = 301;
 HTTP.STATUS_FOUND = 302;
@@ -23,7 +37,7 @@ HTTP.STATUS_NOT_MODIFIED = 304;
 HTTP.STATUS_USE_PROXY = 305;
 HTTP.STATUS_SWITCH_PROXY = 306;
 HTTP.STATUS_TEMPORARY_REDIRECT = 307;
-// 4XX – Client-Fehler
+// 4XX ? Client-Fehler
 HTTP.STATUS_BAD_REQUEST = 400;
 HTTP.STATUS_UNAUTHORIZED = 401;
 HTTP.STATUS_PAYMENT_REQUIRED = 402;
@@ -49,7 +63,7 @@ HTTP.STATUS_LOCKED = 423;
 HTTP.STATUS_FAILED_DEPENDENCY = 424;
 HTTP.STATUS_UNORDERED_COLLECTION = 425;
 HTTP.STATUS_UPGRADE_REQUIRED = 426;
-// 5XX – Server-Fehler
+// 5XX ? Server-Fehler
 HTTP.STATUS_INTERNAL_SERVER_ERROR = 500;
 HTTP.STATUS_NOT_IMPLEMENTED = 501;
 HTTP.STATUS_BAD_GATEWAY = 502;
