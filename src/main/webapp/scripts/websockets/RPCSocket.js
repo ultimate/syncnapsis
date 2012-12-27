@@ -113,16 +113,16 @@ WebSockets.RPCSocket.prototype._onresult = function(msg)
 	if(this._callbacks[msg.ccid])
 	{
 		if(this._callbacks[msg.ccid] instanceof Events.EventHandler)
-			this._callbacks[msg.ccid].onEvent(msg);
+			this._callbacks[msg.ccid].onEvent(msg.data);
 		else
-			this._callbacks[msg.ccid].call(null, msg);
+			this._callbacks[msg.ccid].call(null, msg.data);
 	}
 	else if(this._defaultResultHandler)
 	{
 		if(this._defaultResultHandler instanceof Events.EventHandler)
-			this._defaultResultHandler.onEvent(msg);
+			this._defaultResultHandler.onEvent(msg.data);
 		else
-			this._defaultResultHandler.call(null, msg);
+			this._defaultResultHandler.call(null, msg.data);
 	}
 	else
 		console.error("No handler defined for this result!");
