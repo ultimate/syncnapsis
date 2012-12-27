@@ -82,7 +82,7 @@
 	 -->
 	<bean id="mapper" class="com.syncnapsis.utils.serialization.LimitedReferenceDepthMapper">
 		<property name="securityManager" ref="securityManager" />
-		<property name="depthLimit" value="1"/>
+		<property name="depthLimit" value="3"/>
 	</bean>
 
 	<!-- Servlets -->
