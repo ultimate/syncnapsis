@@ -17,12 +17,12 @@ package com.syncnapsis.websockets.service.rpc;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.syncnapsis.utils.MapUtil;
 import com.syncnapsis.utils.serialization.Mapable;
 import com.syncnapsis.websockets.Connection;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.util.Assert;
 
 /**
  * POJO representing RPCMessages send from client to server or vice versa.
@@ -84,7 +84,7 @@ public class RPCMessage implements Mapable<RPCMessage>
 	public RPCMessage(Connection connection, Long ccid, Long scid, Object data)
 	{
 		super();
-		Assert.notNull(data);
+//		Assert.notNull(data); // message may be null in some cases
 		this.connection = connection;
 		this.ccid = ccid;
 		this.scid = scid;
