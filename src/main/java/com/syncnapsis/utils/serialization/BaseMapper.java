@@ -263,7 +263,7 @@ public class BaseMapper implements Mapper, InitializingBean
 	 * java.lang.Object, java.lang.Object[])
 	 */
 	@Override
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public <T> T merge(Type type, T entity, Object prepared, Object... authorities)
 	{
 		Class<? extends T> cls;
@@ -351,6 +351,11 @@ public class BaseMapper implements Mapper, InitializingBean
 		if(cls == String.class && prepared instanceof String)
 		{
 			return (T) prepared;
+		}
+		// logger.trace("Enum? " + (cls.isEnum()) + " && " + (prepared instanceof String));
+		if(cls.isEnum() && prepared instanceof String)
+		{
+			return (T) Enum.valueOf((Class<? extends Enum>) cls, (String) prepared);
 		}
 		// logger.trace("Number? " + (ClassUtil.isNumber(cls)) + " && " + (prepared instanceof
 		// Number));
