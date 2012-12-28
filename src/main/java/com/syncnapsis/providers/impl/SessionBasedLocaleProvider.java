@@ -46,5 +46,16 @@ public class SessionBasedLocaleProvider extends SessionBasedProvider<EnumLocale>
 		if(locale != null)
 			return locale;
 		return EnumLocale.getDefault();
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see com.syncnapsis.providers.SessionBasedProvider#set(java.lang.Object)
+	 */
+	@Override
+	public void set(EnumLocale t) throws UnsupportedOperationException
+	{
+		// overwritten to ensure type safety and cast when using RPC
+		super.set(t);
 	}	
 }
