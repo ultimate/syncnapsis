@@ -97,5 +97,6 @@
 		<property name="sessionProvider" ref="sessionProvider" />
 		<property name="localeProvider" ref="localeProvider" />
 		<property name="localeDirectoryLevel" value="1" />
+		<property name="useInclude" value="true" />
 	</bean>
 </beans>
