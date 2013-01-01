@@ -15,10 +15,12 @@
 package com.syncnapsis.utils;
 
 import java.io.IOException;
+import java.util.Collection;
 import java.util.Enumeration;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -120,6 +122,31 @@ public abstract class ServletUtil
 		catch(IOException e)
 		{
 			sb.append("[--content unreadable: exception occurred--]");
+		}
+
+		return sb.toString();
+	}
+	
+	/**
+	 * Create a String representing all relevant Information of the given HttpServletResponse.
+	 * 
+	 * @param resp - the response
+	 * @return the request info as a String
+	 */
+	public static String toString(HttpServletResponse resp)
+	{
+		StringBuilder sb = new StringBuilder();
+		sb.append("HttpServletResponse:  " + resp.getClass().getName() + "\n");
+		sb.append("  BufferSize:         " + resp.getBufferSize() + "\n");
+		sb.append("  CharacterEncoding:  " + resp.getCharacterEncoding() + "\n");
+		sb.append("  ContentType:        " + resp.getContentType() + "\n");
+		sb.append("  Locale:             " + resp.getLocale() + "\n");
+		sb.append("  Status:             " + resp.getStatus() + "\n");
+		sb.append("  Headers:\n");
+		Collection<String> headerNames = resp.getHeaderNames();
+		for(String h: headerNames)
+		{
+			sb.append("    " + h + ":" + resp.getHeader(h) + "\n");
 		}
 
 		return sb.toString();
