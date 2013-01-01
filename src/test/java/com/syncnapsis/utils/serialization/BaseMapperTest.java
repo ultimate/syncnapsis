@@ -61,6 +61,9 @@ public class BaseMapperTest extends LoggerTestCase
 		assertEquals(1, (int) mapper.merge(Integer.class, 1, (Object[]) null));
 
 		assertEquals(1, (int) mapper.merge((Integer) null, 1, (Object[]) null));
+
+		assertEquals(EnumLocale.DE, mapper.merge(EnumLocale.class, EnumLocale.DE, (Object[]) null));
+		assertEquals(EnumLocale.DE, mapper.merge(EnumLocale.class, "DE", (Object[]) null));
 	}
 
 	public void testMergeToArray() throws Exception
