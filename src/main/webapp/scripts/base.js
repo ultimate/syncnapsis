@@ -15,6 +15,7 @@
 //@requires("UI")
 //@requires("RPCSocket")
 //@requires("PlayerManager")
+//@requires("Providers")
 
 var WSConfiguration = {};
 WSConfiguration.protocol = "rpc";
@@ -41,6 +42,7 @@ connect = function()
 	client.playerManager = new PlayerManager();
 	// init server-side managers as proxies (may use same "class/interface") 
 	server.playerManager = Proxies.newProxyInstance(PlayerManager, genericRPCInvocationHandler);
+	server.localeProvider = Proxies.newProxyInstance(LocaleProvider, genericRPCInvocationHandler);
 };
 
 disconnect = function()

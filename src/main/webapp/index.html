@@ -30,6 +30,7 @@
 	DependencyManager.register("Lang", "lang/lang.js", true);
 	// register services
 	DependencyManager.register("PlayerManager", "service/PlayerManager.js");
+	DependencyManager.register("Providers", "service/Providers.js");
 	// complete registration
 	DependencyManager.onLoadingFinished("init()");
 	DependencyManager.registrationDone();
@@ -56,7 +57,7 @@
 						<span><a href=""><label key="menu.x"></label></a></span>
 					</div>
 					<div id="bar_top_left_loggedout">
-						<span><select id="locale_chooser" size="1" onselect="Locale.select();"></select></span>
+						<span><select id="locale_chooser" size="1" onchange="Locale.select(this.value);"></select></span>
 					</div>
 				</div>
 				<div id="bar_top_center"  class="bar_center">
@@ -64,9 +65,9 @@
 				</div>
 				<div id="bar_top_right" class="bar_right">
 					<div id="bar_top_right_loggedin">
-						<span><label key="menu.login_info"></label>&nbsp;<b id="username">anonymous</b>&nbsp;:</span>
+						<span><label key="menu.login_info"></label>&nbsp;<b id="bar_top_playername">anonymous</b>&nbsp;:</span>
 						<span><a href=""><label key="menu.profile"></label></a></span>
-						<span><a href="javascript: playerManager.logout();"><label key="menu.logout"></label></a></span>
+						<span><a href="javascript: server.playerManager.logout();"><label key="menu.logout"></label></a></span>
 					</div>
 					<div id="bar_top_right_loggedout">
 						<span><a href=""><label key="menu.login"></label></a></span>
