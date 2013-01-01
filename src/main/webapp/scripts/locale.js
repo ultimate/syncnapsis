@@ -58,8 +58,9 @@ Locale.update = function()
 	}
 };
 
-Locale.select = function()
+Locale.select = function(selection)
 {
-	// TODO select locale on server via WS
+	// select locale on server via WS
+	server.localeProvider.set(selection); // loose dependency of base.js
 	DependencyManager.reloadScript("Lang", Events.wrapEventHandler(Locale, Locale.update));
 };
