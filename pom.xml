@@ -208,7 +208,7 @@
 		<jackson.version>2.0.1</jackson.version> <!-- 02.05.2012 -->
 
 		<!-- Spring-Dependencies -->
-		<spring.version>3.1.0.RELEASE</spring.version> <!-- 19.01.2012 -->
+		<spring.version>3.1.2.RELEASE</spring.version> <!-- 01.01.2013 -->
 
 		<!-- Commons-Dependencies -->
 		<commons.beanutils.version>1.8.3</commons.beanutils.version> <!-- 19.01.2012 -->
