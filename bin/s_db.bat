@@ -12,6 +12,6 @@
 @REM You should have received a copy of the GNU General Plublic License along with this program;
 @REM if not, see <http://www.gnu.org/licenses/>.
 @REM
-s_db_drop
-s_db_prepare
-s_db_sequence
+call s_db_drop
+call s_db_prepare
+call s_db_sequence
