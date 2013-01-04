@@ -30,6 +30,7 @@
 		</property>
 		<property name="timeProvider" ref="timeProvider" />
 		<property name="sessionProvider" ref="sessionProvider" />
+		<property name="localeProvider" ref="localeProvider" />
 		<property name="userProvider" ref="userProvider" />
 		<property name="playerProvider" ref="playerProvider" />
 		<property name="authorityProvider" ref="authorityProvider" />

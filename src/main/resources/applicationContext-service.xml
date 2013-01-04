@@ -99,4 +99,12 @@
         <constructor-arg ref="userRoleDao"/>
     </bean>  
     
+    <!-- non-DB-Managers -->
+    
+    <bean id="uiManager" class="com.syncnapsis.client.UIManagerImpl">
+    	<property name="localeProvider" ref="localeProvider" />
+    	<property name="connectionProvider" ref="connectionProvider" />
+    	<property name="rpcService" ref="rpcService" />
+    </bean>
+    
 </beans>

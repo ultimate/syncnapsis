@@ -19,13 +19,13 @@ PlayerManager = function()
 	this.login = function(username, password)
 	{
 		// return Player
-		return function(player) { UI.onLogin(player); };
+		return function(player) { client.uiManager.onLogin(player); };
 	};
 	
 	this.logout = function()
 	{
 		// return boolean
-		return function(success) { UI.onLogout(success); };
+		return function(success) { client.uiManager.onLogout(success); };
 	};
 	
 	this.register = function(username, email, password, passwordConfirm)

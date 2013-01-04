@@ -26,7 +26,6 @@
 	DependencyManager.register("Base", "base.js");
 	DependencyManager.register("Styles", "styles.js");
 	DependencyManager.register("UI", "ui.js");
-	DependencyManager.register("Locale", "locale.js");
 	DependencyManager.register("Lang", "lang/lang.js", true);
 	// register services
 	DependencyManager.register("PlayerManager", "service/PlayerManager.js");
@@ -57,7 +56,7 @@
 						<span><a href=""><label key="menu.x"></label></a></span>
 					</div>
 					<div id="bar_top_left_loggedout">
-						<span><select id="locale_chooser" size="1" onchange="Locale.select(this.value);"></select></span>
+						<span><select id="locale_chooser" size="1" onchange="server.uiManager.selectLocale(this.value);"></select></span>
 					</div>
 				</div>
 				<div id="bar_top_center"  class="bar_center">

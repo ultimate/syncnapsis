@@ -27,7 +27,6 @@ var rpcSocket;
 
 init = function()
 {
-	UI.init();
 	connect();
 };
 
@@ -39,10 +38,11 @@ connect = function()
 	rpcSocket = new WebSockets.RPCSocket(url, WSConfiguration.protocol, genericRPCHandler.anonymous(), null, null);
 	var genericRPCInvocationHandler = new WebSockets.rpc.GenericRPCInvocationHandler(rpcSocket, server);
 	// init client-side managers
-	client.playerManager = new PlayerManager();
+	client.uiManager = new UIManager();
 	// init server-side managers as proxies (may use same "class/interface") 
 	server.playerManager = Proxies.newProxyInstance(PlayerManager, genericRPCInvocationHandler);
-	server.localeProvider = Proxies.newProxyInstance(LocaleProvider, genericRPCInvocationHandler);
+	server.uiManager = Proxies.newProxyInstance(UIManager, genericRPCInvocationHandler);
+//	server.localeProvider = Proxies.newProxyInstance(LocaleProvider, genericRPCInvocationHandler);
 };
 
 disconnect = function()

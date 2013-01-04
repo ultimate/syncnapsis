@@ -48,7 +48,7 @@ Ad.TOGGLE_IMG_HIDE = "images/toggle-hide.png";
 
 Ad.toggle = function(user)
 {
-	if(UI.layout_horizontal.elementSizes[0] == 0)
+	if(client.uiManager.layout_horizontal.elementSizes[0] == 0)
 	{
 		Ad.TOGGLE_DIR = Ad.TOGGLE_STEP;
 		document.getElementById("ad_left_toggle").src = Ad.TOGGLE_IMG_HIDE;
@@ -56,7 +56,7 @@ Ad.toggle = function(user)
 		if(user)
 			Ad.SHOW_USER = true;
 	}
-	else if(UI.layout_horizontal.elementSizes[0] == UI.constants.AD_WIDTH)
+	else if(client.uiManager.layout_horizontal.elementSizes[0] == UI.constants.AD_WIDTH)
 	{
 		Ad.TOGGLE_DIR = -Ad.TOGGLE_STEP;
 		document.getElementById("ad_left_toggle").src = Ad.TOGGLE_IMG_SHOW;
@@ -64,14 +64,14 @@ Ad.toggle = function(user)
 		if(user)
 			Ad.SHOW_USER = false;
 	}
-	UI.layout_horizontal.elementSizes[0] += Ad.TOGGLE_DIR;
-	UI.layout_horizontal.elementSizes[2] += Ad.TOGGLE_DIR;
-	UI.layout_horizontal.fill();
-	UI.layout_ad_left.fill();
-	UI.layout_ad_right.fill();
-	if(UI.layout_horizontal.elementSizes[0] == 0)
+	client.uiManager.layout_horizontal.elementSizes[0] += Ad.TOGGLE_DIR;
+	client.uiManager.layout_horizontal.elementSizes[2] += Ad.TOGGLE_DIR;
+	client.uiManager.layout_horizontal.fill();
+	client.uiManager.layout_ad_left.fill();
+	client.uiManager.layout_ad_right.fill();
+	if(client.uiManager.layout_horizontal.elementSizes[0] == 0)
 		Ad.TOGGLE_DIR = 0;
-	else if(UI.layout_horizontal.elementSizes[0] == UI.constants.AD_WIDTH)
+	else if(client.uiManager.layout_horizontal.elementSizes[0] == UI.constants.AD_WIDTH)
 		Ad.TOGGLE_DIR = 0;
 	if(Ad.TOGGLE_DIR != 0)
 		setTimeout("Ad.toggle()", Ad.TOGGLE_DELAY);
@@ -79,14 +79,14 @@ Ad.toggle = function(user)
 
 Ad.show = function()
 {
-	if(UI.layout_horizontal.elementSizes[0] == 0)
+	if(client.uiManager.layout_horizontal.elementSizes[0] == 0)
 		Ad.toggle(false);
 	setTimeout("Ad.hide()", Ad.SHOW_DURATION);
 };
 
 Ad.hide = function()
 {
-	if(!Ad.SHOW_USER && UI.layout_horizontal.elementSizes[0] == UI.constants.AD_WIDTH)
+	if(!Ad.SHOW_USER && client.uiManager.layout_horizontal.elementSizes[0] == client.uiManager.constants.AD_WIDTH)
 		Ad.toggle(false);
 };
 
