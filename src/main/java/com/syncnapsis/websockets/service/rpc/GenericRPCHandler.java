@@ -1,14 +1,11 @@
 /**
  * Syncnapsis Framework - Copyright (c) 2012 ultimate
- * 
  * This program is free software; you can redistribute it and/or modify it under the terms of
  * the GNU General Public License as published by the Free Software Foundation; either version
  * 3 of the License, or any later version.
- * 
  * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
  * without even the implied warranty of MECHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU General Public License for more details.
- * 
  * You should have received a copy of the GNU General Plublic License along with this program;
  * if not, see <http://www.gnu.org/licenses/>.
  */
@@ -23,6 +20,9 @@ import java.util.Arrays;
 import com.syncnapsis.security.AccessController;
 import com.syncnapsis.utils.serialization.Serializer;
 import com.syncnapsis.websockets.Connection;
+import com.syncnapsis.websockets.Service;
+import com.syncnapsis.websockets.service.InterceptorService;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
@@ -78,7 +78,9 @@ public abstract class GenericRPCHandler implements RPCHandler, InitializingBean
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.syncnapsis.websockets.service.rpc.RPCHandler#doRPC(com.syncnapsis.websockets.service.rpc.RPCCall)
+	 * @see
+	 * com.syncnapsis.websockets.service.rpc.RPCHandler#doRPC(com.syncnapsis.websockets.service.
+	 * rpc.RPCCall)
 	 */
 	@Override
 	public Object doRPC(RPCCall call, Object... authorities)
@@ -102,7 +104,7 @@ public abstract class GenericRPCHandler implements RPCHandler, InitializingBean
 		for(Object arg : call.getArgs())
 			logger.debug("                 " + arg + (arg != null ? " (" + arg.getClass() + ")" : ""));
 		logger.debug("Method found: " + method);
-		
+
 		try
 		{
 			if(isAccessible(method, authorities))
@@ -453,10 +455,19 @@ public abstract class GenericRPCHandler implements RPCHandler, InitializingBean
 		{
 			super();
 			Assert.notNull(connection, "connection must not be null!");
-			Assert.isTrue(connection.getService() instanceof RPCService);
+
+			// since interrupted Services are possible we have to check for
+			// the real RPCService for being able to do the RPC
+			Service tmp = connection.getService();
+			while(tmp != null && !(tmp instanceof RPCService) && tmp instanceof InterceptorService)
+			{
+				tmp = ((InterceptorService) tmp).getInterceptedService();
+			}
+			Assert.isTrue(tmp instanceof RPCService);
+			
 			this.objectName = objectName;
 			this.connection = connection;
-			this.rpcService = (RPCService) connection.getService();
+			this.rpcService = (RPCService) tmp;
 		}
 
 		/*
