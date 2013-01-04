@@ -1,16 +1,17 @@
 /**
  * Syncnapsis Framework - Copyright (c) 2012 ultimate
  * 
- * This program is free software; you can redistribute it and/or modify it under the terms of
- * the GNU General Public License as published by the Free Software Foundation; either version
- * 3 of the License, or any later version.
+ * This program is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License as published by the Free Software
+ * Foundation; either version 3 of the License, or any later version.
  * 
- * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
- * without even the implied warranty of MECHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
- * See the GNU General Public License for more details.
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MECHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * details.
  * 
- * You should have received a copy of the GNU General Plublic License along with this program;
- * if not, see <http://www.gnu.org/licenses/>.
+ * You should have received a copy of the GNU General Plublic License along with
+ * this program; if not, see <http://www.gnu.org/licenses/>.
  */
 var HTTP = {};
 
@@ -238,9 +239,9 @@ DependencyManager.reloadScript = function(scriptName, doOnReload)
 
 DependencyManager.eval = function(func)
 {
-	if(typeof(func) == "function")
+	if(typeof (func) == "function")
 		func.call(null);
-	else if(typeof(func) == "string")
+	else if(typeof (func) == "string")
 		eval(func);
 };
 
@@ -292,6 +293,15 @@ DependencyManager.addScript = function(scriptIndex)
 		if(console)
 			console.debug("adding script_" + scriptIndex + ": " + DependencyManager.scripts[scriptIndex]);
 		document.getElementsByTagName("head")[0].appendChild(scriptNode);
+	}
+	else
+	{
+		if(console)
+			console.debug("updating script_" + scriptIndex + ": " + DependencyManager.scripts[scriptIndex]);
+		// re-evaluating script is required (script content is not live updated)
+		// ATTENTION: use window.eval(x) or eval.call(window, x) for global scope
+		// (otherwise reloaded content is only available inside this function)
+		window.eval(content);
 	}
 	scriptNode.text = content;
 	// mark script loaded
@@ -377,14 +387,14 @@ DependencyManager.checkScripts = function()
 
 DependencyManager.onLoadingProgressed = function(doOnLoadingProgressed)
 {
-	if(typeof(doOnLoadingProgresses) != "function" && typeof(doOnLoadingProgressed) != "string")
+	if(typeof (doOnLoadingProgresses) != "function" && typeof (doOnLoadingProgressed) != "string")
 		throw new Error("callback must be either function or string for evaluation");
 	DependencyManager.doOnLoadingProgressed[DependencyManager.doOnLoadingProgressed.length] = doOnLoadingProgressed;
 };
 
 DependencyManager.onLoadingFinished = function(doOnLoadingFinished)
 {
-	if(typeof(doOnLoadingFinished) != "function" && typeof(doOnLoadingFinished) != "string")
+	if(typeof (doOnLoadingFinished) != "function" && typeof (doOnLoadingFinished) != "string")
 		throw new Error("callback must be either function or string for evaluation");
 	DependencyManager.doOnLoadingFinished[DependencyManager.doOnLoadingFinished.length] = doOnLoadingFinished;
 };
