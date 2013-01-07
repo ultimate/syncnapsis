@@ -15,3 +15,47 @@
 	-ms-filter: flipv; /*IE*/
 	filter: flipv; /*IE*/
 }
+
+/* 
+	fix some browsers default padding and margin
+*/
+* {
+	padding: 0px;
+	margin: 0px;
+}
+
+/*
+	hide elements
+*/
+.hidden {
+	display: none;
+}
+
+/* 
+	centering or stretching via
+	position:absolute + auto-margin
+	centering: width & height = fixed
+	stretching: width & height not set
+*/
+.centered {
+	position: absolute;
+	top: 0px;
+	bottom: 0px;
+	left: 0px;
+	right: 0px;
+	margin: auto;
+}
+
+.centered_x {
+	position: absolute;
+	left: 0px;
+	right: 0px;
+	margin: auto;
+}
+
+.centered_y {
+	position: absolute;
+	top: 0px;
+	bottom: 0px;
+	margin: auto;
+}
