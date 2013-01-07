@@ -387,7 +387,7 @@ DependencyManager.checkScripts = function()
 
 DependencyManager.onLoadingProgressed = function(doOnLoadingProgressed)
 {
-	if(typeof (doOnLoadingProgresses) != "function" && typeof (doOnLoadingProgressed) != "string")
+	if(typeof (doOnLoadingProgressed) != "function" && typeof (doOnLoadingProgressed) != "string")
 		throw new Error("callback must be either function or string for evaluation");
 	DependencyManager.doOnLoadingProgressed[DependencyManager.doOnLoadingProgressed.length] = doOnLoadingProgressed;
 };
@@ -425,4 +425,18 @@ DependencyManager.loadingProgressed = function()
 	{
 		DependencyManager.eval(DependencyManager.doOnLoadingProgressed[i]);
 	}
+};
+
+DependencyManager.defaultOnLoadingProgressed = function(progressBarID, progressFieldID)
+{
+	var progressBar = document.getElementById(progressBarID);
+	var progressField = document.getElementById(progressFieldID);
+	
+	return function() {
+		var loaded = DependencyManager.scriptsLoaded;
+		var total  = DependencyManager.scripts.length;
+		var progress = Math.round(100*loaded/total) + "%";
+		progressBar.style.width = progress;
+		progressField.innerHTML = progress;
+	};
 };
