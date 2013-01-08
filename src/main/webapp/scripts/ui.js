@@ -25,6 +25,7 @@ UI.constants.BAR_HEIGHT = 24;
 UI.constants.BAR_OUTER_WIDTH = 300;
 
 UI.constants.LABEL_ID_PLAYERNAME = "bar_top_playername";
+UI.constants.OVERLAY_ID = "overlay";
 
 UI.constants.LOCALE_CHOOSER_ID = "locale_chooser";
 UI.constants.LOCALE_LABEL_TAGNAME = "label";
@@ -52,6 +53,7 @@ UIManager = function()
 	this.onLogout();
 	this.updateLabels();
 	this.populateLocaleChooser();
+	this.hideOverlay();
 };
 
 UIManager.prototype.onLogin = function(player)
@@ -75,6 +77,12 @@ UIManager.prototype.onLogout = function(success)
 	document.getElementById("bar_top_right_loggedin").style.display = "none";
 	document.getElementById("bar_top_left_loggedout").style.display = "block";
 	document.getElementById("bar_top_right_loggedout").style.display = "block";
+};
+
+UIManager.prototype.hideOverlay = function()
+{
+	var overlay = document.getElementById(UI.constants.OVERLAY_ID);
+	overlay.className += " hidden";
 };
 
 UIManager.prototype.populateLocaleChooser = function()

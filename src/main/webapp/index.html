@@ -7,6 +7,8 @@
 <link rel="stylesheet" type="text/css" href="styles/base.css" />
 <script type="text/javascript" src="scripts/util/Requests.js"></script>
 <script type="text/javascript">
+	// configure DependencyManager for delayed load
+	DependencyManager.instantLoad = false;
 	// register util-JS
 	DependencyManager.register("Arrays", "util/Arrays.js");
 	DependencyManager.register("Console", "util/Console.js");
@@ -31,22 +33,33 @@
 	DependencyManager.register("PlayerManager", "service/PlayerManager.js");
 	DependencyManager.register("Providers", "service/Providers.js");
 	// complete registration
+	DependencyManager.onLoadingProgressed(DependencyManager.defaultOnLoadingProgressed("loader_bar", "loader_text"));
 	DependencyManager.onLoadingFinished("init()");
-	DependencyManager.registrationDone();
+	// DependencyManager.registrationDone(); // will be called onload
 </script>
-
 </head>
-<body>
+<body onload="javascript: DependencyManager.registrationDone();">
+	<div id="overlay" class="centered">
+		<div id="loader_frame" class="centered">
+			<div id="loader_center" class="centered_y">
+				<span>Loading...</span><br>
+				<div id="loader" class="centered_x">
+					<div id="loader_bar"></div>
+				</div>
+				<br> <span id="loader_text">0%</span>
+			</div>
+		</div>
+	</div>
 	<div id="main">
-		
+
 		<!-- TODO class="hidden" + progress bar & overlay -->
-		
+
 		<div id="ad_left" class="ad">
 			<div id="ad_left_inner" class="ad_inner">
-				<img id="ad_left_img" class="ad_img" src="images/banner-160x600.png" />
+				<img id="ad_left_img" class="ad_img centered" src="images/banner-160x600.png" />
 			</div>
 			<div id="ad_left_border" class="ad_border">
-				<img id="ad_left_toggle" class="ad_toggle" src="images/toggle-hide.png" onclick="javascript: Ad.toggle(true);" />
+				<img id="ad_left_toggle" class="ad_toggle centered_y" src="images/toggle-hide.png" onclick="javascript: Ad.toggle(true);" />
 			</div>
 		</div>
 		<div id="center">
@@ -59,14 +72,13 @@
 						<span><select id="locale_chooser" size="1" onchange="server.uiManager.selectLocale(this.value);"></select></span>
 					</div>
 				</div>
-				<div id="bar_top_center"  class="bar_center">
+				<div id="bar_top_center" class="bar_center">
 					<span>www.syncnapsis.com</span>
 				</div>
 				<div id="bar_top_right" class="bar_right">
 					<div id="bar_top_right_loggedin">
-						<span><label key="menu.login_info"></label>&nbsp;<b id="bar_top_playername">anonymous</b>&nbsp;:</span>
-						<span><a href=""><label key="menu.profile"></label></a></span>
-						<span><a href="javascript: server.playerManager.logout();"><label key="menu.logout"></label></a></span>
+						<span><label key="menu.login_info"></label>&nbsp;<b id="bar_top_playername">anonymous</b>&nbsp;:</span> <span><a href=""><label key="menu.profile"></label></a></span> <span><a
+							href="javascript: server.playerManager.logout();"><label key="menu.logout"></label></a></span>
 					</div>
 					<div id="bar_top_right_loggedout">
 						<span><a href=""><label key="menu.login"></label></a></span>
@@ -76,30 +88,25 @@
 			<div id="content">the content</div>
 			<div id="bar_bottom" class="bar">
 				<div id="bar_bottom_left" class="bar_left">
-					<span><a href=""><label key="menu.pinboard"></label></a></span>
-					<span><a href=""><label key="menu.news"></label></a></span>
-					<span><a href=""><label key="menu.stats"></label></a></span>
+					<span><a href=""><label key="menu.pinboard"></label></a></span> <span><a href=""><label key="menu.news"></label></a></span> <span><a href=""><label key="menu.stats"></label></a></span>
 				</div>
-				<div id="bar_bottom_center"  class="bar_center">
+				<div id="bar_bottom_center" class="bar_center">
 					<span>www.syncnapsis.com</span>
 				</div>
 				<div id="bar_bottom_right" class="bar_right">
-					<span><a href=""><label key="menu.about"></label></a></span>
-					<span><a href="lang/contact.html"><label key="menu.contact"></label></a></span>
-					<span><a href="lang/disclaimer.html"><label key="menu.disclaimer"></label></a></span>
+					<span><a href=""><label key="menu.about"></label></a></span> <span><a href="lang/contact.html"><label key="menu.contact"></label></a></span> <span><a href="lang/disclaimer.html"><label
+							key="menu.disclaimer"></label></a></span>
 				</div>
 			</div>
 		</div>
 		<div id="ad_right" class="ad">
 			<div id="ad_right_border" class="ad_border">
-				<img id="ad_right_toggle" class="ad_toggle flip-horizontal" src="images/toggle-hide.png" onclick="javascript: Ad.toggle(true);" />
+				<img id="ad_right_toggle" class="ad_toggle centered_y flip-horizontal" src="images/toggle-hide.png" onclick="javascript: Ad.toggle(true);" />
 			</div>
 			<div id="ad_right_inner" class="ad_inner">
 				<img id="ad_right_img" class="ad_img" src="images/banner-160x600.png" />
 			</div>
 		</div>
-	</div>
-	<div id="overlay">
 	</div>
 </body>
 </html>
