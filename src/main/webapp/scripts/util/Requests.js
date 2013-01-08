@@ -168,6 +168,7 @@ AJAX.defaultDoOnFailure = function(request)
 var DependencyManager = {};
 
 DependencyManager.registrationIsDone = false;
+DependencyManager.instantLoad = true;
 DependencyManager.scriptSubpath = "scripts/";
 DependencyManager.interval = 100;
 DependencyManager.annotationText = "@requires";
@@ -206,14 +207,13 @@ DependencyManager.register = function(scriptName, scriptPath, external, dependen
 		DependencyManager.scriptContents[scriptIndex] = null;
 		DependencyManager.scriptDependencies[scriptIndex] = dependencies;
 
-		DependencyManager.loadScript(scriptName);
+		if(DependencyManager.instantLoad)
+			DependencyManager.loadScript(scriptIndex);
 	}
 };
 
-DependencyManager.loadScript = function(scriptName)
+DependencyManager.loadScript = function(scriptIndex)
 {
-	var scriptIndex = DependencyManager.indexOf(scriptName);
-
 	AJAX.sendRequestUrlEncoded(DependencyManager.scriptPaths[scriptIndex], null, HTTP.GET, function(request)
 	{
 		DependencyManager.scriptLoaded(scriptIndex, request.responseText);
@@ -247,6 +247,7 @@ DependencyManager.eval = function(func)
 
 DependencyManager.scriptLoaded = function(scriptIndex, content)
 {
+	console.log("script loaded: " + scriptIndex);
 	DependencyManager.scriptContents[scriptIndex] = content;
 	DependencyManager.scriptsLoaded++;
 	DependencyManager.loadingProgressed();
@@ -403,6 +404,15 @@ DependencyManager.registrationDone = function(doOnLoadingFinished)
 {
 	if(doOnLoadingFinished)
 		DependencyManager.onLoadingFinished(doOnLoadingFinished);
+	
+	if(!DependencyManager.instantLoad)
+	{
+		// load scripts (except of 0 which is this one...)
+		for(var i = 1; i < DependencyManager.scripts.length; i++)
+		{
+			DependencyManager.loadScript(i);
+		}
+	}
 
 	DependencyManager.registrationIsDone = true;
 	DependencyManager.checkScripts();
@@ -429,14 +439,17 @@ DependencyManager.loadingProgressed = function()
 
 DependencyManager.defaultOnLoadingProgressed = function(progressBarID, progressFieldID)
 {
-	var progressBar = document.getElementById(progressBarID);
-	var progressField = document.getElementById(progressFieldID);
-	
 	return function() {
+		var progressBar = document.getElementById(progressBarID);
+		var progressField = document.getElementById(progressFieldID);
+		
 		var loaded = DependencyManager.scriptsLoaded;
 		var total  = DependencyManager.scripts.length;
 		var progress = Math.round(100*loaded/total) + "%";
 		progressBar.style.width = progress;
 		progressField.innerHTML = progress;
+		
+		if(console)
+			console.log("progress: '" + progress + "'");
 	};
 };
