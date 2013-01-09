@@ -41,7 +41,7 @@ connect = function()
 	client.uiManager = new UIManager();
 	// init server-side managers as proxies (may use same "class/interface") 
 	server.playerManager = Proxies.newProxyInstance(PlayerManager, genericRPCInvocationHandler);
-	server.uiManager = Proxies.newProxyInstance(UIManager, genericRPCInvocationHandler);
+	server.uiManager = Proxies.newProxyInstance(ServerUIManager, genericRPCInvocationHandler);
 //	server.localeProvider = Proxies.newProxyInstance(LocaleProvider, genericRPCInvocationHandler);
 };
 

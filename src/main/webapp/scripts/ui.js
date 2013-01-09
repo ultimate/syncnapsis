@@ -129,7 +129,11 @@ UIManager.prototype.updateLabels = function()
 	}
 };
 
-UIManager.prototype.selectLocale = function(selection)
+ServerUIManager = function()
+{
+};
+
+ServerUIManager.prototype.selectLocale = function(selection)
 {
 	// stub for server-entity
 };
