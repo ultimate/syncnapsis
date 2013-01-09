@@ -38,7 +38,7 @@
 	// DependencyManager.registrationDone(); // will be called onload
 </script>
 </head>
-<body onload="javascript: DependencyManager.registrationDone();">
+<body onload="DependencyManager.registrationDone();">
 	<div id="overlay" class="centered">
 		<div id="loader_frame" class="centered">
 			<div id="loader_center" class="centered_y">
@@ -59,7 +59,7 @@
 				<img id="ad_left_img" class="ad_img centered" src="images/banner-160x600.png" />
 			</div>
 			<div id="ad_left_border" class="ad_border">
-				<img id="ad_left_toggle" class="ad_toggle centered_y" src="images/toggle-hide.png" onclick="javascript: Ad.toggle(true);" />
+				<img id="ad_left_toggle" class="ad_toggle centered_y" src="images/toggle-hide.png" onclick="Ad.toggle(true);" />
 			</div>
 		</div>
 		<div id="center">
@@ -78,7 +78,7 @@
 				<div id="bar_top_right" class="bar_right">
 					<div id="bar_top_right_loggedin">
 						<span><label key="menu.login_info"></label>&nbsp;<b id="bar_top_playername">anonymous</b>&nbsp;:</span> <span><a href=""><label key="menu.profile"></label></a></span> <span><a
-							href="javascript: server.playerManager.logout();"><label key="menu.logout"></label></a></span>
+							href="server.playerManager.logout();"><label key="menu.logout"></label></a></span>
 					</div>
 					<div id="bar_top_right_loggedout">
 						<span><a href=""><label key="menu.login"></label></a></span>
@@ -101,7 +101,7 @@
 		</div>
 		<div id="ad_right" class="ad">
 			<div id="ad_right_border" class="ad_border">
-				<img id="ad_right_toggle" class="ad_toggle centered_y flip-horizontal" src="images/toggle-hide.png" onclick="javascript: Ad.toggle(true);" />
+				<img id="ad_right_toggle" class="ad_toggle centered_y flip-horizontal" src="images/toggle-hide.png" onclick="Ad.toggle(true);" />
 			</div>
 			<div id="ad_right_inner" class="ad_inner">
 				<img id="ad_right_img" class="ad_img" src="images/banner-160x600.png" />
