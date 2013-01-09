@@ -1,14 +1,11 @@
 /**
  * Syncnapsis Framework - Copyright (c) 2012 ultimate
- * 
  * This program is free software; you can redistribute it and/or modify it under the terms of
  * the GNU General Public License as published by the Free Software Foundation; either version
  * 3 of the License, or any later version.
- * 
  * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
  * without even the implied warranty of MECHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU General Public License for more details.
- * 
  * You should have received a copy of the GNU General Plublic License along with this program;
  * if not, see <http://www.gnu.org/licenses/>.
  */
@@ -78,6 +75,18 @@ public class HttpFallbackEngine extends FilterEngine
 	 * The header name for specifying the op code
 	 */
 	private static final String							HEADER_CLOSE_CODE			= "Close-Code";
+	/**
+	 * The header name for specifying the precondition on response
+	 */
+	private static final String							HEADER_PRECONDITION			= "precondition";
+	/**
+	 * The connected value for the precondition header
+	 */
+	private static final String							PRECONDITION_CONNECTED		= "connected";
+	/**
+	 * The disconnected value for the precondition header
+	 */
+	private static final String							PRECONDITION_DISCONNECTED	= "disconnected";
 
 	/**
 	 * Protocol instance for all established Http Fallback Connections.
@@ -217,7 +226,10 @@ public class HttpFallbackEngine extends FilterEngine
 					resp.setStatus(HttpServletResponse.SC_OK);
 				}
 				else
+				{
+					resp.addHeader(HEADER_PRECONDITION, PRECONDITION_DISCONNECTED);
 					resp.sendError(HttpServletResponse.SC_PRECONDITION_FAILED, "Not connected!");
+				}
 
 			}
 			else if(ACTION_CONNECT.equals(action))
@@ -231,7 +243,10 @@ public class HttpFallbackEngine extends FilterEngine
 					resp.setStatus(HttpServletResponse.SC_OK);
 				}
 				else
+				{
+					resp.addHeader(HEADER_PRECONDITION, PRECONDITION_CONNECTED);
 					resp.sendError(HttpServletResponse.SC_PRECONDITION_FAILED, "Trying to connect a connection that is already connected!");
+				}
 			}
 			else if(ACTION_DISCONNECT.equals(action))
 			{
@@ -241,7 +256,10 @@ public class HttpFallbackEngine extends FilterEngine
 					doDisconnect(connection, req);
 				}
 				else
+				{
+					resp.addHeader(HEADER_PRECONDITION, PRECONDITION_DISCONNECTED);
 					resp.sendError(HttpServletResponse.SC_PRECONDITION_FAILED, "Trying to disconnect a connection that is not connected!");
+				}
 			}
 			else
 			{
@@ -377,7 +395,7 @@ public class HttpFallbackEngine extends FilterEngine
 		Protocol protocol = connection.getProtocol();
 
 		Message message;
-		
+
 		synchronized(connection)
 		{
 			logger.debug("no messages found: waiting for incoming message...");
@@ -399,7 +417,7 @@ public class HttpFallbackEngine extends FilterEngine
 
 			message = connection.getMessageBuffer().removeFirst();
 		}
-		
+
 		if(protocol.isText(message.getOpCode()))
 		{
 			resp.getOutputStream().write(message.getData());

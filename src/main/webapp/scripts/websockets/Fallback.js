@@ -25,6 +25,9 @@ WebSockets.http.HEADER_EXTENSIONS = "extensions";
 // Header name for the action in the http request. Action can be
 // [connect|disconnect|message]
 WebSockets.http.HEADER_ACTION = "action";
+// Header name for failed preconditions
+// [connected|disconnected]
+WebSockets.http.HEADER_PRECONDITION = "precondition";
 // The connect value fot the action parameter.
 WebSockets.http.ACTION_CONNECT = "connect";
 // The disconnect value fot the action parameter.
@@ -43,6 +46,10 @@ WebSockets.http.OP_CODE_BINARY = 0x2;
 WebSockets.http.OP_CODE_CLOSE = 0x8;
 // The header name for specifying the op code
 WebSockets.http.HEADER_CLOSE_CODE = "Close-Code";
+// The precondition returned if the socket is connected
+WebSockets.http.PRECONDITION_CONNECTED = "connected";
+// The precondition returned if the socket is disconnected
+WebSockets.http.PRECONDITION_DISCONNECTED = "disconnected";
 
 // list of all active sockets
 WebSockets.http.sockets = {};
@@ -212,6 +219,17 @@ WebSockets.HttpSocket.prototype._handleOpen = function(request)
 
 WebSockets.HttpSocket.prototype._handleClose = function(request)
 {
+	console.log("websocket closed: " + request.status);
+	console.log("precondition: " + request.getResponseHeader(WebSockets.http.HEADER_PRECONDITION));
+	if(request.status == HTTP.STATUS_PRECONDITION_FAILED)
+	{
+		if(request.getResponseHeader(WebSockets.http.HEADER_PRECONDITION) == WebSockets.http.PRECONDITION_CONNECTED)
+		{
+			// already connected
+			this._handleOpen(request);
+			return;
+		}
+	}
 	this.state = WebSockets.http.state.CLOSED;
 	this.onclose(this.createEvent(request));
 };
