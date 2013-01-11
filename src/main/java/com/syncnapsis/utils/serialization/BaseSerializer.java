@@ -14,14 +14,15 @@
  */
 package com.syncnapsis.utils.serialization;
 
-import java.util.Map;
+import java.lang.reflect.Array;
 
-import com.syncnapsis.exceptions.DeserializationException;
-import com.syncnapsis.exceptions.SerializationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.util.Assert;
+
+import com.syncnapsis.exceptions.DeserializationException;
+import com.syncnapsis.exceptions.SerializationException;
 
 /**
  * Abstract base for Serializers.
@@ -103,7 +104,7 @@ public abstract class BaseSerializer<F> implements Serializer<F>, InitializingBe
 	{
 		if(entity == null)
 			throw new NullPointerException();
-		Map<String, Object> result = deserialize(serialization);
+		Object result = deserialize(serialization);
 		return (T) mapper.merge(entity, result, authorities);
 	}
 
@@ -112,12 +113,17 @@ public abstract class BaseSerializer<F> implements Serializer<F>, InitializingBe
 	 * @see com.syncnapsis.utils.serialization.Serializer#deserialize(java.lang.Object, java.lang.Class,
 	 * java.lang.Object[])
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public <T> T deserialize(F serialization, Class<T> entityClass, Object... authorities) throws DeserializationException
 	{
 		try
 		{
-			T entity = entityClass.newInstance();
+			T entity;
+			if(!entityClass.isArray())
+				entity = entityClass.newInstance();
+			else
+				entity = (T) Array.newInstance(entityClass.getComponentType(), 0);
 			return deserialize(serialization, entity, authorities);
 		}
 		catch(InstantiationException e)
@@ -131,21 +137,21 @@ public abstract class BaseSerializer<F> implements Serializer<F>, InitializingBe
 	}
 
 	/**
-	 * Serialize the given Map.
+	 * Serialize the given entity.
 	 * Called by {@link BaseSerializer#serialize(Mapable, Object)}
 	 * 
-	 * @param map - the Map to serialize
-	 * @return the serialization of the Map
+	 * @param prepared - the entity to serialize
+	 * @return the serialization of the entity
 	 * @throws SerializationException - if serialization fails
 	 */
 	public abstract F serialize(Object prepared) throws SerializationException;
 
 	/**
-	 * Deserialize the Map represented by the given serialization.
+	 * Deserialize the entity represented by the given serialization.
 	 * 
-	 * @param serialization - the serialization of the Map
-	 * @return the deserialized Map
+	 * @param serialization - the serialization of the entity
+	 * @return the deserialized entity
 	 * @throws DeserializationException - if deserialization fails
 	 */
-	public abstract Map<String, Object> deserialize(F serialization) throws DeserializationException;
+	public abstract Object deserialize(F serialization) throws DeserializationException;
 }

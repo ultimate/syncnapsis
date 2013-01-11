@@ -1,14 +1,11 @@
 /**
  * Syncnapsis Framework - Copyright (c) 2012 ultimate
- * 
  * This program is free software; you can redistribute it and/or modify it under the terms of
  * the GNU General Public License as published by the Free Software Foundation; either version
  * 3 of the License, or any later version.
- * 
  * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
  * without even the implied warranty of MECHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU General Public License for more details.
- * 
  * You should have received a copy of the GNU General Plublic License along with this program;
  * if not, see <http://www.gnu.org/licenses/>.
  */
@@ -113,7 +110,8 @@ public class BaseMapper implements Mapper, InitializingBean
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.syncnapsis.utils.serialization.Mapper#prepare(java.lang.Object[], java.lang.Object[])
+	 * @see com.syncnapsis.utils.serialization.Mapper#prepare(java.lang.Object[],
+	 * java.lang.Object[])
 	 */
 	@Override
 	public Object[] prepare(Object[] array, Object... authorities)
@@ -128,7 +126,8 @@ public class BaseMapper implements Mapper, InitializingBean
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.syncnapsis.utils.serialization.Mapper#prepare(java.util.Collection, java.lang.Object[])
+	 * @see com.syncnapsis.utils.serialization.Mapper#prepare(java.util.Collection,
+	 * java.lang.Object[])
 	 */
 	@Override
 	@SuppressWarnings("unchecked")
@@ -259,7 +258,8 @@ public class BaseMapper implements Mapper, InitializingBean
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.syncnapsis.utils.serialization.Mapper#merge(java.lang.reflect.Type, java.lang.Object,
+	 * @see com.syncnapsis.utils.serialization.Mapper#merge(java.lang.reflect.Type,
+	 * java.lang.Object,
 	 * java.lang.Object, java.lang.Object[])
 	 */
 	@Override
@@ -323,7 +323,7 @@ public class BaseMapper implements Mapper, InitializingBean
 		// logger.trace("Map? " + (prepared instanceof Map));
 		if(prepared instanceof Map)
 		{
-			if(entity == null)
+			if(entity == null && !cls.equals(Object.class))
 			{
 				try
 				{
@@ -337,6 +337,13 @@ public class BaseMapper implements Mapper, InitializingBean
 				{
 					logger.error("Could not instantiate type " + type, e);
 				}
+			}
+			else if(entity == null && cls.equals(Object.class))
+			{
+				// If the required type is Object all information in the map will be lost if merged
+				// to a new Object. So we create a new map to hold the merged entities but we do not
+				// just return the old map since merging may be required for the entires in the map.
+				entity = (T) new HashMap<String, Object>();
 			}
 			return fromMap(entity, (Map<String, Object>) prepared, authorities);
 		}
@@ -417,7 +424,7 @@ public class BaseMapper implements Mapper, InitializingBean
 		}
 		return newArray;
 	}
-	
+
 	/**
 	 * Merge all entities inside an Arry to a Collection
 	 * 
@@ -426,7 +433,8 @@ public class BaseMapper implements Mapper, InitializingBean
 	 * @param authorities - the authorities controlling visibility
 	 * @return the new collection
 	 */
-	public <T> Collection<T> mergeToCollection(Object[] array, Class<? extends T> newComponentType, Class<? extends Collection<?>> collectionType, Object... authorities)
+	public <T> Collection<T> mergeToCollection(Object[] array, Class<? extends T> newComponentType, Class<? extends Collection<?>> collectionType,
+			Object... authorities)
 	{
 		Collection<T> newCollection = createCollection(newComponentType, collectionType, array.length);
 		// transform the array entries
@@ -436,7 +444,7 @@ public class BaseMapper implements Mapper, InitializingBean
 		}
 		return newCollection;
 	}
-	
+
 	/**
 	 * Merge all entities inside a Collection to an Array
 	 * 
@@ -528,13 +536,14 @@ public class BaseMapper implements Mapper, InitializingBean
 				}
 				else if(map.containsKey(field.getName()))
 				{
-					logger.warn("Trying to write non-accessible Field '" + field.getName() + "' with authorities " + (authorities != null ? Arrays.asList(authorities) : null));
+					logger.warn("Trying to write non-accessible Field '" + field.getName() + "' with authorities "
+							+ (authorities != null ? Arrays.asList(authorities) : null));
 				}
 			}
 		}
 		return entity;
 	}
-	
+
 	protected boolean isInvariant(Object entity)
 	{
 		if(entity == null)

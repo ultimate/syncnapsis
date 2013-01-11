@@ -1,14 +1,11 @@
 /**
  * Syncnapsis Framework - Copyright (c) 2012 ultimate
- * 
  * This program is free software; you can redistribute it and/or modify it under the terms of
  * the GNU General Public License as published by the Free Software Foundation; either version
  * 3 of the License, or any later version.
- * 
  * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
  * without even the implied warranty of MECHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU General Public License for more details.
- * 
  * You should have received a copy of the GNU General Plublic License along with this program;
  * if not, see <http://www.gnu.org/licenses/>.
  */
@@ -17,8 +14,6 @@ package com.syncnapsis.utils.serialization;
 import java.io.IOException;
 import java.util.Map;
 
-import com.syncnapsis.exceptions.DeserializationException;
-import com.syncnapsis.exceptions.SerializationException;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.util.Assert;
 
@@ -29,6 +24,8 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectReader;
 import com.fasterxml.jackson.databind.ObjectWriter;
+import com.syncnapsis.exceptions.DeserializationException;
+import com.syncnapsis.exceptions.SerializationException;
 
 /**
  * Jackson Implementation of MapableSerializer being capable of serializing Maps or Mapable Objects
@@ -39,13 +36,36 @@ import com.fasterxml.jackson.databind.ObjectWriter;
 public class JacksonStringSerializer extends BaseSerializer<String> implements InitializingBean
 {
 	/**
+	 * The start token for array serializations
+	 */
+	public static final String	ARRAY_START		= "[";
+	/**
+	 * For deserializing array using a map-Type-Serializer a surrounding dummy map is required.
+	 * This is the key used for the array in the map.
+	 */
+	public static final String	DUMMY_KEY		= "value";
+	/**
+	 * For deserializing array using a map-Type-Serializer a surrounding dummy map is required.
+	 * This is the start token for the map.
+	 */
+	public static final String	DUMMY_MAP_START	= "{\"" + DUMMY_KEY + "\":";
+	/**
+	 * For deserializing array using a map-Type-Serializer a surrounding dummy map is required.
+	 * This is the end token for the map.
+	 */
+	public static final String	DUMMY_MAP_END	= "}";
+	/**
 	 * The ObjectWriter used for Serialization
 	 */
-	private ObjectWriter	writer;
+	private ObjectWriter		writer;
 	/**
 	 * The ObjectReader used for Deserialization
 	 */
-	private ObjectReader	reader;
+	private ObjectReader		reader;
+	/**
+	 * The ObjectReader used for Deserialization of Entities and Maps
+	 */
+	private ObjectReader		mapReader;
 
 	/**
 	 * Construct a new JacksonStringSerializer with a default ObjectMapper.
@@ -82,8 +102,8 @@ public class JacksonStringSerializer extends BaseSerializer<String> implements I
 	public JacksonStringSerializer(ObjectWriter writer, ObjectReader reader)
 	{
 		super();
-		this.writer = writer;
-		this.reader = reader.withType(new TypeReference<Map<String, Object>>() {});
+		this.setWriter(writer);
+		this.setReader(reader);
 	}
 
 	/**
@@ -124,6 +144,7 @@ public class JacksonStringSerializer extends BaseSerializer<String> implements I
 	public void setReader(ObjectReader reader)
 	{
 		this.reader = reader;
+		this.mapReader = reader.withType(new TypeReference<Map<String, Object>>() {});
 	}
 
 	/*
@@ -166,12 +187,16 @@ public class JacksonStringSerializer extends BaseSerializer<String> implements I
 	 * (non-Javadoc)
 	 * @see com.syncnapsis.utils.serialization.BaseSerializer#deserialize(java.lang.Object)
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
-	public Map<String, Object> deserialize(String serialization) throws DeserializationException
+	public Object deserialize(String serialization) throws DeserializationException
 	{
 		try
 		{
-			return reader.readValue(serialization);
+			if(serialization.trim().startsWith(ARRAY_START))
+				return ((Map<String, Object>) mapReader.readValue(DUMMY_MAP_START + serialization + DUMMY_MAP_END)).get(DUMMY_KEY);
+			else
+				return mapReader.readValue(serialization);
 		}
 		catch(JsonParseException e)
 		{
