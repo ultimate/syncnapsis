@@ -14,6 +14,8 @@
  */
 package com.syncnapsis.websockets.service.rpc;
 
+import java.lang.reflect.InvocationTargetException;
+
 import com.syncnapsis.websockets.Connection;
 
 /**
@@ -30,7 +32,7 @@ public interface RPCHandler
 	 * 
 	 * @param call - the RPCCall
 	 */
-	public Object doRPC(RPCCall call, Object... authorities);
+	public Object doRPC(RPCCall call, Object... authorities) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException;
 
 	/**
 	 * Get a virtual Client-instance for the given target name and the Client represented by the

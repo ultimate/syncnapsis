@@ -1,20 +1,18 @@
 /**
  * Syncnapsis Framework - Copyright (c) 2012 ultimate
- * 
  * This program is free software; you can redistribute it and/or modify it under the terms of
  * the GNU General Public License as published by the Free Software Foundation; either version
  * 3 of the License, or any later version.
- * 
  * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
  * without even the implied warranty of MECHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU General Public License for more details.
- * 
  * You should have received a copy of the GNU General Plublic License along with this program;
  * if not, see <http://www.gnu.org/licenses/>.
  */
 package com.syncnapsis.websockets.service.rpc;
 
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -169,21 +167,39 @@ public abstract class RPCFilter extends FilterEngine implements InitializingBean
 
 		if(call != null)
 		{
-			Object result = rpcHandler.doRPC(call, getAuthorities());
-
-			if(result != null)
+			try
 			{
-				try
-				{
-					resp.getOutputStream().write(serializer.serialize(result, getAuthorities()).getBytes());
-				}
-				catch(SerializationException e)
-				{
-					throw new IOException("SerializationException", e);
-				}
-			}
+				Object result = rpcHandler.doRPC(call, getAuthorities());
 
-			resp.setStatus(HttpServletResponse.SC_OK);
+				if(result != null)
+				{
+					try
+					{
+						resp.getOutputStream().write(serializer.serialize(result, getAuthorities()).getBytes());
+					}
+					catch(SerializationException e)
+					{
+						throw new IOException("SerializationException", e);
+					}
+				}
+
+				resp.setStatus(HttpServletResponse.SC_OK);
+			}
+			catch(IllegalAccessException e)
+			{
+				logger.error("Exception doing RPC: " + e.getMessage());
+				resp.sendError(HttpServletResponse.SC_FORBIDDEN);
+			}	
+			catch(IllegalArgumentException e)
+			{
+				logger.error("Exception doing RPC: " + e.getMessage());
+				resp.sendError(HttpServletResponse.SC_BAD_REQUEST);
+			}
+			catch(InvocationTargetException e)
+			{
+				logger.error("Exception doing RPC: " + e.getMessage());
+				resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+			}
 		}
 		else
 		{

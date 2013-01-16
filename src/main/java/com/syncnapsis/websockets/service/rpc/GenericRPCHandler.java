@@ -17,16 +17,16 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.util.Arrays;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.InitializingBean;
+import org.springframework.util.Assert;
+
 import com.syncnapsis.security.AccessController;
 import com.syncnapsis.utils.serialization.Serializer;
 import com.syncnapsis.websockets.Connection;
 import com.syncnapsis.websockets.Service;
 import com.syncnapsis.websockets.service.InterceptorService;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.InitializingBean;
-import org.springframework.util.Assert;
 
 /**
  * Generic RPCHandler that executes the RPC via Reflections.
@@ -83,7 +83,7 @@ public abstract class GenericRPCHandler implements RPCHandler, InitializingBean
 	 * rpc.RPCCall)
 	 */
 	@Override
-	public Object doRPC(RPCCall call, Object... authorities)
+	public Object doRPC(RPCCall call, Object... authorities) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException
 	{
 		Object target = this.getTarget(call.getObject());
 
@@ -105,30 +105,18 @@ public abstract class GenericRPCHandler implements RPCHandler, InitializingBean
 			logger.debug("                 " + arg + (arg != null ? " (" + arg.getClass() + ")" : ""));
 		logger.debug("Method found: " + method);
 
-		try
+		if(isAccessible(method, authorities))
 		{
-			if(isAccessible(method, authorities))
-			{
-				Object result = method.invoke(target, call.getArgs());
-				if(method.getReturnType().equals(void.class))
-					return Void.TYPE;
-				return result;
-			}
-			else
-			{
-				logger.warn("Trying to call not accessible method '" + method.getDeclaringClass().getName() + "." + method.getName()
-						+ "() with authorities " + Arrays.asList(authorities));
-			}
+			Object result = method.invoke(target, call.getArgs());
+			if(method.getReturnType().equals(void.class))
+				return Void.TYPE;
+			return result;
 		}
-		catch(IllegalAccessException e)
+		else
 		{
-			logger.error("Exception doing RPC", e);
+			throw new IllegalAccessException("Trying to call not accessible method '" + method.getDeclaringClass().getName() + "." + method.getName()
+					+ "() with authorities " + Arrays.asList(authorities));
 		}
-		catch(InvocationTargetException e)
-		{
-			logger.error("Exception doing RPC", e);
-		}
-		return null;
 	}
 
 	/**
@@ -464,7 +452,7 @@ public abstract class GenericRPCHandler implements RPCHandler, InitializingBean
 				tmp = ((InterceptorService) tmp).getInterceptedService();
 			}
 			Assert.isTrue(tmp instanceof RPCService);
-			
+
 			this.objectName = objectName;
 			this.connection = connection;
 			this.rpcService = (RPCService) tmp;

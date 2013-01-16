@@ -22,8 +22,8 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
+import com.syncnapsis.utils.ServletUtil;
 import com.syncnapsis.websockets.Message;
 import com.syncnapsis.websockets.Protocol;
 import com.syncnapsis.websockets.Service;
@@ -208,7 +208,7 @@ public class HttpFallbackEngine extends FilterEngine
 
 		String sessionId = req.getSession().getId();
 		HttpConnection connection = getConnection(subprotocol, sessionId);
-		
+
 		this.manager.getSessionProvider().set(req.getSession());
 		this.manager.getConnectionProvider().set(connection);
 
@@ -239,7 +239,7 @@ public class HttpFallbackEngine extends FilterEngine
 				{
 					Enumeration<String> extensions = req.getHeaders(HEADER_EXTENSIONS);
 
-					doConnect(sessionId, subprotocol, extensions, req.getSession());
+					doConnect(sessionId, subprotocol, extensions, req);
 					resp.setStatus(HttpServletResponse.SC_OK);
 				}
 				else
@@ -293,17 +293,19 @@ public class HttpFallbackEngine extends FilterEngine
 	 * @param sessionId - the session ID
 	 * @param protocol - the protocol name
 	 * @param extensions - optional extensions requested by the client
-	 * @parma session - the HttpSession associated with the connection
+	 * @parma request - the HttpServletRequest opening the connection and providing the session
 	 */
-	protected void doConnect(String sessionId, String subprotocol, Enumeration<String> extensions, HttpSession session) throws IOException
+	protected void doConnect(String sessionId, String subprotocol, Enumeration<String> extensions, HttpServletRequest request) throws IOException
 	{
 		Service service = this.getService(subprotocol, extensions);
+
+		ServletUtil.copyRequestClientInfo(request, request.getSession());
 
 		HttpConnection connection = new HttpConnection(subprotocol);
 		connection.setProtocol(httpProtocol);
 		connection.setService(service);
 		connection.setManager(this.manager);
-		connection.setSession(session);
+		connection.setSession(request.getSession());
 
 		addConnection(subprotocol, sessionId, connection);
 

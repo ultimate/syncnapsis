@@ -18,6 +18,9 @@ import java.io.IOException;
 import java.util.Map;
 import java.util.TreeMap;
 
+import org.springframework.beans.factory.InitializingBean;
+import org.springframework.util.Assert;
+
 import com.syncnapsis.exceptions.DeserializationException;
 import com.syncnapsis.exceptions.SerializationException;
 import com.syncnapsis.providers.AuthorityProvider;
@@ -25,9 +28,6 @@ import com.syncnapsis.security.SecurityManager;
 import com.syncnapsis.utils.serialization.Serializer;
 import com.syncnapsis.websockets.Connection;
 import com.syncnapsis.websockets.service.BaseService;
-
-import org.springframework.beans.factory.InitializingBean;
-import org.springframework.util.Assert;
 
 /**
  * Service-Implementation allowing bi-directional RPCs.
@@ -148,6 +148,8 @@ public class RPCService extends BaseService implements InitializingBean
 	 */
 	protected void onRPC(RPCMessage message)
 	{
+		// TODO do RPC-Logging
+		
 		convertMessageData(message, RPCCall.class);
 		if(!(message.getData() instanceof RPCCall))
 		{
@@ -155,17 +157,24 @@ public class RPCService extends BaseService implements InitializingBean
 					+ (message.getData() != null ? message.getData().getClass() + " " : "") + message.getData());
 			return;
 		}
-		Object result = this.rpcHandler.doRPC((RPCCall) message.getData(), getAuthorities());
-		if(result != Void.TYPE)
+		try
 		{
-			try
+			Object result = this.rpcHandler.doRPC((RPCCall) message.getData(), getAuthorities());
+			if(result != Void.TYPE)
 			{
-				this.respond(message, result);
+				try
+				{
+					this.respond(message, result);
+				}
+				catch(IOException e)
+				{
+					logger.error("Could not send response.", e);
+				}
 			}
-			catch(IOException e)
-			{
-				logger.error("Could not send response.", e);
-			}
+		}
+		catch(Exception e)
+		{
+			logger.error("Exception doing RPC: " + e.getMessage());
 		}
 	}
 

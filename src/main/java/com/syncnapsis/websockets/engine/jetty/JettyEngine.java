@@ -26,7 +26,9 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.eclipse.jetty.websocket.WebSocket;
 import org.eclipse.jetty.websocket.WebSocketFactory;
+
 import com.syncnapsis.utils.JettyUtil;
+import com.syncnapsis.utils.ServletUtil;
 import com.syncnapsis.websockets.Protocol;
 import com.syncnapsis.websockets.Service;
 import com.syncnapsis.websockets.engine.ServletEngine;
@@ -129,6 +131,7 @@ public class JettyEngine extends ServletEngine implements WebSocketFactory.Accep
 		if(service != null)
 		{
 			logger.debug("service created: " + service.getClass());
+			ServletUtil.copyRequestClientInfo(request, request.getSession());
 			return new JettyWebSocketWrapper(service, manager, request.getSession());
 		}
 		else
