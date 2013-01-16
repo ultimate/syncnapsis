@@ -1,18 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
- - Syncnapsis Framework - Copyright (c) 2012 ultimate
- - 
- - This program is free software; you can redistribute it and/or modify it under the terms of
- - the GNU General Public License as published by the Free Software Foundation; either version
- - 3 of the License, or any later version.
- - 
- - This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
- - without even the implied warranty of MECHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
- - See the GNU General Public License for more details.
- - 
- - You should have received a copy of the GNU General Plublic License along with this program;
- - if not, see <http://www.gnu.org/licenses/>.
--->
+<!-- - Syncnapsis Framework - Copyright (c) 2012 ultimate - - This program is free software; you can redistribute it and/or modify it under the terms of - the GNU General Public License as published by 
+	the Free Software Foundation; either version - 3 of the License, or any later version. - - This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; - without even the implied 
+	warranty of MECHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. - See the GNU General Public License for more details. - - You should have received a copy of the GNU General Plublic License along with 
+	this program; - if not, see <http://www.gnu.org/licenses/>. -->
 <!DOCTYPE dataset SYSTEM "dataset.dtd">
 <dataset>
 	<table name="parameter">
@@ -97,8 +87,7 @@
 			<value description="action">1a2b3c</value>
 			<value description="object">a bean</value>
 			<value description="method">a method</value>
-			<value description="args">rO0ABXVyABNbTGphdmEubGFuZy5PYmplY3Q7kM5YnxBzKWwCAAB4cAAAAAA=</value>
-			<!-- Base64 for new Object[]{} -->
+			<value description="args"><![CDATA[[]]]></value>
 			<value description="uses">1</value>
 			<value description="maxUses">10</value>
 		</row>
@@ -316,7 +305,7 @@
 			<null />
 		</row>
 	</table>
-	
+
 	<table name="messengercontact">
 		<column>id</column>
 		<column>version</column>
@@ -359,7 +348,7 @@
 			<value description="fkMessenger">5</value>
 		</row>
 	</table>
-	
+
 	<table name="usercontact">
 		<column>id</column>
 		<column>version</column>
@@ -793,4 +782,30 @@
 			<value description="fkUser">0</value>
 		</row>
 	</table>
+
+	<table name="rpclog">
+		<column>id</column>
+		<column>version</column>
+		<column>object</column>
+		<column>method</column>
+		<column>args</column>
+		<column>executionDate</column>
+		<column>result</column>
+		<column>remoteAddr</column>
+		<column>userAgent</column>
+		<column>fkUser</column>
+		<row>
+			<value description="id">1</value>
+			<value description="version">1</value>
+			<value description="object">a bean</value>
+			<value description="method">a method</value>
+			<value description="args"><![CDATA[[]]]></value>
+			<value description="executionDate">2013-01-01 00:00:00</value>
+			<value description="result">1</value>
+			<value description="remoteAddr">127.0.0.1</value>
+			<value description="userAgent">a browser</value>
+			<value description="fkUser">0</value>
+		</row>
+	</table>
+
 </dataset>

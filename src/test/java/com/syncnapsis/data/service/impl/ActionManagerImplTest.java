@@ -21,10 +21,15 @@ import com.syncnapsis.data.model.Action;
 import com.syncnapsis.data.service.ActionManager;
 import com.syncnapsis.tests.GenericNameManagerImplTestCase;
 import com.syncnapsis.tests.annotations.TestCoversClasses;
+import com.syncnapsis.utils.serialization.JacksonStringSerializer;
+import com.syncnapsis.utils.serialization.Serializer;
+import com.syncnapsis.websockets.service.rpc.RPCCall;
 
 @TestCoversClasses({ ActionManager.class, ActionManagerImpl.class })
 public class ActionManagerImplTest extends GenericNameManagerImplTestCase<Action, Long, ActionManager, ActionDao>
 {
+	private Serializer<String> serializer = new JacksonStringSerializer();
+	
 	@Override
 	protected void setUp() throws Exception
 	{
@@ -33,6 +38,8 @@ public class ActionManagerImplTest extends GenericNameManagerImplTestCase<Action
 		setDaoClass(ActionDao.class);
 		setMockDao(mockContext.mock(ActionDao.class));
 		setMockManager(new ActionManagerImpl(mockDao));
+		
+		((ActionManagerImpl) mockManager).setSerializer(serializer);
 	}
 
 	public void testGetByCode() throws Exception
@@ -47,11 +54,15 @@ public class ActionManagerImplTest extends GenericNameManagerImplTestCase<Action
 	{
 		final Action action = new Action();
 		final String code = "a1b2c3";
+		final Object[] args = new Object[] { "0", 1 };
+
 		action.setCode(code);
-		action.setObject("mybean");
-		action.setMethod("mymethod");
-		action.setArgs(new Object[] { "0", 1 });
+		action.getRPCCall().setObject("mybean");
+		action.getRPCCall().setMethod("mymethod");
+		action.getRPCCall().setArgs(serializer.serialize(args, (Object[]) null));
 		action.setMaxUses(10);
+		
+		final RPCCall rpcCall = new RPCCall(action.getRPCCall().getObject(), action.getRPCCall().getMethod(), args);
 
 		// test with uses < maxUses-1
 		action.setUses(action.getMaxUses() - 2);
@@ -67,7 +78,7 @@ public class ActionManagerImplTest extends GenericNameManagerImplTestCase<Action
 				will(returnValue(action));
 			}
 		});
-		assertEquals(action.getRPCCall(), mockManager.getRPCCall(code));
+		assertEquals(rpcCall, mockManager.getRPCCall(code));
 		mockContext.assertIsSatisfied();
 
 		// test with uses = maxUses-1
@@ -84,7 +95,7 @@ public class ActionManagerImplTest extends GenericNameManagerImplTestCase<Action
 				will(returnValue("deleted"));
 			}
 		});
-		assertEquals(action.getRPCCall(), mockManager.getRPCCall(code));
+		assertEquals(rpcCall, mockManager.getRPCCall(code));
 		mockContext.assertIsSatisfied();
 
 		// test with uses = maxUses

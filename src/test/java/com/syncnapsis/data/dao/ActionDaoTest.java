@@ -18,11 +18,15 @@ import com.syncnapsis.data.dao.hibernate.ActionDaoHibernate;
 import com.syncnapsis.data.model.Action;
 import com.syncnapsis.tests.GenericNameDaoTestCase;
 import com.syncnapsis.tests.annotations.TestCoversClasses;
+import com.syncnapsis.utils.serialization.JacksonStringSerializer;
+import com.syncnapsis.utils.serialization.Serializer;
 
 @TestCoversClasses({ ActionDao.class, ActionDaoHibernate.class })
 public class ActionDaoTest extends GenericNameDaoTestCase<Action, Long>
 {
 	private ActionDao	actionDao;
+	
+	private Serializer<String> serializer = new JacksonStringSerializer();
 
 	@Override
 	protected void setUp() throws Exception
@@ -45,6 +49,14 @@ public class ActionDaoTest extends GenericNameDaoTestCase<Action, Long>
 		setExistingEntityName(existingName);
 
 		setGenericNameDao(actionDao);
+	}
+	
+	public void testDeserializeArgs() throws Exception
+	{
+		Action a = actionDao.get(existingEntityId);
+		
+		Object[] args = serializer.deserialize(a.getRPCCall().getArgs(), Object[].class, (Object[]) null);
+		assertNotNull(args);
 	}
 
 	// insert individual Tests here

@@ -27,6 +27,8 @@
 	<bean id="newsDao" class="com.syncnapsis.data.dao.hibernate.NewsDaoHibernate" />
 
 	<bean id="parameterDao" class="com.syncnapsis.data.dao.hibernate.ParameterDaoHibernate" />
+
+	<bean id="rpcLogDao" class="com.syncnapsis.data.dao.hibernate.RPCLogDaoHibernate" />
 	
 	<bean id="userContactDao" class="com.syncnapsis.data.dao.hibernate.UserContactDaoHibernate" />
 	
