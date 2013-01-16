@@ -1,14 +1,11 @@
 /**
  * Syncnapsis Framework - Copyright (c) 2012 ultimate
- * 
  * This program is free software; you can redistribute it and/or modify it under the terms of
  * the GNU General Public License as published by the Free Software Foundation; either version
  * 3 of the License, or any later version.
- * 
  * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
  * without even the implied warranty of MECHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU General Public License for more details.
- * 
  * You should have received a copy of the GNU General Plublic License along with this program;
  * if not, see <http://www.gnu.org/licenses/>.
  */
@@ -21,6 +18,7 @@ import java.util.Enumeration;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,12 +33,28 @@ public abstract class ServletUtil
 	/**
 	 * The directory separator inside URLs
 	 */
-	protected static final char				DIRECTORY_SEPARATOR	= '/';
+	protected static final char				DIRECTORY_SEPARATOR		= '/';
+	/**
+	 * Session attribute name for information copied from the request: RemoteAddr
+	 */
+	public static final String				ATTRIBUTE_REMOTE_ADDR	= "RemoteAddr";
+	/**
+	 * Session attribute name for information copied from the request: RemoteHost
+	 */
+	public static final String				ATTRIBUTE_REMOTE_HOST	= "RemoteHost";
+	/**
+	 * Session attribute name for information copied from the request: RemotePort
+	 */
+	public static final String				ATTRIBUTE_REMOTE_PORT	= "RemotePort";
+	/**
+	 * Session attribute name for information copied from the request: User-Agent
+	 */
+	public static final String				ATTRIBUTE_USER_AGENT	= "User-Agent";
 	/**
 	 * Logger-Instance
 	 */
 	@SuppressWarnings("unused")
-	private static transient final Logger	logger				= LoggerFactory.getLogger(ServletUtil.class);
+	private static transient final Logger	logger					= LoggerFactory.getLogger(ServletUtil.class);
 
 	/**
 	 * Create a String representing all relevant Information of the given HttpServletRequest.
@@ -81,7 +95,7 @@ public abstract class ServletUtil
 		while(headerNames.hasMoreElements())
 		{
 			h = headerNames.nextElement();
-			sb.append("    " + h + ":" + req.getHeader(h) + "\n");
+			sb.append("    " + h + ": " + req.getHeader(h) + "\n");
 		}
 		sb.append("  Parameters:\n");
 		Enumeration<String> parameterNames = req.getParameterNames();
@@ -89,7 +103,7 @@ public abstract class ServletUtil
 		while(parameterNames.hasMoreElements())
 		{
 			p = parameterNames.nextElement();
-			sb.append("    " + p + ":" + req.getParameter(p) + "\n");
+			sb.append("    " + p + ": " + req.getParameter(p) + "\n");
 		}
 		sb.append("  Content:\n");
 		try
@@ -126,7 +140,7 @@ public abstract class ServletUtil
 
 		return sb.toString();
 	}
-	
+
 	/**
 	 * Create a String representing all relevant Information of the given HttpServletResponse.
 	 * 
@@ -144,11 +158,37 @@ public abstract class ServletUtil
 		sb.append("  Status:             " + resp.getStatus() + "\n");
 		sb.append("  Headers:\n");
 		Collection<String> headerNames = resp.getHeaderNames();
-		for(String h: headerNames)
+		for(String h : headerNames)
 		{
-			sb.append("    " + h + ":" + resp.getHeader(h) + "\n");
+			sb.append("    " + h + ": " + resp.getHeader(h) + "\n");
 		}
 
+		return sb.toString();
+	}
+
+	/**
+	 * Create a String representing all relevant Information of the given HttpSession
+	 * 
+	 * @param session - the session
+	 * @return the session info as a String
+	 */
+	public static String toString(HttpSession session)
+	{
+		StringBuilder sb = new StringBuilder();
+		sb.append("HttpSession:            " + session.getClass().getName() + "\n");
+		sb.append("  CreationTime          " + session.getCreationTime() + "\n");
+		sb.append("  Id:                   " + session.getId() + "\n");
+		sb.append("  LastAccessedTime:     " + session.getLastAccessedTime() + "\n");
+		sb.append("  MaxInactiveInterval:  " + session.getMaxInactiveInterval() + "\n");
+		sb.append("  ServletContext:       " + session.getServletContext() + "\n");
+		sb.append("  Attributes:\n");
+		Enumeration<String> attributeNames = session.getAttributeNames();
+		String a;
+		while(attributeNames.hasMoreElements())
+		{
+			a = attributeNames.nextElement();
+			sb.append("    " + a + ": " + session.getAttribute(a) + "\n");
+		}
 		return sb.toString();
 	}
 
@@ -196,9 +236,52 @@ public abstract class ServletUtil
 		int dirs = 0;
 		for(int i = 1; i < path.length(); i++)
 		{
-			if(path.charAt(i) != DIRECTORY_SEPARATOR && path.charAt(i-1) == DIRECTORY_SEPARATOR)
+			if(path.charAt(i) != DIRECTORY_SEPARATOR && path.charAt(i - 1) == DIRECTORY_SEPARATOR)
 				dirs++;
 		}
 		return dirs;
+	}
+
+	/**
+	 * Copy the relevant info contained in a HttpServletRequest to a HttpSession.<br>
+	 * This way the info (e.g. client-address, user agent etc.) will be available for later use
+	 * (e.g. in service layer) without the availability of the original request.
+	 * 
+	 * @param req - the request to copy the info from
+	 * @param session - the session to copy the info to
+	 */
+	public static void copyRequestClientInfo(HttpServletRequest req, HttpSession session)
+	{
+		session.setAttribute(ATTRIBUTE_REMOTE_ADDR, req.getRemoteAddr());
+		session.setAttribute(ATTRIBUTE_REMOTE_HOST, req.getRemoteHost());
+		session.setAttribute(ATTRIBUTE_REMOTE_PORT, req.getRemotePort());
+		session.setAttribute(ATTRIBUTE_USER_AGENT, req.getHeader(ATTRIBUTE_USER_AGENT));
+	}
+
+	/**
+	 * Get the remote address to a HttpSession. The address has to be stored as an attribute before
+	 * (using {@link ServletUtil#copyRequestClientInfo(HttpServletRequest, HttpSession)}
+	 * 
+	 * @param session - the HttpSession
+	 * @return the remote address
+	 */
+	public static String getRemoteAddr(HttpSession session)
+	{
+		if(session.getAttribute(ATTRIBUTE_REMOTE_ADDR).equals(session.getAttribute(ATTRIBUTE_REMOTE_HOST)))
+			return (String) session.getAttribute(ATTRIBUTE_REMOTE_ADDR);
+		else
+			return session.getAttribute(ATTRIBUTE_REMOTE_ADDR) + " (" + session.getAttribute(ATTRIBUTE_REMOTE_HOST) + ")";
+	}
+
+	/**
+	 * Get the user agent to a HttpSession. The user agent has to be stored as an attribute before
+	 * (using {@link ServletUtil#copyRequestClientInfo(HttpServletRequest, HttpSession)}
+	 * 
+	 * @param session - the HttpSession
+	 * @return the user agent
+	 */
+	public static String getUserAgent(HttpSession session)
+	{
+		return (String) session.getAttribute(ATTRIBUTE_USER_AGENT);
 	}
 }
