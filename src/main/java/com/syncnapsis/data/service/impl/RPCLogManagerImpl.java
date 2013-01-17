@@ -133,7 +133,7 @@ public class RPCLogManagerImpl extends GenericManagerImpl<RPCLog, Long> implemen
 	{
 		com.syncnapsis.data.model.help.RPCCall call = new com.syncnapsis.data.model.help.RPCCall();
 		call.setObject(rpcCall.getObject());
-		call.setMethod(rpcCall.getObject());
+		call.setMethod(rpcCall.getMethod());
 		try
 		{
 			call.setArgs(serializer.serialize(rpcCall.getArgs(), authorities));

@@ -14,6 +14,8 @@ package com.syncnapsis.data.model.help;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
+import org.apache.commons.lang.builder.ToStringBuilder;
+
 import com.syncnapsis.data.model.base.Model;
 
 /**
@@ -170,5 +172,17 @@ public class RPCCall implements Model
 		else if(!object.equals(other.object))
 			return false;
 		return true;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString()
+	{
+		ToStringBuilder builder = new ToStringBuilder(this);
+		builder.append("object", object).append("method", method).append("args", args);
+		return builder.toString();
 	}
 }

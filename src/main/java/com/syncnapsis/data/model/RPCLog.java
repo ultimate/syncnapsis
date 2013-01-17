@@ -22,6 +22,8 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.apache.commons.lang.builder.ToStringBuilder;
+
 import com.syncnapsis.data.model.base.BaseObject;
 import com.syncnapsis.data.model.help.RPCCall;
 
@@ -274,5 +276,18 @@ public class RPCLog extends BaseObject<Long>
 		else if(!userAgent.equals(other.userAgent))
 			return false;
 		return true;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString()
+	{
+		ToStringBuilder builder = new ToStringBuilder(this);
+		builder.append("rpcCall", rpcCall).append("executionDate", executionDate).append("result", result).append("remoteAddr", remoteAddr)
+				.append("userAgent", userAgent).append("user", user.getId());
+		return builder.toString();
 	}
 }
