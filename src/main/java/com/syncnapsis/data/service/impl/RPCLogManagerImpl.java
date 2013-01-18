@@ -95,7 +95,12 @@ public class RPCLogManagerImpl extends GenericManagerImpl<RPCLog, Long> implemen
 		String resultString;
 		try
 		{
-			resultString = serializer.serialize(result, authorities);
+			if(result == null)
+				resultString = "null";
+			else if(result == Void.TYPE)
+				resultString = "void";
+			else
+				resultString = serializer.serialize(result, authorities);
 		}
 		catch(SerializationException e)
 		{

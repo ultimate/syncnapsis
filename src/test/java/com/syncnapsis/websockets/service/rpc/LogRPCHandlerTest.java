@@ -51,7 +51,7 @@ public class LogRPCHandlerTest extends BaseDaoTestCase
 		logRPCHandler.setSessionProvider(sessionProvider);
 		logRPCHandler.setTimeProvider(timeProvider);
 		logRPCHandler.setUserProvider(userProvider);
-		logRPCHandler.setRPCLogManager(mockRPCLogManager);
+		logRPCHandler.setRpcLogManager(mockRPCLogManager);
 		
 		final RPCCall rpcCall = new RPCCall("object", "method", new Object[] { "1", 2 });
 		final User user = userManager.get(0L);

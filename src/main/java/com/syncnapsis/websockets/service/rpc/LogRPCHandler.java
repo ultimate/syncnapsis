@@ -113,7 +113,7 @@ public class LogRPCHandler extends DelegatingRPCHandler
 	 * 
 	 * @return rpcLogManager
 	 */
-	public RPCLogManager getRPCLogManager()
+	public RPCLogManager getRpcLogManager()
 	{
 		return rpcLogManager;
 	}
@@ -123,7 +123,7 @@ public class LogRPCHandler extends DelegatingRPCHandler
 	 * 
 	 * @param rpcLogManager - the RPCLogManager
 	 */
-	public void setRPCLogManager(RPCLogManager rpcLogManager)
+	public void setRpcLogManager(RPCLogManager rpcLogManager)
 	{
 		this.rpcLogManager = rpcLogManager;
 	}

@@ -135,7 +135,7 @@ public class RPCLog extends BaseObject<Long>
 	 * @return user
 	 */
 	@ManyToOne
-	@JoinColumn(name = "fkUser", nullable = false)
+	@JoinColumn(name = "fkUser", nullable = true)
 	public User getUser()
 	{
 		return user;
