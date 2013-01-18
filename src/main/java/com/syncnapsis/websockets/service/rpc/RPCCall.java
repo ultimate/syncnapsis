@@ -19,6 +19,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.commons.lang.builder.ToStringBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.Assert;
@@ -187,5 +188,17 @@ public class RPCCall implements Mapable<RPCCall>
 		else if(!object.equals(other.object))
 			return false;
 		return true;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString()
+	{
+		ToStringBuilder builder = new ToStringBuilder(this);
+		builder.append("object", object).append("method", method).append("args", Arrays.toString(args));
+		return builder.toString();
 	}
 }
