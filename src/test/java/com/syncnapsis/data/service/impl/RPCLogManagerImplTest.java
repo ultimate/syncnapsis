@@ -24,11 +24,13 @@ import com.syncnapsis.data.service.UserManager;
 import com.syncnapsis.providers.TimeProvider;
 import com.syncnapsis.tests.GenericManagerImplTestCase;
 import com.syncnapsis.tests.annotations.TestCoversClasses;
+import com.syncnapsis.tests.annotations.TestExcludesMethods;
 import com.syncnapsis.utils.ServletUtil;
 import com.syncnapsis.utils.serialization.JacksonStringSerializer;
 import com.syncnapsis.websockets.service.rpc.RPCCall;
 
 @TestCoversClasses({ RPCLogManager.class, RPCLogManagerImpl.class })
+@TestExcludesMethods({ "*etSerializer", "afterPropertiesSet" })
 public class RPCLogManagerImplTest extends GenericManagerImplTestCase<RPCLog, Long, RPCLogManager, RPCLogDao>
 {
 	private UserManager		userManager;
