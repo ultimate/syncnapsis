@@ -22,6 +22,7 @@
     
     <bean id="actionManager" class="com.syncnapsis.data.service.impl.ActionManagerImpl">
         <constructor-arg ref="actionDao"/>
+        <property name="serializer" ref="serializer" />
     </bean>  
     
     <bean id="empireManager" class="com.syncnapsis.data.service.impl.EmpireManagerImpl">
@@ -67,6 +68,11 @@
     <bean id="playerRoleManager" class="com.syncnapsis.data.service.impl.PlayerRoleManagerImpl">
         <constructor-arg ref="playerRoleDao"/>
     </bean>  
+
+	<bean id="rpcLogManager" class="com.syncnapsis.data.service.impl.RPCLogManagerImpl">
+		<constructor-arg ref="rpcLogDao" />
+		<property name="serializer" ref="serializer"/>
+	</bean>
     
     <bean id="solarSystemManager" class="com.syncnapsis.data.service.impl.SolarSystemManagerImpl">
         <constructor-arg ref="solarSystemDao"/>

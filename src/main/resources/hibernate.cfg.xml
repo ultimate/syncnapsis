@@ -24,6 +24,7 @@
         <mapping class="com.syncnapsis.data.model.MessengerContact"/>
         <mapping class="com.syncnapsis.data.model.News"/>
         <mapping class="com.syncnapsis.data.model.Parameter"/>
+        <mapping class="com.syncnapsis.data.model.RPCLog"/>
         <mapping class="com.syncnapsis.data.model.User"/>
         <mapping class="com.syncnapsis.data.model.UserContact"/>
         <mapping class="com.syncnapsis.data.model.UserRole"/>

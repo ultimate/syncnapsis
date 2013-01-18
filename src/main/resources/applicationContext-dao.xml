@@ -40,6 +40,8 @@
 
 	<bean id="playerRoleDao" class="com.syncnapsis.data.dao.hibernate.PlayerRoleDaoHibernate" />
 	
+	<bean id="rpcLogDao" class="com.syncnapsis.data.dao.hibernate.RPCLogDaoHibernate" />
+	
 	<bean id="solarSystemDao" class="com.syncnapsis.data.dao.hibernate.SolarSystemDaoHibernate" />
 	
 	<bean id="solarSystemInfrastructureDao" class="com.syncnapsis.data.dao.hibernate.SolarSystemInfrastructureDaoHibernate" />
