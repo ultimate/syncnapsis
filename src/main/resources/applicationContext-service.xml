@@ -58,6 +58,14 @@
         <constructor-arg ref="participantDao"/>
     </bean>
     
+    <bean id="pinboardManager" class="com.syncnapsis.data.service.impl.PinboardManagerImpl">
+        <constructor-arg ref="pinboardDao"/>
+    </bean>
+    
+    <bean id="pinboardMessageManager" class="com.syncnapsis.data.service.impl.PinboardMessageManagerImpl">
+        <constructor-arg ref="pinboardMessageDao"/>
+    </bean>
+    
     <bean id="playerManager" class="com.syncnapsis.data.service.impl.PlayerManagerImpl">
         <constructor-arg ref="playerDao"/>
         <constructor-arg ref="playerRoleManager"/>

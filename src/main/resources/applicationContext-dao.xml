@@ -36,6 +36,10 @@
 
 	<bean id="participantDao" class="com.syncnapsis.data.dao.hibernate.ParticipantDaoHibernate" />
 
+	<bean id="pinboardDao" class="com.syncnapsis.data.dao.hibernate.PinboardDaoHibernate" />
+
+	<bean id="pinboardMessageDao" class="com.syncnapsis.data.dao.hibernate.PinboardMessageDaoHibernate" />
+
 	<bean id="playerDao" class="com.syncnapsis.data.dao.hibernate.PlayerDaoHibernate" />
 
 	<bean id="playerRoleDao" class="com.syncnapsis.data.dao.hibernate.PlayerRoleDaoHibernate" />
