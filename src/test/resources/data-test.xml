@@ -807,5 +807,67 @@
 			<value description="fkUser">0</value>
 		</row>
 	</table>
+	
+	<table name="pinboard">
+		<column>id</column>
+		<column>version</column>
+		<column>activated</column>
+		<column>name</column>
+		<column>description</column>
+		<column>fkCreator</column>
+		<column>creationDate</column>
+		<column>locked</column>
+		<row>
+			<value description="id">1</value>
+			<value description="version">1</value>
+			<value description="activated">1</value>
+			<value description="name">testboard</value>
+			<value description="description"><![CDATA[the test pinboard]]></value>
+			<value description="fkCreator">0</value>
+			<value description="creationDate">2013-01-01 00:00:00</value>
+			<value description="locked">0</value>
+		</row>
+	</table>
+
+	<table name="pinboardmessage">
+		<column>id</column>
+		<column>version</column>
+		<column>activated</column>
+		<column>fkPinboard</column>
+		<column>fkCreator</column>
+		<column>creationDate</column>
+		<column>title</column>
+		<column>content</column>
+		<row>
+			<value description="id">1</value>
+			<value description="version">1</value>
+			<value description="activated">1</value>
+			<value description="fkPinboard">1</value>
+			<value description="fkCreator">0</value>
+			<value description="creationDate">2013-01-01 01:00:00</value>
+			<value description="title">first message on the board</value>
+			<value description="content"><![CDATA[hello!]]></value>
+		</row>
+		<row>
+			<value description="id">2</value>
+			<value description="version">1</value>
+			<value description="activated">1</value>
+			<value description="fkPinboard">1</value>
+			<value description="fkCreator">0</value>
+			<value description="creationDate">2013-01-01 02:00:00</value>
+			<null/>
+			<value description="content"><![CDATA[enjoy this board]]></value>
+		</row>
+		<row>
+			<value description="id">3</value>
+			<value description="version">1</value>
+			<value description="activated">1</value>
+			<value description="fkPinboard">1</value>
+			<value description="fkCreator">1</value>
+			<value description="creationDate">2013-01-01 03:00:00</value>
+			<null/>
+			<value description="content"><![CDATA[yeah, we will... ;-)]]></value>
+		</row>
+	</table>
 
 </dataset>

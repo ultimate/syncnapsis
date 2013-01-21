@@ -34,6 +34,14 @@
 	<bean id="parameterManager" class="com.syncnapsis.data.service.impl.ParameterManagerImpl">
 		<constructor-arg ref="parameterDao" />
 	</bean>
+    
+    <bean id="pinboardManager" class="com.syncnapsis.data.service.impl.PinboardManagerImpl">
+        <constructor-arg ref="pinboardDao"/>
+    </bean>
+    
+    <bean id="pinboardMessageManager" class="com.syncnapsis.data.service.impl.PinboardMessageManagerImpl">
+        <constructor-arg ref="pinboardMessageDao"/>
+    </bean>
 
 	<bean id="rpcLogManager" class="com.syncnapsis.data.service.impl.RPCLogManagerImpl">
 		<constructor-arg ref="rpcLogDao" />

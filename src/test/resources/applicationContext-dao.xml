@@ -28,6 +28,10 @@
 
 	<bean id="parameterDao" class="com.syncnapsis.data.dao.hibernate.ParameterDaoHibernate" />
 
+	<bean id="pinboardDao" class="com.syncnapsis.data.dao.hibernate.PinboardDaoHibernate" />
+
+	<bean id="pinboardMessageDao" class="com.syncnapsis.data.dao.hibernate.PinboardMessageDaoHibernate" />
+
 	<bean id="rpcLogDao" class="com.syncnapsis.data.dao.hibernate.RPCLogDaoHibernate" />
 	
 	<bean id="userContactDao" class="com.syncnapsis.data.dao.hibernate.UserContactDaoHibernate" />
