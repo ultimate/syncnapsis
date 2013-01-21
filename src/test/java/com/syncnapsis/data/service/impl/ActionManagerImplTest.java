@@ -56,6 +56,7 @@ public class ActionManagerImplTest extends GenericNameManagerImplTestCase<Action
 		final Object[] args = new Object[] { "0", 1 };
 
 		action.setCode(code);
+		action.setRPCCall(new com.syncnapsis.data.model.help.RPCCall());
 		action.getRPCCall().setObject("mybean");
 		action.getRPCCall().setMethod("mymethod");
 		action.getRPCCall().setArgs(serializer.serialize(args, (Object[]) null));

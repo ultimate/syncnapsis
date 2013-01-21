@@ -34,6 +34,7 @@
 		<property name="timeProvider" ref="timeProvider" />
 		<property name="sessionProvider" ref="sessionProvider" />
 		<property name="userProvider" ref="userProvider" />
+		<property name="localeProvider" ref="localeProvider" />
 	</bean>
 
 	<bean id="fieldAccessController" class="com.syncnapsis.security.accesscontrol.FieldAccessController" />
@@ -47,6 +48,11 @@
 	<bean id="userProvider" class="com.syncnapsis.providers.impl.SessionBasedUserProvider">
 		<property name="sessionProvider" ref="sessionProvider" />
 		<property name="attributeName" value="j_user" />
+	</bean>
+
+	<bean id="localeProvider" class="com.syncnapsis.providers.impl.SessionBasedLocaleProvider">
+		<property name="sessionProvider" ref="sessionProvider" />
+		<property name="attributeName" value="j_locale" />
 	</bean>
 
 </beans>
