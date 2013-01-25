@@ -20,6 +20,16 @@
 
 	<description><![CDATA[HelloWeb]]></description>
 	<display-name>HelloWeb</display-name>
+	
+	<servlet>
+		<servlet-name>default</servlet-name>
+		<servlet-class>org.eclipse.jetty.servlet.DefaultServlet</servlet-class>
+		<init-param>
+			<param-name>useFileMappedBuffer</param-name>
+			<param-value>false</param-value>
+		</init-param>
+		<load-on-startup>0</load-on-startup>
+	</servlet>
 
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
