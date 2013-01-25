@@ -35,8 +35,7 @@ a {
 	height: 13px;
 }
 
-#loader_bar {
-	/* width set by JS */
+#loader_bar { /* width set by JS */
 	height: 100%;
 	position: absolute;
 	background: #000000;
@@ -151,8 +150,8 @@ a {
 	width: 100px;
 	height: 20px;
 	font-family: monospace;
-    font-size: 13px;
-    margin-top: -2px;
+	font-size: 13px;
+	margin-top: -2px;
 }
 
 /*
@@ -164,51 +163,88 @@ a {
 	width: 170px;
 	left: 0px;
 }
+
 #center {
 	width: 940px;
 	left: 170px;
 }
+
 #ad_right {
 	width: 170px;
 	left: 1110px;
 }
+
 #ad_left_inner {
 	width: 168px;
 	left: 0px;
 }
+
 #ad_left_border {
 	width: 2px;
 	left: 168px;
 }
+
 #ad_right_border {
 	width: 2px;
 	left: 0px;
 }
+
 #ad_right_inner {
 	width: 168px;
 	left: 2px;
 }
+
 #bar_top {
 	height: 24px;
 	top: 0px;
 }
+
 #content {
 	height: 552px;
 	top: 24px;
 }
+
 #bar_bottom {
 	height: 24px;
 	top: 576px;
 }
+
 .bar_left {
 	width: 300px;
 	left: 0px;
 }
+
 .bar_center {
 	width: 340px;
 	left: 300px;
 }
+
 .bar_right {
 	width: 300px;
 	left: 640px;
+}
+
+.window {
+	border: 1px solid #000000;
+	background: #FFFFFF;
+	color: #000000;
+}
+
+.window .window_title {
+	border-bottom: 2px solid #000000;
+}
+
+.window .window_title label,.window .window_content div {
+	padding: 5px;
+}
+
+.window .window_title label {
+	position: relative;
+	top: 7px;
+}
+
+.window .window_close {
+	position: absolute;
+	top: 6px;
+	right: 5px;
 }

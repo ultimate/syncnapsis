@@ -51,9 +51,6 @@
 		</div>
 	</div>
 	<div id="main">
-
-		<!-- TODO class="hidden" + progress bar & overlay -->
-
 		<div id="ad_left" class="ad">
 			<div id="ad_left_inner" class="ad_inner">
 				<img id="ad_left_img" class="ad_img centered" src="images/banner-160x600.png" />
@@ -78,10 +75,10 @@
 				<div id="bar_top_right" class="bar_right">
 					<div id="bar_top_right_loggedin">
 						<span><label key="menu.login_info"></label>&nbsp;<b id="bar_top_playername">anonymous</b>&nbsp;:</span> <span><a href=""><label key="menu.profile"></label></a></span> <span><a
-							href="server.playerManager.logout();"><label key="menu.logout"></label></a></span>
+							href="javascript: server.playerManager.logout();"><label key="menu.logout"></label></a></span>
 					</div>
 					<div id="bar_top_right_loggedout">
-						<span><a href=""><label key="menu.login"></label></a></span>
+						<span><a href="javascript: client.uiManager.showLogin();"><label key="menu.login"></label></a></span>
 					</div>
 				</div>
 			</div>
@@ -105,6 +102,19 @@
 			</div>
 			<div id="ad_right_inner" class="ad_inner">
 				<img id="ad_right_img" class="ad_img" src="images/banner-160x600.png" />
+			</div>
+		</div>
+	</div>
+	<div id="content" style="display: none;">
+		<div id="content_login">
+			<div class="form">
+				<label key="profile.username"></label>:&nbsp;<input id="login_username" type="text" /><br>
+				<label key="profile.password"></label>:&nbsp;<input id="login_password" type="password" /><br>
+			</div>
+			<div class="buttons">
+				<input type="button" key="menu.login" onclick="" />
+				<input type="button" key="menu.cancel" onclick="" />
+				<input type="button" key="menu.register" onclick="" />
 			</div>
 		</div>
 	</div>

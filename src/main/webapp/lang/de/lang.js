@@ -23,6 +23,7 @@ lang.EnumLocale.DE = "Deutsch";
 lang.menu = {};
 lang.menu.about 				= "?";
 lang.menu.about_tooltip 		= "Über Syncnapsis";
+lang.menu.cancel				= "Abbrechen";
 lang.menu.contact 				= "Kontakt";
 lang.menu.contact_tooltip 		= "Kontaktinformationen / Impressum";
 lang.menu.disclaimer 			= "Rechtliches";
@@ -36,3 +37,7 @@ lang.menu.pinboard_tooltip		= lang.menu.pinboard;
 lang.menu.profile 				= "Profil";
 lang.menu.register 				= "Registrieren";
 lang.menu.stats 				= "Statistik";
+
+lang.profile = {};
+lang.profile.password			= "Passwort";
+lang.profile.username			= "Benutzername";

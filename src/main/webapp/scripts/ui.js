@@ -29,6 +29,7 @@ UI.constants.OVERLAY_ID = "overlay";
 
 UI.constants.LOCALE_CHOOSER_ID = "locale_chooser";
 UI.constants.LOCALE_LABEL_TAGNAME = "label";
+UI.constants.LOCALE_BUTTON_TAGNAME = "input";
 UI.constants.LOCALE_KEY_ATTRIBUTE = "key";
 UI.constants.LOCALE_STRING_VARIABLE = "lang";
 
@@ -47,6 +48,10 @@ UIManager = function()
 	this.layout_bar_top = new Styles.FillLayout([ "bar_top_left", "bar_top_center", "bar_top_right" ], [ UI.constants.BAR_OUTER_WIDTH, null, UI.constants.BAR_OUTER_WIDTH ], Styles.layout.HORIZONTAL);
 	this.layout_bar_bottom = new Styles.FillLayout([ "bar_bottom_left", "bar_bottom_center", "bar_bottom_right" ], [ UI.constants.BAR_OUTER_WIDTH, null, UI.constants.BAR_OUTER_WIDTH ],
 			Styles.layout.HORIZONTAL);
+	
+	this.window_login = new Styles.Window("login", "menu.login", "content_login");
+	this.window_login.setSize(300, 200);
+	this.window_login.center();
 
 	Events.fireEvent(window, Events.ONRESIZE);
 
@@ -122,11 +127,25 @@ UIManager.prototype.reloadLocale = function()
 
 UIManager.prototype.updateLabels = function()
 {
-	var elements = document.getElementsByTagName(UI.constants.LOCALE_LABEL_TAGNAME);
+	var elements;
+	// labels
+	elements = document.getElementsByTagName(UI.constants.LOCALE_LABEL_TAGNAME);
 	for( var i = 0; i < elements.length; i++)
 	{
 		elements[i].innerHTML = this.getString(elements[i].getAttribute(UI.constants.LOCALE_KEY_ATTRIBUTE));
 	}
+	// buttons
+	elements = document.getElementsByTagName(UI.constants.LOCALE_BUTTON_TAGNAME);
+	for( var i = 0; i < elements.length; i++)
+	{
+		if(elements[i].getAttribute("type") == "button")
+			elements[i].value = this.getString(elements[i].getAttribute(UI.constants.LOCALE_KEY_ATTRIBUTE));
+	}
+};
+
+UIManager.prototype.showLogin = function()
+{
+	this.window_login.setVisible(true);
 };
 
 ServerUIManager = function()
