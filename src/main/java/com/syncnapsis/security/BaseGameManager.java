@@ -29,6 +29,25 @@ public class BaseGameManager extends BaseApplicationManager
 	 */
 	protected PlayerProvider	playerProvider;
 
+	/**
+	 * Default Constructor
+	 */
+	public BaseGameManager()
+	{
+		super();
+	}
+
+	/**
+	 * Copy-Constructor
+	 * 
+	 * @param manager - the original BaseGameManager
+	 */
+	public BaseGameManager(BaseGameManager manager)
+	{
+		super(manager);
+		this.playerProvider = manager.playerProvider;
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * @see com.syncnapsis.security.SecurityManager#afterPropertiesSet()
