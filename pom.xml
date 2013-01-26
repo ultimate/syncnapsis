@@ -21,6 +21,7 @@
     <artifactId>syncnapsis-dev-utils</artifactId>
     <packaging>jar</packaging>
     <version>${syncnapsis-dev-utils.version}</version>
+	<name>syncnapsis-dev-utils</name>
 	
 	<parent>
 		<groupId>com.syncnapsis</groupId>
