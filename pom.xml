@@ -21,6 +21,7 @@
 	<artifactId>syncnapsis-examples-ui-playground</artifactId>
 	<packaging>war</packaging>
 	<version>${syncnapsis-examples-ui-playground.version}</version>
+	<name>syncnapsis-examples-ui-playground</name>
 
 	<parent>
 		<groupId>com.syncnapsis</groupId>
