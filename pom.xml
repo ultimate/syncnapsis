@@ -21,6 +21,7 @@
     <artifactId>syncnapsis-examples</artifactId>
     <packaging>pom</packaging>
     <version>1.0.0</version>
+	<name>syncnapsis-examples</name>
 	
 	<parent>
 		<groupId>com</groupId>
