@@ -21,6 +21,7 @@
 	<artifactId>syncnapsis-universe-conquest</artifactId>
 	<packaging>war</packaging>
 	<version>${syncnapsis-universe-conquest.version}</version>
+	<name>syncnapsis-universe-conquest</name>
 
 	<parent>
 		<groupId>com.syncnapsis</groupId>
