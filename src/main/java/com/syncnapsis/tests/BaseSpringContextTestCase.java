@@ -19,18 +19,19 @@ import com.syncnapsis.utils.ApplicationContextUtil;
 import org.springframework.context.ConfigurableApplicationContext;
 
 public abstract class BaseSpringContextTestCase extends LoggerTestCase
-{	
-	protected static final ConfigurableApplicationContext applicationContext;	
+{
+	protected static final ConfigurableApplicationContext	applicationContext;
 
-	protected TimeProvider timeProvider;
-	
-	protected boolean autowired = false;
-	
+	protected TimeProvider									timeProvider;
+
+	protected boolean										autowired	= false;
+
 	static
 	{
-		applicationContext = ApplicationContextUtil.createApplicationContext(ApplicationContextUtil.getDefaultConfigLocations());
+		applicationContext = ApplicationContextUtil.createApplicationContext(ApplicationContextUtil.CONTEXT_LOCATION_DEFAULT,
+				ApplicationContextUtil.CONTEXT_LOCATION_TEST);
 	}
-	
+
 	@Override
 	protected void setUp() throws Exception
 	{

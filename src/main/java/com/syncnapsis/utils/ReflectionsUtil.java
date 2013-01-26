@@ -817,7 +817,7 @@ public class ReflectionsUtil
 			type[i] = typeArgs.get(requestedGenericType).get(typeVariables[i]);
 		}
 
-		return typeArgs.get(requestedGenericType).values().toArray(new Type[0]);
+		return type;
 	}
 
 	/**

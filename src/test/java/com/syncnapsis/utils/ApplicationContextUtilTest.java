@@ -16,7 +16,6 @@ package com.syncnapsis.utils;
 
 import com.syncnapsis.providers.TimeProvider;
 import com.syncnapsis.tests.BaseSpringContextTestCase;
-import com.syncnapsis.tests.annotations.TestCoversMethods;
 import com.syncnapsis.tests.annotations.TestExcludesMethods;
 
 @TestExcludesMethods({"*etApplicationContext", "getInstance"})
@@ -40,7 +39,6 @@ public class ApplicationContextUtilTest extends BaseSpringContextTestCase
 		assertNotNull(timeProvider);		
 	}
 	
-	@TestCoversMethods({"createApplicationContext", "getDefaultConfigLocations"})
 	public void testCreateApplicationContext() throws Exception
 	{
 		assertNotNull(applicationContext);

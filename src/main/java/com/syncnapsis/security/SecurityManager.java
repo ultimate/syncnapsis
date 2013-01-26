@@ -85,6 +85,19 @@ public class SecurityManager implements InitializingBean
 	}
 
 	/**
+	 * Copy-Constructor
+	 * 
+	 * @param manager - the original SecurityManager
+	 */
+	public SecurityManager(SecurityManager manager)
+	{
+		this.accessControllers = new HashMap<Class<?>, AccessController<?>>(manager.accessControllers);
+		this.timeProvider = manager.timeProvider;
+		this.sessionProvider = manager.sessionProvider;
+		this.authorityProvider = manager.authorityProvider;
+	}
+
+	/**
 	 * Add a List of AccessControllers. Existing AccessControllers won't be removed!
 	 * Especially used for initialization.
 	 * 

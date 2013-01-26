@@ -43,12 +43,26 @@ public class ApplicationContextUtil implements ApplicationContextAware
 	/**
 	 * Logger-Instance
 	 */
-	private static transient final Logger	logger		= LoggerFactory.getLogger(ApplicationContextUtil.class);
+	private static transient final Logger	logger						= LoggerFactory.getLogger(ApplicationContextUtil.class);
+
+	/**
+	 * The standard set of xml-Files used to build the ApplicationContext represented by the
+	 * patterns:<br>
+	 * <code>classpath*:/applicationContext-default.xml</code>
+	 */
+	public static final String				CONTEXT_LOCATION_DEFAULT	= "classpath*:/applicationContext-default.xml";
+
+	/**
+	 * The standard set of xml-Files used to build the ApplicationContext represented by the
+	 * patterns:<br>
+	 * <code>classpath*:/applicationContext-test.xml</code>
+	 */
+	public static final String				CONTEXT_LOCATION_TEST		= "classpath*:/applicationContext-test.xml";
 
 	/**
 	 * The local ApplicationContextUtil
 	 */
-	private static ApplicationContextUtil	instance	= new ApplicationContextUtil();
+	private static ApplicationContextUtil	instance					= new ApplicationContextUtil();
 
 	/**
 	 * The ApplicationContext
@@ -341,29 +355,6 @@ public class ApplicationContextUtil implements ApplicationContextAware
 	}
 
 	/**
-	 * An Array with the most common xml-Files used to build an ApplicationContext:<br>
-	 * <ul>
-	 * <li>classpath:/applicationContext-dao.xml</li>
-	 * <li>classpath:/applicationContext-hibernate.xml</li>
-	 * <li>classpath:/applicationContext-security.xml</li>
-	 * <li>classpath:/applicationContext-service.xml</li>
-	 * </ul>
-	 * 
-	 * @return the Array
-	 */
-	public static String[] getDefaultConfigLocations()
-	{
-		// @formatter:off
-		return new String[] {
-				"classpath:/applicationContext-dao.xml",
-				"classpath:/applicationContext-hibernate.xml",
-				"classpath:/applicationContext-security.xml",
-				"classpath:/applicationContext-service.xml"
-				};
-		// @formatter:on
-	}
-
-	/**
 	 * Create a new ApplicationContext from the given Config-Locations.
 	 * If default Config-Locations are used, getDefaultConfigLocations() can be used here.
 	 * 
@@ -371,16 +362,18 @@ public class ApplicationContextUtil implements ApplicationContextAware
 	 * @param locations - the Config-Locations
 	 * @return the new ApplicationContext
 	 */
-	public static ConfigurableApplicationContext createApplicationContext(final String[] locations)
+	public static ConfigurableApplicationContext createApplicationContext(String... locations)
 	{
 		GenericApplicationContext context = new GenericApplicationContext();
+		// GenericXmlApplicationContext context = new GenericXmlApplicationContext();
 		XmlBeanDefinitionReader reader = new XmlBeanDefinitionReader(context);
-		for(String location: locations)
+		int loaded;
+		for(String location : locations)
 		{
 			try
 			{
-				reader.loadBeanDefinitions(location);				
-				logger.debug("bean definition loaded: '" + location + "'");
+				loaded = reader.loadBeanDefinitions(location);
+				logger.debug(loaded + " bean definitions loaded: '" + location + "'");
 			}
 			catch(BeanDefinitionStoreException e)
 			{
@@ -388,6 +381,7 @@ public class ApplicationContextUtil implements ApplicationContextAware
 			}
 		}
 		context.refresh();
+		// ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext();
 		return context;
 	}
 }

@@ -75,9 +75,10 @@ public abstract class ClassUtil
 				jarFileName = jarFileName.substring("file:/".length());
 
 			File jarFile = new File(jarFileName);
+			JarFile jar = null;
 			try
 			{
-				JarFile jar = new JarFile(jarFile);
+				jar = new JarFile(jarFile);
 				Enumeration<JarEntry> jes = jar.entries();
 				while(jes.hasMoreElements())
 				{
@@ -94,6 +95,20 @@ public abstract class ClassUtil
 			catch(IOException e)
 			{
 				e.printStackTrace();
+			}
+			finally
+			{
+				if(jar != null)
+				{
+					try
+					{
+						jar.close();
+					}
+					catch(IOException e)
+					{
+						// ignore
+					}
+				}
 			}
 		}
 		return classes;
@@ -134,9 +149,10 @@ public abstract class ClassUtil
 	{
 		List<Class<T>> classes = new ArrayList<Class<T>>();
 
+		JarFile jar = null;
 		try
 		{
-			JarFile jar = new JarFile(jarFile);
+			jar = new JarFile(jarFile);
 
 			Enumeration<JarEntry> jes = jar.entries();
 			while(jes.hasMoreElements())
@@ -164,6 +180,20 @@ public abstract class ClassUtil
 		catch(IOException e)
 		{
 			e.printStackTrace();
+		}
+		finally
+		{
+			if(jar != null)
+			{
+				try
+				{
+					jar.close();
+				}
+				catch(IOException e)
+				{
+					// ignore
+				}
+			}
 		}
 
 		return classes;

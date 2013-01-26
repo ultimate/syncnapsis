@@ -27,10 +27,5 @@
     <bean id="applicationContextUtil" class="com.syncnapsis.utils.ApplicationContextUtil" lazy-init="false" /> 
 
     <bean id="timeProvider" class="com.syncnapsis.providers.impl.SystemTimeProvider"/>
-        
-    <bean id="mockFilter" class="com.syncnapsis.mock.MockFilter"/>    
-
-    <bean id="mockServlet" class="com.syncnapsis.mock.MockServlet"/>    
     
-    <bean id="duplicate" class="com.syncnapsis.mock.MockTimeProvider" name="dup1, dup2"/>
 </beans>

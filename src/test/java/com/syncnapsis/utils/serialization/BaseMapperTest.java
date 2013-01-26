@@ -109,7 +109,7 @@ public class BaseMapperTest extends LoggerTestCase
 		List<POJO1> expected = Arrays.asList(expectedArray);
 		List<POJO1> result;
 
-		result = (List<POJO1>) mapper.mergeToCollection(array, POJO1.class, (Class<? extends Collection<?>>) List.class);
+		result = (List<POJO1>) mapper.mergeToCollection(array, POJO1.class, (Class<? extends Collection<?>>) (Class<?>) List.class);
 		assertEquals(expected, result);
 
 		result = (List<POJO1>) mapper.mergeToCollection(list, POJO1.class);
@@ -398,13 +398,13 @@ public class BaseMapperTest extends LoggerTestCase
 	{
 		Collection<POJO1> collection;
 
-		collection = mapper.createCollection(POJO1.class, (Class<? extends Collection<?>>) List.class, 5);
+		collection = mapper.createCollection(POJO1.class, (Class<? extends Collection<?>>) (Class<?>) List.class, 5);
 		assertEquals(ArrayList.class, collection.getClass());
 
-		collection = mapper.createCollection(POJO1.class, (Class<? extends Collection<?>>) Set.class, 5);
+		collection = mapper.createCollection(POJO1.class, (Class<? extends Collection<?>>) (Class<?>) Set.class, 5);
 		assertEquals(HashSet.class, collection.getClass());
 
-		collection = mapper.createCollection(POJO1.class, (Class<? extends Collection<?>>) Queue.class, 5);
+		collection = mapper.createCollection(POJO1.class, (Class<? extends Collection<?>>) (Class<?>) Queue.class, 5);
 		assertEquals(PriorityQueue.class, collection.getClass());
 	}
 
