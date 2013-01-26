@@ -21,6 +21,7 @@
 	<artifactId>syncnapsis-examples-HelloWorld</artifactId>
 	<packaging>war</packaging>
 	<version>${syncnapsis-examples-HelloWorld.version}</version>
+	<name>syncnapsis-examples-HelloWorld</name>
 
 	<parent>
 		<groupId>com.syncnapsis</groupId>
