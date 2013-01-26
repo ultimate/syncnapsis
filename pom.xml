@@ -21,6 +21,7 @@
 	<artifactId>syncnapsis-universe-evolution</artifactId>
 	<packaging>jar</packaging>
 	<version>${syncnapsis-universe-evolution.version}</version>
+	<name>syncnapsis-universe-evolution</name>
 
 	<parent>
 		<groupId>com.syncnapsis</groupId>
