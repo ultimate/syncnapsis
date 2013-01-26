@@ -21,6 +21,7 @@
 	<artifactId>syncnapsis-core-application-base</artifactId>
 	<packaging>jar</packaging>
 	<version>${syncnapsis-core-application-base.version}</version>
+	<name>syncnapsis-core-application-base</name>
 
 	<parent>
 		<groupId>com.syncnapsis</groupId>
