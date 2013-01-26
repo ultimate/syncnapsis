@@ -1,14 +1,11 @@
 /**
  * Syncnapsis Framework - Copyright (c) 2012 ultimate
- * 
  * This program is free software; you can redistribute it and/or modify it under the terms of
  * the GNU General Public License as published by the Free Software Foundation; either version
  * 3 of the License, or any later version.
- * 
  * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
  * without even the implied warranty of MECHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU General Public License for more details.
- * 
  * You should have received a copy of the GNU General Plublic License along with this program;
  * if not, see <http://www.gnu.org/licenses/>.
  */
@@ -24,14 +21,14 @@ import com.syncnapsis.tests.LoggerTestCase;
 import com.syncnapsis.tests.annotations.TestCoversClasses;
 import com.syncnapsis.tests.annotations.TestExcludesMethods;
 
-@TestCoversClasses({BaseSerializer.class, JacksonStringSerializer.class})
-@TestExcludesMethods({"get*", "set*", "afterPropertiesSet"})
+@TestCoversClasses({ BaseSerializer.class, JacksonStringSerializer.class })
+@TestExcludesMethods({ "get*", "set*", "afterPropertiesSet" })
 public class JacksonStringSerializerTest extends LoggerTestCase
-{	
+{
 	public void testSerialize() throws Exception
 	{
 		JacksonStringSerializer ser = new JacksonStringSerializer();
-		
+
 		POJO p1, p2;
 		String s1, s2, sExpected;
 
@@ -61,23 +58,41 @@ public class JacksonStringSerializerTest extends LoggerTestCase
 		sExpected = p1.toString();
 		logger.debug(sExpected + " vs. " + s2);
 		assertEquals(sExpected, s2);
-		
+
 		// serialize "trees"
-		
+
 		p2 = new POJO(2, "zwei");
-		
+
 		POJOParent pp1 = new POJOParent();
-		pp1.setChildren(Arrays.asList(new POJO[]{p1}));
-		
+		pp1.setChildren(Arrays.asList(new POJO[] { p1 }));
+
 		POJOParent pp2 = new POJOParent();
-		pp2.setChildren(Arrays.asList(new POJO[]{p2}));
-		
+		pp2.setChildren(Arrays.asList(new POJO[] { p2 }));
+
 		pp1.setSibling(pp2);
-		
+
 		s2 = ser.serialize(pp1, (Object[]) null);
 		sExpected = pp1.toString();
 		logger.debug(sExpected + " vs. " + s2);
 		assertEquals(sExpected, s2);
+
+		// serialize arrays
+
+		Object[] arr1;
+
+		arr1 = new Object[] { 1, "2", null };
+
+		s1 = ser.serialize(arr1, (Object[]) null);
+		sExpected = "[1,\"2\",null]";
+		logger.debug(sExpected + " vs. " + s1);
+		assertEquals(sExpected, s1);
+
+		arr1 = new Object[] { new POJO(1, "one"), new POJO(2, "two") };
+
+		s1 = ser.serialize(arr1, (Object[]) null);
+		sExpected = "[" + arr1[0] + "," + arr1[1] + "]";
+		logger.debug(sExpected + " vs. " + s1);
+		assertEquals(sExpected, s1);
 	}
 
 	public void testDeserialize() throws Exception
@@ -86,7 +101,7 @@ public class JacksonStringSerializerTest extends LoggerTestCase
 
 		POJO p1, p2, pExpected;
 		String s1;
-		
+
 		p1 = new POJO(1, "one", Arrays.asList(new Object[] { 1.0 }));
 		s1 = ser.serialize(p1, (Object[]) null);
 
@@ -112,50 +127,70 @@ public class JacksonStringSerializerTest extends LoggerTestCase
 		assertEquals(pExpected, p2);
 
 		// deserialize "trees"
-		
+
 		p2 = new POJO(2, "zwei");
-		
+
 		POJOParent pp1 = new POJOParent();
-		pp1.setChildren(Arrays.asList(new POJO[]{p1}));
-		
+		pp1.setChildren(Arrays.asList(new POJO[] { p1 }));
+
 		POJOParent pp2 = new POJOParent();
-		pp2.setChildren(Arrays.asList(new POJO[]{p2}));
-		
+		pp2.setChildren(Arrays.asList(new POJO[] { p2 }));
+
 		pp1.setSibling(pp2);
-		
+
 		s1 = ser.serialize(pp1, (Object[]) null);
-		
+
 		POJOParent pp3 = ser.deserialize(s1, POJOParent.class, (Object[]) null);
 		logger.debug(pp1 + " vs. " + pp3);
 		assertEquals(pp1, pp3);
-	}
-	
-	/*
-	public void testSerialize_withCycle() throws Exception
-	{
-		JacksonStringSerializer ser = new JacksonStringSerializer();
 
-		POJOParent pp1, pp2, pExpected;
-		String s1;
-		
-		pp1 = new POJOParent();
-		pp2 = new POJOParent();
-		
-		pp1.sibling = pp2;
-		pp2.sibling = pp1;
-		
-		s1 = ser.serialize(pp1); 
-		logger.debug(s1);
-		
-		Map<String, Object> m1 = new HashMap<String, Object>();
-		Map<String, Object> m2 = new HashMap<String, Object>();
-		m1.put("sibling", m2);
-		m2.put("sibling", m1);
-		
-		s1 = ser.serialize(m1);
-		logger.debug(s1);
+		// deserialize Arrays
+
+		Object[] arr1, arr1a, arr2;
+
+		arr1 = new Object[] { 1, "2", null };
+
+		s1 = ser.serialize(arr1, (Object[]) null);
+
+		arr2 = ser.deserialize(s1, Object[].class, (Object[]) null);
+		logger.debug(Arrays.asList(arr1) + " vs. " + Arrays.asList(arr2));
+		assertEquals(arr1, arr2);
+
+		arr1 = new POJO[] { new POJO(1, "one"), new POJO(2, "two") };
+
+		s1 = ser.serialize(arr1, (Object[]) null);
+
+		arr2 = ser.deserialize(s1, POJO[].class, (Object[]) null);
+		logger.debug(Arrays.asList(arr1) + " vs. " + Arrays.asList(arr2));
+		assertEquals(arr1, arr2);
+
+		arr1a = new Object[] { ((POJO) arr1[0]).toMap(), ((POJO) arr1[1]).toMap() };
+
+		arr2 = ser.deserialize(s1, Object[].class, (Object[]) null);
+		logger.debug(Arrays.asList(arr1a) + " vs. " + Arrays.asList(arr2));
+		assertEquals(arr1a, arr2);
 	}
-	*/
+
+	/*
+	 * public void testSerialize_withCycle() throws Exception
+	 * {
+	 * JacksonStringSerializer ser = new JacksonStringSerializer();
+	 * POJOParent pp1, pp2, pExpected;
+	 * String s1;
+	 * pp1 = new POJOParent();
+	 * pp2 = new POJOParent();
+	 * pp1.sibling = pp2;
+	 * pp2.sibling = pp1;
+	 * s1 = ser.serialize(pp1);
+	 * logger.debug(s1);
+	 * Map<String, Object> m1 = new HashMap<String, Object>();
+	 * Map<String, Object> m2 = new HashMap<String, Object>();
+	 * m1.put("sibling", m2);
+	 * m2.put("sibling", m1);
+	 * s1 = ser.serialize(m1);
+	 * logger.debug(s1);
+	 * }
+	 */
 
 	public static class POJO implements Mapable<POJO>
 	{

@@ -1,16 +1,17 @@
 /**
  * Syncnapsis Framework - Copyright (c) 2012 ultimate
  * 
- * This program is free software; you can redistribute it and/or modify it under the terms of
- * the GNU General Public License as published by the Free Software Foundation; either version
- * 3 of the License, or any later version.
+ * This program is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License as published by the Free Software
+ * Foundation; either version 3 of the License, or any later version.
  * 
- * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
- * without even the implied warranty of MECHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
- * See the GNU General Public License for more details.
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MECHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * details.
  * 
- * You should have received a copy of the GNU General Plublic License along with this program;
- * if not, see <http://www.gnu.org/licenses/>.
+ * You should have received a copy of the GNU General Plublic License along with
+ * this program; if not, see <http://www.gnu.org/licenses/>.
  */
 var HTTP = {};
 
@@ -167,6 +168,7 @@ AJAX.defaultDoOnFailure = function(request)
 var DependencyManager = {};
 
 DependencyManager.registrationIsDone = false;
+DependencyManager.instantLoad = true;
 DependencyManager.scriptSubpath = "scripts/";
 DependencyManager.interval = 100;
 DependencyManager.annotationText = "@requires";
@@ -205,14 +207,13 @@ DependencyManager.register = function(scriptName, scriptPath, external, dependen
 		DependencyManager.scriptContents[scriptIndex] = null;
 		DependencyManager.scriptDependencies[scriptIndex] = dependencies;
 
-		DependencyManager.loadScript(scriptName);
+		if(DependencyManager.instantLoad)
+			DependencyManager.loadScript(scriptIndex);
 	}
 };
 
-DependencyManager.loadScript = function(scriptName)
+DependencyManager.loadScript = function(scriptIndex)
 {
-	var scriptIndex = DependencyManager.indexOf(scriptName);
-
 	AJAX.sendRequestUrlEncoded(DependencyManager.scriptPaths[scriptIndex], null, HTTP.GET, function(request)
 	{
 		DependencyManager.scriptLoaded(scriptIndex, request.responseText);
@@ -238,14 +239,15 @@ DependencyManager.reloadScript = function(scriptName, doOnReload)
 
 DependencyManager.eval = function(func)
 {
-	if(typeof(func) == "function")
+	if(typeof (func) == "function")
 		func.call(null);
-	else if(typeof(func) == "string")
+	else if(typeof (func) == "string")
 		eval(func);
 };
 
 DependencyManager.scriptLoaded = function(scriptIndex, content)
 {
+	console.log("script loaded: " + scriptIndex);
 	DependencyManager.scriptContents[scriptIndex] = content;
 	DependencyManager.scriptsLoaded++;
 	DependencyManager.loadingProgressed();
@@ -292,6 +294,15 @@ DependencyManager.addScript = function(scriptIndex)
 		if(console)
 			console.debug("adding script_" + scriptIndex + ": " + DependencyManager.scripts[scriptIndex]);
 		document.getElementsByTagName("head")[0].appendChild(scriptNode);
+	}
+	else
+	{
+		if(console)
+			console.debug("updating script_" + scriptIndex + ": " + DependencyManager.scripts[scriptIndex]);
+		// re-evaluating script is required (script content is not live updated)
+		// ATTENTION: use window.eval(x) or eval.call(window, x) for global scope
+		// (otherwise reloaded content is only available inside this function)
+		window.eval(content);
 	}
 	scriptNode.text = content;
 	// mark script loaded
@@ -377,14 +388,14 @@ DependencyManager.checkScripts = function()
 
 DependencyManager.onLoadingProgressed = function(doOnLoadingProgressed)
 {
-	if(typeof(doOnLoadingProgresses) != "function" && typeof(doOnLoadingProgressed) != "string")
+	if(typeof (doOnLoadingProgressed) != "function" && typeof (doOnLoadingProgressed) != "string")
 		throw new Error("callback must be either function or string for evaluation");
 	DependencyManager.doOnLoadingProgressed[DependencyManager.doOnLoadingProgressed.length] = doOnLoadingProgressed;
 };
 
 DependencyManager.onLoadingFinished = function(doOnLoadingFinished)
 {
-	if(typeof(doOnLoadingFinished) != "function" && typeof(doOnLoadingFinished) != "string")
+	if(typeof (doOnLoadingFinished) != "function" && typeof (doOnLoadingFinished) != "string")
 		throw new Error("callback must be either function or string for evaluation");
 	DependencyManager.doOnLoadingFinished[DependencyManager.doOnLoadingFinished.length] = doOnLoadingFinished;
 };
@@ -393,6 +404,15 @@ DependencyManager.registrationDone = function(doOnLoadingFinished)
 {
 	if(doOnLoadingFinished)
 		DependencyManager.onLoadingFinished(doOnLoadingFinished);
+	
+	if(!DependencyManager.instantLoad)
+	{
+		// load scripts (except of 0 which is this one...)
+		for(var i = 1; i < DependencyManager.scripts.length; i++)
+		{
+			DependencyManager.loadScript(i);
+		}
+	}
 
 	DependencyManager.registrationIsDone = true;
 	DependencyManager.checkScripts();
@@ -415,4 +435,21 @@ DependencyManager.loadingProgressed = function()
 	{
 		DependencyManager.eval(DependencyManager.doOnLoadingProgressed[i]);
 	}
+};
+
+DependencyManager.defaultOnLoadingProgressed = function(progressBarID, progressFieldID)
+{
+	return function() {
+		var progressBar = document.getElementById(progressBarID);
+		var progressField = document.getElementById(progressFieldID);
+		
+		var loaded = DependencyManager.scriptsLoaded;
+		var total  = DependencyManager.scripts.length;
+		var progress = Math.round(100*loaded/total) + "%";
+		progressBar.style.width = progress;
+		progressField.innerHTML = progress;
+		
+		if(console)
+			console.log("progress: '" + progress + "'");
+	};
 };

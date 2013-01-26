@@ -1,14 +1,11 @@
 /**
  * Syncnapsis Framework - Copyright (c) 2012 ultimate
- * 
  * This program is free software; you can redistribute it and/or modify it under the terms of
  * the GNU General Public License as published by the Free Software Foundation; either version
  * 3 of the License, or any later version.
- * 
  * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
  * without even the implied warranty of MECHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU General Public License for more details.
- * 
  * You should have received a copy of the GNU General Plublic License along with this program;
  * if not, see <http://www.gnu.org/licenses/>.
  */
@@ -20,6 +17,7 @@ import javax.servlet.ServletException;
 
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
+import org.springframework.mock.web.MockHttpSession;
 
 import com.syncnapsis.tests.LoggerTestCase;
 import com.syncnapsis.tests.annotations.TestCoversMethods;
@@ -81,6 +79,27 @@ public class ServletUtilTest extends LoggerTestCase
 		assertTrue(s.contains(hv));
 	}
 
+	@TestCoversMethods("toString")
+	public void testToString_Session()
+	{
+		String an = "anAttributeName";
+		String av = "anAttributeValue";
+
+		int interval = 12345;
+
+		MockHttpSession session = new MockHttpSession();
+		session.setMaxInactiveInterval(interval);
+		session.setAttribute(an, av);
+
+		String s = ServletUtil.toString(session);
+
+		assertNotNull(s);
+
+		assertTrue(s.contains("" + interval));
+		assertTrue(s.contains(an));
+		assertTrue(s.contains(av));
+	}
+
 	public void testInsertDirectory() throws Exception
 	{
 		String path = "/a/b/c/d";
@@ -116,5 +135,49 @@ public class ServletUtilTest extends LoggerTestCase
 		assertEquals(2, ServletUtil.countDirectories("/a/b/"));
 		assertEquals(2, ServletUtil.countDirectories("//a//b/"));
 		assertEquals(2, ServletUtil.countDirectories("//a//b//"));
+	}
+	
+	public void testCopyRequestClientInfo() throws Exception
+	{
+		MockHttpServletRequest req = new MockHttpServletRequest();
+		MockHttpSession sess = new MockHttpSession();
+		
+		req.addHeader(ServletUtil.ATTRIBUTE_USER_AGENT, "my browser");
+		req.setRemoteHost("1.2.3.4");
+		req.setRemotePort(1234);
+		
+		ServletUtil.copyRequestClientInfo(req, sess);
+		
+		assertEquals(sess.getAttribute(ServletUtil.ATTRIBUTE_REMOTE_HOST), req.getRemoteHost());
+		assertEquals(sess.getAttribute(ServletUtil.ATTRIBUTE_REMOTE_PORT), req.getRemotePort());
+		assertEquals(sess.getAttribute(ServletUtil.ATTRIBUTE_USER_AGENT), req.getHeader(ServletUtil.ATTRIBUTE_USER_AGENT));
+	}
+	
+	public void testGetRemoteAddr() throws Exception
+	{
+		MockHttpSession sess = new MockHttpSession();
+		
+		String ip = "1.2.3.4";
+		String name = "www.example.com";
+		
+		sess.setAttribute(ServletUtil.ATTRIBUTE_REMOTE_ADDR, ip);
+		sess.setAttribute(ServletUtil.ATTRIBUTE_REMOTE_HOST, ip);
+		
+		assertEquals(ip, ServletUtil.getRemoteAddr(sess));
+		
+		sess.setAttribute(ServletUtil.ATTRIBUTE_REMOTE_HOST, name);
+		
+		assertEquals(ip + " (" + name + ")", ServletUtil.getRemoteAddr(sess));
+	}
+	
+	public void testGetUserAgent() throws Exception
+	{
+		MockHttpSession sess = new MockHttpSession();
+		
+		String agent = "my browser";
+		
+		sess.setAttribute(ServletUtil.ATTRIBUTE_USER_AGENT, agent);
+		
+		assertEquals(agent, ServletUtil.getUserAgent(sess));
 	}
 }
