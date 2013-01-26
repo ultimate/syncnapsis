@@ -21,6 +21,7 @@
     <artifactId>syncnapsis-modules-authority-generic-impl</artifactId>
     <packaging>jar</packaging>
     <version>${syncnapsis-modules-authority-generic-impl.version}</version>
+	<name>syncnapsis-modules-authority-generic-impl</name>
 	
 	<parent>
 		<groupId>com.syncnapsis</groupId>
