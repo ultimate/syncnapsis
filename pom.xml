@@ -21,6 +21,7 @@
     <artifactId>syncnapsis-core-websockets</artifactId>
     <packaging>jar</packaging>
     <version>${syncnapsis-core-websockets.version}</version>
+	<name>syncnapsis-core-websockets</name>
 	
 	<parent>
 		<groupId>com.syncnapsis</groupId>
