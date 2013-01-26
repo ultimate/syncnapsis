@@ -21,6 +21,7 @@
     <artifactId>syncnapsis-modules-politics-complex-impl</artifactId>
     <packaging>jar</packaging>
     <version>${syncnapsis-modules-politics-complex-impl.version}</version>
+	<name>syncnapsis-modules-politics-complex-impl</name>
 	
 	<parent>
 		<groupId>com.syncnapsis</groupId>
