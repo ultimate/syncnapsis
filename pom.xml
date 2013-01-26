@@ -21,6 +21,7 @@
     <artifactId>syncnapsis-modules-authority-api</artifactId>
     <packaging>jar</packaging>
     <version>${syncnapsis-modules-authority-api.version}</version>
+	<name>syncnapsis-modules-authority-api</name>
 	
 	<parent>
 		<groupId>com.syncnapsis</groupId>
