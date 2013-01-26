@@ -45,6 +45,11 @@
 
 	<bean id="actionManager" class="com.syncnapsis.data.service.impl.ActionManagerImpl">
 		<constructor-arg ref="actionDao" />
+		<property name="serializer" ref="serializer" />
+	</bean>
+
+	<bean id="serializer" class="com.syncnapsis.utils.serialization.JacksonStringSerializer">
+		<!-- <property name="mapper" ref="mapper" /> -->
 	</bean>
 
 	<bean id="messengerContactManager" class="com.syncnapsis.data.service.impl.MessengerContactManagerImpl">
@@ -62,6 +67,19 @@
 
 	<bean id="parameterManager" class="com.syncnapsis.data.service.impl.ParameterManagerImpl">
 		<constructor-arg ref="parameterDao" />
+	</bean>
+    
+    <bean id="pinboardManager" class="com.syncnapsis.data.service.impl.PinboardManagerImpl">
+        <constructor-arg ref="pinboardDao"/>
+    </bean>
+    
+    <bean id="pinboardMessageManager" class="com.syncnapsis.data.service.impl.PinboardMessageManagerImpl">
+        <constructor-arg ref="pinboardMessageDao"/>
+    </bean>
+
+	<bean id="rpcLogManager" class="com.syncnapsis.data.service.impl.RPCLogManagerImpl">
+		<constructor-arg ref="rpcLogDao" />
+		<property name="serializer" ref="serializer"/>
 	</bean>
 
 	<bean id="userManager" class="com.syncnapsis.data.service.impl.UserManagerImpl">

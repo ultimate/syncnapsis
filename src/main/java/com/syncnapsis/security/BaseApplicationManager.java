@@ -1,14 +1,11 @@
 /**
  * Syncnapsis Framework - Copyright (c) 2012 ultimate
- * 
  * This program is free software; you can redistribute it and/or modify it under the terms of
  * the GNU General Public License as published by the Free Software Foundation; either version
  * 3 of the License, or any later version.
- * 
  * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
  * without even the implied warranty of MECHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU General Public License for more details.
- * 
  * You should have received a copy of the GNU General Plublic License along with this program;
  * if not, see <http://www.gnu.org/licenses/>.
  */
@@ -16,9 +13,11 @@ package com.syncnapsis.security;
 
 import java.security.MessageDigest;
 
+import org.springframework.util.Assert;
+
+import com.syncnapsis.providers.LocaleProvider;
 import com.syncnapsis.providers.UserProvider;
 import com.syncnapsis.utils.StringUtil;
-import org.springframework.util.Assert;
 
 /**
  * Extension of {@link SecurityManager} for additional functionality in applications.
@@ -37,6 +36,10 @@ public class BaseApplicationManager extends SecurityManager
 	 * The UserProvider
 	 */
 	protected UserProvider		userProvider;
+	/**
+	 * The LocaleProvider
+	 */
+	protected LocaleProvider	localeProvider;
 	/**
 	 * The encryption algorithm used for password encryption
 	 */
@@ -96,6 +99,26 @@ public class BaseApplicationManager extends SecurityManager
 	public void setUserProvider(UserProvider userProvider)
 	{
 		this.userProvider = userProvider;
+	}
+	
+	/**
+	 * The LocaleProvider
+	 * 
+	 * @return localeProvider
+	 */
+	public LocaleProvider getLocaleProvider()
+	{
+		return localeProvider;
+	}
+	
+	/**
+	 * The LocaleProvider
+	 * 
+	 * @param localeProvider - the LocaleProvider
+	 */
+	public void setLocaleProvider(LocaleProvider localeProvider)
+	{
+		this.localeProvider = localeProvider;
 	}
 
 	/**

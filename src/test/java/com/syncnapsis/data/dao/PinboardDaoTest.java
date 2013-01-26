@@ -14,50 +14,38 @@
  */
 package com.syncnapsis.data.dao;
 
-import com.syncnapsis.data.dao.hibernate.ActionDaoHibernate;
-import com.syncnapsis.data.model.Action;
+import com.syncnapsis.data.dao.hibernate.PinboardDaoHibernate;
+import com.syncnapsis.data.model.Pinboard;
 import com.syncnapsis.tests.GenericNameDaoTestCase;
 import com.syncnapsis.tests.annotations.TestCoversClasses;
-import com.syncnapsis.utils.serialization.JacksonStringSerializer;
-import com.syncnapsis.utils.serialization.Serializer;
 
-@TestCoversClasses({ ActionDao.class, ActionDaoHibernate.class })
-public class ActionDaoTest extends GenericNameDaoTestCase<Action, Long>
+@TestCoversClasses({PinboardDao.class, PinboardDaoHibernate.class})
+public class PinboardDaoTest extends GenericNameDaoTestCase<Pinboard, Long>
 {
-	private ActionDao	actionDao;
+	private PinboardDao pinboardDao;
 	
-	private Serializer<String> serializer = new JacksonStringSerializer();
-
 	@Override
 	protected void setUp() throws Exception
 	{
 		super.setUp();
-
-		Long existingId = 1L;
-		String existingName = actionDao.get(existingId).getCode();
-
-		Action action = new Action();
+		
+		String existingName = pinboardDao.getAll().get(0).getName();
+		Long existingId = pinboardDao.getByName(existingName).getId();
+		
+		Pinboard pinboard = new Pinboard();
 		// set individual properties here
-
-		setEntity(action);
-
-		setEntityProperty("code");
-		setEntityPropertyValue("1A2B3C");
-
+		
+		setEntity(pinboard);
+		
+		setEntityProperty("description");
+		setEntityPropertyValue("a descriptive text...");
+		
 		setExistingEntityId(existingId);
 		setBadEntityId(-1L);
 		setExistingEntityName(existingName);
-
-		setGenericNameDao(actionDao);
+		
+		setGenericNameDao(pinboardDao);
 	}
 	
-	public void testDeserializeArgs() throws Exception
-	{
-		Action a = actionDao.get(existingEntityId);
-		
-		Object[] args = serializer.deserialize(a.getRPCCall().getArgs(), Object[].class, (Object[]) null);
-		assertNotNull(args);
-	}
-
 	// insert individual Tests here
 }

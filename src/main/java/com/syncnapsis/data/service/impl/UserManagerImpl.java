@@ -109,7 +109,7 @@ public class UserManagerImpl extends GenericNameManagerImpl<User, Long> implemen
 		if(pwEnc.equals(user.getPassword()))
 		{
 			securityManager.getUserProvider().set(user);
-			// TODO set user Locale (since overwriting in UI is possible if no user specified
+			securityManager.getLocaleProvider().set(user.getLocale());
 			// TODO additionally set username (for relogin)
 			return user;
 		}
