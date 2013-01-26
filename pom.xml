@@ -21,6 +21,7 @@
     <artifactId>syncnapsis-universe</artifactId>
     <packaging>pom</packaging>
     <version>1.0.0</version>
+	<name>syncnapsis-universe</name>
 	
 	<parent>
 		<groupId>com</groupId>
