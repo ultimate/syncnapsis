@@ -104,7 +104,7 @@ public abstract class URLRewriteFilter extends FilterEngine
 		if(newURL != null)
 		{
 			RequestDispatcher dispatcher = httpRequest.getRequestDispatcher(newURL);
-			
+
 			if(!useInclude)
 			{
 				dispatcher.forward(httpRequest, httpResponse);

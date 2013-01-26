@@ -40,7 +40,27 @@ public class BaseApplicationManager extends SecurityManager
 	/**
 	 * The encryption algorithm used for password encryption
 	 */
-	protected String				encryptionAlgorithm;
+	protected String			encryptionAlgorithm;
+
+	/**
+	 * Standard Constructor
+	 */
+	public BaseApplicationManager()
+	{
+		super();
+	}
+
+	/**
+	 * Copy-Constructor
+	 * 
+	 * @param manager - the original BaseApplicationManager
+	 */
+	public BaseApplicationManager(BaseApplicationManager manager)
+	{
+		super(manager);
+		this.userProvider = manager.userProvider;
+		this.encryptionAlgorithm = manager.encryptionAlgorithm;
+	}
 
 	/*
 	 * (non-Javadoc)
