@@ -32,6 +32,12 @@
 	<bean id="newsDao" class="com.syncnapsis.data.dao.hibernate.NewsDaoHibernate" />
 
 	<bean id="parameterDao" class="com.syncnapsis.data.dao.hibernate.ParameterDaoHibernate" />
+
+	<bean id="pinboardDao" class="com.syncnapsis.data.dao.hibernate.PinboardDaoHibernate" />
+
+	<bean id="pinboardMessageDao" class="com.syncnapsis.data.dao.hibernate.PinboardMessageDaoHibernate" />
+	
+	<bean id="rpcLogDao" class="com.syncnapsis.data.dao.hibernate.RPCLogDaoHibernate" />
 	
 	<bean id="userContactDao" class="com.syncnapsis.data.dao.hibernate.UserContactDaoHibernate" />
 	
@@ -103,6 +109,11 @@
 
 	<bean id="sessionProvider" class="com.syncnapsis.providers.impl.ThreadLocalSessionProvider" />
 
+	<bean id="localeProvider" class="com.syncnapsis.providers.impl.SessionBasedLocaleProvider">
+		<property name="sessionProvider" ref="sessionProvider" />
+		<property name="attributeName" value="j_locale" />
+	</bean>
+
 	<bean id="userProvider" class="com.syncnapsis.providers.impl.SessionBasedUserProvider">
 		<property name="sessionProvider" ref="sessionProvider" />
 		<property name="attributeName" value="j_user" />
@@ -122,6 +133,23 @@
 		<property name="timeProvider" ref="timeProvider" />
 		<property name="sessionProvider" ref="sessionProvider" />
 		<property name="userProvider" ref="userProvider" />
+	</bean>
+	
+    <!-- =================================================================== -->
+    <!-- Servlets					                                         -->
+    <!-- =================================================================== -->
+
+	<bean id="actionFilter" class="com.syncnapsis.web.ActionFilter">
+		<property name="rpcHandler" ref="rpcHandler" />
+		<property name="serializer" ref="serializer" />
+		<property name="actionManager" ref="actionManager" />
+	</bean>
+
+	<bean id="localeFilter" class="com.syncnapsis.web.LocaleFilter">
+		<property name="sessionProvider" ref="sessionProvider" />
+		<property name="localeProvider" ref="localeProvider" />
+		<property name="localeDirectoryLevel" value="1" />
+		<property name="useInclude" value="true" />
 	</bean>
 	
 </beans>
