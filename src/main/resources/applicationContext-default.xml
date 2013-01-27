@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ - Syncnapsis Framework - Copyright (c) 2012 ultimate
+ - 
+ - This program is free software; you can redistribute it and/or modify it under the terms of
+ - the GNU General Public License as published by the Free Software Foundation; either version
+ - 3 of the License, or any later version.
+ - 
+ - This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+ - without even the implied warranty of MECHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ - See the GNU General Public License for more details.
+ - 
+ - You should have received a copy of the GNU General Plublic License along with this program;
+ - if not, see <http://www.gnu.org/licenses/>.
+-->
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+            http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd
+            http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.0.xsd"
+       default-lazy-init="true">
+	
+    <!-- =================================================================== -->
+    <!-- DAO						                                         -->
+    <!-- =================================================================== -->
+	
+	<bean id="actionDao" class="com.syncnapsis.data.dao.hibernate.ActionDaoHibernate" />
+
+	<bean id="galaxyDao" class="com.syncnapsis.data.dao.hibernate.GalaxyDaoHibernate" />
+
+	<bean id="matchDao" class="com.syncnapsis.data.dao.hibernate.MatchDaoHibernate" />
+
+	<bean id="participantDao" class="com.syncnapsis.data.dao.hibernate.ParticipantDaoHibernate" />
+	
+	<bean id="solarSystemDao" class="com.syncnapsis.data.dao.hibernate.SolarSystemDaoHibernate" />
+	
+	<bean id="solarSystemInfrastructureDao" class="com.syncnapsis.data.dao.hibernate.SolarSystemInfrastructureDaoHibernate" />
+	
+	<bean id="solarSystemPopulationDao" class="com.syncnapsis.data.dao.hibernate.SolarSystemPopulationDaoHibernate" />
+	
+	<bean id="universalDao" class="com.syncnapsis.data.dao.hibernate.UniversalDaoHibernate" />
+	
+    <!-- =================================================================== -->
+    <!-- Service					                                         -->
+    <!-- =================================================================== -->
+    
+    <bean id="actionManager" class="com.syncnapsis.data.service.impl.ActionManagerImpl">
+        <constructor-arg ref="actionDao"/>
+        <property name="serializer" ref="serializer" />
+    </bean>  
+    
+    <bean id="galaxyManager" class="com.syncnapsis.data.service.impl.GalaxyManagerImpl">
+        <constructor-arg ref="galaxyDao"/>
+    </bean>  
+    
+    <bean id="matchManager" class="com.syncnapsis.data.service.impl.MatchManagerImpl">
+        <constructor-arg ref="matchDao"/>
+    </bean>  
+    
+    <bean id="participantManager" class="com.syncnapsis.data.service.impl.ParticipantManagerImpl">
+        <constructor-arg ref="participantDao"/>
+    </bean>
+    
+    <bean id="solarSystemManager" class="com.syncnapsis.data.service.impl.SolarSystemManagerImpl">
+        <constructor-arg ref="solarSystemDao"/>
+    </bean>  
+    
+    <bean id="solarSystemInfrastructureManager" class="com.syncnapsis.data.service.impl.SolarSystemInfrastructureManagerImpl">
+        <constructor-arg ref="solarSystemInfrastructureDao"/>
+    </bean>  
+    
+    <bean id="solarSystemPopulationManager" class="com.syncnapsis.data.service.impl.SolarSystemPopulationManagerImpl">
+        <constructor-arg ref="solarSystemPopulationDao"/>
+    </bean>  
+
+	<bean id="universalManager" class="com.syncnapsis.data.service.impl.UniversalManagerImpl">
+		<constructor-arg ref="universalDao" />
+	</bean>
+    
+    <!-- =================================================================== -->
+    <!-- non-DB-Managers			                                         -->
+    <!-- =================================================================== -->
+    
+    <bean id="uiManager" class="com.syncnapsis.client.UIManagerImpl">
+    	<property name="localeProvider" ref="localeProvider" />
+    	<property name="connectionProvider" ref="connectionProvider" />
+    	<property name="rpcService" ref="rpcService" />
+    </bean>
+    
+    <!-- =================================================================== -->
+    <!-- Security					                                         -->
+    <!-- =================================================================== -->
+
+	<bean id="securityManager" class="com.syncnapsis.security.BaseGameManager">
+		<constructor-arg ref="baseGameManager" />
+	</bean>
+    
+    <!-- =================================================================== -->
+    <!-- Hibernate					                                         -->
+    <!-- =================================================================== -->
+    
+    <bean id="transactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+    
+    <tx:annotation-driven transaction-manager="transactionManager" />
+	
+</beans>

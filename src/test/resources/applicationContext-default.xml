@@ -19,14 +19,34 @@
             http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd
             http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.0.xsd"
        default-lazy-init="true">
+	
+    <!-- =================================================================== -->
+    <!-- DAO						                                         -->
+    <!-- =================================================================== -->
+	
+	<bean id="actionDao" class="com.syncnapsis.data.dao.hibernate.ActionDaoHibernate" />
+
+	<bean id="galaxyDao" class="com.syncnapsis.data.dao.hibernate.GalaxyDaoHibernate" />
+
+	<bean id="matchDao" class="com.syncnapsis.data.dao.hibernate.MatchDaoHibernate" />
+
+	<bean id="participantDao" class="com.syncnapsis.data.dao.hibernate.ParticipantDaoHibernate" />
+	
+	<bean id="solarSystemDao" class="com.syncnapsis.data.dao.hibernate.SolarSystemDaoHibernate" />
+	
+	<bean id="solarSystemInfrastructureDao" class="com.syncnapsis.data.dao.hibernate.SolarSystemInfrastructureDaoHibernate" />
+	
+	<bean id="solarSystemPopulationDao" class="com.syncnapsis.data.dao.hibernate.SolarSystemPopulationDaoHibernate" />
+	
+	<bean id="universalDao" class="com.syncnapsis.data.dao.hibernate.UniversalDaoHibernate" />
+	
+    <!-- =================================================================== -->
+    <!-- Service					                                         -->
+    <!-- =================================================================== -->
     
     <bean id="actionManager" class="com.syncnapsis.data.service.impl.ActionManagerImpl">
         <constructor-arg ref="actionDao"/>
         <property name="serializer" ref="serializer" />
-    </bean>  
-    
-    <bean id="empireManager" class="com.syncnapsis.data.service.impl.EmpireManagerImpl">
-        <constructor-arg ref="empireDao"/>
     </bean>  
     
     <bean id="galaxyManager" class="com.syncnapsis.data.service.impl.GalaxyManagerImpl">
@@ -37,50 +57,9 @@
         <constructor-arg ref="matchDao"/>
     </bean>  
     
-    <bean id="messengerContactManager" class="com.syncnapsis.data.service.impl.MessengerContactManagerImpl">
-        <constructor-arg ref="messengerContactDao"/>
-    </bean>
-    
-    <bean id="messengerManager" class="com.syncnapsis.data.service.impl.MessengerManagerImpl">
-        <constructor-arg ref="messengerDao"/>
-    </bean>
-    
-    <bean id="newsManager" class="com.syncnapsis.data.service.impl.NewsManagerImpl">
-        <constructor-arg ref="newsDao"/>
-        <constructor-arg ref="parameterManager"/>
-    </bean>
-    
-    <bean id="parameterManager" class="com.syncnapsis.data.service.impl.ParameterManagerImpl">
-        <constructor-arg ref="parameterDao"/>
-    </bean>
-    
     <bean id="participantManager" class="com.syncnapsis.data.service.impl.ParticipantManagerImpl">
         <constructor-arg ref="participantDao"/>
     </bean>
-    
-    <bean id="pinboardManager" class="com.syncnapsis.data.service.impl.PinboardManagerImpl">
-        <constructor-arg ref="pinboardDao"/>
-    </bean>
-    
-    <bean id="pinboardMessageManager" class="com.syncnapsis.data.service.impl.PinboardMessageManagerImpl">
-        <constructor-arg ref="pinboardMessageDao"/>
-    </bean>
-    
-    <bean id="playerManager" class="com.syncnapsis.data.service.impl.PlayerManagerImpl">
-        <constructor-arg ref="playerDao"/>
-        <constructor-arg ref="playerRoleManager"/>
-        <constructor-arg ref="userManager"/>
-        <property name="securityManager" ref="securityManager" />
-    </bean>
-    
-    <bean id="playerRoleManager" class="com.syncnapsis.data.service.impl.PlayerRoleManagerImpl">
-        <constructor-arg ref="playerRoleDao"/>
-    </bean>  
-
-	<bean id="rpcLogManager" class="com.syncnapsis.data.service.impl.RPCLogManagerImpl">
-		<constructor-arg ref="rpcLogDao" />
-		<property name="serializer" ref="serializer"/>
-	</bean>
     
     <bean id="solarSystemManager" class="com.syncnapsis.data.service.impl.SolarSystemManagerImpl">
         <constructor-arg ref="solarSystemDao"/>
@@ -98,22 +77,9 @@
 		<constructor-arg ref="universalDao" />
 	</bean>
     
-    <bean id="userManager" class="com.syncnapsis.data.service.impl.UserManagerImpl">
-        <constructor-arg ref="userDao"/>
-        <constructor-arg ref="userRoleManager"/>
-        <property name="securityManager" ref="securityManager" />
-    </bean>
-    
-    <bean id="userContactManager" class="com.syncnapsis.data.service.impl.UserContactManagerImpl">
-        <constructor-arg ref="userContactDao"/>
-        <constructor-arg ref="userManager"/>
-    </bean>
-    
-    <bean id="userRoleManager" class="com.syncnapsis.data.service.impl.UserRoleManagerImpl">
-        <constructor-arg ref="userRoleDao"/>
-    </bean>  
-    
-    <!-- non-DB-Managers -->
+    <!-- =================================================================== -->
+    <!-- non-DB-Managers			                                         -->
+    <!-- =================================================================== -->
     
     <bean id="uiManager" class="com.syncnapsis.client.UIManagerImpl">
     	<property name="localeProvider" ref="localeProvider" />
@@ -121,4 +87,24 @@
     	<property name="rpcService" ref="rpcService" />
     </bean>
     
+    <!-- =================================================================== -->
+    <!-- Security					                                         -->
+    <!-- =================================================================== -->
+
+	<bean id="securityManager" class="com.syncnapsis.security.BaseGameManager">
+		<constructor-arg ref="baseGameManager" />
+	</bean>
+    
+    <!-- =================================================================== -->
+    <!-- Hibernate					                                         -->
+    <!-- =================================================================== -->
+    
+    <!-- 
+    <bean id="transactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+    
+    <tx:annotation-driven transaction-manager="transactionManager" />
+     -->
+	
 </beans>
