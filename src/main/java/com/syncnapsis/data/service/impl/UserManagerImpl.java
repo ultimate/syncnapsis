@@ -73,7 +73,7 @@ public class UserManagerImpl extends GenericNameManagerImpl<User, Long> implemen
 	@Override
 	public void afterPropertiesSet() throws Exception
 	{
-		Assert.notNull(securityManager, "baseApplicationManager must not be null!");
+		Assert.notNull(securityManager, "securityManager must not be null!");
 	}
 
 	/**

@@ -62,6 +62,7 @@ public class BaseApplicationManager extends SecurityManager
 	{
 		super(manager);
 		this.userProvider = manager.userProvider;
+		this.localeProvider = manager.localeProvider;
 		this.encryptionAlgorithm = manager.encryptionAlgorithm;
 	}
 

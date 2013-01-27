@@ -132,6 +132,7 @@
 		</property>
 		<property name="timeProvider" ref="timeProvider" />
 		<property name="sessionProvider" ref="sessionProvider" />
+		<property name="localeProvider" ref="localeProvider" />
 		<property name="userProvider" ref="userProvider" />
 	</bean>
 	
