@@ -15,6 +15,7 @@
 package com.syncnapsis.websockets.service.rpc;
 
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -30,30 +31,35 @@ import com.syncnapsis.websockets.Connection;
 import com.syncnapsis.websockets.service.BaseService;
 
 /**
- * Service-Implementation allowing bi-directional RPCs.
+ * Service-Implementation allowing bi-directional RPCs.<br>
  * RPCs are forwarded to a RPCHandler the is used to obtain the target Object and the required
- * Method and to invoke the Method with the given Arguments.
+ * Method and to invoke the Method with the given Arguments.<br>
+ * <br>
+ * For better portability and the requirement of implementing an Interface for MockContext-Testing
+ * the RPCService is an RPCHandler itself, that will only forward the RPCHandler method calls to the
+ * underlying RPCHandler. As a result to this the RPCService of couse may be overwritten to handle
+ * the calls itself if desired.
  * 
  * @author ultimate
  */
-public class RPCService extends BaseService implements InitializingBean
+public class RPCService extends BaseService implements InitializingBean, RPCHandler
 {
 	/**
 	 * The Serializer used to (de)-serialize messages.
 	 */
-	protected Serializer<String>	serializer;
+	protected Serializer<String>		serializer;
 	/**
 	 * The RPCHandler that finally executes the RPC.
 	 */
-	protected RPCHandler								rpcHandler;
+	protected RPCHandler				rpcHandler;
 	/**
 	 * The Number of calls the Server has made. Used to generate the CID
 	 */
-	protected long										currentCall	= 0;
+	protected long						currentCall	= 0;
 	/**
 	 * A map for caching the results
 	 */
-	protected final Map<Long, Object>					results		= new TreeMap<Long, Object>();
+	protected final Map<Long, Object>	results		= new TreeMap<Long, Object>();
 
 	/**
 	 * Default Constructor
@@ -116,7 +122,8 @@ public class RPCService extends BaseService implements InitializingBean
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.syncnapsis.websockets.service.BaseService#onMessage(com.syncnapsis.websockets.Connection,
+	 * @see
+	 * com.syncnapsis.websockets.service.BaseService#onMessage(com.syncnapsis.websockets.Connection,
 	 * java.lang.String)
 	 */
 	@Override
@@ -148,8 +155,6 @@ public class RPCService extends BaseService implements InitializingBean
 	 */
 	protected void onRPC(RPCMessage message)
 	{
-		// TODO do RPC-Logging
-		
 		convertMessageData(message, RPCCall.class);
 		if(!(message.getData() instanceof RPCCall))
 		{
@@ -159,7 +164,7 @@ public class RPCService extends BaseService implements InitializingBean
 		}
 		try
 		{
-			Object result = this.rpcHandler.doRPC((RPCCall) message.getData(), getAuthorities());
+			Object result = this.doRPC((RPCCall) message.getData(), getAuthorities());
 			if(result != Void.TYPE)
 			{
 				try
@@ -289,7 +294,7 @@ public class RPCService extends BaseService implements InitializingBean
 			throw new IOException("SerializationException", e);
 		}
 	}
-	
+
 	/**
 	 * Convert the data included in the RPCMessage to a required type.
 	 * 
@@ -350,19 +355,25 @@ public class RPCService extends BaseService implements InitializingBean
 		return null;
 	}
 
-	/**
-	 * Get a virtual Client-instance for the given target name and the Client represented by the
-	 * Connection.
-	 * For example a Proxy may be created that handles the method calls an creates the RPCMessage to
-	 * be handled by this Service.
-	 * 
-	 * @see RPCHandler#getClientInstance(String, Connection)
-	 * @param objectName - the name of the Object to get the Client-Instance for
-	 * @param connection - the Connection representing the Client
-	 * @return the Client-Instance
+	/*
+	 * (non-Javadoc)
+	 * @see com.syncnapsis.websockets.service.rpc.RPCHandler#getClientInstance(java.lang.String,
+	 * com.syncnapsis.websockets.Connection)
 	 */
 	public Object getClientInstance(String objectName, Connection connection)
 	{
 		return this.rpcHandler.getClientInstance(objectName, connection);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see
+	 * com.syncnapsis.websockets.service.rpc.RPCHandler#doRPC(com.syncnapsis.websockets.service.
+	 * rpc.RPCCall, java.lang.Object[])
+	 */
+	@Override
+	public Object doRPC(RPCCall call, Object... authorities) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException
+	{
+		return this.rpcHandler.doRPC(call, authorities);
 	}
 }
