@@ -84,7 +84,7 @@
     <bean id="uiManager" class="com.syncnapsis.client.UIManagerImpl">
     	<property name="localeProvider" ref="localeProvider" />
     	<property name="connectionProvider" ref="connectionProvider" />
-    	<property name="rpcService" ref="rpcService" />
+    	<property name="rpcHandler" ref="rpcHandler" />
     </bean>
     
     <!-- =================================================================== -->

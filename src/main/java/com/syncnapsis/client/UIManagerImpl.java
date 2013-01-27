@@ -17,7 +17,7 @@ import org.slf4j.LoggerFactory;
 import com.syncnapsis.enums.EnumLocale;
 import com.syncnapsis.providers.ConnectionProvider;
 import com.syncnapsis.providers.LocaleProvider;
-import com.syncnapsis.websockets.service.rpc.RPCService;
+import com.syncnapsis.websockets.service.rpc.RPCHandler;
 
 /**
  * Interface representing the client and server UIManager functions
@@ -41,9 +41,9 @@ public class UIManagerImpl implements UIManager
 	protected ConnectionProvider		connectionProvider;
 
 	/**
-	 * The RPCService used to obtain the client instance
+	 * The RPCHandler used to obtain the client instance
 	 */
-	protected RPCService				rpcService;
+	protected RPCHandler				rpcHandler;
 
 	/**
 	 * The LocaleProvider for accessing the session locale
@@ -86,23 +86,23 @@ public class UIManagerImpl implements UIManager
 	}
 
 	/**
-	 * The RPCService used to obtain the client instance
+	 * The RPCHandler used to obtain the client instance
 	 * 
-	 * @return rpcService
+	 * @return rpcHandler
 	 */
-	public RPCService getRpcService()
+	public RPCHandler getRpcHandler()
 	{
-		return rpcService;
+		return rpcHandler;
 	}
 
 	/**
-	 * The RPCService used to obtain the client instance
+	 * The RPCHandler used to obtain the client instance
 	 * 
-	 * @param rpcService - the RPCService
+	 * @param rpcHandler - the RPCHandler
 	 */
-	public void setRpcService(RPCService rpcService)
+	public void setRpcHandler(RPCHandler rpcHandler)
 	{
-		this.rpcService = rpcService;
+		this.rpcHandler = rpcHandler;
 	}
 
 	/*
@@ -125,6 +125,6 @@ public class UIManagerImpl implements UIManager
 		logger.debug("setting locale: " + locale);
 		localeProvider.set(locale);
 		logger.debug("reloading locale on client now!");
-		((UIManager) rpcService.getClientInstance("uiManager", connectionProvider.get())).reloadLocale();
+		((UIManager) rpcHandler.getClientInstance("uiManager", connectionProvider.get())).reloadLocale();
 	}
 }
