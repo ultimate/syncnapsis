@@ -38,8 +38,6 @@
 	
 	<bean id="solarSystemPopulationDao" class="com.syncnapsis.data.dao.hibernate.SolarSystemPopulationDaoHibernate" />
 	
-	<bean id="universalDao" class="com.syncnapsis.data.dao.hibernate.UniversalDaoHibernate" />
-	
     <!-- =================================================================== -->
     <!-- Service					                                         -->
     <!-- =================================================================== -->
@@ -72,10 +70,6 @@
     <bean id="solarSystemPopulationManager" class="com.syncnapsis.data.service.impl.SolarSystemPopulationManagerImpl">
         <constructor-arg ref="solarSystemPopulationDao"/>
     </bean>  
-
-	<bean id="universalManager" class="com.syncnapsis.data.service.impl.UniversalManagerImpl">
-		<constructor-arg ref="universalDao" />
-	</bean>
     
     <!-- =================================================================== -->
     <!-- non-DB-Managers			                                         -->
