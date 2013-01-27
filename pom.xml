@@ -45,33 +45,11 @@
             <version>${syncnapsis-core-data.version}</version>
             <optional>true</optional>
         </dependency>
-    	<!-- websockets - START -->
-        <dependency>
-            <groupId>org.eclipse.jetty</groupId>
-            <artifactId>jetty-websocket</artifactId>
-            <version>${jetty.version}</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.eclipse.jetty</groupId>
-            <artifactId>jetty-server</artifactId>
-            <version>${jetty.version}</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.eclipse.jetty</groupId>
-            <artifactId>jetty-servlet</artifactId>
-            <version>${jetty.version}</version>
-            <scope>provided</scope>
-        </dependency>
-    	<!-- websockets - END -->
     </dependencies>
 
     <profiles> 
     </profiles>
 
     <properties>
-    	<!-- Web-Dependencies -->
-    	<jetty.version>8.1.0.v20120127</jetty.version> <!-- 27.01.2012 -->
     </properties>
 </project>
