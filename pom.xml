@@ -232,6 +232,34 @@
 			<scope>compile</scope>
 		</dependency>
 		<!-- BASE - END -->
+		<!-- WEB - START -->
+		<dependency>
+			<groupId>org.glassfish</groupId>
+			<artifactId>javax.servlet</artifactId>
+			<version>${servlet.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<!-- WEB - END -->
+    	<!-- websockets - START -->
+        <dependency>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-websocket</artifactId>
+            <version>${jetty.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-server</artifactId>
+            <version>${jetty.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-servlet</artifactId>
+            <version>${jetty.version}</version>
+            <scope>provided</scope>
+        </dependency>
+    	<!-- websockets - END -->
 	</dependencies>
 
 	<profiles>
@@ -308,6 +336,7 @@
 		<servlet.version>3.1.1</servlet.version> <!-- 19.01.2012 -->
 		<slf4j.version>1.6.4</slf4j.version> <!-- 19.01.2012 -->
 		<log4j.version>1.2.16</log4j.version> <!-- 19.01.2012 -->
+    	<jetty.version>8.1.0.v20120127</jetty.version> <!-- 27.01.2012 -->
 		<!-- For Profiles only -->
 		<hibernate.version>4.0.1.Final</hibernate.version> <!-- 19.01.2012 -->
 
