@@ -31,7 +31,6 @@
 	DependencyManager.register("Lang", "lang/lang.js", true);
 	// register services
 	DependencyManager.register("PlayerManager", "service/PlayerManager.js");
-	DependencyManager.register("Providers", "service/Providers.js");
 	// complete registration
 	DependencyManager.onLoadingProgressed(DependencyManager.defaultOnLoadingProgressed("loader_bar", "loader_text"));
 	DependencyManager.onLoadingFinished("init()");
@@ -108,13 +107,18 @@
 	<div id="content" style="display: none;">
 		<div id="content_login">
 			<div class="form">
-				<label key="profile.username"></label>:&nbsp;<input id="login_username" type="text" /><br>
-				<label key="profile.password"></label>:&nbsp;<input id="login_password" type="password" /><br>
+				<label key="profile.username"></label>:&nbsp;<input id="login_username" type="text" />
+				<div class="message" id="message_login_invalid_username" style="display: none;"><label key=""></label></div>
+				<br>
+				<label key="profile.password"></label>:&nbsp;<input id="login_password" type="password" />
+				<div class="message" id="message_login_invalid_password" style="display: none;"><label key=""></label></div>
+				<br>
 			</div>
 			<div class="buttons">
-				<input type="button" key="menu.login" onclick="" />
-				<input type="button" key="menu.cancel" onclick="" />
-				<input type="button" key="menu.register" onclick="" />
+				<input type="button" key="menu.login" onclick="client.uiManager.doLogin();" />
+				<input type="button" key="menu.cancel" onclick="client.uiManager.hideLogin();" />
+				<input type="button" key="menu.register" onclick="client.uiManager.showRegister();" />
+				<div class="message" id="message_login_failed" style="display: none;"><label key=""></label></div><br/>
 			</div>
 		</div>
 	</div>
