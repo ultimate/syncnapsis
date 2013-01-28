@@ -1,14 +1,11 @@
 /**
  * Syncnapsis Framework - Copyright (c) 2012 ultimate
- * 
  * This program is free software; you can redistribute it and/or modify it under the terms of
  * the GNU General Public License as published by the Free Software Foundation; either version
  * 3 of the License, or any later version.
- * 
  * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
  * without even the implied warranty of MECHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU General Public License for more details.
- * 
  * You should have received a copy of the GNU General Plublic License along with this program;
  * if not, see <http://www.gnu.org/licenses/>.
  */
@@ -30,6 +27,7 @@ import com.syncnapsis.utils.FileUtil;
 public class Assembler
 {
 	public static final List<String>	excludedExtensions	= Arrays.asList(new String[] { ".zip" });
+	public static final List<String>	excludedNames		= Arrays.asList(new String[] { "applicationContext-default.xml" });
 
 	protected transient final Logger	logger				= LoggerFactory.getLogger(getClass());
 
@@ -126,6 +124,8 @@ public class Assembler
 			else
 			{
 				if(excludedExtensions.contains(FileUtil.getExtension(childSource)))
+					continue;
+				if(excludedNames.contains(childSource.getName()))
 					continue;
 				try
 				{
