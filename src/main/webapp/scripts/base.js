@@ -15,7 +15,6 @@
 //@requires("UI")
 //@requires("RPCSocket")
 //@requires("PlayerManager")
-//@requires("Providers")
 
 var WSConfiguration = {};
 WSConfiguration.protocol = "rpc";
