@@ -20,28 +20,6 @@
 	default-lazy-init="true">
     
     <!-- =================================================================== -->
-    <!-- Utilities					                                         -->
-    <!-- =================================================================== -->
-
-	<bean id="hibernateUtil" class="com.syncnapsis.utils.HibernateUtil" lazy-init="false">
-		<property name="sessionFactory" ref="sessionFactory" />
-	</bean>
-    
-    <!-- =================================================================== -->
-    <!-- DAO						                                         -->
-    <!-- =================================================================== -->
-	
-	<bean id="universalDao" class="com.syncnapsis.data.dao.hibernate.UniversalDaoHibernate" />
-    
-    <!-- =================================================================== -->
-    <!-- Service					                                         -->
-    <!-- =================================================================== -->
-
-	<bean id="universalManager" class="com.syncnapsis.data.service.impl.UniversalManagerImpl">
-		<constructor-arg ref="universalDao" />
-	</bean>
-    
-    <!-- =================================================================== -->
     <!-- Hibernate					                                         -->
     <!-- =================================================================== -->
     
