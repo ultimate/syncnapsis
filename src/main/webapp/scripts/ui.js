@@ -46,12 +46,13 @@ UIManager = function()
 	this.layout_ad_right = new Styles.FillLayout([ "ad_right_border", "ad_right_inner" ], [ UI.constants.AD_BORDER, null ], Styles.layout.HORIZONTAL);
 
 	this.layout_bar_top = new Styles.FillLayout([ "bar_top_left", "bar_top_center", "bar_top_right" ], [ UI.constants.BAR_OUTER_WIDTH, null, UI.constants.BAR_OUTER_WIDTH ], Styles.layout.HORIZONTAL);
-	this.layout_bar_bottom = new Styles.FillLayout([ "bar_bottom_left", "bar_bottom_center", "bar_bottom_right" ], [ UI.constants.BAR_OUTER_WIDTH, null, UI.constants.BAR_OUTER_WIDTH ],
-			Styles.layout.HORIZONTAL);
-	
+	this.layout_bar_bottom = new Styles.FillLayout([ "bar_bottom_left", "bar_bottom_center", "bar_bottom_right" ], [ UI.constants.BAR_OUTER_WIDTH, null, UI.constants.BAR_OUTER_WIDTH ], Styles.layout.HORIZONTAL);
+
 	this.window_login = new Styles.Window("login", "menu.login", "content_login");
 	this.window_login.setSize(300, 200);
 	this.window_login.center();
+	
+	this.window_register = null; // TODO
 
 	Events.fireEvent(window, Events.ONRESIZE);
 
@@ -63,17 +64,26 @@ UIManager = function()
 
 UIManager.prototype.onLogin = function(player)
 {
-	// store the current player
-	this.currentPlayer = player;
-	// set the player name in the top bar
-	document.getElementById(UI.constants.LABEL_ID_PLAYERNAME).innerHTML = player.user.username;
-	// change language to users selection
-	server.uiManager.selectLocale(player.user.locale);
-	// switch ui to logged-in menu
-	document.getElementById("bar_top_left_loggedin").style.display = "block";
-	document.getElementById("bar_top_right_loggedin").style.display = "block";
-	document.getElementById("bar_top_left_loggedout").style.display = "none";
-	document.getElementById("bar_top_right_loggedout").style.display = "none";
+	if(player != null)
+	{		
+		// store the current player
+		this.currentPlayer = player;
+		// set the player name in the top bar
+		document.getElementById(UI.constants.LABEL_ID_PLAYERNAME).innerHTML = player.user.username;
+		// change language to users selection
+		server.uiManager.selectLocale(player.user.locale);
+		// switch ui to logged-in menu
+		document.getElementById("bar_top_left_loggedin").style.display = "block";
+		document.getElementById("bar_top_right_loggedin").style.display = "block";
+		document.getElementById("bar_top_left_loggedout").style.display = "none";
+		document.getElementById("bar_top_right_loggedout").style.display = "none";
+		
+		this.hideLogin();
+	}
+	else
+	{
+		this.showErrorMessage(null, document.getElementById("message_login_failed"));
+	}
 };
 
 UIManager.prototype.onLogout = function(success)
@@ -114,6 +124,8 @@ UIManager.prototype.populateLocaleChooser = function()
 
 UIManager.prototype.getString = function(key)
 {
+	if(key == null || key == "")
+		return key; // otherwise the following eval would fail!
 	return eval(UI.constants.LOCALE_STRING_VARIABLE + "." + key);
 };
 
@@ -146,6 +158,70 @@ UIManager.prototype.updateLabels = function()
 UIManager.prototype.showLogin = function()
 {
 	this.window_login.setVisible(true);
+};
+
+UIManager.prototype.hideLogin = function()
+{
+	this.window_login.setVisible(false);
+};
+
+UIManager.prototype.doLogin = function()
+{
+	var username = document.getElementById("login_username").value;
+	var password = document.getElementById("login_password").value;
+	if(username == "" || username == null || password == "" || password == null)
+	{
+		if(username == "" || username == null)
+			this.showErrorMessage(document.getElementById("login_username"), document.getElementById("message_login_invalid_username"));
+		if(password == "" || password == null)
+			this.showErrorMessage(document.getElementById("login_password"), document.getElementById("message_login_invalid_password"));
+		return;
+	}
+	console.log("login as: " + username + ":" + password);
+	server.playerManager.login(username, password);
+};
+
+UIManager.prototype.showRegister = function()
+{
+	this.window_register.setVisible(true);
+};
+
+UIManager.prototype.hideRegister = function()
+{
+	this.window_register.setVisible(false);
+};
+
+UIManager.prototype.doRegister = function()
+{
+//	var username = document.getElementById("register_username").value;
+//	var password = document.getElementById("register_password").value;
+//	// TODO password confirm
+//	// TODO email
+//	if(username == "" || password == "")
+//	{
+//		if(username == "" || username == null)
+//			this.showErrorMessage(document.getElementyById("register_username"), document.getElementById("message_register_invalid_username"));
+//		if(password == "" || password == null)
+//			this.showErrorMessage(document.getElementyById("register_password"), document.getElementById("message_register_invalid_password"));
+//		return;
+//	}
+//	server.playerManager.register(............);
+};
+
+UIManager.prototype.showErrorMessage = function(textfield, messagefield)
+{
+	if(textfield != null)
+	{
+		var bg = textfield.style.background;
+		textfield.style.background = "#FFEE88";
+		setTimeout(function() {textfield.style.background = bg;}, 3000);
+	}
+	if(messagefield != null)
+	{
+		var disp = messagefield.style.display;
+		messagefield.style.display = "none";
+		setTimeout(function() {messagefield.style.display = disp;}, 3000);
+	}
 };
 
 ServerUIManager = function()
