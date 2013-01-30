@@ -72,18 +72,10 @@
 
 	<bean id="rpcService" class="com.syncnapsis.websockets.service.rpc.RPCService">
 		<property name="serializer" ref="serializer" />
-		<property name="rpcHandler" ref="logRPCHandler" />
-	</bean>
-	
-	<bean id="logRPCHandler" class="com.syncnapsis.websockets.service.rpc.LogRPCHandler">
-		<property name="delegate" ref="rpcHandler" />
-		<property name="rpcLogManager" ref="rpcLogManager" />
-		<property name="sessionProvider" ref="sessionProvider" />
-		<property name="timeProvider" ref="timeProvider" />
-		<property name="userProvider" ref="userProvider" />
+		<property name="rpcHandler" ref="rpcHandler" />
 	</bean>
 
-	<bean id="rpcHandler" class="com.syncnapsis.websockets.service.rpc.DataRPCHandler">
+	<bean id="dataRPCHandler" class="com.syncnapsis.websockets.service.rpc.DataRPCHandler">
 		<property name="serializer" ref="serializer" />
 		<property name="universalManager" ref="universalManager" />
 	</bean>
