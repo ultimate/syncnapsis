@@ -20,8 +20,14 @@
             http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.0.xsd"
 	default-lazy-init="true">
 
+	<!-- Wire the name "securityManager" with the "baseApplicationManager" -->
 	<bean id="securityManager" class="com.syncnapsis.security.BaseApplicationManager">
 		<constructor-arg ref="baseApplicationManager" />
+	</bean>
+
+	<!-- Wire the name "rpcHandler" with the "logRPCHandler" -->
+	<bean id="rpcHandler" class="com.syncnapsis.websockets.service.rpc.DelegatingRPCHandler">
+		<property name="delegate" ref="logRPCHandler" />
 	</bean>
     
 </beans>

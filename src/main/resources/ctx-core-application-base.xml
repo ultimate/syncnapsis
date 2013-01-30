@@ -137,6 +137,18 @@
 	</bean>
 	
     <!-- =================================================================== -->
+    <!-- WebSockets					                                         -->
+    <!-- =================================================================== -->
+    	
+	<bean id="logRPCHandler" class="com.syncnapsis.websockets.service.rpc.LogRPCHandler">
+		<property name="delegate" ref="dataRPCHandler" />
+		<property name="rpcLogManager" ref="rpcLogManager" />
+		<property name="sessionProvider" ref="sessionProvider" />
+		<property name="timeProvider" ref="timeProvider" />
+		<property name="userProvider" ref="userProvider" />
+	</bean>
+      
+    <!-- =================================================================== -->
     <!-- Servlets					                                         -->
     <!-- =================================================================== -->
 
