@@ -11,10 +11,14 @@
  */
 package com.syncnapsis.data.service.impl;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import javax.servlet.http.HttpSession;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.util.Assert;
 
@@ -34,6 +38,26 @@ import com.syncnapsis.websockets.service.rpc.RPCCall;
  */
 public class RPCLogManagerImpl extends GenericManagerImpl<RPCLog, Long> implements RPCLogManager, InitializingBean
 {
+	/**
+	 * The additional RPC-Logger
+	 */
+	protected transient final Logger rpcLogger = LoggerFactory.getLogger("rpclogger");
+
+	/**
+	 * The DateFormat used for RPC-Logging
+	 */
+	protected ThreadLocal<DateFormat> dateFormat = new ThreadLocal<DateFormat>() {
+		/*
+		 * (non-Javadoc)
+		 * @see java.lang.ThreadLocal#initialValue()
+		 */
+		@Override
+		protected DateFormat initialValue()
+		{
+			return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+		}
+	};
+	
 	/**
 	 * RPCLogDao for database access
 	 */
@@ -107,7 +131,7 @@ public class RPCLogManagerImpl extends GenericManagerImpl<RPCLog, Long> implemen
 			logger.error("Could not serialize RPC result: " + e.getMessage());
 			resultString = e.getClass().getName() + ": " + e.getMessage();
 		}
-		return this.log(rpcCall, resultString, executionDate, user, session, authorities);
+		return this.log(rpcCall, resultString, false, executionDate, user, session, authorities);
 	}
 
 	/*
@@ -117,8 +141,13 @@ public class RPCLogManagerImpl extends GenericManagerImpl<RPCLog, Long> implemen
 	@Override
 	public RPCLog log(RPCCall rpcCall, Exception exception, Date executionDate, User user, HttpSession session, Object... authorities)
 	{
-		String resultString = exception.getClass().getName() + ": " + exception.getMessage();
-		return this.log(rpcCall, resultString, executionDate, user, session, authorities);
+		String resultString;
+		if(exception != null)
+			resultString = exception.getClass().getName() + ": " + exception.getMessage();
+		else
+			resultString = "null";
+		
+		return this.log(rpcCall, resultString, true, executionDate, user, session, authorities);
 	}
 
 	/**
@@ -129,12 +158,13 @@ public class RPCLogManagerImpl extends GenericManagerImpl<RPCLog, Long> implemen
 	 * @see RPCLogManager#log(RPCCall, Exception, User, HttpSession, Object...)
 	 * @param rpcCall - the RPCCall performed
 	 * @param result - the result or exception returned serialized as a String
+	 * @param exceptionThrown - did the RPCCall throw an Exception
 	 * @param executionDate - the execution date
 	 * @param user - the User that performed the RPCCall
 	 * @param session - the session in which the RPCCall was executed
 	 * @param authorities - the authorities used to perform the RPCCall
 	 */
-	protected RPCLog log(RPCCall rpcCall, String result, Date executionDate, User user, HttpSession session, Object... authorities)
+	protected RPCLog log(RPCCall rpcCall, String result, boolean exceptionThrown, Date executionDate, User user, HttpSession session, Object... authorities)
 	{
 		com.syncnapsis.data.model.help.RPCCall call = new com.syncnapsis.data.model.help.RPCCall();
 		call.setObject(rpcCall.getObject());
@@ -156,6 +186,12 @@ public class RPCLogManagerImpl extends GenericManagerImpl<RPCLog, Long> implemen
 		log.setRPCCall(call);
 		log.setUser(user);
 		log.setUserAgent(ServletUtil.getUserAgent(session));
+		
+		if(rpcLogger.isInfoEnabled())
+		{
+			String d = dateFormat.get().format(executionDate);
+			rpcLogger.info(d + "  " + log.getRemoteAddr() + " -> " + call.getObject() + "." + call.getMethod() + "(" + call.getArgs() + ")" + (exceptionThrown ? " threw " : " returned ") + log.getResult());
+		}
 		
 		return save(log);
 	}

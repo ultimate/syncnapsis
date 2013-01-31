@@ -170,7 +170,8 @@ public class LogRPCHandler extends DelegatingRPCHandler
 		}
 		catch(InvocationTargetException e)
 		{
-			rpcLogManager.log(call, e, executionDate, userProvider.get(), sessionProvider.get(), authorities);
+			e.printStackTrace(); // TODO remove
+			rpcLogManager.log(call, e.getCause(), executionDate, userProvider.get(), sessionProvider.get(), authorities);
 			throw e;
 		}
 	}
