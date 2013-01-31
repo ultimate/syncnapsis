@@ -34,7 +34,14 @@
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
 		<param-value>
-            classpath*:/applicationContext-default.xml
+            classpath*:/ctx-core-utils.xml
+            classpath*:/ctx-core-data.xml
+            classpath*:/ctx-hibernate-default.xml
+            classpath*:/ctx-core-websockets.xml
+            classpath*:/ctx-core-application-base.xml
+            classpath*:/ctx-core-game-base.xml
+            classpath*:/ctx-stats-base-impl.xml
+            classpath*:/ctx-universe-conquest.xml
 		</param-value>
 	</context-param>
 	
