@@ -57,7 +57,7 @@
 		<property name="attributeName" value="j_player" />
 	</bean>
 
-	<bean id="authorityProvider" class="com.syncnapsis.providers.impl.PlayerRoleBasedAuthorityProvider">
+	<bean id="playerRoleBasedAuthorityProvider" class="com.syncnapsis.providers.impl.PlayerRoleBasedAuthorityProvider">
 		<constructor-arg ref="playerProvider" />
 	</bean>
 	
@@ -73,7 +73,7 @@
 		<property name="localeProvider" ref="localeProvider" />
 		<property name="userProvider" ref="userProvider" />
 		<property name="playerProvider" ref="playerProvider" />
-		<property name="authorityProvider" ref="authorityProvider" />
+		<property name="authorityProvider" ref="playerRoleBasedAuthorityProvider" />
 	</bean>
 	
 </beans>
