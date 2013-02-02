@@ -27,7 +27,7 @@ import com.syncnapsis.utils.FileUtil;
 public class Assembler
 {
 	public static final List<String>	excludedExtensions	= Arrays.asList(new String[] { ".zip" });
-	public static final List<String>	excludedNames		= Arrays.asList(new String[] { "applicationContext-default.xml" });
+	public static final List<String>	excludedNames		= Arrays.asList(new String[] { "ctx-default.xml" });
 
 	protected transient final Logger	logger				= LoggerFactory.getLogger(getClass());
 
