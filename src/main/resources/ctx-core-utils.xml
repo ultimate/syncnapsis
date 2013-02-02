@@ -27,6 +27,8 @@
     <bean id="applicationContextUtil" class="com.syncnapsis.utils.ApplicationContextUtil" lazy-init="false" /> 
 
     <bean id="timeProvider" class="com.syncnapsis.providers.impl.SystemTimeProvider"/>
+
+	<bean id="sessionProvider" class="com.syncnapsis.providers.impl.ThreadLocalSessionProvider" />
     
     <!-- =================================================================== -->
     <!-- Serialization				                                         -->
