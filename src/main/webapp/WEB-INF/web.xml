@@ -24,7 +24,8 @@
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
 		<param-value>
-            classpath*:/applicationContext-default.xml
+			classpath*:/ctx-default.xml
+			classpath:/ctx-helloworld.xml
 		</param-value>
 	</context-param>
 	
