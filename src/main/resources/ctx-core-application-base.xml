@@ -54,10 +54,6 @@
 		<property name="serializer" ref="serializer" />
 	</bean>
 
-	<bean id="serializer" class="com.syncnapsis.utils.serialization.JacksonStringSerializer">
-		<!-- <property name="mapper" ref="mapper" /> -->
-	</bean>
-
 	<bean id="messengerContactManager" class="com.syncnapsis.data.service.impl.MessengerContactManagerImpl">
 		<constructor-arg ref="messengerContactDao" />
 	</bean>
