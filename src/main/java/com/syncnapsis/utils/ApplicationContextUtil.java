@@ -98,7 +98,7 @@ public class ApplicationContextUtil implements ApplicationContextAware
 	 * 
 	 * @return the ApplicationContextUtil
 	 */
-	public ApplicationContextUtil getInstance()
+	public static ApplicationContextUtil getInstance()
 	{
 		return instance;
 	}
