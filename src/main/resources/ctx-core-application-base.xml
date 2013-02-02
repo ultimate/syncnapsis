@@ -103,8 +103,6 @@
     <!-- Security					                                         -->
     <!-- =================================================================== -->
 
-	<bean id="sessionProvider" class="com.syncnapsis.providers.impl.ThreadLocalSessionProvider" />
-
 	<bean id="localeProvider" class="com.syncnapsis.providers.impl.SessionBasedLocaleProvider">
 		<property name="sessionProvider" ref="sessionProvider" />
 		<property name="attributeName" value="j_locale" />
@@ -113,6 +111,10 @@
 	<bean id="userProvider" class="com.syncnapsis.providers.impl.SessionBasedUserProvider">
 		<property name="sessionProvider" ref="sessionProvider" />
 		<property name="attributeName" value="j_user" />
+	</bean>
+
+	<bean id="userRoleBasedAuthorityProvider" class="com.syncnapsis.providers.impl.UserRoleBasedAuthorityProvider">
+		<constructor-arg ref="userProvider" />
 	</bean>
 	
 	<bean id="fieldAccessController" class="com.syncnapsis.security.accesscontrol.FieldAccessController" />
@@ -130,6 +132,7 @@
 		<property name="sessionProvider" ref="sessionProvider" />
 		<property name="localeProvider" ref="localeProvider" />
 		<property name="userProvider" ref="userProvider" />
+		<property name="authorityProvider" ref="userRoleBasedAuthorityProvider" />
 	</bean>
 	
     <!-- =================================================================== -->
@@ -142,6 +145,24 @@
 		<property name="sessionProvider" ref="sessionProvider" />
 		<property name="timeProvider" ref="timeProvider" />
 		<property name="userProvider" ref="userProvider" />
+	</bean>
+	
+	<bean id="serviceMapping" class="com.syncnapsis.websockets.ServiceMapping">
+		<property name="protocols">
+			<map key-type="java.lang.String" value-type="java.lang.String">
+				<entry key="rpc" value-ref="openSessionInViewService"/>
+				<!-- 
+				<entry key="chat" value-ref="chatService" />
+				<entry key="rpc" value-ref="rpcService" />
+				 -->
+			</map>
+		</property>
+	</bean>
+
+	<bean id="openSessionInViewService" class="com.syncnapsis.websockets.service.OpenSessionInViewService">
+		<property name="interceptedService" ref="rpcService" />
+		<property name="sessionFactory" ref="sessionFactory" />
+		<property name="flushMode" value="COMMIT" />
 	</bean>
       
     <!-- =================================================================== -->
