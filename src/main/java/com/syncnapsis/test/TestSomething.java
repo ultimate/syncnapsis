@@ -32,25 +32,18 @@ public class TestSomething
 {
 	public static void main(String[] args) throws Exception
 	{
-//		String[] locations = new String[] {
-//				ApplicationContextUtil.CONTEXT_LOCATION_ALL,
-//				ApplicationContextUtil.CONTEXT_LOCATION_DEFAULT,
-//				ApplicationContextUtil.CONTEXT_LOCATION_TEST
-//		};
+		// new config: fixed again!!!
 		String[] locations = new String[] {
-				"classpath*:/ctx-test.xml"
+				"classpath*:/ctx-core-utils.xml",
+	            "classpath*:/ctx-core-data.xml",
+//	            "classpath*:/ctx-hibernate-default.xml",
+	            "classpath*:/ctx-core-websockets.xml",
+	            "classpath*:/ctx-core-application-base.xml",
+	            "classpath*:/ctx-core-game-base.xml",
+	            "classpath*:/ctx-stats-base-impl.xml",
+	            "classpath*:/ctx-universe-conquest.xml",
 		};
-//		String[] locations = new String[] {
-//				"classpath*:/ctx-core-utils.xml",
-//	            "classpath*:/ctx-core-data.xml",
-////	            "classpath*:/ctx-hibernate-default.xml",
-////	            "classpath*:/ctx-core-websockets.xml",
-//	            "classpath*:/ctx-core-application-base.xml",
-//	            "classpath*:/ctx-core-game-base.xml",
-////	            "classpath*:/ctx-stats-base-impl.xml",
-//	            "classpath*:/ctx-universe-conquest.xml",
-//		};
-		// working!!!
+		// old config: working!!!
 //		String[] locations = new String[] {
 //	            "classpath:/applicationContext-dao.xml",
 //	            "classpath:/applicationContext-security.xml",
@@ -75,7 +68,7 @@ public class TestSomething
 		s.setSize(321);
 		solarSystemManager.save(s);
 
-		/*
+		
 		RPCLogManager rpcLogManager = ctx.getBean("rpcLogManager", RPCLogManager.class);
 
 		RPCCall rpcCall = new RPCCall("object", "method", new Object[] { "1", 2 });
