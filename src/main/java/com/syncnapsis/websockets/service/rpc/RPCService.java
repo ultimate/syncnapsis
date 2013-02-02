@@ -1,14 +1,11 @@
 /**
  * Syncnapsis Framework - Copyright (c) 2012 ultimate
- * 
  * This program is free software; you can redistribute it and/or modify it under the terms of
  * the GNU General Public License as published by the Free Software Foundation; either version
  * 3 of the License, or any later version.
- * 
  * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
  * without even the implied warranty of MECHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU General Public License for more details.
- * 
  * You should have received a copy of the GNU General Plublic License along with this program;
  * if not, see <http://www.gnu.org/licenses/>.
  */
@@ -20,12 +17,15 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import org.springframework.beans.factory.InitializingBean;
+import org.springframework.orm.hibernate4.HibernateTransactionManager;
 import org.springframework.util.Assert;
 
 import com.syncnapsis.exceptions.DeserializationException;
 import com.syncnapsis.exceptions.SerializationException;
 import com.syncnapsis.providers.AuthorityProvider;
 import com.syncnapsis.security.SecurityManager;
+import com.syncnapsis.utils.ApplicationContextUtil;
+import com.syncnapsis.utils.HibernateUtil;
 import com.syncnapsis.utils.serialization.Serializer;
 import com.syncnapsis.websockets.Connection;
 import com.syncnapsis.websockets.service.BaseService;
@@ -179,6 +179,17 @@ public class RPCService extends BaseService implements InitializingBean, RPCHand
 		}
 		catch(Exception e)
 		{
+			// TODO remove start
+			HibernateTransactionManager txm = (HibernateTransactionManager) ApplicationContextUtil.getBean("transactionManager");
+			logger.info("txm: " + txm);
+			logger.info("txm.sessFac: " + txm.getSessionFactory());
+			logger.info("hbu.sessFac: " + HibernateUtil.getInstance().getSessionFactory());
+			logger.info("sess: " + txm.getSessionFactory().getCurrentSession());
+			logger.info("tx: " + txm.getSessionFactory().getCurrentSession().getTransaction());
+			logger.info("tx.active: " + txm.getSessionFactory().getCurrentSession().getTransaction().isActive());
+			e.printStackTrace();
+			// TODO remove end
+
 			logger.error("Exception doing RPC: " + e.getMessage());
 		}
 	}
