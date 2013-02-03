@@ -15,7 +15,6 @@
 package com.syncnapsis.websockets;
 
 import com.syncnapsis.exceptions.WebSocketEngineException;
-import com.syncnapsis.exceptions.WebSocketManagerException;
 
 /**
  * MXBean-Interface for Engines.
@@ -28,16 +27,16 @@ public interface EngineMXBean
 	/**
 	 * Start this Engine and all of it's engines.
 	 * 
-	 * @throws WebSocketEngineException - if the WebSocketManager could not be started
+	 * @throws WebSocketEngineException - if the Engine could not be started
 	 */
-	public void start() throws WebSocketManagerException;
+	public void start() throws WebSocketEngineException;
 
 	/**
 	 * Stop this Engine and all of it's engines.
 	 * 
-	 * @throws WebSocketEngineException - if the WebSocketManager could not be stopped
+	 * @throws WebSocketEngineException - if the Engine could not be stopped
 	 */
-	public void stop() throws WebSocketManagerException;
+	public void stop() throws WebSocketEngineException;
 
 	/**
 	 * Is this Engine running?
