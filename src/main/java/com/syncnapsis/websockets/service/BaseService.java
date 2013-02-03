@@ -22,15 +22,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-import com.syncnapsis.exceptions.WebSocketManagerException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.InitializingBean;
+
 import com.syncnapsis.exceptions.WebSocketServiceException;
 import com.syncnapsis.utils.MBeanUtil;
 import com.syncnapsis.websockets.Connection;
 import com.syncnapsis.websockets.Message;
 import com.syncnapsis.websockets.Service;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.InitializingBean;
 
 /**
  * Basic implementation of WebSocketListener to be used for extending own WebSocketListeners
@@ -238,7 +238,7 @@ public class BaseService implements Service, InitializingBean
 	 * @see com.syncnapsis.websockets.ServiceMXBean#sendMessage(java.lang.String, java.lang.String)
 	 */
 	@Override
-	public void sendMessage(String id, String data) throws WebSocketManagerException
+	public void sendMessage(String id, String data) throws WebSocketServiceException
 	{
 		Connection connection = this.connections.get(id);
 		if(connection != null)
