@@ -101,4 +101,6 @@ public class WebSocketEngineExceptionTest extends LoggerTestCase
 			assertNotNull(ex);
 		}
 	}
+	
+	// additional test in specific engine implementation
 }

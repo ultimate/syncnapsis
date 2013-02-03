@@ -16,8 +16,6 @@ package com.syncnapsis.websockets;
 
 import java.io.IOException;
 
-import com.syncnapsis.exceptions.WebSocketServiceException;
-
 /**
  * MXBean-Interface for Services.
  * All relevant Methods for configuring the Service are declared here.
@@ -49,10 +47,9 @@ public interface ServiceMXBean
 	 * 
 	 * @param id - the id of the connection to send the message to
 	 * @param data - the message
-	 * @throws WebSocketServiceException - if no connection with the given is connected or sending
-	 *             fails
+	 * @throws IOException - if no connection with the given ID is not connected or sending fails
 	 */
-	public void sendMessage(String id, String data) throws WebSocketServiceException;
+	public void sendMessage(String id, String data) throws IOException;
 
 	/**
 	 * Send a binary message to a given client within this service
@@ -61,10 +58,9 @@ public interface ServiceMXBean
 	 * @param data - the message content
 	 * @param offset - an offset
 	 * @param length - message length
-	 * @throws WebSocketServiceException - if no service with the given is connected or sending
-	 *             fails
+	 * @throws IOException - if no connection with the given ID is not connected or sending fails
 	 */
-	public void sendMessage(String id, byte[] data, int offset, int length) throws WebSocketServiceException;
+	public void sendMessage(String id, byte[] data, int offset, int length) throws IOException;
 
 	/**
 	 * Get the amount of currently connected connections.

@@ -11,6 +11,8 @@
  */
 package com.syncnapsis.websockets.service;
 
+import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
 
 import org.slf4j.Logger;
@@ -18,7 +20,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.util.Assert;
 
-import com.syncnapsis.exceptions.WebSocketServiceException;
 import com.syncnapsis.utils.interception.Interceptor;
 import com.syncnapsis.utils.reflections.Invocation;
 import com.syncnapsis.websockets.Connection;
@@ -64,7 +65,7 @@ public abstract class InterceptorService implements Service, Interceptor, Initia
 	 * Logger-Instance
 	 */
 	protected transient final Logger	logger	= LoggerFactory.getLogger(getClass());
-	
+
 	/**
 	 * The Service to intercept and to forward the method calls to
 	 */
@@ -107,14 +108,22 @@ public abstract class InterceptorService implements Service, Interceptor, Initia
 	@Override
 	public void broadcast(final String data)
 	{
-		intercept(new Invocation<Object>() {
-			@Override
-			public Object invoke()
-			{
-				interceptedService.broadcast(data);
-				return null;
-			}
-		});
+		try
+		{
+			intercept(new Invocation<Object>() {
+				@Override
+				public Object invoke() throws InvocationTargetException
+				{
+					interceptedService.broadcast(data);
+					return null;
+				}
+			});
+		}
+		catch(InvocationTargetException e)
+		{
+			logger.error("Error while intercepting: " + e.getCause() != null ? e.getCause().getClass().getSimpleName() + ": "
+					+ e.getCause().getMessage() : "null");
+		}
 	}
 
 	/*
@@ -124,14 +133,23 @@ public abstract class InterceptorService implements Service, Interceptor, Initia
 	@Override
 	public void broadcast(final byte[] data, final int offset, final int length)
 	{
-		intercept(new Invocation<Object>() {
-			@Override
-			public Object invoke()
-			{
-				interceptedService.broadcast(data, offset, length);
-				return null;
-			}
-		});
+		try
+		{
+			intercept(new Invocation<Object>() {
+				@Override
+				public Object invoke() throws InvocationTargetException
+				{
+					interceptedService.broadcast(data, offset, length);
+					return null;
+				}
+			});
+		}
+		catch(InvocationTargetException e)
+		{
+			logger.error("Error while intercepting: " + e.getCause() != null ? e.getCause().getClass().getSimpleName() + ": "
+					+ e.getCause().getMessage() : "null");
+			throw new RuntimeException(e.getCause());
+		}
 	}
 
 	/*
@@ -139,16 +157,35 @@ public abstract class InterceptorService implements Service, Interceptor, Initia
 	 * @see com.syncnapsis.websockets.ServiceMXBean#sendMessage(java.lang.String, java.lang.String)
 	 */
 	@Override
-	public void sendMessage(final String id, final String data) throws WebSocketServiceException
+	public void sendMessage(final String id, final String data) throws IOException
 	{
-		intercept(new Invocation<Object>() {
-			@Override
-			public Object invoke()
-			{
-				interceptedService.sendMessage(id, data);
-				return null;
-			}
-		});
+		try
+		{
+			intercept(new Invocation<Object>() {
+				@Override
+				public Object invoke() throws InvocationTargetException
+				{
+					try
+					{
+						interceptedService.sendMessage(id, data);
+						return null;
+					}
+					catch(IOException e)
+					{
+						throw new InvocationTargetException(e);
+					}
+				}
+			});
+		}
+		catch(InvocationTargetException e)
+		{
+			if(e.getCause() instanceof IOException)
+				throw (IOException) e.getCause();
+
+			logger.error("Error while intercepting: " + e.getCause() != null ? e.getCause().getClass().getSimpleName() + ": "
+					+ e.getCause().getMessage() : "null");
+			throw new RuntimeException(e.getCause());
+		}
 	}
 
 	/*
@@ -156,16 +193,35 @@ public abstract class InterceptorService implements Service, Interceptor, Initia
 	 * @see com.syncnapsis.websockets.ServiceMXBean#sendMessage(java.lang.String, byte[], int, int)
 	 */
 	@Override
-	public void sendMessage(final String id, final byte[] data, final int offset, final int length) throws WebSocketServiceException
+	public void sendMessage(final String id, final byte[] data, final int offset, final int length) throws IOException
 	{
-		intercept(new Invocation<Object>() {
-			@Override
-			public Object invoke()
-			{
-				interceptedService.sendMessage(id, data, offset, length);
-				return null;
-			}
-		});
+		try
+		{
+			intercept(new Invocation<Object>() {
+				@Override
+				public Object invoke() throws InvocationTargetException
+				{
+					try
+					{
+						interceptedService.sendMessage(id, data, offset, length);
+						return null;
+					}
+					catch(IOException e)
+					{
+						throw new InvocationTargetException(e);
+					}
+				}
+			});
+		}
+		catch(InvocationTargetException e)
+		{
+			if(e.getCause() instanceof IOException)
+				throw (IOException) e.getCause();
+
+			logger.error("Error while intercepting: " + e.getCause() != null ? e.getCause().getClass().getSimpleName() + ": "
+					+ e.getCause().getMessage() : "null");
+			throw new RuntimeException(e.getCause());
+		}
 	}
 
 	/*
@@ -175,14 +231,24 @@ public abstract class InterceptorService implements Service, Interceptor, Initia
 	@Override
 	public void onOpen(final Connection connection)
 	{
-		intercept(new Invocation<Object>() {
-			@Override
-			public Object invoke()
-			{
-				interceptedService.onOpen(connection);
-				return null;
-			}
-		});
+		try
+		{
+			intercept(new Invocation<Object>() {
+				@Override
+				public Object invoke() throws InvocationTargetException
+				{
+					interceptedService.onOpen(connection);
+					return null;
+				}
+			});
+		}
+		catch(InvocationTargetException e)
+		{
+
+			logger.error("Error while intercepting: " + e.getCause() != null ? e.getCause().getClass().getSimpleName() + ": "
+					+ e.getCause().getMessage() : "null");
+			throw new RuntimeException(e.getCause());
+		}
 	}
 
 	/*
@@ -193,14 +259,23 @@ public abstract class InterceptorService implements Service, Interceptor, Initia
 	@Override
 	public void onClose(final Connection connection, final int closeCode, final String message)
 	{
-		intercept(new Invocation<Object>() {
-			@Override
-			public Object invoke()
-			{
-				interceptedService.onClose(connection, closeCode, message);
-				return null;
-			}
-		});
+		try
+		{
+			intercept(new Invocation<Object>() {
+				@Override
+				public Object invoke() throws InvocationTargetException
+				{
+					interceptedService.onClose(connection, closeCode, message);
+					return null;
+				}
+			});
+		}
+		catch(InvocationTargetException e)
+		{
+			logger.error("Error while intercepting: " + e.getCause() != null ? e.getCause().getClass().getSimpleName() + ": "
+					+ e.getCause().getMessage() : "null");
+			throw new RuntimeException(e.getCause());
+		}
 	}
 
 	/*
@@ -210,14 +285,23 @@ public abstract class InterceptorService implements Service, Interceptor, Initia
 	@Override
 	public void onHandshake(final Connection connection)
 	{
-		intercept(new Invocation<Object>() {
-			@Override
-			public Object invoke()
-			{
-				interceptedService.onHandshake(connection);
-				return null;
-			}
-		});
+		try
+		{
+			intercept(new Invocation<Object>() {
+				@Override
+				public Object invoke() throws InvocationTargetException
+				{
+					interceptedService.onHandshake(connection);
+					return null;
+				}
+			});
+		}
+		catch(InvocationTargetException e)
+		{
+			logger.error("Error while intercepting: " + e.getCause() != null ? e.getCause().getClass().getSimpleName() + ": "
+					+ e.getCause().getMessage() : "null");
+			throw new RuntimeException(e.getCause());
+		}
 	}
 
 	/*
@@ -228,14 +312,23 @@ public abstract class InterceptorService implements Service, Interceptor, Initia
 	@Override
 	public void onMessage(final Connection connection, final String data)
 	{
-		intercept(new Invocation<Object>() {
-			@Override
-			public Object invoke()
-			{
-				interceptedService.onMessage(connection, data);
-				return null;
-			}
-		});
+		try
+		{
+			intercept(new Invocation<Object>() {
+				@Override
+				public Object invoke() throws InvocationTargetException
+				{
+					interceptedService.onMessage(connection, data);
+					return null;
+				}
+			});
+		}
+		catch(InvocationTargetException e)
+		{
+			logger.error("Error while intercepting: " + e.getCause() != null ? e.getCause().getClass().getSimpleName() + ": "
+					+ e.getCause().getMessage() : "null");
+			throw new RuntimeException(e.getCause());
+		}
 	}
 
 	/*
@@ -246,14 +339,23 @@ public abstract class InterceptorService implements Service, Interceptor, Initia
 	@Override
 	public void onMessage(final Connection connection, final byte[] data, final int offset, final int length)
 	{
-		intercept(new Invocation<Object>() {
-			@Override
-			public Object invoke()
-			{
-				interceptedService.onMessage(connection, data, offset, length);
-				return null;
-			}
-		});
+		try
+		{
+			intercept(new Invocation<Object>() {
+				@Override
+				public Object invoke() throws InvocationTargetException
+				{
+					interceptedService.onMessage(connection, data, offset, length);
+					return null;
+				}
+			});
+		}
+		catch(InvocationTargetException e)
+		{
+			logger.error("Error while intercepting: " + e.getCause() != null ? e.getCause().getClass().getSimpleName() + ": "
+					+ e.getCause().getMessage() : "null");
+			throw new RuntimeException(e.getCause());
+		}
 	}
 
 	/*
@@ -264,14 +366,23 @@ public abstract class InterceptorService implements Service, Interceptor, Initia
 	@Override
 	public void onMessage(final Connection connection, final Message message)
 	{
-		intercept(new Invocation<Object>() {
-			@Override
-			public Object invoke()
-			{
-				interceptedService.onMessage(connection, message);
-				return null;
-			}
-		});
+		try
+		{
+			intercept(new Invocation<Object>() {
+				@Override
+				public Object invoke() throws InvocationTargetException
+				{
+					interceptedService.onMessage(connection, message);
+					return null;
+				}
+			});
+		}
+		catch(InvocationTargetException e)
+		{
+			logger.error("Error while intercepting: " + e.getCause() != null ? e.getCause().getClass().getSimpleName() + ": "
+					+ e.getCause().getMessage() : "null");
+			throw new RuntimeException(e.getCause());
+		}
 	}
 
 	/*
@@ -282,13 +393,22 @@ public abstract class InterceptorService implements Service, Interceptor, Initia
 	@Override
 	public boolean onControl(final Connection connection, final byte controlCode, final byte[] data, final int offset, final int length)
 	{
-		return intercept(new Invocation<Boolean>() {
-			@Override
-			public Boolean invoke()
-			{
-				return interceptedService.onControl(connection, controlCode, data, offset, length);
-			}
-		});
+		try
+		{
+			return intercept(new Invocation<Boolean>() {
+				@Override
+				public Boolean invoke() throws InvocationTargetException
+				{
+					return interceptedService.onControl(connection, controlCode, data, offset, length);
+				}
+			});
+		}
+		catch(InvocationTargetException e)
+		{
+			logger.error("Error while intercepting: " + e.getCause() != null ? e.getCause().getClass().getSimpleName() + ": "
+					+ e.getCause().getMessage() : "null");
+			throw new RuntimeException(e.getCause());
+		}
 	}
 
 	/*
@@ -299,13 +419,22 @@ public abstract class InterceptorService implements Service, Interceptor, Initia
 	@Override
 	public boolean onFrame(final Connection connection, final byte flags, final byte opcode, final byte[] data, final int offset, final int length)
 	{
-		return intercept(new Invocation<Boolean>() {
-			@Override
-			public Boolean invoke()
-			{
-				return interceptedService.onFrame(connection, flags, opcode, data, offset, length);
-			}
-		});
+		try
+		{
+			return intercept(new Invocation<Boolean>() {
+				@Override
+				public Boolean invoke() throws InvocationTargetException
+				{
+					return interceptedService.onFrame(connection, flags, opcode, data, offset, length);
+				}
+			});
+		}
+		catch(InvocationTargetException e)
+		{
+			logger.error("Error while intercepting: " + e.getCause() != null ? e.getCause().getClass().getSimpleName() + ": "
+					+ e.getCause().getMessage() : "null");
+			throw new RuntimeException(e.getCause());
+		}
 	}
 
 	// NOT INTERCEPTED

@@ -26,7 +26,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 
-import com.syncnapsis.exceptions.WebSocketServiceException;
 import com.syncnapsis.utils.MBeanUtil;
 import com.syncnapsis.websockets.Connection;
 import com.syncnapsis.websockets.Message;
@@ -62,7 +61,7 @@ public class BaseService implements Service, InitializingBean
 	/**
 	 * The TimeProvider used to access the current time
 	 */
-//	protected TimeProvider				timeProvider;
+	// protected TimeProvider timeProvider;
 
 	/**
 	 * Constructs a new basic WebSocketService to be used in Connections
@@ -88,7 +87,7 @@ public class BaseService implements Service, InitializingBean
 	 */
 	@Override
 	public void afterPropertiesSet() throws Exception
-	{	
+	{
 		// nothing specific here
 	}
 
@@ -206,7 +205,7 @@ public class BaseService implements Service, InitializingBean
 			{
 				sendMessage(id, data);
 			}
-			catch(WebSocketServiceException e)
+			catch(IOException e)
 			{
 				logger.error("could not send message to connection '" + id + "': " + e.getMessage());
 			}
@@ -226,7 +225,7 @@ public class BaseService implements Service, InitializingBean
 			{
 				sendMessage(id, data, offset, length);
 			}
-			catch(WebSocketServiceException e)
+			catch(IOException e)
 			{
 				logger.error("could not send message to connection '" + id + "': " + e.getMessage());
 			}
@@ -238,31 +237,24 @@ public class BaseService implements Service, InitializingBean
 	 * @see com.syncnapsis.websockets.ServiceMXBean#sendMessage(java.lang.String, java.lang.String)
 	 */
 	@Override
-	public void sendMessage(String id, String data) throws WebSocketServiceException
+	public void sendMessage(String id, String data) throws IOException
 	{
 		Connection connection = this.connections.get(id);
 		if(connection != null)
 		{
 			if(connection.isOpen())
 			{
-				try
-				{
-					connection.sendMessage(data);
-				}
-				catch(IOException e)
-				{
-					throw new WebSocketServiceException(e);
-				}
+				connection.sendMessage(data);
 			}
 			else
 			{
 				this.removeConnection(connection);
-				throw new WebSocketServiceException("connection not connected: '" + id + "'");
+				throw new IOException("connection not connected: '" + id + "'");
 			}
 		}
 		else
 		{
-			throw new WebSocketServiceException("unknown connection: '" + id + "'");
+			throw new IOException("unknown connection: '" + id + "'");
 		}
 	}
 
@@ -271,31 +263,24 @@ public class BaseService implements Service, InitializingBean
 	 * @see com.syncnapsis.websockets.ServiceMXBean#sendMessage(java.lang.String, byte[], int, int)
 	 */
 	@Override
-	public void sendMessage(String id, byte[] data, int offset, int length) throws WebSocketServiceException
+	public void sendMessage(String id, byte[] data, int offset, int length) throws IOException
 	{
 		Connection connection = this.connections.get(id);
 		if(connection != null)
 		{
 			if(connection.isOpen())
 			{
-				try
-				{
-					connection.sendMessage(data, offset, length);
-				}
-				catch(IOException e)
-				{
-					throw new WebSocketServiceException(e);
-				}
+				connection.sendMessage(data, offset, length);
 			}
 			else
 			{
 				this.removeConnection(connection);
-				throw new WebSocketServiceException("connection not connected: '" + id + "'");
+				throw new IOException("connection not connected: '" + id + "'");
 			}
 		}
 		else
 		{
-			throw new WebSocketServiceException("unknown connection: '" + id + "'");
+			throw new IOException("unknown connection: '" + id + "'");
 		}
 	}
 
@@ -313,7 +298,8 @@ public class BaseService implements Service, InitializingBean
 	/*
 	 * j
 	 * (non-Javadoc)
-	 * @see com.syncnapsis.websockets.Service#onClose(com.syncnapsis.websockets.Connection, int, java.lang.String)
+	 * @see com.syncnapsis.websockets.Service#onClose(com.syncnapsis.websockets.Connection, int,
+	 * java.lang.String)
 	 */
 	@Override
 	public void onClose(Connection connection, int closeCode, String message)
@@ -334,7 +320,8 @@ public class BaseService implements Service, InitializingBean
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.syncnapsis.websockets.Service#onMessage(com.syncnapsis.websockets.Connection, java.lang.String)
+	 * @see com.syncnapsis.websockets.Service#onMessage(com.syncnapsis.websockets.Connection,
+	 * java.lang.String)
 	 */
 	@Override
 	public void onMessage(Connection connection, String data)
@@ -344,7 +331,8 @@ public class BaseService implements Service, InitializingBean
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.syncnapsis.websockets.Service#onMessage(com.syncnapsis.websockets.Connection, byte[], int, int)
+	 * @see com.syncnapsis.websockets.Service#onMessage(com.syncnapsis.websockets.Connection,
+	 * byte[], int, int)
 	 */
 	@Override
 	public void onMessage(Connection connection, byte[] data, int offset, int length)
@@ -368,7 +356,8 @@ public class BaseService implements Service, InitializingBean
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.syncnapsis.websockets.Service#onControl(com.syncnapsis.websockets.Connection, byte, byte[], int, int)
+	 * @see com.syncnapsis.websockets.Service#onControl(com.syncnapsis.websockets.Connection, byte,
+	 * byte[], int, int)
 	 */
 	@Override
 	public boolean onControl(Connection connection, byte controlCode, byte[] data, int offset, int length)
@@ -379,7 +368,8 @@ public class BaseService implements Service, InitializingBean
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.syncnapsis.websockets.Service#onFrame(com.syncnapsis.websockets.Connection, byte, byte, byte[], int,
+	 * @see com.syncnapsis.websockets.Service#onFrame(com.syncnapsis.websockets.Connection, byte,
+	 * byte, byte[], int,
 	 * int)
 	 */
 	@Override
