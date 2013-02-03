@@ -14,13 +14,91 @@
  */
 package com.syncnapsis.exceptions;
 
-import com.syncnapsis.tests.LoggerTestCase;
+import java.util.ArrayList;
 
+import com.syncnapsis.enums.EnumEngineSupport;
+import com.syncnapsis.tests.LoggerTestCase;
+import com.syncnapsis.websockets.Engine;
+import com.syncnapsis.websockets.engine.BaseEngine;
+
+/**
+ * Test for WebSocketEngineException
+ * 
+ * @author ultimate
+ */
 public class WebSocketEngineExceptionTest extends LoggerTestCase
 {
-	public void testNothing()
+	private Engine	engine	= new BaseEngine(EnumEngineSupport.NOT_SUPPORTED) {
+								/*
+								 * (non-Javadoc)
+								 * @see com.syncnapsis.websockets.engine.BaseEngine#stop0()
+								 */
+								@Override
+								protected void stop0() throws WebSocketEngineException
+								{
+									// nothing
+								}
+
+								/*
+								 * (non-Javadoc)
+								 * @see com.syncnapsis.websockets.engine.BaseEngine#start0()
+								 */
+								@Override
+								protected void start0() throws WebSocketEngineException
+								{
+									// nothing
+								}
+							};
+
+	public void testInvalidGetChildren()
 	{
-		// TODO no test yet
-		fail("no test yet");
+		try
+		{
+			engine.getChildren();
+			fail("expected Exception not occurred");
+		}
+		catch(WebSocketEngineException ex)
+		{
+			assertNotNull(ex);
+		}
+	}
+
+	public void testInvalidSetChildren()
+	{
+		try
+		{
+			engine.setChildren(new ArrayList<Engine>());
+			fail("expected Exception not occurred");
+		}
+		catch(WebSocketEngineException ex)
+		{
+			assertNotNull(ex);
+		}
+	}
+
+	public void testInvalidAddChild()
+	{
+		try
+		{
+			engine.addChild(null);
+			fail("expected Exception not occurred");
+		}
+		catch(WebSocketEngineException ex)
+		{
+			assertNotNull(ex);
+		}
+	}
+
+	public void testInvalidRemoveChild()
+	{
+		try
+		{
+			engine.removeChild(null);
+			fail("expected Exception not occurred");
+		}
+		catch(WebSocketEngineException ex)
+		{
+			assertNotNull(ex);
+		}
 	}
 }
