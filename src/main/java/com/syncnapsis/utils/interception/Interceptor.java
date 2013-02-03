@@ -11,6 +11,8 @@
  */
 package com.syncnapsis.utils.interception;
 
+import java.lang.reflect.InvocationTargetException;
+
 import com.syncnapsis.utils.reflections.Invocation;
 
 /**
@@ -24,7 +26,7 @@ public interface Interceptor
 	 * Do the interception for the original method call represented by the given
 	 * 
 	 * @param invocation - the original method call
-	 * @return
+	 * @return the result of the intercepted method
 	 */
-	public <T> T intercept(Invocation<T> invocation);
+	public <T> T intercept(Invocation<T> invocation) throws InvocationTargetException;
 }

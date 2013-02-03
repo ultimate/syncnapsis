@@ -11,6 +11,8 @@
  */
 package com.syncnapsis.utils.reflections;
 
+import java.lang.reflect.InvocationTargetException;
+
 /**
  * Interface representing invocations of methods for forwarding them to other instances and invoke
  * them later on.
@@ -25,5 +27,5 @@ public interface Invocation<T>
 	 * 
 	 * @return the result of the invocation
 	 */
-	public T invoke();
+	public T invoke() throws InvocationTargetException;
 }
