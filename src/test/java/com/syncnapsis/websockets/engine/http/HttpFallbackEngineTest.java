@@ -12,26 +12,15 @@
  * You should have received a copy of the GNU General Plublic License along with this program;
  * if not, see <http://www.gnu.org/licenses/>.
  */
-package com.syncnapsis;
+package com.syncnapsis.websockets.engine.http;
 
+import com.syncnapsis.tests.LoggerTestCase;
 
-import com.syncnapsis.providers.TimeProvider;
-import com.syncnapsis.tests.BaseSpringContextTestCase;
-import com.syncnapsis.utils.ApplicationContextUtil;
-
-public class WebsocketsContextTest extends BaseSpringContextTestCase
+public class HttpFallbackEngineTest extends LoggerTestCase
 {
-	private ApplicationContextUtil applicationContextUtil;
-	private TimeProvider timeProvider;
-	
-	public void testContextConfiguration()
+	public void testNothing()
 	{
-		assertNotNull(applicationContext);
-		
-		assertNotNull(applicationContextUtil);
-		
-		assertNotNull(timeProvider);
-		
-		assertNotNull(ApplicationContextUtil.getBean("timeProvider"));
+		// TODO no test yet
+		fail("no test yet");
 	}
 }

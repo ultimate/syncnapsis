@@ -49,6 +49,7 @@
 		<property name="timeProvider" ref="timeProvider" />
 		<property name="sessionProvider" ref="sessionProvider" />
 		<!-- 
+		not mandatory
 		<property name="authorityProvider" ref="authorityProvider" />
 		 -->
 	</bean>
