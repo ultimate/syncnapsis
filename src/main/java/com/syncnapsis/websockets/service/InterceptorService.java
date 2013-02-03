@@ -123,6 +123,7 @@ public abstract class InterceptorService implements Service, Interceptor, Initia
 		{
 			logger.error("Error while intercepting: " + e.getCause() != null ? e.getCause().getClass().getSimpleName() + ": "
 					+ e.getCause().getMessage() : "null");
+			throw new RuntimeException(e.getCause());
 		}
 	}
 
