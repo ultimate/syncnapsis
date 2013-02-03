@@ -11,6 +11,8 @@
  */
 package com.syncnapsis.websockets.service;
 
+import java.lang.reflect.InvocationTargetException;
+
 import org.hibernate.FlushMode;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
@@ -101,7 +103,7 @@ public class OpenSessionInViewService extends InterceptorService implements Init
 	 * @see com.syncnapsis.utils.interception.Interceptor#intercept(com.syncnapsis.utils.reflections.Invocation)
 	 */
 	@Override
-	public <T> T intercept(Invocation<T> invocation)
+	public <T> T intercept(Invocation<T> invocation) throws InvocationTargetException
 	{
 		boolean participate = false;
 
