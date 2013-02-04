@@ -14,6 +14,8 @@
  */
 //@requires("RPCSockets")
 
+// unused and experimental!!!
+
 // the ApplicationBase-Object
 ApplicationBase = function()
 {
