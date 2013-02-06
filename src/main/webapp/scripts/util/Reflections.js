@@ -20,7 +20,30 @@ Reflections.type.NULL 		= "null";
 Reflections.type.BOOLEAN 	= "boolean";
 Reflections.type.STRING 	= "string";
 Reflections.type.NUMBER 	= "number";
+Reflections.type.OBJECT		= "object";
 Reflections.type.FUNCTION	= "function";
+
+Reflections.typeMask = {};
+Reflections.typeMask.UNDEFINED 	= 1;
+Reflections.typeMask.NULL 		= 2;
+Reflections.typeMask.BOOLEAN 	= 4;
+Reflections.typeMask.STRING 	= 8;
+Reflections.typeMask.NUMBER 	= 16;
+Reflections.typeMask.OBJECT		= 32;
+Reflections.typeMask.FUNCTION	= 64;
+Reflections.typeMask.NONE		= 0x00;
+Reflections.typeMask.VARIABLE	= ~Reflections.typeMask.FUNCTION & ~Reflections.typeMask.UNDEFINED & 0xFF;
+Reflections.typeMask.ALL		= 0xFF
+
+Reflections.getTypeMask = function(type)
+{
+	for(var t in Reflections.type)
+	{
+		if(Reflections.type[t] == type)
+			return Reflections.typeMask[t];
+	}
+	return 0;
+};
 
 Reflections.arguments = function(func)
 {
@@ -102,4 +125,83 @@ Reflections.call = function(object, method, args)
 	callSB.append(")");
 	
 	return eval(callSB.toString());
+};
+
+Reflections.addProperty = function(object, name, value, writable)
+{
+	var accessorName = name.substring(0, 1).toUpperCase() + name.substring(1);
+	var setter = "set" + accessorName;
+	var getter = "get" + accessorName;
+	if(typeof value == Reflections.type.BOOLEAN)
+		getter = "is" + accessorName;
+
+	var _value = value;
+	
+	object[getter] = function()
+	{
+		return _value;
+	};
+	if(writable != false)
+	{
+		object[setter] = function(value)
+		{
+			_value = value;
+		};
+	}
+	else if(object[setter] != undefined)
+	{
+		delete object[setter]; // = undefined;
+	}
+};
+
+Reflections.addListProperty = function(object, listName, value, writable)
+{
+	var entryName;
+	if(listName.endsWith("ies"))
+		entryName = listName.substring(0, listName.length-3) + "y";
+	else if(listName.endsWith("s"))
+		entryName = listName.substring(0, listName.length-1);
+	else
+		entryName = listName;
+	
+	var _value = value;
+	if(!(value instanceof Array))
+		_value = [ value ];
+	
+	Reflections.addProperty(object, listName, _value, writable);
+	
+	var accessorName = entryName.substring(0, 1).toUpperCase() + entryName.substring(1);
+	var adder = "add" + accessorName;
+	var remover = "remove" + accessorName;
+
+	if(writable != false)
+	{
+		object[adder] = function(value)
+		{
+			_value.push(value);
+		};
+		object[remover] = function(value)
+		{
+			if(_value.indexOf(value) != -1)
+				_value.splice(_value.indexOf(value), 1);
+		};
+	}
+};
+
+/*
+ * Object prototype extensions
+ */
+
+Object.prototype.merge = function(other, typeMask)
+{
+	if(typeMask == undefined)
+		typeMask = Reflections.typeMask.ALL;
+	for( var prop in other)
+	{
+		if((Reflections.getTypeMask(typeof other[prop]) & typeMask) != 0)
+		{
+			this[prop] = other[prop];
+		}
+	}
+	return this;
 };
