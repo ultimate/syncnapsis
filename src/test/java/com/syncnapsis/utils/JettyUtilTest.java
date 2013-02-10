@@ -15,12 +15,23 @@
 package com.syncnapsis.utils;
 
 import com.syncnapsis.tests.LoggerTestCase;
+import com.syncnapsis.tests.annotations.TestExcludesMethods;
 
+@TestExcludesMethods("printError")
 public class JettyUtilTest extends LoggerTestCase
 {
-	public void testNothing()
+	public void testGetJettyVersion() throws Exception
 	{
-		// TODO no test yet
-		fail("no test yet");
+		assertNotNull(JettyUtil.versionFound);
+	}
+	
+	public void testCheckJettyVersion() throws Exception
+	{
+		assertTrue(JettyUtil.checkJettyVersion());
+	}
+
+	public void testJettyFound() throws Exception
+	{
+		assertTrue(JettyUtil.jettyFound());
 	}
 }

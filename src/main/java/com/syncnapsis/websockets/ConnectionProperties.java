@@ -29,18 +29,18 @@ public class ConnectionProperties
 	/**
 	 * Logger-Instance
 	 */
-	protected final Logger	logger					= LoggerFactory.getLogger(getClass());
+	protected final Logger		logger						= LoggerFactory.getLogger(getClass());
 	/**
 	 * The bufferSize used.
 	 * Default = 8192
 	 */
-	private int				bufferSize				= 8192;
+	private int					bufferSize					= 8192;
 
 	/**
 	 * The max idle time for connections
 	 * Default = 18000000
 	 */
-	private int				maxIdleTime				= 1800000;
+	private int					maxIdleTime					= 1800000;
 
 	/**
 	 * The max text message size
@@ -49,14 +49,19 @@ public class ConnectionProperties
 	 * 
 	 * @see bufferSize
 	 */
-	private int				maxTextMessageSize		= bufferSize;
+	private int					maxTextMessageSize			= bufferSize;
 
 	/**
 	 * The max binary message size
 	 * Default = -1
 	 * If -1 no message aggregation from frames will be done.
 	 */
-	private int				maxBinaryMessageSize	= -1;
+	private int					maxBinaryMessageSize		= -1;
+
+	public static final String	KEY_BUFFER_SIZE				= "connection.bufferSize";
+	public static final String	KEY_MAX_IDLE_TIME			= "connection.maxIdleTime";
+	public static final String	KEY_MAX_TEXT_MESSAGE_SIZE	= "connection.maxTextMessageSize";
+	public static final String	KEY_MAX_BINARY_MESSAGE_SIZE	= "connection.maxBinaryMessageSize";
 
 	/**
 	 * Empty default Constructor
@@ -70,20 +75,21 @@ public class ConnectionProperties
 	 * <br>
 	 * Properties useable:<br>
 	 * <ul>
-	 * <li>connection.bufferSize</li>
-	 * <li>connection.maxIdleTime</li>
-	 * <li>connection.maxTextMessageSize</li>
-	 * <li>connection.maxBinaryMessageSize</li>
+	 * <li>connection.bufferSize ({@link ConnectionProperties#KEY_BUFFER_SIZE})</li>
+	 * <li>connection.maxIdleTime ({@link ConnectionProperties#KEY_MAX_IDLE_TIME})</li>
+	 * <li>connection.maxTextMessageSize ({@link ConnectionProperties#KEY_MAX_TEXT_MESSAGE_SIZE})</li>
+	 * <li>connection.maxBinaryMessageSize ({@link ConnectionProperties#KEY_MAX_BINARY_MESSAGE_SIZE}
+	 * )</li>
 	 * </ul>
 	 * 
 	 * @param p - the properties to use
 	 */
 	public ConnectionProperties(Properties p)
 	{
-		this.bufferSize = fromProperties(p, "connection.bufferSize");
-		this.maxIdleTime = fromProperties(p, "connection.maxIdleTime");
-		this.maxTextMessageSize = fromProperties(p, "connection.maxTextMessageSize");
-		this.maxBinaryMessageSize = fromProperties(p, "connection.maxBinaryMessageSize");
+		this.bufferSize = fromProperties(p, KEY_BUFFER_SIZE);
+		this.maxIdleTime = fromProperties(p, KEY_MAX_IDLE_TIME);
+		this.maxTextMessageSize = fromProperties(p, KEY_MAX_TEXT_MESSAGE_SIZE);
+		this.maxBinaryMessageSize = fromProperties(p, KEY_MAX_BINARY_MESSAGE_SIZE);
 	}
 
 	/**

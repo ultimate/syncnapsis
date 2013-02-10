@@ -14,13 +14,79 @@
  */
 package com.syncnapsis.websockets;
 
+import java.util.Properties;
+
 import com.syncnapsis.tests.LoggerTestCase;
+import com.syncnapsis.tests.annotations.TestCoversMethods;
 
 public class ConnectionPropertiesTest extends LoggerTestCase
 {
-	public void testNothing()
+	@TestCoversMethods("*etMaxBinaryMessageSize")
+	public void testGetAndSetMaxBinaryMessageSize() throws Exception
 	{
-		// TODO no test yet
-		fail("no test yet");
+		ConnectionProperties cp = new ConnectionProperties();
+
+		int maxBinaryMessageSize = 123;
+
+		cp.setMaxBinaryMessageSize(maxBinaryMessageSize);
+
+		assertEquals(maxBinaryMessageSize, cp.getMaxBinaryMessageSize());
+	}
+
+	@TestCoversMethods("*etMaxTextMessageSize")
+	public void testGetAndSetMaxTextMessageSize() throws Exception
+	{
+		ConnectionProperties cp = new ConnectionProperties();
+
+		int maxTextMessageSize = 123;
+
+		cp.setMaxTextMessageSize(maxTextMessageSize);
+
+		assertEquals(maxTextMessageSize, cp.getMaxTextMessageSize());
+	}
+
+	@TestCoversMethods("*etBufferSize")
+	public void testGetAndSetBufferSize() throws Exception
+	{
+		ConnectionProperties cp = new ConnectionProperties();
+
+		int bufferSize = 123;
+
+		cp.setBufferSize(bufferSize);
+
+		assertEquals(bufferSize, cp.getBufferSize());
+	}
+
+	@TestCoversMethods("*etMaxIdleTime")
+	public void testGetAndSetMaxIdleTime() throws Exception
+	{
+		ConnectionProperties cp = new ConnectionProperties();
+
+		int maxIdleTime = 123;
+
+		cp.setMaxIdleTime(maxIdleTime);
+
+		assertEquals(maxIdleTime, cp.getMaxIdleTime());
+	}
+
+	public void testFromProperties() throws Exception
+	{
+		int bufferSize = 123;
+		int maxIdleTime = 234;
+		int maxTextMessageSize = 345;
+		int maxBinaryMessageSize = 456;
+		
+		Properties p = new Properties();
+		p.setProperty(ConnectionProperties.KEY_BUFFER_SIZE, "" + bufferSize);
+		p.setProperty(ConnectionProperties.KEY_MAX_IDLE_TIME, "" + maxIdleTime);
+		p.setProperty(ConnectionProperties.KEY_MAX_TEXT_MESSAGE_SIZE, "" + maxTextMessageSize);
+		p.setProperty(ConnectionProperties.KEY_MAX_BINARY_MESSAGE_SIZE, "" + maxBinaryMessageSize);
+		
+		ConnectionProperties cp = new ConnectionProperties(p);
+		
+		assertEquals(bufferSize, cp.getBufferSize());
+		assertEquals(maxIdleTime, cp.getMaxIdleTime());
+		assertEquals(maxTextMessageSize, cp.getMaxTextMessageSize());
+		assertEquals(maxBinaryMessageSize, cp.getMaxBinaryMessageSize());
 	}
 }
