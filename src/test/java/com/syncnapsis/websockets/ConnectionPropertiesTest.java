@@ -21,52 +21,14 @@ import com.syncnapsis.tests.annotations.TestCoversMethods;
 
 public class ConnectionPropertiesTest extends LoggerTestCase
 {
-	@TestCoversMethods("*etMaxBinaryMessageSize")
-	public void testGetAndSetMaxBinaryMessageSize() throws Exception
+	@TestCoversMethods({"get*", "set*"})
+	public void testGetAndSet() throws Exception
 	{
 		ConnectionProperties cp = new ConnectionProperties();
-
-		int maxBinaryMessageSize = 123;
-
-		cp.setMaxBinaryMessageSize(maxBinaryMessageSize);
-
-		assertEquals(maxBinaryMessageSize, cp.getMaxBinaryMessageSize());
-	}
-
-	@TestCoversMethods("*etMaxTextMessageSize")
-	public void testGetAndSetMaxTextMessageSize() throws Exception
-	{
-		ConnectionProperties cp = new ConnectionProperties();
-
-		int maxTextMessageSize = 123;
-
-		cp.setMaxTextMessageSize(maxTextMessageSize);
-
-		assertEquals(maxTextMessageSize, cp.getMaxTextMessageSize());
-	}
-
-	@TestCoversMethods("*etBufferSize")
-	public void testGetAndSetBufferSize() throws Exception
-	{
-		ConnectionProperties cp = new ConnectionProperties();
-
-		int bufferSize = 123;
-
-		cp.setBufferSize(bufferSize);
-
-		assertEquals(bufferSize, cp.getBufferSize());
-	}
-
-	@TestCoversMethods("*etMaxIdleTime")
-	public void testGetAndSetMaxIdleTime() throws Exception
-	{
-		ConnectionProperties cp = new ConnectionProperties();
-
-		int maxIdleTime = 123;
-
-		cp.setMaxIdleTime(maxIdleTime);
-
-		assertEquals(maxIdleTime, cp.getMaxIdleTime());
+		getAndSetTest(cp, "bufferSize", int.class, int.class, 123);
+		getAndSetTest(cp, "maxIdleTime", int.class, int.class, 123);
+		getAndSetTest(cp, "maxTextMessageSize", int.class, int.class, 123);
+		getAndSetTest(cp, "maxBinaryMessageSize", int.class, int.class, 123);
 	}
 
 	public void testFromProperties() throws Exception

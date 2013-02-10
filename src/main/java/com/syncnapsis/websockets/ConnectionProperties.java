@@ -58,9 +58,25 @@ public class ConnectionProperties
 	 */
 	private int					maxBinaryMessageSize		= -1;
 
+	/**
+	 * The key for the buffer size
+	 * @see ConnectionProperties#ConnectionProperties(Properties)
+	 */
 	public static final String	KEY_BUFFER_SIZE				= "connection.bufferSize";
+	/**
+	 * The key for the max idle time
+	 * @see ConnectionProperties#ConnectionProperties(Properties)
+	 */
 	public static final String	KEY_MAX_IDLE_TIME			= "connection.maxIdleTime";
+	/**
+	 * The key for the max text message size
+	 * @see ConnectionProperties#ConnectionProperties(Properties)
+	 */
 	public static final String	KEY_MAX_TEXT_MESSAGE_SIZE	= "connection.maxTextMessageSize";
+	/**
+	 * The key for the max binary message size
+	 * @see ConnectionProperties#ConnectionProperties(Properties)
+	 */
 	public static final String	KEY_MAX_BINARY_MESSAGE_SIZE	= "connection.maxBinaryMessageSize";
 
 	/**
@@ -93,7 +109,15 @@ public class ConnectionProperties
 	}
 
 	/**
-	 * Get an int from the Properties if the value is not null. Otherwise return -1.
+	 * Get an int from the Properties if the value is not null. Otherwise return -1.<br>
+	 * <br>
+	 * Properties useable:<br>
+	 * <ul>
+	 * <li>connection.bufferSize ({@link ConnectionProperties#KEY_BUFFER_SIZE})</li>
+	 * <li>connection.maxIdleTime ({@link ConnectionProperties#KEY_MAX_IDLE_TIME})</li>
+	 * <li>connection.maxTextMessageSize ({@link ConnectionProperties#KEY_MAX_TEXT_MESSAGE_SIZE})</li>
+	 * <li>connection.maxBinaryMessageSize ({@link ConnectionProperties#KEY_MAX_BINARY_MESSAGE_SIZE}
+	 * )</li>
 	 * 
 	 * @param p - the Properties
 	 * @param key - the property key
