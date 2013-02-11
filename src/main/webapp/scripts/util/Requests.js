@@ -114,7 +114,10 @@ AJAX.sendRequest = function(url, content, method, headers, doOnSuccess, doOnFail
 	}
 	request.open(method, url, true);
 	for(h in headers)
-		request.setRequestHeader(h, headers[h]);
+	{
+		if((typeof headers[h]) != "function")
+			request.setRequestHeader(h, headers[h]);
+	}
 	request.onreadystatechange = function()
 	{
 		AJAX.processRequest(request, doOnSuccess, doOnFailure, handler);
