@@ -12,10 +12,26 @@
  * You should have received a copy of the GNU General Plublic License along with this program;
  * if not, see <http://www.gnu.org/licenses/>.
  */
-//@requires("RPCSockets")
+//@requires("RPCSocket")
+//@requires("UniversalManager")
+
+EntityManager = function(universalManager)
+{
+	if(universalManager == null)
+		throw new Error("universalManager must not be null!");
+	// will fail, if the given universalManager is a Proxy
+//	if(!(universalManager instanceof UniversalManager))
+//		throw new Error("illegal type for universalManager!");
+	var _universalManager = universalManager;
+	
+	this.load = function(entity, type, callback)
+	{
+		_universalManager.get(type, entity.id, function(result) { entity.merge(result); if(callback != undefined) (callback)(entity); } );
+	};
+};
 
 // unused and experimental!!!
-
+/*
 // the ApplicationBase-Object
 ApplicationBase = function()
 {
@@ -46,3 +62,4 @@ if(!config)
 	console.error("No application configuration provided! Please add global 'config'-variable!");
 	throw new Error("No application configuration provided! Please add global 'config'-variable!");
 }
+*/
