@@ -179,17 +179,6 @@ public class RPCService extends BaseService implements InitializingBean, RPCHand
 		}
 		catch(Exception e)
 		{
-			// TODO remove start
-			HibernateTransactionManager txm = (HibernateTransactionManager) ApplicationContextUtil.getBean("transactionManager");
-			logger.info("txm: " + txm);
-			logger.info("txm.sessFac: " + txm.getSessionFactory());
-			logger.info("hbu.sessFac: " + HibernateUtil.getInstance().getSessionFactory());
-			logger.info("sess: " + txm.getSessionFactory().getCurrentSession());
-			logger.info("tx: " + txm.getSessionFactory().getCurrentSession().getTransaction());
-			logger.info("tx.active: " + txm.getSessionFactory().getCurrentSession().getTransaction().isActive());
-			e.printStackTrace();
-			// TODO remove end
-
 			logger.error("Exception doing RPC: " + e.getMessage());
 		}
 	}
