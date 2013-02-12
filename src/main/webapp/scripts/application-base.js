@@ -13,20 +13,21 @@
  * if not, see <http://www.gnu.org/licenses/>.
  */
 //@requires("RPCSocket")
-//@requires("UniversalManager")
 
-EntityManager = function(universalManager)
+EntityManager = function(server)
 {
-	if(universalManager == null)
-		throw new Error("universalManager must not be null!");
-	// will fail, if the given universalManager is a Proxy
-//	if(!(universalManager instanceof UniversalManager))
-//		throw new Error("illegal type for universalManager!");
-	var _universalManager = universalManager;
+	if(server == null)
+		throw new Error("server must not be null!");
+	var _server = server;
 	
+	// TODO remove type and get if from the entity
 	this.load = function(entity, type, callback)
 	{
-		_universalManager.get(type, entity.id, function(result) { entity.merge(result); if(callback != undefined) (callback)(entity); } );
+		var manager = type + "Manager";
+		if(_server[manager] == null)
+			throw new Error("required manager '" + manager + "' not found for type '" + type + "'");
+		_server[manager].get(entity.id, function(result) { entity.merge(result); if(callback != undefined) (callback)(entity); } );
+//		_universalManager.get(type, entity.id, function(result) { entity.merge(result); if(callback != undefined) (callback)(entity); } );
 	};
 };
 
