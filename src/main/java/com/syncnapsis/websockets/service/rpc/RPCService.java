@@ -17,15 +17,12 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import org.springframework.beans.factory.InitializingBean;
-import org.springframework.orm.hibernate4.HibernateTransactionManager;
 import org.springframework.util.Assert;
 
 import com.syncnapsis.exceptions.DeserializationException;
 import com.syncnapsis.exceptions.SerializationException;
 import com.syncnapsis.providers.AuthorityProvider;
 import com.syncnapsis.security.SecurityManager;
-import com.syncnapsis.utils.ApplicationContextUtil;
-import com.syncnapsis.utils.HibernateUtil;
 import com.syncnapsis.utils.serialization.Serializer;
 import com.syncnapsis.websockets.Connection;
 import com.syncnapsis.websockets.service.BaseService;
