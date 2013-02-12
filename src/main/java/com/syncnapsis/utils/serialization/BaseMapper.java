@@ -382,6 +382,19 @@ public class BaseMapper implements Mapper, InitializingBean
 		{
 			return (T) prepared;
 		}
+		// logger.trace("Class? " + (cls == Class.class && prepared instanceof String));
+		if(cls == Class.class && prepared instanceof String)
+		{
+			try
+			{
+				return (T) Class.forName((String) prepared);
+			}
+			catch(ClassNotFoundException e)
+			{
+				// fallback to the original given entity
+				return entity;
+			}
+		}		
 		// logger.trace("nothing suitable found...!");
 		return entity;
 	}
