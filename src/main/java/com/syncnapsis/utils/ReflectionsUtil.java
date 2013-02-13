@@ -1,14 +1,11 @@
 /**
  * Syncnapsis Framework - Copyright (c) 2012 ultimate
- * 
  * This program is free software; you can redistribute it and/or modify it under the terms of
  * the GNU General Public License as published by the Free Software Foundation; either version
  * 3 of the License, or any later version.
- * 
  * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
  * without even the implied warranty of MECHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU General Public License for more details.
- * 
  * You should have received a copy of the GNU General Plublic License along with this program;
  * if not, see <http://www.gnu.org/licenses/>.
  */
@@ -35,7 +32,10 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TreeMap;
 
+import com.syncnapsis.exceptions.ConversionException;
 import com.syncnapsis.utils.reflections.FieldCriterion;
+import com.syncnapsis.utils.serialization.Mapper;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -533,6 +533,167 @@ public class ReflectionsUtil
 		}
 
 		return isMethodSuitableFor(m, inClasses);
+	}
+
+	/**
+	 * Convert an Object to a required type if possible.<br>
+	 * For details see {@link ReflectionsUtil#convert(Class, Object, Mapper, Object...)}
+	 * 
+	 * @see ReflectionsUtil#convert(Class, Object, Mapper, Object...)
+	 * @param requiredType - the required type
+	 * @param original - the original object to convert
+	 * @return the converted object
+	 * @throws ConversionException if the conversion fails
+	 */
+	public static <T> T convert(Class<T> requiredType, Object original) throws ConversionException
+	{
+		return convert(requiredType, original, null);
+	}
+
+	/**
+	 * Convert an Object to a required type if possible.<br>
+	 * This method is designed for use with:<br>
+	 * <ul>
+	 * <li>numbers, including chars (e.g. int &lt;--&gt; long, etc.)</li>
+	 * <li>objects (checks assignability, see {@link Class#isAssignableFrom(Class)})</li>
+	 * <li>objects (uses the given mapper for merging, see
+	 * {@link Mapper#merge(Class, Object, Object...)}</li>
+	 * </ul>
+	 * 
+	 * @param requiredType - the required type
+	 * @param original - the original object to convert
+	 * @param mapper - an optional mapper used for merging, if no other conversion rules is found
+	 * @param authorities - the authorities to pass to merge(..)
+	 * @return the converted object
+	 * @throws ConversionException if the conversion fails; possible reasons:
+	 *             <ul>
+	 *             <li>"null not suitable for required primitive type!"</li>
+	 *             <li>original.getClass() + " cannot be converted to " + requiredType</li>
+	 *             <li>original.getClass() + " cannot be merged to " + requiredType</li>
+	 *             <li>"no conversion rule found!"</li>
+	 *             </ul>
+	 */
+	@SuppressWarnings("unchecked")
+	public static <T> T convert(Class<T> requiredType, Object original, Mapper mapper, Object... authorities) throws ConversionException
+	{
+		if(requiredType.isPrimitive() || Number.class.isAssignableFrom(requiredType) || Character.class == requiredType
+				|| Boolean.class == requiredType)
+		{
+			// Numbers, Char, Boolean here
+			if(original == null)
+			{
+				if(requiredType.isPrimitive())
+					throw new ConversionException("null not suitable for required primitive type!");
+				else
+					return (T) original;
+			}
+			if(requiredType == int.class || requiredType == Integer.class)
+			{
+				if(original instanceof Integer)
+					return (T) original;
+				else if(original instanceof Number)
+					return (T) (Integer) ((Number) original).intValue();
+				else if(original instanceof Character)
+					return (T) (Integer) (int) ((Character) original).charValue();
+				else
+					throw new ConversionException(original.getClass() + " cannot be converted to " + requiredType);
+			}
+			else if(requiredType == long.class || requiredType == Long.class)
+			{
+				if(original instanceof Long)
+					return (T) original;
+				else if(original instanceof Number)
+					return (T) (Long) ((Number) original).longValue();
+				else if(original instanceof Character)
+					return (T) (Long) (long) ((Character) original).charValue();
+				else
+					throw new ConversionException(original.getClass() + " cannot be converted to " + requiredType);
+			}
+			else if(requiredType == double.class || requiredType == Double.class)
+			{
+				if(original instanceof Double)
+					return (T) original;
+				else if(original instanceof Number)
+					return (T) (Double) ((Number) original).doubleValue();
+				else if(original instanceof Character)
+					return (T) (Double) (double) ((Character) original).charValue();
+				else
+					throw new ConversionException(original.getClass() + " cannot be converted to " + requiredType);
+			}
+			else if(requiredType == float.class || requiredType == Float.class)
+			{
+				if(original instanceof Float)
+					return (T) original;
+				else if(original instanceof Number)
+					return (T) (Float) ((Number) original).floatValue();
+				else if(original instanceof Character)
+					return (T) (Float) (float) ((Character) original).charValue();
+				else
+					throw new ConversionException(original.getClass() + " cannot be converted to " + requiredType);
+			}
+			else if(requiredType == byte.class || requiredType == Byte.class)
+			{
+				if(original instanceof Byte)
+					return (T) original;
+				else if(original instanceof Number)
+					return (T) (Byte) ((Number) original).byteValue();
+				else if(original instanceof Character)
+					return (T) (Byte) (byte) ((Character) original).charValue();
+				else
+					throw new ConversionException(original.getClass() + " cannot be converted to " + requiredType);
+			}
+			else if(requiredType == short.class || requiredType == Short.class)
+			{
+				if(original instanceof Short)
+					return (T) original;
+				else if(original instanceof Number)
+					return (T) (Short) ((Number) original).shortValue();
+				else if(original instanceof Character)
+					return (T) (Short) (short) ((Character) original).charValue();
+				else
+					throw new ConversionException(original.getClass() + " cannot be converted to " + requiredType);
+			}
+			else if(requiredType == char.class || requiredType == Character.class)
+			{
+				if(original instanceof Character)
+					return (T) original;
+				else if(original instanceof Number)
+					return (T) (Character) (char) ((Number) original).intValue();
+				else
+					throw new ConversionException(original.getClass() + " cannot be converted to " + requiredType);
+			}
+			else if(requiredType == boolean.class || requiredType == Boolean.class)
+			{
+				if(original instanceof Boolean)
+					return (T) original;
+				else
+					throw new ConversionException(original.getClass() + " cannot be converted to " + requiredType);
+			}
+		}
+		else
+		{
+			// other objects
+			if(original == null)
+				return (T) original;
+			if(requiredType == Object.class)
+				return (T) original;
+			else if(requiredType.isAssignableFrom(original.getClass()))
+				return (T) original;
+			else if(mapper != null)
+			{
+				T tmp = mapper.merge(requiredType, original, authorities);
+				if(tmp == null)
+				{
+					// merging failed
+					throw new ConversionException(original.getClass() + " cannot be merged to " + requiredType);
+				}
+				else
+				{
+					return tmp;
+				}
+			}
+		}
+		throw new ConversionException("no conversion rule found!");
 	}
 
 	/**

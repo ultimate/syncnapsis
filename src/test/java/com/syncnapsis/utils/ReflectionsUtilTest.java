@@ -1,14 +1,11 @@
 /**
  * Syncnapsis Framework - Copyright (c) 2012 ultimate
- * 
  * This program is free software; you can redistribute it and/or modify it under the terms of
  * the GNU General Public License as published by the Free Software Foundation; either version
  * 3 of the License, or any later version.
- * 
  * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
  * without even the implied warranty of MECHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU General Public License for more details.
- * 
  * You should have received a copy of the GNU General Plublic License along with this program;
  * if not, see <http://www.gnu.org/licenses/>.
  */
@@ -30,6 +27,9 @@ import java.util.Map;
 import javax.persistence.Column;
 import javax.servlet.ServletContext;
 
+import org.jmock.Expectations;
+
+import com.syncnapsis.exceptions.ConversionException;
 import com.syncnapsis.mock.MockSetAndGetEntity;
 import com.syncnapsis.security.annotations.Accessible;
 import com.syncnapsis.security.annotations.Authority;
@@ -38,6 +38,7 @@ import com.syncnapsis.tests.annotations.TestCoversClasses;
 import com.syncnapsis.tests.annotations.TestCoversMethods;
 import com.syncnapsis.tests.annotations.TestExcludesMethods;
 import com.syncnapsis.utils.reflections.FieldCriterion;
+import com.syncnapsis.utils.serialization.Mapper;
 import com.syncnapsis.utils.spring.BeanProxy;
 
 @TestCoversClasses({ ReflectionsUtil.class, FieldCriterion.class })
@@ -132,6 +133,45 @@ public class ReflectionsUtilTest extends LoggerTestCase
 		assertFalse(ReflectionsUtil.isMethodSuitableFor(m, "111"));
 		assertFalse(ReflectionsUtil.isMethodSuitableFor(m, new Object()));
 		assertTrue(ReflectionsUtil.isMethodSuitableFor(m, new POJO()));
+	}
+
+	public void testConvert() throws Exception
+	{
+		assertEquals(new Long(1), ReflectionsUtil.convert(Long.class, new Integer(1)));
+		assertEquals(new Long(1), ReflectionsUtil.convert(long.class, new Integer(1)));
+		assertEquals(new Long(1), ReflectionsUtil.convert(Long.class, 1));
+		assertEquals(new Long(1), ReflectionsUtil.convert(long.class, 1));
+		
+		assertEquals(new Integer(1), ReflectionsUtil.convert(Integer.class, new Long(1)));
+		assertEquals(new Integer(1), ReflectionsUtil.convert(int.class, new Long(1)));
+		assertEquals(new Integer(1), ReflectionsUtil.convert(Integer.class, 1L));
+		assertEquals(new Integer(1), ReflectionsUtil.convert(int.class, 1L));
+		
+		final Dummy<Integer> d = new Dummy<Integer>();
+		assertSame(d, ReflectionsUtil.convert(Dummy.class, d));
+		assertSame(d, ReflectionsUtil.convert(DummySuper.class, d));
+		
+		try
+		{
+			ReflectionsUtil.convert(Dummy.class, new DummySuper());
+			fail("expected Exception not occurred!");
+		}
+		catch(ConversionException e)
+		{
+			assertNotNull(e);
+		}
+		
+		final Mapper m = mockContext.mock(Mapper.class);
+		final DummySuper ds = new DummySuper();
+
+		mockContext.checking(new Expectations() {
+			{
+				oneOf(m).merge(Dummy.class, ds);
+				will(returnValue(d));
+			}
+		});
+		
+		assertSame(d, ReflectionsUtil.convert(Dummy.class,  ds, m));
 	}
 
 	public void testFindMethod() throws Exception
@@ -514,11 +554,11 @@ public class ReflectionsUtilTest extends LoggerTestCase
 		// Class
 		Class<?> cls = getClass();
 		assertEquals(cls, ReflectionsUtil.getClassForType(cls));
-		
+
 		// ParameterizedType
 		ParameterizedType pt = (ParameterizedType) Generic4.class.getGenericSuperclass();
 		assertEquals(Generic3.class, ReflectionsUtil.getClassForType(pt));
-		
+
 		// GenericArrayType
 		GenericArrayType at = (GenericArrayType) new Generic4<String>().getClass().getField("array").getGenericType();
 		assertEquals(Object[].class, ReflectionsUtil.getClassForType(at));
@@ -642,7 +682,7 @@ public class ReflectionsUtilTest extends LoggerTestCase
 
 	public static class Generic4<T4> extends Generic3<T4, Integer>
 	{
-		public T4[] array;
+		public T4[]	array;
 	}
 
 	// fomatter:on
