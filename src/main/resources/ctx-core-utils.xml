@@ -38,19 +38,6 @@
 		<property name="mapper" ref="mapper" />
 	</bean>
 	
-	<!-- 
-		mapper originally intended for use, but due to the database structure we
-		need a workaround beeing able to handle circular references and a reference
-		limit to prevent loading the whole database... 
-		workaround is realized in LimitedReferenceDepthMapper
-	
-	<bean id="mapper" class="com.syncnapsis.utils.serialization.BaseMapper">
-		<property name="securityManager" ref="securityManager" />
-	</bean>
-	 -->
-	<bean id="mapper" class="com.syncnapsis.utils.serialization.LimitedReferenceDepthMapper">
-		<property name="securityManager" ref="securityManager" />
-		<property name="depthLimit" value="3"/>
-	</bean>
+	<!-- define the mapper needed in the specific context -->
     
 </beans>

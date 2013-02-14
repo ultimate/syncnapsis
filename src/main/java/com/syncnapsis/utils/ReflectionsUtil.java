@@ -536,6 +536,179 @@ public class ReflectionsUtil
 	}
 
 	/**
+	 * Find a suitable method for the given method name and an array of arguments, that should be
+	 * passed to the method.<br>
+	 * In difference to {@link ReflectionsUtil#findMethod(Class, String, Object...)} arguments are
+	 * converted if necessary using special conversion rules (e.g. for primitives and numbers).<br>
+	 * <b>Warning:</b> If a suitable method is found, the argument array will be modified and filled
+	 * with the converted arguments!<br>
+	 * <br>
+	 * Simply forwards to
+	 * {@link ReflectionsUtil#findMethodAndConvertArgs(Class, String, Object[], Mapper, Object...)}
+	 * with no mapper.
+	 * 
+	 * @see ReflectionsUtil#checkAndConvertArgs(Method, Object[], Mapper, Object...)
+	 * @param cls - the class that contains the method
+	 * @param method - the name of the method to find
+	 * @param args - the arguments to pass to the method
+	 * @return the method found, or null if no method was suitable
+	 */
+	public static Method findMethodAndConvertArgs(Class<?> cls, String method, Object[] args)
+	{
+		return findMethodAndConvertArgs(cls, method, args, null);
+	}
+
+	/**
+	 * Find a suitable method for the given method name and an array of arguments, that should be
+	 * passed to the method.<br>
+	 * In difference to {@link ReflectionsUtil#findMethod(Class, String, Object...)} arguments are
+	 * converted if necessary using special conversion rules (e.g. for primitives and numbers) or
+	 * using the given mapper (e.g. for entities).<br>
+	 * <b>Warning:</b> If a suitable method is found, the argument array will be modified and filled
+	 * with the converted arguments!
+	 * 
+	 * @see ReflectionsUtil#checkAndConvertArgs(Method, Object[], Mapper, Object...)
+	 * @param cls - the class that contains the method
+	 * @param method - the name of the method to find
+	 * @param args - the arguments to pass to the method
+	 * @param mapper - an optional mapper used for merging, if no other conversion rules is found
+	 * @param authorities - the authorities to pass to merge(..)
+	 * @return the method found, or null if no method was suitable
+	 */
+	public static Method findMethodAndConvertArgs(Class<?> cls, String method, Object[] args, Mapper mapper, Object... authorities)
+	{
+		logger.trace("looking for " + method);
+		// when Generics are present getMethod won't work well!
+		for(Method m : cls.getMethods())
+		{
+			logger.trace("  comparing " + m.getName());
+			if(m.getName().equals(method))
+			{
+				// check if the given args are suitable for the Method
+				// also check for var args and convertable types...
+				Object[] tmp = Arrays.copyOf(args, args.length);
+				if(checkAndConvertArgs(m, tmp, mapper, authorities))
+				{
+					// tmp has been modified
+					// copy changes back to args
+					for(int i = 0; i < args.length; i++)
+						args[i] = tmp[i];
+					return m;
+				}
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * Check the arguments for a given method.<br>
+	 * The argument array will be processed and each argument will be checked for suitability and
+	 * converted if necessary.<br>
+	 * <b>Warning:</b> The given argument array will be modified while processing the arguments!
+	 * 
+	 * @see ReflectionsUtil#checkAndConvertArg(Class, int, Object[], Mapper, Object...)
+	 * @param m - the method to check the arguments for
+	 * @param args - the arguments to pass to the method
+	 * @param mapper - an optional mapper used for merging, if no other conversion rules is found
+	 * @param authorities - the authorities to pass to merge(..)
+	 * @return true if all arguments passed the check and have been converted (if necessary),
+	 *         otherwise false
+	 */
+	public static boolean checkAndConvertArgs(Method m, Object[] args, Mapper mapper, Object... authorities)
+	{
+		int params = m.getParameterTypes().length;
+		logger.trace(params + (m.isVarArgs() ? "(varArgs)" : "") + " vs. " + args.length);
+		if(m.isVarArgs())
+		{
+			if(params > args.length + 1)
+				return false;
+		}
+		else if(params != args.length)
+		{
+			return false;
+		}
+
+		// check each type to the given argument
+		// if possible (and necessary) convert the arg to the type (e.g. Long to int)
+		Class<?> type = null;
+		boolean varArgsUsed = false;
+		for(int i = 0; i < args.length; i++)
+		{
+			// if we have more args than params, we have varArgs X[]
+			// --> every additional arg must be of type X
+			// for the arg at the varArg Position both X[] is only suitable if no more args follow
+			logger.trace("  " + m.getParameterTypes()[i >= params ? params - 1 : i] + " vs. " + args[i]);
+			if(i < params - 1)
+			{
+				type = m.getParameterTypes()[i];
+				if(checkAndConvertArg(type, i, args, mapper, authorities))
+					continue;
+				return false;
+			}
+			else if(i == params - 1)
+			{
+				type = m.getParameterTypes()[i];
+				if(checkAndConvertArg(type, i, args, mapper, authorities))
+				{
+					// if arg is null it may be X[] or X, but only if X is not primitive
+					// set varArgsUsed to true if this is the case in order to check following args
+					if(args[i] == null && type.getComponentType() != null && !type.getComponentType().isPrimitive())
+						varArgsUsed = true;
+					continue;
+				}
+				else if(m.isVarArgs())
+				{
+					type = type.getComponentType(); // will be available for following args, too
+					varArgsUsed = true;
+					if(checkAndConvertArg(type, i, args, mapper, authorities))
+						continue;
+				}
+				return false;
+			}
+			else
+			{
+				if(varArgsUsed)
+				{
+					if(checkAndConvertArg(type, i, args, mapper, authorities))
+						continue;
+				}
+				else
+				{
+					// array is used instead of varArgs
+					return false;
+				}
+			}
+		}
+		return true;
+	}
+
+	/**
+	 * Check wether an argument is suitable for a required type and convert it if necessary.<br>
+	 * <b>Warning:<b> The argument at the specified index will be replaced within the array when
+	 * converted!
+	 * 
+	 * @see ReflectionsUtil#convert(Class, Object, Mapper, Object...)
+	 * @param requiredType - the required type
+	 * @param arg - the index of the argument to check and convert
+	 * @param args - the array of arguments
+	 * @param mapper - an optional mapper used for merging, if no other conversion rules is found
+	 * @param authorities - the authorities to pass to merge(..)
+	 * @return true if the argument passed the check and has been converted, otherwise false
+	 */
+	protected static boolean checkAndConvertArg(Class<?> requiredType, int arg, Object[] args, Mapper mapper, Object... authorities)
+	{
+		try
+		{
+			args[arg] = ReflectionsUtil.convert(requiredType, args[arg], mapper, authorities);
+			return true;
+		}
+		catch(ConversionException e)
+		{
+			return false;
+		}
+	}
+
+	/**
 	 * Convert an Object to a required type if possible.<br>
 	 * For details see {@link ReflectionsUtil#convert(Class, Object, Mapper, Object...)}
 	 * 

@@ -16,6 +16,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.lang.reflect.TypeVariable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -268,10 +269,12 @@ public class BaseMapper implements Mapper, InitializingBean
 	{
 		Class<? extends T> cls;
 
-		if(entity != null && type == null)
+		if(entity != null && (type == null || type instanceof TypeVariable))
 			cls = (Class<? extends T>) entity.getClass();
 		else if(type != null && type instanceof ParameterizedType)
 			cls = (Class<? extends T>) ((ParameterizedType) type).getRawType();
+//		else if(type != null && type instanceof TypeVariable)
+//			cls = ((TypeVariable) type).
 		else
 			cls = (Class<? extends T>) type;
 

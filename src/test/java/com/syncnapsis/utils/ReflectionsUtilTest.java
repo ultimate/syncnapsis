@@ -21,6 +21,7 @@ import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -38,6 +39,7 @@ import com.syncnapsis.tests.annotations.TestCoversClasses;
 import com.syncnapsis.tests.annotations.TestCoversMethods;
 import com.syncnapsis.tests.annotations.TestExcludesMethods;
 import com.syncnapsis.utils.reflections.FieldCriterion;
+import com.syncnapsis.utils.serialization.BaseMapper;
 import com.syncnapsis.utils.serialization.Mapper;
 import com.syncnapsis.utils.spring.BeanProxy;
 
@@ -134,6 +136,91 @@ public class ReflectionsUtilTest extends LoggerTestCase
 		assertFalse(ReflectionsUtil.isMethodSuitableFor(m, new Object()));
 		assertTrue(ReflectionsUtil.isMethodSuitableFor(m, new POJO()));
 	}
+
+	public void testFindMethodAndConvertArgs() throws Exception
+	{
+		Mapper mapper = new BaseMapper();
+		
+		@SuppressWarnings("unused")
+		Object tmp = new Object() {
+			// @formatter:off
+			public void doSomething1(Long id, String name)	{}
+			public void doSomething2(String x, String... args)	{}
+			public void doSomething3(int i, POJO p)	{}
+			// @formatter:on
+		};
+		Class<?> cls = tmp.getClass();
+
+		Method expected;
+
+		expected = cls.getMethod("doSomething1", Long.class, String.class);
+		// valid
+		assertEquals(expected, ReflectionsUtil.findMethodAndConvertArgs(cls, expected.getName(), new Object[] { 1L, "a" }, mapper));
+		assertEquals(expected, ReflectionsUtil.findMethodAndConvertArgs(cls, expected.getName(), new Object[] { 1L, null }, mapper));
+		assertEquals(expected, ReflectionsUtil.findMethodAndConvertArgs(cls, expected.getName(), new Object[] { null, "a" }, mapper));
+		assertEquals(expected, ReflectionsUtil.findMethodAndConvertArgs(cls, expected.getName(), new Object[] { null, null }, mapper));
+		assertEquals(expected, ReflectionsUtil.findMethodAndConvertArgs(cls, expected.getName(), new Object[] { 1, "a" }, mapper));
+		assertEquals(expected, ReflectionsUtil.findMethodAndConvertArgs(cls, expected.getName(), new Object[] { 1.0, "a" }, mapper));
+		// invalid
+		assertNull(ReflectionsUtil.findMethodAndConvertArgs(cls, expected.getName(), new Object[] { 1, 1 }, mapper));
+		assertNull(ReflectionsUtil.findMethodAndConvertArgs(cls, expected.getName(), new Object[] { "a", "a" }, mapper));
+		assertNull(ReflectionsUtil.findMethodAndConvertArgs(cls, expected.getName(), new Object[] { 1, "a", null }, mapper));
+		assertNull(ReflectionsUtil.findMethodAndConvertArgs(cls, expected.getName(), new Object[] { 1 }, mapper));
+		assertNull(ReflectionsUtil.findMethodAndConvertArgs(cls, expected.getName(), new Object[] { "a" }, mapper));
+		assertNull(ReflectionsUtil.findMethodAndConvertArgs(cls, expected.getName(), new Object[] { null }, mapper));
+
+		expected = cls.getMethod("doSomething2", String.class, String[].class);
+		// valid
+		assertEquals(expected, ReflectionsUtil.findMethodAndConvertArgs(cls, expected.getName(), new Object[] { "a" }, mapper));
+		assertEquals(expected, ReflectionsUtil.findMethodAndConvertArgs(cls, expected.getName(), new Object[] { "a", "b" }, mapper));
+		assertEquals(expected, ReflectionsUtil.findMethodAndConvertArgs(cls, expected.getName(), new Object[] { "a", "b", "c" }, mapper));
+		assertEquals(expected, ReflectionsUtil.findMethodAndConvertArgs(cls, expected.getName(), new Object[] { "a", null, "c" }, mapper));
+		assertEquals(expected, ReflectionsUtil.findMethodAndConvertArgs(cls, expected.getName(), new Object[] { "a", "b", null }, mapper));
+		assertEquals(expected, ReflectionsUtil.findMethodAndConvertArgs(cls, expected.getName(), new Object[] { "a", null, null }, mapper));
+		assertEquals(expected, ReflectionsUtil.findMethodAndConvertArgs(cls, expected.getName(), new Object[] { "a", new String[] { "b", "c" } }, mapper));
+		assertEquals(expected, ReflectionsUtil.findMethodAndConvertArgs(cls, expected.getName(), new Object[] { "a", new String[] { "b" } }, mapper));
+		assertEquals(expected, ReflectionsUtil.findMethodAndConvertArgs(cls, expected.getName(), new Object[] { "a", (String[]) null }, mapper));
+		assertEquals(expected, ReflectionsUtil.findMethodAndConvertArgs(cls, expected.getName(), new Object[] { null }, mapper));
+		assertEquals(expected, ReflectionsUtil.findMethodAndConvertArgs(cls, expected.getName(), new Object[] { null, "b" }, mapper));
+		assertEquals(expected, ReflectionsUtil.findMethodAndConvertArgs(cls, expected.getName(), new Object[] { null, "b", "c" }, mapper));
+		assertEquals(expected, ReflectionsUtil.findMethodAndConvertArgs(cls, expected.getName(), new Object[] { null, null, "c" }, mapper));
+		assertEquals(expected, ReflectionsUtil.findMethodAndConvertArgs(cls, expected.getName(), new Object[] { null, "b", null }, mapper));
+		assertEquals(expected, ReflectionsUtil.findMethodAndConvertArgs(cls, expected.getName(), new Object[] { null, null, null }, mapper));
+		assertEquals(expected, ReflectionsUtil.findMethodAndConvertArgs(cls, expected.getName(), new Object[] { null, new String[] { "b", "c" } }, mapper));
+		assertEquals(expected, ReflectionsUtil.findMethodAndConvertArgs(cls, expected.getName(), new Object[] { null, new String[] { "b" } }, mapper));
+		assertEquals(expected, ReflectionsUtil.findMethodAndConvertArgs(cls, expected.getName(), new Object[] { null, (String[]) null }, mapper));
+		// invalid
+		assertNull(ReflectionsUtil.findMethodAndConvertArgs(cls, expected.getName(), new Object[] { 1, 1 }, mapper));
+		assertNull(ReflectionsUtil.findMethodAndConvertArgs(cls, expected.getName(), new Object[] { 1 }, mapper));
+		assertNull(ReflectionsUtil.findMethodAndConvertArgs(cls, expected.getName(), new Object[] { 1, "a" }, mapper));
+		assertNull(ReflectionsUtil.findMethodAndConvertArgs(cls, expected.getName(), new Object[] { "a", 1 }, mapper));
+		assertNull(ReflectionsUtil.findMethodAndConvertArgs(cls, expected.getName(), new Object[] { 1, "a", null }, mapper));
+		assertNull(ReflectionsUtil.findMethodAndConvertArgs(cls, expected.getName(), new Object[] { "a", 1, null }, mapper));
+
+		POJO p = new POJO(1, "eins");
+		Map<String, Object> pm = mapper.toMap(p);
+		assertEquals(p.getId(), pm.get("id"));
+		assertEquals(p.getName(), pm.get("name"));
+		Map<String, Object> im = new HashMap<String, Object>();
+
+		expected = cls.getMethod("doSomething3", int.class, POJO.class);
+		// valid
+		assertEquals(expected, ReflectionsUtil.findMethodAndConvertArgs(cls, expected.getName(), new Object[] { 1, p }, mapper));
+		assertEquals(expected, ReflectionsUtil.findMethodAndConvertArgs(cls, expected.getName(), new Object[] { 1, null }, mapper));
+		assertEquals(expected, ReflectionsUtil.findMethodAndConvertArgs(cls, expected.getName(), new Object[] { 1, pm }, mapper));
+		assertEquals(expected, ReflectionsUtil.findMethodAndConvertArgs(cls, expected.getName(), new Object[] { 1L, null }, mapper));
+		assertEquals(expected, ReflectionsUtil.findMethodAndConvertArgs(cls, expected.getName(), new Object[] { 1.0, null }, mapper));
+		// invalid
+		assertNull(ReflectionsUtil.findMethodAndConvertArgs(cls, expected.getName(), new Object[] { 1 }, mapper));
+		assertNull(ReflectionsUtil.findMethodAndConvertArgs(cls, expected.getName(), new Object[] { null }, mapper));
+		assertNull(ReflectionsUtil.findMethodAndConvertArgs(cls, expected.getName(), new Object[] { null, p }, mapper));
+		assertNull(ReflectionsUtil.findMethodAndConvertArgs(cls, expected.getName(), new Object[] { null, null }, mapper));
+		assertNull(ReflectionsUtil.findMethodAndConvertArgs(cls, expected.getName(), new Object[] { null, pm }, mapper));
+		assertNull(ReflectionsUtil.findMethodAndConvertArgs(cls, expected.getName(), new Object[] { im, p }, mapper));
+		assertNull(ReflectionsUtil.findMethodAndConvertArgs(cls, expected.getName(), new Object[] { im, null }, mapper));
+		assertNull(ReflectionsUtil.findMethodAndConvertArgs(cls, expected.getName(), new Object[] { im, pm }, mapper));
+	}
+
 
 	public void testConvert() throws Exception
 	{
