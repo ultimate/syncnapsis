@@ -211,7 +211,7 @@ public class BaseMapper implements Mapper, InitializingBean
 					try
 					{
 						logger.debug("adding field " + entity.getClass().getSimpleName() + "." + field.getName() + ": " + field.get(entity));
-						map.put(field.getName(), prepare(field.get(entity)));
+						map.put(field.getName(), prepare(field.get(entity), authorities));
 					}
 					catch(IllegalAccessException e)
 					{
