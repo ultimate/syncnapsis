@@ -140,7 +140,7 @@
     <!-- =================================================================== -->
     	
 	<bean id="logRPCHandler" class="com.syncnapsis.websockets.service.rpc.LogRPCHandler">
-		<property name="delegate" ref="dataRPCHandler" />
+		<property name="delegate" ref="beanRPCHandler" />
 		<property name="rpcLogManager" ref="rpcLogManager" />
 		<property name="sessionProvider" ref="sessionProvider" />
 		<property name="timeProvider" ref="timeProvider" />
@@ -163,6 +163,15 @@
 		<property name="interceptedService" ref="rpcService" />
 		<property name="sessionFactory" ref="sessionFactory" />
 		<property name="flushMode" value="COMMIT" />
+	</bean>
+	
+    <!-- =================================================================== -->
+    <!-- Serialization				                                         -->
+    <!-- =================================================================== -->
+
+	<bean id="mapper" class="com.syncnapsis.utils.serialization.DataMapper">
+		<property name="securityManager" ref="securityManager" />
+		<property name="universalManager" ref="universalManager" />
 	</bean>
       
     <!-- =================================================================== -->

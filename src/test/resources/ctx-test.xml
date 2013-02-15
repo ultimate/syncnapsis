@@ -29,5 +29,5 @@
 	<bean id="rpcHandler" class="com.syncnapsis.websockets.service.rpc.DelegatingRPCHandler">
 		<property name="delegate" ref="logRPCHandler" />
 	</bean>
-    
+  
 </beans>
