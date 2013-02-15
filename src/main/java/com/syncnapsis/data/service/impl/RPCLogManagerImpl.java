@@ -136,14 +136,14 @@ public class RPCLogManagerImpl extends GenericManagerImpl<RPCLog, Long> implemen
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.syncnapsis.data.service.RPCLogManager#log(com.syncnapsis.websockets.service.rpc.RPCCall, java.lang.Exception, java.util.Date, com.syncnapsis.data.model.User, javax.servlet.http.HttpSession, java.lang.Object[])
+	 * @see com.syncnapsis.data.service.RPCLogManager#log(com.syncnapsis.websockets.service.rpc.RPCCall, java.lang.Throwable, java.util.Date, com.syncnapsis.data.model.User, javax.servlet.http.HttpSession, java.lang.Object[])
 	 */
 	@Override
-	public RPCLog log(RPCCall rpcCall, Exception exception, Date executionDate, User user, HttpSession session, Object... authorities)
+	public RPCLog log(RPCCall rpcCall, Throwable throwable, Date executionDate, User user, HttpSession session, Object... authorities)
 	{
 		String resultString;
-		if(exception != null)
-			resultString = exception.getClass().getName() + ": " + exception.getMessage();
+		if(throwable != null)
+			resultString = throwable.getClass().getName() + ": " + throwable.getMessage();
 		else
 			resultString = "null";
 		

@@ -43,12 +43,12 @@ public interface RPCLogManager extends GenericManager<RPCLog, Long>
 	 * Log an RPCCall performed by the client in the given session with the exception it threw.
 	 * 
 	 * @param rpcCall - the RPCCall performed
-	 * @param exception - the Exception thrown
+	 * @param exception - the Exception/Throwable thrown
 	 * @param executionDate - the execution date
 	 * @param user - the User that performed the RPCCall
 	 * @param session - the session in which the RPCCall was executed
 	 * @param authorities - the authorities used to perform the RPCCall
 	 * @return the RPCLog created and stored in the database
 	 */
-	public RPCLog log(RPCCall rpcCall, Exception exception, Date executionDate, User user, HttpSession session, Object... authorities);
+	public RPCLog log(RPCCall rpcCall, Throwable throwable, Date executionDate, User user, HttpSession session, Object... authorities);
 }
