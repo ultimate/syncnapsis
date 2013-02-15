@@ -31,7 +31,7 @@
 	
 	<!-- define the used rpcHandler -->
 	<bean id="rpcHandler" class="com.syncnapsis.websockets.service.rpc.DelegatingRPCHandler">
-		<property name="delegate" ref="dataRPCHandler" />
+		<property name="delegate" ref="beanRPCHandler" />
 	</bean>
 	
 	<!-- the default securityManager -->

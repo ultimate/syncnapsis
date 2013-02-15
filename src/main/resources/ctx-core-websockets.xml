@@ -67,9 +67,8 @@
 		<property name="rpcHandler" ref="rpcHandler" />
 	</bean>
 
-	<bean id="dataRPCHandler" class="com.syncnapsis.websockets.service.rpc.DataRPCHandler">
+	<bean id="beanRPCHandler" class="com.syncnapsis.websockets.service.rpc.BeanRPCHandler">
 		<property name="serializer" ref="serializer" />
-		<property name="universalManager" ref="universalManager" />
 	</bean>
 	
 </beans>
