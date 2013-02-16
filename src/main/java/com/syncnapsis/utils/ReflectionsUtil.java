@@ -895,6 +895,20 @@ public class ReflectionsUtil
 	{
 		return getSetter(cls, field.getName(), field.getType());
 	}
+	
+	/**
+	 * Find the matching getter for a Field within a Class or it's super classes.<br>
+	 * When the Field type is boolean isX(..) will be checked as well.
+	 * 
+	 * @param cls - the Class to scan
+	 * @param fieldName - the name of the Field whichs getter to find
+	 * @param type - the type of the Field
+	 * @return the getter or null if none could be found
+	 */
+	public static <T, V> Method getGetter(Class<T> cls, String fieldName, Class<V> type)
+	{
+		return getGetter(cls, fieldName, type, type);
+	}
 
 	/**
 	 * Find the matching getter for a Field within a Class or it's super classes.<br>
@@ -903,6 +917,7 @@ public class ReflectionsUtil
 	 * @param cls - the Class to scan
 	 * @param fieldName - the name of the Field whichs getter to find
 	 * @param type - the type of the Field
+	 * @param genericType - the generic type of the Field
 	 * @return the getter or null if none could be found
 	 */
 	public static <T, V> Method getGetter(Class<T> cls, String fieldName, Class<V> type, Type genericType)

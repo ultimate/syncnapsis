@@ -15,16 +15,15 @@
 package com.syncnapsis.tests;
 
 import java.lang.reflect.Method;
-import java.lang.reflect.Type;
 import java.util.Arrays;
 
 import junit.framework.TestCase;
 
 import org.jmock.Mockery;
-import com.syncnapsis.utils.ReflectionsUtil;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.syncnapsis.utils.ReflectionsUtil;
 
 /**
  * Abstract base for all tests containing useful test support:
@@ -123,13 +122,12 @@ public abstract class LoggerTestCase extends TestCase
 	 * @param o - the object to use
 	 * @param fieldName - the field name
 	 * @param type - the type of the field
-	 * @param genericType - the generic type of the field
 	 * @param aValue - a valid value for the field
 	 * @throws Exception - if the test fails
 	 */
-	public <V> void getAndSetTest(Object o, String fieldName, Class<V> type, Type genericType, V aValue) throws Exception
+	public <V> void getAndSetTest(Object o, String fieldName, Class<V> type, V aValue) throws Exception
 	{
-		Method getter = ReflectionsUtil.getGetter(o.getClass(), fieldName, type, genericType);
+		Method getter = ReflectionsUtil.getGetter(o.getClass(), fieldName, type);
 		Method setter = ReflectionsUtil.getSetter(o.getClass(), fieldName, type);
 
 		assertNotNull(getter);
