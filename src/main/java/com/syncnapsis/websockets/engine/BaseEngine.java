@@ -152,7 +152,7 @@ public abstract class BaseEngine implements Engine, InitializingBean
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.syncnapsis.websockets.WebSocketEngine#getManager()
+	 * @see com.syncnapsis.websockets.Engine#getManager()
 	 */
 	@Override
 	public WebSocketManager getManager()
@@ -162,7 +162,7 @@ public abstract class BaseEngine implements Engine, InitializingBean
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.syncnapsis.websockets.WebSocketEngine#setManager(com.syncnapsis.websockets.WebSocketManager)
+	 * @see com.syncnapsis.websockets.Engine#setManager(com.syncnapsis.websockets.WebSocketManager)
 	 */
 	@Override
 	public void setManager(WebSocketManager manager)
@@ -221,7 +221,7 @@ public abstract class BaseEngine implements Engine, InitializingBean
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.syncnapsis.websockets.WebSocketEngine#getServiceMapping()
+	 * @see com.syncnapsis.websockets.Engine#getServiceMapping()
 	 */
 	@Override
 	public ServiceMapping getServiceMapping()
@@ -232,7 +232,7 @@ public abstract class BaseEngine implements Engine, InitializingBean
 	/*
 	 * (non-Javadoc)
 	 * @see
-	 * com.syncnapsis.websockets.WebSocketEngine#setServiceMapping(com.syncnapsis.websockets.WebSocketServiceMapping)
+	 * com.syncnapsis.websockets.Engine#setServiceMapping(com.syncnapsis.websockets.WebSocketServiceMapping)
 	 */
 	@Override
 	public void setServiceMapping(ServiceMapping serviceMapping)
@@ -242,7 +242,7 @@ public abstract class BaseEngine implements Engine, InitializingBean
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.syncnapsis.websockets.WebSocketEngine#getParent()
+	 * @see com.syncnapsis.websockets.Engine#getParent()
 	 */
 	@Override
 	public Engine getParent()
@@ -252,7 +252,7 @@ public abstract class BaseEngine implements Engine, InitializingBean
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.syncnapsis.websockets.WebSocketEngine#setParent(com.syncnapsis.websockets.WebSocketEngine)
+	 * @see com.syncnapsis.websockets.Engine#setParent(com.syncnapsis.websockets.Engine)
 	 */
 	@Override
 	public void setParent(Engine parentEngine)
@@ -262,7 +262,7 @@ public abstract class BaseEngine implements Engine, InitializingBean
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.syncnapsis.websockets.WebSocketEngine#getChildren()
+	 * @see com.syncnapsis.websockets.Engine#getChildren()
 	 */
 	@Override
 	public List<Engine> getChildren()
@@ -274,7 +274,7 @@ public abstract class BaseEngine implements Engine, InitializingBean
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.syncnapsis.websockets.WebSocketEngine#setChildren(java.util.List)
+	 * @see com.syncnapsis.websockets.Engine#setChildren(java.util.List)
 	 */
 	@Override
 	public void setChildren(List<Engine> engines)
@@ -291,7 +291,7 @@ public abstract class BaseEngine implements Engine, InitializingBean
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.syncnapsis.websockets.WebSocketEngine#addChild(com.syncnapsis.websockets.WebSocketEngine)
+	 * @see com.syncnapsis.websockets.Engine#addChild(com.syncnapsis.websockets.Engine)
 	 */
 	@Override
 	public void addChild(Engine engine)
@@ -307,7 +307,7 @@ public abstract class BaseEngine implements Engine, InitializingBean
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.syncnapsis.websockets.WebSocketEngine#removeChild(com.syncnapsis.websockets.WebSocketEngine)
+	 * @see com.syncnapsis.websockets.Engine#removeChild(com.syncnapsis.websockets.Engine)
 	 */
 	@Override
 	public void removeChild(Engine engine)
@@ -321,7 +321,7 @@ public abstract class BaseEngine implements Engine, InitializingBean
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.syncnapsis.websockets.WebSocketEngine#getEngineSupport()
+	 * @see com.syncnapsis.websockets.Engine#getEngineSupport()
 	 */
 	@Override
 	public EnumEngineSupport getEngineSupport()
@@ -331,7 +331,7 @@ public abstract class BaseEngine implements Engine, InitializingBean
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.syncnapsis.websockets.WebSocketEngine#isRunning()
+	 * @see com.syncnapsis.websockets.Engine#isRunning()
 	 */
 	@Override
 	public boolean isRunning()
@@ -341,7 +341,7 @@ public abstract class BaseEngine implements Engine, InitializingBean
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.syncnapsis.websockets.WebSocketEngine#isDisabled()
+	 * @see com.syncnapsis.websockets.Engine#isDisabled()
 	 */
 	@Override
 	public boolean isDisabled()
@@ -351,7 +351,7 @@ public abstract class BaseEngine implements Engine, InitializingBean
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.syncnapsis.websockets.WebSocketEngine#setDisabled(boolean)
+	 * @see com.syncnapsis.websockets.Engine#setDisabled(boolean)
 	 */
 	@Override
 	public void setDisabled(boolean disabled)
@@ -361,7 +361,7 @@ public abstract class BaseEngine implements Engine, InitializingBean
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.syncnapsis.websockets.WebSocketEngine#start()
+	 * @see com.syncnapsis.websockets.Engine#start()
 	 */
 	public final void start() throws WebSocketEngineException
 	{
@@ -401,7 +401,7 @@ public abstract class BaseEngine implements Engine, InitializingBean
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.syncnapsis.websockets.WebSocketEngine#stop()
+	 * @see com.syncnapsis.websockets.Engine#stop()
 	 */
 	public final synchronized void stop() throws WebSocketEngineException
 	{
@@ -542,7 +542,7 @@ public abstract class BaseEngine implements Engine, InitializingBean
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.syncnapsis.websockets.WebSocketEngine#createService(java.lang.String, java.util.Enumeration)
+	 * @see com.syncnapsis.websockets.Engine#getService(java.lang.String, java.util.Enumeration)
 	 */
 	@Override
 	public Service getService(String subprotocol, Enumeration<String> extensions)
