@@ -15,6 +15,7 @@
 package com.syncnapsis.tests;
 
 import java.lang.reflect.Method;
+import java.lang.reflect.Type;
 import java.util.Arrays;
 
 import junit.framework.TestCase;
@@ -125,9 +126,27 @@ public abstract class LoggerTestCase extends TestCase
 	 * @param aValue - a valid value for the field
 	 * @throws Exception - if the test fails
 	 */
-	public <V> void getAndSetTest(Object o, String fieldName, Class<V> type, V aValue) throws Exception
+	protected <V> void getAndSetTest(Object o, String fieldName, Class<V> type, V aValue) throws Exception
 	{
-		Method getter = ReflectionsUtil.getGetter(o.getClass(), fieldName, type);
+		getAndSetTest(o, fieldName, type, type, aValue);
+	}
+
+	/**
+	 * A generic reflection based test for fields with getters and setters.<br>
+	 * The test will find the setter and getter method, invoke them, and check wether the result
+	 * matches the given argument.<br>
+	 * This way copy-and-paste errors within the fields used can be found...
+	 * 
+	 * @param o - the object to use
+	 * @param fieldName - the field name
+	 * @param type - the type of the field
+	 * @param genericType - the generic type of the field
+	 * @param aValue - a valid value for the field
+	 * @throws Exception - if the test fails
+	 */
+	protected <V> void getAndSetTest(Object o, String fieldName, Class<V> type, Type genericType, V aValue) throws Exception
+	{
+		Method getter = ReflectionsUtil.getGetter(o.getClass(), fieldName, type, genericType);
 		Method setter = ReflectionsUtil.getSetter(o.getClass(), fieldName, type);
 
 		assertNotNull(getter);

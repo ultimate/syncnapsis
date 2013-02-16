@@ -403,15 +403,21 @@ public class ReflectionsUtil
 						if(m.getParameterTypes().length == result.getParameterTypes().length)
 						{
 							moreSpecificTypes = true;
-							for(int i = 0; i < m.getParameterTypes().length; i++)
+							int i;
+							for(i = 0; i < m.getParameterTypes().length; i++)
 							{
 								if(!result.getParameterTypes()[i].isAssignableFrom(m.getParameterTypes()[i]))
 								{
 									moreSpecificTypes = false;
 								}
 							}
-							if(moreSpecificTypes)
+							if(moreSpecificTypes && i > 0)
 								result = m;
+							continue;
+						}
+						if(m.getReturnType() != result.getReturnType() && m.getReturnType().isAssignableFrom(result.getReturnType()))
+						{
+							result = m;
 						}
 					}
 				}
