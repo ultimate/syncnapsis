@@ -25,10 +25,10 @@ public class ConnectionPropertiesTest extends LoggerTestCase
 	public void testGetAndSet() throws Exception
 	{
 		ConnectionProperties cp = new ConnectionProperties();
-		getAndSetTest(cp, "bufferSize", int.class, int.class, 123);
-		getAndSetTest(cp, "maxIdleTime", int.class, int.class, 123);
-		getAndSetTest(cp, "maxTextMessageSize", int.class, int.class, 123);
-		getAndSetTest(cp, "maxBinaryMessageSize", int.class, int.class, 123);
+		getAndSetTest(cp, "bufferSize", int.class, 123);
+		getAndSetTest(cp, "maxIdleTime", int.class, 123);
+		getAndSetTest(cp, "maxTextMessageSize", int.class, 123);
+		getAndSetTest(cp, "maxBinaryMessageSize", int.class, 123);
 	}
 
 	public void testFromProperties() throws Exception

@@ -31,19 +31,20 @@ import com.syncnapsis.websockets.service.EchoService;
 
 public class BaseConnectionTest extends LoggerTestCase
 {
-	@TestCoversMethods({ "get*", "set*" })
+	@TestCoversMethods({ "*etManager", "*etService", "*etProtocol", "*etSubprotocol", "*etId", "*AllowFrameFragmentation", "*etSession",
+			"*etAttribute" })
 	public void testGetAndSet() throws Exception
 	{
 		DummyConnection c = new DummyConnection();
 
 		// simple properties
-		getAndSetTest(c, "manager", WebSocketManager.class, WebSocketManager.class, new WebSocketManager());
-		getAndSetTest(c, "service", Service.class, Service.class, new EchoService());
-		getAndSetTest(c, "protocol", Protocol.class, Protocol.class, new MockProtocol());
-		getAndSetTest(c, "subprotocol", String.class, String.class, "abc");
-		getAndSetTest(c, "id", String.class, String.class, "1a2b3c");
-		getAndSetTest(c, "allowFrameFragmentation", boolean.class, boolean.class, true);
-		getAndSetTest(c, "session", HttpSession.class, HttpSession.class, new MockHttpSession());
+		getAndSetTest(c, "manager", WebSocketManager.class, new WebSocketManager());
+		getAndSetTest(c, "service", Service.class, new EchoService());
+		getAndSetTest(c, "protocol", Protocol.class, new MockProtocol());
+		getAndSetTest(c, "subprotocol", String.class, "abc");
+		getAndSetTest(c, "id", String.class, "1a2b3c");
+		getAndSetTest(c, "allowFrameFragmentation", boolean.class, true);
+		getAndSetTest(c, "session", HttpSession.class, new MockHttpSession());
 
 		// attribute map
 		String key = "aKey";
