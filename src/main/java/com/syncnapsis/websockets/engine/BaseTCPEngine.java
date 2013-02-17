@@ -111,7 +111,7 @@ public abstract class BaseTCPEngine extends BaseEngine
 	{
 		super.afterPropertiesSet();
 		Assert.isTrue(this.port != null || this.sslPort != null, "either port or sslPort must not be null");
-		Assert.isTrue(this.port == null || this.port >= 0, "port must be 0 or positive");
-		Assert.isTrue(this.sslPort == null || this.sslPort >= 0, "sslPort must be 0 or positive");
+		Assert.isTrue(this.port == null || (this.port >= 0 && this.port < 65536), "port must be between 0 (inclusive) and 65536 (exclusive)");
+		Assert.isTrue(this.sslPort == null || (this.sslPort >= 0 && this.sslPort < 65536), "sslPort must be between 0 (inclusive) and 65536 (exclusive)");
 	}
 }
