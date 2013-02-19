@@ -32,7 +32,7 @@ public class ${model}DaoTest extends GenericDaoTestCase<${model}, ${pkType}>
 		${pkType} existingId = ${entity}Dao.getAll().get(0).getId();
 		
 		${model} ${entity} = new ${model}();
-		// set individual properties here
+		// set individual properties here (especially not-null properties!)
 		
 		setEntity(${entity});
 		
