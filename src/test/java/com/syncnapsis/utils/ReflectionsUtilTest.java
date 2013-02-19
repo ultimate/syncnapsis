@@ -43,7 +43,7 @@ import com.syncnapsis.utils.serialization.BaseMapper;
 import com.syncnapsis.utils.serialization.Mapper;
 import com.syncnapsis.utils.spring.BeanProxy;
 
-@TestCoversClasses({ ReflectionsUtil.class, FieldCriterion.class })
+@TestCoversClasses({ ReflectionsUtil.class, FieldCriterion.class, ConversionException.class })
 public class ReflectionsUtilTest extends LoggerTestCase
 {
 	public void testSetAccessible() throws Exception
@@ -137,6 +137,7 @@ public class ReflectionsUtilTest extends LoggerTestCase
 		assertTrue(ReflectionsUtil.isMethodSuitableFor(m, new POJO()));
 	}
 
+	@TestCoversMethods({"findMethodAndConvertArgs", "checkAndConvertArg*" })
 	public void testFindMethodAndConvertArgs() throws Exception
 	{
 		Mapper mapper = new BaseMapper();

@@ -25,7 +25,7 @@ import com.syncnapsis.tests.annotations.TestExcludesMethods;
  * 
  * @author ultimate
  */
-@TestCoversClasses({ ConvertingAppender.class, ConsoleAppenderExtension.class })
+@TestCoversClasses({ ConvertingAppender.class, ConsoleAppenderExtension.class, DailyRollingFileAppenderExtension.class })
 @TestExcludesMethods({ "get*", "set*", "doAppend" })
 public class ConvertingAppenderTest extends LoggerTestCase
 {
