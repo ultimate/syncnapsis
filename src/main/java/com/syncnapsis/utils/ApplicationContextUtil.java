@@ -59,9 +59,9 @@ public class ApplicationContextUtil implements ApplicationContextAware
 	/**
 	 * The standard set of xml-Files used to build the ApplicationContext represented by the
 	 * patterns:<br>
-	 * <code>classpath*:/ctx-test.xml</code>
+	 * <code>classpath:/ctx-test.xml</code>
 	 */
-	public static final String				CONTEXT_LOCATION_TEST		= "classpath*:/ctx-test.xml";
+	public static final String				CONTEXT_LOCATION_TEST		= "classpath:/ctx-test.xml";
 
 	/**
 	 * The local ApplicationContextUtil

@@ -25,8 +25,10 @@ public abstract class BaseSpringContextTestCase extends LoggerTestCase
 
 	static
 	{
-		applicationContext = ApplicationContextUtil.createApplicationContext(ApplicationContextUtil.CONTEXT_LOCATION_ALL,
-				ApplicationContextUtil.CONTEXT_LOCATION_DEFAULT, ApplicationContextUtil.CONTEXT_LOCATION_TEST);
+		applicationContext = ApplicationContextUtil.createApplicationContext(
+				ApplicationContextUtil.CONTEXT_LOCATION_TEST,
+				ApplicationContextUtil.CONTEXT_LOCATION_DEFAULT
+			);
 	}
 
 	@Override
