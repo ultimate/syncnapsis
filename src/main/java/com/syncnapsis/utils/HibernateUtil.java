@@ -14,6 +14,10 @@
  */
 package com.syncnapsis.utils;
 
+import java.io.Serializable;
+import java.util.HashMap;
+
+import org.hibernate.FlushMode;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -22,6 +26,11 @@ import org.hibernate.service.ServiceRegistry;
 import org.hibernate.service.ServiceRegistryBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.orm.hibernate4.SessionHolder;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
+
+import com.syncnapsis.data.model.base.Identifiable;
+import com.syncnapsis.exceptions.ConversionException;
 
 /**
  * Util-Klasse für den Zugriff auf die Hibernate-Session
@@ -111,6 +120,55 @@ public class HibernateUtil
 	}
 
 	/**
+	 * Open a Session that is bound to the {@link TransactionSynchronizationManager}.<br>
+	 * The Session will be configured with {@link FlushMode#COMMIT}
+	 * 
+	 * @param useSessionHolder - select wether to use a SessionHolder for binding or not
+	 * @return the session opened
+	 */
+	public static Session openBoundSession(boolean useSessionHolder)
+	{
+		Session session = sessionFactory.openSession();
+		session.setFlushMode(FlushMode.COMMIT);
+		TransactionSynchronizationManager.bindResource(sessionFactory, useSessionHolder ? new SessionHolder(session) : session);
+		return session;
+	}
+
+	/**
+	 * Close the session bound to the sessionFactory.
+	 * 
+	 * @return true when the Session has been closed successfully, false otherwise
+	 */
+	public static boolean closeBoundSession()
+	{
+		if(!isSessionBound())
+			return false;
+		Object resource = TransactionSynchronizationManager.unbindResource(sessionFactory);
+		if(resource instanceof Session)
+		{
+			((Session) resource).close();
+			return true;
+		}
+		else if(resource instanceof SessionHolder)
+		{
+			((SessionHolder) resource).getSession().close();
+			return true;
+		}
+		return false;
+	}
+
+	/**
+	 * Is there a session bound for the SessionFactory?
+	 * 
+	 * @see TransactionSynchronizationManager#hasResource(Object)
+	 * @return true or false
+	 */
+	public static boolean isSessionBound()
+	{
+		return TransactionSynchronizationManager.hasResource(sessionFactory);
+	}
+
+	/**
 	 * Initialize the SessionFactory if no SessionFactory is set.
 	 * 
 	 * @param resource - an optional path to a Resource from which the SessionFactory will be
@@ -130,19 +188,116 @@ public class HibernateUtil
 					configuration = new Configuration().configure();
 				else
 					configuration = new Configuration().configure(resource);
-				
+
 				ServiceRegistry serviceRegistry = new ServiceRegistryBuilder().applySettings(configuration.getProperties()).buildServiceRegistry();
 
 				sessionFactory = configuration.buildSessionFactory(serviceRegistry);
-				
+
 				logger.info("Hibernate configuration file loaded: " + (resource == null ? "hibernate.cfg.xml" : resource));
 			}
 			catch(Throwable ex)
 			{
-				logger.error("Initial SessionFactory creation failed." + ex);
+				logger.error("Initial SessionFactory creation failed: " + ex);
 				throw new ExceptionInInitializerError(ex);
 			}
 		}
 		return sessionFactory;
+	}
+
+	/**
+	 * The map caching the id types for all used model classes.
+	 */
+	private static HashMap<Class<?>, Class<? extends Serializable>>	idTypes	= new HashMap<Class<?>, Class<? extends Serializable>>();
+
+	/**
+	 * Check an id for a required type and convert it if necessary.<br>
+	 * This check is helpful before calling {@link Session#get(Class, Serializable)} from hibernate,
+	 * since hibernate will perform a id check as well, which may fail for some combinations which
+	 * are not really expected to fail (e.g. Integer vs. Long).
+	 * 
+	 * @see ReflectionsUtil#convert(Class, Object)
+	 * @param clazz - the model type (used to determine the required id
+	 * @param id - the given id
+	 * @return the converted id
+	 * @throws ConversionException if conversion fails
+	 */
+	public static Serializable checkIdType(Class<?> clazz, Serializable id)
+	{
+		Class<? extends Serializable> requiredType = getIdType(clazz);
+		if(requiredType.isInstance(id))
+			return id;
+		try
+		{
+			return (Serializable) ReflectionsUtil.convert(requiredType, id);
+		}
+		catch(ConversionException e)
+		{
+			logger.error(e.getMessage());
+			return id;
+		}
+		// hibernate performs type checks for the id when calling Session#get(..).
+		// But since we provide not primitive ids here type check will fail for Integer instead of
+		// Long for example. So we do a quick type check and a conversion if required.
+		// @see checkIdType(...)
+		// if(Identifiable.class.isAssignableFrom(clazz))
+		// {
+		// try
+		// {
+		// return checkIdType0((Class<? extends Identifiable<?>>) clazz, id);
+		// }
+		// catch(ConversionException e)
+		// {
+		// logger.error(e.getMessage());
+		// }
+		// }
+		// return id;
+	}
+
+	/**
+	 * Get the ID type for an entity class
+	 * 
+	 * @param clazz - the entity class
+	 * @return the ID type
+	 */
+	@SuppressWarnings("unchecked")
+	public static Class<? extends Serializable> getIdType(Class<?> clazz)
+	{
+		if(!idTypes.containsKey(clazz))
+			idTypes.put(clazz, sessionFactory.getClassMetadata(clazz).getIdentifierType().getReturnedClass());
+		return idTypes.get(clazz);
+	}
+
+	/**
+	 * Check an id for a required type and convert it if necessary.<br>
+	 * This check is helpful before calling {@link Session#get(Class, Serializable)} from hibernate,
+	 * since hibernate will perform a id check as well, which may fail for some combinations which
+	 * are not really expected to fail (e.g. Integer vs. Long).
+	 * 
+	 * @see ReflectionsUtil#convert(Class, Object)
+	 * @param clazz - the model type (used to determine the required id
+	 * @param id - the given id
+	 * @return the converted id
+	 * @throws ConversionException if conversion fails
+	 */
+	@SuppressWarnings("unchecked")
+	/* package */static <T extends Identifiable<PK>, PK extends Serializable> PK checkIdType0(Class<T> clazz, Serializable id)
+			throws ConversionException
+	{
+		Class<PK> requiredType;
+		if(idTypes.containsKey(clazz))
+		{
+			requiredType = (Class<PK>) idTypes.get(clazz);
+		}
+		else
+		{
+			requiredType = (Class<PK>) ReflectionsUtil.getActualTypeArguments(clazz, Identifiable.class)[0];
+			idTypes.put(clazz, requiredType);
+		}
+		// logger.debug("checking id " + id + " (" + id.getClass().getName() + ") for type " +
+		// requiredType.getName());
+		// if(requiredType.isAssignableFrom(id.getClass()))
+		if(requiredType.isInstance(id))
+			return (PK) id;
+		return ReflectionsUtil.convert(requiredType, id);
 	}
 }

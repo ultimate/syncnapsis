@@ -16,12 +16,16 @@ package com.syncnapsis.utils;
 
 import org.hibernate.Session;
 
-import com.syncnapsis.tests.LoggerTestCase;
+import com.syncnapsis.data.model.IntegerModel;
+import com.syncnapsis.data.model.LongModel;
+import com.syncnapsis.data.model.StringModel;
+import com.syncnapsis.tests.BaseSpringContextTestCase;
 import com.syncnapsis.tests.annotations.TestCoversMethods;
 
-public class HibernateUtilTest extends LoggerTestCase
+public class HibernateUtilTest extends BaseSpringContextTestCase
 {
-	@TestCoversMethods({ "getInstance", "*etSessionFactory", "initSessionFactory", "currentSession", "closeSession" })
+	@TestCoversMethods({ "getInstance", "*etSessionFactory", "initSessionFactory", "currentSession", "closeSession", "*BoundSession",
+			"isSessionBound" })
 	public void testInstantiation()
 	{
 		HibernateUtil h = HibernateUtil.getInstance();
@@ -30,35 +34,44 @@ public class HibernateUtilTest extends LoggerTestCase
 		assertNotNull(h);
 		assertSame(h, h2);
 
-		/*
-		SessionFactory overrideSF = createSessionFactory();
-		SessionFactory defaultSF = h.getSessionFactory();
+		// Spring does not open the session automatically here, since we are not within
+		// a bean and a @Transactional annotation
+		HibernateUtil.openBoundSession(false);
 
-		assertNotNull(defaultSF);
-		h.setSessionFactory(overrideSF);
-		assertNotSame(overrideSF, defaultSF);
-		assertSame(overrideSF, h.getSessionFactory());
-		*/
-		
 		Session session = HibernateUtil.currentSession();
-		
+
 		assertNotNull(session);
 		assertSame(h.getSessionFactory().getCurrentSession(), session);
 		assertTrue(session.isOpen());
-		
-		HibernateUtil.closeSession();
-		
+
+		HibernateUtil.closeBoundSession();
+
 		assertFalse(session.isOpen());
-		assertNotSame(session, HibernateUtil.currentSession());
-		assertTrue(HibernateUtil.currentSession().isOpen());
 	}
 
-	/*
-	private SessionFactory createSessionFactory()
+	public void testGetIdType() throws Exception
 	{
-		Configuration configuration = new Configuration().configure();
-		ServiceRegistry serviceRegistry = new ServiceRegistryBuilder().applySettings(configuration.getProperties()).buildServiceRegistry();
-		return configuration.buildSessionFactory(serviceRegistry);
+		assertSame(Long.class, HibernateUtil.getIdType(LongModel.class));
+		assertSame(Integer.class, HibernateUtil.getIdType(IntegerModel.class));
+		assertSame(String.class, HibernateUtil.getIdType(StringModel.class));
 	}
-	*/
+
+	@TestCoversMethods({ "checkIdType*" })
+	public void testCheckIdType() throws Exception
+	{
+		assertEquals((Long) 1L, HibernateUtil.checkIdType(LongModel.class, 1L));
+		assertSame(Long.class, HibernateUtil.checkIdType(LongModel.class, 1L).getClass());
+
+		assertEquals((Long) 1L, HibernateUtil.checkIdType(LongModel.class, 1));
+		assertSame(Long.class, HibernateUtil.checkIdType(LongModel.class, 1).getClass());
+
+		assertEquals((Integer) 1, HibernateUtil.checkIdType(IntegerModel.class, 1L));
+		assertSame(Integer.class, HibernateUtil.checkIdType(IntegerModel.class, 1L).getClass());
+
+		assertEquals((Integer) 1, HibernateUtil.checkIdType(IntegerModel.class, 1));
+		assertSame(Integer.class, HibernateUtil.checkIdType(IntegerModel.class, 1).getClass());
+
+		assertEquals("1", HibernateUtil.checkIdType(StringModel.class, "1"));
+		assertSame(String.class, HibernateUtil.checkIdType(StringModel.class, "1").getClass());
+	}
 }
