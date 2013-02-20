@@ -20,10 +20,11 @@ import java.util.List;
 import org.hibernate.ObjectNotFoundException;
 import org.hibernate.Query;
 import org.hibernate.Session;
-import com.syncnapsis.data.dao.UniversalDao;
-import com.syncnapsis.utils.HibernateUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.syncnapsis.data.dao.UniversalDao;
+import com.syncnapsis.utils.HibernateUtil;
 
 /**
  * Dao-Implementierung für Hibernate für den universellen Zugriff auf die
@@ -69,6 +70,7 @@ public class UniversalDaoHibernate implements UniversalDao
 	@Override
 	public <T> T get(Class<? extends T> clazz, Serializable id)
 	{
+		id = HibernateUtil.checkIdType(clazz, id);
 		T o = (T) currentSession().get(clazz, id);
 		if(o == null)
 			throw new ObjectNotFoundException(id, clazz.getSimpleName());
