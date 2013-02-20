@@ -32,6 +32,8 @@ public abstract class BaseDaoTestCase extends BaseSpringContextTestCase
 	
 	protected void startTransaction()
 	{
+		if(!HibernateUtil.isSessionBound())
+			HibernateUtil.openBoundSession(false);
 		transaction = HibernateUtil.currentSession().beginTransaction();
 	}
 	
@@ -39,6 +41,7 @@ public abstract class BaseDaoTestCase extends BaseSpringContextTestCase
 	{
 		transaction.rollback();
 		transaction = null;
+		HibernateUtil.closeBoundSession();
 	}
 
 	@Override

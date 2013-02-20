@@ -19,7 +19,12 @@
 <hibernate-configuration>
     <session-factory>
     
-	<!-- empty dummy file -->
+		<!-- empty dummy file -->
+	
+		<!-- just include some test model classes -->
+	    <mapping class="com.syncnapsis.data.model.LongModel"/>
+	    <mapping class="com.syncnapsis.data.model.IntegerModel"/>
+	    <mapping class="com.syncnapsis.data.model.StringModel"/>
 
     </session-factory>
 </hibernate-configuration>
