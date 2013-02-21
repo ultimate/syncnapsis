@@ -59,6 +59,14 @@ public abstract class BaseDaoTestCase extends BaseSpringContextTestCase
 		HibernateUtil.closeBoundSession();
 	}
 
+	/**
+	 * Flush the current session
+	 */
+	protected void flush()
+	{
+		HibernateUtil.currentSession().flush();
+	}
+	
 	@Override
 	protected void tearDown() throws Exception
 	{

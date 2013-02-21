@@ -20,11 +20,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.hibernate.ObjectNotFoundException;
+
 import com.syncnapsis.data.dao.GenericDao;
 import com.syncnapsis.data.model.base.ActivatableInstance;
 import com.syncnapsis.data.model.base.BaseObject;
 import com.syncnapsis.tests.annotations.TestCoversMethods;
-import com.syncnapsis.utils.HibernateUtil;
 
 public abstract class GenericDaoTestCase<T extends BaseObject<PK>, PK extends Serializable> extends BaseDaoTestCase
 {
@@ -171,7 +171,7 @@ public abstract class GenericDaoTestCase<T extends BaseObject<PK>, PK extends Se
 			((ActivatableInstance) entity2).setActivated(false);
 			entity2 = genericDao.save(entity2);
 			// we are within a surrounding test-transaction so we need to flush
-			HibernateUtil.currentSession().flush();
+			flush();
 			newSize--;
 		}
 
@@ -186,7 +186,7 @@ public abstract class GenericDaoTestCase<T extends BaseObject<PK>, PK extends Se
 			((ActivatableInstance) entity2).setActivated(true);
 			entity2 = genericDao.save(entity2);
 			// we are within a surrounding test-transaction so we need to flush
-			HibernateUtil.currentSession().flush();
+			flush();
 		}
 	}
 }
