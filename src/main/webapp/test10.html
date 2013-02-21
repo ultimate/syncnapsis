@@ -723,6 +723,21 @@
 					},
 					parameters: 1,
 				},
+				radius3 :  {
+					getRGB: function(param) {
+						var bound = 0.6;
+						var red1 = 0.3;
+						var green1 = 0.7;
+						var green2 = 0.2;
+						var blueMin = 0.3;			
+						
+						if(param < bound)
+							return {r: (param/bound)*(1-red1)+red1, g: green1-Math.pow(param/bound,2)*(green1-green2), b: (1-Math.pow(param/bound,2))*(1-blueMin)+blueMin };
+						else
+							return {r: 1, g: Math.pow((param-bound)/(1-bound),0.3)*(1-green2)+green2, b: Math.pow((param-bound)/(1-bound),0.7)*(1-blueMin)+blueMin};
+					},
+					parameters: 1,
+				},
 				//Math.pow((param-bound)/(1-bound)*2-1,2)*(1-red2)+red2
 			};
 			
