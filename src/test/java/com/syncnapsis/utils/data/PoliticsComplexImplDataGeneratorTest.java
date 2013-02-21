@@ -80,6 +80,8 @@ public class PoliticsComplexImplDataGeneratorTest extends BaseDaoTestCase
 		allianceMemberRanksMap.put("rank2_weight", "0");
 
 		Alliance alliance = gen.createAlliance(name, contactAuthoritiesMap, allianceAuthoritiesMap, allianceMemberRanksMap);
+		
+		flush();
 
 		assertNotNull(alliance);
 		assertNotNull(alliance.getId());
