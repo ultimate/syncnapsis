@@ -15,12 +15,16 @@
 package com.syncnapsis.tests;
 
 import org.hibernate.Transaction;
+import org.springframework.orm.hibernate4.HibernateTransactionManager;
+import org.springframework.transaction.TransactionStatus;
 
 import com.syncnapsis.utils.HibernateUtil;
 
 public abstract class BaseDaoTestCase extends BaseSpringContextTestCase
 {
 	private Transaction transaction = null;
+	private HibernateTransactionManager transactionManager;
+	private TransactionStatus transactionStatus = null;
 	
 	@Override
 	protected void setUp() throws Exception
@@ -33,14 +37,25 @@ public abstract class BaseDaoTestCase extends BaseSpringContextTestCase
 	protected void startTransaction()
 	{
 		if(!HibernateUtil.isSessionBound())
-			HibernateUtil.openBoundSession(false);
-		transaction = HibernateUtil.currentSession().beginTransaction();
+			HibernateUtil.openBoundSession();
+		if(transactionManager != null)
+			transactionStatus = transactionManager.getTransaction(null);
+		else
+			transaction = HibernateUtil.currentSession().beginTransaction();
 	}
 	
 	protected void rollbackTransaction()
 	{
-		transaction.rollback();
-		transaction = null;
+		if(transactionManager != null)
+		{
+			transactionManager.rollback(transactionStatus);
+			transactionStatus = null;
+		}
+		else
+		{
+			transaction.rollback();
+			transaction = null;
+		}
 		HibernateUtil.closeBoundSession();
 	}
 

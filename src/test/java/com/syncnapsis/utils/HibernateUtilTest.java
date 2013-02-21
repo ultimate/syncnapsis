@@ -36,7 +36,7 @@ public class HibernateUtilTest extends BaseSpringContextTestCase
 
 		// Spring does not open the session automatically here, since we are not within
 		// a bean and a @Transactional annotation
-		HibernateUtil.openBoundSession(false);
+		HibernateUtil.openBoundSession();
 
 		Session session = HibernateUtil.currentSession();
 

@@ -29,7 +29,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.orm.hibernate4.SessionHolder;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
 
-import com.syncnapsis.data.model.base.Identifiable;
 import com.syncnapsis.exceptions.ConversionException;
 
 /**
@@ -126,11 +125,11 @@ public class HibernateUtil
 	 * @param useSessionHolder - select wether to use a SessionHolder for binding or not
 	 * @return the session opened
 	 */
-	public static Session openBoundSession(boolean useSessionHolder)
+	public static Session openBoundSession()
 	{
 		Session session = sessionFactory.openSession();
 		session.setFlushMode(FlushMode.COMMIT);
-		TransactionSynchronizationManager.bindResource(sessionFactory, useSessionHolder ? new SessionHolder(session) : session);
+		TransactionSynchronizationManager.bindResource(sessionFactory, new SessionHolder(session));
 		return session;
 	}
 
@@ -235,22 +234,6 @@ public class HibernateUtil
 			logger.error(e.getMessage());
 			return id;
 		}
-		// hibernate performs type checks for the id when calling Session#get(..).
-		// But since we provide not primitive ids here type check will fail for Integer instead of
-		// Long for example. So we do a quick type check and a conversion if required.
-		// @see checkIdType(...)
-		// if(Identifiable.class.isAssignableFrom(clazz))
-		// {
-		// try
-		// {
-		// return checkIdType0((Class<? extends Identifiable<?>>) clazz, id);
-		// }
-		// catch(ConversionException e)
-		// {
-		// logger.error(e.getMessage());
-		// }
-		// }
-		// return id;
 	}
 
 	/**
@@ -265,39 +248,5 @@ public class HibernateUtil
 		if(!idTypes.containsKey(clazz))
 			idTypes.put(clazz, sessionFactory.getClassMetadata(clazz).getIdentifierType().getReturnedClass());
 		return idTypes.get(clazz);
-	}
-
-	/**
-	 * Check an id for a required type and convert it if necessary.<br>
-	 * This check is helpful before calling {@link Session#get(Class, Serializable)} from hibernate,
-	 * since hibernate will perform a id check as well, which may fail for some combinations which
-	 * are not really expected to fail (e.g. Integer vs. Long).
-	 * 
-	 * @see ReflectionsUtil#convert(Class, Object)
-	 * @param clazz - the model type (used to determine the required id
-	 * @param id - the given id
-	 * @return the converted id
-	 * @throws ConversionException if conversion fails
-	 */
-	@SuppressWarnings("unchecked")
-	/* package */static <T extends Identifiable<PK>, PK extends Serializable> PK checkIdType0(Class<T> clazz, Serializable id)
-			throws ConversionException
-	{
-		Class<PK> requiredType;
-		if(idTypes.containsKey(clazz))
-		{
-			requiredType = (Class<PK>) idTypes.get(clazz);
-		}
-		else
-		{
-			requiredType = (Class<PK>) ReflectionsUtil.getActualTypeArguments(clazz, Identifiable.class)[0];
-			idTypes.put(clazz, requiredType);
-		}
-		// logger.debug("checking id " + id + " (" + id.getClass().getName() + ") for type " +
-		// requiredType.getName());
-		// if(requiredType.isAssignableFrom(id.getClass()))
-		if(requiredType.isInstance(id))
-			return (PK) id;
-		return ReflectionsUtil.convert(requiredType, id);
 	}
 }
