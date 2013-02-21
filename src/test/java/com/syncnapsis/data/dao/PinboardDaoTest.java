@@ -14,15 +14,21 @@
  */
 package com.syncnapsis.data.dao;
 
+import java.util.Date;
+
 import com.syncnapsis.data.dao.hibernate.PinboardDaoHibernate;
 import com.syncnapsis.data.model.Pinboard;
+import com.syncnapsis.data.service.UserManager;
+import com.syncnapsis.providers.TimeProvider;
 import com.syncnapsis.tests.GenericNameDaoTestCase;
 import com.syncnapsis.tests.annotations.TestCoversClasses;
 
 @TestCoversClasses({PinboardDao.class, PinboardDaoHibernate.class})
 public class PinboardDaoTest extends GenericNameDaoTestCase<Pinboard, Long>
 {
+	private UserManager userManager;
 	private PinboardDao pinboardDao;
+	private TimeProvider timeProvider;
 	
 	@Override
 	protected void setUp() throws Exception
@@ -33,6 +39,9 @@ public class PinboardDaoTest extends GenericNameDaoTestCase<Pinboard, Long>
 		Long existingId = pinboardDao.getByName(existingName).getId();
 		
 		Pinboard pinboard = new Pinboard();
+		pinboard.setCreationDate(new Date(timeProvider.get()));
+		pinboard.setName("testboard");		
+		pinboard.setCreator(userManager.getAll().get(0));
 		// set individual properties here
 		
 		setEntity(pinboard);

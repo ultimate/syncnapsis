@@ -11,7 +11,6 @@
  */
 package com.syncnapsis.websockets.service;
 
-import org.hibernate.FlushMode;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
@@ -30,7 +29,6 @@ public class OpenSessionInViewServiceTest extends BaseSpringContextTestCase
 	public void testIntercept() throws Exception
 	{
 		OpenSessionInViewService s = new OpenSessionInViewService();
-		s.setFlushMode(FlushMode.AUTO);
 		s.setSessionFactory(sessionFactory);
 		// s.setDelegate(delegate);
 
@@ -46,10 +44,14 @@ public class OpenSessionInViewServiceTest extends BaseSpringContextTestCase
 			}
 		};
 		
-		// close session to force new one
-		Session before = HibernateUtil.currentSession();
-		before.close();
-		assertFalse(before.isOpen());
+		Session before = null;
+		if(HibernateUtil.isSessionBound())
+		{
+			// close session to force new one
+			before = HibernateUtil.currentSession();
+			before.close();
+			assertFalse(before.isOpen());
+		}
 		
 		// this is the current session
 		Session session = s.intercept(i);

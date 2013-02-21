@@ -62,6 +62,8 @@ public class ParameterDaoTest extends GenericNameDaoTestCase<Parameter, Long>
 
 		parameterDao.save(string);
 
+		flush();
+		
 		assertEquals(strValue, parameterDao.getString(string.getName()));
 
 		logger.debug("testing numbers...");
@@ -72,6 +74,8 @@ public class ParameterDaoTest extends GenericNameDaoTestCase<Parameter, Long>
 		number.setValue(numValue.toString());
 
 		parameterDao.save(number);
+		
+		flush();
 
 		assertEquals((Integer) numValue.intValue(), parameterDao.getInteger(number.getName()));
 		assertEquals((Long) numValue.longValue(), parameterDao.getLong(number.getName()));
@@ -87,14 +91,17 @@ public class ParameterDaoTest extends GenericNameDaoTestCase<Parameter, Long>
 
 		bool.setValue("true");
 		bool = parameterDao.save(bool);
+		flush();
 		assertEquals((Boolean) true, parameterDao.getBoolean(bool.getName()));
 
 		bool.setValue("false");
 		bool = parameterDao.save(bool);
+		flush();
 		assertEquals((Boolean) false, parameterDao.getBoolean(bool.getName()));
 
 		bool.setValue("xyz");
 		bool = parameterDao.save(bool);
+		flush();
 		assertEquals((Boolean) false, parameterDao.getBoolean(bool.getName()));
 
 		logger.debug("testing date...");
@@ -105,6 +112,7 @@ public class ParameterDaoTest extends GenericNameDaoTestCase<Parameter, Long>
 		date.setValue(EnumDateFormat.getDefault().getDateFormat().format(dateValue));
 
 		parameterDao.save(date);
+		flush();
 
 		assertEquals(dateValue.getTime(), parameterDao.getDate(date.getName()).getTime());
 		assertEquals(dateValue, parameterDao.getDate(date.getName()));

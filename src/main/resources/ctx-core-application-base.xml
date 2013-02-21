@@ -162,7 +162,6 @@
 	<bean id="openSessionInViewService" class="com.syncnapsis.websockets.service.OpenSessionInViewService">
 		<property name="interceptedService" ref="rpcService" />
 		<property name="sessionFactory" ref="sessionFactory" />
-		<property name="flushMode" value="COMMIT" />
 	</bean>
 	
     <!-- =================================================================== -->

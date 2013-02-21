@@ -16,6 +16,7 @@ package com.syncnapsis.data.dao;
 
 import com.syncnapsis.data.dao.hibernate.ActionDaoHibernate;
 import com.syncnapsis.data.model.Action;
+import com.syncnapsis.data.model.help.RPCCall;
 import com.syncnapsis.tests.GenericNameDaoTestCase;
 import com.syncnapsis.tests.annotations.TestCoversClasses;
 import com.syncnapsis.utils.serialization.JacksonStringSerializer;
@@ -37,6 +38,11 @@ public class ActionDaoTest extends GenericNameDaoTestCase<Action, Long>
 		String existingName = actionDao.get(existingId).getCode();
 
 		Action action = new Action();
+		action.setCode("code");
+		action.setRPCCall(new RPCCall());
+		action.getRPCCall().setObject("object");
+		action.getRPCCall().setMethod("method");
+		action.getRPCCall().setArgs("[]");
 		// set individual properties here
 
 		setEntity(action);

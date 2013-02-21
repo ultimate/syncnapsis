@@ -140,6 +140,8 @@ public class NewsDaoTest extends BaseDaoTestCase
 		news4.setAuthor(userDao.get(0L));
 
 		news3 = newsDao.save(news3);
+		
+		flush();
 
 		EnumNewsAge maxAge = EnumNewsAge.length1;
 		long maxAgeValue = parameterDao.getLong(maxAge.getParameterKey()) * 1000;

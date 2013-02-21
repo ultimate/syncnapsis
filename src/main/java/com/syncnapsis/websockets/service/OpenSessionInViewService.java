@@ -13,18 +13,13 @@ package com.syncnapsis.websockets.service;
 
 import java.lang.reflect.InvocationTargetException;
 
-import org.hibernate.FlushMode;
-import org.hibernate.HibernateException;
-import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.InitializingBean;
-import org.springframework.dao.DataAccessResourceFailureException;
-import org.springframework.orm.hibernate4.SessionFactoryUtils;
-import org.springframework.orm.hibernate4.SessionHolder;
 import org.springframework.orm.hibernate4.support.OpenSessionInViewFilter;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
 import org.springframework.util.Assert;
 
+import com.syncnapsis.utils.HibernateUtil;
 import com.syncnapsis.utils.reflections.Invocation;
 
 /**
@@ -40,11 +35,6 @@ public class OpenSessionInViewService extends InterceptorService implements Init
 	 * The SessionFactory to use
 	 */
 	protected SessionFactory	sessionFactory;
-
-	/**
-	 * The FlushMode used for the hibernate session
-	 */
-	protected FlushMode			flushMode;
 
 	/**
 	 * The SessionFactory to use
@@ -66,26 +56,6 @@ public class OpenSessionInViewService extends InterceptorService implements Init
 		this.sessionFactory = sessionFactory;
 	}
 
-	/**
-	 * The FlushMode used for the hibernate session
-	 * 
-	 * @return flushMode
-	 */
-	public FlushMode getFlushMode()
-	{
-		return flushMode;
-	}
-
-	/**
-	 * The FlushMode used for the hibernate session
-	 * 
-	 * @param flushMode - the FlushMode
-	 */
-	public void setFlushMode(FlushMode flushMode)
-	{
-		this.flushMode = flushMode;
-	}
-
 	/*
 	 * (non-Javadoc)
 	 * @see com.syncnapsis.websockets.service.BaseService#afterPropertiesSet()
@@ -95,7 +65,6 @@ public class OpenSessionInViewService extends InterceptorService implements Init
 	{
 		super.afterPropertiesSet();
 		Assert.notNull(sessionFactory, "sessionFactory must not be null!");
-		Assert.notNull(flushMode, "flushMode must not be null!");
 	}
 
 	/*
@@ -105,8 +74,7 @@ public class OpenSessionInViewService extends InterceptorService implements Init
 	@Override
 	public <T> T intercept(Invocation<T> invocation) throws InvocationTargetException
 	{
-		boolean participate = false;
-
+		boolean participate = false;		
 		if(TransactionSynchronizationManager.hasResource(sessionFactory))
 		{
 			participate = true;
@@ -114,8 +82,7 @@ public class OpenSessionInViewService extends InterceptorService implements Init
 		else
 		{
 			logger.debug("Opening Hibernate Session in OpenSessionInViewService");
-			Session session = openSession(sessionFactory);
-			TransactionSynchronizationManager.bindResource(sessionFactory, new SessionHolder(session));
+			HibernateUtil.openBoundSession();
 		}
 		T result;
 		try
@@ -126,36 +93,10 @@ public class OpenSessionInViewService extends InterceptorService implements Init
 		{
 			if(!participate)
 			{
-				SessionHolder sessionHolder = (SessionHolder) TransactionSynchronizationManager.unbindResource(sessionFactory);
 				logger.debug("Closing Hibernate Session in OpenSessionInViewService");
-				SessionFactoryUtils.closeSession(sessionHolder.getSession());
+				HibernateUtil.closeBoundSession();
 			}
 		}
 		return result;
-	}
-
-	/**
-	 * Open a Session for the SessionFactory that this filter uses.
-	 * <p>
-	 * The default implementation delegates to the <code>SessionFactory.openSession</code> method
-	 * and sets the <code>Session</code>'s flush mode to the requested flushMode.
-	 * 
-	 * @see OpenSessionInViewService#setFlushMode(FlushMode)
-	 * @param sessionFactory - the SessionFactory that this filter uses
-	 * @return the Session to use
-	 * @throws DataAccessResourceFailureException if the Session could not be created
-	 */
-	protected Session openSession(SessionFactory sessionFactory) throws DataAccessResourceFailureException
-	{
-		try
-		{
-			Session session = SessionFactoryUtils.openSession(sessionFactory);
-			session.setFlushMode(flushMode);
-			return session;
-		}
-		catch(HibernateException ex)
-		{
-			throw new DataAccessResourceFailureException("Could not open Hibernate Session", ex);
-		}
 	}
 }
