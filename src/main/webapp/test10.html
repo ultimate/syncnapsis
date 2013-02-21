@@ -675,6 +675,29 @@
 					},
 					parameters: 1,
 				},
+				spectrum : {
+					getRGB: function(param) {
+						var bound1 = 1/6;	
+						var bound2 = 2/6;	
+						var bound3 = 3/6;	
+						var bound4 = 4/6;		
+						var bound5 = 5/6;
+							
+						if(param < bound1)
+							return {r: 1-param/bound1, g: 0, b: 1};
+						else if(param < bound2)
+							return {r: 0, g: (param-bound1)/(bound2-bound1), b: 1};
+						else if(param < bound3)
+							return {r: 0, g: 1, b: 1-(param-bound2)/(bound3-bound2)};
+						else if(param < bound4)
+							return {r: (param-bound3)/(bound4-bound3), g: 1, b: 0};
+						else if(param < bound5)
+							return {r: 1, g: 1-(param-bound4)/(bound5-bound4), b: 0};
+						else
+							return {r: 1, g: 0, b: (param-bound5)/(1-bound5)};
+					},
+					parameters: 1,
+				},
 				bluewhite : {
 					getRGB: function(param) {
 						return {r: param, g: param, b: 1 };
