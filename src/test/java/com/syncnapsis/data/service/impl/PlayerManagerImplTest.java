@@ -294,6 +294,8 @@ public class PlayerManagerImplTest extends GenericManagerImplTestCase<Player, Lo
 		String password = "a_password";
 
 		Player newPlayer = playerManager.register(username, email, password, password);
+		
+		flush();
 
 		assertNotNull(newPlayer);
 		assertNotNull(newPlayer.getUser());
