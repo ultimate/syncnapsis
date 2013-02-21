@@ -24,6 +24,7 @@ import com.syncnapsis.data.dao.GenericDao;
 import com.syncnapsis.data.model.base.ActivatableInstance;
 import com.syncnapsis.data.model.base.BaseObject;
 import com.syncnapsis.tests.annotations.TestCoversMethods;
+import com.syncnapsis.utils.HibernateUtil;
 
 public abstract class GenericDaoTestCase<T extends BaseObject<PK>, PK extends Serializable> extends BaseDaoTestCase
 {
@@ -165,10 +166,12 @@ public abstract class GenericDaoTestCase<T extends BaseObject<PK>, PK extends Se
 		
 		T entity2 = result.get(0);
 
-		if(entity instanceof ActivatableInstance)
+		if(entity2 instanceof ActivatableInstance)
 		{
 			((ActivatableInstance) entity2).setActivated(false);
 			entity2 = genericDao.save(entity2);
+			// we are within a surrounding test-transaction so we need to flush
+			HibernateUtil.currentSession().flush();
 			newSize--;
 		}
 
@@ -178,10 +181,12 @@ public abstract class GenericDaoTestCase<T extends BaseObject<PK>, PK extends Se
 		logger.debug(result.size() + " entities found");
 		assertTrue(result.size() == newSize);
 
-		if(entity instanceof ActivatableInstance)
+		if(entity2 instanceof ActivatableInstance)
 		{
 			((ActivatableInstance) entity2).setActivated(true);
 			entity2 = genericDao.save(entity2);
+			// we are within a surrounding test-transaction so we need to flush
+			HibernateUtil.currentSession().flush();
 		}
 	}
 }
