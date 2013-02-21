@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="de">
+	<!--
+		- replaced the cubes with a Galaxy out of particles! (unfortunately particles are for CanvasRenderers only :( )
+		- make it use a particle system (so we can use a WebGLRenderer again!)
+	-->
+	<meta charset="utf-8">
+	<head>
+		<script type="text/javascript" src="scripts/three.min.js"></script>
+		<script type="text/javascript" src="sectors-0.1-medium.js"></script>
+		<script type="text/javascript">
+		<!--
+			var camera, scene, renderer, projector;
+			//var geometry, material, mesh;
+			
+			var mesh,mesh2;
+			
+			var mouse = { x: 0, y: 0 };
+			
+			var cameraRadius = 2000,cameraRadiusTarget = 2000;
+			
+			var colorSelected = new THREE.MeshBasicMaterial( { color: 0x000000, wireframe: true } );
+			
+			var colorInactive = new THREE.MeshBasicMaterial( { color: 0x999999, wireframe: true } );
+			
+			var colorNeighbor = new THREE.MeshBasicMaterial( { color: 0xff0099, wireframe: true } );
+
+			var colorPlanes = new THREE.MeshBasicMaterial( { color: 0x00ff99 , opacity:0.6 , wireframe: true } );
+			
+			var imgTexture;
+			
+			var activeMesh = null;
+			
+			
+			document.addEventListener("DOMContentLoaded", function(){
+	
+				init();
+				animate();
+			
+			
+			}, false);
+			
+			
+			document.addEventListener( 'mousedown', onClick, false );
+			
+			document.addEventListener( 'mouseup', clearColors, false );
+			
+			
+			
+			document.addEventListener( 'DOMMouseScroll', mousewheel, false );
+			
+			
+			function mousewheel(e){
+			
+				e.preventDefault();
+			
+				var e = window.event || e;
+				var delta = Math.max(-1, Math.min(1, (e.wheelDelta || -e.detail)));
+		
+				cameraRadiusTarget = cameraRadius + delta * 30;
+				
+				
+		//sq.e.style.width = Math.max(sq.zoom, Math.min(sq.nw, sq.e.width + (sq.zoom * delta))) + "px";
+
+				return false;
+			
+			};
+			
+			
+			
+
+			function onClick( event ) {
+
+				event.preventDefault();
+
+				mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
+				mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+				
+				
+				var vector = new THREE.Vector3( mouse.x, mouse.y, 1 );
+				
+				projector.unprojectVector( vector, camera );
+
+				var ray = new THREE.Ray( camera.position, vector.subSelf( camera.position ).normalize() );
+
+				var intersects = ray.intersectObjects( allCubes );
+
+				if ( intersects.length > 0 ) {
+				
+					//findNeighbors(intersects[0].point);
+					
+					findNeighbors(intersects[0].object.position);
+			
+			
+					//console.log(intersects[0].object.position);
+					
+					intersects[0].object.material = colorSelected;
+					
+					activeMesh = intersects[0].object;
+					
+					cameraOffset = [activeMesh.position.x,activeMesh.position.y,activeMesh.position.z];
+					
+
+					
+					
+					//console.log('coords_rev: ',(coords[0] + 1)/2,-(coords[1] - 1)/2);
+					
+
+				}
+
+			};
+			
+			function findNeighbors(point) {
+
+				var distances = [];
+				
+				for(var i=0;i<allCubes.length;i++) {
+				
+					var distance = Math.sqrt(  squareIt(allCubes[i].position.x - point.x)  +  squareIt(allCubes[i].position.y - point.y) + squareIt(allCubes[i].position.z - point.z)           );
+				
+					distances.push({distance:distance,object:allCubes[i]});
+				
+				};
+				
+				
+				distances.sort(compare);
+
+				for(var i=0;i<=5;i++) {
+				
+					distances[i].object.material = colorNeighbor;
+					
+					var currentColor = 0xff9900;
+					
+					//var currentColor = 0xffffff + parseInt(Math.floor(Math.random()*16777215).toString(16),16);
+					
+					//var currentColor = 0xffffff - parseInt((5592405 - ( i * 51)).toString(16),16);
+					
+				
+					var lineMaterial = new THREE.LineBasicMaterial({ color: currentColor });
+					
+					var geometry = new THREE.Geometry();
+					
+					geometry.vertices.push(new THREE.Vector3(point.x, point.y, point.z));
+					geometry.vertices.push(new THREE.Vector3(distances[i].object.position.x, distances[i].object.position.y, distances[i].object.position.z));
+					
+					var line = new THREE.Line(geometry, lineMaterial);
+					
+					scene.add(line);
+					
+				
+				}
+	
+			};
+			
+			
+			
+			
+			
+			function squareIt(number) {
+				return number * number;
+			}
+
+			function compare(a,b) {
+			  if (a.distance < b.distance)
+				 return -1;
+			  if (a.distance > b.distance)
+				return 1;
+			  return 0;
+			}			
+			
+			
+			
+			function clearColors() {
+			
+				for(var i=0;i<allCubes.length;i++) {
+				
+					allCubes[i].material = colorInactive;
+				
+				};
+			
+			};
+			
+			
+			function init() {
+			
+				    imgTexture = new THREE.MeshBasicMaterial({ //CHANGED to MeshBasicMaterial
+						map:THREE.ImageUtils.loadTexture('test.png')
+					});
+					
+					imgTexture.map.needsUpdate = true; //ADDED
+
+
+				camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 10000 );
+				camera.position.z = cameraRadius;
+
+				scene = new THREE.Scene();
+
+				/*
+				
+				var geometry = new THREE.CubeGeometry( 100, 100, 100 );
+				var material = new THREE.MeshBasicMaterial( { color: 0xff9900, wireframe: true } );
+
+				mesh = new THREE.Mesh( geometry, material );
+				
+				scene.add( mesh );
+				*/
+				
+				createCubes();
+				
+				createPlanes();
+				
+				//createTestCubes();
+
+				projector = new THREE.Projector();
+
+
+				renderer = new THREE.WebGLRenderer({antialias: true});
+				//renderer = new THREE.CanvasRenderer({antialias: true});
+				renderer.setSize( window.innerWidth, window.innerHeight );
+
+				document.body.appendChild(renderer.domElement );
+				
+				
+				
+				var testDiv = document.createElement('div');
+				testDiv.id = 'testDiv';
+				
+				document.body.appendChild(testDiv);
+				
+				
+			};
+			
+			
+			var allCubes = new Array();
+			
+			function createCubes() {			
+				allCubes = createSystems(sectors, 1);
+				for(var i = 0; i < allCubes.length; i++)
+				{
+					scene.add(allCubes[i]);
+				}			
+			};		
+			
+			function createPlanes() {
+			
+				var count = 10;
+				
+				for(var i=0;i<count;i++) {
+				
+			
+					var geometry = new THREE.PlaneGeometry(2000, 2000);
+					
+					var material = materials.planes;
+					
+					//var material = imgTexture;
+
+					var mesh = new THREE.Mesh( geometry, material );
+			
+					scene.add( mesh );
+					
+					mesh.position.y = 200 * i - 1000;
+					
+					mesh.rotation.x = Math.PI / 2;
+					
+					if(i < 5) {
+					
+						mesh.rotation.y = Math.PI;
+					
+					
+					};
+			
+				};
+			};			
+			
+			
+			var flip = 0;
+
+			var circleAngle = 0;
+			
+			var cameraOffset = [0,0,0];
+			
+			function animate() {
+
+				// note: three.js includes requestAnimationFrame shim
+				requestAnimationFrame( animate );
+				
+				
+				
+				//console.log(camera.position.z);
+				
+				/*
+				
+				
+				if( flip == 0 ) {
+				
+					camera.position.z -= 10;
+					
+					if(camera.position.z < 100) {
+					
+						flip = 1;
+					
+					}
+				
+				} else {
+				
+					camera.position.z += 10;
+					
+					if(camera.position.z > 1000) {
+					
+						flip = 0;
+					
+					}
+					
+					
+				}
+				
+				*/
+				
+				//camera.rotation.x += 0.01;
+
+					
+					if(cameraRadius != cameraRadiusTarget ) {
+					
+						if(cameraRadiusTarget > cameraRadius) {
+						
+							cameraRadius += 1
+						
+						} 
+						
+						if(cameraRadiusTarget < cameraRadius) {
+						
+							cameraRadius -= 1
+						
+						} 
+						
+					};
+
+
+					var x = cameraRadius * Math.cos(circleAngle); 
+					var y = cameraRadius * Math.sin(circleAngle); 
+				
+				
+					/*
+					camera.position.x = x;
+					
+					camera.position.z = y;				
+					*/
+				
+					var targetX = x + cameraOffset[0];
+					
+					var targetY = cameraOffset[1];
+				
+					var targetZ = y + cameraOffset[2];
+					
+					
+	
+					camera.position.x = x + cameraOffset[0];
+				
+					camera.position.y = cameraOffset[1];
+				
+					camera.position.z = y + cameraOffset[2];
+					
+					
+				
+				if( circleAngle < 360 ) {
+
+					circleAngle += 0.005;
+				
+				} else {
+				
+					circleAngle = 0;
+
+					circleAngle += 0.005;
+				
+				}
+				
+				
+				//var angle = circleAngle * ( Math.PI / 180);
+			
+				camera.rotation.y  = - circleAngle + 77;
+				
+				/*
+				for(var i=0;i<allCubes.length;i++) {
+				
+					allCubes[i].rotation.x += 0.01;
+					allCubes[i].rotation.y += 0.01;
+					
+				}
+				*/
+				
+				renderer.render( scene, camera );
+				
+				if(activeMesh != null) {
+				
+					var coords = toScreenXY(activeMesh.position,camera);
+					
+					var testC = document.getElementById('testDiv');
+					
+					
+					testC.style.left = (coords[0] * window.innerWidth - 50) + 'px';
+					
+					testC.style.top = (coords[1] * window.innerHeight - 50) + 'px';
+					
+					testC.innerHTML = activeMesh.id;
+					
+					
+				
+				};
+			
+			}
+			
+			var materials = {
+				initial: new THREE.MeshBasicMaterial( { color: 0xff0000, wireframe: true } ),
+				selected: new THREE.MeshBasicMaterial( { color: 0x000000, wireframe: true } ),
+				neighbor: new THREE.MeshBasicMaterial( { color: 0xff0099, wireframe: true } ),
+				//inactive: new THREE.MeshBasicMaterial( { color: 0x999999, wireframe: true } ),
+				inactive: new THREE.ParticleBasicMaterial({ color: 0xFFFFFF, size: 1 }),
+				planes: new THREE.MeshBasicMaterial( { color: 0x00ff99 , opacity:0.6 , wireframe: true } )
+			};
+			
+			getSystemMaterial = function(selected, linked)
+			{
+				if(!selected && !linked)
+					return materials.inactive;
+				if(selected)
+					return materials.selected;
+				if(linked)
+					return materials.neighbor
+				return materials.initial;
+			};
+			
+			createSystems = function(sectors, stepSize)
+			{
+				if(stepSize == undefined)
+					stepSize = 1;
+				var systems = new Array();
+				// TODO refactor for particle system
+				var sector;
+				var geometry;
+				var material;
+				var particle;
+				var particles = new THREE.Geometry();
+				for(var i = 0; i < sectors.length; i += stepSize)
+				{
+					sector = parseSector(sectors[i]);					
+					geometry = new THREE.CubeGeometry(30, 30, 30);
+					material = getSystemMaterial(false, false);
+					
+					particle = new THREE.Vector3(sector.x, sector.y, sector.z);
+					particles.vertices.push(particle);
+				}
+				var particleSystem = new THREE.ParticleSystem(particles, getSystemMaterial(false, false));
+				scene.add(particleSystem);
+				return systems;
+			};
+			
+			parseSector = function(sector)
+			{
+				return {x: sector[0], y: sector[1], z: sector[2]} 
+			};
+
+			GalaxyInfo = function(minX, maxX, minY, maxY, minZ, maxZ)
+			{
+				this.minX = minX;
+				this.maxX = maxX;
+				this.minY = minY;
+				this.maxY = maxY;
+				this.minZ = minZ;
+				this.maxZ = maxZ;
+				this.boundX = getBound(minX, maxX);
+				this.boundY = getBound(minY, maxY);
+				this.boundZ = getBound(minZ, maxZ);
+			};
+			
+			getBound = function(min, max)
+			{
+				var absMax = Math.max(Math.abs(min), Math.abs(max));
+				var leadingDigit = parseInt((absMax + "").substring(0,1));
+				var digits = (absMax + "").length;
+				var base10 = Math.pow(10, digits-1);
+				return (leadingDigit+1)*base10;
+			};
+
+			toScreenXY = function(position, camera)
+			{
+				var pos = position.clone();
+				projScreenMat = new THREE.Matrix4();
+				projScreenMat.multiply( camera.projectionMatrix, camera.matrixWorldInverse );
+				projScreenMat.multiplyVector3( pos );
+				return [(pos.x + 1)/2,-(pos.y - 1)/2];
+			};		
+		//-->
+		</script>
+
+		<style type="text/css">
+		<!--		
+			#testDiv {		
+				position:absolute;
+				width:100px;
+				height:100px;
+				border:solid 3px #09f;
+				color:#09f;
+				font-family:arial,sans;
+				border-radius:50px;		
+			}
+			body {
+				background: #000000;
+			}
+			#control {
+				position: absolute;
+				top: 0px;
+				left: 0px;
+				width: 200px;
+				height: 300px;
+				background: #111111;
+				color: #AAAAAA;
+				border: 1px solid #888888;
+			}
+		-->
+		</style>		
+	</head>
+	<body>
+		<div id="control">
+			Show-Planes?<br>
+			<input type="checkbox" id="planesXY" checked="checked"/> XY &nbsp;
+			<input type="checkbox" id="planesXZ" checked="checked"/> XZ &nbsp;
+			<input type="checkbox" id="planesYZ" checked="checked"/> YZ &nbsp;
+			<br>
+			Rotate?<br>
+			<input type="radio" name="rotate" value="x" checked="checked"/> X &nbsp;
+			<input type="radio" name="rotate" value="y" /> Y &nbsp;
+			<input type="radio" name="rotate" value="z" /> Z &nbsp;
+			<input type="radio" name="rotate" value="-" /> still &nbsp;
+			<br>
+		</div>
+		<!-- generated by JS -->
+	</body>
+</html>
