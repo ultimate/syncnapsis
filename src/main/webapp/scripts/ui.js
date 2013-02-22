@@ -111,6 +111,8 @@ UIManager.prototype.populateLocaleChooser = function()
 	var option;
 	for( var i in lang.EnumLocale)
 	{
+		if(typeof(lang.EnumLocale[i]) == Reflections.type.FUNCTION)
+			continue;
 		option = document.createElement("option");
 		option.value = i;
 		option.text = lang.EnumLocale[i];

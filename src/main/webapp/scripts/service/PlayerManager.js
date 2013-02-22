@@ -32,4 +32,9 @@ PlayerManager = function()
 	{
 		// return Player
 	};
+	
+	this.get = function(id)
+	{
+		// return Player
+	};
 };
