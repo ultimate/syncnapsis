@@ -12,6 +12,7 @@
  * You should have received a copy of the GNU General Plublic License along with this program;
  * if not, see <http://www.gnu.org/licenses/>.
  */
+//@requires("GenericManager")
 //@requires("UI")
 
 PlayerManager = function()
@@ -32,9 +33,6 @@ PlayerManager = function()
 	{
 		// return Player
 	};
-	
-	this.get = function(id)
-	{
-		// return Player
-	};
 };
+
+PlayerManager.prototype = new GenericManager();

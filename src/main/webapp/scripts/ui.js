@@ -16,6 +16,7 @@
 // @requires("Styles")
 // @requires("Events")
 // @requires("Lang")
+// @requires("application-base")
 var UI = {};
 
 UI.constants = {};
@@ -68,8 +69,8 @@ UIManager.prototype.onLogin = function(player)
 	{		
 		// store the current player
 		this.currentPlayer = player;
-		// set the player name in the top bar
-		document.getElementById(UI.constants.LABEL_ID_PLAYERNAME).innerHTML = player.user.username;
+		// set the player name in the top bar (after loading the user)
+		server.entityManager.load(player.user, this.onUserLoaded);
 		// change language to users selection
 		server.uiManager.selectLocale(player.user.locale);
 		// switch ui to logged-in menu
@@ -92,6 +93,13 @@ UIManager.prototype.onLogout = function(success)
 	document.getElementById("bar_top_right_loggedin").style.display = "none";
 	document.getElementById("bar_top_left_loggedout").style.display = "block";
 	document.getElementById("bar_top_right_loggedout").style.display = "block";
+	this.onUserLoaded({username: "anonymous"});
+};
+
+UIManager.prototype.onUserLoaded = function(user)
+{
+	// set the player name in the top bar
+	document.getElementById(UI.constants.LABEL_ID_PLAYERNAME).innerHTML = user.username;
 };
 
 UIManager.prototype.hideOverlay = function()

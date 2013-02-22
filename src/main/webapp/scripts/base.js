@@ -40,6 +40,7 @@ connect = function()
 	// init client-side managers
 	client.uiManager = new UIManager();
 	// init server-side managers as proxies (may use same "class/interface") 
+	server.userManager = Proxies.newProxyInstance(GenericManager, genericRPCInvocationHandler); // currently GenericManager is sufficient
 	server.playerManager = Proxies.newProxyInstance(PlayerManager, genericRPCInvocationHandler);
 	server.uiManager = Proxies.newProxyInstance(ServerUIManager, genericRPCInvocationHandler);
 	// init additional services
