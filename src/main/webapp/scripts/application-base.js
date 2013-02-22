@@ -20,10 +20,22 @@ EntityManager = function(server)
 		throw new Error("server must not be null!");
 	var _server = server;
 	
-	// TODO remove type and get if from the entity
-	this.load = function(entity, type, callback)
+	this.getType = function(entity)
 	{
-		var manager = type + "Manager";
+		return entity["j_type"];
+	};
+	
+	this.getManagerNameForType = function(type)
+	{
+		type = type.substring(type.lastIndexOf(".")+1);
+		type = type.substring(0,1).toLowerCase() + type.substring(1);
+		return type + "Manager";
+	};
+	
+	this.load = function(entity, callback)
+	{
+		var type = this.getType(entity);
+		var manager = this.getManagerNameForType(type);
 		if(_server[manager] == null)
 			throw new Error("required manager '" + manager + "' not found for type '" + type + "'");
 		_server[manager].get(entity.id, function(result) { entity.merge(result); if(callback != undefined) (callback)(entity); } );
