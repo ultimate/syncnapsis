@@ -293,13 +293,14 @@
 					size: 20,
 					map: THREE.ImageUtils.loadTexture("img/star.png"),
 					vertexColors: true,
+					transparent: true,
 				}),
 				planesXY: new THREE.MeshBasicMaterial( { color: 0x00ff99 , opacity:0.6 , wireframe: true } ),
 				planesXZ: new THREE.MeshBasicMaterial( { color: 0xff9900 , opacity:0.6 , wireframe: true } ),
 				planesYZ: new THREE.MeshBasicMaterial( { color: 0x9900ff , opacity:0.6 , wireframe: true } ),
 				planesInvisible: new THREE.MeshBasicMaterial( { visible: false} ),
 			};
-			
+					
 			getSystemMaterial = function(selected, linked)
 			{
 				if(!selected && !linked)
