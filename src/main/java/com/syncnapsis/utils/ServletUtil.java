@@ -14,6 +14,7 @@ package com.syncnapsis.utils;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Enumeration;
+import java.util.StringTokenizer;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -50,6 +51,11 @@ public abstract class ServletUtil
 	 * Session attribute name for information copied from the request: User-Agent
 	 */
 	public static final String				ATTRIBUTE_USER_AGENT	= "User-Agent";
+	
+	/**
+	 * Separators for multi in one headers
+	 */
+	public static final String				HEADER_SEPARATOR	= " \t\n\r\f,";
 	/**
 	 * Logger-Instance
 	 */
@@ -92,18 +98,28 @@ public abstract class ServletUtil
 		sb.append("  Headers:\n");
 		Enumeration<String> headerNames = req.getHeaderNames();
 		String h;
+		Enumeration<String> headerValues;
 		while(headerNames.hasMoreElements())
 		{
 			h = headerNames.nextElement();
-			sb.append("    " + h + ": " + req.getHeader(h) + "\n");
+			headerValues = req.getHeaders(h);
+			sb.append("    " + h + ":");
+			while(headerValues.hasMoreElements())
+				sb.append(" " + headerValues.nextElement());
+			sb.append("\n");
 		}
 		sb.append("  Parameters:\n");
 		Enumeration<String> parameterNames = req.getParameterNames();
 		String p;
+		String[] parameters;
 		while(parameterNames.hasMoreElements())
 		{
 			p = parameterNames.nextElement();
-			sb.append("    " + p + ": " + req.getParameter(p) + "\n");
+			parameters = req.getParameterValues(p);
+			sb.append("    " + p + ":");
+			for(String parameter: parameters)
+				sb.append(" " + parameter);
+			sb.append("\n");
 		}
 		sb.append("  Content:\n");
 		try
@@ -283,5 +299,45 @@ public abstract class ServletUtil
 	public static String getUserAgent(HttpSession session)
 	{
 		return (String) session.getAttribute(ATTRIBUTE_USER_AGENT);
+	}
+
+	/**
+	 * Check wether a header of the given HttpServletRequest contains a required header value.
+	 * 
+	 * @param request - the HttpServletRequest
+	 * @param headerName - the header to check
+	 * @param requiredValue - the value to look for
+	 * @param ignoreCase - wether to ignore case on comparison
+	 * @return true or false
+	 */
+	public static boolean headerContainsValue(HttpServletRequest request, String headerName, String requiredValue, boolean ignoreCase)
+	{
+		Enumeration<String> headerValues = request.getHeaders(headerName);
+		String value;
+		StringTokenizer st;
+		String valueToken;
+		while(headerValues.hasMoreElements())
+		{
+			value = headerValues.nextElement();
+			if(ignoreCase && requiredValue.equalsIgnoreCase(value))
+				return true;
+			else if(!ignoreCase && requiredValue.equals(value))
+				return true;
+			
+			// try again for tokens
+			st = new StringTokenizer(value, HEADER_SEPARATOR);
+			if(st.countTokens() > 1)
+			{
+				while(st.hasMoreTokens())
+				{
+					valueToken = st.nextToken();
+					if(ignoreCase && requiredValue.equalsIgnoreCase(valueToken))
+						return true;
+					else if(!ignoreCase && requiredValue.equals(valueToken))
+						return true;
+				}
+			}
+		}
+		return false;
 	}
 }

@@ -180,4 +180,41 @@ public class ServletUtilTest extends LoggerTestCase
 		
 		assertEquals(agent, ServletUtil.getUserAgent(sess));
 	}
+	
+	public void testHeaderContainsValue() throws Exception
+	{
+		MockHttpServletRequest request = new MockHttpServletRequest();
+		
+		String header = "my-test-header";
+		String value1 = "value";
+		String value2 = "VaLuE"; 
+		String value3 = "VALUE"; 
+		String value4a = "val";
+		String value4b = "4";
+		String value4 = value4a + ", " + value4b;
+		String valueN = "nothing"; 
+		
+		request.addHeader(header, value1);
+		request.addHeader(header, value2);
+		request.addHeader(header, value4);
+		
+		assertTrue(ServletUtil.headerContainsValue(request, header, value1, true));
+		assertTrue(ServletUtil.headerContainsValue(request, header, value1, false));
+		
+		assertTrue(ServletUtil.headerContainsValue(request, header, value2, true));
+		assertTrue(ServletUtil.headerContainsValue(request, header, value2, false));
+		
+		assertTrue(ServletUtil.headerContainsValue(request, header, value3, true));
+		assertFalse(ServletUtil.headerContainsValue(request, header, value3, false));
+		
+		assertTrue(ServletUtil.headerContainsValue(request, header, value4, true));
+		assertTrue(ServletUtil.headerContainsValue(request, header, value4, true));
+		assertTrue(ServletUtil.headerContainsValue(request, header, value4a, true));
+		assertTrue(ServletUtil.headerContainsValue(request, header, value4a, true));
+		assertTrue(ServletUtil.headerContainsValue(request, header, value4b, true));
+		assertTrue(ServletUtil.headerContainsValue(request, header, value4b, true));
+		
+		assertFalse(ServletUtil.headerContainsValue(request, header, valueN, true));
+		assertFalse(ServletUtil.headerContainsValue(request, header, valueN, false));
+	}
 }
