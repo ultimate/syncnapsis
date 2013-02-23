@@ -246,12 +246,24 @@
             <artifactId>jetty-websocket</artifactId>
             <version>${jetty.version}</version>
             <scope>provided</scope>
+           	<exclusions>
+           		<exclusion>
+		            <groupId>org.eclipse.jetty.orbit</groupId>
+		            <artifactId>javax.servlet</artifactId>
+           		</exclusion>
+           	</exclusions>
         </dependency>
         <dependency>
             <groupId>org.eclipse.jetty</groupId>
             <artifactId>jetty-server</artifactId>
             <version>${jetty.version}</version>
             <scope>provided</scope>
+           	<exclusions>
+           		<exclusion>
+		            <groupId>org.eclipse.jetty.orbit</groupId>
+		            <artifactId>javax.servlet</artifactId>
+           		</exclusion>
+           	</exclusions>
         </dependency>
         <dependency>
             <groupId>org.eclipse.jetty</groupId>
@@ -336,7 +348,7 @@
 		<servlet.version>3.1.1</servlet.version> <!-- 19.01.2012 -->
 		<slf4j.version>1.6.4</slf4j.version> <!-- 19.01.2012 -->
 		<log4j.version>1.2.16</log4j.version> <!-- 19.01.2012 -->
-    	<jetty.version>8.1.0.v20120127</jetty.version> <!-- 27.01.2012 -->
+    	<jetty.version>8.1.9.v20130131</jetty.version> <!-- 31.01.2013 -->
 		<!-- For Profiles only -->
 		<hibernate.version>4.0.1.Final</hibernate.version> <!-- 19.01.2012 -->
 
