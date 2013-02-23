@@ -447,9 +447,9 @@ public class HttpFallbackEngine extends FilterEngine
 
 	/**
 	 * Check wether the given Request is a valid WebSocket handshake. Therefore following headers
-	 * must be correct:
-	 * Upgrade: WebSocket
-	 * Connection: Upgrade
+	 * must be correct:<br>
+	 * Upgrade: WebSocket<br>
+	 * Connection: Upgrade<br>
 	 * 
 	 * @param req - the request
 	 * @param resp - the response
@@ -457,8 +457,11 @@ public class HttpFallbackEngine extends FilterEngine
 	 */
 	protected boolean isWebSocketHandshake(HttpServletRequest req, HttpServletResponse resp)
 	{
-		return req.getMethod().equals("GET") && Protocol.HEADER_CONNECTION_UPGRADE.equalsIgnoreCase(req.getHeader(Protocol.HEADER_CONNECTION))
-				&& Protocol.HEADER_UPGRADE_WEBSOCKET.equalsIgnoreCase(req.getHeader(Protocol.HEADER_UPGRADE));
+		if(!req.getMethod().equals("GET"))
+			return false;
+		boolean connection_upgrade = ServletUtil.headerContainsValue(req, Protocol.HEADER_CONNECTION, Protocol.HEADER_CONNECTION_UPGRADE, true);
+		boolean upgrade_websocket = ServletUtil.headerContainsValue(req, Protocol.HEADER_UPGRADE, Protocol.HEADER_UPGRADE_WEBSOCKET, true);
+		return connection_upgrade && upgrade_websocket;
 	}
 
 	/*
