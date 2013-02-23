@@ -33,7 +33,7 @@ public abstract class JettyUtil
 	 * The Jetty version this library is build with an which is required to use Jetty dependant
 	 * classes in the library.
 	 */
-	public static final String	versionRequired		= "8.1.0.v20120127";
+	public static final String	versionRequired		= "8.1.9.v20130131";
 	/**
 	 * The Jetty version found in the Classpath
 	 */
