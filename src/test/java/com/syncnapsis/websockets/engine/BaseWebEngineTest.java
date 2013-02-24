@@ -15,12 +15,29 @@
 package com.syncnapsis.websockets.engine;
 
 import com.syncnapsis.tests.LoggerTestCase;
+import com.syncnapsis.tests.annotations.TestCoversMethods;
+import com.syncnapsis.tests.annotations.TestExcludesMethods;
 
+/**
+ * Test for {@link BaseWebEngine}
+ * 
+ * @author ultimate
+ */
+@TestExcludesMethods({ "start0", "stop0" })
 public class BaseWebEngineTest extends LoggerTestCase
 {
-	public void testNothing()
+	@TestCoversMethods({ "afterPropertiesSet", "*etPath" })
+	public void testAfterPropertiesSet() throws Exception
 	{
-		// TODO no test yet
-		fail("no test yet");
+		BaseWebEngine e = new BaseWebEngine() {};
+		assertNull(e.getPath());
+		e.afterPropertiesSet();
+		assertNotNull(e.getPath());
+		assertEquals("/*", e.getPath());
+
+		String path = "/a_path";
+		e.setPath(path);
+		e.afterPropertiesSet();
+		assertEquals(path, e.getPath());
 	}
 }

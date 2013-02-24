@@ -14,13 +14,37 @@
  */
 package com.syncnapsis.websockets.engine;
 
-import com.syncnapsis.tests.LoggerTestCase;
+import java.io.IOException;
 
+import javax.servlet.FilterChain;
+import javax.servlet.FilterConfig;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
+
+import org.springframework.mock.web.MockFilterConfig;
+
+import com.syncnapsis.tests.LoggerTestCase;
+import com.syncnapsis.tests.annotations.TestExcludesMethods;
+
+/**
+ * Test for {@link FilterEngine}
+ * 
+ * @author ultimate
+ */
+@TestExcludesMethods({"destroy"})
 public class FilterEngineTest extends LoggerTestCase
 {
-	public void testNothing()
+	public void testInit() throws Exception
 	{
-		// TODO no test yet
-		fail("no test yet");
+		FilterEngine e = new FilterEngine() {
+			@Override
+			public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException
+			{
+			}
+		};
+		FilterConfig config = new MockFilterConfig();
+		e.init(config);
+		assertSame(config, e.filterConfig);
 	}
 }

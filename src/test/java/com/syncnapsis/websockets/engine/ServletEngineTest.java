@@ -14,13 +14,49 @@
  */
 package com.syncnapsis.websockets.engine;
 
-import com.syncnapsis.tests.LoggerTestCase;
+import java.io.IOException;
 
+import javax.servlet.ServletConfig;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
+
+import org.springframework.mock.web.MockServletConfig;
+
+import com.syncnapsis.tests.LoggerTestCase;
+import com.syncnapsis.tests.annotations.TestCoversMethods;
+import com.syncnapsis.tests.annotations.TestExcludesMethods;
+
+/**
+ * Test for {@link ServletEngine}
+ * 
+ * @author ultimate
+ */
+@TestExcludesMethods({ "destroy" })
 public class ServletEngineTest extends LoggerTestCase
 {
-	public void testNothing()
+	@TestCoversMethods({ "init", "getServletConfig" })
+	public void testInit() throws Exception
 	{
-		// TODO no test yet
-		fail("no test yet");
+		ServletEngine e = new ServletEngine() {
+			@Override
+			public void service(ServletRequest req, ServletResponse res) throws ServletException, IOException
+			{
+			}
+		};
+		ServletConfig config = new MockServletConfig();
+		e.init(config);
+		assertSame(config, e.getServletConfig());
+	}
+
+	public void testGetServletInfo() throws Exception
+	{
+		ServletEngine e = new ServletEngine() {
+			@Override
+			public void service(ServletRequest req, ServletResponse res) throws ServletException, IOException
+			{
+			}
+		};
+		assertNotNull(e.getServletInfo());
 	}
 }
