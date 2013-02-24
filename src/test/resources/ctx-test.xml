@@ -19,6 +19,11 @@
             http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd
             http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.0.xsd"
 	default-lazy-init="true">
+	
+	<!-- define the default mapper -->
+	<bean id="mapper" class="com.syncnapsis.utils.serialization.BaseMapper">
+		<property name="securityManager" ref="securityManager" />
+	</bean>
 
 	<!-- define the service-mapping -->
 	<bean id="serviceMapping" class="com.syncnapsis.websockets.ServiceMapping">
