@@ -873,25 +873,25 @@
 					{
 						if(debugRGB)
 						{
-						for(h = 0; h < 3; h++)
-						{
-							var div2 = document.createElement("div");
-							div2.style.position = "absolute";
-							div2.style.top = h*30  + "%";
-							div2.style.left = i + "%";					
-							div2.style.width = "1%";
-							div2.style.height = "30%";
-							var c = colormodel.getRGB(i/steps, i/steps);
-							var cs;
-							if(h == 0)
-								cs = "rgb(" + Math.round(c.r*255) + ",0,0)";
-							if(h == 1)
-								cs = "rgb(0," + Math.round(c.g*255) + ",0)";
-							if(h == 2)
-								cs = "rgb(0,0," + Math.round(c.b*255) + ")";
-							div2.style.background = cs;
-							bar.appendChild(div2);						
-						}
+							for(h = 0; h < 3; h++)
+							{
+								var div2 = document.createElement("div");
+								div2.style.position = "absolute";
+								div2.style.top = h*30  + "%";
+								div2.style.left = i + "%";					
+								div2.style.width = "1%";
+								div2.style.height = "30%";
+								var c = colormodel.getRGB(i/steps, i/steps);
+								var cs;
+								if(h == 0)
+									cs = "rgb(" + Math.round(c.r*255) + ",0,0)";
+								if(h == 1)
+									cs = "rgb(0," + Math.round(c.g*255) + ",0)";
+								if(h == 2)
+									cs = "rgb(0,0," + Math.round(c.b*255) + ")";
+								div2.style.background = cs;
+								bar.appendChild(div2);						
+							}
 						}
 						else
 						{
