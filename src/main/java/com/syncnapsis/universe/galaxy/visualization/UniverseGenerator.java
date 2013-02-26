@@ -57,17 +57,17 @@ public abstract class UniverseGenerator
 		// gs.addTypeEx();
 		// gs.addTypeEx(1.0, 0.5);
 		// gs.addTypeS0(1.0, 0.2, 1);
-		// gs.addTypeSB0(1.0, 0.2, 0.5);
-		gs.addTypeSx(2, 1.5, 1);
-		// gs.addTypeSx(3,1.5, -1);
-		// gs.addTypeSBx(1, 1);
+		// gs.addTypeSB0(1.0, 0.2, 0.5, 0);
+		 gs.addTypeSx(5, 2, 1.5, 1, 0);
+		// gs.addTypeSx(3, 1.5, -1, 0);
+		// gs.addTypeSBx(1, 1, 0);
 		// gs.addTypeRx(5);
-		// gs.addTypeAx(0.5, 1, 4);
-		// gs.addTypeAx(0.7, 3, 5);
-		// gs.addTypeAx(0.3, 4, 8);
-		// gs.addTypeAx(0.2, 7, 12);
-		// gs.addTypeAx(0.6, 5, 9);
-		// gs.addTypeAx(0.4, 3, 8);
+		 gs.addTypeAx(0.5, 1, 4);
+		 gs.addTypeAx(0.7, 3, 5);
+		 gs.addTypeAx(0.3, 4, 8);
+		 gs.addTypeAx(0.2, 7, 12);
+		 gs.addTypeAx(0.6, 5, 9);
+		 gs.addTypeAx(0.4, 3, 8);
 
 		List<int[]> coords = gs.generateCoordinates();
 

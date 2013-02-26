@@ -499,8 +499,9 @@ public class GalaxySpecification implements Serializable
 	 * @param thickness - die Dicke der Linse
 	 * @param sizeLimitation - eine Größenbeschränkung für den Galaxietyp
 	 * @return die Wahrscheinlichkeitsmatrix
+	 * @param rotationOffset - der Drehoffset
 	 */
-	protected ProbabilityMatrix generateTypeSB0(double weight, double thickness, double sizeLimitation)
+	protected ProbabilityMatrix generateTypeSB0(double weight, double thickness, double sizeLimitation, double rotationOffset)
 	{
 		ProbabilityMatrix m = new ProbabilityMatrix(this.xSize, this.ySize, this.zSize);
 		m.setWeight(weight);
@@ -511,6 +512,9 @@ public class GalaxySpecification implements Serializable
 		double r2Max = 0;
 		double p = 0;
 		double sigma = 0;
+		double x2, y2;
+		double cosOffset = Math.cos(rotationOffset);
+		double sinOffset = Math.sin(rotationOffset);
 		for(int x = m.getXMin(); x <= m.getXMax(); x++)
 		{
 			for(int y = m.getYMin(); y <= m.getYMax(); y++)
@@ -518,10 +522,12 @@ public class GalaxySpecification implements Serializable
 				for(int z = m.getZMin(); z <= m.getZMax(); z++)
 				{
 					r = getRadius(x, y, z);
-					r2Normed = Math.abs(Math.sqrt(y * y + z * z) / Math.sqrt(this.ySize * this.ySize / 4.0 + this.zSize * this.zSize / 4.0));
+					x2 = cosOffset*x - sinOffset*y;
+					y2 = sinOffset*x + cosOffset*y;
+					r2Normed = Math.abs(Math.sqrt(y2 * y2 + z * z) / Math.sqrt(this.ySize * this.ySize / 4.0 + this.zSize * this.zSize / 4.0));
 					if(r <= 1 * sizeLimitation)
 					{
-						r2Max = Functions.circularUnit((double) x * 2 / (double) this.xSize) * sizeLimitation;
+						r2Max = Functions.circularUnit((double) x2 * 2 / (double) this.xSize) * sizeLimitation;
 						if(r2Max <= 0)
 							r2Normed = 0;
 						else
@@ -547,10 +553,11 @@ public class GalaxySpecification implements Serializable
 	 * @param numberOfArms - die Anzahl der Spiralarme
 	 * @param numberOfTurns - die Anzahl der Umdrehungen für jeden Arm
 	 * @param direction - die Drehrichtung
+	 * @param rotationOffset - der Drehoffset
 	 * @return die Wahrscheinlichkeitsmatrix
 	 */
 	@SuppressWarnings("unchecked")
-	protected ProbabilityMatrix generateTypeSx(double weight, double numberOfArms, double numberOfTurns, double direction)
+	protected ProbabilityMatrix generateTypeSx(double weight, double numberOfArms, double numberOfTurns, double direction, double rotationOffset)
 	{
 		ProbabilityMatrix m = new ProbabilityMatrix(this.xSize, this.ySize, this.zSize);
 		m.setWeight(weight);
@@ -559,7 +566,7 @@ public class GalaxySpecification implements Serializable
 		double[] phiMax = new double[(int) numberOfArms];
 		for(int i = 0; i < numberOfArms; i++)
 		{
-			phi0[i] = i * Math.PI * 2 / numberOfArms;
+			phi0[i] = i * Math.PI * 2 / numberOfArms + rotationOffset;
 			phiMax[i] = direction * numberOfTurns * Math.PI * 2 + phi0[i];
 		}
 
@@ -595,10 +602,15 @@ public class GalaxySpecification implements Serializable
 		double rDisc = 0;
 		double deltaRing = 0;
 		double gradient = 0.3;
+		double x2, y2;
+		double cosOffset = Math.cos(rotationOffset);
+		double sinOffset = Math.sin(rotationOffset);
 		for(int x = m.getXMin(); x <= m.getXMax(); x++)
 		{
 			for(int y = m.getYMin(); y <= m.getYMax(); y++)
 			{
+				x2 = cosOffset*x - sinOffset*y;
+				y2 = sinOffset*x + cosOffset*y;
 				for(int z = m.getZMin(); z <= m.getZMax(); z++)
 				{
 					rMinToSP = Double.POSITIVE_INFINITY;
@@ -607,7 +619,7 @@ public class GalaxySpecification implements Serializable
 						for(int i = 0; i < spiralPoints[j].size(); i++)
 						{
 							sP = ((List<int[]>) spiralPoints[j]).get(i);
-							rToSP = MathUtil.distance(x, y, z, sP[0], sP[1], sP[2]);
+							rToSP = MathUtil.distance(x2, y2, z, sP[0], sP[1], sP[2]);
 							if(rToSP < rMinToSP)
 							{
 								rMinToSP = rToSP;
@@ -617,7 +629,7 @@ public class GalaxySpecification implements Serializable
 						}
 					}
 					rMax = gradient + 0.1 - iMinIndex / (double) spiralPoints[jMinIndex].size() * gradient;
-					alpha = Math.atan2(y, x);
+					alpha = Math.atan2(y2, x2);
 					rDisc = Math.abs(Math.sqrt(Math.cos(alpha) * this.xSize / 2 * Math.cos(alpha) * this.xSize / 2 + Math.sin(alpha) * this.ySize / 2
 							* Math.sin(alpha) * this.ySize / 2));
 					deltaRing = rDisc / numberOfArms / numberOfTurns;
@@ -642,10 +654,11 @@ public class GalaxySpecification implements Serializable
 	 *            Galaxie
 	 * @param numberOfTurns - die Anzahl der Umdrehungen für jeden Arm
 	 * @param direction - die Drehrichtung
+	 * @param rotationOffset - der Drehoffset
 	 * @return die Wahrscheinlichkeitsmatrix
 	 */
 	@SuppressWarnings("unchecked")
-	protected ProbabilityMatrix generateTypeSBx(double weight, double numberOfTurns, double direction)
+	protected ProbabilityMatrix generateTypeSBx(double weight, double numberOfTurns, double direction, double rotationOffset)
 	{
 		ProbabilityMatrix m = new ProbabilityMatrix(this.xSize, this.ySize, this.zSize);
 		m.setWeight(weight);
@@ -695,10 +708,15 @@ public class GalaxySpecification implements Serializable
 		double rDisc = 0;
 		double deltaRing = 0;
 		double gradient = 0.3;
+		double x2, y2;
+		double cosOffset = Math.cos(rotationOffset);
+		double sinOffset = Math.sin(rotationOffset);
 		for(int x = m.getXMin(); x <= m.getXMax(); x++)
 		{
 			for(int y = m.getYMin(); y <= m.getYMax(); y++)
 			{
+				x2 = cosOffset*x - sinOffset*y;
+				y2 = sinOffset*x + cosOffset*y;
 				for(int z = m.getZMin(); z <= m.getZMax(); z++)
 				{
 					rMinToSP = Double.POSITIVE_INFINITY;
@@ -707,7 +725,7 @@ public class GalaxySpecification implements Serializable
 						for(int i = 0; i < spiralPoints[j].size(); i++)
 						{
 							sP = ((List<int[]>) spiralPoints[j]).get(i);
-							rToSP = MathUtil.distance(x, y, z, sP[0], sP[1], sP[2]);
+							rToSP = MathUtil.distance(x2, y2, z, sP[0], sP[1], sP[2]);
 							if(rToSP < rMinToSP)
 							{
 								rMinToSP = rToSP;
@@ -717,7 +735,7 @@ public class GalaxySpecification implements Serializable
 						}
 					}
 					rMax = gradient + 0.1 - iMinIndex / (double) spiralPoints[jMinIndex].size() * gradient;
-					alpha = Math.atan2(y, x);
+					alpha = Math.atan2(y2, x2);
 					rDisc = Math.abs(Math.sqrt(Math.cos(alpha) * this.xSize / 2 * Math.cos(alpha) * this.xSize / 2 + Math.sin(alpha) * this.ySize / 2
 							* Math.sin(alpha) * this.ySize / 2));
 					deltaRing = rDisc / numberOfArms / numberOfTurns;
@@ -967,10 +985,11 @@ public class GalaxySpecification implements Serializable
 	 * 
 	 * @see EnumGalaxyType#SB0
 	 * @param thickness - die Dicke der Linse
+	 * @param rotationOffset - der Drehoffset
 	 */
-	public void addTypeSB0(double thickness)
+	public void addTypeSB0(double thickness, double rotationOffset)
 	{
-		this.addTypeSB0(1.0, thickness, 1.0);
+		this.addTypeSB0(1.0, thickness, 1.0, rotationOffset);
 	}
 
 	/**
@@ -982,11 +1001,12 @@ public class GalaxySpecification implements Serializable
 	 *            Galaxie
 	 * @param thickness - die Dicke der Linse
 	 * @param sizeLimitation - eine Größenbeschränkung für den Galaxietyp
+	 * @param rotationOffset - der Drehoffset
 	 */
-	public void addTypeSB0(double weight, double thickness, double sizeLimitation)
+	public void addTypeSB0(double weight, double thickness, double sizeLimitation, double rotationOffset)
 	{
 		addTypeEx(1.0 * weight, sizeLimitation);
-		GalaxyGenerationThread tSB0 = new GalaxyGenerationThread(EnumGalaxyType.SB0, thickness, sizeLimitation);
+		GalaxyGenerationThread tSB0 = new GalaxyGenerationThread(EnumGalaxyType.SB0, thickness, sizeLimitation, rotationOffset);
 		tSB0.start(0.5 * weight);
 		this.threads.add(tSB0);
 	}
@@ -998,10 +1018,11 @@ public class GalaxySpecification implements Serializable
 	 * @param numberOfArms - die Anzahl der Spiralarme
 	 * @param numberOfTurns - die Anzahl der Umdrehungen für jeden Arm
 	 * @param direction - die Drehrichtung
+	 * @param rotationOffset - der Drehoffset
 	 */
-	public void addTypeSx(int numberOfArms, double numberOfTurns, double direction)
+	public void addTypeSx(int numberOfArms, double numberOfTurns, double direction, double rotationOffset)
 	{
-		this.addTypeSx(1.0, numberOfArms, numberOfTurns, direction);
+		this.addTypeSx(1.0, numberOfArms, numberOfTurns, direction, rotationOffset);
 	}
 
 	/**
@@ -1013,11 +1034,12 @@ public class GalaxySpecification implements Serializable
 	 * @param numberOfArms - die Anzahl der Spiralarme
 	 * @param numberOfTurns - die Anzahl der Umdrehungen für jeden Arm
 	 * @param direction - die Drehrichtung
+	 * @param rotationOffset - der Drehoffset
 	 */
-	public void addTypeSx(double weight, int numberOfArms, double numberOfTurns, double direction)
+	public void addTypeSx(double weight, int numberOfArms, double numberOfTurns, double direction, double rotationOffset)
 	{
 		addTypeS0(0.7 * weight, 0.2, 1.0);
-		GalaxyGenerationThread tSx = new GalaxyGenerationThread(EnumGalaxyType.Sx, numberOfArms, numberOfTurns, direction);
+		GalaxyGenerationThread tSx = new GalaxyGenerationThread(EnumGalaxyType.Sx, numberOfArms, numberOfTurns, direction, rotationOffset);
 		tSx.start(0.75 * weight);
 		this.threads.add(tSx);
 	}
@@ -1028,10 +1050,11 @@ public class GalaxySpecification implements Serializable
 	 * @see EnumGalaxyType#SBx
 	 * @param numberOfTurns - die Anzahl der Umdrehungen für jeden Arm
 	 * @param direction - die Drehrichtung
+	 * @param rotationOffset - der Drehoffset
 	 */
-	public void addTypeSBx(double numberOfTurns, double direction)
+	public void addTypeSBx(double numberOfTurns, double direction, double rotationOffset)
 	{
-		this.addTypeSBx(1.0, numberOfTurns, direction);
+		this.addTypeSBx(1.0, numberOfTurns, direction, rotationOffset);
 	}
 
 	/**
@@ -1042,12 +1065,13 @@ public class GalaxySpecification implements Serializable
 	 *            Galaxie
 	 * @param numberOfTurns - die Anzahl der Umdrehungen für jeden Arm
 	 * @param direction - die Drehrichtung
+	 * @param rotationOffset - der Drehoffset
 	 */
-	public void addTypeSBx(double weight, double numberOfTurns, double direction)
+	public void addTypeSBx(double weight, double numberOfTurns, double direction, double rotationOffset)
 	{
 		addTypeS0(0.5 * weight, 0.2, 1.0);
-		addTypeSB0(0.3 * weight, 0.2, 0.6);
-		GalaxyGenerationThread tSBx = new GalaxyGenerationThread(EnumGalaxyType.SBx, numberOfTurns, direction);
+		addTypeSB0(0.3 * weight, 0.2, 0.6, rotationOffset);
+		GalaxyGenerationThread tSBx = new GalaxyGenerationThread(EnumGalaxyType.SBx, numberOfTurns, direction, rotationOffset);
 		tSBx.start(0.8 * weight);
 		this.threads.add(tSBx);
 	}
@@ -1203,11 +1227,11 @@ public class GalaxySpecification implements Serializable
 			if(this.type.equals(EnumGalaxyType.S0))
 				m = generateTypeS0(this.weight, params[0], params[1]);
 			if(this.type.equals(EnumGalaxyType.SB0))
-				m = generateTypeSB0(this.weight, params[0], params[1]);
+				m = generateTypeSB0(this.weight, params[0], params[1], params[2]);
 			if(this.type.equals(EnumGalaxyType.Sx))
-				m = generateTypeSx(this.weight, params[0], params[1], params[2]);
+				m = generateTypeSx(this.weight, params[0], params[1], params[2], params[3]);
 			if(this.type.equals(EnumGalaxyType.SBx))
-				m = generateTypeSBx(this.weight, params[0], params[1]);
+				m = generateTypeSBx(this.weight, params[0], params[1], params[2]);
 			if(this.type.equals(EnumGalaxyType.Rx))
 				m = generateTypeRx(this.weight, params[0]);
 			if(this.type.equals(EnumGalaxyType.Ax))
