@@ -1,3 +1,7 @@
+body {
+	overflow: scroll;
+}
+
 ol li {
 	margin-bottom: 12pt;
 }
