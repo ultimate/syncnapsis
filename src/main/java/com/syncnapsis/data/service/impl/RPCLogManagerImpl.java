@@ -146,8 +146,12 @@ public class RPCLogManagerImpl extends GenericManagerImpl<RPCLog, Long> implemen
 			resultString = throwable.getClass().getName() + ": " + throwable.getMessage();
 		else
 			resultString = "null";
+	
+		RPCLog log = this.log(rpcCall, resultString, true, executionDate, user, session, authorities);
 		
-		return this.log(rpcCall, resultString, true, executionDate, user, session, authorities);
+		rpcLogger.warn("Exception occured when doing RPC", throwable);
+		
+		return log;
 	}
 
 	/**

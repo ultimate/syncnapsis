@@ -31,22 +31,22 @@ public class LogRPCHandler extends DelegatingRPCHandler
 	/**
 	 * The SessionProvider used to access the current session.
 	 */
-	protected SessionProvider	sessionProvider;
+	protected SessionProvider			sessionProvider;
 
 	/**
 	 * The TimeProvider used to access the current time
 	 */
-	protected TimeProvider		timeProvider;
+	protected TimeProvider				timeProvider;
 
 	/**
 	 * The UserProvider used to access the current user.
 	 */
-	protected UserProvider		userProvider;
+	protected UserProvider				userProvider;
 
 	/**
 	 * The RPCLogManager used for logging the RPCCalls.
 	 */
-	protected RPCLogManager		rpcLogManager;
+	protected RPCLogManager				rpcLogManager;
 
 	/**
 	 * The SessionProvider used to access the current session.
@@ -170,7 +170,6 @@ public class LogRPCHandler extends DelegatingRPCHandler
 		}
 		catch(InvocationTargetException e)
 		{
-			e.printStackTrace(); // TODO remove
 			rpcLogManager.log(call, e.getCause(), executionDate, userProvider.get(), sessionProvider.get(), authorities);
 			throw e;
 		}
