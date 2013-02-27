@@ -25,6 +25,13 @@ import com.syncnapsis.providers.LocaleProvider;
 import com.syncnapsis.providers.SessionProvider;
 import com.syncnapsis.utils.ServletUtil;
 
+/**
+ * Extension of {@link URLRewriteFilter} rewriting urls for the current locale the user selected.<br/>
+ * By using {@link URLRewriteFilter#rewriteURL(String, HttpServletRequest, HttpServletResponse)} the
+ * current locale is inserted into the requested path at a specified directory level.
+ * 
+ * @author ultimate
+ */
 public class LocaleFilter extends URLRewriteFilter
 {
 	/**
@@ -178,20 +185,21 @@ public class LocaleFilter extends URLRewriteFilter
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.syncnapsis.web.URLRewriteFilter#rewriteURL(java.lang.String, javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
+	 * @see com.syncnapsis.web.URLRewriteFilter#rewriteURL(java.lang.String,
+	 * javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
 	 */
 	@Override
 	protected String rewriteURL(String url, HttpServletRequest request, HttpServletResponse response) throws ServletException
 	{
 		sessionProvider.set(request.getSession());
 		EnumLocale locale = localeProvider.get();
-		
+
 		String target;
 		if(localeLowerCase)
 			target = ServletUtil.insertDirectory(url, locale.toString().toLowerCase(), localeDirectoryLevel);
 		else
 			target = ServletUtil.insertDirectory(url, locale.toString(), localeDirectoryLevel);
-		
+
 		logger.debug("forwarding to: " + target);
 		return target;
 	}
