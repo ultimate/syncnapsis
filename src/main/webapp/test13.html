@@ -260,7 +260,7 @@
 				var factor = 0.6;				
 				var diffTreshold;
 				if(galaxy.animation == -1)
-					diffTreshold = 100;
+					diffTreshold = 10;
 				else
 					diffTreshold = 1;
 				
@@ -576,7 +576,7 @@
 					
 					removed++;
 				}
-				galaxy.animation = 1;
+				galaxy.animation = -1;
 				console.log("updated: " + updated + " removed: " + removed);
 				
 				galaxy.particleSystem.geometry.verticesNeedUpdate = true;
