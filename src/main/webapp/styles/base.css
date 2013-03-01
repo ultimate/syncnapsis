@@ -3,6 +3,7 @@ body {
 	overflow: hidden;
 	color: #EEEEEE;
 	font-family: monospace;
+	margin: 0px;
 }
 
 a {
@@ -232,9 +233,15 @@ a {
 
 .window .window_title {
 	border-bottom: 2px solid #000000;
+	position: absolute;
+	top: 0px;
+	height: 30px;
+	width: 100%
 }
 
-.window .window_title label,.window .window_content div {
+.window .window_title label
+/*,.window .window_content div*/
+ {
 	padding: 5px;
 }
 
@@ -247,4 +254,27 @@ a {
 	position: absolute;
 	top: 6px;
 	right: 5px;
+}
+
+.window .window_content {
+	position: absolute;
+	top: 30px;
+	bottom: 0px;
+	width: 100%;
+}
+
+.window .window_content div {
+	position: absolute;
+	top: 4px;
+	bottom: 4px;
+	left: 2px;
+	right: 2px;
+}
+
+#content_static iframe {
+    overflow-x: hidden;
+    overflow-y: scroll;
+	height: 100%;
+	width: 100%;
+	border: none;
 }

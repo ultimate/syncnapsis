@@ -27,6 +27,7 @@ UI.constants.BAR_OUTER_WIDTH = 300;
 
 UI.constants.LABEL_ID_PLAYERNAME = "bar_top_playername";
 UI.constants.OVERLAY_ID = "overlay";
+UI.constants.STATIC_FRAME_ID = "static_frame";
 
 UI.constants.LOCALE_CHOOSER_ID = "locale_chooser";
 UI.constants.LOCALE_LABEL_TAGNAME = "label";
@@ -54,11 +55,17 @@ UIManager = function()
 	this.window_login.center();
 	
 	this.window_register = null; // TODO
+	
+	this.window_static = new Styles.Window("static", "", "content_static");
+	this.window_static.setSize(600, 400);
+	this.window_static.center();
+	this.window_static.setMovable(true);
 
 	Events.fireEvent(window, Events.ONRESIZE);
 
 	this.onLogout();
 	this.updateLabels();
+	this.updateLinks();
 	this.populateLocaleChooser();
 	this.hideOverlay();
 };
@@ -147,11 +154,15 @@ UIManager.prototype.reloadLocale = function()
 	DependencyManager.reloadScript("Lang", Events.wrapEventHandler(this, this.updateLabels));
 };
 
-UIManager.prototype.updateLabels = function()
+UIManager.prototype.updateLabels = function(parent)
 {
+	if(parent == undefined)
+		parent = document;
+	else if(parent.getElementsByTagName == undefined)
+		parent = document;
 	var elements;
 	// labels
-	elements = document.getElementsByTagName(UI.constants.LOCALE_LABEL_TAGNAME);
+	elements = parent.getElementsByTagName(UI.constants.LOCALE_LABEL_TAGNAME);
 	for( var i = 0; i < elements.length; i++)
 	{
 		elements[i].innerHTML = this.getString(elements[i].getAttribute(UI.constants.LOCALE_KEY_ATTRIBUTE));
@@ -218,6 +229,17 @@ UIManager.prototype.doRegister = function()
 //	server.playerManager.register(............);
 };
 
+UIManager.prototype.showStatic = function(key)
+{
+	this.window_static.setTitleKey(key);
+	this.window_static.setVisible(true);
+};
+
+UIManager.prototype.hideStatic = function()
+{
+	this.window_static.setVisible(false);
+};
+
 UIManager.prototype.showErrorMessage = function(textfield, messagefield)
 {
 	if(textfield != null)
@@ -231,6 +253,24 @@ UIManager.prototype.showErrorMessage = function(textfield, messagefield)
 		var disp = messagefield.style.display;
 		messagefield.style.display = "none";
 		setTimeout(function() {messagefield.style.display = disp;}, 3000);
+	}
+};
+
+UIManager.prototype.updateLinks = function()
+{
+	var links = document.getElementsByTagName("a");
+	for( var i = 0; i < links.length; i++)
+	{
+		if(links[i].target == "_blank")
+		{
+			links[i].target = UI.constants.STATIC_FRAME_ID;
+			links[i].onclick = (function(link, uiManager) 
+			{
+				return function() {
+					uiManager.showStatic(link.getElementsByTagName(UI.constants.LOCALE_LABEL_TAGNAME)[0].getAttribute(UI.constants.LOCALE_KEY_ATTRIBUTE));
+				};
+			})(links[i], this);
+		}
 	}
 };
 

@@ -1,5 +1,6 @@
 body {
 	overflow: scroll;
+	margin: 10px;
 }
 
 ol li {
@@ -8,4 +9,13 @@ ol li {
 
 ol li ol li, ol li ul li {
 	margin-bottom: 0;
+}
+
+#footer {
+	text-align: center;
+}
+
+#footer hr {
+	margin-top: 20px;
+	margin-bottom: 20px;
 }

@@ -51,6 +51,7 @@
 				<br> <span id="loader_text">0%</span>
 			</div>
 		</div>
+		<!-- TODO contact & disclaimer in der Ecke hinzufügen -->
 	</div>
 	<div id="main">
 		<div id="ad_left" class="ad">
@@ -93,8 +94,9 @@
 					<span>www.syncnapsis.com</span>
 				</div>
 				<div id="bar_bottom_right" class="bar_right">
-					<span><a href=""><label key="menu.about"></label></a></span> <span><a href="lang/contact.html"><label key="menu.contact"></label></a></span> <span><a href="lang/disclaimer.html"><label
-							key="menu.disclaimer"></label></a></span>
+					<span><a href=""><label key="menu.about"></label></a></span>
+					<span><a href="lang/contact.html" target="_blank"><label key="menu.contact"></label></a></span>
+					<span><a href="lang/disclaimer.html" target="_blank"><label	key="menu.disclaimer"></label></a></span>
 				</div>
 			</div>
 		</div>
@@ -123,6 +125,10 @@
 				<input type="button" key="menu.register" onclick="client.uiManager.showRegister();" />
 				<div class="message" id="message_login_failed" style="display: none;"><label key=""></label></div><br/>
 			</div>
+		</div>
+		<div id="content_static">
+			<iframe name="static_frame">
+			</iframe>
 		</div>
 	</div>
 </body>

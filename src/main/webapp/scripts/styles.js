@@ -188,6 +188,13 @@ Styles.Window = function(id, titleKey, contentDiv)
 		else
 			this._contentFrame.appendChild(contentDiv);
 	};
+	
+	frame.setTitleKey = function(titleKey)
+	{
+		this._titleLabel.setAttribute("key", titleKey);
+		if(client && client.uiManager) // reverse dependency check...
+			client.uiManager.updateLabels(this);
+	};
 
 	frame.setVisible = function(visible)
 	{
