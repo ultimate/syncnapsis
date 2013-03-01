@@ -16,14 +16,6 @@
 	filter: flipv; /*IE*/
 }
 
-/* 
-	fix some browsers default padding and margin
-*/
-* {
-	padding: 0px;
-	margin: 0px;
-}
-
 /*
 	hide elements
 */
