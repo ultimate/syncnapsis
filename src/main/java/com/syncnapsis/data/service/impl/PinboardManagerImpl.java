@@ -17,6 +17,7 @@ package com.syncnapsis.data.service.impl;
 import com.syncnapsis.data.dao.PinboardDao;
 import com.syncnapsis.data.model.Pinboard;
 import com.syncnapsis.data.service.PinboardManager;
+import com.syncnapsis.data.service.PinboardMessageManager;
 
 /**
  * Manager-Implementation for access to Pinboard.
@@ -29,6 +30,11 @@ public class PinboardManagerImpl extends GenericNameManagerImpl<Pinboard, Long> 
 	 * PinboardDao for database access
 	 */
 	protected PinboardDao			pinboardDao;
+	
+	/**
+	 * The PinboardMessageManager
+	 */
+	protected PinboardMessageManager pinboardMessageManager;
 
 	/**
 	 * Standard Constructor

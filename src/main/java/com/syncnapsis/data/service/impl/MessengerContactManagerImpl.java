@@ -30,7 +30,7 @@ public class MessengerContactManagerImpl extends GenericManagerImpl<MessengerCon
 	/**
 	 * MessengerContactDao für den Datenbankzugriff
 	 */
-	private MessengerContactDao messengerContactDao;
+	protected MessengerContactDao messengerContactDao;
 	
 	/**
 	 * Standard-Constructor

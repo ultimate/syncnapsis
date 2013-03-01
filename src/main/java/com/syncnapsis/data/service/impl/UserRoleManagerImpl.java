@@ -28,8 +28,7 @@ public class UserRoleManagerImpl extends GenericNameManagerImpl<UserRole, Long> 
 	/**
 	 * UserRoleDao für den Datenbankzugriff
 	 */
-	@SuppressWarnings("unused")
-	private UserRoleDao			userRoleDao;
+	protected UserRoleDao			userRoleDao;
 
 	/**
 	 * Standard Constructor

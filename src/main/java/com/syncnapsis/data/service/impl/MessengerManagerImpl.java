@@ -28,8 +28,7 @@ public class MessengerManagerImpl extends GenericNameManagerImpl<Messenger, Long
 	/**
 	 * MessengerDao für den Datenbankzugriff
 	 */
-	@SuppressWarnings("unused")
-	private MessengerDao messengerDao;
+	protected MessengerDao messengerDao;
 	
 	/**
 	 * Standard-Constructor

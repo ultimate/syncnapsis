@@ -34,11 +34,11 @@ public class UserContactManagerImpl extends GenericManagerImpl<UserContact, Long
 	/**
 	 * UserContactDao für den Datenbankzugriff
 	 */
-	private UserContactDao userContactDao;
+	protected UserContactDao userContactDao;
 	/**
 	 * UserManager für den Datenbankzugriff
 	 */
-	private UserManager userManager;
+	protected UserManager userManager;
 	
 	/**
 	 * Standard-Constructor

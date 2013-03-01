@@ -37,11 +37,11 @@ public class NewsManagerImpl extends GenericManagerImpl<News, Long> implements N
 	/**
 	 * NewsDao für den Datenbankzugriff
 	 */
-	private NewsDao			newsDao;
+	protected NewsDao			newsDao;
 	/**
 	 * ParameterManager für den Datenbankzugriff
 	 */
-	private ParameterManager	parameterManager;
+	protected ParameterManager	parameterManager;
 
 	/**
 	 * Standard Constructor, der die DAOs speichert.

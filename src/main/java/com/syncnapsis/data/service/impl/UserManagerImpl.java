@@ -43,15 +43,15 @@ public class UserManagerImpl extends GenericNameManagerImpl<User, Long> implemen
 	/**
 	 * UserDao für den Datenbankzugriff
 	 */
-	private UserDao					userDao;
+	protected UserDao					userDao;
 	/**
 	 * The UserRoleManager
 	 */
-	private UserRoleManager			userRoleManager;
+	protected UserRoleManager			userRoleManager;
 	/**
 	 * The SecurityManager (BaseApplicationManager)
 	 */
-	private BaseApplicationManager	securityManager;
+	protected BaseApplicationManager	securityManager;
 
 	/**
 	 * Standard Constructor

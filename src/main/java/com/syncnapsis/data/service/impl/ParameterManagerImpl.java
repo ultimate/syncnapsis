@@ -30,7 +30,7 @@ public class ParameterManagerImpl extends GenericNameManagerImpl<Parameter, Long
 	/**
 	 * ParameterDao für den Datenbankzugriff
 	 */
-	private ParameterDao	parameterDao;
+	protected ParameterDao	parameterDao;
 
 	/**
 	 * Standard Constructor, der die DAOs speichert.
