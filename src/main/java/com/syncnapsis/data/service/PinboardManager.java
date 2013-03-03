@@ -15,12 +15,23 @@
 package com.syncnapsis.data.service;
 
 import com.syncnapsis.data.model.Pinboard;
+import com.syncnapsis.data.model.PinboardMessage;
 
 /**
  * Manager-Interface for access to Pinboard.
  * 
  * @author ultimate
  */
-public interface PinboardManager  extends GenericNameManager<Pinboard, Long>
+public interface PinboardManager extends GenericNameManager<Pinboard, Long>
 {
+	/**
+	 * Add a message to the pinboard given by id.<br>
+	 * The user posting will be determined from the session.
+	 * 
+	 * @param boardId - the id of the pinboard to add the message to
+	 * @param title - the title of the message (optional)
+	 * @param message - the message content to add
+	 * @return the message object created
+	 */
+	public PinboardMessage postMessage(Long boardId, String title, String message);
 }
