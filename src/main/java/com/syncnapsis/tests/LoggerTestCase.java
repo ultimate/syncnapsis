@@ -24,6 +24,7 @@ import org.jmock.Mockery;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.syncnapsis.mock.util.CombinedImposteriser;
 import com.syncnapsis.utils.ReflectionsUtil;
 
 /**
@@ -36,31 +37,73 @@ import com.syncnapsis.utils.ReflectionsUtil;
  * </ul>
  * 
  * @author ultimate
- * 
  */
 public abstract class LoggerTestCase extends TestCase
 {
-	protected Logger	logger		= LoggerFactory.getLogger(getClass());
-	protected Mockery	mockContext	= new Mockery();
+	/**
+	 * Logger-Instance
+	 */
+	protected Logger	logger			= LoggerFactory.getLogger(getClass());
+	/**
+	 * Mockery for creating mocks
+	 */
+	protected Mockery	mockContext		= new Mockery();
 
+	/**
+	 * Default Constructor.<br>
+	 * (will initialize the Mockery)
+	 */
+	public LoggerTestCase()
+	{
+		mockContext.setImposteriser(CombinedImposteriser.INSTANCE);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see junit.framework.TestCase#setUp()
+	 */
 	@Override
 	protected void setUp() throws Exception
 	{
 		super.setUp();
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see junit.framework.TestCase#tearDown()
+	 */
 	@Override
 	protected void tearDown() throws Exception
 	{
 		super.tearDown();
 	}
 
+	/**
+	 * Class representing a method call.
+	 * 
+	 * @author ultimate
+	 */
 	protected class MethodCall
 	{
+		/**
+		 * The name of the method called
+		 */
 		private String		method;
+		/**
+		 * The expected return value
+		 */
 		private Object		out;
+		/**
+		 * The arguments passed
+		 */
 		private Object[]	in;
 
+		/**
+		 * 
+		 * @param method - the name of the method called
+		 * @param out - the expected return value
+		 * @param in - the arguments passed
+		 */
 		public MethodCall(String method, Object out, Object... in)
 		{
 			super();
@@ -69,22 +112,45 @@ public abstract class LoggerTestCase extends TestCase
 			this.in = in;
 		}
 
+		/**
+		 * The name of the method called
+		 * 
+		 * @return method
+		 */
 		public String getMethod()
 		{
 			return method;
 		}
 
+		/**
+		 * The expected return value
+		 * 
+		 * @return
+		 */
 		public Object getOut()
 		{
 			return out;
 		}
 
+		/**
+		 * The arguments passed
+		 * 
+		 * @return in
+		 */
 		public Object[] getIn()
 		{
 			return in;
 		}
 	}
 
+	/**
+	 * Find a Method using a MethodCall Object.<br>
+	 * 
+	 * @see ReflectionsUtil#findMethod(Class, String, Object...)
+	 * @param cls - the class containing the method
+	 * @param call - the MethodCall defining the method
+	 * @return the Method Object
+	 */
 	protected Method getMethod(Class<?> cls, MethodCall call)
 	{
 		return ReflectionsUtil.findMethod(cls, call.getMethod(), call.getIn());

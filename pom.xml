@@ -185,6 +185,11 @@
 			<version>${jmock.version}</version>
 		</dependency>
 		<dependency>
+			<groupId>org.javassist</groupId>
+			<artifactId>javassist</artifactId>
+			<version>${javassist.version}</version>
+		</dependency>
+		<dependency>
 			<groupId>org.subethamail</groupId>
 			<artifactId>subethasmtp-wiser</artifactId>
 			<version>${wiser.version}</version>
@@ -222,6 +227,7 @@
 
 		<!-- Testing dependency versions -->
 		<jmock.version>2.5.1</jmock.version>
+		<javassist.version>3.15.0-GA</javassist.version>
 		<junit.version>4.10</junit.version>
 		<wiser.version>1.2</wiser.version>
 	</properties>
