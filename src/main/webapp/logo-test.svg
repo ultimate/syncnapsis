@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 20010904//EN"
+  "http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd">
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="800" style="background: #000000;"
+  xmlns:xlink="http://www.w3.org/1999/xlink">
+	<title>USER_ID</title>
+	<defs>
+		<style type="text/css">
+			<![CDATA[
+			  .fill_1 {fill:#FFFFFF; fill-opacity:1;}
+			  .fill_t {fill:#FFFFFF; fill-opacity:0.5;}
+			  .fill_0 {fill:#FFFFFF; fill-opacity:0;}
+			  .border_1 {stroke:#FFFFFF; stroke-opacity:1; }
+			  .border_t {stroke:#FFFFFF; stroke-opacity:0.5; }
+			  .border_0 {stroke:#FFFFFF; stroke-opacity:0; }
+			  .stroke_1 {stroke-width: 1px;}
+			  .stroke_5 {stroke-width: 5px;}
+			  .stroke_10 {stroke-width: 10px;}
+			]]>
+		</style>
+		<circle id="0" cx="0" cy="0" r="0.5" vector-effect="non-scaling-stroke"/>
+		<polygon id="3" points="0 0.5 0.4330 -0.25 -0.4330 -0.25" vector-effect="non-scaling-stroke"/>
+		<polygon id="4" points="-0.3535 0.3535 0.3535 0.3535 0.3535 -0.3535 -0.3535 -0.3535" vector-effect="non-scaling-stroke"/>
+		<polygon id="5" points="0 0.5 0.4755 0.1545 0.2939 -0.4045 -0.2939 -0.4045 -0.4755 0.1545" vector-effect="non-scaling-stroke"/>
+		<polygon id="6" points="0 0.5 0.4330 0.25 0.4330 -0.25 0 -0.5 -0.4330 -0.25 -0.4330 0.25" vector-effect="non-scaling-stroke"/>
+		<polygon id="7" points="0 0.5 0.3909 0.3117 0.4875 -0.1113 0.2169 -0.4505 -0.2169 -0.4505 -0.4875 -0.1113 -0.3909 0.3117" vector-effect="non-scaling-stroke"/>
+		<polygon id="8" points="0 0.5 0.3535 0.3535 0.5 0 0.3535 -0.3535 0 -0.5 -0.3535 -0.3535 -0.5 0 -0.3535 0.3535" vector-effect="non-scaling-stroke"/>
+		<g id="circles">
+			<use xlink:href="#0" class="fill_1 border_1 stroke_1" transform="translate(50,40) scale(50,50)"/>
+			<use xlink:href="#0" class="fill_1 border_t stroke_1" transform="translate(150,40) scale(50,50)" />
+			<use xlink:href="#0" class="fill_1 border_0 stroke_1" transform="translate(250,40) scale(50,50)" />
+			<use xlink:href="#0" class="fill_t border_1 stroke_1" transform="translate(350,40) scale(50,50)" />
+			<use xlink:href="#0" class="fill_t border_t stroke_1" transform="translate(450,40) scale(50,50)" />
+			<use xlink:href="#0" class="fill_t border_0 stroke_1" transform="translate(550,40) scale(50,50)" />
+			<use xlink:href="#0" class="fill_0 border_1 stroke_1" transform="translate(650,40) scale(50,50)" />
+			<use xlink:href="#0" class="fill_0 border_t stroke_1" transform="translate(750,40) scale(50,50)" />
+			<use xlink:href="#0" class="fill_0 border_0 stroke_1" transform="translate(850,40) scale(50,50)" />
+		</g>
+		<g id="triangles">
+			<use xlink:href="#3" class="fill_1 border_1 stroke_1" transform="translate(50,40) scale(50,50)"/>
+			<use xlink:href="#3" class="fill_1 border_t stroke_1" transform="translate(150,40) scale(50,50)" />
+			<use xlink:href="#3" class="fill_1 border_0 stroke_1" transform="translate(250,40) scale(50,50)" />
+			<use xlink:href="#3" class="fill_t border_1 stroke_1" transform="translate(350,40) scale(50,50)" />
+			<use xlink:href="#3" class="fill_t border_t stroke_1" transform="translate(450,40) scale(50,50)" />
+			<use xlink:href="#3" class="fill_t border_0 stroke_1" transform="translate(550,40) scale(50,50)" />
+			<use xlink:href="#3" class="fill_0 border_1 stroke_1" transform="translate(650,40) scale(50,50)" />
+			<use xlink:href="#3" class="fill_0 border_t stroke_1" transform="translate(750,40) scale(50,50)" />
+			<use xlink:href="#3" class="fill_0 border_0 stroke_1" transform="translate(850,40) scale(50,50)" />
+		</g>
+		<g id="squares">
+			<use xlink:href="#4" class="fill_1 border_1 stroke_1" transform="translate(50,40) scale(50,50)"/>
+			<use xlink:href="#4" class="fill_1 border_t stroke_1" transform="translate(150,40) scale(50,50)" />
+			<use xlink:href="#4" class="fill_1 border_0 stroke_1" transform="translate(250,40) scale(50,50)" />
+			<use xlink:href="#4" class="fill_t border_1 stroke_1" transform="translate(350,40) scale(50,50)" />
+			<use xlink:href="#4" class="fill_t border_t stroke_1" transform="translate(450,40) scale(50,50)" />
+			<use xlink:href="#4" class="fill_t border_0 stroke_1" transform="translate(550,40) scale(50,50)" />
+			<use xlink:href="#4" class="fill_0 border_1 stroke_1" transform="translate(650,40) scale(50,50)" />
+			<use xlink:href="#4" class="fill_0 border_t stroke_1" transform="translate(750,40) scale(50,50)" />
+			<use xlink:href="#4" class="fill_0 border_0 stroke_1" transform="translate(850,40) scale(50,50)" />
+		</g>
+		<g id="pol5">
+			<use xlink:href="#5" class="fill_1 border_1 stroke_1" transform="translate(50,40) scale(50,50)"/>
+			<use xlink:href="#5" class="fill_1 border_t stroke_1" transform="translate(150,40) scale(50,50)" />
+			<use xlink:href="#5" class="fill_1 border_0 stroke_1" transform="translate(250,40) scale(50,50)" />
+			<use xlink:href="#5" class="fill_t border_1 stroke_1" transform="translate(350,40) scale(50,50)" />
+			<use xlink:href="#5" class="fill_t border_t stroke_1" transform="translate(450,40) scale(50,50)" />
+			<use xlink:href="#5" class="fill_t border_0 stroke_1" transform="translate(550,40) scale(50,50)" />
+			<use xlink:href="#5" class="fill_0 border_1 stroke_1" transform="translate(650,40) scale(50,50)" />
+			<use xlink:href="#5" class="fill_0 border_t stroke_1" transform="translate(750,40) scale(50,50)" />
+			<use xlink:href="#5" class="fill_0 border_0 stroke_1" transform="translate(850,40) scale(50,50)" />
+		</g>
+		<g id="pol6">
+			<use xlink:href="#6" class="fill_1 border_1 stroke_1" transform="translate(50,40) scale(50,50)"/>
+			<use xlink:href="#6" class="fill_1 border_t stroke_1" transform="translate(150,40) scale(50,50)" />
+			<use xlink:href="#6" class="fill_1 border_0 stroke_1" transform="translate(250,40) scale(50,50)" />
+			<use xlink:href="#6" class="fill_t border_1 stroke_1" transform="translate(350,40) scale(50,50)" />
+			<use xlink:href="#6" class="fill_t border_t stroke_1" transform="translate(450,40) scale(50,50)" />
+			<use xlink:href="#6" class="fill_t border_0 stroke_1" transform="translate(550,40) scale(50,50)" />
+			<use xlink:href="#6" class="fill_0 border_1 stroke_1" transform="translate(650,40) scale(50,50)" />
+			<use xlink:href="#6" class="fill_0 border_t stroke_1" transform="translate(750,40) scale(50,50)" />
+			<use xlink:href="#6" class="fill_0 border_0 stroke_1" transform="translate(850,40) scale(50,50)" />
+		</g>
+		<g id="pol7">
+			<use xlink:href="#7" class="fill_1 border_1 stroke_1" transform="translate(50,40) scale(50,50)"/>
+			<use xlink:href="#7" class="fill_1 border_t stroke_1" transform="translate(150,40) scale(50,50)" />
+			<use xlink:href="#7" class="fill_1 border_0 stroke_1" transform="translate(250,40) scale(50,50)" />
+			<use xlink:href="#7" class="fill_t border_1 stroke_1" transform="translate(350,40) scale(50,50)" />
+			<use xlink:href="#7" class="fill_t border_t stroke_1" transform="translate(450,40) scale(50,50)" />
+			<use xlink:href="#7" class="fill_t border_0 stroke_1" transform="translate(550,40) scale(50,50)" />
+			<use xlink:href="#7" class="fill_0 border_1 stroke_1" transform="translate(650,40) scale(50,50)" />
+			<use xlink:href="#7" class="fill_0 border_t stroke_1" transform="translate(750,40) scale(50,50)" />
+			<use xlink:href="#7" class="fill_0 border_0 stroke_1" transform="translate(850,40) scale(50,50)" />
+		</g>
+		<g id="pol8">
+			<use xlink:href="#8" class="fill_1 border_1 stroke_1" transform="translate(50,40) scale(50,50)"/>
+			<use xlink:href="#8" class="fill_1 border_t stroke_1" transform="translate(150,40) scale(50,50)" />
+			<use xlink:href="#8" class="fill_1 border_0 stroke_1" transform="translate(250,40) scale(50,50)" />
+			<use xlink:href="#8" class="fill_t border_1 stroke_1" transform="translate(350,40) scale(50,50)" />
+			<use xlink:href="#8" class="fill_t border_t stroke_1" transform="translate(450,40) scale(50,50)" />
+			<use xlink:href="#8" class="fill_t border_0 stroke_1" transform="translate(550,40) scale(50,50)" />
+			<use xlink:href="#8" class="fill_0 border_1 stroke_1" transform="translate(650,40) scale(50,50)" />
+			<use xlink:href="#8" class="fill_0 border_t stroke_1" transform="translate(750,40) scale(50,50)" />
+			<use xlink:href="#8" class="fill_0 border_0 stroke_1" transform="translate(850,40) scale(50,50)" />
+		</g>
+	</defs>
+	<desc>Generated from user settings</desc>
+	
+	<rect x="0" y="0" width="1000" height="80" style="fill: #888888" />
+	<use xlink:href="#circles" transform="translate(0,0)" />
+	
+	<rect x="0" y="80" width="1000" height="80" style="fill: #880000" />
+	<use xlink:href="#triangles" transform="translate(0,80)" />
+	
+	<rect x="0" y="160" width="1000" height="80" style="fill: #008800" />
+	<use xlink:href="#squares" transform="translate(0,160)" />
+	
+	<rect x="0" y="240" width="1000" height="80" style="fill: #000088" />
+	<use xlink:href="#pol5" transform="translate(0,240)" />
+	
+	<rect x="0" y="320" width="1000" height="80" style="fill: #888800" />
+	<use xlink:href="#pol6" transform="translate(0,320)" />
+	
+	<rect x="0" y="400" width="1000" height="80" style="fill: #008888" />
+	<use xlink:href="#pol7" transform="translate(0,400)" />
+	
+	<rect x="0" y="480" width="1000" height="80" style="fill: #880088" />
+	<use xlink:href="#pol8" transform="translate(0,480)" />
+	
+	<rect x="0" y="560" width="1000" height="80" style="fill: #000000" />
+	<use xlink:href="#circles" transform="translate(0,560)" />
+	<use xlink:href="#triangles" transform="translate(0,560)" />
+	<use xlink:href="#squares" transform="translate(0,560)" />
+	<use xlink:href="#pol5" transform="translate(0,560)" />
+	<use xlink:href="#pol6" transform="translate(0,560)" />
+	<use xlink:href="#pol7" transform="translate(0,560)" />
+	<use xlink:href="#pol8" transform="translate(0,560)" />
+	
+</svg>
