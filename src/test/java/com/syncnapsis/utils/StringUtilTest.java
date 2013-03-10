@@ -173,4 +173,12 @@ public class StringUtilTest extends LoggerTestCase
 			assertTrue(Arrays.equals(bytes, StringUtil.fromBinaryString(StringUtil.toBinaryString(bytes))));
 		}
 	}
+
+	@TestCoversMethods("*codeBase64")
+	public void testBase64() throws Exception
+	{
+		String s = "my test String";
+		assertFalse(s.equals(StringUtil.encodeBase64(s)));
+		assertEquals(s, StringUtil.decodeBase64(StringUtil.encodeBase64(s)));
+	}
 }

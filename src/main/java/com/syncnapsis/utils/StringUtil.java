@@ -19,6 +19,8 @@ import java.text.MessageFormat;
 import java.util.Locale;
 
 import com.syncnapsis.enums.EnumLocale;
+
+import org.dbunit.util.Base64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -314,5 +316,32 @@ public abstract class StringUtil
 		}
 
 		return bytes;
+	}
+
+	/**
+	 * Encode a String base64 style.<br>
+	 * This Method will forward to an external implementation for future compatibility and
+	 * exchangeability.
+	 * 
+	 * @param s - the String to encode
+	 * @return the base64 encoding of the string
+	 */
+	public static String encodeBase64(String s)
+	{
+		return Base64.encodeString(s);
+	}
+
+	/**
+	 * 
+	 * Decode a String base64 style
+	 * This Method will forward to an external implementation for future compatibility and
+	 * exchangeability.
+	 * 
+	 * @param s - the base64 String to decode
+	 * @return the decoded String
+	 */
+	public static String decodeBase64(String s)
+	{
+		return Base64.decodeToString(s);
 	}
 }
