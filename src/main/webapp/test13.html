@@ -10,7 +10,7 @@
 	<head>
 		<script type="text/javascript" src="scripts/three.min.js"></script>
 		<script type="text/javascript" src="scripts/stats.min.js"></script>
-		<script type="text/javascript" src="sectors-0.1-medium.js"></script>
+		<!--<script type="text/javascript" src="sectors-0.1-medium.js"></script>-->
 		<script type="x-shader/x-vertex" id="vertexshader">
 			uniform float amplitude;
 			attribute float size;
@@ -137,10 +137,8 @@
 
 				scene = new THREE.Scene();
 				
-				galaxy = createGalaxy(sectors, 1);	
 				showStarColors();
-				updateColormodelConfig();
-				createPlanes(galaxy.info);
+				selectGalaxy();
 
 				projector = new THREE.Projector();
 
@@ -208,71 +206,185 @@
 				var material;
 				var mesh;			
 				// XY
-				planes.xy = new Array();
-				geometry = new THREE.PlaneGeometry(galaxyInfo.boundX*2, galaxyInfo.boundY*2);
-				material = materials.planesXY;
+				if(planes.xy == null)
+				{
+					planes.xy = new Array();
+					geometry = new THREE.PlaneGeometry(galaxyInfo.boundX*2, galaxyInfo.boundY*2);
+					material = materials.planesXY;
+					for(var i = 0; i < count; i++) {
+						mesh = new THREE.Mesh(geometry, material);
+						scene.add(mesh);
+						planes.xy.push(mesh);
+					};	
+				}
 				for(var i = 0; i < count; i++) {
-					mesh = new THREE.Mesh(geometry, material);
-					mesh.position.z = galaxyInfo.boundZ/count * 2 * (i+0.5) - galaxyInfo.boundZ;
-					mesh.rotation.z = Math.PI / 2;
-					scene.add(mesh);
-					planes.xy.push(mesh);
+					planes.xy[i].position.z = galaxyInfo.boundZ/count * 2 * (i+0.5) - galaxyInfo.boundZ;
+					planes.xy[i].rotation.z = Math.PI / 2;
 				};			
-				// XZ
-				planes.xz = new Array();
-				geometry = new THREE.PlaneGeometry(galaxyInfo.boundX*2, galaxyInfo.boundZ*2);
-				material = materials.planesXZ;
+				// XZ				
+				if(planes.xz == null)
+				{
+					planes.xz = new Array();
+					geometry = new THREE.PlaneGeometry(galaxyInfo.boundX*2, galaxyInfo.boundZ*2);
+					material = materials.planesXZ;
+					for(var i = 0; i < count; i++) {
+						mesh = new THREE.Mesh(geometry, material);
+						scene.add(mesh);
+						planes.xz.push(mesh);
+					};	
+				}
 				for(var i = 0; i < count; i++) {
-					mesh = new THREE.Mesh(geometry, material);
-					mesh.position.y = galaxyInfo.boundY/count * 2 * (i+0.5) - galaxyInfo.boundY;
-					mesh.rotation.x = Math.PI / 2;
-					scene.add(mesh);
-					planes.xz.push(mesh);
+					planes.xz[i].position.y = galaxyInfo.boundY/count * 2 * (i+0.5) - galaxyInfo.boundY;
+					planes.xz[i].rotation.x = Math.PI / 2;
 				};		
-				// YZ
-				planes.yz = new Array();
-				geometry = new THREE.PlaneGeometry(galaxyInfo.boundZ*2, galaxyInfo.boundY*2);
-				material = materials.planesYZ;
+				// YZ				
+				if(planes.yz == null)
+				{
+					planes.yz = new Array();
+					geometry = new THREE.PlaneGeometry(galaxyInfo.boundZ*2, galaxyInfo.boundY*2);
+					material = materials.planesYZ;
+					for(var i = 0; i < count; i++) {
+						mesh = new THREE.Mesh(geometry, material);
+						scene.add(mesh);
+						planes.yz.push(mesh);
+					};	
+				}
 				for(var i = 0; i < count; i++) {
-					mesh = new THREE.Mesh(geometry, material);
-					mesh.position.x = galaxyInfo.boundX/count * 2 * (i+0.5) - galaxyInfo.boundX;
-					mesh.rotation.y = Math.PI / 2;
-					scene.add(mesh);
-					planes.yz.push(mesh);
+					planes.yz[i].x = galaxyInfo.boundX/count * 2 * (i+0.5) - galaxyInfo.boundX;
+					planes.yz[i].y = Math.PI / 2;
 				};
 			};	
 			
+			updateStars = function(firstCall)
+			{
+				var factor = 0.6;				
+				var diffTreshold;
+				if(galaxy.animation == -1)
+					diffTreshold = 100;
+				else
+					diffTreshold = 1;
+				
+				var inMotion = 0;
+				var diff;
+				var target;
+				for(i = 0; i < galaxy.particles.vertices.length; i++)
+				{
+					if(galaxy.animation == -1)
+						target = new THREE.Vector3(0,0,0);
+					else
+						target = galaxy.particles.vertices[i].target;
+						
+					// x
+					diff = Math.abs(target.x - galaxy.particles.vertices[i].x);
+					if(diff < diffTreshold && diff > 0)
+					{
+						//galaxy.particles.vertices[i].x = target.x;
+					}
+					else if(diff > 0)
+					{
+						galaxy.particles.vertices[i].x = target.x - (target.x - galaxy.particles.vertices[i].x)*factor;
+						inMotion++;
+					}
+					// y
+					diff = Math.abs(target.y - galaxy.particles.vertices[i].y);
+					if(diff < diffTreshold && diff > 0)
+					{
+						//galaxy.particles.vertices[i].y = target.y;
+					}
+					else if(diff > 0)
+					{
+						galaxy.particles.vertices[i].y = target.y - (target.y - galaxy.particles.vertices[i].y)*factor;
+						inMotion++;
+					}
+					// z
+					diff = Math.abs(target.z - galaxy.particles.vertices[i].z);
+					if(diff < diffTreshold && diff > 0)
+					{
+						//galaxy.particles.vertices[i].z = target.z;
+					}
+					else if(diff > 0)
+					{
+						galaxy.particles.vertices[i].z = target.z - (target.z - galaxy.particles.vertices[i].z)*factor;
+						inMotion++;
+					}
+				}
+				
+				if((inMotion == 0 && galaxy.animation == -1) || (galaxy.animation == 1 && firstCall == true))			
+				{				
+					console.log("animation -1 done!");
+					galaxy.animation = 1;		
+					inMotion = 1;
+					
+					var colormodel = colormodels[checkedRadioButton("colormodel")];
+					for(i = 0; i < galaxy.particles.vertices.length; i++)
+					{
+						target = galaxy.particles.vertices[i].target;
+						if(target.x == 0 && target.y == 0 && target.z == 0)
+						{
+							galaxy.sizes[i] = 0;
+							
+							galaxy.colors[i].radius = 0;
+							galaxy.colors[i].radius2 = 0;
+						}
+						else
+						{
+							galaxy.colors[i].radius = galaxy.colors[i].radius_tmp;
+							galaxy.colors[i].radius2 = galaxy.colors[i].radius2_tmp;
+							galaxy.colors[i].calculateRGB(colormodel);
+						}
+					}					
+					shaders.attributes.size.needsUpdate = true;	
+					shaders.attributes.customColor.needsUpdate = true;	
+				}
+				
+				//console.log("stars updated: " + inMotion);
+				if(inMotion > 0)
+				{
+					galaxy.particleSystem.geometry.verticesNeedUpdate = true;
+					setTimeout(updateStars, 100);
+				}
+			}
+			
 			updatePlanes = function()
 			{
-				if(document.getElementById("planesXY").checked)
+				if(planes.xy)
 				{
-					for(var i = 0; i < planes.xy.length; i ++)
-						planes.xy[i].material = materials.planesXY;
+					if(document.getElementById("planesXY").checked)
+					{
+						for(var i = 0; i < planes.xy.length; i ++)
+							planes.xy[i].material = materials.planesXY;
+					}
+					else
+					{
+						for(var i = 0; i < planes.xy.length; i ++)
+							planes.xy[i].material = materials.planesInvisible;
+					}
 				}
-				else
+				if(planes.xz)
 				{
-					for(var i = 0; i < planes.xy.length; i ++)
-						planes.xy[i].material = materials.planesInvisible;
+					if(document.getElementById("planesXZ").checked)
+					{
+						for(var i = 0; i < planes.xz.length; i ++)
+							planes.xz[i].material = materials.planesXZ;
+					}
+					else
+					{
+						for(var i = 0; i < planes.xz.length; i ++)
+							planes.xz[i].material = materials.planesInvisible;
+					}
 				}
-				if(document.getElementById("planesXZ").checked)
+				if(planes.yz)
 				{
-					for(var i = 0; i < planes.xz.length; i ++)
-						planes.xz[i].material = materials.planesXZ;
-				}
-				else
-				{
-					for(var i = 0; i < planes.xz.length; i ++)
-						planes.xz[i].material = materials.planesInvisible;
-				}
-				if(document.getElementById("planesYZ").checked)
-				{
-					for(var i = 0; i < planes.yz.length; i ++)
-						planes.yz[i].material = materials.planesYZ;
-				}
-				else
-				{
-					for(var i = 0; i < planes.yz.length; i ++)
-						planes.yz[i].material = materials.planesInvisible;
+					if(document.getElementById("planesYZ").checked)
+					{
+						for(var i = 0; i < planes.yz.length; i ++)
+							planes.yz[i].material = materials.planesYZ;
+					}
+					else
+					{
+						for(var i = 0; i < planes.yz.length; i ++)
+							planes.yz[i].material = materials.planesInvisible;
+					}
 				}
 			};
 			
@@ -295,6 +407,32 @@
 				camera.lookAt(new THREE.Vector3(0,0,0));
 				camera.up = new THREE.Vector3( 0,0,1 );
 				camera.rotation.z += sphere_axis;
+			};
+			
+			selectGalaxy = function()
+			{
+				sectors = null;
+				var iframe = document.getElementById(document.getElementById("select_galaxy").value);
+				console.log("loading galaxy: " + iframe.src);
+				if(iframe.contentWindow.document.body != null)
+					doSelectGalaxy();
+				else
+					iframe.onload = doSelectGalaxy;
+			};
+			
+			doSelectGalaxy = function()
+			{
+				var iframe = document.getElementById(document.getElementById("select_galaxy").value)
+				var str = iframe.contentWindow.document.body.innerHTML;
+				str = str.substring(5,str.length-6);
+				//alert(str);
+				window.eval(str);
+				
+				createGalaxy(sectors, 1);
+				updateColormodelConfig();
+				createPlanes(galaxy.info);
+				//setTimeout(updateStars, 100);
+				updateStars(true);
 			};
 			
 			updateColors = function()
@@ -356,7 +494,38 @@
 			createGalaxy = function(sectors, stepSize)
 			{
 				if(stepSize == undefined)
-					stepSize = 1;
+					stepSize = 1;				
+				
+				if(galaxy == undefined)
+				{
+					galaxy = {
+						maxSectors: 55000,
+						particles: new THREE.Geometry(),
+						particleSystem: null,
+						info: null,
+						sizes: shaders.attributes.size.value,
+						colors: shaders.attributes.customColor.value,
+						animation: -1,
+					};					
+					
+					for(var i = 0; i < galaxy.maxSectors; i += stepSize)
+					{				
+						particle = new THREE.Vector3(0, 0, 0);
+						galaxy.particles.vertices[i] = particle;	
+						galaxy.particles.vertices[i].target = new THREE.Vector3(0, 0, 0);
+
+						galaxy.sizes[i] = Math.random()*(shaders.sizeMax-shaders.sizeMin)+shaders.sizeMin;		
+
+						galaxy.colors[i] = new StarColor(Math.random(), 0, 0);
+					}
+					
+					galaxy.particles.dynamic = true;
+					galaxy.particleSystem = new THREE.ParticleSystem(galaxy.particles, getSystemMaterial(false, false))
+					galaxy.particleSystem.dynamic = true;
+
+					scene.add(galaxy.particleSystem);					
+				}	
+					
 				var minX = 1000000000;
 				var minY = 1000000000;
 				var minZ = 1000000000;
@@ -367,17 +536,24 @@
 				var maxR2 = 0;
 				var sector;
 				var particle;
-				var particles = new THREE.Geometry();
-				var particleSystem;
-				var sizes = shaders.attributes.size.value;
-				var color;
-				var colors = shaders.attributes.customColor.value;
-				var particleCount = 0;
+				
+				var updated = 0;
+				var removed = 0;
 				for(var i = 0; i < sectors.length; i += stepSize)
-				{
-					sector = parseSector(sectors[i]);								
-					particle = new THREE.Vector3(sector.x, sector.y, sector.z);
-					particles.vertices.push(particle);
+				{				
+					sector = parseSector(sectors[i]);
+					
+					galaxy.particles.vertices[i].target.x = sector.x;
+					galaxy.particles.vertices[i].target.y = sector.y;
+					galaxy.particles.vertices[i].target.z = sector.z;
+					
+					galaxy.sizes[i] = Math.random()*(shaders.sizeMax-shaders.sizeMin)+shaders.sizeMin;
+					
+					galaxy.colors[i].radius_tmp = sector.r;
+					galaxy.colors[i].radius2_tmp = sector.r2;
+						
+					updated++;
+					
 					if(sector.x < minX)	minX = sector.x;
 					if(sector.x > maxX)	maxX = sector.x;
 					if(sector.y < minY)	minY = sector.y;
@@ -385,26 +561,29 @@
 					if(sector.z < minZ)	minZ = sector.z;
 					if(sector.z > maxZ)	maxZ = sector.z;
 					if(sector.r > maxR) maxR = sector.r;
-					if(sector.r2 > maxR2) maxR2 = sector.r2;
-							
-					sizes.push(Math.random()*(shaders.sizeMax-shaders.sizeMin)+shaders.sizeMin);
-					color = new StarColor(Math.random(), sector.r, sector.r2);
-					colors.push(color);
+					if(sector.r2 > maxR2) maxR2 = sector.r2;				
+				};		
+				for(var i = sectors.length; i < galaxy.maxSectors; i += stepSize)
+				{
+					galaxy.particles.vertices[i].target.x = 0;
+					galaxy.particles.vertices[i].target.y = 0;
+					galaxy.particles.vertices[i].target.z = 0;
 					
-					particleCount++;
+					//galaxy.sizes[i] = 0;
+					
+					//galaxy.colors[i].radius = 0;
+					//galaxy.colors[i].radius2 = 0;
+					
+					removed++;
 				}
-				particleSystem = new THREE.ParticleSystem(particles, getSystemMaterial(false, false));
-				particleSystem.dynamic = true;				
+				galaxy.animation = 1;
+				console.log("updated: " + updated + " removed: " + removed);
 				
-				var galaxy = {
-					particles: particles,
-					particleSystem: particleSystem,
-					info: new GalaxyInfo(minX, maxX, minY, maxY, minZ, maxZ, maxR, maxR2),
-					count: particleCount,
-					colors: colors,
-				};
-				scene.add(galaxy.particleSystem);
-				return galaxy;
+				galaxy.particleSystem.geometry.verticesNeedUpdate = true;
+				shaders.attributes.size.needsUpdate = true;	
+				shaders.attributes.customColor.needsUpdate = true;	
+				
+				galaxy.info = new GalaxyInfo(minX, maxX, minY, maxY, minZ, maxZ, maxR, maxR2);
 			};
 			
 			parseSector = function(sector)
@@ -456,36 +635,43 @@
 			
 			StarColor.prototype.calculateRGB = function(colormodel)
 			{
-				var param1;
-				if(colormodelconfig.param1 == colormodelconfig.heat)
-					param1 = this.heat;				
-				else if(colormodelconfig.param1 == colormodelconfig.radius)
-					param1 = this.radius/galaxy.info.maxR;			
-				else if(colormodelconfig.param1 == colormodelconfig.radius2)
-					param1 = this.radius2/galaxy.info.maxR2;			
-				else if(colormodelconfig.param1 == colormodelconfig.radius_inv)
-					param1 = 1 - this.radius/galaxy.info.maxR;			
-				else if(colormodelconfig.param1 == colormodelconfig.radius2_inv)
-					param1 = 1 - this.radius2/galaxy.info.maxR2;	
-				else 
-					param1 = 0;
+				if(this.radius > 0)
+				{
+					var param1;
+					if(colormodelconfig.param1 == colormodelconfig.heat)
+						param1 = this.heat;				
+					else if(colormodelconfig.param1 == colormodelconfig.radius)
+						param1 = this.radius/galaxy.info.maxR;			
+					else if(colormodelconfig.param1 == colormodelconfig.radius2)
+						param1 = this.radius2/galaxy.info.maxR2;			
+					else if(colormodelconfig.param1 == colormodelconfig.radius_inv)
+						param1 = 1 - this.radius/galaxy.info.maxR;			
+					else if(colormodelconfig.param1 == colormodelconfig.radius2_inv)
+						param1 = 1 - this.radius2/galaxy.info.maxR2;	
+					else 
+						param1 = 0;
+						
+					var param2;
+					if(colormodelconfig.param2 == colormodelconfig.heat)
+						param2 = this.heat;				
+					else if(colormodelconfig.param2 == colormodelconfig.radius)
+						param2 = this.radius/galaxy.info.maxR;			
+					else if(colormodelconfig.param2 == colormodelconfig.radius2)
+						param2 = this.radius2/galaxy.info.maxR2;			
+					else if(colormodelconfig.param2 == colormodelconfig.radius_inv)
+						param2 = 1 - this.radius/galaxy.info.maxR;			
+					else if(colormodelconfig.param2 == colormodelconfig.radius2_inv)
+						param2 = 1 - this.radius2/galaxy.info.maxR2;	
+					else 
+						param2 = 0;
 					
-				var param2;
-				if(colormodelconfig.param2 == colormodelconfig.heat)
-					param2 = this.heat;				
-				else if(colormodelconfig.param2 == colormodelconfig.radius)
-					param2 = this.radius/galaxy.info.maxR;			
-				else if(colormodelconfig.param2 == colormodelconfig.radius2)
-					param2 = this.radius2/galaxy.info.maxR2;			
-				else if(colormodelconfig.param2 == colormodelconfig.radius_inv)
-					param2 = 1 - this.radius/galaxy.info.maxR;			
-				else if(colormodelconfig.param2 == colormodelconfig.radius2_inv)
-					param2 = 1 - this.radius2/galaxy.info.maxR2;	
-				else 
-					param2 = 0;
-				
-				var rgb = colormodel.getRGB(param1, param2);
-				this.setRGB(rgb.r, rgb.g, rgb.b);
+					var rgb = colormodel.getRGB(param1, param2);
+					this.setRGB(rgb.r, rgb.g, rgb.b);
+				}
+				else
+				{
+					this.setRGB(0,0,0);
+				}
 			};
 			
 			var colormodels = {
@@ -983,6 +1169,18 @@
 			<input type="checkbox" id="rotateY" checked="checked"/> Y &nbsp;
 			<input type="checkbox" id="rotateZ" /> Z &nbsp;
 			<br>
+			Galaxy?<br>
+			&nbsp;<select id="select_galaxy" size="1" onchange="selectGalaxy()">
+				<option value="sectors-0.1-medium.js" selected="selected">Spiral (medium)</option>
+				<!--<option value="sectors-0.1-large.js">Spiral (large)</option>-->
+				<option value="sectors-spiral_3_arms.js">Spiral - 3 arms</option>
+				<option value="sectors-spiral_barred.js">Spiral - barred</option>
+				<option value="sectors-ellipsis.js">Ellipsis</option>
+				<option value="sectors-ellipsis_small.js">Ellipsis (small)</option>
+				<option value="sectors-rings_5.js">Rings - 5</option>
+				<option value="sectors-arcs.js">Arcs</option>
+				<option value="sectors-arcs_spiral.js">Arcs + Spiral</option>
+			</select><br>
 			Colormodel?<br>
 			<div id="colormodels"><!-- generated by JS --></div>
 			&nbsp;&nbsp;P1: 
@@ -999,6 +1197,17 @@
 			<input type="radio" name="param2" value="radius_inv" onchange="updateColormodelConfig()" /> R' 
 			<input type="radio" name="param2" value="radius2_inv" onchange="updateColormodelConfig()" /> R2' 
 			<br>
+		</div>
+		<div style="display: none;">
+			<iframe id="sectors-0.1-medium.js" src="sectors-0.1-medium.js"></iframe>
+			<iframe id="sectors-0.1-large.js" src="sectors-0.1-large.js"></iframe>
+			<iframe id="sectors-spiral_3_arms.js" src="sectors-spiral_3_arms.js"></iframe>
+			<iframe id="sectors-spiral_barred.js" src="sectors-spiral_barred.js"></iframe>
+			<iframe id="sectors-ellipsis.js" src="sectors-ellipsis.js"></iframe>
+			<iframe id="sectors-ellipsis_small.js" src="sectors-ellipsis_small.js"></iframe>
+			<iframe id="sectors-rings_5.js" src="sectors-rings_5.js"></iframe>
+			<iframe id="sectors-arcs.js" src="sectors-arcs.js"></iframe>
+			<iframe id="sectors-arcs_spiral.js" src="sectors-arcs_spiral.js"></iframe>
 		</div>
 		<!-- generated by JS -->
 	</body>
