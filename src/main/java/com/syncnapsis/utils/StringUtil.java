@@ -332,7 +332,6 @@ public abstract class StringUtil
 	}
 
 	/**
-	 * 
 	 * Decode a String base64 style
 	 * This Method will forward to an external implementation for future compatibility and
 	 * exchangeability.
