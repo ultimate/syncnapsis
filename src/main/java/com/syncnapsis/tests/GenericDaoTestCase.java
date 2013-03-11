@@ -161,6 +161,12 @@ public abstract class GenericDaoTestCase<T extends BaseObject<PK>, PK extends Se
 		assertNotNull(result);
 		logger.debug(result.size() + " entities found");
 		assertTrue(result.size() > 0);
+		int allSize = result.size();
+
+		logger.debug("...testing getAll(true)...");
+		result = genericDao.getAll(true);
+		assertTrue(result.size() <= allSize);
+		
 		int oldSize = result.size();
 		int newSize = oldSize;
 		
@@ -175,11 +181,10 @@ public abstract class GenericDaoTestCase<T extends BaseObject<PK>, PK extends Se
 			newSize--;
 		}
 
-		logger.debug("...testing getAll(true)...");
 		result = genericDao.getAll(true);
 		assertNotNull(result);
 		logger.debug(result.size() + " entities found");
-		assertTrue(result.size() == newSize);
+		assertEquals(newSize, result.size());
 
 		if(entity2 instanceof ActivatableInstance)
 		{
