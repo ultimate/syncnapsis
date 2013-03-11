@@ -68,7 +68,7 @@ public class Message
 	 * Construct a new message with a String
 	 * 
 	 * @param message - the text message content
-	 * @param protocol - the protocol used
+	 * @param opCode - the message op-code
 	 */
 	public Message(String message, byte opCode)
 	{
