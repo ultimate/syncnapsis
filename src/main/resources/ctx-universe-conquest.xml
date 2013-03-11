@@ -68,9 +68,17 @@
 	<!-- =================================================================== -->
 
 	<bean id="uiManager" class="com.syncnapsis.client.UIManagerImpl">
-		<property name="localeProvider" ref="localeProvider" />
+		<property name="securityManager" ref="securityManager" />
 		<property name="connectionProvider" ref="connectionProvider" />
-		<property name="rpcHandler" ref="rpcHandler" />
+		<property name="rpcService" ref="rpcService" />
+	</bean>
+
+	<bean id="messageManager" class="com.syncnapsis.client.MessageManagerImpl">
+		<property name="securityManager" ref="securityManager" />
+		<property name="connectionProvider" ref="connectionProvider" />
+		<property name="rpcService" ref="rpcService" />
+		<property name="pinboardManager" ref="pinboardManager" />
+		<property name="pinboardMessageManager" ref="pinboardMessageManager" />
 	</bean>
 
 	<!-- =================================================================== -->

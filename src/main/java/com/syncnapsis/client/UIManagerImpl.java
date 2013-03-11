@@ -11,98 +11,21 @@
  */
 package com.syncnapsis.client;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.syncnapsis.enums.EnumLocale;
-import com.syncnapsis.providers.ConnectionProvider;
-import com.syncnapsis.providers.LocaleProvider;
-import com.syncnapsis.websockets.service.rpc.RPCHandler;
 
 /**
  * Interface representing the client and server UIManager functions
  * 
  * @author ultimate
  */
-public class UIManagerImpl implements UIManager
+public class UIManagerImpl extends BaseClientManager implements UIManager
 {
 	/**
-	 * The Logger-Instance
+	 * Default Constructor
 	 */
-	protected transient final Logger	logger	= LoggerFactory.getLogger(UIManagerImpl.class);
-	/**
-	 * The LocaleProvider for accessing the session locale
-	 */
-	protected LocaleProvider			localeProvider;
-
-	/**
-	 * The ConnectionProvider for accessing the current connection
-	 */
-	protected ConnectionProvider		connectionProvider;
-
-	/**
-	 * The RPCHandler used to obtain the client instance
-	 */
-	protected RPCHandler				rpcHandler;
-
-	/**
-	 * The LocaleProvider for accessing the session locale
-	 * 
-	 * @return localeProvider
-	 */
-	public LocaleProvider getLocaleProvider()
+	public UIManagerImpl()
 	{
-		return localeProvider;
-	}
-
-	/**
-	 * The LocaleProvider for accessing the session locale
-	 * 
-	 * @param localeProvider - the LocaleProvider
-	 */
-	public void setLocaleProvider(LocaleProvider localeProvider)
-	{
-		this.localeProvider = localeProvider;
-	}
-
-	/**
-	 * The ConnectionProvider for accessing the current connection
-	 * 
-	 * @return connectionProvider
-	 */
-	public ConnectionProvider getConnectionProvider()
-	{
-		return connectionProvider;
-	}
-
-	/**
-	 * The ConnectionProvider for accessing the current connection
-	 * 
-	 * @param connectionProvider - the ConnectionProvider
-	 */
-	public void setConnectionProvider(ConnectionProvider connectionProvider)
-	{
-		this.connectionProvider = connectionProvider;
-	}
-
-	/**
-	 * The RPCHandler used to obtain the client instance
-	 * 
-	 * @return rpcHandler
-	 */
-	public RPCHandler getRpcHandler()
-	{
-		return rpcHandler;
-	}
-
-	/**
-	 * The RPCHandler used to obtain the client instance
-	 * 
-	 * @param rpcHandler - the RPCHandler
-	 */
-	public void setRpcHandler(RPCHandler rpcHandler)
-	{
-		this.rpcHandler = rpcHandler;
+		super("uiManager");
 	}
 
 	/*
@@ -113,6 +36,7 @@ public class UIManagerImpl implements UIManager
 	public void reloadLocale()
 	{
 		// nothing to do on the server
+		// this is the stub for client method invocation
 	}
 
 	/*
@@ -123,8 +47,8 @@ public class UIManagerImpl implements UIManager
 	public void selectLocale(EnumLocale locale)
 	{
 		logger.debug("setting locale: " + locale);
-		localeProvider.set(locale);
+		securityManager.getLocaleProvider().set(locale);
 		logger.debug("reloading locale on client now!");
-		((UIManager) rpcHandler.getClientInstance("uiManager", connectionProvider.get())).reloadLocale();
+		((UIManager) getClientInstance("uiManager", connectionProvider.get())).reloadLocale();
 	}
 }

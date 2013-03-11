@@ -43,4 +43,14 @@ public interface MessageManager
 	 * @param messages - the list of messages for the pinboard
 	 */
 	public void updatePinboard(Long pinboardId, List<PinboardMessage> messages);
+
+	/**
+	 * Refresh an update for the pinboard given by id.<br>
+	 * The update will contain the newest messages available within the given range for the number
+	 * of messages.
+	 * 
+	 * @param pinboardId - the id of the pinboard to update
+	 * @param messageCount - the amount of messages to get
+	 */
+	public void requestPinboardUpdate(Long pinboardId, int messageCount);
 }

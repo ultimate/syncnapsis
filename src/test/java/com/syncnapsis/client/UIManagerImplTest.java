@@ -5,19 +5,19 @@ import org.springframework.mock.web.MockHttpSession;
 
 import com.syncnapsis.enums.EnumLocale;
 import com.syncnapsis.providers.ConnectionProvider;
-import com.syncnapsis.providers.LocaleProvider;
 import com.syncnapsis.providers.SessionProvider;
+import com.syncnapsis.security.BaseGameManager;
 import com.syncnapsis.tests.BaseSpringContextTestCase;
 import com.syncnapsis.tests.annotations.TestExcludesMethods;
 import com.syncnapsis.websockets.Connection;
 import com.syncnapsis.websockets.engine.http.HttpConnection;
-import com.syncnapsis.websockets.service.rpc.RPCHandler;
+import com.syncnapsis.websockets.service.rpc.RPCService;
 
 @TestExcludesMethods({ "get*", "set*" })
 public class UIManagerImplTest extends BaseSpringContextTestCase
 {
-	private SessionProvider sessionProvider;
-	private LocaleProvider		localeProvider;
+	private SessionProvider		sessionProvider;
+	private BaseGameManager		securityManager;
 	private ConnectionProvider	connectionProvider;
 
 	public void testReloadLocale()
@@ -29,16 +29,16 @@ public class UIManagerImplTest extends BaseSpringContextTestCase
 	{
 		UIManagerImpl uiManager = new UIManagerImpl();
 		uiManager.setConnectionProvider(connectionProvider);
-		uiManager.setLocaleProvider(localeProvider);
-		
+		uiManager.setSecurityManager(securityManager);
+
 		sessionProvider.set(new MockHttpSession());
-		localeProvider.set(EnumLocale.EN);
+		securityManager.getLocaleProvider().set(EnumLocale.EN);
 
 		final Connection connection = new HttpConnection("test");
 		connectionProvider.set(connection);
 
-		final RPCHandler mockRPCHandler = mockContext.mock(RPCHandler.class);
-		uiManager.setRpcHandler(mockRPCHandler);
+		final RPCService mockRPCService = mockContext.mock(RPCService.class);
+		uiManager.setRpcService(mockRPCService);
 
 		final UIManager clientUIManager = mockContext.mock(UIManager.class);
 
@@ -46,7 +46,7 @@ public class UIManagerImplTest extends BaseSpringContextTestCase
 
 		mockContext.checking(new Expectations() {
 			{
-				oneOf(mockRPCHandler).getClientInstance(uiManagerName, connection);
+				oneOf(mockRPCService).getClientInstance(uiManagerName, connection);
 				will(returnValue(clientUIManager));
 			}
 		});
@@ -55,11 +55,11 @@ public class UIManagerImplTest extends BaseSpringContextTestCase
 				oneOf(clientUIManager).reloadLocale();
 			}
 		});
-		
+
 		uiManager.selectLocale(EnumLocale.DE);
-		
+
 		mockContext.assertIsSatisfied();
-		
-		assertEquals(EnumLocale.DE, localeProvider.get());
+
+		assertEquals(EnumLocale.DE, securityManager.getLocaleProvider().get());
 	}
 }

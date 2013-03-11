@@ -11,120 +11,119 @@
  */
 package com.syncnapsis.client;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
-import com.syncnapsis.enums.EnumLocale;
-import com.syncnapsis.providers.ConnectionProvider;
-import com.syncnapsis.providers.LocaleProvider;
-import com.syncnapsis.websockets.service.rpc.RPCHandler;
+import com.syncnapsis.data.model.PinboardMessage;
+import com.syncnapsis.data.service.PinboardManager;
+import com.syncnapsis.data.service.PinboardMessageManager;
+import com.syncnapsis.websockets.Connection;
 
 /**
  * Interface representing the client and server UIManager functions
  * 
  * @author ultimate
  */
-public class MessageManagerImpl implements UIManager
+public class MessageManagerImpl extends BaseClientManager implements MessageManager
 {
 	/**
-	 * The Logger-Instance
+	 * The PinboardManager used to access Pinboard related data
 	 */
-	protected transient final Logger	logger	= LoggerFactory.getLogger(MessageManagerImpl.class);
+	protected PinboardManager	pinboardManager;
 	/**
-	 * The LocaleProvider for accessing the session locale
+	 * The PinboardMessageManager used to access PinboardMessage related data
 	 */
-	protected LocaleProvider			localeProvider;
+	protected PinboardMessageManager	pinboardMessageManager;
 
 	/**
-	 * The ConnectionProvider for accessing the current connection
+	 * Default Constructor
 	 */
-	protected ConnectionProvider		connectionProvider;
-
-	/**
-	 * The RPCHandler used to obtain the client instance
-	 */
-	protected RPCHandler				rpcHandler;
-
-	/**
-	 * The LocaleProvider for accessing the session locale
-	 * 
-	 * @return localeProvider
-	 */
-	public LocaleProvider getLocaleProvider()
+	public MessageManagerImpl()
 	{
-		return localeProvider;
+		super("mMessageManager");
 	}
 
 	/**
-	 * The LocaleProvider for accessing the session locale
+	 * The PinboardManager used to access pinboard related data
 	 * 
-	 * @param localeProvider - the LocaleProvider
+	 * @return pinboardManager
 	 */
-	public void setLocaleProvider(LocaleProvider localeProvider)
+	public PinboardManager getPinboardManager()
 	{
-		this.localeProvider = localeProvider;
+		return pinboardManager;
 	}
 
 	/**
-	 * The ConnectionProvider for accessing the current connection
+	 * The PinboardManager used to access pinboard related data
 	 * 
-	 * @return connectionProvider
+	 * @param pinboardManager - the PinboardManager
 	 */
-	public ConnectionProvider getConnectionProvider()
+	public void setPinboardManager(PinboardManager pinboardManager)
 	{
-		return connectionProvider;
+		this.pinboardManager = pinboardManager;
 	}
-
+	
 	/**
-	 * The ConnectionProvider for accessing the current connection
+	 * The PinboardMessageManager used to access pinboardMessage related data
 	 * 
-	 * @param connectionProvider - the ConnectionProvider
+	 * @return pinboardMessageManager
 	 */
-	public void setConnectionProvider(ConnectionProvider connectionProvider)
+	public PinboardMessageManager getPinboardMessageManager()
 	{
-		this.connectionProvider = connectionProvider;
+		return pinboardMessageManager;
 	}
-
+	
 	/**
-	 * The RPCHandler used to obtain the client instance
+	 * The PinboardMessageManager used to access pinboardMessage related data
 	 * 
-	 * @return rpcHandler
+	 * @param pinboardMessageManager - the PinboardMessageManager
 	 */
-	public RPCHandler getRpcHandler()
+	public void setPinboardMessageManager(PinboardMessageManager pinboardMessageManager)
 	{
-		return rpcHandler;
-	}
-
-	/**
-	 * The RPCHandler used to obtain the client instance
-	 * 
-	 * @param rpcHandler - the RPCHandler
-	 */
-	public void setRpcHandler(RPCHandler rpcHandler)
-	{
-		this.rpcHandler = rpcHandler;
+		this.pinboardMessageManager = pinboardMessageManager;
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.syncnapsis.client.UIManager#reloadLocale()
+	 * @see com.syncnapsis.client.MessageManager#postPinboardMessage(java.lang.Long,
+	 * java.lang.String, java.lang.String)
 	 */
 	@Override
-	public void reloadLocale()
+	public void postPinboardMessage(Long pinboardId, String title, String message)
+	{
+		PinboardMessage pinboardMessage = pinboardManager.postMessage(pinboardId, title, message);
+
+		List<PinboardMessage> messages = new ArrayList<PinboardMessage>(1);
+		messages.add(pinboardMessage);
+
+		Collection<Connection> connections = getConnections();
+
+		for(Connection connection : connections)
+		{
+			((MessageManager) getClientInstance(getInstanceName(), connection)).updatePinboard(pinboardId, messages);
+		}
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see com.syncnapsis.client.MessageManager#updatePinboard(java.lang.Long, java.util.List)
+	 */
+	@Override
+	public void updatePinboard(Long pinboardId, List<PinboardMessage> messages)
 	{
 		// nothing to do on the server
+		// this is the stub for client method invocation
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.syncnapsis.client.UIManager#selectLocale(com.syncnapsis.enums.EnumLocale)
+	 * @see com.syncnapsis.client.MessageManager#requestPinboardUpdate(java.lang.Long, int)
 	 */
 	@Override
-	public void selectLocale(EnumLocale locale)
+	public void requestPinboardUpdate(Long pinboardId, int messageCount)
 	{
-		logger.debug("setting locale: " + locale);
-		localeProvider.set(locale);
-		logger.debug("reloading locale on client now!");
-		((UIManager) rpcHandler.getClientInstance("uiManager", connectionProvider.get())).reloadLocale();
+		List<PinboardMessage> messages = pinboardMessageManager.getByPinboard(pinboardId, messageCount);
+		((MessageManager) getClientInstance(getInstanceName(), getConnectionProvider().get())).updatePinboard(pinboardId, messages);
 	}
 }
