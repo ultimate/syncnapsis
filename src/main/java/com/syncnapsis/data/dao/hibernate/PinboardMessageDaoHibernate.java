@@ -14,6 +14,10 @@
  */
 package com.syncnapsis.data.dao.hibernate;
 
+import java.util.List;
+
+import org.hibernate.Query;
+
 import com.syncnapsis.data.dao.PinboardMessageDao;
 import com.syncnapsis.data.model.PinboardMessage;
 
@@ -31,5 +35,29 @@ public class PinboardMessageDaoHibernate extends GenericDaoHibernate<PinboardMes
 	public PinboardMessageDaoHibernate()
 	{
 		super(PinboardMessage.class);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see com.syncnapsis.data.dao.PinboardMessageDao#getByPinboard(java.lang.Long)
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<PinboardMessage> getByPinboard(Long pinboardId)
+	{
+		return createQuery("from PinboardMessage where pinboard.id = ? and activated=true order by creationDate", pinboardId).list();
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see com.syncnapsis.data.dao.PinboardMessageDao#getByPinboard(java.lang.Long, int)
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<PinboardMessage> getByPinboard(Long pinboardId, int count)
+	{
+		Query q = createQuery("from PinboardMessage where pinboard.id = ? and activated=true order by creationDate", pinboardId);
+		q.setMaxResults(count);
+		return q.list();
 	}
 }

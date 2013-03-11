@@ -14,6 +14,9 @@
  */
 package com.syncnapsis.data.dao;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.syncnapsis.data.dao.hibernate.PinboardMessageDaoHibernate;
 import com.syncnapsis.data.model.PinboardMessage;
 import com.syncnapsis.tests.GenericDaoTestCase;
@@ -43,6 +46,42 @@ public class PinboardMessageDaoTest extends GenericDaoTestCase<PinboardMessage, 
 		setBadEntityId(-1L);
 		
 		setGenericDao(pinboardMessageDao);
+	}
+	
+	public void testGetByPinboard() throws Exception
+	{
+		List<PinboardMessage> allMessages = pinboardMessageDao.getAll();
+		
+		List<Long> pinboards = new ArrayList<Long>();
+		for(PinboardMessage m: allMessages)
+		{
+			if(!pinboards.contains(m.getPinboard().getId()))
+				pinboards.add(m.getPinboard().getId());
+		}
+		
+		assertTrue(pinboards.size() > 0);
+		
+		List<PinboardMessage> boardMessages;
+		List<PinboardMessage> someBoardMessages;
+		final int count = 2;
+		int totalMessages = 0;
+		
+		for(Long pinboardId: pinboards)
+		{
+			boardMessages = pinboardMessageDao.getByPinboard(pinboardId);
+			totalMessages += boardMessages.size();
+			
+			assertTrue(boardMessages.size() < allMessages.size());
+			
+			someBoardMessages = pinboardMessageDao.getByPinboard(pinboardId, count);
+			
+			if(boardMessages.size() > count)
+				assertEquals(count, someBoardMessages.size());
+			else
+				assertEquals(boardMessages.size(), someBoardMessages.size());
+		}
+		
+		assertEquals(allMessages.size(), totalMessages);
 	}
 	
 	// insert individual Tests here

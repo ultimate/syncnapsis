@@ -17,12 +17,15 @@ package com.syncnapsis.data.service.impl;
 import com.syncnapsis.data.dao.PinboardDao;
 import com.syncnapsis.data.model.Pinboard;
 import com.syncnapsis.data.service.PinboardManager;
+import com.syncnapsis.data.service.PinboardMessageManager;
 import com.syncnapsis.tests.GenericNameManagerImplTestCase;
 import com.syncnapsis.tests.annotations.TestCoversClasses;
 
-@TestCoversClasses( { PinboardManager.class, PinboardManagerImpl.class })
+@TestCoversClasses({ PinboardManager.class, PinboardManagerImpl.class })
 public class PinboardManagerImplTest extends GenericNameManagerImplTestCase<Pinboard, Long, PinboardManager, PinboardDao>
 {
+	private PinboardMessageManager	pinboardMessageManager;
+
 	@Override
 	protected void setUp() throws Exception
 	{
@@ -30,6 +33,6 @@ public class PinboardManagerImplTest extends GenericNameManagerImplTestCase<Pinb
 		setEntity(new Pinboard());
 		setDaoClass(PinboardDao.class);
 		setMockDao(mockContext.mock(PinboardDao.class));
-		setMockManager(new PinboardManagerImpl(mockDao));
+		setMockManager(new PinboardManagerImpl(mockDao, pinboardMessageManager));
 	}
 }

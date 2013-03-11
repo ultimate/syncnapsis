@@ -827,6 +827,16 @@
 			<value description="creationDate">2013-01-01 00:00:00</value>
 			<value description="locked">0</value>
 		</row>
+		<row>
+			<value description="id">2</value>
+			<value description="version">1</value>
+			<value description="activated">1</value>
+			<value description="name">a second board</value>
+			<value description="description"><![CDATA[the second pinboard]]></value>
+			<value description="fkCreator">0</value>
+			<value description="creationDate">2013-01-01 00:00:00</value>
+			<value description="locked">1</value>
+		</row>
 	</table>
 
 	<table name="pinboardmessage">
@@ -867,6 +877,26 @@
 			<value description="creationDate">2013-01-01 03:00:00</value>
 			<null/>
 			<value description="content"><![CDATA[yeah, we will... ;-)]]></value>
+		</row>
+		<row>
+			<value description="id">4</value>
+			<value description="version">1</value>
+			<value description="activated">0</value>
+			<value description="fkPinboard">2</value>
+			<value description="fkCreator">0</value>
+			<value description="creationDate">2013-01-01 02:00:00</value>
+			<null/>
+			<value description="content"><![CDATA[old announcement]]></value>
+		</row>
+		<row>
+			<value description="id">5</value>
+			<value description="version">1</value>
+			<value description="activated">1</value>
+			<value description="fkPinboard">2</value>
+			<value description="fkCreator">1</value>
+			<value description="creationDate">2013-01-01 03:00:00</value>
+			<null/>
+			<value description="content"><![CDATA[new announcement]]></value>
 		</row>
 	</table>
 

@@ -14,6 +14,8 @@
  */
 package com.syncnapsis.data.service.impl;
 
+import java.util.List;
+
 import com.syncnapsis.data.dao.PinboardMessageDao;
 import com.syncnapsis.data.model.PinboardMessage;
 import com.syncnapsis.data.service.PinboardMessageManager;
@@ -28,7 +30,7 @@ public class PinboardMessageManagerImpl extends GenericManagerImpl<PinboardMessa
 	/**
 	 * PinboardMessageDao for database access
 	 */
-	protected PinboardMessageDao			pinboardMessageDao;
+	protected PinboardMessageDao	pinboardMessageDao;
 
 	/**
 	 * Standard Constructor
@@ -39,5 +41,25 @@ public class PinboardMessageManagerImpl extends GenericManagerImpl<PinboardMessa
 	{
 		super(pinboardMessageDao);
 		this.pinboardMessageDao = pinboardMessageDao;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see com.syncnapsis.data.service.PinboardMessageManager#getByPinboard(java.lang.Long)
+	 */
+	@Override
+	public List<PinboardMessage> getByPinboard(Long pinboardId)
+	{
+		return pinboardMessageDao.getByPinboard(pinboardId);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see com.syncnapsis.data.service.PinboardMessageManager#getByPinboard(java.lang.Long, int)
+	 */
+	@Override
+	public List<PinboardMessage> getByPinboard(Long pinboardId, int count)
+	{
+		return pinboardMessageDao.getByPinboard(pinboardId, count);
 	}
 }

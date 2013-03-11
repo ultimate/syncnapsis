@@ -97,10 +97,10 @@ public class PinboardManagerImpl extends GenericNameManagerImpl<Pinboard, Long> 
 	 * @see com.syncnapsis.data.service.PinboardManager#postMessage(java.lang.Long, java.lang.String, java.lang.String)
 	 */
 	@Override
-	public PinboardMessage postMessage(Long boardId, String title, String message)
+	public PinboardMessage postMessage(Long pinboardId, String title, String message)
 	{
 		// get additional post information
-		Pinboard pinboard = get(boardId);
+		Pinboard pinboard = get(pinboardId);
 		User creator = securityManager.getUserProvider().get();
 		
 		// create and save the message

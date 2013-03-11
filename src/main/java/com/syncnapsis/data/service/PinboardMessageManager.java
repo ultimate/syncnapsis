@@ -14,6 +14,8 @@
  */
 package com.syncnapsis.data.service;
 
+import java.util.List;
+
 import com.syncnapsis.data.model.PinboardMessage;
 
 /**
@@ -21,6 +23,22 @@ import com.syncnapsis.data.model.PinboardMessage;
  * 
  * @author ultimate
  */
-public interface PinboardMessageManager  extends GenericManager<PinboardMessage, Long>
+public interface PinboardMessageManager extends GenericManager<PinboardMessage, Long>
 {
+	/**
+	 * Get all messages belonging to a pinboard
+	 * 
+	 * @param pinboardId - the pinboard id
+	 * @return the list of messages
+	 */
+	public List<PinboardMessage> getByPinboard(Long pinboardId);
+
+	/**
+	 * Get the newest messages belonging to a pinboard
+	 * 
+	 * @param pinboardId - the pinboard id
+	 * @param count - the number of messages to get
+	 * @return the list of messages
+	 */
+	public List<PinboardMessage> getByPinboard(Long pinboardId, int count);
 }

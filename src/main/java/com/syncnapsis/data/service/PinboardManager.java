@@ -33,5 +33,5 @@ public interface PinboardManager extends GenericNameManager<Pinboard, Long>
 	 * @param message - the message content to add
 	 * @return the message object created
 	 */
-	public PinboardMessage postMessage(Long boardId, String title, String message);
+	public PinboardMessage postMessage(Long pinboardId, String title, String message);
 }
