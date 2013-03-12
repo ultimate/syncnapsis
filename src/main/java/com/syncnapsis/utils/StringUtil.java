@@ -343,4 +343,27 @@ public abstract class StringUtil
 	{
 		return Base64.decodeToString(s);
 	}
+
+	/**
+	 * Count the occurrences of a String within another String
+	 * 
+	 * @param s - the String to scan for part
+	 * @param part - the part to look for
+	 * @param allowOverlap - wether to allow overlaps while counting
+	 * @return the number of occurrences
+	 */
+	public static int countOccurrences(String s, String part, boolean allowOverlap)
+	{
+		int index = 0;
+		int count = 0;
+		while((index = s.indexOf(part, index)) >= 0)
+		{
+			count++;
+			if(!allowOverlap)
+				index += part.length();
+			else
+				index++;
+		}
+		return count;
+	}
 }

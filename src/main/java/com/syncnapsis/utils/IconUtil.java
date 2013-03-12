@@ -14,8 +14,6 @@
  */
 package com.syncnapsis.utils;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -298,34 +296,21 @@ public abstract class IconUtil
 	 * @param b - the byte to convert
 	 * @return the resulting int
 	 */
-	private static int getByte(byte[] bytes, int e, int offset)
+	protected static int getByte(byte[] bytes, int e, int offset)
 	{
 		int b = bytes[(e + offset) % bytes.length] + offset * 13;
 		int i = (((int) b - ASCII_OFFSET) + 256) % 256;
-		// System.out.println(i);
 		return i;
 	}
 
-	private static double round(double d)
+	/**
+	 * Internal shortcut for rounding doubles to 2 digits precision.
+	 * 
+	 * @param d - the double to round
+	 * @return the rounded double
+	 */
+	protected static double round(double d)
 	{
 		return Math.round(d * 100) / 100.0;
-	}
-
-	private static void createIconFile(String s) throws IOException
-	{
-		FileUtil.writeFile(new File(s + ".svg"), createIcon(s));
-	}
-
-	public static void main(String[] args) throws IOException
-	{
-		createIconFile("ultimate");
-		createIconFile("moronicjoker");
-		createIconFile("X");
-		createIconFile("no");
-		createIconFile("foo");
-		createIconFile("bazz");
-		createIconFile("thing");
-		createIconFile("abcdef");
-		createIconFile("nothing");
 	}
 }

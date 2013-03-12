@@ -181,4 +181,27 @@ public class StringUtilTest extends LoggerTestCase
 		assertFalse(s.equals(StringUtil.encodeBase64(s)));
 		assertEquals(s, StringUtil.decodeBase64(StringUtil.encodeBase64(s)));
 	}
+	
+	public void testCountOccurrences() throws Exception
+	{
+		String s = "abcdefabcdeababa";
+		
+		assertEquals(1, StringUtil.countOccurrences(s, "f", true));
+		assertEquals(1, StringUtil.countOccurrences(s, "f", false));
+
+		assertEquals(1, StringUtil.countOccurrences(s, "def", true));
+		assertEquals(1, StringUtil.countOccurrences(s, "def", false));
+
+		assertEquals(2, StringUtil.countOccurrences(s, "de", true));
+		assertEquals(2, StringUtil.countOccurrences(s, "de", false));
+		
+		assertEquals(5, StringUtil.countOccurrences(s, "a", true));
+		assertEquals(5, StringUtil.countOccurrences(s, "a", false));
+		
+		assertEquals(4, StringUtil.countOccurrences(s, "ab", true));
+		assertEquals(4, StringUtil.countOccurrences(s, "ab", false));
+		
+		assertEquals(2, StringUtil.countOccurrences(s, "aba", true));
+		assertEquals(1, StringUtil.countOccurrences(s, "aba", false));
+	}
 }
