@@ -14,17 +14,33 @@
  */
 package com.syncnapsis.data.service.impl;
 
+import java.util.Date;
+
+import org.jmock.Expectations;
+import org.springframework.mock.web.MockHttpSession;
+
 import com.syncnapsis.data.dao.PinboardDao;
 import com.syncnapsis.data.model.Pinboard;
+import com.syncnapsis.data.model.PinboardMessage;
 import com.syncnapsis.data.service.PinboardManager;
 import com.syncnapsis.data.service.PinboardMessageManager;
+import com.syncnapsis.data.service.UserManager;
+import com.syncnapsis.mock.MockTimeProvider;
+import com.syncnapsis.providers.SessionProvider;
+import com.syncnapsis.providers.UserProvider;
+import com.syncnapsis.security.BaseApplicationManager;
 import com.syncnapsis.tests.GenericNameManagerImplTestCase;
 import com.syncnapsis.tests.annotations.TestCoversClasses;
+import com.syncnapsis.tests.annotations.TestExcludesMethods;
 
 @TestCoversClasses({ PinboardManager.class, PinboardManagerImpl.class })
+@TestExcludesMethods({ "*etSecurityManager", "afterPropertiesSet" })
 public class PinboardManagerImplTest extends GenericNameManagerImplTestCase<Pinboard, Long, PinboardManager, PinboardDao>
 {
 	private PinboardMessageManager	pinboardMessageManager;
+	private SessionProvider			sessionProvider;
+	private UserProvider			userProvider;
+	private UserManager				userManager;
 
 	@Override
 	protected void setUp() throws Exception
@@ -34,5 +50,51 @@ public class PinboardManagerImplTest extends GenericNameManagerImplTestCase<Pinb
 		setDaoClass(PinboardDao.class);
 		setMockDao(mockContext.mock(PinboardDao.class));
 		setMockManager(new PinboardManagerImpl(mockDao, pinboardMessageManager));
+	}
+
+	public void testPostMessage() throws Exception
+	{
+		final PinboardMessageManager mockPinboardMessageManager = mockContext.mock(PinboardMessageManager.class);
+		final BaseApplicationManager securityManager = new BaseApplicationManager();
+		securityManager.setTimeProvider(new MockTimeProvider(123456));
+		securityManager.setUserProvider(userProvider);
+		
+		sessionProvider.set(new MockHttpSession());
+		userProvider.set(userManager.getAll().get(0));
+		
+		PinboardManagerImpl pinboardManagerImpl = new PinboardManagerImpl(mockDao, mockPinboardMessageManager);
+		pinboardManagerImpl.setSecurityManager(securityManager);
+		
+		final Long pinboardId = 1L;
+		final String title = "title";
+		final String content = "content";
+		
+		final Pinboard pinboard = new Pinboard(); // just a dummy
+		pinboard.setId(pinboardId);
+		
+		final PinboardMessage message = new PinboardMessage();
+		message.setActivated(true);
+		message.setContent(content);
+		message.setCreationDate(new Date(securityManager.getTimeProvider().get()));
+		message.setCreator(userProvider.get());
+		message.setPinboard(pinboard);	
+		message.setTitle(title);
+		
+		mockContext.checking(new Expectations() {
+			{
+				oneOf(mockPinboardMessageManager).save(message);
+				will(returnValue(message));
+			}
+		});
+		mockContext.checking(new Expectations() {
+			{
+				oneOf(mockDao).get(pinboardId);
+				will(returnValue(pinboard));
+			}
+		});
+		
+		PinboardMessage result = pinboardManagerImpl.postMessage(pinboardId, title, content);
+		mockContext.assertIsSatisfied();
+		assertEquals(result, message);
 	}
 }

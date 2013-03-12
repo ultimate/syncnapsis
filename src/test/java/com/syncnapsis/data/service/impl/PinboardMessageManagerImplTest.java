@@ -14,6 +14,8 @@
  */
 package com.syncnapsis.data.service.impl;
 
+import java.util.ArrayList;
+
 import com.syncnapsis.data.dao.PinboardMessageDao;
 import com.syncnapsis.data.model.PinboardMessage;
 import com.syncnapsis.data.service.PinboardMessageManager;
@@ -31,5 +33,16 @@ public class PinboardMessageManagerImplTest extends GenericManagerImplTestCase<P
 		setDaoClass(PinboardMessageDao.class);
 		setMockDao(mockContext.mock(PinboardMessageDao.class));
 		setMockManager(new PinboardMessageManagerImpl(mockDao));
+	}
+	
+	public void testGetByPinboard() throws Exception
+	{
+		MethodCall managerCall = new MethodCall("getByPinboard", new ArrayList<PinboardMessage>(), 1L);
+		MethodCall daoCall = managerCall;
+		simpleGenericTest(managerCall, daoCall);
+
+		managerCall = new MethodCall("getByPinboard", new ArrayList<PinboardMessage>(), 1L, 10);
+		daoCall = managerCall;
+		simpleGenericTest(managerCall, daoCall);
 	}
 }
