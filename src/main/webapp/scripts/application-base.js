@@ -32,14 +32,38 @@ EntityManager = function(server)
 		return type + "Manager";
 	};
 	
+	this.extend = function(entity)
+	{
+		if(entity.merge == undefined)
+		{
+			entity.merge = function(other, typeMask)
+			{
+				if(typeMask == undefined)
+					typeMask = Reflections.typeMask.ALL;
+				for( var prop in other)
+				{
+					if((Reflections.getTypeMask(typeof other[prop]) & typeMask) != 0)
+					{
+						this[prop] = other[prop];
+					}
+				}
+				return this;
+			};			
+		}
+	};
+	
 	this.load = function(entity, callback)
 	{
+		// assure entity-functionality
+		this.extend(entity);
+		// get the type of the entity
 		var type = this.getType(entity);
+		// get the corresponding manager-name
 		var manager = this.getManagerNameForType(type);
 		if(_server[manager] == null)
 			throw new Error("required manager '" + manager + "' not found for type '" + type + "'");
+		// get the entity from the manager
 		_server[manager].get(entity.id, function(result) { entity.merge(result); if(callback != undefined) (callback)(entity); } );
-//		_universalManager.get(type, entity.id, function(result) { entity.merge(result); if(callback != undefined) (callback)(entity); } );
 	};
 };
 
