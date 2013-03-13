@@ -14,6 +14,8 @@
  */
 package com.syncnapsis.test;
 
+import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.Map;
@@ -21,26 +23,38 @@ import java.util.Map;
 import com.syncnapsis.data.model.Player;
 import com.syncnapsis.data.model.base.Identifiable;
 import com.syncnapsis.tests.annotations.Untested;
+import com.syncnapsis.utils.FileUtil;
+import com.syncnapsis.utils.IconUtil;
 import com.syncnapsis.utils.ReflectionsUtil;
 
 @Untested
 public class TestSomething
 {
 	public static void main(String[] args) throws Exception
-	{	
+	{
+		createIconFile("ultimate");
+		createIconFile("moronicjoker");
+		createIconFile("X");
+		createIconFile("no");
+		createIconFile("foo");
+		createIconFile("bazz");
+		createIconFile("thing");
+		createIconFile("abcdef");
+		createIconFile("nothing");
+
 		for(int i = 0; i < 20; i++)
-			System.out.println((i*5)%7+1);
-		
+			System.out.println((i * 5) % 7 + 1);
+
 		for(byte b = Byte.MIN_VALUE; b < Byte.MAX_VALUE; b++)
-			System.out.println((b+256) % 256);
-		
+			System.out.println((b + 256) % 256);
+
 		ReflectionsUtil.getActualTypeArguments(Player.class, Identifiable.class); // warm up
 		long start = System.nanoTime();
 		Type[] t = ReflectionsUtil.getActualTypeArguments(Player.class, Identifiable.class);
 		long end = System.nanoTime();
 		System.out.println(t[0]);
-		System.out.println(end-start);
-		
+		System.out.println(end - start);
+
 		Map<Class<?>, Class<?>> idTypes = new HashMap<Class<?>, Class<?>>();
 		idTypes.put(Player.class, (Class<?>) t[0]);
 		idTypes.containsKey(Player.class); // warm up
@@ -50,6 +64,11 @@ public class TestSomething
 		Type t1 = idTypes.get(Player.class);
 		end = System.nanoTime();
 		System.out.println(t1);
-		System.out.println(end-start);
+		System.out.println(end - start);
+	}
+
+	private static void createIconFile(String s) throws IOException
+	{
+		FileUtil.writeFile(new File(s + ".svg"), IconUtil.createIcon(s));
 	}
 }

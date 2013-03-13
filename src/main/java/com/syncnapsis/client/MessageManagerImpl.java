@@ -41,7 +41,7 @@ public class MessageManagerImpl extends BaseClientManager implements MessageMana
 	 */
 	public MessageManagerImpl()
 	{
-		super("mMessageManager");
+		super("messageManager");
 	}
 
 	/**
