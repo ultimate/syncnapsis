@@ -187,21 +187,3 @@ Reflections.addListProperty = function(object, listName, value, writable)
 		};
 	}
 };
-
-/*
- * Object prototype extensions
- */
-
-Object.prototype.merge = function(other, typeMask)
-{
-	if(typeMask == undefined)
-		typeMask = Reflections.typeMask.ALL;
-	for( var prop in other)
-	{
-		if((Reflections.getTypeMask(typeof other[prop]) & typeMask) != 0)
-		{
-			this[prop] = other[prop];
-		}
-	}
-	return this;
-};
