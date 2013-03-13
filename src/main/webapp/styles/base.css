@@ -263,7 +263,7 @@ a {
 	width: 100%;
 }
 
-.window .window_content div {
+.window .window_content > div {
 	position: absolute;
 	top: 4px;
 	bottom: 4px;
