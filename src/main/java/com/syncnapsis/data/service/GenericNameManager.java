@@ -20,55 +20,74 @@ import java.util.List;
 import com.syncnapsis.data.model.base.BaseObject;
 
 /**
- * Generische Manager, der erweiterte Operationen nach Name zur Verfügung stellt.
+ * Generic Manager, offering extended functionality for named entities.
  * 
- * @param <T> die Model-Klasse
- * @param <PK> die Klasse des Primärschlüssels
+ * @param <T> the Model Class
+ * @param <PK> the primary key Class
  * @author ultimate
  */
 public interface GenericNameManager<T extends BaseObject<PK>, PK extends Serializable> extends GenericManager<T, PK>
 {
 	/**
-	 * Lade eine Liste aller Einträge, sortiert nach Name
+	 * Load a list of all entities ordered by name.<br>
+	 * Will only return activated entities.
 	 * 
-	 * @param returnOnlyActivated - sollen nur aktivierte Einträge zurückgegeben
-	 *            werden?
-	 * @return die Liste aller Einträge
+	 * @see GenericNameManager#getOrderedByName(boolean)
+	 * @return the list of entities
 	 */
 	public List<T> getOrderedByName();
+
 	/**
-	 * Lade eine Liste aller Einträge, sortiert nach Name
+	 * Load a list of all entities ordered by name
 	 * 
-	 * @param returnOnlyActivated - sollen nur aktivierte Einträge zurückgegeben
-	 *            werden?
-	 * @return die Liste aller Einträge
+	 * @param returnOnlyActivated - wether only to return activated entities
+	 * @return the list of entities
 	 */
 	public List<T> getOrderedByName(boolean returnOnlyActivated);
-	
+
 	/**
-	 * Lade eine Liste aller Einträge, sortiert nach Name mit eingeschränktem Präfix des Namens
+	 * Load a list of all entities starting with the given prefex ordered by name
 	 * 
-	 * @param prefix - die Anfangsbuchstaben des Namens
-	 * @param nRows - die maximale Anzahl an zurückzugebenen Ergebnisses (negativ = alle)
-	 * @param returnOnlyActivated - sollen nur aktivierte Einträge zurückgegeben
-	 *            werden?
-	 * @return die Liste aller Einträge
+	 * @param prefix - the prefix for the name
+	 * @param nRows - the maximum amount of entities to return
+	 * @param returnOnlyActivated - wether only to return activated entities
+	 * @return the list of entities
 	 */
 	public List<T> getByPrefix(String prefix, int nRows, boolean returnOnlyActivated);
-	
+
 	/**
-	 * Lade einen Eintrag anhand seines Namens
+	 * Load an entity by it's name
 	 * 
-	 * @param name - der Name
-	 * @return de Eintrag
+	 * @param name - the name
+	 * @return the entity
 	 */
 	public T getByName(String name);
 
 	/**
-	 * Prüft, ob ein gewünschter Name für diese Klasse noch verfügbar ist.
+	 * Check wether a given name is still available for this model class
 	 * 
-	 * @param name - der zu prüfende Name
-	 * @return true oder false
+	 * @param name - the name to check
+	 * @return true or false
 	 */
 	public boolean isNameAvailable(String name);
+
+	/**
+	 * Check wether a given name is valid for this model class.<br>
+	 * This method is supposed to be used to check wether the given name is valid according to
+	 * specific rules.<br>
+	 * By default (if no specific implementation is given) this method should default to true.<br>
+	 * In specific implementations the following checks might be performed for example:<br>
+	 * <ul>
+	 * <li>length within a given range (min length, max length)</li>
+	 * <li>used characters in given range (e.g. ascii only)</li>
+	 * <li>required complexibility (e.g. mix of digits and letters)</li>
+	 * <li>occurrence of forbidden substrings</li>
+	 * <li>black- or white-lists</li>
+	 * <li>...</li>
+	 * </ul>
+	 * 
+	 * @param name - the name to check
+	 * @return true or false
+	 */
+	public boolean isNameValid(String name);
 }

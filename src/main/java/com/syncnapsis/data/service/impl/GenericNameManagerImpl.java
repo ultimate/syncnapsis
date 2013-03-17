@@ -96,4 +96,14 @@ public class GenericNameManagerImpl<T extends BaseObject<PK>, PK extends Seriali
 	{
 		return genericNameDao.isNameAvailable(name);
 	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see com.syncnapsis.data.service.GenericNameManager#isNameValid(java.lang.String)
+	 */
+	@Override
+	public boolean isNameValid(String name)
+	{
+		return true;
+	}
 }

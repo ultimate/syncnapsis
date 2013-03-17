@@ -62,4 +62,12 @@ public abstract class GenericNameManagerImplTestCase<T extends BaseObject<PK>, P
 		MethodCall daoCall = managerCall;
 		simpleGenericTest(managerCall, daoCall);
 	}
+	
+	public void testIsNameValid() throws Exception
+	{
+		// TODO test 
+//		MethodCall managerCall = new MethodCall("isNameAvailable", true, "name");
+//		MethodCall daoCall = managerCall;
+//		simpleGenericTest(managerCall, daoCall);
+	}
 }
