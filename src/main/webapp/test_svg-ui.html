@@ -221,21 +221,22 @@
 				</div>
 			</li>
 			</ul>
-			as you can see even standard html input elements can by styles transparent with individual borders and text colors so you can see the svg in the background (I added some elements and lines for demonstration)... (all that is pure css, even for radio and checkbox!)<br>
-			You can even use embedded svg in css (see css-style in code for "ul.embedded", example above) to style lists for example - but unfortunately:
+			as you can see even standard html input elements can be styled transparent with individual borders and text colors so you can see the svg in the background (I added some elements and lines for demonstration)... (all that is pure css, even for radio and checkbox!)<br>
+			You can even use embedded svg in css (see css-style in code for "ul.embedded") to style lists for example - but unfortunately:
 			<ul class="embedded">
 			<li>referencing the defines doesn't work here</li>
 			<li>the result slightly differs in chrome</li>
-			<li>elements don't size on zoom in Opera<li>
+			<li>elements don't size on zoom in Opera</li>
 			<li>doesn't work in IE - who cares ;-)</li>
 			</ul>	
-			But there is a second alternative similar to the radios and checkboxes styles above which works (just like the example above) in:
+			But there is a second alternative similar to the radios and checkboxes styles above - see an example with the browsers tested below:
 			<ul class="via-before">
-			<li id="l2-1"><label for="l2-1"></label>Chrome</li>
-			<li id="l2-2"><label for="l2-2"></label>Firefox</li>
-			<li id="l2-3"><label for="l2-3"></label>Opera</li>
-			<li id="l2-4"><label for="l2-4"></label>IE (the only thing not working is the background svg)</li>
-			</ul>		
+			<li id="l2-1"><label for="l2-1"></label>Chrome &#x2714; (could not test in Chrome on Android (since I have only 2.3.3))</li>
+			<li id="l2-2"><label for="l2-2"></label>Firefox &#x2714;  (&amp; Firefox on Android &#x2714; )</li>
+			<li id="l2-3"><label for="l2-3"></label>Opera &#x2714;  (&amp; Opera Mobile on Android &#x2714; )</li>
+			<li id="l2-4"><label for="l2-4"></label>IE (except background svg, which displays wrong)</li>
+			<li id="l2-5"><label for="l2-5"></label>Android-standard browser (only input-elements working, svgs are not displayed)</li>
+			</ul>	
 		</div>
 	</div>
 </body>
