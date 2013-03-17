@@ -12,7 +12,7 @@
  * You should have received a copy of the GNU General Plublic License along with this program;
  * if not, see <http://www.gnu.org/licenses/>.
  */
-//@requires("UI")
+//@requires("Client")
 //@requires("RPCSocket")
 //@requires("PlayerManager")
 //@requires("application-base")
@@ -39,10 +39,12 @@ connect = function()
 	var genericRPCInvocationHandler = new WebSockets.rpc.GenericRPCInvocationHandler(rpcSocket, server);
 	// init client-side managers
 	client.uiManager = new UIManager();
+	client.messageManager = new MessageManager();
 	// init server-side managers as proxies (may use same "class/interface") 
 	server.userManager = Proxies.newProxyInstance(GenericManager, genericRPCInvocationHandler); // currently GenericManager is sufficient
 	server.playerManager = Proxies.newProxyInstance(PlayerManager, genericRPCInvocationHandler);
 	server.uiManager = Proxies.newProxyInstance(ServerUIManager, genericRPCInvocationHandler);
+	server.messageManager = Proxies.newProxyInstance(ServerMessageManager, genericRPCInvocationHandler);
 	// init additional services
 	server.entityManager = new EntityManager(server);
 };

@@ -282,3 +282,30 @@ ServerUIManager.prototype.selectLocale = function(selection)
 {
 	// stub for server-entity
 };
+
+MessageManager = function()
+{
+};
+
+MessageManager.prototype.updatePinboard = function(pinboardId, messages)
+{
+	console.log("updating pinboard #" + pinboardId);
+	for(var i = 0; i < messages.length; i++)
+	{
+		console.log(messages[i]);
+	}
+};
+
+ServerMessageManager = function()
+{
+};
+
+ServerMessageManager.prototype.postPinboardMessage = function(pinboardId, title, message)
+{
+	// stub for server-entity
+};
+
+ServerMessageManager.prototype.requestPinboardUpdate = function(pinboardId, messageCount)
+{
+	// stub for server-entity
+};

@@ -13,7 +13,7 @@
  * if not, see <http://www.gnu.org/licenses/>.
  */
 //@requires("Events")
-//@requires("UI")
+//@requires("Client")
 
 var Ad = {};
 
