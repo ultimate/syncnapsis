@@ -17,11 +17,16 @@ package com.syncnapsis.tests;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+import org.jmock.Expectations;
+
 import com.syncnapsis.data.dao.GenericNameDao;
 import com.syncnapsis.data.model.base.BaseObject;
 import com.syncnapsis.data.service.GenericNameManager;
+import com.syncnapsis.data.service.impl.GenericNameManagerImpl;
+import com.syncnapsis.security.Validator;
 
-public abstract class GenericNameManagerImplTestCase<T extends BaseObject<PK>, PK extends Serializable, M extends GenericNameManager<T, PK>, D extends GenericNameDao<T, PK>> extends GenericManagerImplTestCase<T, PK, M, D>
+public abstract class GenericNameManagerImplTestCase<T extends BaseObject<PK>, PK extends Serializable, M extends GenericNameManager<T, PK>, D extends GenericNameDao<T, PK>>
+		extends GenericManagerImplTestCase<T, PK, M, D>
 {
 	protected void setUp() throws Exception
 	{
@@ -34,7 +39,7 @@ public abstract class GenericNameManagerImplTestCase<T extends BaseObject<PK>, P
 		mockManager = null;
 		mockDao = null;
 	}
-	
+
 	public void testGetByName() throws Exception
 	{
 		MethodCall managerCall = new MethodCall("getByName", entity, "name");
@@ -48,26 +53,42 @@ public abstract class GenericNameManagerImplTestCase<T extends BaseObject<PK>, P
 		MethodCall daoCall = managerCall;
 		simpleGenericTest(managerCall, daoCall);
 	}
-		
+
 	public void testGetByPrefix() throws Exception
 	{
 		MethodCall managerCall = new MethodCall("getByPrefix", new ArrayList<T>(), "prefix", -1, true);
 		MethodCall daoCall = managerCall;
 		simpleGenericTest(managerCall, daoCall);
 	}
-	
+
 	public void testIsNameAvailable() throws Exception
 	{
 		MethodCall managerCall = new MethodCall("isNameAvailable", true, "name");
 		MethodCall daoCall = managerCall;
 		simpleGenericTest(managerCall, daoCall);
 	}
-	
+
+	@SuppressWarnings("unchecked")
 	public void testIsNameValid() throws Exception
 	{
-		// TODO test 
-//		MethodCall managerCall = new MethodCall("isNameAvailable", true, "name");
-//		MethodCall daoCall = managerCall;
-//		simpleGenericTest(managerCall, daoCall);
+
+		assertFalse(((GenericNameManager<?, ?>) mockManager).isNameValid(null));
+		mockContext.assertIsSatisfied();
+
+		final Validator<String> v = mockContext.mock(Validator.class);
+		((GenericNameManagerImpl<?, ?>) mockManager).setNameValidator(v);
+
+		final String name = "aname";
+
+		mockContext.checking(new Expectations() {
+			{
+				oneOf(v).isValid(name);
+				will(returnValue(true));
+			}
+		});
+
+		assertTrue(((GenericNameManager<?, ?>) mockManager).isNameValid(name));
+		mockContext.assertIsSatisfied();
+
 	}
 }

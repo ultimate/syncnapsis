@@ -70,7 +70,7 @@ public interface GenericNameManager<T extends BaseObject<PK>, PK extends Seriali
 	 * @return true or false
 	 */
 	public boolean isNameAvailable(String name);
-
+	
 	/**
 	 * Check wether a given name is valid for this model class.<br>
 	 * This method is supposed to be used to check wether the given name is valid according to

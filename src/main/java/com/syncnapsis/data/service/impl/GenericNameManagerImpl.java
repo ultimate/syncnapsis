@@ -17,10 +17,12 @@ package com.syncnapsis.data.service.impl;
 import java.io.Serializable;
 import java.util.List;
 
+import org.springframework.transaction.annotation.Transactional;
+
 import com.syncnapsis.data.dao.GenericNameDao;
 import com.syncnapsis.data.model.base.BaseObject;
 import com.syncnapsis.data.service.GenericNameManager;
-import org.springframework.transaction.annotation.Transactional;
+import com.syncnapsis.security.Validator;
 
 /**
  * Manager-Implementierung für den generischen Zugriff auf beliebige
@@ -29,12 +31,20 @@ import org.springframework.transaction.annotation.Transactional;
  * @author ultimate
  */
 @Transactional
-public class GenericNameManagerImpl<T extends BaseObject<PK>, PK extends Serializable> extends GenericManagerImpl<T, PK> implements GenericNameManager<T, PK>
+public class GenericNameManagerImpl<T extends BaseObject<PK>, PK extends Serializable> extends GenericManagerImpl<T, PK> implements
+		GenericNameManager<T, PK>
 {
 	/**
 	 * GenericNameDao für den Datenbankzugriff.
 	 */
 	protected GenericNameDao<T, PK>	genericNameDao;
+
+	/**
+	 * Optional nameValidator used to validate names.<br>
+	 * If no nameValidator is set {@link GenericNameManagerImpl#isNameValid(String)} will return
+	 * true.
+	 */
+	protected Validator<String>		nameValidator;
 
 	/**
 	 * Standard Constructor, der die DAOs speichert.
@@ -47,6 +57,28 @@ public class GenericNameManagerImpl<T extends BaseObject<PK>, PK extends Seriali
 		this.genericNameDao = genericNameDao;
 	}
 
+	/**
+	 * Optional validator used to validate names.<br>
+	 * If no validator is set {@link GenericNameManagerImpl#isNameValid(String)} will return true.
+	 * 
+	 * @return nameValidator
+	 */
+	public Validator<String> getNameValidator()
+	{
+		return nameValidator;
+	}
+
+	/**
+	 * Optional validator used to validate names.<br>
+	 * If no validator is set {@link GenericNameManagerImpl#isNameValid(String)} will return true.
+	 * 
+	 * @param nameValidator - the Validator
+	 */
+	public void setNameValidator(Validator<String> nameValidator)
+	{
+		this.nameValidator = nameValidator;
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * @see com.syncnapsis.data.service.GenericNameManager#getByName(java.lang.String)
@@ -56,7 +88,7 @@ public class GenericNameManagerImpl<T extends BaseObject<PK>, PK extends Seriali
 	{
 		return genericNameDao.getByName(name);
 	}
-	
+
 	/*
 	 * (non-Javadoc)
 	 * @see com.syncnapsis.data.service.GenericNameManager#getOrderedByName()
@@ -79,7 +111,8 @@ public class GenericNameManagerImpl<T extends BaseObject<PK>, PK extends Seriali
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.syncnapsis.data.service.GenericNameManager#getByPrefix(java.lang.String, int, boolean)
+	 * @see com.syncnapsis.data.service.GenericNameManager#getByPrefix(java.lang.String, int,
+	 * boolean)
 	 */
 	@Override
 	public List<T> getByPrefix(String prefix, int nRows, boolean returnOnlyActivated)
@@ -104,6 +137,9 @@ public class GenericNameManagerImpl<T extends BaseObject<PK>, PK extends Seriali
 	@Override
 	public boolean isNameValid(String name)
 	{
-		return true;
+		if(nameValidator == null)
+			return name != null;
+		else
+			return nameValidator.isValid(name);
 	}
 }
