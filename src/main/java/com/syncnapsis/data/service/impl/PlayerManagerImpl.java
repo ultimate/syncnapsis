@@ -21,9 +21,11 @@ import com.syncnapsis.data.model.User;
 import com.syncnapsis.data.service.PlayerManager;
 import com.syncnapsis.data.service.PlayerRoleManager;
 import com.syncnapsis.data.service.UserManager;
+import com.syncnapsis.exceptions.PlayerRegistrationFailedException;
 import com.syncnapsis.exceptions.PlayerSelectionInvalidException;
 import com.syncnapsis.exceptions.PlayerSittingExistsException;
 import com.syncnapsis.exceptions.PlayerSittingNotPossibleException;
+import com.syncnapsis.exceptions.UserRegistrationFailedException;
 import com.syncnapsis.security.BaseGameManager;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.util.Assert;
@@ -137,11 +139,17 @@ public class PlayerManagerImpl extends GenericManagerImpl<Player, Long> implemen
 	 * java.lang.String, java.lang.String)
 	 */
 	@Override
-	public Player register(String username, String email, String password, String passwordConfirm)
+	public Player register(String username, String email, String password, String passwordConfirm) throws PlayerRegistrationFailedException
 	{
-		User user = userManager.register(username, email, password, passwordConfirm);
-		if(user == null)
-			return null;
+		User user;
+		try
+		{
+			user = userManager.register(username, email, password, passwordConfirm);
+		}
+		catch(UserRegistrationFailedException e)
+		{
+			throw new PlayerRegistrationFailedException(e.getMessage());
+		}
 
 		Player player = new Player();
 		player.setAccountStatus(user.getAccountStatus());

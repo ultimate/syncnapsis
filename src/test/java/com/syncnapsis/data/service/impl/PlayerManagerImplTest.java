@@ -25,6 +25,7 @@ import com.syncnapsis.data.model.User;
 import com.syncnapsis.data.service.PlayerManager;
 import com.syncnapsis.data.service.PlayerRoleManager;
 import com.syncnapsis.data.service.UserManager;
+import com.syncnapsis.exceptions.PlayerRegistrationFailedException;
 import com.syncnapsis.exceptions.PlayerSelectionInvalidException;
 import com.syncnapsis.exceptions.PlayerSittingExistsException;
 import com.syncnapsis.exceptions.PlayerSittingNotPossibleException;
@@ -294,7 +295,7 @@ public class PlayerManagerImplTest extends GenericManagerImplTestCase<Player, Lo
 		String password = "a_password";
 
 		Player newPlayer = playerManager.register(username, email, password, password);
-		
+
 		flush();
 
 		assertNotNull(newPlayer);
@@ -315,8 +316,32 @@ public class PlayerManagerImplTest extends GenericManagerImplTestCase<Player, Lo
 		String email = "new@syncnapsis.com";
 		String password = "a_password";
 
-		assertNull(playerManager.register(existingUser.getUsername(), email, password, password));
-		assertNull(playerManager.register(username, existingUser.getEmail(), password, password));
-		assertNull(playerManager.register(username, email, password, password.toUpperCase()));
+		try
+		{
+			playerManager.register(existingUser.getUsername(), email, password, password);
+			fail("expected Exception not occurred!");
+		}
+		catch(PlayerRegistrationFailedException e)
+		{
+			assertNotNull(e);
+		}
+		try
+		{
+			playerManager.register(username, existingUser.getEmail(), password, password);
+			fail("expected Exception not occurred!");
+		}
+		catch(PlayerRegistrationFailedException e)
+		{
+			assertNotNull(e);
+		}
+		try
+		{
+			playerManager.register(username, email, password, password.toUpperCase());
+			fail("expected Exception not occurred!");
+		}
+		catch(PlayerRegistrationFailedException e)
+		{
+			assertNotNull(e);
+		}
 	}
 }

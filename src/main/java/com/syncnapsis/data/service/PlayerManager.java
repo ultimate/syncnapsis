@@ -15,6 +15,7 @@
 package com.syncnapsis.data.service;
 
 import com.syncnapsis.data.model.Player;
+import com.syncnapsis.exceptions.PlayerRegistrationFailedException;
 import com.syncnapsis.exceptions.PlayerSelectionInvalidException;
 import com.syncnapsis.exceptions.PlayerSittingExistsException;
 import com.syncnapsis.exceptions.PlayerSittingNotPossibleException;
@@ -56,8 +57,9 @@ public interface PlayerManager extends GenericManager<Player, Long>
 	 * @param password - the password used
 	 * @param passwordConfirm - the confirmation of the password
 	 * @return the new Player
+	 * @throws PlayerRegistrationFailedException if registration fails
 	 */
-	public Player register(String username, String email, String password, String passwordConfirm);
+	public Player register(String username, String email, String password, String passwordConfirm) throws PlayerRegistrationFailedException;
 
 	/**
 	 * Get the Player belonging to a User
