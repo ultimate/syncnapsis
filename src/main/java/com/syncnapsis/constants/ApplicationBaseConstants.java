@@ -23,17 +23,17 @@ package com.syncnapsis.constants;
  * @author ultimate
  */
 public class ApplicationBaseConstants
-{	
+{
 	/**
 	 * Namen der Spielparameter: Maximale Anzahl angezeigter News
 	 */
-	public static final String	PARAM_NEWS_MAXITEMS	= "news.maxItems";
+	public static final String	PARAM_NEWS_MAXITEMS		= "news.maxItems";
 	/**
 	 * Namen der Spielparameter: Maximales Alter der News mit Platzhalter für
 	 * Abstufungen
 	 */
-	public static final String	PARAM_NEWS_MAXAGE	= "news.%L.maxAge";
-	
+	public static final String	PARAM_NEWS_MAXAGE		= "news.%L.maxAge";
+
 	/**
 	 * Rollennamen: Administrator
 	 */
@@ -50,7 +50,7 @@ public class ApplicationBaseConstants
 	 * Rollennamen: Demo-User
 	 */
 	public static final String	ROLE_DEMO_USER			= "DEMO_USER";
-	
+
 	/**
 	 * Schlüssel für die User-ID in der Session
 	 */
@@ -79,10 +79,31 @@ public class ApplicationBaseConstants
 	 * des Benutzers abgelaufen ist.
 	 */
 	public static final String	SESSION_REFRESH_KEY		= "j_refresh";
-	
+
 	/**
 	 * Maximale Anzahl der Relogin-Versuche. Nach dieser Anzahl von Versuchen
 	 * wird der Benutzer automatisch ausgeloggt.
 	 */
 	public static final int		LOGIN_MAXFAILS			= 3;
+
+	/**
+	 * Error-Key for "invalid username"
+	 */
+	public static final String	ERROR_USERNAME_INVALID	= "error.invalid_username";
+	/**
+	 * Error-Key for "no password"
+	 */
+	public static final String	ERROR_NO_PASSWORD		= "error.password_mismatch";
+	/**
+	 * Error-Key for "password mismatch"
+	 */
+	public static final String	ERROR_PASSWORD_MISMATCH	= "error.password_mismatch";
+	/**
+	 * Error-Key for "email exists"
+	 */
+	public static final String	ERROR_EMAIL_EXISTS		= "error.email_exists";
+	/**
+	 * Error-Key for "username exists"
+	 */
+	public static final String	ERROR_USERNAME_EXISTS	= "error.username_exists";
 }

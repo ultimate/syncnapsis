@@ -29,6 +29,7 @@ import com.syncnapsis.enums.EnumDateFormat;
 import com.syncnapsis.enums.EnumGender;
 import com.syncnapsis.enums.EnumLocale;
 import com.syncnapsis.exceptions.UserNotFoundException;
+import com.syncnapsis.exceptions.UserRegistrationFailedException;
 import com.syncnapsis.security.BaseApplicationManager;
 import com.syncnapsis.utils.StringUtil;
 import com.syncnapsis.utils.TimeZoneUtil;
@@ -133,18 +134,18 @@ public class UserManagerImpl extends GenericNameManagerImpl<User, Long> implemen
 	 * java.lang.String, java.lang.String)
 	 */
 	@Override
-	public User register(String username, String email, String password, String passwordConfirm)
+	public User register(String username, String email, String password, String passwordConfirm) throws UserRegistrationFailedException
 	{
 		if(!isNameAvailable(username))
-			return null;
+			throw new UserRegistrationFailedException(ApplicationBaseConstants.ERROR_USERNAME_EXISTS);
+		if(!isNameValid(username))
+			throw new UserRegistrationFailedException(ApplicationBaseConstants.ERROR_USERNAME_INVALID);
 		if(isEmailRegistered(email))
-			return null;
+			throw new UserRegistrationFailedException(ApplicationBaseConstants.ERROR_EMAIL_EXISTS);
 		if(password == null)
-			return null;
+			throw new UserRegistrationFailedException(ApplicationBaseConstants.ERROR_NO_PASSWORD);
 		if(!password.equals(passwordConfirm))
-			return null;
-		// TODO throw Exception on bad username?
-		// TODO throw Exception on wrong password?
+			throw new UserRegistrationFailedException(ApplicationBaseConstants.ERROR_PASSWORD_MISMATCH);
 		// TODO validate email
 
 		User user = new User();

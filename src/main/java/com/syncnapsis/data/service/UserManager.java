@@ -16,6 +16,7 @@ package com.syncnapsis.data.service;
 
 import com.syncnapsis.data.model.User;
 import com.syncnapsis.exceptions.UserNotFoundException;
+import com.syncnapsis.exceptions.UserRegistrationFailedException;
 
 /**
  * Manager-Interface für den Zugriff auf User.
@@ -78,6 +79,7 @@ public interface UserManager extends GenericNameManager<User, Long>
 	 * @param password - the password used
 	 * @param passwordConfirm - the confirmation of the password
 	 * @return the new User
+	 * @throws UserRegistrationFailedException if registration failed
 	 */
-	public User register(String username, String email, String password, String passwordConfirm);
+	public User register(String username, String email, String password, String passwordConfirm) throws UserRegistrationFailedException;
 }

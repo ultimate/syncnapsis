@@ -20,6 +20,7 @@ import com.syncnapsis.data.dao.UserDao;
 import com.syncnapsis.data.model.User;
 import com.syncnapsis.data.service.UserManager;
 import com.syncnapsis.data.service.UserRoleManager;
+import com.syncnapsis.exceptions.UserRegistrationFailedException;
 import com.syncnapsis.exceptions.UserNotFoundException;
 import com.syncnapsis.providers.SessionProvider;
 import com.syncnapsis.providers.UserProvider;
@@ -34,11 +35,11 @@ import com.syncnapsis.utils.StringUtil;
 @TestExcludesMethods({ "*etSecurityManager", "afterPropertiesSet" })
 public class UserManagerImplTest extends GenericNameManagerImplTestCase<User, Long, UserManager, UserDao>
 {
-	private SessionProvider	sessionProvider;
+	private SessionProvider			sessionProvider;
 	private BaseApplicationManager	securityManager;
-	private UserProvider	userProvider;
-	private UserManager		userManager;
-	private UserRoleManager	userRoleManager;
+	private UserProvider			userProvider;
+	private UserManager				userManager;
+	private UserRoleManager			userRoleManager;
 
 	@Override
 	protected void setUp() throws Exception
@@ -62,7 +63,7 @@ public class UserManagerImplTest extends GenericNameManagerImplTestCase<User, Lo
 		assertEquals(userManager.getByName(name), userManager.login(name, pw));
 		assertNotNull(userProvider.get());
 		assertEquals(userManager.getByName(name), userProvider.get());
-		
+
 		assertTrue(userManager.logout());
 		assertNull(userProvider.get());
 	}
@@ -101,15 +102,15 @@ public class UserManagerImplTest extends GenericNameManagerImplTestCase<User, Lo
 		String username = "a_new_user";
 		String email = "new@syncnapsis.com";
 		String password = "a_password";
-		
+
 		User newUser = userManager.register(username, email, password, password);
-		
+
 		assertNotNull(newUser);
 		assertNotNull(newUser.getId());
 		assertEquals(username, newUser.getUsername());
 		assertEquals(email, newUser.getEmail());
 		assertEquals(StringUtil.encodePassword(password, securityManager.getEncryptionAlgorithm()), newUser.getPassword());
-		
+
 		assertNotNull(userManager.getByName(username));
 	}
 
@@ -117,23 +118,47 @@ public class UserManagerImplTest extends GenericNameManagerImplTestCase<User, Lo
 	{
 		String existingUserName = "user1";
 		User existingUser = userManager.getByName(existingUserName);
-		
+
 		String username = "a_new_user";
 		String email = "new@syncnapsis.com";
 		String password = "a_password";
-		
-		assertNull(userManager.register(existingUser.getUsername(), email, password, password));
-		assertNull(userManager.register(username, existingUser.getEmail(), password, password));
-		assertNull(userManager.register(username, email, password, password.toUpperCase()));
+
+		try
+		{
+			userManager.register(existingUser.getUsername(), email, password, password);
+			fail("expected Exception not occurred!");
+		}
+		catch(UserRegistrationFailedException e)
+		{
+			assertNotNull(e);
+		}
+		try
+		{
+			userManager.register(username, existingUser.getEmail(), password, password);
+			fail("expected Exception not occurred!");
+		}
+		catch(UserRegistrationFailedException e)
+		{
+			assertNotNull(e);
+		}
+		try
+		{
+			userManager.register(username, email, password, password.toUpperCase());
+			fail("expected Exception not occurred!");
+		}
+		catch(UserRegistrationFailedException e)
+		{
+			assertNotNull(e);
+		}
 	}
-	
+
 	public void testGetByEmail() throws Exception
 	{
 		MethodCall managerCall = new MethodCall("getByEmail", new User(), "mail@example.com");
 		MethodCall daoCall = managerCall;
 		simpleGenericTest(managerCall, daoCall);
 	}
-	
+
 	public void testIsEmailRegistered() throws Exception
 	{
 		MethodCall managerCall = new MethodCall("isEmailRegistered", true, "mail@example.com");
