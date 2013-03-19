@@ -29,11 +29,17 @@ public class BooleanUtilTest extends LoggerTestCase
 	{
 		logger.debug("testing AND with 2 args");
 
-		logger.debug("testing AND with 2 args (valid)");
-		assertEquals(true, (boolean) BooleanUtil.and(true, true));
-		assertEquals(false, (boolean) BooleanUtil.and(true, false));
-		assertEquals(false, (boolean) BooleanUtil.and(false, true));
-		assertEquals(false, (boolean) BooleanUtil.and(false, false));
+		logger.debug("testing AND with 2 args (valid, primitive)");
+		assertEquals(true, BooleanUtil.and(true, true));
+		assertEquals(false, BooleanUtil.and(true, false));
+		assertEquals(false, BooleanUtil.and(false, true));
+		assertEquals(false, BooleanUtil.and(false, false));
+
+		logger.debug("testing AND with 2 args (valid, Object)");
+		assertEquals(true, BooleanUtil.and((Boolean) true, (Boolean) true));
+		assertEquals(false, BooleanUtil.and((Boolean) true, (Boolean) false));
+		assertEquals(false, BooleanUtil.and((Boolean) false, (Boolean) true));
+		assertEquals(false, BooleanUtil.and((Boolean) false, (Boolean) false));
 
 		logger.debug("testing AND with 2 args (invalid)");
 		try
@@ -62,26 +68,56 @@ public class BooleanUtilTest extends LoggerTestCase
 	{
 		logger.debug("testing AND with 3 args");
 
-		logger.debug("testing AND with 3 args (valid)");
-		assertEquals(true, (boolean) BooleanUtil.and(new Boolean[] { true, true, true }));
-		assertEquals(false, (boolean) BooleanUtil.and(new Boolean[] { true, true, false }));
-		assertEquals(false, (boolean) BooleanUtil.and(new Boolean[] { true, false, true }));
-		assertEquals(false, (boolean) BooleanUtil.and(new Boolean[] { true, false, false }));
-		assertEquals(false, (boolean) BooleanUtil.and(new Boolean[] { false, true, true }));
-		assertEquals(false, (boolean) BooleanUtil.and(new Boolean[] { false, true, false }));
-		assertEquals(false, (boolean) BooleanUtil.and(new Boolean[] { false, false, true }));
-		assertEquals(false, (boolean) BooleanUtil.and(new Boolean[] { false, false, false }));
+		logger.debug("testing AND with 3 args (valid, primitive)");
+		assertEquals(true, BooleanUtil.and(new boolean[] { true, true, true }));
+		assertEquals(false, BooleanUtil.and(new boolean[] { true, true, false }));
+		assertEquals(false, BooleanUtil.and(new boolean[] { true, false, true }));
+		assertEquals(false, BooleanUtil.and(new boolean[] { true, false, false }));
+		assertEquals(false, BooleanUtil.and(new boolean[] { false, true, true }));
+		assertEquals(false, BooleanUtil.and(new boolean[] { false, true, false }));
+		assertEquals(false, BooleanUtil.and(new boolean[] { false, false, true }));
+		assertEquals(false, BooleanUtil.and(new boolean[] { false, false, false }));
+
+		logger.debug("testing AND with 3 args (valid, Object)");
+		assertEquals(true, BooleanUtil.and(new Boolean[] { true, true, true }));
+		assertEquals(false, BooleanUtil.and(new Boolean[] { true, true, false }));
+		assertEquals(false, BooleanUtil.and(new Boolean[] { true, false, true }));
+		assertEquals(false, BooleanUtil.and(new Boolean[] { true, false, false }));
+		assertEquals(false, BooleanUtil.and(new Boolean[] { false, true, true }));
+		assertEquals(false, BooleanUtil.and(new Boolean[] { false, true, false }));
+		assertEquals(false, BooleanUtil.and(new Boolean[] { false, false, true }));
+		assertEquals(false, BooleanUtil.and(new Boolean[] { false, false, false }));
 
 		logger.debug("testing AND with 3 args (invalid)");
 		try
 		{
-			BooleanUtil.and(null);
+			BooleanUtil.and((boolean[]) null);
 			fail("Expected Exception not occurred.");
 		}
 		catch(IllegalArgumentException e)
 		{
 			assertNotNull(e);
 			assertEquals("The given Array of Boolean b is null.", e.getMessage());
+		}
+		try
+		{
+			BooleanUtil.and((Boolean[]) null);
+			fail("Expected Exception not occurred.");
+		}
+		catch(IllegalArgumentException e)
+		{
+			assertNotNull(e);
+			assertEquals("The given Array of Boolean b is null.", e.getMessage());
+		}
+		try
+		{
+			BooleanUtil.and(new boolean[0]);
+			fail("Expected Exception not occurred.");
+		}
+		catch(IllegalArgumentException e)
+		{
+			assertNotNull(e);
+			assertEquals("The given Array of Boolean contains no elements.", e.getMessage());
 		}
 		try
 		{
@@ -109,11 +145,17 @@ public class BooleanUtilTest extends LoggerTestCase
 	{
 		logger.debug("testing OR with 2 args");
 
-		logger.debug("testing OR with 2 args (valid)");
-		assertEquals(true, (boolean) BooleanUtil.or(true, true));
-		assertEquals(true, (boolean) BooleanUtil.or(true, false));
-		assertEquals(true, (boolean) BooleanUtil.or(false, true));
-		assertEquals(false, (boolean) BooleanUtil.or(false, false));
+		logger.debug("testing OR with 2 args (valid, primitive)");
+		assertEquals(true, BooleanUtil.or(true, true));
+		assertEquals(true, BooleanUtil.or(true, false));
+		assertEquals(true, BooleanUtil.or(false, true));
+		assertEquals(false, BooleanUtil.or(false, false));
+
+		logger.debug("testing OR with 2 args (valid, Object)");
+		assertEquals(true, BooleanUtil.or((Boolean) true, (Boolean) true));
+		assertEquals(true, BooleanUtil.or((Boolean) true, (Boolean) false));
+		assertEquals(true, BooleanUtil.or((Boolean) false, (Boolean) true));
+		assertEquals(false, BooleanUtil.or((Boolean) false, (Boolean) false));
 
 		logger.debug("testing OR with 2 args (invalid)");
 		try
@@ -142,26 +184,56 @@ public class BooleanUtilTest extends LoggerTestCase
 	{
 		logger.debug("testing OR with 3 args");
 
-		logger.debug("testing OR with 3 args (valid)");
-		assertEquals(true, (boolean) BooleanUtil.or(new Boolean[] { true, true, true }));
-		assertEquals(true, (boolean) BooleanUtil.or(new Boolean[] { true, true, false }));
-		assertEquals(true, (boolean) BooleanUtil.or(new Boolean[] { true, false, true }));
-		assertEquals(true, (boolean) BooleanUtil.or(new Boolean[] { true, false, false }));
-		assertEquals(true, (boolean) BooleanUtil.or(new Boolean[] { false, true, true }));
-		assertEquals(true, (boolean) BooleanUtil.or(new Boolean[] { false, true, false }));
-		assertEquals(true, (boolean) BooleanUtil.or(new Boolean[] { false, false, true }));
-		assertEquals(false, (boolean) BooleanUtil.or(new Boolean[] { false, false, false }));
+		logger.debug("testing OR with 3 args (valid, primitive)");
+		assertEquals(true, BooleanUtil.or(new boolean[] { true, true, true }));
+		assertEquals(true, BooleanUtil.or(new boolean[] { true, true, false }));
+		assertEquals(true, BooleanUtil.or(new boolean[] { true, false, true }));
+		assertEquals(true, BooleanUtil.or(new boolean[] { true, false, false }));
+		assertEquals(true, BooleanUtil.or(new boolean[] { false, true, true }));
+		assertEquals(true, BooleanUtil.or(new boolean[] { false, true, false }));
+		assertEquals(true, BooleanUtil.or(new boolean[] { false, false, true }));
+		assertEquals(false, BooleanUtil.or(new boolean[] { false, false, false }));
+
+		logger.debug("testing OR with 3 args (valid, Object)");
+		assertEquals(true, BooleanUtil.or(new Boolean[] { true, true, true }));
+		assertEquals(true, BooleanUtil.or(new Boolean[] { true, true, false }));
+		assertEquals(true, BooleanUtil.or(new Boolean[] { true, false, true }));
+		assertEquals(true, BooleanUtil.or(new Boolean[] { true, false, false }));
+		assertEquals(true, BooleanUtil.or(new Boolean[] { false, true, true }));
+		assertEquals(true, BooleanUtil.or(new Boolean[] { false, true, false }));
+		assertEquals(true, BooleanUtil.or(new Boolean[] { false, false, true }));
+		assertEquals(false, BooleanUtil.or(new Boolean[] { false, false, false }));
 
 		logger.debug("testing OR with 3 args (invalid)");
 		try
 		{
-			BooleanUtil.or(null);
+			BooleanUtil.or((boolean[]) null);
 			fail("Expected Exception not occurred.");
 		}
 		catch(IllegalArgumentException e)
 		{
 			assertNotNull(e);
 			assertEquals("The given Array of Boolean b is null.", e.getMessage());
+		}
+		try
+		{
+			BooleanUtil.or((Boolean[]) null);
+			fail("Expected Exception not occurred.");
+		}
+		catch(IllegalArgumentException e)
+		{
+			assertNotNull(e);
+			assertEquals("The given Array of Boolean b is null.", e.getMessage());
+		}
+		try
+		{
+			BooleanUtil.or(new boolean[0]);
+			fail("Expected Exception not occurred.");
+		}
+		catch(IllegalArgumentException e)
+		{
+			assertNotNull(e);
+			assertEquals("The given Array of Boolean contains no elements.", e.getMessage());
 		}
 		try
 		{
@@ -189,11 +261,17 @@ public class BooleanUtilTest extends LoggerTestCase
 	{
 		logger.debug("testing XOR with 2 args");
 
-		logger.debug("testing XOR with 2 args (valid)");
-		assertEquals(false, (boolean) BooleanUtil.xor(true, true));
-		assertEquals(true, (boolean) BooleanUtil.xor(true, false));
-		assertEquals(true, (boolean) BooleanUtil.xor(false, true));
-		assertEquals(false, (boolean) BooleanUtil.xor(false, false));
+		logger.debug("testing XOR with 2 args (valid, primitive)");
+		assertEquals(false, BooleanUtil.xor(true, true));
+		assertEquals(true, BooleanUtil.xor(true, false));
+		assertEquals(true, BooleanUtil.xor(false, true));
+		assertEquals(false, BooleanUtil.xor(false, false));
+
+		logger.debug("testing XOR with 2 args (valid, Object)");
+		assertEquals(false, BooleanUtil.xor((Boolean) true, (Boolean) true));
+		assertEquals(true, BooleanUtil.xor((Boolean) true, (Boolean) false));
+		assertEquals(true, BooleanUtil.xor((Boolean) false, (Boolean) true));
+		assertEquals(false, BooleanUtil.xor((Boolean) false, (Boolean) false));
 
 		logger.debug("testing XOR with 2 args (invalid)");
 		try
@@ -222,26 +300,56 @@ public class BooleanUtilTest extends LoggerTestCase
 	{
 		logger.debug("testing XOR with 3 args");
 
-		logger.debug("testing XOR with 3 args (valid)");
-		assertEquals(false, (boolean) BooleanUtil.xor(new Boolean[] { true, true, true }));
-		assertEquals(false, (boolean) BooleanUtil.xor(new Boolean[] { true, true, false }));
-		assertEquals(false, (boolean) BooleanUtil.xor(new Boolean[] { true, false, true }));
-		assertEquals(true, (boolean) BooleanUtil.xor(new Boolean[] { true, false, false }));
-		assertEquals(false, (boolean) BooleanUtil.xor(new Boolean[] { false, true, true }));
-		assertEquals(true, (boolean) BooleanUtil.xor(new Boolean[] { false, true, false }));
-		assertEquals(true, (boolean) BooleanUtil.xor(new Boolean[] { false, false, true }));
-		assertEquals(false, (boolean) BooleanUtil.xor(new Boolean[] { false, false, false }));
+		logger.debug("testing XOR with 3 args (valid, primitive)");
+		assertEquals(false, BooleanUtil.xor(new boolean[] { true, true, true }));
+		assertEquals(false, BooleanUtil.xor(new boolean[] { true, true, false }));
+		assertEquals(false, BooleanUtil.xor(new boolean[] { true, false, true }));
+		assertEquals(true, BooleanUtil.xor(new boolean[] { true, false, false }));
+		assertEquals(false, BooleanUtil.xor(new boolean[] { false, true, true }));
+		assertEquals(true, BooleanUtil.xor(new boolean[] { false, true, false }));
+		assertEquals(true, BooleanUtil.xor(new boolean[] { false, false, true }));
+		assertEquals(false, BooleanUtil.xor(new boolean[] { false, false, false }));
+
+		logger.debug("testing XOR with 3 args (valid, Object)");
+		assertEquals(false, BooleanUtil.xor(new Boolean[] { true, true, true }));
+		assertEquals(false, BooleanUtil.xor(new Boolean[] { true, true, false }));
+		assertEquals(false, BooleanUtil.xor(new Boolean[] { true, false, true }));
+		assertEquals(true, BooleanUtil.xor(new Boolean[] { true, false, false }));
+		assertEquals(false, BooleanUtil.xor(new Boolean[] { false, true, true }));
+		assertEquals(true, BooleanUtil.xor(new Boolean[] { false, true, false }));
+		assertEquals(true, BooleanUtil.xor(new Boolean[] { false, false, true }));
+		assertEquals(false, BooleanUtil.xor(new Boolean[] { false, false, false }));
 
 		logger.debug("testing XOR with 3 args (invalid)");
 		try
 		{
-			BooleanUtil.xor(null);
+			BooleanUtil.xor((boolean[]) null);
 			fail("Expected Exception not occurred.");
 		}
 		catch(IllegalArgumentException e)
 		{
 			assertNotNull(e);
 			assertEquals("The given Array of Boolean b is null.", e.getMessage());
+		}
+		try
+		{
+			BooleanUtil.xor((Boolean[]) null);
+			fail("Expected Exception not occurred.");
+		}
+		catch(IllegalArgumentException e)
+		{
+			assertNotNull(e);
+			assertEquals("The given Array of Boolean b is null.", e.getMessage());
+		}
+		try
+		{
+			BooleanUtil.xor(new boolean[0]);
+			fail("Expected Exception not occurred.");
+		}
+		catch(IllegalArgumentException e)
+		{
+			assertNotNull(e);
+			assertEquals("The given Array of Boolean contains no elements.", e.getMessage());
 		}
 		try
 		{
@@ -269,11 +377,17 @@ public class BooleanUtilTest extends LoggerTestCase
 	{
 		logger.debug("testing OR with 2 args");
 
-		logger.debug("testing NOR with 2 args (valid)");
-		assertEquals(false, (boolean) BooleanUtil.nor(true, true));
-		assertEquals(false, (boolean) BooleanUtil.nor(true, false));
-		assertEquals(false, (boolean) BooleanUtil.nor(false, true));
-		assertEquals(true, (boolean) BooleanUtil.nor(false, false));
+		logger.debug("testing NOR with 2 args (valid, primitive)");
+		assertEquals(false, BooleanUtil.nor(true, true));
+		assertEquals(false, BooleanUtil.nor(true, false));
+		assertEquals(false, BooleanUtil.nor(false, true));
+		assertEquals(true, BooleanUtil.nor(false, false));
+
+		logger.debug("testing NOR with 2 args (valid, Object)");
+		assertEquals(false, BooleanUtil.nor((Boolean) true, (Boolean) true));
+		assertEquals(false, BooleanUtil.nor((Boolean) true, (Boolean) false));
+		assertEquals(false, BooleanUtil.nor((Boolean) false, (Boolean) true));
+		assertEquals(true, BooleanUtil.nor((Boolean) false, (Boolean) false));
 
 		logger.debug("testing NOR with 2 args (invalid)");
 		try
@@ -302,26 +416,56 @@ public class BooleanUtilTest extends LoggerTestCase
 	{
 		logger.debug("testing NOR with 3 args");
 
-		logger.debug("testing NOR with 3 args (valid)");
-		assertEquals(false, (boolean) BooleanUtil.nor(new Boolean[] { true, true, true }));
-		assertEquals(false, (boolean) BooleanUtil.nor(new Boolean[] { true, true, false }));
-		assertEquals(false, (boolean) BooleanUtil.nor(new Boolean[] { true, false, true }));
-		assertEquals(false, (boolean) BooleanUtil.nor(new Boolean[] { true, false, false }));
-		assertEquals(false, (boolean) BooleanUtil.nor(new Boolean[] { false, true, true }));
-		assertEquals(false, (boolean) BooleanUtil.nor(new Boolean[] { false, true, false }));
-		assertEquals(false, (boolean) BooleanUtil.nor(new Boolean[] { false, false, true }));
-		assertEquals(true, (boolean) BooleanUtil.nor(new Boolean[] { false, false, false }));
+		logger.debug("testing NOR with 3 args (valid, primitive)");
+		assertEquals(false, BooleanUtil.nor(new boolean[] { true, true, true }));
+		assertEquals(false, BooleanUtil.nor(new boolean[] { true, true, false }));
+		assertEquals(false, BooleanUtil.nor(new boolean[] { true, false, true }));
+		assertEquals(false, BooleanUtil.nor(new boolean[] { true, false, false }));
+		assertEquals(false, BooleanUtil.nor(new boolean[] { false, true, true }));
+		assertEquals(false, BooleanUtil.nor(new boolean[] { false, true, false }));
+		assertEquals(false, BooleanUtil.nor(new boolean[] { false, false, true }));
+		assertEquals(true, BooleanUtil.nor(new boolean[] { false, false, false }));
+
+		logger.debug("testing NOR with 3 args (valid, Object)");
+		assertEquals(false, BooleanUtil.nor(new Boolean[] { true, true, true }));
+		assertEquals(false, BooleanUtil.nor(new Boolean[] { true, true, false }));
+		assertEquals(false, BooleanUtil.nor(new Boolean[] { true, false, true }));
+		assertEquals(false, BooleanUtil.nor(new Boolean[] { true, false, false }));
+		assertEquals(false, BooleanUtil.nor(new Boolean[] { false, true, true }));
+		assertEquals(false, BooleanUtil.nor(new Boolean[] { false, true, false }));
+		assertEquals(false, BooleanUtil.nor(new Boolean[] { false, false, true }));
+		assertEquals(true, BooleanUtil.nor(new Boolean[] { false, false, false }));
 
 		logger.debug("testing NOR with 3 args (invalid)");
 		try
 		{
-			BooleanUtil.nor(null);
+			BooleanUtil.nor((boolean[]) null);
 			fail("Expected Exception not occurred.");
 		}
 		catch(IllegalArgumentException e)
 		{
 			assertNotNull(e);
 			assertEquals("The given Array of Boolean b is null.", e.getMessage());
+		}
+		try
+		{
+			BooleanUtil.nor((Boolean[]) null);
+			fail("Expected Exception not occurred.");
+		}
+		catch(IllegalArgumentException e)
+		{
+			assertNotNull(e);
+			assertEquals("The given Array of Boolean b is null.", e.getMessage());
+		}
+		try
+		{
+			BooleanUtil.nor(new boolean[0]);
+			fail("Expected Exception not occurred.");
+		}
+		catch(IllegalArgumentException e)
+		{
+			assertNotNull(e);
+			assertEquals("The given Array of Boolean contains no elements.", e.getMessage());
 		}
 		try
 		{
@@ -350,14 +494,25 @@ public class BooleanUtilTest extends LoggerTestCase
 		logger.debug("testing LOGICAL with 2 args");
 
 		logger.debug("testing LOGICAL with 2 args (valid only)");
-		Boolean[][] b = new Boolean[4][2];
-		b[0] = new Boolean[] { true, true };
-		b[1] = new Boolean[] { true, false };
-		b[2] = new Boolean[] { false, true };
-		b[3] = new Boolean[] { false, false };
+		Boolean[][] B = new Boolean[4][2];
+		B[0] = new Boolean[] { true, true };
+		B[1] = new Boolean[] { true, false };
+		B[2] = new Boolean[] { false, true };
+		B[3] = new Boolean[] { false, false };
+
+		boolean[][] b = new boolean[4][2];
+		b[0] = new boolean[] { true, true };
+		b[1] = new boolean[] { true, false };
+		b[2] = new boolean[] { false, true };
+		b[3] = new boolean[] { false, false };
 
 		for(int i = 0; i < b.length; i++)
 		{
+			assertEquals(BooleanUtil.and(B[i][0], B[i][1]), BooleanUtil.logical(EnumLogicalOperator.AND, B[i][0], B[i][1]));
+			assertEquals(BooleanUtil.or(B[i][0], B[i][1]), BooleanUtil.logical(EnumLogicalOperator.OR, B[i][0], B[i][1]));
+			assertEquals(BooleanUtil.xor(B[i][0], B[i][1]), BooleanUtil.logical(EnumLogicalOperator.XOR, B[i][0], B[i][1]));
+			assertEquals(BooleanUtil.nor(B[i][0], B[i][1]), BooleanUtil.logical(EnumLogicalOperator.NOR, B[i][0], B[i][1]));
+
 			assertEquals(BooleanUtil.and(b[i][0], b[i][1]), BooleanUtil.logical(EnumLogicalOperator.AND, b[i][0], b[i][1]));
 			assertEquals(BooleanUtil.or(b[i][0], b[i][1]), BooleanUtil.logical(EnumLogicalOperator.OR, b[i][0], b[i][1]));
 			assertEquals(BooleanUtil.xor(b[i][0], b[i][1]), BooleanUtil.logical(EnumLogicalOperator.XOR, b[i][0], b[i][1]));
@@ -370,18 +525,33 @@ public class BooleanUtilTest extends LoggerTestCase
 		logger.debug("testing LOGICAL with 3 args");
 
 		logger.debug("testing LOGICAL with 3 args (valid only)");
-		Boolean[][] b = new Boolean[8][];
-		b[0] = new Boolean[] { true, true, true };
-		b[1] = new Boolean[] { true, true, false };
-		b[2] = new Boolean[] { true, false, true };
-		b[3] = new Boolean[] { true, false, false };
-		b[4] = new Boolean[] { false, true, true };
-		b[5] = new Boolean[] { false, true, false };
-		b[6] = new Boolean[] { false, false, true };
-		b[7] = new Boolean[] { false, false, false };
+		Boolean[][] B = new Boolean[8][];
+		B[0] = new Boolean[] { true, true, true };
+		B[1] = new Boolean[] { true, true, false };
+		B[2] = new Boolean[] { true, false, true };
+		B[3] = new Boolean[] { true, false, false };
+		B[4] = new Boolean[] { false, true, true };
+		B[5] = new Boolean[] { false, true, false };
+		B[6] = new Boolean[] { false, false, true };
+		B[7] = new Boolean[] { false, false, false };
+
+		boolean[][] b = new boolean[8][];
+		b[0] = new boolean[] { true, true, true };
+		b[1] = new boolean[] { true, true, false };
+		b[2] = new boolean[] { true, false, true };
+		b[3] = new boolean[] { true, false, false };
+		b[4] = new boolean[] { false, true, true };
+		b[5] = new boolean[] { false, true, false };
+		b[6] = new boolean[] { false, false, true };
+		b[7] = new boolean[] { false, false, false };
 
 		for(int i = 0; i < b.length; i++)
 		{
+			assertEquals(BooleanUtil.and(B[i]), BooleanUtil.logical(EnumLogicalOperator.AND, B[i]));
+			assertEquals(BooleanUtil.or(B[i]), BooleanUtil.logical(EnumLogicalOperator.OR, B[i]));
+			assertEquals(BooleanUtil.xor(B[i]), BooleanUtil.logical(EnumLogicalOperator.XOR, B[i]));
+			assertEquals(BooleanUtil.nor(B[i]), BooleanUtil.logical(EnumLogicalOperator.NOR, B[i]));
+
 			assertEquals(BooleanUtil.and(b[i]), BooleanUtil.logical(EnumLogicalOperator.AND, b[i]));
 			assertEquals(BooleanUtil.or(b[i]), BooleanUtil.logical(EnumLogicalOperator.OR, b[i]));
 			assertEquals(BooleanUtil.xor(b[i]), BooleanUtil.logical(EnumLogicalOperator.XOR, b[i]));
