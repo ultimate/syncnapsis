@@ -79,7 +79,7 @@ public class BlackListStringValidator extends BlackListValidator<String>
 	@Override
 	public boolean isValid(String value)
 	{
-		if(!strict)
+		if(!isStrict())
 		{
 			return super.isValid(value);
 		}
