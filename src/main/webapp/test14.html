@@ -96,7 +96,7 @@
 					n.x = (o.x - p.x)-opd*d.x;
 					n.y = (o.y - p.y)-opd*d.y;
 					n.z = (o.z - p.z)-opd*d.z;
-					dist2 = n.x*n.x + n.y*n.y + n.z*n.z;
+					dist2 = (n.x*n.x + n.y*n.y + n.z*n.z);
 					//if(dist2 < 10000)
 					//	console.log("opd=" + opd + " dist=" + dist2);
 					if(dist2 < dist2Min)
@@ -230,7 +230,7 @@
 					var coords = toScreenXY(activeSector,camera);
 					//console.log("coords = (" + coords[0] + "," + coords[1] + ")");
 					var testC = document.getElementById('testDiv');
-					var divWidth = divHeight = 20;
+					var divWidth = divHeight = 26;
 					testC.style.left = Math.round(coords[0] * window.innerWidth - divWidth/2) + 'px';
 					testC.style.top = Math.round(coords[1] * window.innerHeight - divHeight/2) + 'px';
 					//testC.innerHTML = activeMesh.id;
