@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html xmlns:svg="http://www.w3.org/2000/svg"
+	xmlns:xlink="http://www.w3.org/1999/xlink">
+<head>
+<title>syncnapsis</title>
+<meta charset="UTF-8">
+<!-- some html style-sheet -->
+<style type="text/css">
+	body {
+		color: #FFFFFF;
+	}
+	.tf {
+		border: 1px solid rgba(0,255,255,1);
+		background: rgba(0,0,0,0.2);
+		color: rgba(255,255,255,0.8);
+	}
+	.btn {
+		border: 1px solid rgba(0,255,255,0.8);
+		background: rgba(0,255,255,0.5);
+		color: rgba(0,0,0,0.8);
+	}
+	.rounded {
+		border-radius:20px;		
+	}
+	
+	/* create custom radios and checkboxes */
+	label { display: inline; }	 
+	.check { display: none; }	 
+	.check + label {
+		background: rgba(0,0,0,0.2);
+		border: 1px solid rgba(0,255,255,1);
+	    padding: 6px;
+	    border-radius: 3px;
+	    display: inline-block;
+	    position: relative;
+	    margin-right: 3px;
+	}	 
+	.check + label:active, .check:checked + label:active {
+		border: 1px solid rgba(0,255,255,0.5);
+	}	 
+	.check:checked + label {
+		background: rgba(0,0,0,0.2);
+		border: 1px solid rgba(0,255,255,1);
+		color: rgba(0,255,255,0.8);
+	}	 
+	.check:checked + label:after {
+	    content: '\2714';
+	    font-size: 9px;
+	    position: absolute;
+	    top: 0px;
+	    left: 2px;
+		color: rgba(0,255,255,0.8);
+	}
+	.radio { display: none;	}	 
+	.radio + label {
+	    -webkit-appearance: none;
+		background: rgba(0,0,0,0.2);
+		border: 1px solid rgba(0,255,255,1);
+	    padding: 6px;
+	    border-radius: 50px;
+	    display: inline-block;
+	    position: relative;
+	    margin-right: 3px;
+	}	 
+	.radio:checked + label:after {
+	    content: ' ';
+	    width: 8px;
+	    height: 8px;
+	    border-radius: 50px;
+	    position: absolute;
+	    top: 2px;
+		background: rgba(0,255,255,0.8);
+	    left: 2px;
+	    font-size: 32px;
+	}	 
+	.radio:checked + label {
+		background: rgba(0,0,0,0.2);
+		border: 1px solid rgba(0,255,255,1);
+		color: rgba(0,255,255,0.8);
+	}	 
+	.radio + label:active, .radio:checked + label:active {
+		border: 1px solid rgba(0,255,255,0.5);
+	}
+	
+	/* styling lists */	
+	ul {	
+		margin-top: 0px;
+		margin-bottom: 0px;
+	}
+	ul.embedded {
+		list-style-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' width='10' height='10'><circle cx='0' cy='0' r='0.5' transform='translate(5,5) scale(10,10)' style='fill: rgba(255,255,255,0.5); stroke: rgb(0,255,255)' vector-effect='non-scaling-stroke'/><use xlink:href='%23square' class='fill_t border_1 stroke_1' transform='translate(5,5) scale(10,10)' /></svg>");
+	}
+	ul.via-before li {
+		list-style: none;
+	}
+	ul.via-before li label {	
+	    display: inline-block;
+	    position: relative;
+	}
+	ul.via-before li label:before {		
+	    content: ' ';
+	    font-size: 32px;
+	    color: rgba(0,0,0,0);
+	    border-radius: 50px;
+	    position: absolute;
+	    bottom: 2px;
+	    right: 3px;
+	    width: 6px;
+	    height: 6px;
+		background: rgba(255,255,255,0.5);
+		border: 1px solid rgba(0,255,255,1);
+	    margin-right: 5px;
+	    display: inline;
+	}
+</style>
+</head>
+<body>
+	<div id="defines" style="display: none">
+		<svg xmlns="http://www.w3.org/2000/svg"	xmlns:xlink="http://www.w3.org/1999/xlink">
+			<defs>
+				<!-- some svg-style-sheet -->
+				<style type="text/css">
+					<![CDATA[
+					  .fill_1 {fill:#FFFFFF; fill-opacity:1;}
+					  .fill_t {fill:#FFFFFF; fill-opacity:0.5;}
+					  .fill_0 {fill:#FFFFFF; fill-opacity:0;}
+					  .border_1 {stroke:#FFFFFF; stroke-opacity:1; }
+					  .border_t {stroke:#FFFFFF; stroke-opacity:0.5; }
+					  .border_0 {stroke:#FFFFFF; stroke-opacity:0; }
+					  .stroke_1 {stroke-width: 1px;}
+					  .stroke_5 {stroke-width: 5px;}
+					  .stroke_10 {stroke-width: 10px;}
+					  .line {stroke: rgba(255,255,255,0.7); stroke-width: 1px;}
+					]]>
+				</style>
+				<!-- this elements have a standard size of 1 in diameter and will be scaled using transform -->
+				<circle id="circle" cx="0" cy="0" r="0.5" vector-effect="non-scaling-stroke"/>
+				<polygon id="square" points="-0.3535 0.3535 0.3535 0.3535 0.3535 -0.3535 -0.3535 -0.3535" vector-effect="non-scaling-stroke"/>
+			</defs>
+		</svg>
+	</div>
+	<div id="aframe" style="position: absolute; top: 50px; left: 200px; width: 600px; height: 500px;">
+		<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="100%" height="100%" >
+			<!-- simply use the elements defined above -->
+			<rect x="0" y="0" width="100%" height="100%" style="fill: #008888; stroke: #00FFFF; stroke-width: 3px;" />
+			<line x1="-450" y1="0" x2="550" y2="1000" class="line"/>
+			<line x1="-400" y1="0" x2="600" y2="1000" class="line"/>
+			<line x1="-350" y1="0" x2="650" y2="1000" class="line"/>
+			<line x1="-300" y1="0" x2="700" y2="1000" class="line"/>
+			<line x1="-250" y1="0" x2="750" y2="1000" class="line"/>
+			<line x1="-200" y1="0" x2="800" y2="1000" class="line"/>
+			<line x1="-150" y1="0" x2="850" y2="1000" class="line"/>
+			<line x1="-100" y1="0" x2="900" y2="1000" class="line"/>
+			<line x1="-50" y1="0" x2="950" y2="1000" class="line"/>
+			<line x1="0" y1="0" x2="1000" y2="1000" class="line"/>
+			<line x1="50" y1="0" x2="1050" y2="1000" class="line"/>
+			<line x1="100" y1="0" x2="1100" y2="1000" class="line"/>
+			<line x1="150" y1="0" x2="1150" y2="1000" class="line"/>
+			<line x1="200" y1="0" x2="1200" y2="1000" class="line"/>
+			<line x1="250" y1="0" x2="1250" y2="1000" class="line"/>
+			<line x1="300" y1="0" x2="1300" y2="1000" class="line"/>
+			<line x1="350" y1="0" x2="1350" y2="1000" class="line"/>
+			<line x1="400" y1="0" x2="1400" y2="1000" class="line"/>
+			<line x1="450" y1="0" x2="1450" y2="1000" class="line"/>
+			<line x1="500" y1="0" x2="1500" y2="1000" class="line"/>
+			<line x1="550" y1="0" x2="1550" y2="1000" class="line"/>
+			<use xlink:href="#square" class="fill_t border_1 stroke_1" transform="translate(50,50) scale(50,50)" />
+			<use xlink:href="#circle" class="fill_t border_1 stroke_1" transform="translate(150,50) scale(50,50)" />
+			<use xlink:href="#square" class="fill_t border_1 stroke_1" transform="translate(250,50) scale(50,50)" />
+			<use xlink:href="#circle" class="fill_t border_1 stroke_1" transform="translate(350,50) scale(50,50)" />
+			<use xlink:href="#square" class="fill_t border_1 stroke_1" transform="translate(450,50) scale(50,50)" />
+			<use xlink:href="#circle" class="fill_t border_1 stroke_1" transform="translate(550,50) scale(50,50)" />
+			<use xlink:href="#circle" class="fill_t border_1 stroke_1" transform="translate(50,150) scale(50,50)" />
+			<use xlink:href="#square" class="fill_t border_1 stroke_1" transform="translate(150,150) scale(50,50)" />
+			<use xlink:href="#circle" class="fill_t border_1 stroke_1" transform="translate(250,150) scale(50,50)" />
+			<use xlink:href="#square" class="fill_t border_1 stroke_1" transform="translate(350,150) scale(50,50)" />
+			<use xlink:href="#circle" class="fill_t border_1 stroke_1" transform="translate(450,150) scale(50,50)" />
+			<use xlink:href="#square" class="fill_t border_1 stroke_1" transform="translate(550,150) scale(50,50)" />
+			<use xlink:href="#square" class="fill_t border_1 stroke_1" transform="translate(50,250) scale(50,50)" />
+			<use xlink:href="#circle" class="fill_t border_1 stroke_1" transform="translate(150,250) scale(50,50)" />
+			<use xlink:href="#square" class="fill_t border_1 stroke_1" transform="translate(250,250) scale(50,50)" />
+			<use xlink:href="#circle" class="fill_t border_1 stroke_1" transform="translate(350,250) scale(50,50)" />
+			<use xlink:href="#square" class="fill_t border_1 stroke_1" transform="translate(450,250) scale(50,50)" />
+			<use xlink:href="#circle" class="fill_t border_1 stroke_1" transform="translate(550,250) scale(50,50)" />
+			<use xlink:href="#circle" class="fill_t border_1 stroke_1" transform="translate(50,350) scale(50,50)" />
+			<use xlink:href="#square" class="fill_t border_1 stroke_1" transform="translate(150,350) scale(50,50)" />
+			<use xlink:href="#circle" class="fill_t border_1 stroke_1" transform="translate(250,350) scale(50,50)" />
+			<use xlink:href="#square" class="fill_t border_1 stroke_1" transform="translate(350,350) scale(50,50)" />
+			<use xlink:href="#circle" class="fill_t border_1 stroke_1" transform="translate(450,350) scale(50,50)" />
+			<use xlink:href="#square" class="fill_t border_1 stroke_1" transform="translate(550,350) scale(50,50)" />
+			<use xlink:href="#square" class="fill_t border_1 stroke_1" transform="translate(50,450) scale(50,50)" />
+			<use xlink:href="#circle" class="fill_t border_1 stroke_1" transform="translate(150,450) scale(50,50)" />
+			<use xlink:href="#square" class="fill_t border_1 stroke_1" transform="translate(250,450) scale(50,50)" />
+			<use xlink:href="#circle" class="fill_t border_1 stroke_1" transform="translate(350,450) scale(50,50)" />
+			<use xlink:href="#square" class="fill_t border_1 stroke_1" transform="translate(450,450) scale(50,50)" />
+			<use xlink:href="#circle" class="fill_t border_1 stroke_1" transform="translate(550,450) scale(50,50)" />
+		</svg>
+		<!-- put some elements over them -->
+		<div style="position: absolute; top: 0px; left: 0px; right: 0px; bottom: 0px; padding: 10px;">
+			This is an example of styling a div and it's elements with pure css<br>
+			The background is using an embedded svg-image.<br>
+			Let's have a look at some input elements:<br>
+			<ul>
+			<li>
+				Textfields: <input id="tf1" type="text" class="tf" value="type here" /> <input id="tf2" type="text" class="tf rounded" value="this tf should be rounded" /><br>
+			</li>
+			<li>
+				Buttons: <input type="button" class="btn" value="click me" onclick="alert('you typed \'' + document.getElementById('tf1').value + '\'');"/>
+				<input type="button" class="btn rounded" value="click me (rounded)" onclick="alert('you typed \'' + document.getElementById('tf2').value + '\'');"/><br>
+			</li>
+			<li>
+				Radiobuttons: <div style="display: inline;">
+				<input id="r1-1" type="radio" name="r1" class="radio" /><label for="r1-1"></label>aaa
+				<input id="r1-2" type="radio" name="r1" class="radio" /><label for="r1-2"></label>bbb
+				</div>
+			</li>
+			<li>
+				Checkboxes: <div style="display: inline;">
+				<input id="c1-1" type="checkbox" class="check" /><label for="c1-1"></label>xxx
+				<input id="c1-2" type="checkbox" class="check" /><label for="c1-2"></label>yyy
+				</div>
+			</li>
+			</ul>
+			as you can see even standard html input elements can be styled transparent with individual borders and text colors so you can see the svg in the background (I added some elements and lines for demonstration)... (all that is pure css, even for radio and checkbox!)<br>
+			You can even use embedded svg in css (see css-style in code for "ul.embedded") to style lists for example - but unfortunately:
+			<ul class="embedded">
+			<li>referencing the defines doesn't work here</li>
+			<li>the result slightly differs in chrome</li>
+			<li>elements don't size on zoom in Opera</li>
+			<li>doesn't work in IE - who cares ;-)</li>
+			</ul>	
+			But there is a second alternative similar to the radios and checkboxes styles above - see an example with the browsers tested below:
+			<ul class="via-before">
+			<li id="l2-1"><label for="l2-1"></label>Chrome &#x2714; (could not test in Chrome on Android (since I have only 2.3.3))</li>
+			<li id="l2-2"><label for="l2-2"></label>Firefox &#x2714;  (&amp; Firefox on Android &#x2714; )</li>
+			<li id="l2-3"><label for="l2-3"></label>Opera &#x2714;  (&amp; Opera Mobile on Android &#x2714; )</li>
+			<li id="l2-4"><label for="l2-4"></label>IE (except background svg, which displays wrong)</li>
+			<li id="l2-5"><label for="l2-5"></label>Android-standard browser (only input-elements working, svgs are not displayed)</li>
+			</ul>	
+		</div>
+	</div>
+</body>
+</html>
