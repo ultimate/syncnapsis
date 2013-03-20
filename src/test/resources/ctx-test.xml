@@ -26,5 +26,5 @@
     <bean id="mockServlet" class="com.syncnapsis.mock.MockServlet"/>    
     
     <bean id="duplicate" class="com.syncnapsis.mock.MockTimeProvider" name="dup1, dup2"/>
-        
+    
 </beans>

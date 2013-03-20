@@ -15,19 +15,49 @@
 package com.syncnapsis.security;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Set;
 
+import com.syncnapsis.providers.AuthorityProvider;
+import com.syncnapsis.providers.impl.SystemTimeProvider;
+import com.syncnapsis.providers.impl.ThreadLocalSessionProvider;
 import com.syncnapsis.security.accesscontrol.FieldAccessController;
 import com.syncnapsis.security.accesscontrol.MethodAccessController;
 import com.syncnapsis.tests.LoggerTestCase;
 import com.syncnapsis.tests.annotations.TestCoversMethods;
 import com.syncnapsis.tests.annotations.TestExcludesMethods;
+import com.syncnapsis.utils.ReflectionsUtil;
 import com.syncnapsis.utils.reflections.Field;
 
 @TestExcludesMethods({"*Provider", "afterPropertiesSet"})
 public class SecurityManagerTest extends LoggerTestCase
 {
+	public void testSecurityManagerClone() throws Exception
+	{
+		SecurityManager securityManager = new SecurityManager();
+		securityManager.setAccessControllers(new ArrayList<AccessController<?>>());
+		securityManager.setAuthorityProvider(new AuthorityProvider() {
+			// @formatter:off
+			public void set(Object[] t) throws UnsupportedOperationException{ }			
+			public Object[] get() {	return null; }
+			// @formatter:on
+		});
+		securityManager.setSessionProvider(new ThreadLocalSessionProvider());
+		securityManager.setTimeProvider(new SystemTimeProvider());
+		
+		SecurityManager clone = new SecurityManager(securityManager);
+		
+		List<Field> fields = ReflectionsUtil.findDefaultFields(clone.getClass());
+		
+		assertTrue(fields.size() > 0);
+		for(Field f: fields)
+		{
+			assertSame(f.get(securityManager), f.get(clone));
+		}
+	}
+	
 	@TestCoversMethods({"*AccessController", "*AccessControllers", "getAvailableAccessControllerTypes"})
 	public void testAccessControllerManagement() throws Exception
 	{

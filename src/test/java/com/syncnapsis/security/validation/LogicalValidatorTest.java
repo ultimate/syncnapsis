@@ -26,7 +26,7 @@ import com.syncnapsis.tests.annotations.TestExcludesMethods;
  * @author ultimate
  * 
  */
-@TestExcludesMethods({ "*etWhiteList" })
+@TestExcludesMethods({ "*etOperator", "*etDefaultState", "*etValidators" })
 public class LogicalValidatorTest extends LoggerTestCase
 {
 	public void testIsValid() throws Exception
