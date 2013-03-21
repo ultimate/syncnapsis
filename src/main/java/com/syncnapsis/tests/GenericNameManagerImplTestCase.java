@@ -71,7 +71,6 @@ public abstract class GenericNameManagerImplTestCase<T extends BaseObject<PK>, P
 	@SuppressWarnings("unchecked")
 	public void testIsNameValid() throws Exception
 	{
-
 		assertFalse(((GenericNameManager<?, ?>) mockManager).isNameValid(null));
 		mockContext.assertIsSatisfied();
 
