@@ -19,9 +19,11 @@
 <hibernate-configuration>
     <session-factory>
     
-    	<!-- exclude Action tp prevent dependency on RPCCall
+    	<!-- exclude Action to prevent dependency on RPCCall
         <mapping class="com.syncnapsis.data.model.Action"/>
     	 -->
+        <mapping class="com.syncnapsis.data.model.BlackList"/>
+        <mapping class="com.syncnapsis.data.model.BlackListEntry"/>
         <mapping class="com.syncnapsis.data.model.Messenger"/>
         <mapping class="com.syncnapsis.data.model.MessengerContact"/>
         <mapping class="com.syncnapsis.data.model.News"/>
