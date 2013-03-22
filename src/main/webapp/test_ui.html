@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>syncnapsis</title>
+<meta charset="UTF-8">
+<style type="text/css">
+	#debug {
+		position: absolute;
+		top: 5px;
+		left: 5px;
+		width: 200px;
+		height: 150px;
+		border: 1px solid #AAAAAA;
+		background: rgba(255,255,255,0.5);
+	}
+	body {
+		background: rgb(0,0,0);
+		margin: 0px;
+		font-family: monospace;
+		font-size: 11px;
+	}
+	.centered {	
+		position: absolute;
+		left: 0px;
+		right: 0px;
+		top: 0px;
+		bottom: 0px;
+		margin: auto;
+	}
+	.centered_x {	
+		position: absolute;
+		left: 0px;
+		right: 0px;
+		margin-left: auto;
+		margin-right: auto;
+	}
+	#main {
+		width: 250px;
+		height: 150px;
+		border: 1px solid rgba(0,255,255,0.8);
+		background: rgba(0,255,255,0.3);
+	}
+	#links {
+		position: absolute;
+		left: 0px;
+		right: 0px;
+		bottom: 10px;
+		margin-left: 0px;
+		margin-right: 0px;
+		text-align: center;
+	}
+	#logo_container {
+		width: 75px;
+		height: 75px;
+		bottom: 30px;
+	}
+	a {
+		color: rgba(255,255,255,0.9);
+		margin: 8px;
+	}
+	
+	
+</style>
+<script type="text/javascript">
+	// debug-js
+	load = function(progress)
+	{
+		setProgress(progress);
+		var time = Math.round(Math.random()*200);
+		if(progress < 100)
+			setTimeout(function() { load(progress+5); }, time);
+		document.getElementById("debug_load").disabled = "disabled";
+	};
+
+</script>
+<script type="text/javascript">
+	// real js
+	setProgress = function(progress)
+	{
+		if(progress > 100)
+			progress = 100;
+		var c = 37.5;
+		var r = 2*c;
+		var xEnd = c + r*Math.sin(2*Math.PI*progress/100);
+		var yEnd = c - r*Math.cos(2*Math.PI*progress/100);
+		var d = "M" + c + "," + (c-r) + " ";
+		if(progress < 100)
+		{
+			var largeArc = progress > 50 ? 1 : 0;
+			d += "A" + r + "," + r + " 0 " + largeArc + ",1 " + xEnd + "," + yEnd + " L" + c + "," + c + " z";
+		}
+		else
+		{
+			d += "A" + r + "," + r + " 0 0,1 " + c + "," + (c+r) + " ";
+			d += "A" + r + "," + r + " 0 0,1 " + c + "," + (c-r) + " ";
+			d += "z";
+		}
+		document.getElementById("loader_clippath").setAttribute("d", d);
+		if(progress == 100)
+			init();
+	}
+	
+	init = function()
+	{
+	}
+	
+
+</script>
+</head>
+<body>
+	<div id="defines" style="display: none">
+		<svg xmlns="http://www.w3.org/2000/svg"	xmlns:xlink="http://www.w3.org/1999/xlink">
+			<defs>
+				<g id="logo">
+					<circle cx="37.5" cy="37.5" r="30" style="fill: #008888; stroke: #00FFFF; stroke-width: 3px;" />
+					<line x1="0" y1="50" x2="75" y2="25" style="stroke: #00FFFF; stroke-width: 2px;"/>
+				</g>
+			</defs>
+		</svg>
+	</div>
+	<div id="debug">
+		debug...<br>
+		<input id="debug_load" type="button" value="load" onclick="load(0);" />
+	</div>
+	<div id="main" class="centered">
+		<div id="logo_container" class="centered">
+			<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="100%" height="100%" >
+				<use xlink:href="#logo" style="opacity: 0.2;"/>
+				<clipPath id="loader">
+					<path id="loader_clippath" d=""/>
+				</clipPath>
+				<use xlink:href="#logo" clip-path="url(#loader)"/>
+			</g>
+		</div>
+		<div id="links">
+			<a href="">about</a>
+			<a href="">site policy</a>
+			<a href="">disclaimer</a>
+		</div>
+	</div>
+</body>
+</html>
