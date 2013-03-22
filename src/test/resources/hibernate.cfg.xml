@@ -20,6 +20,8 @@
     <session-factory>
      
         <mapping class="com.syncnapsis.data.model.Action"/>
+        <mapping class="com.syncnapsis.data.model.BlackList"/>
+        <mapping class="com.syncnapsis.data.model.BlackListEntry"/>
         <mapping class="com.syncnapsis.data.model.Messenger"/>
         <mapping class="com.syncnapsis.data.model.MessengerContact"/>
         <mapping class="com.syncnapsis.data.model.News"/>

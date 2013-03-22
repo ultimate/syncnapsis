@@ -74,6 +74,8 @@
 		<property name="userProvider" ref="userProvider" />
 		<property name="playerProvider" ref="playerProvider" />
 		<property name="authorityProvider" ref="playerRoleBasedAuthorityProvider" />
+		<property name="nameValidator" ref="nameValidator" />
+		<property name="emailValidator" ref="emailValidator" />
 	</bean>
 	
 </beans>
