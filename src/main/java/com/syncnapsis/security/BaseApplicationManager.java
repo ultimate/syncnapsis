@@ -40,6 +40,16 @@ public class BaseApplicationManager extends SecurityManager
 	 * The LocaleProvider
 	 */
 	protected LocaleProvider	localeProvider;
+
+	/**
+	 * The Validator for name validation
+	 */
+	protected Validator<String>	nameValidator;
+	/**
+	 * The Validator for email-address validation
+	 */
+	protected Validator<String>	emailValidator;
+
 	/**
 	 * The encryption algorithm used for password encryption
 	 */
@@ -64,6 +74,8 @@ public class BaseApplicationManager extends SecurityManager
 		this.userProvider = manager.userProvider;
 		this.localeProvider = manager.localeProvider;
 		this.encryptionAlgorithm = manager.encryptionAlgorithm;
+		this.nameValidator = manager.nameValidator;
+		this.emailValidator = manager.emailValidator;
 	}
 
 	/*
@@ -75,6 +87,11 @@ public class BaseApplicationManager extends SecurityManager
 	{
 		super.afterPropertiesSet();
 		Assert.notNull(userProvider, "userProvider must not be null!");
+		Assert.notNull(localeProvider, "localeProvider must not be null!");
+		if(this.nameValidator == null)
+			logger.warn("nameValidator is null!");
+		if(this.emailValidator == null)
+			logger.warn("emailValidator is null!");
 		if(encryptionAlgorithm == null)
 		{
 			logger.warn("encryptionAlgorithm is null, using default: '" + DEFAULT_ENCRYPTION_ALGORITHM + "'");
@@ -101,7 +118,7 @@ public class BaseApplicationManager extends SecurityManager
 	{
 		this.userProvider = userProvider;
 	}
-	
+
 	/**
 	 * The LocaleProvider
 	 * 
@@ -111,7 +128,7 @@ public class BaseApplicationManager extends SecurityManager
 	{
 		return localeProvider;
 	}
-	
+
 	/**
 	 * The LocaleProvider
 	 * 
@@ -120,6 +137,46 @@ public class BaseApplicationManager extends SecurityManager
 	public void setLocaleProvider(LocaleProvider localeProvider)
 	{
 		this.localeProvider = localeProvider;
+	}
+
+	/**
+	 * The Validator for name validation
+	 * 
+	 * @return nameValidator
+	 */
+	public Validator<String> getNameValidator()
+	{
+		return nameValidator;
+	}
+
+	/**
+	 * The Validator for name validation
+	 * 
+	 * @param nameValidator - the Validator
+	 */
+	public void setNameValidator(Validator<String> nameValidator)
+	{
+		this.nameValidator = nameValidator;
+	}
+
+	/**
+	 * The Validator for email-address validation
+	 * 
+	 * @return emailValidator
+	 */
+	public Validator<String> getEmailValidator()
+	{
+		return emailValidator;
+	}
+
+	/**
+	 * The Validator for email-address validation
+	 * 
+	 * @param emailValidator - the Validator
+	 */
+	public void setEmailValidator(Validator<String> emailValidator)
+	{
+		this.emailValidator = emailValidator;
 	}
 
 	/**

@@ -25,6 +25,10 @@
     
 	<bean id="actionDao" class="com.syncnapsis.data.dao.hibernate.ActionDaoHibernate" />
 
+	<bean id="blackListDao" class="com.syncnapsis.data.dao.hibernate.BlackListDaoHibernate" />
+
+	<bean id="blackListEntryDao" class="com.syncnapsis.data.dao.hibernate.BlackListEntryDaoHibernate" />
+
 	<bean id="messengerContactDao" class="com.syncnapsis.data.dao.hibernate.MessengerContactDaoHibernate" />
 	
 	<bean id="messengerDao" class="com.syncnapsis.data.dao.hibernate.MessengerDaoHibernate" />
@@ -52,6 +56,15 @@
 	<bean id="actionManager" class="com.syncnapsis.data.service.impl.ActionManagerImpl">
 		<constructor-arg ref="actionDao" />
 		<property name="serializer" ref="serializer" />
+	</bean>
+
+	<bean id="blackListManager" class="com.syncnapsis.data.service.impl.BlackListManagerImpl">
+		<constructor-arg ref="blackListDao" />
+	</bean>
+
+	<bean id="blackListEntryManager" class="com.syncnapsis.data.service.impl.BlackListEntryManagerImpl">
+		<constructor-arg ref="blackListEntryDao" />
+		<constructor-arg ref="blackListManager" />
 	</bean>
 
 	<bean id="messengerContactManager" class="com.syncnapsis.data.service.impl.MessengerContactManagerImpl">
@@ -135,6 +148,20 @@
 		<property name="localeProvider" ref="localeProvider" />
 		<property name="userProvider" ref="userProvider" />
 		<property name="authorityProvider" ref="userRoleBasedAuthorityProvider" />
+		<property name="nameValidator" ref="nameValidator" />
+		<property name="emailValidator" ref="emailValidator" />
+	</bean>
+	
+	<bean id="nameValidator" class="com.syncnapsis.security.validation.DBBlackListStringValidator" >
+		<property name="blackListManager" ref="blackListManager" />
+		<property name="blackListEntryManager" ref="blackListEntryManager" />
+		<property name="blackListName" value="name" />
+	</bean>
+	
+	<bean id="emailValidator" class="com.syncnapsis.security.validation.DBBlackListStringValidator" >
+		<property name="blackListManager" ref="blackListManager" />
+		<property name="blackListEntryManager" ref="blackListEntryManager" />
+		<property name="blackListName" value="email" />
 	</bean>
 	
     <!-- =================================================================== -->

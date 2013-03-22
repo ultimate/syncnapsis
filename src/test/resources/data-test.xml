@@ -899,5 +899,67 @@
 			<value description="content"><![CDATA[new announcement]]></value>
 		</row>
 	</table>
+	
+	<table name="blacklist">
+		<column>id</column>
+		<column>version</column>
+		<column>name</column>
+		<column>strict</column>
+		<row>
+			<value description="id">0</value>
+			<value description="version">1</value>
+			<value description="name">general</value>
+			<value description="strict">1</value>
+		</row>
+		<row>
+			<value description="id">1</value>
+			<value description="version">1</value>
+			<value description="name">email</value>
+			<value description="strict">0</value>
+		</row>
+		<row>
+			<value description="id">2</value>
+			<value description="version">1</value>
+			<value description="name">name</value>
+			<value description="strict">1</value>
+		</row>
+	</table>
+	
+	<table name="blacklistentry">
+		<column>id</column>
+		<column>version</column>
+		<column>fkBlackList</column>
+		<column>value</column>
+		<row>
+			<value description="id">1</value>
+			<value description="version">1</value>
+			<value description="fkBlackList">0</value>
+			<value description="value"><![CDATA[badword]]></value>
+		</row>
+		<row>
+			<value description="id">101</value>
+			<value description="version">1</value>
+			<value description="fkBlackList">1</value>
+			<value description="value"><![CDATA[spammer@example.com]]></value>
+		</row>
+		<row>
+			<value description="id">102</value>
+			<value description="version">1</value>
+			<value description="fkBlackList">1</value>
+			<value description="value"><![CDATA[idiot@example.com]]></value>
+		</row>
+		<row>
+			<value description="id">201</value>
+			<value description="version">1</value>
+			<value description="fkBlackList">2</value>
+			<value description="value"><![CDATA[badguy]]></value>
+		</row>
+		<row>
+			<value description="id">202</value>
+			<value description="version">1</value>
+			<value description="fkBlackList">2</value>
+			<value description="value"><![CDATA[b4d6uy]]></value>
+		</row>
+	</table>
 
 </dataset>

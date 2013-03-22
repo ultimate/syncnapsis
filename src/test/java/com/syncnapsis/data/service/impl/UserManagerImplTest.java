@@ -165,4 +165,18 @@ public class UserManagerImplTest extends GenericNameManagerImplTestCase<User, Lo
 		MethodCall daoCall = managerCall;
 		simpleGenericTest(managerCall, daoCall);
 	}
+	
+	public void testIsEmailValid() throws Exception
+	{
+		assertFalse(userManager.isEmailValid(null));
+		assertTrue(userManager.isEmailValid("a@example.com"));
+		assertFalse(userManager.isEmailValid("spammer@example.com"));
+	}
+	
+	public void testIsNameValid() throws Exception
+	{
+		assertFalse(userManager.isNameValid(null));
+		assertTrue(userManager.isNameValid("goodguy"));
+		assertFalse(userManager.isNameValid("badguy"));
+	}
 }

@@ -27,7 +27,6 @@ import com.syncnapsis.data.service.UserRoleManager;
 import com.syncnapsis.enums.EnumAccountStatus;
 import com.syncnapsis.enums.EnumDateFormat;
 import com.syncnapsis.enums.EnumGender;
-import com.syncnapsis.enums.EnumLocale;
 import com.syncnapsis.exceptions.UserNotFoundException;
 import com.syncnapsis.exceptions.UserRegistrationFailedException;
 import com.syncnapsis.security.BaseApplicationManager;
@@ -142,11 +141,14 @@ public class UserManagerImpl extends GenericNameManagerImpl<User, Long> implemen
 			throw new UserRegistrationFailedException(ApplicationBaseConstants.ERROR_USERNAME_INVALID);
 		if(isEmailRegistered(email))
 			throw new UserRegistrationFailedException(ApplicationBaseConstants.ERROR_EMAIL_EXISTS);
+		if(!isEmailValid(email))
+			throw new UserRegistrationFailedException(ApplicationBaseConstants.ERROR_EMAIL_INVALID);
 		if(password == null)
 			throw new UserRegistrationFailedException(ApplicationBaseConstants.ERROR_NO_PASSWORD);
 		if(!password.equals(passwordConfirm))
 			throw new UserRegistrationFailedException(ApplicationBaseConstants.ERROR_PASSWORD_MISMATCH);
-		// TODO validate email
+
+		// TODO email verification
 
 		User user = new User();
 		user.setAccountStatus(EnumAccountStatus.active);
@@ -161,8 +163,8 @@ public class UserManagerImpl extends GenericNameManagerImpl<User, Long> implemen
 		user.setEmail(email);
 		// user.setImageURL(imageURL);
 		user.setLastActiveDate(new Date(securityManager.getTimeProvider().get()));
-		user.setLocale(EnumLocale.getDefault()); // TODO get current locale from session
-		// user.setNickname(nickname); // TODO = username?
+		user.setLocale(securityManager.getLocaleProvider().get());
+		// user.setNickname(nickname);
 		user.setPassword(StringUtil.encodePassword(password, securityManager.getEncryptionAlgorithm()));
 		user.setRegistrationDate(new Date(securityManager.getTimeProvider().get()));
 		user.setRole(userRoleManager.getByName(ApplicationBaseConstants.ROLE_NORMAL_USER));
@@ -200,5 +202,35 @@ public class UserManagerImpl extends GenericNameManagerImpl<User, Long> implemen
 	public boolean isEmailRegistered(String email)
 	{
 		return userDao.isEmailRegistered(email);
+	}
+	
+	/*
+	 * (non-Javadoc)
+	 * @see com.syncnapsis.data.service.impl.GenericNameManagerImpl#isNameValid(java.lang.String)
+	 */
+	@Override
+	public boolean isNameValid(String name)
+	{
+		if(name == null)
+			return false;
+		if(securityManager.getNameValidator() != null)
+			return securityManager.getNameValidator().isValid(name);
+		else
+			return true;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see com.syncnapsis.data.service.UserManager#isEmailValid(java.lang.String)
+	 */
+	@Override
+	public boolean isEmailValid(String email)
+	{
+		if(email == null)
+			return false;
+		if(securityManager.getEmailValidator() != null)
+			return securityManager.getEmailValidator().isValid(email);
+		else
+			return true;
 	}
 }

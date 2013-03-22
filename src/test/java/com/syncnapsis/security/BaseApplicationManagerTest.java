@@ -14,14 +14,28 @@
  */
 package com.syncnapsis.security;
 
-import com.syncnapsis.tests.LoggerTestCase;
+import java.util.List;
+
+import com.syncnapsis.tests.BaseSpringContextTestCase;
 import com.syncnapsis.tests.annotations.TestExcludesMethods;
+import com.syncnapsis.utils.ReflectionsUtil;
+import com.syncnapsis.utils.reflections.Field;
 
 @TestExcludesMethods({ "set*", "get*", "afterPropertiesSet" })
-public class BaseApplicationManagerTest extends LoggerTestCase
+public class BaseApplicationManagerTest extends BaseSpringContextTestCase
 {
-	public void testBaseApplicationManager() throws Exception
+	private BaseApplicationManager securityManager;
+	
+	public void testBaseApplicationManagerClone() throws Exception
 	{
-		// nothing to test yet
+		BaseApplicationManager clone = new BaseApplicationManager(securityManager);
+		
+		List<Field> fields = ReflectionsUtil.findDefaultFields(clone.getClass());
+		
+		assertTrue(fields.size() > 0);
+		for(Field f: fields)
+		{
+			assertSame(f.get(securityManager), f.get(clone));
+		}
 	}
 }

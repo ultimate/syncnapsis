@@ -91,6 +91,10 @@ public class ApplicationBaseConstants
 	 */
 	public static final String	ERROR_USERNAME_INVALID	= "error.invalid_username";
 	/**
+	 * Error-Key for "invalid username"
+	 */
+	public static final String	ERROR_EMAIL_INVALID		= "error.invalid_email";
+	/**
 	 * Error-Key for "no password"
 	 */
 	public static final String	ERROR_NO_PASSWORD		= "error.password_mismatch";

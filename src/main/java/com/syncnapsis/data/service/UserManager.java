@@ -43,6 +43,14 @@ public interface UserManager extends GenericNameManager<User, Long>
 	public boolean isEmailRegistered(String email);
 
 	/**
+	 * Check wether the given email is valid
+	 * 
+	 * @param email - the email to check
+	 * @return true or false
+	 */
+	public boolean isEmailValid(String email);
+
+	/**
 	 * Perform the login for a user.<br>
 	 * The password will be encrypted and checked against the database entry.<br>
 	 * If the password matches the session will be initialized with the specified user and the user
