@@ -36,6 +36,9 @@ import com.syncnapsis.utils.PropertiesUtil;
 /**
  * Mailer offering basic support for e-mail-sending.<br>
  * <i>(maybe support for e-mail-receiving will come in future versions).</i><br>
+ * <br>
+ * To use this class a javax.mail compliant properties is required. After initialization different
+ * variants of Mailer.send(...) may be used for message sending.
  * 
  * @author ultimate
  */
@@ -181,6 +184,11 @@ public class Mailer
 			logger.warn(KEY_PASSWORD + " is null!");
 	}
 
+	/**
+	 * Get the protocol as specified by "mail.transport.protocol" in the properties.
+	 * 
+	 * @return the protocol name
+	 */
 	public String getProtocol()
 	{
 		return getGlobalProperty(KEY_TRANSPORT_PROTOCOL);
@@ -208,16 +216,37 @@ public class Mailer
 		return "true".equals(getProtocolProperty(KEY_AUTH, protocol));
 	}
 
+	/**
+	 * Get a global property in the underlying properties (e.g. "mail.user")
+	 * 
+	 * @param key - the property key
+	 * @return the property value
+	 */
 	public String getGlobalProperty(String key)
 	{
 		return properties.getProperty(key);
 	}
 
+	/**
+	 * Get a global property in the underlying properties (e.g. "mail.user")
+	 * 
+	 * @param key - the property key
+	 * @paramn value - the (new) property value
+	 * @return the old property value
+	 */
 	public String setGlobalProperty(String key, String value)
 	{
 		return (String) properties.put(key, value);
 	}
 
+	/**
+	 * Get a property specific property in the underlying properties (e.g.
+	 * "mail.<i>protocol</i>.user")
+	 * 
+	 * @param key - the property key
+	 * @param protocol - the protocol name
+	 * @return the property value
+	 */
 	public String getProtocolProperty(String key, String protocol)
 	{
 		String protocolProperty = properties.getProperty(key.replace(KEY_PREFIX, KEY_PREFIX + protocol + "."));
@@ -228,16 +257,44 @@ public class Mailer
 		return getGlobalProperty(key);
 	}
 
+	/**
+	 * Set a property specific property in the underlying properties (e.g.
+	 * "mail.<i>protocol</i>.user")
+	 * 
+	 * @param key - the property key
+	 * @param protocol - the protocol name
+	 * @param value - the (new) property value
+	 * @return the old property value
+	 */
 	public String setProtocolProperty(String key, String protocol, String value)
 	{
 		return (String) properties.put(key.replace(key.replace(KEY_PREFIX, KEY_PREFIX + protocol + "."), protocol), value);
 	}
 
+	/**
+	 * Send an e-mail to a single recipient.
+	 * 
+	 * @param subject - the mail subject as of {@link MimeMessage#setSubject(String)}
+	 * @param text - the mail content as of {@link MimeMessage#setText(String, String)}
+	 * @param to - the recipient
+	 * @return wether the message has been send successfully
+	 * @throws AddressException if parsing the address fails
+	 */
 	public boolean send(String subject, String text, String to) throws AddressException
 	{
 		return send(subject, text, to, null);
 	}
 
+	/**
+	 * Send an e-mail to a single recipient.
+	 * 
+	 * @param subject - the mail subject as of {@link MimeMessage#setSubject(String)}
+	 * @param text - the mail content as of {@link MimeMessage#setText(String, String)}
+	 * @param to - the recipient
+	 * @param from - an optional from address
+	 * @return wether the message has been send successfully
+	 * @throws AddressException if parsing the address fails
+	 */
 	public boolean send(String subject, String text, String to, String from) throws AddressException
 	{
 		return send(subject, text, new String[] { to }, null, null, from);
@@ -247,16 +304,19 @@ public class Mailer
 	 * Send an e-mail with the specified parameters.<br>
 	 * All other required information will be obtained from the mail-properties. If authetication is
 	 * required it will automatically be done before sending.<br>
+	 * <br>
+	 * Some of the Address arrays may be null or empty but at least one address must be specified
+	 * overall.
 	 * 
 	 * @see MimeMessage
 	 * @param subject - the mail subject as of {@link MimeMessage#setSubject(String)}
 	 * @param text - the mail content as of {@link MimeMessage#setText(String, String)}
-	 * @param to
-	 * @param cc
-	 * @param bcc
-	 * @param from
-	 * @return
-	 * @throws AddressException
+	 * @param to - the recipients for TO (may be null or empty)
+	 * @param cc - the recipients for CC (may be null or empty)
+	 * @param bcc - the recipients for BCC (may be null or empty)
+	 * @param from - an optional from address
+	 * @return wether the message has been send successfully
+	 * @throws AddressException if parsing the address fails
 	 */
 	public boolean send(String subject, String text, String[] to, String[] cc, String[] bcc, String from) throws AddressException
 	{
