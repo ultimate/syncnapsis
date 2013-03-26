@@ -109,7 +109,48 @@
 	}
 	#menu #menu_content {
 		width: 100%;
+		color: rgba(255,255,255,0.9);
 	}
+	#menu #menu_content div {
+		height: 0px;
+		max-height: 0px;
+		overflow: hidden;
+		transition: all 1s;
+		padding-right: 5px;
+		padding-left: 5px;
+		padding-top: 0px;
+		padding-bottom: 0px;
+	}
+	#menu #menu_content div + div {
+		border-top: 1px solid rgba(0,255,255,0.5);
+		margin-top: -2px;
+	}
+	#menu #menu_content div.selected {
+		/*height: 300px;*/
+		max-height: 300px;
+		overflow: hidden;
+		transition: all 1s;
+		padding-top: 5px;
+		padding-bottom: 5px;
+	}
+	
+	#menu #menu_content #menu_1.selected {
+		height: 200px;
+		transition: all 1s;
+	}
+	#menu #menu_content #menu_2.selected {
+		height: 100px;
+		transition: all 1s;
+	}
+	#menu #menu_content #menu_3.selected {
+		height: 300px;
+		transition: all 1s;
+	}
+	#menu #menu_content #menu_4.selected {
+		height: 500px;
+		transition: all 1s;
+	}
+	
 	.frame {	
 		border: 1px solid rgba(0,255,255,0.8);
 		background: rgba(0,255,255,0.3);
@@ -181,7 +222,7 @@
 		document.getElementById("loader_clippath").setAttribute("d", d);
 		if(progress == 100)
 			init();
-	}
+	};
 	
 	init = function()
 	{
@@ -213,7 +254,29 @@
 		
 		document.getElementById("overlay").className += " invisible";
 		setTimeout(function() {document.getElementById("overlay").className += " hidden";}, 3000);
-	}
+	};
+	
+	selectMenu = function(id)
+	{
+		var children = document.getElementById("nav").children.length;
+		var nav;
+		var menu;
+		for(var i = 1; i <= children; i++)
+		{
+			nav = document.getElementById("nav_" + i);
+			menu = document.getElementById("menu_" + i);
+			if(i == id)
+			{
+				nav.className = "selected";
+				menu.className = "selected";
+			}
+			else
+			{
+				nav.className = "";
+				menu.className = "";
+			}
+		}
+	};
 	
 
 </script>
@@ -233,20 +296,65 @@
 		<div id="userbar" class="frame">
 		</div>
 		<div id="nav">
-			<a id="nav_1" href=""><div class="frame">a</div></a>
-			<a id="nav_2" href=""><div class="frame">b</div></a>
-			<a id="nav_3" href=""><div class="frame">c</div></a>
+			<a id="nav_1" href="javascript: selectMenu(1);" class="selected"><div class="frame">a</div></a>
+			<a id="nav_2" href="javascript: selectMenu(2);"><div class="frame">b</div></a>
+			<a id="nav_3" href="javascript: selectMenu(3);"><div class="frame">c</div></a>
+			<a id="nav_4" href="javascript: selectMenu(4);"><div class="frame">d</div></a>
 			<!--<div class="frame"><a id="nav_2" href="">b</a></div>-->
 		</div>
 		<div id="menu_content" class="frame">
-			foo<br>
-			bar<br>
-			foo<br>
-			bar<br>
-			foo<br>
-			bar<br>
-			foo<br>
-			bar<br>
+			<div id="menu_1" class="selected">
+				foo<br>
+				bar<br>
+				foo<br>
+				bar<br>
+				foo<br>
+				bar<br>
+				foo<br>
+				bar<br>
+			</div>
+			<div id="menu_2" class="">
+				This is menu #2 with a very long text that should automatically wrap to fill this box.<br>
+				As you can see the surrounding container will be automatically resized to fit best for the content.
+			</div>
+			<div id="menu_3" class="">
+				blub
+			</div>
+			<div id="menu_4" class="">
+				Let's stretch the content to max ;-)<br>
+				A lot of options...
+				<ul>
+				<li>1</li>
+				<li>2</li>
+				<li>3</li>
+				<li>4</li>
+				<li>5</li>
+				<li>6</li>
+				<li>7</li>
+				<li>8</li>
+				<li>9</li>
+				<li>10</li>
+				<li>11</li>
+				<li>12</li>
+				<li>13</li>
+				<li>14</li>
+				<li>15</li>
+				<li>16</li>
+				<li>17</li>
+				<li>18</li>
+				<li>19</li>
+				<li>20</li>
+				<li>21</li>
+				<li>22</li>
+				<li>23</li>
+				<li>24</li>
+				<li>25</li>
+				<li>26</li>
+				<li>27</li>
+				<li>28</li>
+				<li>29</li>
+				</ul>
+			</div>
 		</div>
 		<div id="main" class="main frame">
 			<div id="logo_container2" class="logo_container centered_x">
