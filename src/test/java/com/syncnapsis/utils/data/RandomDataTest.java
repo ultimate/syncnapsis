@@ -27,6 +27,8 @@ import com.syncnapsis.utils.TimeZoneUtil;
 @TestExcludesMethods("toRegExpString")
 public class RandomDataTest extends LoggerTestCase
 {
+	private static final int	BOOLEAN_CYCLES	= 100000;
+	private static final double	DELTA			= 0.01;
 
 	public void testRandomString() throws Exception
 	{
@@ -64,12 +66,11 @@ public class RandomDataTest extends LoggerTestCase
 
 	public void testRandomBoolean() throws Exception
 	{
-		double delta = 0.01;
 		int t = 0;
 		int f = 0;
 		boolean b;
 
-		for(int i = 0; i < 10000; i++)
+		for(int i = 0; i < BOOLEAN_CYCLES; i++)
 		{
 			b = RandomData.randomBoolean();
 			if(b)
@@ -78,13 +79,13 @@ public class RandomDataTest extends LoggerTestCase
 				f++;
 		}
 		logger.debug("generated " + t + " x true and " + f + " x false");
-		assertEquals(0.5, t / (double) (t + f), delta);
-		assertEquals(0.5, f / (double) (t + f), delta);
+		assertEquals(0.5, t / (double) (t + f), DELTA);
+		assertEquals(0.5, f / (double) (t + f), DELTA);
 
 		t = 0;
 		f = 0;
 
-		for(int i = 0; i < 10000; i++)
+		for(int i = 0; i < BOOLEAN_CYCLES; i++)
 		{
 			b = RandomData.randomBoolean(3, 7);
 			if(b)
@@ -93,8 +94,8 @@ public class RandomDataTest extends LoggerTestCase
 				f++;
 		}
 		logger.debug("generated " + t + " x true and " + f + " x false");
-		assertEquals(0.3, t / (double) (t + f), delta);
-		assertEquals(0.7, f / (double) (t + f), delta);
+		assertEquals(0.3, t / (double) (t + f), DELTA);
+		assertEquals(0.7, f / (double) (t + f), DELTA);
 	}
 
 	public void testRandomInt() throws Exception
@@ -185,7 +186,7 @@ public class RandomDataTest extends LoggerTestCase
 		int machine = 0;
 		int unknown = 0;
 
-		int total = 10000;
+		int total = BOOLEAN_CYCLES;
 
 		EnumGender r;
 		for(int i = 0; i < total; i++)
@@ -206,13 +207,12 @@ public class RandomDataTest extends LoggerTestCase
 		}
 
 		double prob = 1 / (double) EnumGender.values().length;
-		double delta = 0.01;
 
-		assertEquals(prob, male / (double) total, delta);
-		assertEquals(prob, female / (double) total, delta);
-		assertEquals(prob, transsexual / (double) total, delta);
-		assertEquals(prob, machine / (double) total, delta);
-		assertEquals(prob, unknown / (double) total, delta);
+		assertEquals(prob, male / (double) total, DELTA);
+		assertEquals(prob, female / (double) total, DELTA);
+		assertEquals(prob, transsexual / (double) total, DELTA);
+		assertEquals(prob, machine / (double) total, DELTA);
+		assertEquals(prob, unknown / (double) total, DELTA);
 	}
 
 	public void testRandomTimeZoneId() throws Exception
