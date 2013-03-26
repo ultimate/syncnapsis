@@ -122,6 +122,34 @@ public class Mailer
 	}
 
 	/**
+	 * Construct a new ApplicationMailer with the given properties
+	 * 
+	 * @param properties - the Properties
+	 */
+	public Mailer(Properties properties)
+	{
+		Assert.notNull(properties, "properties must not be null!");
+		this.properties = properties;
+
+		if("true".equals(properties.getProperty(KEY_DEBUG)))
+			logger.info("javax.mail debugging is enabled!");
+
+		// check properties content
+		String protocol = getProtocol();
+		if(protocol == null)
+			logger.info("javax.mail no transport protocol specified!");
+
+		if(getProtocolProperty(KEY_HOST, protocol) == null)
+			logger.warn(KEY_FROM + " is null!");
+		if(getProtocolProperty(KEY_FROM, protocol) == null)
+			logger.warn(KEY_FROM + " is null!");
+		if(getProtocolProperty(KEY_USER, protocol) == null)
+			logger.warn(KEY_USER + " is null!");
+		if(getProtocolProperty(KEY_PASSWORD, protocol) == null)
+			logger.warn(KEY_PASSWORD + " is null!");
+	}
+
+	/**
 	 * The javax.mail properties
 	 * 
 	 * @see Mailer#getGlobalProperty(String)
@@ -157,34 +185,6 @@ public class Mailer
 	}
 
 	/**
-	 * Construct a new ApplicationMailer with the given properties
-	 * 
-	 * @param properties - the Properties
-	 */
-	public Mailer(Properties properties)
-	{
-		Assert.notNull(properties, "properties must not be null!");
-		this.properties = properties;
-
-		if("true".equals(properties.getProperty(KEY_DEBUG)))
-			logger.info("javax.mail debugging is enabled!");
-
-		// check properties content
-		String protocol = getProtocol();
-		if(protocol == null)
-			logger.info("javax.mail no transport protocol specified!");
-
-		if(getProtocolProperty(KEY_HOST, protocol) == null)
-			logger.warn(KEY_FROM + " is null!");
-		if(getProtocolProperty(KEY_FROM, protocol) == null)
-			logger.warn(KEY_FROM + " is null!");
-		if(getProtocolProperty(KEY_USER, protocol) == null)
-			logger.warn(KEY_USER + " is null!");
-		if(getProtocolProperty(KEY_PASSWORD, protocol) == null)
-			logger.warn(KEY_PASSWORD + " is null!");
-	}
-
-	/**
 	 * Get the protocol as specified by "mail.transport.protocol" in the properties.
 	 * 
 	 * @return the protocol name
@@ -195,28 +195,7 @@ public class Mailer
 	}
 
 	/**
-	 * Enable/disable authentication for a specific protocol
-	 * 
-	 * @param protocol - the protocol
-	 * @param auth - enabled = true / disabled = false
-	 */
-	public void setAuth(String protocol, boolean auth)
-	{
-		setProtocolProperty(KEY_AUTH, protocol, "" + auth);
-	}
-
-	/**
-	 * Is authentication enabled/disabled for a specific protocol?
-	 * 
-	 * @param protocol - the protocol
-	 * @return enabled = true / disabled = false
-	 */
-	public boolean getAuth(String protocol)
-	{
-		return "true".equals(getProtocolProperty(KEY_AUTH, protocol));
-	}
-
-	/**
+	 * /**
 	 * Get a global property in the underlying properties (e.g. "mail.user")
 	 * 
 	 * @param key - the property key
@@ -343,7 +322,7 @@ public class Mailer
 			msg.addRecipients(RecipientType.BCC, bccAddr);
 
 			String protocol = getProtocol();
-			if(!getAuth(protocol))
+			if(!"true".equals(getProtocolProperty(KEY_AUTH, protocol)))
 			{
 				Transport.send(msg);
 			}
