@@ -29,4 +29,17 @@ public class PropertiesUtilTest extends LoggerTestCase
 		assertNotNull(p.getProperty("testkey"));
 		assertEquals("testvalue", p.getProperty("testkey"));
 	}
+	
+	public void testLoadPropertiesMultiline() throws Exception
+	{
+		File file = new File("src/test/resources/mail.properties");
+		Properties p = PropertiesUtil.loadProperties(file);
+		assertNotNull(p.getProperty("template.register.text"));
+		String expected = "Hello {user},\n" + 
+				"thank you for your registration and welcome to syncnapsis.\n" + 
+				"Please confirm your registration by clicking the following link:\n" + 
+				"http://www.syncnapsis.com/test/activate/{code}\n" + 
+				"Best regards"; 
+		assertEquals(expected, p.getProperty("template.register.text"));
+	}
 }
