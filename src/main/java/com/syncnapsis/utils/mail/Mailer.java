@@ -111,7 +111,7 @@ public class Mailer
 	protected String					mailContentType;
 
 	/**
-	 * Construct a new ApplicationMailer by loading the Properties from the given file
+	 * Construct a new Mailer by loading the Properties from the given file
 	 * 
 	 * @param propertiesFile - the properties-file
 	 * @throws IOException if loading the properties fails
@@ -122,7 +122,7 @@ public class Mailer
 	}
 
 	/**
-	 * Construct a new ApplicationMailer with the given properties
+	 * Construct a new Mailer with the given properties
 	 * 
 	 * @param properties - the Properties
 	 */

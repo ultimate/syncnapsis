@@ -154,7 +154,6 @@ public class MailerTest extends LoggerTestCase
 				assertEquals(1, msg.getFrom().length);
 				assertEquals(from, ((InternetAddress) msg.getFrom()[0]).getAddress());
 			}
-
 		}
 		finally
 		{
