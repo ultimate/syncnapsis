@@ -16,11 +16,13 @@ package com.syncnapsis.utils.mail;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
 
 import javax.mail.internet.AddressException;
 
@@ -165,6 +167,16 @@ public class TemplateMailer extends Mailer
 	}
 
 	/**
+	 * Get the list of template names (as an unmodifiable Set).
+	 * 
+	 * @return the template names
+	 */
+	public Set<String> getTemplateNames()
+	{
+		return Collections.unmodifiableSet(subjects.keySet());
+	}
+
+	/**
 	 * Send a mail based on a template.<br>
 	 * The template will be obtained from this Mailers configuration via
 	 * {@link TemplateMailer#getSubject(String, Map)} and
@@ -269,7 +281,7 @@ public class TemplateMailer extends Mailer
 	protected String getSubject(String templateName)
 	{
 		if(!subjects.containsKey(templateName))
-			throw new IllegalArgumentException("template '" + templateName + "'not found");
+			throw new IllegalArgumentException("template '" + templateName + "' not found");
 		return subjects.get(templateName);
 	}
 
@@ -296,7 +308,7 @@ public class TemplateMailer extends Mailer
 	protected String getText(String templateName)
 	{
 		if(!subjects.containsKey(templateName))
-			throw new IllegalArgumentException("template '" + templateName + "'not found");
+			throw new IllegalArgumentException("template '" + templateName + "' not found");
 		return texts.get(templateName);
 	}
 }
