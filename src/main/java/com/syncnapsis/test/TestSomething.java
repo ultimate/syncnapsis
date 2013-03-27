@@ -32,6 +32,14 @@ public class TestSomething
 {
 	public static void main(String[] args) throws Exception
 	{
+		String a = "abc";
+		System.out.println(a);
+		System.out.println(a.replace("a", "1"));
+		System.out.println(a.replace("b", "2"));
+		System.out.println(a.replace("c", "3"));
+		
+		System.exit(0);
+		
 		createIconFile("ultimate");
 		createIconFile("moronicjoker");
 		createIconFile("X");
