@@ -32,12 +32,12 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TreeMap;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.syncnapsis.exceptions.ConversionException;
 import com.syncnapsis.utils.reflections.FieldCriterion;
 import com.syncnapsis.utils.serialization.Mapper;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Utility-Class enabling easier access to special functions of java.lang.reflect. See detailed
@@ -257,6 +257,51 @@ public class ReflectionsUtil
 	public static <T> T getField(Object o, com.syncnapsis.utils.reflections.Field field, Class<T> requiredClass) throws IllegalAccessException
 	{
 		return (T) getField(o, field);
+	}
+
+	/**
+	 * Get a field value by a given key.<br>
+	 * Keys are passed in property format and this algorithm will recursively scan the passed Object
+	 * for a Field in the hierarchie specified by the key.<br>
+	 * For example if we had the following Object (in json notation): <code>
+	 * <pre>
+	 * {
+	 *   id: 1,
+	 *   name: "foo",
+	 *   role: {
+	 *     id: 2,
+	 *     rolename: "bar"
+	 *   }
+	 * }
+	 * </pre>
+	 * </code>
+	 * <ul>
+	 * <li>"name" will return "foo"</li>
+	 * <li>"role.rolename" will return "bar"</li>
+	 * </ul>
+	 * 
+	 * @param o - the Object to scan for the key
+	 * @param key - the key describing the requested field
+	 * @return the field value
+	 * @throws NoSuchFieldException if no such field exists
+	 * @throws IllegalAccessException if the field found is not accessible
+	 */
+	public static Object getFieldByKey(Object o, String key) throws NoSuchFieldException, IllegalAccessException
+	{
+		int dotIndex = key.indexOf('.');
+		if(dotIndex == -1)
+		{
+			if(o instanceof Map)
+				return ((Map<?,?>) o).get(key);
+			else
+				return getField(o, key);
+		}
+		else
+		{
+			String field = key.substring(0, dotIndex);
+			String subField = key.substring(dotIndex + 1);
+			return getFieldByKey(getFieldByKey(o, field), subField);
+		}
 	}
 
 	/**
@@ -901,7 +946,7 @@ public class ReflectionsUtil
 	{
 		return getSetter(cls, field.getName(), field.getType());
 	}
-	
+
 	/**
 	 * Find the matching getter for a Field within a Class or it's super classes.<br>
 	 * When the Field type is boolean isX(..) will be checked as well.

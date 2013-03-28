@@ -75,6 +75,46 @@ public class ReflectionsUtilTest extends LoggerTestCase
 		assertEquals(value, ReflectionsUtil.getField(entity, "value"));
 	}
 
+	public void testGetFieldByKey() throws Exception
+	{
+		POJO3 p1 = new POJO3();
+		p1.name = "p1";
+		POJO3 p2 = new POJO3();
+		p2.name = "p2";
+		POJO3 p3 = new POJO3();
+		p3.name = "p3";
+		
+		p1.child = p2;
+		p2.child = p3;
+
+		
+		assertEquals(p1.name, ReflectionsUtil.getFieldByKey(p1, "name"));
+		assertEquals(p1.child, ReflectionsUtil.getFieldByKey(p1, "child"));
+		
+		assertEquals(p2.name, ReflectionsUtil.getFieldByKey(p1, "child.name"));
+		assertEquals(p2.child, ReflectionsUtil.getFieldByKey(p1, "child.child"));
+		
+		assertEquals(p3.name, ReflectionsUtil.getFieldByKey(p1, "child.child.name"));
+		
+		Map<String, Object> m1 = new HashMap<String, Object>();
+		m1.put("name", "m1");
+		Map<String, Object> m2 = new HashMap<String, Object>();
+		m2.put("id", "m2");
+		Map<String, Object> m3 = new HashMap<String, Object>();
+		m3.put("desc", "m1");
+		
+		m1.put("sub", m2);
+		m2.put("child", m3);
+
+		assertEquals(m1.get("name"), ReflectionsUtil.getFieldByKey(m1, "name"));
+		assertEquals(m1.get("sub"), ReflectionsUtil.getFieldByKey(m1, "sub"));
+		
+		assertEquals(m2.get("id"), ReflectionsUtil.getFieldByKey(m1, "sub.id"));
+		assertEquals(m2.get("child"), ReflectionsUtil.getFieldByKey(m1, "sub.child"));
+		
+		assertEquals(m3.get("desc"), ReflectionsUtil.getFieldByKey(m1, "sub.child.desc"));
+	}
+
 	@TestCoversMethods({ "initSuitabilityMatrix", "isMethodSuitableFor" })
 	public void testSuitabilityMatrix() throws Exception
 	{
@@ -137,11 +177,11 @@ public class ReflectionsUtilTest extends LoggerTestCase
 		assertTrue(ReflectionsUtil.isMethodSuitableFor(m, new POJO()));
 	}
 
-	@TestCoversMethods({"findMethodAndConvertArgs", "checkAndConvertArg*" })
+	@TestCoversMethods({ "findMethodAndConvertArgs", "checkAndConvertArg*" })
 	public void testFindMethodAndConvertArgs() throws Exception
 	{
 		Mapper mapper = new BaseMapper();
-		
+
 		@SuppressWarnings("unused")
 		Object tmp = new Object() {
 			// @formatter:off
@@ -178,7 +218,8 @@ public class ReflectionsUtilTest extends LoggerTestCase
 		assertEquals(expected, ReflectionsUtil.findMethodAndConvertArgs(cls, expected.getName(), new Object[] { "a", null, "c" }, mapper));
 		assertEquals(expected, ReflectionsUtil.findMethodAndConvertArgs(cls, expected.getName(), new Object[] { "a", "b", null }, mapper));
 		assertEquals(expected, ReflectionsUtil.findMethodAndConvertArgs(cls, expected.getName(), new Object[] { "a", null, null }, mapper));
-		assertEquals(expected, ReflectionsUtil.findMethodAndConvertArgs(cls, expected.getName(), new Object[] { "a", new String[] { "b", "c" } }, mapper));
+		assertEquals(expected,
+				ReflectionsUtil.findMethodAndConvertArgs(cls, expected.getName(), new Object[] { "a", new String[] { "b", "c" } }, mapper));
 		assertEquals(expected, ReflectionsUtil.findMethodAndConvertArgs(cls, expected.getName(), new Object[] { "a", new String[] { "b" } }, mapper));
 		assertEquals(expected, ReflectionsUtil.findMethodAndConvertArgs(cls, expected.getName(), new Object[] { "a", (String[]) null }, mapper));
 		assertEquals(expected, ReflectionsUtil.findMethodAndConvertArgs(cls, expected.getName(), new Object[] { null }, mapper));
@@ -187,7 +228,8 @@ public class ReflectionsUtilTest extends LoggerTestCase
 		assertEquals(expected, ReflectionsUtil.findMethodAndConvertArgs(cls, expected.getName(), new Object[] { null, null, "c" }, mapper));
 		assertEquals(expected, ReflectionsUtil.findMethodAndConvertArgs(cls, expected.getName(), new Object[] { null, "b", null }, mapper));
 		assertEquals(expected, ReflectionsUtil.findMethodAndConvertArgs(cls, expected.getName(), new Object[] { null, null, null }, mapper));
-		assertEquals(expected, ReflectionsUtil.findMethodAndConvertArgs(cls, expected.getName(), new Object[] { null, new String[] { "b", "c" } }, mapper));
+		assertEquals(expected,
+				ReflectionsUtil.findMethodAndConvertArgs(cls, expected.getName(), new Object[] { null, new String[] { "b", "c" } }, mapper));
 		assertEquals(expected, ReflectionsUtil.findMethodAndConvertArgs(cls, expected.getName(), new Object[] { null, new String[] { "b" } }, mapper));
 		assertEquals(expected, ReflectionsUtil.findMethodAndConvertArgs(cls, expected.getName(), new Object[] { null, (String[]) null }, mapper));
 		// invalid
@@ -222,23 +264,22 @@ public class ReflectionsUtilTest extends LoggerTestCase
 		assertNull(ReflectionsUtil.findMethodAndConvertArgs(cls, expected.getName(), new Object[] { im, pm }, mapper));
 	}
 
-
 	public void testConvert() throws Exception
 	{
 		assertEquals(new Long(1), ReflectionsUtil.convert(Long.class, new Integer(1)));
 		assertEquals(new Long(1), ReflectionsUtil.convert(long.class, new Integer(1)));
 		assertEquals(new Long(1), ReflectionsUtil.convert(Long.class, 1));
 		assertEquals(new Long(1), ReflectionsUtil.convert(long.class, 1));
-		
+
 		assertEquals(new Integer(1), ReflectionsUtil.convert(Integer.class, new Long(1)));
 		assertEquals(new Integer(1), ReflectionsUtil.convert(int.class, new Long(1)));
 		assertEquals(new Integer(1), ReflectionsUtil.convert(Integer.class, 1L));
 		assertEquals(new Integer(1), ReflectionsUtil.convert(int.class, 1L));
-		
+
 		final Dummy<Integer> d = new Dummy<Integer>();
 		assertSame(d, ReflectionsUtil.convert(Dummy.class, d));
 		assertSame(d, ReflectionsUtil.convert(DummySuper.class, d));
-		
+
 		try
 		{
 			ReflectionsUtil.convert(Dummy.class, new DummySuper());
@@ -248,7 +289,7 @@ public class ReflectionsUtilTest extends LoggerTestCase
 		{
 			assertNotNull(e);
 		}
-		
+
 		final Mapper m = mockContext.mock(Mapper.class);
 		final DummySuper ds = new DummySuper();
 
@@ -258,8 +299,8 @@ public class ReflectionsUtilTest extends LoggerTestCase
 				will(returnValue(d));
 			}
 		});
-		
-		assertSame(d, ReflectionsUtil.convert(Dummy.class,  ds, m));
+
+		assertSame(d, ReflectionsUtil.convert(Dummy.class, ds, m));
 	}
 
 	public void testFindMethod() throws Exception
@@ -749,6 +790,12 @@ public class ReflectionsUtilTest extends LoggerTestCase
 	public static interface MyList extends List<String>
 	{
 
+	}
+
+	public static class POJO3
+	{
+		public String	name;
+		public POJO3	child;
 	}
 
 	// fomatter:off
