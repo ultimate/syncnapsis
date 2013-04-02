@@ -14,8 +14,14 @@
  */
 package com.syncnapsis.utils;
 
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Utility class offering template based message formatting.
@@ -25,6 +31,19 @@ import java.util.Map.Entry;
 public abstract class MessageUtil
 {
 	/**
+	 * Logger-Instance
+	 */
+	protected static transient final Logger	logger		= LoggerFactory.getLogger(MessageUtil.class);
+	/**
+	 * The start char for the keys used in templates
+	 */
+	public static final char				KEY_START	= '{';
+	/**
+	 * The end char for the keys used in templates
+	 */
+	public static final char				KEY_END		= '}';
+
+	/**
 	 * Fill a template with the given key-bound values.<br>
 	 * Therefore each key of the map found in the String in the format "{<i>key</i>}" will be
 	 * replaced with the associated value of the map. Keys not found in the String will be ignored.
@@ -33,13 +52,100 @@ public abstract class MessageUtil
 	 * @param values - the values to insert
 	 * @return the resulting message
 	 */
-	public static String fromTemplate(String template, Map<String, String> values)
+	public static String fromTemplate(String template, Map<String, Object> values)
 	{
 		String result = new String(template);
-		for(Entry<String, String> entry : values.entrySet())
+		String value;
+		for(Entry<String, Object> entry : values.entrySet())
 		{
-			result = result.replace("{" + entry.getKey() + "}", entry.getValue());
+			value = entry.getValue() != null ? entry.getValue().toString() : null;
+			result = result.replace(KEY_START + entry.getKey() + KEY_END, value);
 		}
 		return result;
+	}
+
+	/**
+	 * Get all used keys within the template.<br>
+	 * This algorithm does NOT perform any plausibility checks for the keys and may therefore return
+	 * nested keys. (I know this is not the best solution but it will work for now, if correct keys
+	 * are used.)
+	 * 
+	 * @param template - the template to scan
+	 * @return the list of keys
+	 */
+	public static List<String> getUsedTemplateKeys(String template)
+	{
+		List<String> keys = new LinkedList<String>();
+
+		int start = -1;
+		int end = -1;
+		while(true)
+		{
+			start = template.indexOf(KEY_START, start + 1);
+			if(start == -1)
+				break;
+			end = template.indexOf(KEY_END, start);
+			if(end == -1)
+				break;
+			keys.add(template.substring(start + 1, end));
+		}
+
+		return keys;
+	}
+
+	public static Map<String, Object> extractValues(List<String> keys, Object... args)
+	{
+		Map<String, Object> values = new HashMap<String, Object>();
+		
+		String keyClass;
+		String field;
+		int dotIndex;
+		for(String key: keys)
+		{
+			if(key == null)
+				continue;
+			
+			dotIndex = key.indexOf('.');
+			
+			if(dotIndex == -1)
+			{
+				keyClass = key;
+				field = null;
+			}
+			else
+			{
+				keyClass = key.substring(0, dotIndex);
+				field = key.substring(dotIndex+1);
+			}
+					
+			for(Object arg: args)
+			{
+				if(arg == null)
+					continue;
+				if(arg.getClass().getSimpleName().equalsIgnoreCase(keyClass))
+				{
+					if(field != null)
+					{
+						try
+						{
+							values.put(key, ReflectionsUtil.getFieldByKey(arg, field));
+						}
+						catch(NoSuchFieldException e)
+						{
+							logger.warn("field '" + field + "' not found in " + arg + " - value will be null");
+						}
+						catch(IllegalAccessException e)
+						{
+							logger.warn("field '" + field + "' not acessible in " + arg + " - value will be null");
+						}
+					}
+					else
+					{
+						values.put(key, arg);
+					}
+				}
+			}
+		}
+		return values;
 	}
 }

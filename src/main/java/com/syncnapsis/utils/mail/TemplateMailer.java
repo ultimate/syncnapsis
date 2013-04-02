@@ -190,7 +190,7 @@ public class TemplateMailer extends Mailer
 	 * @return wether the message has been send successfully
 	 * @throws AddressException if parsing the address fails
 	 */
-	public boolean send(String templateName, Map<String, String> values, String to) throws AddressException
+	public boolean send(String templateName, Map<String, Object> values, String to) throws AddressException
 	{
 		return this.send(templateName, values, new String[] { to }, null, null, null);
 	}
@@ -210,7 +210,7 @@ public class TemplateMailer extends Mailer
 	 * @return wether the message has been send successfully
 	 * @throws AddressException if parsing the address fails
 	 */
-	public boolean send(String templateName, Map<String, String> values, String to, String from) throws AddressException
+	public boolean send(String templateName, Map<String, Object> values, String to, String from) throws AddressException
 	{
 		return this.send(templateName, values, new String[] { to }, null, null, from);
 	}
@@ -231,7 +231,7 @@ public class TemplateMailer extends Mailer
 	 * @return wether the message has been send successfully
 	 * @throws AddressException if parsing the address fails
 	 */
-	public boolean send(String templateName, Map<String, String> values, String[] to, String[] cc, String[] bcc) throws AddressException
+	public boolean send(String templateName, Map<String, Object> values, String[] to, String[] cc, String[] bcc) throws AddressException
 	{
 		return this.send(templateName, values, to, null, null, null);
 	}
@@ -253,7 +253,7 @@ public class TemplateMailer extends Mailer
 	 * @return wether the message has been send successfully
 	 * @throws AddressException if parsing the address fails
 	 */
-	public boolean send(String templateName, Map<String, String> values, String[] to, String[] cc, String[] bcc, String from) throws AddressException
+	public boolean send(String templateName, Map<String, Object> values, String[] to, String[] cc, String[] bcc, String from) throws AddressException
 	{
 		return this.send(getSubject(templateName, values), getText(templateName, values), to, cc, bcc, from);
 	}
@@ -267,7 +267,7 @@ public class TemplateMailer extends Mailer
 	 * @param values - the values to inlcude into the template (subject)
 	 * @return the formatted subject
 	 */
-	protected String getSubject(String templateName, Map<String, String> values)
+	protected String getSubject(String templateName, Map<String, Object> values)
 	{
 		return MessageUtil.fromTemplate(getSubject(templateName), values);
 	}
@@ -294,7 +294,7 @@ public class TemplateMailer extends Mailer
 	 * @param values - the values to inlcude into the template (text)
 	 * @return the formatted text
 	 */
-	protected String getText(String templateName, Map<String, String> values)
+	protected String getText(String templateName, Map<String, Object> values)
 	{
 		return MessageUtil.fromTemplate(getText(templateName), values);
 	}

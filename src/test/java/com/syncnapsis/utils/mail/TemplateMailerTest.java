@@ -45,7 +45,7 @@ public class TemplateMailerTest extends LoggerTestCase
 		String text = "you are very welcome, {user}\nactivate: {code}";
 		String text2 = "you are very welcome, new guy\nactivate: xyz123";
 
-		Map<String, String> values = new HashMap<String, String>();
+		Map<String, Object> values = new HashMap<String, Object>();
 		values.put("user", "new guy");
 		values.put("code", "xyz123");
 
@@ -84,7 +84,7 @@ public class TemplateMailerTest extends LoggerTestCase
 	{
 		TemplateMailer m = new TemplateMailer(new File("target/test-classes/mail.properties"));
 
-		Map<String, String> values = new HashMap<String, String>();
+		Map<String, Object> values = new HashMap<String, Object>();
 		values.put("user", "new guy");
 		values.put("code", "xyz123");
 
