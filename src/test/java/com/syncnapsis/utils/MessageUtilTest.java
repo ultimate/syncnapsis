@@ -45,6 +45,13 @@ public class MessageUtilTest extends LoggerTestCase
 				+ "<a href=\"" + link + "\">" + link + "</a>\n" + "Have fun!\n" + "You " + provider + "-team";
 
 		assertEquals(expected, MessageUtil.fromTemplate(template, values));
+		
+		// check for recursice replacement of keys in values, too 
+		values.put("link", "link/for/{user}/to/click");
+		expected = "Hello " + user + ",\n" + "Thank you for your registration.\n" + "For verification please click the following link:\n"
+				+ "<a href=\"link/for/" + user + "/to/click\">link/for/" + user + "/to/click</a>\n" + "Have fun!\n" + "You " + provider + "-team";
+		
+		assertEquals(expected, MessageUtil.fromTemplate(template, values));
 	}
 
 	public void testGetUsedTemplateKeys() throws Exception

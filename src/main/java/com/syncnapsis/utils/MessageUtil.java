@@ -55,12 +55,23 @@ public abstract class MessageUtil
 	public static String fromTemplate(String template, Map<String, Object> values)
 	{
 		String result = new String(template);
+		String key;
 		String value;
-		for(Entry<String, Object> entry : values.entrySet())
+		boolean replaced;
+		do
 		{
-			value = entry.getValue() != null ? entry.getValue().toString() : null;
-			result = result.replace(KEY_START + entry.getKey() + KEY_END, value);
-		}
+			replaced = false;
+			for(Entry<String, Object> entry : values.entrySet())
+			{
+				value = entry.getValue() != null ? entry.getValue().toString() : "null";
+				key = KEY_START + entry.getKey() + KEY_END;
+				if(result.contains(key))
+				{
+					result = result.replace(key, value);
+					replaced = true;
+				}
+			}
+		} while(replaced);
 		return result;
 	}
 
@@ -96,17 +107,17 @@ public abstract class MessageUtil
 	public static Map<String, Object> extractValues(List<String> keys, Object... args)
 	{
 		Map<String, Object> values = new HashMap<String, Object>();
-		
+
 		String keyClass;
 		String field;
 		int dotIndex;
-		for(String key: keys)
+		for(String key : keys)
 		{
 			if(key == null)
 				continue;
-			
+
 			dotIndex = key.indexOf('.');
-			
+
 			if(dotIndex == -1)
 			{
 				keyClass = key;
@@ -115,10 +126,10 @@ public abstract class MessageUtil
 			else
 			{
 				keyClass = key.substring(0, dotIndex);
-				field = key.substring(dotIndex+1);
+				field = key.substring(dotIndex + 1);
 			}
-					
-			for(Object arg: args)
+
+			for(Object arg : args)
 			{
 				if(arg == null)
 					continue;
