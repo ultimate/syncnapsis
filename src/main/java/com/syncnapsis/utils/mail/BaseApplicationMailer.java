@@ -31,7 +31,7 @@ import com.syncnapsis.utils.MessageUtil;
 /**
  * TemplateMailer extension offering support for sending standard application mails like
  * registration or email verifications etc.<br>
- * All remplates required must be provided with the mail.properties. The keys for those templates
+ * All templates required must be provided with the mail.properties. The keys for those templates
  * are defined as constants within the class and are listed in
  * {@link BaseApplicationMailer#REQUIRED_TEMPLATES}:
  * <ul>
@@ -46,19 +46,19 @@ import com.syncnapsis.utils.MessageUtil;
 public class BaseApplicationMailer extends TemplateMailer
 {
 	/**
-	 * Template name for {@link BaseApplicationMailer#sendVerifyRegistration(User)}
+	 * Template name for {@link BaseApplicationMailer#sendVerifyRegistration(User, Action)}
 	 */
 	public static final String		TEMPLATE_REGISTRATION_VERIFY	= "registration.verify";
 	/**
-	 * Template name for {@link BaseApplicationMailer#sendVerifyMailAddress(User)}
+	 * Template name for {@link BaseApplicationMailer#sendVerifyMailAddress(User, Action)}
 	 */
 	public static final String		TEMPLATE_MAIL_ADDRESS_VERIFY	= "mail.verify";
 	/**
-	 * Template name for {@link BaseApplicationMailer#sendGeneralNotification(List)}
+	 * Template name for {@link BaseApplicationMailer#sendGeneralNotification(List, String, String)}
 	 */
 	public static final String		TEMPLATE_NOTIFICATION			= "notification";
 	/**
-	 * Template name for {@link BaseApplicationMailer#sendUserRoleChangedNotification(User)}
+	 * Template name for {@link BaseApplicationMailer#sendUserRoleChangedNotification(User, UserRole, String)}
 	 */
 	public static final String		TEMPLATE_USERROLE_CHANGED		= "userrole.changed";
 	/**
