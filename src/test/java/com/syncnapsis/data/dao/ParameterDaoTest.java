@@ -16,6 +16,7 @@ package com.syncnapsis.data.dao;
 
 import java.util.Date;
 
+import com.syncnapsis.constants.ApplicationBaseConstants;
 import com.syncnapsis.data.dao.hibernate.ParameterDaoHibernate;
 import com.syncnapsis.data.model.Parameter;
 import com.syncnapsis.enums.EnumDateFormat;
@@ -31,7 +32,7 @@ public class ParameterDaoTest extends GenericNameDaoTestCase<Parameter, Long>
 	{
 		super.setUp();
 
-		String existingName = "news.maxItems";
+		String existingName = ApplicationBaseConstants.PARAM_REGISTRATION_STATUS_DEFAULT;
 		Long existingId = parameterDao.getByName(existingName).getId();
 
 		Parameter parameter = new Parameter();

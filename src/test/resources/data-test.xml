@@ -12,60 +12,84 @@
 		<column>version</column>
 		<row>
 			<value description="id">1</value>
+			<value description="name">session.timeout.default</value>
+			<value description="value">60</value>
+			<value description="version">1</value>
+		</row>
+		<row>
+			<value description="id">2</value>
+			<value description="name">registration.status.default</value>
+			<value description="value">active</value>
+			<value description="version">1</value>
+		</row>
+		<row>
+			<value description="id">3</value>
+			<value description="name">registration.timeToVerify</value>
+			<value description="value">604800000</value><!-- 1 week -->
+			<value description="version">1</value>
+		</row>
+		<row>
+			<value description="id">4</value>
+			<value description="name">action.code.length</value>
+			<value description="value">50</value>
+			<value description="version">1</value>
+		</row>
+		<row>
+			<value description="id">999901</value>
 			<value description="name">news.maxItems</value>
 			<value description="value">10</value>
 			<value description="version">1</value>
 		</row>
 		<row>
-			<value description="id">2</value>
+			<value description="id">999902</value>
 			<value description="name">news.length1.maxAge</value>
 			<value description="value">86400</value>
 			<value description="version">1</value>
 		</row>
 		<row>
-			<value description="id">3</value>
+			<value description="id">999903</value>
 			<value description="name">news.length2.maxAge</value>
 			<value description="value">172800</value>
 			<value description="version">1</value>
 		</row>
 		<row>
-			<value description="id">4</value>
+			<value description="id">999904</value>
 			<value description="name">news.length3.maxAge</value>
 			<value description="value">259200</value>
 			<value description="version">1</value>
 		</row>
 		<row>
-			<value description="id">5</value>
+			<value description="id">999905</value>
 			<value description="name">news.length4.maxAge</value>
 			<value description="value">432000</value>
 			<value description="version">1</value>
 		</row>
 		<row>
-			<value description="id">6</value>
+			<value description="id">999906</value>
 			<value description="name">news.length5.maxAge</value>
 			<value description="value">604800</value>
 			<value description="version">1</value>
 		</row>
 		<row>
-			<value description="id">7</value>
+			<value description="id">999907</value>
 			<value description="name">news.length6.maxAge</value>
 			<value description="value">1209600</value>
 			<value description="version">1</value>
 		</row>
 		<row>
-			<value description="id">8</value>
+			<value description="id">999908</value>
 			<value description="name">news.length7.maxAge</value>
 			<value description="value">2419200</value>
 			<value description="version">1</value>
 		</row>
 		<row>
-			<value description="id">9</value>
+			<value description="id">999909</value>
 			<value description="name">news.length8.maxAge</value>
 			<value description="value">4838400</value>
 			<value description="version">1</value>
 		</row>
 		<row>
-			<value description="id">10</value>
+			<value description="id">999910</value>
 			<value description="name">news.length9.maxAge</value>
 			<value description="value">7257600</value>
 			<value description="version">1</value>
@@ -807,7 +831,7 @@
 			<value description="fkUser">0</value>
 		</row>
 	</table>
-	
+
 	<table name="pinboard">
 		<column>id</column>
 		<column>version</column>
@@ -865,7 +889,7 @@
 			<value description="fkPinboard">1</value>
 			<value description="fkCreator">0</value>
 			<value description="creationDate">2013-01-01 02:00:00</value>
-			<null/>
+			<null />
 			<value description="content"><![CDATA[enjoy this board]]></value>
 		</row>
 		<row>
@@ -875,7 +899,7 @@
 			<value description="fkPinboard">1</value>
 			<value description="fkCreator">1</value>
 			<value description="creationDate">2013-01-01 03:00:00</value>
-			<null/>
+			<null />
 			<value description="content"><![CDATA[yeah, we will... ;-)]]></value>
 		</row>
 		<row>
@@ -885,7 +909,7 @@
 			<value description="fkPinboard">2</value>
 			<value description="fkCreator">0</value>
 			<value description="creationDate">2013-01-01 02:00:00</value>
-			<null/>
+			<null />
 			<value description="content"><![CDATA[old announcement]]></value>
 		</row>
 		<row>
@@ -895,11 +919,11 @@
 			<value description="fkPinboard">2</value>
 			<value description="fkCreator">1</value>
 			<value description="creationDate">2013-01-01 03:00:00</value>
-			<null/>
+			<null />
 			<value description="content"><![CDATA[new announcement]]></value>
 		</row>
 	</table>
-	
+
 	<table name="blacklist">
 		<column>id</column>
 		<column>version</column>
@@ -924,7 +948,7 @@
 			<value description="strict">1</value>
 		</row>
 	</table>
-	
+
 	<table name="blacklistentry">
 		<column>id</column>
 		<column>version</column>
