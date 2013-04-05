@@ -78,6 +78,18 @@ public class TemplateMailer extends Mailer
 	protected Map<String, String>	texts;
 
 	/**
+	 * Construct a new Mailer by loading the Properties from the given name
+	 * 
+	 * @param propertiesFile - the properties-file name
+	 * @throws IOException if loading the properties fails
+	 */
+	public TemplateMailer(String propertiesFile) throws IOException
+	{
+		super(propertiesFile);
+		readTemplates();
+	}
+
+	/**
 	 * Construct a new Mailer by loading the Properties from the given file
 	 * 
 	 * @param propertiesFile - the properties-file

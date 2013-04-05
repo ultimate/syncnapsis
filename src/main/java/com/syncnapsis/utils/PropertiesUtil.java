@@ -21,22 +21,39 @@ import java.io.IOException;
 import java.util.Properties;
 
 /**
- * Util-Klasse für das Laden von *.properties-Dateien.
+ * Utility-Class for loading {@link Properties}
  * 
  * @author ultimate
  */
 public class PropertiesUtil
 {
 	/**
-	 * Lädt eine *.properties-Datei.
+	 * Load a *.properties-File by specifying the location as a {@link File}.
 	 * 
-	 * @param file - die Datei
-	 * @return das Properties-Objekt
-	 * @throws IOException - wenn die Datei ungültig ist
+	 * @param file - the file
+	 * @return the Properties-Object
+	 * @throws IOException if reading the file fails
 	 */
 	public static Properties loadProperties(File file) throws IOException
 	{
 		BufferedInputStream bis = new BufferedInputStream(new FileInputStream(file));
+		Properties properties = new Properties();
+		properties.load(bis);
+		bis.close();
+		return properties;
+	}
+
+	/**
+	 * Load a *.properties-File by specifying the location as a String. The Properties will then be
+	 * loaded via the ClassLoader as a resource.
+	 * 
+	 * @param name - the name of the properties file
+	 * @return the Properties-Object
+	 * @throws IOException if reading the file fails
+	 */
+	public static Properties loadProperties(String name) throws IOException
+	{
+		BufferedInputStream bis = new BufferedInputStream(ClassLoader.getSystemResourceAsStream(name));
 		Properties properties = new Properties();
 		properties.load(bis);
 		bis.close();

@@ -36,8 +36,15 @@ public class MailerTest extends LoggerTestCase
 	@TestCoversMethods({ "*etGlobalProperty", "*etProtocolProperty", "getProtocol", "getProperties" })
 	public void testProperties() throws Exception
 	{
-		Mailer m = new Mailer(new File("target/test-classes/mail.properties"));
+		Mailer m;
+		
+		// load the properties by file
+		m = new Mailer(new File("target/test-classes/mail.properties"));
+		assertNotNull(m.getProperties());
+		assertNotNull(m.getGlobalProperty(Mailer.KEY_DEBUG));
 
+		// load the properties by name
+		m = new Mailer("mail.properties");
 		assertNotNull(m.getProperties());
 		assertNotNull(m.getGlobalProperty(Mailer.KEY_DEBUG));
 

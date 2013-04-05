@@ -109,6 +109,17 @@ public class Mailer
 	 * An optional mail content type (e.g. "text/html")
 	 */
 	protected String					mailContentType;
+	
+	/**
+	 * Construct a new Mailer by loading the Properties from the given name
+	 * 
+	 * @param propertiesFile - the properties-file name
+	 * @throws IOException if loading the properties fails
+	 */
+	public Mailer(String propertiesFile) throws IOException
+	{
+		this(PropertiesUtil.loadProperties(propertiesFile));
+	}
 
 	/**
 	 * Construct a new Mailer by loading the Properties from the given file

@@ -37,7 +37,7 @@ public class TemplateMailerTest extends LoggerTestCase
 	@TestCoversMethods({ "getSubject", "getText" })
 	public void testGetTemplate() throws Exception
 	{
-		TemplateMailer m = new TemplateMailer(new File("target/test-classes/mail.properties"));
+		TemplateMailer m = new TemplateMailer("mail.properties");
 
 		String template = "test";
 		String subject = "hello {user}";
@@ -61,7 +61,7 @@ public class TemplateMailerTest extends LoggerTestCase
 	@TestCoversMethods({ "readTemplates", "getTemplateNames" })
 	public void testReadTemplates() throws Exception
 	{
-		TemplateMailer m = new TemplateMailer(new File("target/test-classes/mail.properties"));
+		TemplateMailer m = new TemplateMailer("mail.properties");
 
 		assertEquals(2, m.getTemplateNames().size());
 		assertTrue(m.getTemplateNames().contains("register"));
@@ -82,7 +82,7 @@ public class TemplateMailerTest extends LoggerTestCase
 
 	public void testSend() throws Exception
 	{
-		TemplateMailer m = new TemplateMailer(new File("target/test-classes/mail.properties"));
+		TemplateMailer m = new TemplateMailer("mail.properties");
 
 		Map<String, Object> values = new HashMap<String, Object>();
 		values.put("user", "new guy");
