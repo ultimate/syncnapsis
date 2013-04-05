@@ -14,10 +14,15 @@ package com.syncnapsis.data.service.impl;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.util.Assert;
 
+import com.syncnapsis.constants.ApplicationBaseConstants;
 import com.syncnapsis.data.dao.ActionDao;
 import com.syncnapsis.data.model.Action;
 import com.syncnapsis.data.service.ActionManager;
+import com.syncnapsis.data.service.ParameterManager;
 import com.syncnapsis.exceptions.DeserializationException;
+import com.syncnapsis.exceptions.SerializationException;
+import com.syncnapsis.utils.data.DefaultData;
+import com.syncnapsis.utils.data.RandomData;
 import com.syncnapsis.utils.serialization.Serializer;
 import com.syncnapsis.websockets.service.rpc.RPCCall;
 
@@ -29,9 +34,18 @@ import com.syncnapsis.websockets.service.rpc.RPCCall;
 public class ActionManagerImpl extends GenericNameManagerImpl<Action, Long> implements ActionManager, InitializingBean
 {
 	/**
+	 * The character source for generating codes
+	 */
+	public static final String		CODE_SOURCE	= DefaultData.STRING_ASCII_LETTERS_UPPER + DefaultData.STRING_ASCII_NUMBERS;
+	/**
 	 * ActionDao for database access
 	 */
 	protected ActionDao				actionDao;
+
+	/**
+	 * The ParameterManager
+	 */
+	protected ParameterManager		parameterManager;
 
 	/**
 	 * The Serializer used to deserialize the stored RPC arguments
@@ -42,11 +56,13 @@ public class ActionManagerImpl extends GenericNameManagerImpl<Action, Long> impl
 	 * Standard Constructor
 	 * 
 	 * @param actionDao - ActionDao for database access
+	 * @param parameterManager - The ParameterManager
 	 */
-	public ActionManagerImpl(ActionDao actionDao)
+	public ActionManagerImpl(ActionDao actionDao, ParameterManager parameterManager)
 	{
 		super(actionDao);
 		this.actionDao = actionDao;
+		this.parameterManager = parameterManager;
 	}
 
 	/**
@@ -120,5 +136,55 @@ public class ActionManagerImpl extends GenericNameManagerImpl<Action, Long> impl
 			return new RPCCall(object, method, args);
 		}
 		return null;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see
+	 * com.syncnapsis.data.service.ActionManager#createAction(com.syncnapsis.websockets.service.
+	 * rpc.RPCCall, int)
+	 */
+	@Override
+	public Action createAction(RPCCall rpcCall, int maxUses)
+	{
+		com.syncnapsis.data.model.help.RPCCall rpcCall2 = new com.syncnapsis.data.model.help.RPCCall();
+		rpcCall2.setObject(rpcCall.getObject());
+		rpcCall2.setMethod(rpcCall.getMethod());
+		try
+		{
+			rpcCall2.setArgs(serializer.serialize(rpcCall.getArgs(), (Object[]) null));
+		}
+		catch(SerializationException e)
+		{
+			logger.error("could not serialize RPCCall arguments: " + e.getMessage());
+			e.printStackTrace();
+		}
+
+		Action action = new Action();
+		action.setRPCCall(rpcCall2);
+		action.setMaxUses(maxUses);
+		action.setUses(0);
+		action.setCode(generateCode());
+
+		return save(action);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see com.syncnapsis.data.service.ActionManager#generateCode()
+	 */
+	@Override
+	public String generateCode()
+	{
+		String code;
+		Action action;
+
+		do
+		{
+			code = RandomData.randomString(parameterManager.getInteger(ApplicationBaseConstants.PARAM_ACTION_CODE_LENGTH), CODE_SOURCE);
+			action = getByCode(code);
+		} while(action != null);
+		
+		return code;
 	}
 }

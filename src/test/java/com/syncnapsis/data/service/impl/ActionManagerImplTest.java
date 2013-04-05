@@ -11,11 +11,15 @@
  */
 package com.syncnapsis.data.service.impl;
 
+import org.hamcrest.BaseMatcher;
+import org.hamcrest.Description;
 import org.jmock.Expectations;
 
+import com.syncnapsis.constants.ApplicationBaseConstants;
 import com.syncnapsis.data.dao.ActionDao;
 import com.syncnapsis.data.model.Action;
 import com.syncnapsis.data.service.ActionManager;
+import com.syncnapsis.data.service.ParameterManager;
 import com.syncnapsis.tests.GenericNameManagerImplTestCase;
 import com.syncnapsis.tests.annotations.TestCoversClasses;
 import com.syncnapsis.tests.annotations.TestExcludesMethods;
@@ -27,6 +31,8 @@ import com.syncnapsis.websockets.service.rpc.RPCCall;
 @TestExcludesMethods({ "*etSerializer", "afterPropertiesSet" })
 public class ActionManagerImplTest extends GenericNameManagerImplTestCase<Action, Long, ActionManager, ActionDao>
 {
+	private ParameterManager	parameterManager;
+
 	private Serializer<String>	serializer	= new JacksonStringSerializer();
 
 	@Override
@@ -36,7 +42,7 @@ public class ActionManagerImplTest extends GenericNameManagerImplTestCase<Action
 		setEntity(new Action());
 		setDaoClass(ActionDao.class);
 		setMockDao(mockContext.mock(ActionDao.class));
-		setMockManager(new ActionManagerImpl(mockDao));
+		setMockManager(new ActionManagerImpl(mockDao, parameterManager));
 
 		((ActionManagerImpl) mockManager).setSerializer(serializer);
 	}
@@ -108,5 +114,94 @@ public class ActionManagerImplTest extends GenericNameManagerImplTestCase<Action
 		});
 		assertNull(mockManager.getRPCCall(code));
 		mockContext.assertIsSatisfied();
+	}
+
+	public void testGenerateCode() throws Exception
+	{
+		String code;
+
+		mockContext.checking(new Expectations() {
+			{
+				oneOf(mockDao).getByName(with(any(String.class)));
+				will(returnValue(null));
+			}
+		});
+
+		code = mockManager.generateCode();
+		mockContext.assertIsSatisfied();
+
+		assertNotNull(code);
+		assertEquals((int) parameterManager.getInteger(ApplicationBaseConstants.PARAM_ACTION_CODE_LENGTH), code.length());
+
+		mockContext.checking(new Expectations() {
+			{
+				oneOf(mockDao).getByName(with(any(String.class)));
+				will(returnValue(new Action()));
+			}
+		});
+		mockContext.checking(new Expectations() {
+			{
+				oneOf(mockDao).getByName(with(any(String.class)));
+				will(returnValue(null));
+			}
+		});
+
+		code = mockManager.generateCode();
+		mockContext.assertIsSatisfied();
+
+		assertNotNull(code);
+		assertEquals((int) parameterManager.getInteger(ApplicationBaseConstants.PARAM_ACTION_CODE_LENGTH), code.length());
+	}
+
+	public void testCreateAction() throws Exception
+	{
+		Object[] args = new Object[] { 1L, "blub", true };
+		final RPCCall rpcCall = new RPCCall("aBean", "aMethod", args);
+		
+		int maxUses = 1;
+		
+		final Action action = new Action();
+		action.setMaxUses(maxUses);
+		action.setRPCCall(new com.syncnapsis.data.model.help.RPCCall());
+		action.getRPCCall().setObject(rpcCall.getObject());
+		action.getRPCCall().setMethod(rpcCall.getMethod());
+		action.getRPCCall().setArgs("[1,\"blub\",true]");
+		
+		mockContext.checking(new Expectations() {
+			{
+				oneOf(mockDao).getByName(with(any(String.class)));
+				will(returnValue(null));
+			}
+		});
+		mockContext.checking(new Expectations() {
+			{
+				oneOf(mockDao).save(with(new BaseMatcher<Action>() {
+					@Override
+					public boolean matches(Object arg0)
+					{
+						if(!(arg0 instanceof Action))
+							return false;
+								
+						Action a = (Action) arg0;
+						boolean matches = true;
+						matches = matches && (a.getMaxUses() == action.getMaxUses());
+						matches = matches && a.getRPCCall().equals(action.getRPCCall());
+						action.setCode(a.getCode());
+						return matches;
+					}
+
+					@Override
+					public void describeTo(Description arg0)
+					{
+					}
+				}));
+				will(returnValue(action));
+			}
+		});
+
+		Action result = mockManager.createAction(rpcCall, 1);
+		mockContext.assertIsSatisfied();
+		
+		assertNotNull(result.getCode());
 	}
 }

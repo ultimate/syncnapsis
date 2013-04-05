@@ -39,4 +39,20 @@ public interface ActionManager extends GenericNameManager<Action, Long>
 	 * @return the RPCCall
 	 */
 	public RPCCall getRPCCall(String code);
+
+	/**
+	 * Create a new Action for the given RPCCall with the number of max uses
+	 * 
+	 * @param rpcCall - the RPCCall for the Action
+	 * @param maxUses - the max number of uses for the Action
+	 * @return the newly created Action
+	 */
+	public Action createAction(RPCCall rpcCall, int maxUses);
+
+	/**
+	 * Generate a new code guaranteed not be be present in the database
+	 * 
+	 * @return the new code
+	 */
+	public String generateCode();
 }
