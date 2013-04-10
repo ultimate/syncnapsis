@@ -18,9 +18,11 @@ import com.syncnapsis.tests.LoggerTestCase;
 
 public class HttpProtocolTest extends LoggerTestCase
 {
-	public void testNothing()
+	public void testIsMessageComplete()
 	{
-		// TODO no test yet
-		fail("no test yet");
+		HttpProtocol p = new HttpProtocol();
+		
+		for(int i = Byte.MIN_VALUE; i <= Byte.MAX_VALUE; i++)
+			assertTrue(p.isMessageComplete((byte)i));
 	}
 }

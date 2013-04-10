@@ -41,62 +41,62 @@ public class HttpFallbackEngine extends FilterEngine
 	/**
 	 * Header name for the protocol name in the http request.
 	 */
-	private static final String							HEADER_PROTOCOL				= "protocol";
+	public static final String							HEADER_PROTOCOL				= "protocol";
 	/**
 	 * Header name for the extension names in the http request.
 	 */
-	private static final String							HEADER_EXTENSIONS			= "extensions";
+	public static final String							HEADER_EXTENSIONS			= "extensions";
 	/**
 	 * Header name for the action in the http request.
 	 * Action can be [connect|disconnect|message]
 	 */
-	private static final String							HEADER_ACTION				= "action";
+	public static final String							HEADER_ACTION				= "action";
 	/**
 	 * The connect value fot the action parameter.
 	 */
-	private static final String							ACTION_CONNECT				= "connect";
+	public static final String							ACTION_CONNECT				= "connect";
 	/**
 	 * The disconnect value fot the action parameter.
 	 */
-	private static final String							ACTION_DISCONNECT			= "disconnect";
+	public static final String							ACTION_DISCONNECT			= "disconnect";
 	/**
 	 * The message value fot the action parameter.
 	 */
-	private static final String							ACTION_MESSAGE				= "message";
+	public static final String							ACTION_MESSAGE				= "message";
 	/**
 	 * The header name for specifying how many more messages are buffered
 	 */
-	private static final String							HEADER_MESSAGES_BUFFERED	= "Messages-Buffered";
+	public static final String							HEADER_MESSAGES_BUFFERED	= "Messages-Buffered";
 	/**
 	 * The header name for specifying the op code
 	 */
-	private static final String							HEADER_OP_CODE				= "Op-Code";
+	public static final String							HEADER_OP_CODE				= "Op-Code";
 	/**
 	 * The header name for specifying the op code
 	 */
-	private static final String							HEADER_CLOSE_CODE			= "Close-Code";
+	public static final String							HEADER_CLOSE_CODE			= "Close-Code";
 	/**
 	 * The header name for specifying the precondition on response
 	 */
-	private static final String							HEADER_PRECONDITION			= "precondition";
+	public static final String							HEADER_PRECONDITION			= "precondition";
 	/**
 	 * The connected value for the precondition header
 	 */
-	private static final String							PRECONDITION_CONNECTED		= "connected";
+	public static final String							PRECONDITION_CONNECTED		= "connected";
 	/**
 	 * The disconnected value for the precondition header
 	 */
-	private static final String							PRECONDITION_DISCONNECTED	= "disconnected";
+	public static final String							PRECONDITION_DISCONNECTED	= "disconnected";
 
 	/**
 	 * Protocol instance for all established Http Fallback Connections.
 	 */
-	private static final Protocol						httpProtocol				= new HttpProtocol();
+	public static final Protocol						httpProtocol				= new HttpProtocol();
 
 	/**
 	 * Internal list of all active Connections
 	 */
-	private Map<String, Map<String, HttpConnection>>	connections;
+	protected Map<String, Map<String, HttpConnection>>	connections;
 
 	/**
 	 * Empty default Constructor

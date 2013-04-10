@@ -90,7 +90,7 @@ public class Message
 	public Message(byte[] data, int offset, int length, Protocol protocol)
 	{
 		Assert.notNull(protocol, "protocol must not be null!");
-		this.dataString = null;
+		this.dataString = new String(data, offset, length);
 		this.data = data != null ? data : new byte[0];
 		this.offset = offset;
 		this.length = length;
@@ -107,7 +107,7 @@ public class Message
 	 */
 	public Message(byte[] data, int offset, int length, byte opCode)
 	{
-		this.dataString = null;
+		this.dataString = new String(data, offset, length);
 		this.data = data != null ? data : new byte[0];
 		this.offset = offset;
 		this.length = length;

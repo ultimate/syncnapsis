@@ -53,9 +53,6 @@ public class HttpConnectionTest extends LoggerTestCase
 		assertEquals(message3, connection.getMessageBuffer().get(2).getDataString());
 		assertEquals(control, connection.getMessageBuffer().get(3).getDataString());
 		assertEquals(frame, connection.getMessageBuffer().get(4).getDataString());
-		
-		// TODO no test yet
-		fail("no test yet");
 	}
 
 	@TestCoversMethods({ "isOpen", "close" })
