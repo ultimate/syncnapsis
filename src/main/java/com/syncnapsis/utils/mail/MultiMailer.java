@@ -85,7 +85,7 @@ public class MultiMailer<M extends Mailer>
 	 */
 	protected Properties				properties;
 
-	protected M							all;
+	private M							all;
 
 	/**
 	 * Construct a new MultiMailer and instatiate all required Mailers
@@ -129,6 +129,7 @@ public class MultiMailer<M extends Mailer>
 	{
 		String key;
 		String configValue;
+		M mailer;
 		for(String property : properties.stringPropertyNames())
 		{
 			if(KEY_DEFAULT.equals(property))
@@ -143,7 +144,15 @@ public class MultiMailer<M extends Mailer>
 
 				try
 				{
-					set(key, createMailer(key, configValue));
+					mailer = createMailer(key, configValue);
+					if(checkMailer(key, mailer))
+					{
+						set(key, mailer);
+					}
+					else
+					{
+						logger.warn("mailer '" + key + "' did not pass the check and will be ignored (and not be available for usage)");
+					}
 				}
 				catch(IOException e)
 				{
@@ -201,6 +210,26 @@ public class MultiMailer<M extends Mailer>
 			logger.warn("no constructor with Properties found", e);
 			return this.mailerClass.newInstance();
 		}
+	}
+
+	/**
+	 * Check the given Mailer during initialization.<br>
+	 * <br>
+	 * This method may validate if the mailer is configured properly (e. g. if all settings have
+	 * been made through the properties).<br>
+	 * <br>
+	 * By default true is returned.<br>
+	 * <br>
+	 * If false is returned {@link MultiMailer#createMailers()} will ignore this Mailer and not add
+	 * it to the underlying map of mailers.
+	 * 
+	 * @param key - the key for the mailer to check
+	 * @param mailer - the mailer to check
+	 * @return true if the mailer is valid, false otherwise
+	 */
+	protected boolean checkMailer(String key, M mailer)
+	{
+		return true;
 	}
 
 	/**

@@ -24,7 +24,7 @@ import com.syncnapsis.tests.annotations.TestExcludesMethods;
 /**
  * @author ultimate
  */
-@TestExcludesMethods({ "*etDefaultKey", "getMailerClass" })
+@TestExcludesMethods({ "*etDefaultKey", "getMailerClass", "checkMailer" })
 public class MultiMailerTest extends LoggerTestCase
 {
 	private Properties			global;
