@@ -134,6 +134,7 @@ public class MultiMailer<M extends Mailer>
 		{
 			if(KEY_DEFAULT.equals(property))
 			{
+				logger.debug("setting default key: " + properties.getProperty(property));
 				setDefaultKey(properties.getProperty(property));
 			}
 			else if(property.startsWith(KEY_PREFIX))
