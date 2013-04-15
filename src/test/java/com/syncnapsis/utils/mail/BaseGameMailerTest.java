@@ -14,7 +14,6 @@
  */
 package com.syncnapsis.utils.mail;
 
-import java.io.File;
 import java.util.Date;
 
 import javax.mail.Message.RecipientType;
@@ -32,12 +31,12 @@ import com.syncnapsis.tests.annotations.TestExcludesMethods;
 /**
  * @author ultimate
  */
-@TestExcludesMethods("checkTemplates")
+@TestExcludesMethods({"checkMailer", "get"})
 public class BaseGameMailerTest extends LoggerTestCase
 {
 	public void testSendPlayerRoleChangedNotification() throws Exception
 	{
-		BaseGameMailer m = new BaseGameMailer(new File("target/test-classes/mail.properties"));
+		BaseGameMailer m = new BaseGameMailer("mail.properties");
 
 		User user = new User();
 		user.setUsername("new guy");
@@ -81,7 +80,7 @@ public class BaseGameMailerTest extends LoggerTestCase
 			assertEquals(1, msg.getRecipients(RecipientType.TO).length);
 			assertEquals(toExpected, ((InternetAddress) msg.getRecipients(RecipientType.TO)[0]).getAddress());
 			assertEquals(1, msg.getFrom().length);
-			assertEquals(m.getGlobalProperty(Mailer.KEY_FROM), ((InternetAddress) msg.getFrom()[0]).getAddress());
+			assertEquals(m.getDefault().getGlobalProperty(Mailer.KEY_FROM), ((InternetAddress) msg.getFrom()[0]).getAddress());
 		}
 		finally
 		{
@@ -89,3 +88,5 @@ public class BaseGameMailerTest extends LoggerTestCase
 		}
 	}
 }
+
+

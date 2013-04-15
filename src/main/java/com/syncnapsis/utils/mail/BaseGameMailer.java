@@ -25,6 +25,7 @@ import javax.mail.internet.AddressException;
 
 import com.syncnapsis.data.model.Player;
 import com.syncnapsis.data.model.PlayerRole;
+import com.syncnapsis.data.model.User;
 import com.syncnapsis.utils.MessageUtil;
 
 /**
@@ -62,6 +63,17 @@ public class BaseGameMailer extends BaseApplicationMailer
 	}
 
 	/**
+	 * Construct a new Mailer by loading the Properties from the given file
+	 * 
+	 * @param propertiesFile - the properties-file
+	 * @throws IOException if loading the properties fails
+	 */
+	public BaseGameMailer(String propertiesFile) throws IOException
+	{
+		super(propertiesFile);
+	}
+
+	/**
 	 * Construct a new Mailer with the given properties
 	 * 
 	 * @param properties - the Properties
@@ -73,18 +85,39 @@ public class BaseGameMailer extends BaseApplicationMailer
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.syncnapsis.utils.mail.BaseApplicationMailer#checkTemplates()
+	 * @see com.syncnapsis.utils.mail.BaseApplicationMailer#checkMailer(java.lang.String,
+	 * com.syncnapsis.utils.mail.TemplateMailer)
 	 */
 	@Override
-	protected void checkTemplates()
+	protected boolean checkMailer(String key, TemplateMailer mailer)
 	{
-		super.checkTemplates();
-		Set<String> templates = getTemplateNames();
+		boolean valid = super.checkMailer(key, mailer);
+
+		// check if all requried templates are present
+		Set<String> templates = mailer.getTemplateNames();
 		for(String req : REQUIRED_TEMPLATES)
 		{
 			if(!templates.contains(req))
-				throw new IllegalArgumentException("required template '" + req + "' not found");
+			{
+				logger.error("required template '" + req + "' not found for mailer '" + key + "'");
+				valid = false;
+			}
 		}
+		return valid;
+	}
+
+	/**
+	 * Get the mailer associated with the given player (via the user and the locale set).<br>
+	 * (shorthand for <code>get(player.getUser().getLocale())</code>)
+	 * 
+	 * @param user - the user to get the mailer for
+	 * @return the Mailer
+	 */
+	public TemplateMailer get(Player player)
+	{
+		if(player == null)
+			return get((User) null);
+		return get(player.getUser());
 	}
 
 	/**
@@ -112,15 +145,17 @@ public class BaseGameMailer extends BaseApplicationMailer
 	 */
 	public boolean sendPlayerRoleChangedNotification(Player player, PlayerRole oldRole, String reason)
 	{
+		TemplateMailer m = get(player);
+
 		String template = TEMPLATE_PLAYERROLE_CHANGED;
-		List<String> keys = MessageUtil.getUsedTemplateKeys(getText(template));
-		keys.addAll(MessageUtil.getUsedTemplateKeys(getSubject(template)));
+		List<String> keys = MessageUtil.getUsedTemplateKeys(m.getText(template));
+		keys.addAll(MessageUtil.getUsedTemplateKeys(m.getSubject(template)));
 		Map<String, Object> values = MessageUtil.extractValues(keys, player, oldRole);
 		values.put("reason", reason);
 		// fill other values?
 		try
 		{
-			return send(template, values, player.getUser().getEmail());
+			return m.send(template, values, player.getUser().getEmail());
 		}
 		catch(AddressException e)
 		{
