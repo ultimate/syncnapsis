@@ -96,6 +96,14 @@
 	<bean id="securityManager" class="com.syncnapsis.security.BaseGameManager">
 		<constructor-arg ref="baseGameManager" />
 	</bean>
+	
+	<!-- =================================================================== -->
+	<!-- Utilities															 -->
+	<!-- =================================================================== -->
+	
+	<bean id="mailer" class="com.syncnapsis.utils.mail.BaseGameMailer">
+		<constructor-arg value="mail.properties"/>
+	</bean>
 
 	<!-- =================================================================== -->
     <!-- Hibernate					                                         -->
