@@ -18,6 +18,7 @@ import org.springframework.util.Assert;
 import com.syncnapsis.providers.LocaleProvider;
 import com.syncnapsis.providers.UserProvider;
 import com.syncnapsis.utils.StringUtil;
+import com.syncnapsis.utils.mail.BaseApplicationMailer;
 
 /**
  * Extension of {@link SecurityManager} for additional functionality in applications.
@@ -31,29 +32,34 @@ public class BaseApplicationManager extends SecurityManager
 	 * 
 	 * @see StringUtil#encodePassword(String, String)
 	 */
-	public static final String	DEFAULT_ENCRYPTION_ALGORITHM	= "SHA";
+	public static final String		DEFAULT_ENCRYPTION_ALGORITHM	= "SHA";
 	/**
 	 * The UserProvider
 	 */
-	protected UserProvider		userProvider;
+	protected UserProvider			userProvider;
 	/**
 	 * The LocaleProvider
 	 */
-	protected LocaleProvider	localeProvider;
+	protected LocaleProvider		localeProvider;
 
 	/**
 	 * The Validator for name validation
 	 */
-	protected Validator<String>	nameValidator;
+	protected Validator<String>		nameValidator;
 	/**
 	 * The Validator for email-address validation
 	 */
-	protected Validator<String>	emailValidator;
+	protected Validator<String>		emailValidator;
 
 	/**
 	 * The encryption algorithm used for password encryption
 	 */
-	protected String			encryptionAlgorithm;
+	protected String				encryptionAlgorithm;
+
+	/**
+	 * The BaseApplicationMailer used to send mails
+	 */
+	protected BaseApplicationMailer	mailer;
 
 	/**
 	 * Standard Constructor
@@ -76,6 +82,7 @@ public class BaseApplicationManager extends SecurityManager
 		this.encryptionAlgorithm = manager.encryptionAlgorithm;
 		this.nameValidator = manager.nameValidator;
 		this.emailValidator = manager.emailValidator;
+		this.mailer = manager.mailer;
 	}
 
 	/*
@@ -92,6 +99,8 @@ public class BaseApplicationManager extends SecurityManager
 			logger.warn("nameValidator is null!");
 		if(this.emailValidator == null)
 			logger.warn("emailValidator is null!");
+		if(this.mailer == null)
+			logger.warn("mailer is null!");
 		if(encryptionAlgorithm == null)
 		{
 			logger.warn("encryptionAlgorithm is null, using default: '" + DEFAULT_ENCRYPTION_ALGORITHM + "'");
@@ -199,5 +208,25 @@ public class BaseApplicationManager extends SecurityManager
 	public void setEncryptionAlgorithm(String encryptionAlgorithm)
 	{
 		this.encryptionAlgorithm = encryptionAlgorithm;
+	}
+
+	/**
+	 * The BaseApplicationMailer used to send mails
+	 * 
+	 * @return mailer
+	 */
+	public BaseApplicationMailer getMailer()
+	{
+		return mailer;
+	}
+
+	/**
+	 * The BaseApplicationMailer used to send mails
+	 * 
+	 * @param mailer - the BaseApplicationMailer
+	 */
+	public void setMailer(BaseApplicationMailer mailer)
+	{
+		this.mailer = mailer;
 	}
 }

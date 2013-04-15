@@ -28,21 +28,36 @@ import org.subethamail.wiser.Wiser;
 import com.syncnapsis.data.model.Action;
 import com.syncnapsis.data.model.User;
 import com.syncnapsis.data.model.UserRole;
-import com.syncnapsis.tests.LoggerTestCase;
+import com.syncnapsis.security.BaseApplicationManager;
+import com.syncnapsis.tests.BaseSpringContextTestCase;
 import com.syncnapsis.tests.annotations.TestExcludesMethods;
 
 /**
  * @author ultimate
  */
-@TestExcludesMethods({"checkMailer", "get"})
-public class BaseApplicationMailerTest extends LoggerTestCase
+@TestExcludesMethods({ "checkMailer", "get" })
+public class BaseApplicationMailerTest extends BaseSpringContextTestCase
 {
+	private BaseApplicationMailer	mailer;
+	private BaseApplicationManager	securityManager;
+
+	public void testAppCtxInitialization()
+	{
+		assertNotNull(mailer);
+		assertEquals("en", mailer.getDefaultKey());
+		assertEquals(2, mailer.getKeys().size());
+		assertTrue(mailer.getKeys().contains("en"));
+		assertTrue(mailer.getKeys().contains("de"));
+		
+		assertSame(mailer, securityManager.getMailer());
+	}
+
 	public void testSendVerifyRegistration() throws Exception
 	{
 		BaseApplicationMailer m = new BaseApplicationMailer("mail.properties");
 
 		logger.debug("defaultKey=" + m.getDefaultKey());
-		
+
 		User user = new User();
 		user.setUsername("new guy");
 		user.setEmail("newguy@example.com");

@@ -150,6 +150,7 @@
 		<property name="authorityProvider" ref="userRoleBasedAuthorityProvider" />
 		<property name="nameValidator" ref="nameValidator" />
 		<property name="emailValidator" ref="emailValidator" />
+		<property name="mailer" ref="mailer" />
 	</bean>
 	
 	<bean id="nameValidator" class="com.syncnapsis.security.validation.DBBlackListStringValidator" >
