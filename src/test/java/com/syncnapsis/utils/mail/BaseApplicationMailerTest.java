@@ -34,13 +34,15 @@ import com.syncnapsis.tests.annotations.TestExcludesMethods;
 /**
  * @author ultimate
  */
-@TestExcludesMethods("checkTemplates")
+@TestExcludesMethods({"checkMailer", "get"})
 public class BaseApplicationMailerTest extends LoggerTestCase
 {
 	public void testSendVerifyRegistration() throws Exception
 	{
-		BaseApplicationMailer m = new BaseApplicationMailer(new File("target/test-classes/mail.properties"));
+		BaseApplicationMailer m = new BaseApplicationMailer("mail.properties");
 
+		logger.debug("defaultKey=" + m.getDefaultKey());
+		
 		User user = new User();
 		user.setUsername("new guy");
 		user.setEmail("newguy@example.com");
@@ -72,7 +74,7 @@ public class BaseApplicationMailerTest extends LoggerTestCase
 			assertEquals(1, msg.getRecipients(RecipientType.TO).length);
 			assertEquals(toExpected, ((InternetAddress) msg.getRecipients(RecipientType.TO)[0]).getAddress());
 			assertEquals(1, msg.getFrom().length);
-			assertEquals(m.getGlobalProperty(Mailer.KEY_FROM), ((InternetAddress) msg.getFrom()[0]).getAddress());
+			assertEquals(m.getDefault().getGlobalProperty(Mailer.KEY_FROM), ((InternetAddress) msg.getFrom()[0]).getAddress());
 		}
 		finally
 		{
@@ -115,7 +117,7 @@ public class BaseApplicationMailerTest extends LoggerTestCase
 			assertEquals(1, msg.getRecipients(RecipientType.TO).length);
 			assertEquals(toExpected, ((InternetAddress) msg.getRecipients(RecipientType.TO)[0]).getAddress());
 			assertEquals(1, msg.getFrom().length);
-			assertEquals(m.getGlobalProperty(Mailer.KEY_FROM), ((InternetAddress) msg.getFrom()[0]).getAddress());
+			assertEquals(m.getDefault().getGlobalProperty(Mailer.KEY_FROM), ((InternetAddress) msg.getFrom()[0]).getAddress());
 		}
 		finally
 		{
@@ -165,7 +167,7 @@ public class BaseApplicationMailerTest extends LoggerTestCase
 			assertEquals(1, msg.getRecipients(RecipientType.TO).length);
 			assertEquals(toExpected, ((InternetAddress) msg.getRecipients(RecipientType.TO)[0]).getAddress());
 			assertEquals(1, msg.getFrom().length);
-			assertEquals(m.getGlobalProperty(Mailer.KEY_FROM), ((InternetAddress) msg.getFrom()[0]).getAddress());
+			assertEquals(m.getDefault().getGlobalProperty(Mailer.KEY_FROM), ((InternetAddress) msg.getFrom()[0]).getAddress());
 		}
 		finally
 		{
@@ -212,7 +214,7 @@ public class BaseApplicationMailerTest extends LoggerTestCase
 				assertEquals(1, msg.getRecipients(RecipientType.TO).length);
 				assertEquals(users.get(i).getEmail(), ((InternetAddress) msg.getRecipients(RecipientType.TO)[0]).getAddress());
 				assertEquals(1, msg.getFrom().length);
-				assertEquals(m.getGlobalProperty(Mailer.KEY_FROM), ((InternetAddress) msg.getFrom()[0]).getAddress());
+				assertEquals(m.getDefault().getGlobalProperty(Mailer.KEY_FROM), ((InternetAddress) msg.getFrom()[0]).getAddress());
 			}
 		}
 		finally

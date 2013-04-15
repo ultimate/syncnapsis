@@ -26,13 +26,21 @@ import javax.mail.internet.AddressException;
 import com.syncnapsis.data.model.Action;
 import com.syncnapsis.data.model.User;
 import com.syncnapsis.data.model.UserRole;
+import com.syncnapsis.enums.EnumLocale;
 import com.syncnapsis.utils.MessageUtil;
 
 /**
- * TemplateMailer extension offering support for sending standard application mails like
+ * MultiMailer extension offering support for sending standard application mails like
  * registration or email verifications etc.<br>
- * All templates required must be provided with the mail.properties. The keys for those templates
- * are defined as constants within the class and are listed in
+ * <br>
+ * Since this is a {@link MultiMailer} all send operations are done by underlying key associated
+ * mailers by using {@link MultiMailer#get(String)}.<br>
+ * <br>
+ * All templates required must be provided for each of the underlying mailers in separate propertes
+ * as specified by MultiMailer. Standard mail properties only have to be provided once in the
+ * default properties this mailer is created from.<br>
+ * <br>
+ * The keys for the templates required are defined as constants within the class and are listed in
  * {@link BaseApplicationMailer#REQUIRED_TEMPLATES}:
  * <ul>
  * <li>{@link BaseApplicationMailer#TEMPLATE_REGISTRATION_VERIFY}: "registration.verify"</li>
@@ -43,7 +51,7 @@ import com.syncnapsis.utils.MessageUtil;
  * 
  * @author ultimate
  */
-public class BaseApplicationMailer extends TemplateMailer
+public class BaseApplicationMailer extends MultiMailer<TemplateMailer>
 {
 	/**
 	 * Template name for {@link BaseApplicationMailer#sendVerifyRegistration(User, Action)}
@@ -58,7 +66,8 @@ public class BaseApplicationMailer extends TemplateMailer
 	 */
 	public static final String		TEMPLATE_NOTIFICATION			= "notification";
 	/**
-	 * Template name for {@link BaseApplicationMailer#sendUserRoleChangedNotification(User, UserRole, String)}
+	 * Template name for
+	 * {@link BaseApplicationMailer#sendUserRoleChangedNotification(User, UserRole, String)}
 	 */
 	public static final String		TEMPLATE_USERROLE_CHANGED		= "userrole.changed";
 	/**
@@ -73,10 +82,20 @@ public class BaseApplicationMailer extends TemplateMailer
 	 * @param propertiesFile - the properties-file
 	 * @throws IOException if loading the properties fails
 	 */
+	public BaseApplicationMailer(String propertiesFile) throws IOException
+	{
+		super(TemplateMailer.class, propertiesFile);
+	}
+
+	/**
+	 * Construct a new Mailer by loading the Properties from the given file
+	 * 
+	 * @param propertiesFile - the properties-file
+	 * @throws IOException if loading the properties fails
+	 */
 	public BaseApplicationMailer(File propertiesFile) throws IOException
 	{
-		super(propertiesFile);
-		checkTemplates();
+		super(TemplateMailer.class, propertiesFile);
 	}
 
 	/**
@@ -86,25 +105,55 @@ public class BaseApplicationMailer extends TemplateMailer
 	 */
 	public BaseApplicationMailer(Properties properties)
 	{
-		super(properties);
-		checkTemplates();
+		super(TemplateMailer.class, properties);
 	}
 
 	/**
-	 * Check the template configuration if all required templates are present.<br>
-	 * Since this method is used in the constructors it will throw an IllegalArgumentException for
-	 * the first required template not found and abort any further check.
-	 * 
-	 * @throws IllegalArgumentException if a required template is not found.
+	 * Check wether the given TemplateMailer contains all required templates
 	 */
-	protected void checkTemplates()
+	@Override
+	protected boolean checkMailer(String key, TemplateMailer mailer)
 	{
-		Set<String> templates = getTemplateNames();
+		boolean valid = super.checkMailer(key, mailer);
+
+		// check if all requried templates are present
+		Set<String> templates = mailer.getTemplateNames();
 		for(String req : REQUIRED_TEMPLATES)
 		{
 			if(!templates.contains(req))
-				throw new IllegalArgumentException("required template '" + req + "' not found");
+			{
+				logger.error("required template '" + req + "' not found for mailer '" + key + "'");
+				valid = false;
+			}
 		}
+		return valid;
+	}
+
+	/**
+	 * Get the mailer associated with the given EnumLocale
+	 * 
+	 * @param locale - the locale to get the mailer for
+	 * @return the Mailer
+	 */
+	public TemplateMailer get(EnumLocale locale)
+	{
+		if(locale == null)
+			return get((String) null);
+		return get(locale.toString().toLowerCase());
+	}
+
+	/**
+	 * Get the mailer associated with the locale of the given user.<br>
+	 * (shorthand for <code>get(user.getLocale())</code>)
+	 * 
+	 * @param user - the user to get the mailer for
+	 * @return the Mailer
+	 */
+	public TemplateMailer get(User user)
+	{
+		if(user == null)
+			return get((EnumLocale) null);
+		return get(user.getLocale());
 	}
 
 	/**
@@ -127,14 +176,16 @@ public class BaseApplicationMailer extends TemplateMailer
 	 */
 	public boolean sendVerifyRegistration(User user, Action action)
 	{
+		TemplateMailer m = get(user);
+
 		String template = TEMPLATE_REGISTRATION_VERIFY;
-		List<String> keys = MessageUtil.getUsedTemplateKeys(getText(template));
-		keys.addAll(MessageUtil.getUsedTemplateKeys(getSubject(template)));
+		List<String> keys = MessageUtil.getUsedTemplateKeys(m.getText(template));
+		keys.addAll(MessageUtil.getUsedTemplateKeys(m.getSubject(template)));
 		Map<String, Object> values = MessageUtil.extractValues(keys, user, action);
 		// fill other values?
 		try
 		{
-			return send(template, values, user.getEmail());
+			return m.send(template, values, user.getEmail());
 		}
 		catch(AddressException e)
 		{
@@ -163,14 +214,16 @@ public class BaseApplicationMailer extends TemplateMailer
 	 */
 	public boolean sendVerifyMailAddress(User user, Action action)
 	{
+		TemplateMailer m = get(user);
+
 		String template = TEMPLATE_MAIL_ADDRESS_VERIFY;
-		List<String> keys = MessageUtil.getUsedTemplateKeys(getText(template));
-		keys.addAll(MessageUtil.getUsedTemplateKeys(getSubject(template)));
+		List<String> keys = MessageUtil.getUsedTemplateKeys(m.getText(template));
+		keys.addAll(MessageUtil.getUsedTemplateKeys(m.getSubject(template)));
 		Map<String, Object> values = MessageUtil.extractValues(keys, user, action);
 		// fill other values?
 		try
 		{
-			return send(template, values, user.getEmail());
+			return m.send(template, values, user.getEmail());
 		}
 		catch(AddressException e)
 		{
@@ -204,15 +257,17 @@ public class BaseApplicationMailer extends TemplateMailer
 	 */
 	public boolean sendUserRoleChangedNotification(User user, UserRole oldRole, String reason)
 	{
+		TemplateMailer m = get(user);
+
 		String template = TEMPLATE_USERROLE_CHANGED;
-		List<String> keys = MessageUtil.getUsedTemplateKeys(getText(template));
-		keys.addAll(MessageUtil.getUsedTemplateKeys(getSubject(template)));
+		List<String> keys = MessageUtil.getUsedTemplateKeys(m.getText(template));
+		keys.addAll(MessageUtil.getUsedTemplateKeys(m.getSubject(template)));
 		Map<String, Object> values = MessageUtil.extractValues(keys, user, oldRole);
 		values.put("reason", reason);
 		// fill other values?
 		try
 		{
-			return send(template, values, user.getEmail());
+			return m.send(template, values, user.getEmail());
 		}
 		catch(AddressException e)
 		{
@@ -244,21 +299,23 @@ public class BaseApplicationMailer extends TemplateMailer
 	public int sendGeneralNotification(List<User> users, String notificationSubject, String notificationText)
 	{
 		String template = TEMPLATE_NOTIFICATION;
-		List<String> keys = MessageUtil.getUsedTemplateKeys(getText(template));
-		keys.addAll(MessageUtil.getUsedTemplateKeys(getSubject(template)));
-		keys.addAll(MessageUtil.getUsedTemplateKeys(notificationSubject));
-		keys.addAll(MessageUtil.getUsedTemplateKeys(notificationText));
-		Map<String, Object> values;
 		int messagesSent = 0;
+		TemplateMailer m;
 		for(User user : users)
 		{
+			m = get(user);
+			List<String> keys = MessageUtil.getUsedTemplateKeys(m.getText(template));
+			keys.addAll(MessageUtil.getUsedTemplateKeys(m.getSubject(template)));
+			keys.addAll(MessageUtil.getUsedTemplateKeys(notificationSubject));
+			keys.addAll(MessageUtil.getUsedTemplateKeys(notificationText));
+			Map<String, Object> values;
+			values = MessageUtil.extractValues(keys, user);
+			values.put("subject", notificationSubject);
+			values.put("text", notificationText);
 			try
 			{
-				values = MessageUtil.extractValues(keys, user);
-				values.put("subject", notificationSubject);
-				values.put("text", notificationText);
 				// fill other values?
-				if(send(template, values, user.getEmail()))
+				if(m.send(template, values, user.getEmail()))
 					messagesSent++;
 			}
 			catch(AddressException e)
