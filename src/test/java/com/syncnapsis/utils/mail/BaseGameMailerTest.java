@@ -25,15 +25,30 @@ import org.subethamail.wiser.Wiser;
 import com.syncnapsis.data.model.Player;
 import com.syncnapsis.data.model.PlayerRole;
 import com.syncnapsis.data.model.User;
-import com.syncnapsis.tests.LoggerTestCase;
+import com.syncnapsis.security.BaseGameManager;
+import com.syncnapsis.tests.BaseSpringContextTestCase;
 import com.syncnapsis.tests.annotations.TestExcludesMethods;
 
 /**
  * @author ultimate
  */
 @TestExcludesMethods({"checkMailer", "get"})
-public class BaseGameMailerTest extends LoggerTestCase
+public class BaseGameMailerTest extends BaseSpringContextTestCase
 {
+	private BaseGameMailer	mailer;
+	private BaseGameManager	securityManager;
+
+	public void testAppCtxInitialization()
+	{
+		assertNotNull(mailer);
+		assertEquals("en", mailer.getDefaultKey());
+		assertEquals(2, mailer.getKeys().size());
+		assertTrue(mailer.getKeys().contains("en"));
+		assertTrue(mailer.getKeys().contains("de"));
+		
+		assertSame(mailer, securityManager.getMailer());
+	}
+	
 	public void testSendPlayerRoleChangedNotification() throws Exception
 	{
 		BaseGameMailer m = new BaseGameMailer("mail.properties");

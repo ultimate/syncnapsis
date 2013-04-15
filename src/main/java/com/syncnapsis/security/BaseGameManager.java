@@ -14,8 +14,10 @@
  */
 package com.syncnapsis.security;
 
-import com.syncnapsis.providers.PlayerProvider;
 import org.springframework.util.Assert;
+
+import com.syncnapsis.providers.PlayerProvider;
+import com.syncnapsis.utils.mail.BaseGameMailer;
 
 /**
  * Extension of {@link BaseApplicationManager} for additional functionality in games.
@@ -57,6 +59,7 @@ public class BaseGameManager extends BaseApplicationManager
 	{
 		super.afterPropertiesSet();
 		Assert.notNull(playerProvider, "playerProvider must not be null!");
+		Assert.isTrue(this.mailer == null || this.mailer instanceof BaseGameMailer, "mailer must be an instance of BaseGameMailer");
 	}
 
 	/**
@@ -77,5 +80,16 @@ public class BaseGameManager extends BaseApplicationManager
 	public void setPlayerProvider(PlayerProvider playerProvider)
 	{
 		this.playerProvider = playerProvider;
+	}
+
+	/**
+	 * The BaseGameMailer used to send mails
+	 * 
+	 * @return mailer
+	 */
+	@Override
+	public BaseGameMailer getMailer()
+	{
+		return (BaseGameMailer) this.mailer;
 	}
 }

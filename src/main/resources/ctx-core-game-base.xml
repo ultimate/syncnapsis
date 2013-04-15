@@ -76,6 +76,7 @@
 		<property name="authorityProvider" ref="playerRoleBasedAuthorityProvider" />
 		<property name="nameValidator" ref="nameValidator" />
 		<property name="emailValidator" ref="emailValidator" />
+		<property name="mailer" ref="mailer" />
 	</bean>
 	
 </beans>
