@@ -30,6 +30,11 @@ public class ${model}ManagerImplTest extends GenericNameManagerImplTestCase<${mo
 		setEntity(new ${model}());
 		setDaoClass(${model}Dao.class);
 		setMockDao(mockContext.mock(${model}Dao.class));
-		setMockManager(new ${model}ManagerImpl(mockDao));
+		setMockManager(new ${model}ManagerImpl(mockDao) {
+			public String getBeanName()
+			{
+				return "mockManager";
+			}
+		});
 	}
 }
