@@ -239,7 +239,7 @@ public class ApplicationContextUtil implements ApplicationContextAware
 		String[] names = applicationContext.getBeanNamesForType(bean.getClass());
 		for(String name : names)
 		{
-			if(getBean(name) == bean)
+			if(getBean(name).equals(bean))
 				return name;
 		}
 		return null;

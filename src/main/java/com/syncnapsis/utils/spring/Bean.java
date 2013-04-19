@@ -14,14 +14,14 @@
  */
 package com.syncnapsis.utils.spring;
 
-import com.syncnapsis.utils.ApplicationContextUtil;
+import org.springframework.beans.factory.BeanNameAware;
 
 /**
  * Simple base for all beans that should be aware of their own name
  * 
  * @author ultimate
  */
-public class Bean
+public class Bean implements BeanNameAware
 {
 	/**
 	 * A name for this bean
@@ -29,17 +29,22 @@ public class Bean
 	private String	beanName;
 
 	/**
-	 * Get a name for this bean in the application context
+	 * Get a name for this bean in the application context set via {@link Bean#setBeanName(String)}
 	 * 
-	 * @see ApplicationContextUtil#getBeanName(Object)
-	 * @return a name for this bean in the application context, or null if none found
+	 * @return a name for this bean in the application context
 	 */
 	public String getBeanName()
 	{
-		if(beanName == null)
-		{
-			beanName = ApplicationContextUtil.getBeanName(this);
-		}
 		return beanName;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.springframework.beans.factory.BeanNameAware#setBeanName(java.lang.String)
+	 */
+	@Override
+	public void setBeanName(String beanName)
+	{
+		this.beanName = beanName;
 	}
 }
