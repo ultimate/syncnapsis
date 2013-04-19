@@ -63,17 +63,16 @@ public abstract class AnnotationAccessController<T> implements AccessController<
 	 * defined by an
 	 * Annotation.
 	 * 
-	 * @param annotationAuthorities - the Annotation authorities to scan for the (de)-serialization
-	 *            authorities
-	 * @param serializationAuthorities - the (de)-serialization authorities to check for
+	 * @param annotationAuthorities - the Annotation authorities to scan for the access authorities
+	 * @param accessAuthorities - the access authorities to check for
 	 * @return true or false
 	 */
-	public boolean containsAuthority(Authority[] annotationAuthorities, Object... serializationAuthorities)
+	public boolean containsAuthority(Authority[] annotationAuthorities, Object... accessAuthorities)
 	{
 		Object id;
-		if(serializationAuthorities != null && serializationAuthorities.length > 0)
+		if(accessAuthorities != null && accessAuthorities.length > 0)
 		{
-			for(Object authority : serializationAuthorities)
+			for(Object authority : accessAuthorities)
 			{
 				if(authority == null)
 					continue;
@@ -94,7 +93,7 @@ public abstract class AnnotationAccessController<T> implements AccessController<
 					id = authority;
 				else
 					id = authority.toString();
-				
+
 				if(id == null)
 					continue;
 				else if(id instanceof Number)

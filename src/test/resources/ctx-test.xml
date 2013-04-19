@@ -27,4 +27,8 @@
     
     <bean id="duplicate" class="com.syncnapsis.mock.MockTimeProvider" name="dup1, dup2"/>
     
+	<bean id="securityManager" class="com.syncnapsis.security.SecurityManager">
+		<!-- Dummy -->
+	</bean>
+    
 </beans>

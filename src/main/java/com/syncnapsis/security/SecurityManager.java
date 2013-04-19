@@ -20,14 +20,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import com.syncnapsis.providers.AuthorityProvider;
-import com.syncnapsis.providers.SessionProvider;
-import com.syncnapsis.providers.TimeProvider;
-import com.syncnapsis.utils.ReflectionsUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.util.Assert;
+
+import com.syncnapsis.providers.AuthorityProvider;
+import com.syncnapsis.providers.SessionProvider;
+import com.syncnapsis.providers.TimeProvider;
+import com.syncnapsis.utils.ReflectionsUtil;
+import com.syncnapsis.utils.spring.Bean;
 
 /**
  * This Class represents the central instance for managing Security-Questions especially controlling
@@ -46,7 +48,7 @@ import org.springframework.util.Assert;
  * @see AccessController
  * @author ultimate
  */
-public class SecurityManager implements InitializingBean
+public class SecurityManager extends Bean implements InitializingBean
 {
 	/**
 	 * Logger-Instance
