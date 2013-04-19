@@ -17,12 +17,14 @@ package com.syncnapsis.data.service.impl;
 import java.io.Serializable;
 import java.util.List;
 
-import com.syncnapsis.data.dao.GenericDao;
-import com.syncnapsis.data.model.base.BaseObject;
-import com.syncnapsis.data.service.GenericManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
+
+import com.syncnapsis.data.dao.GenericDao;
+import com.syncnapsis.data.model.base.BaseObject;
+import com.syncnapsis.data.service.GenericManager;
+import com.syncnapsis.utils.spring.Bean;
 
 /**
  * Manager-Implementierung für den generischen Zugriff auf beliebige
@@ -31,7 +33,7 @@ import org.springframework.transaction.annotation.Transactional;
  * @author ultimate
  */
 @Transactional
-public class GenericManagerImpl<T extends BaseObject<PK>, PK extends Serializable> implements GenericManager<T, PK>
+public class GenericManagerImpl<T extends BaseObject<PK>, PK extends Serializable> extends Bean implements GenericManager<T, PK>
 {
 	/**
 	 * Logger-Instanz für die Benutzung in allen Subklassen.

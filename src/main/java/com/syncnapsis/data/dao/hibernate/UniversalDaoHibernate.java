@@ -25,6 +25,7 @@ import org.slf4j.LoggerFactory;
 
 import com.syncnapsis.data.dao.UniversalDao;
 import com.syncnapsis.utils.HibernateUtil;
+import com.syncnapsis.utils.spring.Bean;
 
 /**
  * Dao-Implementierung für Hibernate für den universellen Zugriff auf die
@@ -36,7 +37,7 @@ import com.syncnapsis.utils.HibernateUtil;
  * @author ultimate
  */
 @SuppressWarnings("unchecked")
-public class UniversalDaoHibernate implements UniversalDao
+public class UniversalDaoHibernate extends Bean implements UniversalDao
 {
 	/**
 	 * Logger-Instanz zur Verwendung in allen Subklassen
