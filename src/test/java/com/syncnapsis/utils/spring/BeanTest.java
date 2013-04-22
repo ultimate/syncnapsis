@@ -16,6 +16,7 @@ package com.syncnapsis.utils.spring;
 
 import com.syncnapsis.security.SecurityManager;
 import com.syncnapsis.tests.BaseSpringContextTestCase;
+import com.syncnapsis.tests.annotations.TestCoversMethods;
 
 /**
  * @author ultimate
@@ -25,6 +26,7 @@ public class BeanTest extends BaseSpringContextTestCase
 {
 	private SecurityManager	securityManager;
 
+	@TestCoversMethods({ "getBeanName", "setBeanName" })
 	public void testGetBeanName() throws Exception
 	{
 		assertNotNull(securityManager);
