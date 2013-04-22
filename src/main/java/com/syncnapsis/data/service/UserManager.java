@@ -26,6 +26,15 @@ import com.syncnapsis.exceptions.UserRegistrationFailedException;
 public interface UserManager extends GenericNameManager<User, Long>
 {
 	/**
+	 * The method name of "verifyRegistration" for RPC
+	 */
+	public static final String	RPC_VERIFY_REGISTRATION	= "verifyRegistration";
+	/**
+	 * The method name of "verifyMailAddress" for RPC
+	 */
+	public static final String	RPC_VERIFY_MAIL_ADDRESS	= "verifyMailAddress";
+
+	/**
 	 * Load a User by it's email address
 	 * 
 	 * @param email - the user's email
@@ -90,4 +99,33 @@ public interface UserManager extends GenericNameManager<User, Long>
 	 * @throws UserRegistrationFailedException if registration failed
 	 */
 	public User register(String username, String email, String password, String passwordConfirm) throws UserRegistrationFailedException;
+
+	/**
+	 * Change the email address of the current user.<br>
+	 * This method will not necessarily update the email address instantly but may send an email to
+	 * the new address for verification.
+	 * 
+	 * @param email - the new email to set
+	 * @return true if a verification is required, false otherwise
+	 */
+	public boolean updateMailAddress(String email);
+
+	/**
+	 * Verify the registration of a user.<br>
+	 * This will updated the user status and/or role
+	 * 
+	 * @param userId - the user whose registration to verify
+	 * @return a message representing the result of the operation for action output
+	 */
+	public String verifyRegistration(Long userId);
+
+	/**
+	 * Verify a new email set for a user.<br>
+	 * This will finally updated the users email address to the requested value.
+	 * 
+	 * @param userId - the user whose email address to update
+	 * @param email - the new email to set
+	 * @return a message representing the result of the operation for action output
+	 */
+	public String verifyMailAddress(Long userId, String email);
 }

@@ -209,10 +209,11 @@ public class BaseApplicationMailer extends MultiMailer<TemplateMailer>
 	 * @see MessageUtil#getUsedTemplateKeys(String)
 	 * @see TemplateMailer#send(String, Map, String)
 	 * @param user - the user that changed his email address
+	 * @param newMailAddress - the new mail address set
 	 * @param action - the action for confirming the email address change
 	 * @return true if a message has been send, false otherwise
 	 */
-	public boolean sendVerifyMailAddress(User user, Action action)
+	public boolean sendVerifyMailAddress(User user, String newMailAddress, Action action)
 	{
 		TemplateMailer m = get(user);
 
@@ -220,10 +221,11 @@ public class BaseApplicationMailer extends MultiMailer<TemplateMailer>
 		List<String> keys = MessageUtil.getUsedTemplateKeys(m.getText(template));
 		keys.addAll(MessageUtil.getUsedTemplateKeys(m.getSubject(template)));
 		Map<String, Object> values = MessageUtil.extractValues(keys, user, action);
+		values.put("newMailAddress", newMailAddress);
 		// fill other values?
 		try
 		{
-			return m.send(template, values, user.getEmail());
+			return m.send(template, values, newMailAddress);
 		}
 		catch(AddressException e)
 		{

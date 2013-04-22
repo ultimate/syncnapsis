@@ -48,7 +48,7 @@ public class BaseApplicationMailerTest extends BaseSpringContextTestCase
 		assertEquals(2, mailer.getKeys().size());
 		assertTrue(mailer.getKeys().contains("en"));
 		assertTrue(mailer.getKeys().contains("de"));
-		
+
 		assertSame(mailer, securityManager.getMailer());
 	}
 
@@ -101,9 +101,11 @@ public class BaseApplicationMailerTest extends BaseSpringContextTestCase
 	{
 		BaseApplicationMailer m = new BaseApplicationMailer(new File("target/test-classes/mail.properties"));
 
+		String newEmail = "newMail@example.com";
+
 		User user = new User();
 		user.setUsername("new guy");
-		user.setEmail("newguy@example.com");
+		user.setEmail("oldMail@example.com");
 
 		Action action = new Action();
 		action.setCode("34ae8c3f0142aa3bc4");
@@ -114,14 +116,12 @@ public class BaseApplicationMailerTest extends BaseSpringContextTestCase
 				+ "\n" + "Beste regards";
 		textExpected = textExpected.replace("\n", "\r\n"); // mailing replaced the line endings.
 
-		String toExpected = user.getEmail();
-
 		Wiser w = new Wiser();
 		w.start();
 
 		try
 		{
-			assertTrue(m.sendVerifyMailAddress(user, action));
+			assertTrue(m.sendVerifyMailAddress(user, newEmail, action));
 
 			assertEquals(1, w.getMessages().size());
 			MimeMessage msg = w.getMessages().get(0).getMimeMessage();
@@ -130,7 +130,7 @@ public class BaseApplicationMailerTest extends BaseSpringContextTestCase
 			assertEquals(textExpected, msg.getContent());
 			assertEquals(1, msg.getAllRecipients().length);
 			assertEquals(1, msg.getRecipients(RecipientType.TO).length);
-			assertEquals(toExpected, ((InternetAddress) msg.getRecipients(RecipientType.TO)[0]).getAddress());
+			assertEquals(newEmail, ((InternetAddress) msg.getRecipients(RecipientType.TO)[0]).getAddress());
 			assertEquals(1, msg.getFrom().length);
 			assertEquals(m.getDefault().getGlobalProperty(Mailer.KEY_FROM), ((InternetAddress) msg.getFrom()[0]).getAddress());
 		}

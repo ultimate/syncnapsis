@@ -14,14 +14,23 @@
  */
 package com.syncnapsis.data.service.impl;
 
-import org.springframework.mock.web.MockHttpSession;
+import java.util.Date;
 
+import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeMessage.RecipientType;
+
+import org.springframework.mock.web.MockHttpSession;
+import org.subethamail.wiser.Wiser;
+
+import com.syncnapsis.constants.ApplicationBaseConstants;
 import com.syncnapsis.data.dao.UserDao;
 import com.syncnapsis.data.model.User;
+import com.syncnapsis.data.service.ActionManager;
+import com.syncnapsis.data.service.ParameterManager;
 import com.syncnapsis.data.service.UserManager;
 import com.syncnapsis.data.service.UserRoleManager;
-import com.syncnapsis.exceptions.UserRegistrationFailedException;
 import com.syncnapsis.exceptions.UserNotFoundException;
+import com.syncnapsis.exceptions.UserRegistrationFailedException;
 import com.syncnapsis.providers.SessionProvider;
 import com.syncnapsis.providers.UserProvider;
 import com.syncnapsis.security.BaseApplicationManager;
@@ -29,7 +38,11 @@ import com.syncnapsis.tests.GenericNameManagerImplTestCase;
 import com.syncnapsis.tests.annotations.TestCoversClasses;
 import com.syncnapsis.tests.annotations.TestCoversMethods;
 import com.syncnapsis.tests.annotations.TestExcludesMethods;
+import com.syncnapsis.utils.HibernateUtil;
+import com.syncnapsis.utils.ServletUtil;
 import com.syncnapsis.utils.StringUtil;
+import com.syncnapsis.websockets.service.rpc.RPCCall;
+import com.syncnapsis.websockets.service.rpc.RPCHandler;
 
 @TestCoversClasses({ UserManager.class, UserManagerImpl.class })
 @TestExcludesMethods({ "*etSecurityManager", "afterPropertiesSet" })
@@ -40,15 +53,25 @@ public class UserManagerImplTest extends GenericNameManagerImplTestCase<User, Lo
 	private UserProvider			userProvider;
 	private UserManager				userManager;
 	private UserRoleManager			userRoleManager;
+	private ActionManager			actionManager;
+	private ParameterManager		parameterManager;
+
+	private RPCHandler				rpcHandler;
 
 	@Override
 	protected void setUp() throws Exception
 	{
 		super.setUp();
 		setEntity(new User());
+		
 		setDaoClass(UserDao.class);
 		setMockDao(mockContext.mock(UserDao.class));
-		setMockManager(new UserManagerImpl(mockDao, userRoleManager));
+		setMockManager(new UserManagerImpl(mockDao, userRoleManager, actionManager, parameterManager) {
+			public String getBeanName()
+			{
+				return "mockManager";
+			}
+		});
 	}
 
 	@TestCoversMethods({ "login", "logout" })
@@ -97,21 +120,62 @@ public class UserManagerImplTest extends GenericNameManagerImplTestCase<User, Lo
 		}
 	}
 
+	@TestCoversMethods({ "register", "verifyRegistration" })
 	public void testRegister() throws Exception
 	{
 		String username = "a_new_user";
 		String email = "new@syncnapsis.com";
 		String password = "a_password";
+		
+		MockHttpSession session = new MockHttpSession();
+		session.setAttribute(ServletUtil.ATTRIBUTE_REMOTE_ADDR, "localhost");
+		session.setAttribute(ServletUtil.ATTRIBUTE_USER_AGENT, "testcase");
+		sessionProvider.set(session);
+		
+		Wiser w = new Wiser();
+		try
+		{
+			w.start();
 
-		User newUser = userManager.register(username, email, password, password);
+			User newUser = userManager.register(username, email, password, password);
 
-		assertNotNull(newUser);
-		assertNotNull(newUser.getId());
-		assertEquals(username, newUser.getUsername());
-		assertEquals(email, newUser.getEmail());
-		assertEquals(StringUtil.encodePassword(password, securityManager.getEncryptionAlgorithm()), newUser.getPassword());
+			assertNotNull(newUser);
+			assertNotNull(newUser.getId());
+			assertEquals(username, newUser.getUsername());
+			assertEquals(email, newUser.getEmail());
+			assertEquals(StringUtil.encodePassword(password, securityManager.getEncryptionAlgorithm()), newUser.getPassword());
+			assertNotNull(newUser.getAccountStatusExpireDate());
+			assertTrue(newUser.getAccountStatusExpireDate().after(new Date(securityManager.getTimeProvider().get())));
+			
+			HibernateUtil.currentSession().flush();
 
-		assertNotNull(userManager.getByName(username));
+			assertNotNull(userManager.getByName(username));
+			
+			assertEquals(1, w.getMessages().size());
+
+			MimeMessage m = w.getMessages().get(0).getMimeMessage();
+			assertEquals(1, m.getRecipients(RecipientType.TO).length);
+			assertEquals(email, m.getRecipients(RecipientType.TO)[0].toString());
+
+			String message = (String) m.getContent();
+			int codeIndex = message.indexOf("/activate/") + "/activate/".length();
+			String code = message.substring(codeIndex, codeIndex + parameterManager.getInteger(ApplicationBaseConstants.PARAM_ACTION_CODE_LENGTH));
+			logger.debug("'" + code + "'");
+			assertNotNull(actionManager.getByCode(code));
+			RPCCall rpcCall = actionManager.getRPCCall(code);
+			assertNotNull(rpcCall);
+
+			String result = (String) rpcHandler.doRPC(rpcCall, new Object[] {});
+			assertEquals("ok", result);
+
+			User user = userManager.get(newUser.getId());
+			assertNotNull(user);
+			assertNull(user.getAccountStatusExpireDate());
+		}
+		finally
+		{
+			w.stop();
+		}
 	}
 
 	public void testRegisterInvalid() throws Exception
@@ -165,18 +229,78 @@ public class UserManagerImplTest extends GenericNameManagerImplTestCase<User, Lo
 		MethodCall daoCall = managerCall;
 		simpleGenericTest(managerCall, daoCall);
 	}
-	
+
 	public void testIsEmailValid() throws Exception
 	{
 		assertFalse(userManager.isEmailValid(null));
 		assertTrue(userManager.isEmailValid("a@example.com"));
 		assertFalse(userManager.isEmailValid("spammer@example.com"));
 	}
-	
+
 	public void testIsNameValid() throws Exception
 	{
 		assertFalse(userManager.isNameValid(null));
 		assertTrue(userManager.isNameValid("goodguy"));
 		assertFalse(userManager.isNameValid("badguy"));
+	}
+
+	@TestCoversMethods({ "updateMailAddress", "verifyMailAddress" })
+	public void testUpdateMailAddress() throws Exception
+	{
+		User user = userManager.getByName("admin");
+		
+		String email = "mynewmailaddress@example.com";
+		
+		MockHttpSession session = new MockHttpSession();
+		session.setAttribute(ServletUtil.ATTRIBUTE_REMOTE_ADDR, "localhost");
+		session.setAttribute(ServletUtil.ATTRIBUTE_USER_AGENT, "testcase");
+		sessionProvider.set(session);
+		
+		userProvider.set(user);
+		
+		Wiser w = new Wiser();
+		try
+		{
+			w.start();
+			
+			String oldemail = user.getEmail();
+			assertFalse(oldemail.equals(email));
+			
+			assertTrue(userManager.updateMailAddress(email));
+			assertEquals(oldemail, user.getEmail());
+
+			HibernateUtil.currentSession().flush();
+
+			assertEquals(1, w.getMessages().size());
+
+			MimeMessage m = w.getMessages().get(0).getMimeMessage();
+			assertEquals(1, m.getRecipients(RecipientType.TO).length);
+			assertEquals(email, m.getRecipients(RecipientType.TO)[0].toString());
+			
+			String message = (String) m.getContent();
+			int codeIndex = message.indexOf("/activate/") + "/activate/".length();
+			String code = message.substring(codeIndex, codeIndex + parameterManager.getInteger(ApplicationBaseConstants.PARAM_ACTION_CODE_LENGTH));
+			logger.debug("'" + code + "'");
+			assertNotNull(actionManager.getByCode(code));
+			RPCCall rpcCall = actionManager.getRPCCall(code);
+			assertNotNull(rpcCall);
+			
+			logger.debug(rpcCall.getObject());
+			logger.debug(rpcCall.getMethod());
+			logger.debug("" + rpcCall.getArgs()[0]);
+			logger.debug("" + rpcCall.getArgs()[1]);
+			
+			String result = (String) rpcHandler.doRPC(rpcCall, new Object[] {});
+			assertEquals("ok", result);
+			
+//			HibernateUtil.currentSession().flush();
+
+			user = userManager.get(user.getId());
+			assertEquals(email, user.getEmail());
+		}
+		finally
+		{
+			w.stop();
+		}
 	}
 }

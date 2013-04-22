@@ -21,7 +21,10 @@ import org.springframework.util.Assert;
 
 import com.syncnapsis.constants.ApplicationBaseConstants;
 import com.syncnapsis.data.dao.UserDao;
+import com.syncnapsis.data.model.Action;
 import com.syncnapsis.data.model.User;
+import com.syncnapsis.data.service.ActionManager;
+import com.syncnapsis.data.service.ParameterManager;
 import com.syncnapsis.data.service.UserManager;
 import com.syncnapsis.data.service.UserRoleManager;
 import com.syncnapsis.enums.EnumAccountStatus;
@@ -32,6 +35,7 @@ import com.syncnapsis.exceptions.UserRegistrationFailedException;
 import com.syncnapsis.security.BaseApplicationManager;
 import com.syncnapsis.utils.StringUtil;
 import com.syncnapsis.utils.TimeZoneUtil;
+import com.syncnapsis.websockets.service.rpc.RPCCall;
 
 /**
  * Manager-Implementierung für den Zugriff auf User.
@@ -49,6 +53,14 @@ public class UserManagerImpl extends GenericNameManagerImpl<User, Long> implemen
 	 */
 	protected UserRoleManager			userRoleManager;
 	/**
+	 * The ActionManager
+	 */
+	protected ActionManager				actionManager;
+	/**
+	 * The ParameterManager
+	 */
+	protected ParameterManager			parameterManager;
+	/**
 	 * The SecurityManager (BaseApplicationManager)
 	 */
 	protected BaseApplicationManager	securityManager;
@@ -58,12 +70,16 @@ public class UserManagerImpl extends GenericNameManagerImpl<User, Long> implemen
 	 * 
 	 * @param userDao - UserDao für den Datenbankzugriff
 	 * @param userRoleManager - the UserRoleManager
+	 * @param actionManager - the ActionManager
+	 * @param parameterManager - the ParameterManager
 	 */
-	public UserManagerImpl(UserDao userDao, UserRoleManager userRoleManager)
+	public UserManagerImpl(UserDao userDao, UserRoleManager userRoleManager, ActionManager actionManager, ParameterManager parameterManager)
 	{
 		super(userDao);
 		this.userDao = userDao;
 		this.userRoleManager = userRoleManager;
+		this.actionManager = actionManager;
+		this.parameterManager = parameterManager;
 	}
 
 	/*
@@ -148,12 +164,10 @@ public class UserManagerImpl extends GenericNameManagerImpl<User, Long> implemen
 		if(!password.equals(passwordConfirm))
 			throw new UserRegistrationFailedException(ApplicationBaseConstants.ERROR_PASSWORD_MISMATCH);
 
-		// TODO email verification
-
 		User user = new User();
-		user.setAccountStatus(EnumAccountStatus.active);
-		// TODO use EnumAccountStatus.locked and email verification
-		user.setAccountStatusExpireDate(null);
+		user.setAccountStatus(EnumAccountStatus.valueOf(parameterManager.getString(ApplicationBaseConstants.PARAM_REGISTRATION_STATUS_DEFAULT)));
+		user.setAccountStatusExpireDate(new Date(securityManager.getTimeProvider().get()
+				+ parameterManager.getLong(ApplicationBaseConstants.PARAM_REGISTRATION_TIME_TO_VERIFY)));
 		user.setActivated(true);
 		// user.setBirthday(birthday);
 		// user.setCity(city);
@@ -169,7 +183,7 @@ public class UserManagerImpl extends GenericNameManagerImpl<User, Long> implemen
 		user.setRegistrationDate(new Date(securityManager.getTimeProvider().get()));
 		user.setRole(userRoleManager.getByName(ApplicationBaseConstants.ROLE_NORMAL_USER));
 		user.setRoleExpireDate(null);
-		user.setSessionTimeout(60); // TODO set default somewhere else?
+		user.setSessionTimeout(parameterManager.getInteger(ApplicationBaseConstants.PARAM_SESSION_TIMEOUT_DEFAULT));
 		user.setGender(EnumGender.unknown);
 		user.setShowEmail(false);
 		user.setTimeZoneID(TimeZoneUtil.getDefaultID()); // TODO get from session?
@@ -180,6 +194,14 @@ public class UserManagerImpl extends GenericNameManagerImpl<User, Long> implemen
 		user.setUsingTooltips(true);
 
 		user = save(user);
+
+		if(securityManager.getMailer() != null)
+		{
+			// email verification
+			RPCCall rpcCall = new RPCCall(getBeanName(), RPC_VERIFY_REGISTRATION, new Object[] { user.getId() });
+			Action action = actionManager.createAction(rpcCall, 1);
+			securityManager.getMailer().sendVerifyRegistration(user, action);
+		}
 
 		return user;
 	}
@@ -203,7 +225,7 @@ public class UserManagerImpl extends GenericNameManagerImpl<User, Long> implemen
 	{
 		return userDao.isEmailRegistered(email);
 	}
-	
+
 	/*
 	 * (non-Javadoc)
 	 * @see com.syncnapsis.data.service.impl.GenericNameManagerImpl#isNameValid(java.lang.String)
@@ -232,5 +254,60 @@ public class UserManagerImpl extends GenericNameManagerImpl<User, Long> implemen
 			return securityManager.getEmailValidator().isValid(email);
 		else
 			return true;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see com.syncnapsis.data.service.UserManager#updateMailAddress(java.lang.String)
+	 */
+	@Override
+	public boolean updateMailAddress(String email)
+	{
+		User user = securityManager.getUserProvider().get();
+		if(user == null)
+			throw new IllegalStateException("no user found");
+		if(securityManager.getMailer() != null)
+		{
+			logger.debug("mail address update requested for user " + user.getId() + ": " + email);
+
+			RPCCall rpcCall = new RPCCall(getBeanName(), RPC_VERIFY_MAIL_ADDRESS, new Object[] { user.getId(), email });
+			Action action = actionManager.createAction(rpcCall, 1);
+
+			securityManager.getMailer().sendVerifyMailAddress(user, email, action);
+			
+			return true;
+		}
+		else
+		{
+			verifyMailAddress(user.getId(), email);
+			return false;
+		}
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see com.syncnapsis.data.service.UserManager#verifyRegistration(java.lang.Long)
+	 */
+	@Override
+	public String verifyRegistration(Long userId)
+	{
+		User user = get(userId);
+		user.setAccountStatusExpireDate(null);
+		user.setAccountStatus(EnumAccountStatus.active);
+		return "ok";
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see com.syncnapsis.data.service.UserManager#verifyMailAddress(java.lang.Long,
+	 * java.lang.String)
+	 */
+	@Override
+	public String verifyMailAddress(Long userId, String email)
+	{
+		User user = get(userId);
+		user.setEmail(email);
+		save(user);
+		return "ok";
 	}
 }
