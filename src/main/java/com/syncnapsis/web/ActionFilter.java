@@ -14,6 +14,8 @@
  */
 package com.syncnapsis.web;
 
+import java.lang.reflect.InvocationTargetException;
+
 import org.springframework.util.Assert;
 
 import com.syncnapsis.data.model.Action;
@@ -73,5 +75,38 @@ public class ActionFilter extends RPCFilter
 	protected RPCCall getRPCCall(String code)
 	{
 		return actionManager.getRPCCall(code);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see
+	 * com.syncnapsis.websockets.service.rpc.RPCFilter#doRPC(com.syncnapsis.websockets.service.rpc
+	 * .RPCCall)
+	 */
+	@Override
+	protected Object doRPC(RPCCall call)
+	{
+		Object result;
+		try
+		{
+			result = super.doRPC(call);
+		}
+		catch(IllegalArgumentException e)
+		{
+			logger.error("exception doing RPC: " + e.getMessage());
+			result = "exception doing RPC: " + e.getMessage();
+		}
+		catch(IllegalAccessException e)
+		{
+			logger.error("exception doing RPC: " + e.getMessage());
+			result = "exception doing RPC: " + e.getMessage();
+		}
+		catch(InvocationTargetException e)
+		{
+			logger.error("exception doing RPC: " + e.getCause().getMessage());
+			result = "exception doing RPC: " + e.getCause().getMessage();
+		}
+		// TODO localize
+		return result;
 	}
 }

@@ -14,13 +14,16 @@
  */
 package com.syncnapsis.web;
 
+import java.lang.reflect.InvocationTargetException;
+
 import org.jmock.Expectations;
 
 import com.syncnapsis.data.service.ActionManager;
 import com.syncnapsis.tests.BaseDaoTestCase;
 import com.syncnapsis.tests.annotations.TestCoversMethods;
+import com.syncnapsis.utils.serialization.BaseMapper;
+import com.syncnapsis.utils.serialization.Mapper;
 import com.syncnapsis.utils.serialization.Serializer;
-import com.syncnapsis.web.ActionFilter;
 import com.syncnapsis.websockets.service.rpc.RPCCall;
 import com.syncnapsis.websockets.service.rpc.RPCHandler;
 
@@ -64,6 +67,52 @@ public class ActionFilterTest extends BaseDaoTestCase
 		});
 
 		assertEquals(rpcCall, actionFilter.getRPCCall(code));
+		mockContext.assertIsSatisfied();
+	}
+
+	public void testDoRPC() throws Exception
+	{
+		final String ok = "ok";
+		final String error = "bad arg";
+		String result;
+		final RPCCall call = new RPCCall("o", "m", new Object[] { 1 });
+		
+		final Object[] authorities = new Object[0];
+		
+		final Mapper mapper = new BaseMapper();
+		
+		mockContext.checking(new Expectations() {
+			{
+				oneOf(actionFilter.getSerializer()).getMapper();
+				will(returnValue(mapper));
+			}
+		});
+		mockContext.checking(new Expectations() {
+			{
+				oneOf(actionFilter.getRpcHandler()).doRPC(call, authorities);
+				will(returnValue(ok));
+			}
+		});
+
+		result = (String) actionFilter.doRPC(call);
+		assertEquals(ok, result);
+		mockContext.assertIsSatisfied();
+		
+		mockContext.checking(new Expectations() {
+			{
+				oneOf(actionFilter.getSerializer()).getMapper();
+				will(returnValue(mapper));
+			}
+		});
+		mockContext.checking(new Expectations() {
+			{
+				oneOf(actionFilter.getRpcHandler()).doRPC(call, authorities);
+				will(throwException(new InvocationTargetException(new Exception(error))));
+			}
+		});
+		
+		result = (String) actionFilter.doRPC(call);
+		assertEquals("exception doing RPC: " + error, result);
 		mockContext.assertIsSatisfied();
 	}
 }
