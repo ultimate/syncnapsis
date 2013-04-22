@@ -35,6 +35,8 @@ public class BaseApplicationManagerTest extends BaseSpringContextTestCase
 		assertTrue(fields.size() > 0);
 		for(Field f: fields)
 		{
+			if(f.getName().equals("beanName"))
+				continue;
 			assertSame(f.get(securityManager), f.get(clone));
 		}
 	}
