@@ -18,6 +18,7 @@ import java.util.Date;
 
 import com.syncnapsis.data.dao.hibernate.MatchDaoHibernate;
 import com.syncnapsis.data.model.Match;
+import com.syncnapsis.enums.EnumStartCondition;
 import com.syncnapsis.enums.EnumVictoryCondition;
 import com.syncnapsis.tests.GenericNameDaoTestCase;
 import com.syncnapsis.tests.annotations.TestCoversClasses;
@@ -42,10 +43,12 @@ public class MatchDaoTest extends GenericNameDaoTestCase<Match, Long>
 		match.setCreator(playerDao.getByUsername("user1"));
 		match.setFinishedDate(null);
 		match.setGalaxy(galaxyDao.getByName("galaxy1"));
+		match.setNumberOfStartSystems(1);
 		match.setParticipantsMax(10);
 		match.setParticipantsMin(2);
 		match.setSpeed(10);
 		match.setStartDate(new Date(timeProvider.get()));
+		match.setStartCondition(EnumStartCondition.immediately);
 		match.setTitle("any title");
 		match.setVictoryCondition(EnumVictoryCondition.domination);
 		// set individual properties here

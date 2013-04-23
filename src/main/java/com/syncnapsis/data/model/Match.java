@@ -29,6 +29,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import com.syncnapsis.data.model.base.ActivatableInstance;
+import com.syncnapsis.enums.EnumStartCondition;
 import com.syncnapsis.enums.EnumVictoryCondition;
 
 /**
@@ -82,6 +83,11 @@ public class Match extends ActivatableInstance<Long>
 	 * The speed this match is played with (a factor for travel times and growth rates)
 	 */
 	protected int					speed;
+	
+	/**
+	 * The number of start systems the participants may select.
+	 */
+	protected int 					numberOfStartSystems;
 
 	/**
 	 * The maximum number of participants
@@ -92,6 +98,13 @@ public class Match extends ActivatableInstance<Long>
 	 * The minimum number of participants
 	 */
 	protected int					participantsMin;
+	
+	/**
+	 * The start condition for this match
+	 * 
+	 * @see EnumStartCondition
+	 */
+	protected EnumStartCondition	startCondition;
 
 	/**
 	 * The victory condition for this match
@@ -186,6 +199,17 @@ public class Match extends ActivatableInstance<Long>
 	{
 		return speed;
 	}
+	
+	/**
+	 * The number of start systems the participants may select.
+	 * 
+	 * @return numberOfStartSystems
+	 */
+	@Column(nullable = false)
+	public int getNumberOfStartSystems()
+	{
+		return numberOfStartSystems;
+	}
 
 	/**
 	 * The maximum number of participants
@@ -219,6 +243,18 @@ public class Match extends ActivatableInstance<Long>
 	public EnumVictoryCondition getVictoryCondition()
 	{
 		return victoryCondition;
+	}
+	
+	/**
+	 * The start condition for this match
+	 * 
+	 * @return startCondition
+	 */
+	@Column(nullable = false, length = LENGTH_ENUM)
+	@Enumerated(value = EnumType.STRING)
+	public EnumStartCondition getStartCondition()
+	{
+		return startCondition;
 	}
 
 	/**
@@ -301,6 +337,16 @@ public class Match extends ActivatableInstance<Long>
 	{
 		this.speed = speed;
 	}
+	
+	/**
+	 * The number of start systems the participants may select.
+	 * 
+	 * @param numberOfStartSystems - the number
+	 */
+	public void setNumberOfStartSystems(int numberOfStartSystems)
+	{
+		this.numberOfStartSystems = numberOfStartSystems;
+	}
 
 	/**
 	 * The maximum number of participants
@@ -333,6 +379,16 @@ public class Match extends ActivatableInstance<Long>
 	}
 
 	/**
+	 * The start condition for this match
+	 * 
+	 * @param startCondition - the start condition
+	 */
+	public void setStartCondition(EnumStartCondition startCondition)
+	{
+		this.startCondition = startCondition;
+	}
+
+	/**
 	 * The participants in this match
 	 * 
 	 * @param participants - the List of participants
@@ -355,10 +411,13 @@ public class Match extends ActivatableInstance<Long>
 		result = prime * result + ((creator == null) ? 0 : creator.getId().hashCode());
 		result = prime * result + ((finishedDate == null) ? 0 : finishedDate.hashCode());
 		result = prime * result + ((galaxy == null) ? 0 : galaxy.getId().hashCode());
+		result = prime * result + numberOfStartSystems;
 		result = prime * result + participantsMax;
 		result = prime * result + participantsMin;
-		result = prime * result + ((title == null) ? 0 : title.hashCode());
+		result = prime * result + speed;
+		result = prime * result + ((startCondition == null) ? 0 : startCondition.hashCode());
 		result = prime * result + ((startDate == null) ? 0 : startDate.hashCode());
+		result = prime * result + ((title == null) ? 0 : title.hashCode());
 		result = prime * result + ((victoryCondition == null) ? 0 : victoryCondition.hashCode());
 		return result;
 	}
@@ -405,16 +464,15 @@ public class Match extends ActivatableInstance<Long>
 		}
 		else if(!galaxy.getId().equals(other.galaxy.getId()))
 			return false;
+		if(numberOfStartSystems != other.numberOfStartSystems)
+			return false;
 		if(participantsMax != other.participantsMax)
 			return false;
 		if(participantsMin != other.participantsMin)
 			return false;
-		if(title == null)
-		{
-			if(other.title != null)
-				return false;
-		}
-		else if(!title.equals(other.title))
+		if(speed != other.speed)
+			return false;
+		if(startCondition != other.startCondition)
 			return false;
 		if(startDate == null)
 		{
@@ -422,6 +480,13 @@ public class Match extends ActivatableInstance<Long>
 				return false;
 		}
 		else if(!startDate.equals(other.startDate))
+			return false;
+		if(title == null)
+		{
+			if(other.title != null)
+				return false;
+		}
+		else if(!title.equals(other.title))
 			return false;
 		if(victoryCondition != other.victoryCondition)
 			return false;

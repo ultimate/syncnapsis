@@ -387,8 +387,10 @@
 		<column>startDate</column>
 		<column>finishedDate</column>
 		<column>speed</column>
+		<column>numberOfStartSystems</column>
 		<column>participantsMax</column>
 		<column>participantsMin</column>
+		<column>startCondition</column>
 		<column>victoryCondition</column>
 		<row>
 			<value description="id">1</value>
@@ -401,8 +403,10 @@
 			<value description="startDate">2012-01-01</value>
 			<null />
 			<value description="speed">1</value>
+			<value description="numberOfStartSystems">1</value>
 			<value description="participantsMax">10</value>
 			<value description="participantsMin">2</value>
+			<value description="startCondition">immediately</value>
 			<value description="victoryCondition">extermination</value>
 		</row>
 		<row>
@@ -416,8 +420,10 @@
 			<value description="startDate">2012-01-01</value>
 			<value description="finishedDate">2012-02-01</value>
 			<value description="speed">1</value>
+			<value description="numberOfStartSystems">1</value>
 			<value description="participantsMax">10</value>
 			<value description="participantsMin">2</value>
+			<value description="startCondition">manually</value>
 			<value description="victoryCondition">extermination</value>
 		</row>
 	</table>
