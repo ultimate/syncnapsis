@@ -15,13 +15,15 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import org.springframework.util.Assert;
+
 import com.syncnapsis.data.model.PinboardMessage;
 import com.syncnapsis.data.service.PinboardManager;
 import com.syncnapsis.data.service.PinboardMessageManager;
 import com.syncnapsis.websockets.Connection;
 
 /**
- * Interface representing the client and server UIManager functions
+ * {@link MessageManager} implementation
  * 
  * @author ultimate
  */
@@ -30,7 +32,7 @@ public class MessageManagerImpl extends BaseClientManager implements MessageMana
 	/**
 	 * The PinboardManager used to access Pinboard related data
 	 */
-	protected PinboardManager	pinboardManager;
+	protected PinboardManager			pinboardManager;
 	/**
 	 * The PinboardMessageManager used to access PinboardMessage related data
 	 */
@@ -41,7 +43,7 @@ public class MessageManagerImpl extends BaseClientManager implements MessageMana
 	 */
 	public MessageManagerImpl()
 	{
-		super("messageManager");
+		super();
 	}
 
 	/**
@@ -63,7 +65,7 @@ public class MessageManagerImpl extends BaseClientManager implements MessageMana
 	{
 		this.pinboardManager = pinboardManager;
 	}
-	
+
 	/**
 	 * The PinboardMessageManager used to access pinboardMessage related data
 	 * 
@@ -73,7 +75,7 @@ public class MessageManagerImpl extends BaseClientManager implements MessageMana
 	{
 		return pinboardMessageManager;
 	}
-	
+
 	/**
 	 * The PinboardMessageManager used to access pinboardMessage related data
 	 * 
@@ -82,6 +84,18 @@ public class MessageManagerImpl extends BaseClientManager implements MessageMana
 	public void setPinboardMessageManager(PinboardMessageManager pinboardMessageManager)
 	{
 		this.pinboardMessageManager = pinboardMessageManager;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see com.syncnapsis.client.BaseClientManager#afterPropertiesSet()
+	 */
+	@Override
+	public void afterPropertiesSet() throws Exception
+	{
+		super.afterPropertiesSet();
+		Assert.notNull(pinboardManager, "pinboardManager must not be null!");
+		Assert.notNull(pinboardMessageManager, "pinboardMessageManager must not be null!");
 	}
 
 	/*
@@ -101,7 +115,7 @@ public class MessageManagerImpl extends BaseClientManager implements MessageMana
 
 		for(Connection connection : connections)
 		{
-			((MessageManager) getClientInstance(getInstanceName(), connection)).updatePinboard(pinboardId, messages);
+			((MessageManager) getClientInstance(getBeanName(), connection)).updatePinboard(pinboardId, messages);
 		}
 	}
 
@@ -124,6 +138,6 @@ public class MessageManagerImpl extends BaseClientManager implements MessageMana
 	public void requestPinboardUpdate(Long pinboardId, int messageCount)
 	{
 		List<PinboardMessage> messages = pinboardMessageManager.getByPinboard(pinboardId, messageCount);
-		((MessageManager) getClientInstance(getInstanceName(), getConnectionProvider().get())).updatePinboard(pinboardId, messages);
+		((MessageManager) getClientInstance(getBeanName(), getConnectionProvider().get())).updatePinboard(pinboardId, messages);
 	}
 }

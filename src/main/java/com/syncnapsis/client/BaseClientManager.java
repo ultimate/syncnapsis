@@ -15,9 +15,12 @@ import java.util.Collection;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.InitializingBean;
+import org.springframework.util.Assert;
 
 import com.syncnapsis.providers.ConnectionProvider;
 import com.syncnapsis.security.BaseGameManager;
+import com.syncnapsis.utils.spring.Bean;
 import com.syncnapsis.websockets.Connection;
 import com.syncnapsis.websockets.service.rpc.RPCService;
 
@@ -26,7 +29,7 @@ import com.syncnapsis.websockets.service.rpc.RPCService;
  * 
  * @author ultimate
  */
-public class BaseClientManager
+public class BaseClientManager extends Bean implements InitializingBean
 {
 	/**
 	 * The Logger-Instance
@@ -49,18 +52,10 @@ public class BaseClientManager
 	protected RPCService				rpcService;
 
 	/**
-	 * The name for the instance of this client manager
-	 */
-	protected String					instanceName;
-
-	/**
 	 * Construct a new BaseClientManager with the instance name
-	 * 
-	 * @param instanceName - The name for the instance of this client manager
 	 */
-	public BaseClientManager(String instanceName)
+	public BaseClientManager()
 	{
-		this.instanceName = instanceName;
 	}
 
 	/**
@@ -123,14 +118,16 @@ public class BaseClientManager
 		this.rpcService = rpcService;
 	}
 
-	/**
-	 * The name for the instance of this client manager
-	 * 
-	 * @return the instance name
+	/*
+	 * (non-Javadoc)
+	 * @see org.springframework.beans.factory.InitializingBean#afterPropertiesSet()
 	 */
-	protected String getInstanceName()
+	@Override
+	public void afterPropertiesSet() throws Exception
 	{
-		return this.instanceName;
+		Assert.notNull(securityManager, "securityManager must not be null!");
+		Assert.notNull(connectionProvider, "connectionProvider must not be null!");
+		Assert.notNull(rpcService, "rpcService must not be null!");
 	}
 
 	/**

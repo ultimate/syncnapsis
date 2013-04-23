@@ -14,7 +14,7 @@ package com.syncnapsis.client;
 import com.syncnapsis.enums.EnumLocale;
 
 /**
- * Interface representing the client and server UIManager functions
+ * {@link UIManager} implementation
  * 
  * @author ultimate
  */
@@ -25,7 +25,7 @@ public class UIManagerImpl extends BaseClientManager implements UIManager
 	 */
 	public UIManagerImpl()
 	{
-		super("uiManager");
+		super();
 	}
 
 	/*

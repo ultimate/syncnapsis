@@ -20,10 +20,8 @@ public class BaseClientManagerTest extends BaseSpringContextTestCase
 	@TestCoversMethods({"get*", "set*"})
 	public void testGetAndSet() throws Exception
 	{
-		String instanceName = "m";
-		BaseClientManager manager = new BaseClientManager(instanceName);
+		BaseClientManager manager = new BaseClientManager();
 		
-		assertEquals(instanceName, manager.getInstanceName());
 		getAndSetTest(manager, "connectionProvider", ConnectionProvider.class, new ThreadLocalConnectionProvider());
 		getAndSetTest(manager, "rpcService", RPCService.class, new RPCService());
 		getAndSetTest(manager, "securityManager", BaseGameManager.class, new BaseGameManager());
@@ -31,7 +29,7 @@ public class BaseClientManagerTest extends BaseSpringContextTestCase
 	
 	public void testGetClientInstance()
 	{
-		BaseClientManager manager = new BaseClientManager("m");
+		BaseClientManager manager = new BaseClientManager();
 
 		final RPCService mockRPCService = mockContext.mock(RPCService.class);
 		manager.setRpcService(mockRPCService);
@@ -55,7 +53,7 @@ public class BaseClientManagerTest extends BaseSpringContextTestCase
 
 	public void testGetConnections() throws Exception
 	{
-		BaseClientManager manager = new BaseClientManager("m");
+		BaseClientManager manager = new BaseClientManager();
 
 		final RPCService mockRPCService = mockContext.mock(RPCService.class);
 		manager.setRpcService(mockRPCService);
