@@ -83,11 +83,16 @@ public class Match extends ActivatableInstance<Long>
 	 * The speed this match is played with (a factor for travel times and growth rates)
 	 */
 	protected int					speed;
-	
+
 	/**
 	 * The number of start systems the participants may select.
 	 */
-	protected int 					numberOfStartSystems;
+	protected int					startSystemCount;
+
+	/**
+	 * Is manual start system selection enabled?
+	 */
+	protected boolean				startSystemSelectionEnabled;
 
 	/**
 	 * The maximum number of participants
@@ -98,7 +103,7 @@ public class Match extends ActivatableInstance<Long>
 	 * The minimum number of participants
 	 */
 	protected int					participantsMin;
-	
+
 	/**
 	 * The start condition for this match
 	 * 
@@ -199,16 +204,27 @@ public class Match extends ActivatableInstance<Long>
 	{
 		return speed;
 	}
-	
+
 	/**
 	 * The number of start systems the participants may select.
 	 * 
-	 * @return numberOfStartSystems
+	 * @return startSystemCount
 	 */
 	@Column(nullable = false)
-	public int getNumberOfStartSystems()
+	public int getStartSystemCount()
 	{
-		return numberOfStartSystems;
+		return startSystemCount;
+	}
+
+	/**
+	 * Is manual start system selection enabled?
+	 * 
+	 * @return startSystemSelectionEnabled
+	 */
+	@Column(nullable = false)
+	public boolean isStartSystemSelectionEnabled()
+	{
+		return startSystemSelectionEnabled;
 	}
 
 	/**
@@ -244,7 +260,7 @@ public class Match extends ActivatableInstance<Long>
 	{
 		return victoryCondition;
 	}
-	
+
 	/**
 	 * The start condition for this match
 	 * 
@@ -337,15 +353,25 @@ public class Match extends ActivatableInstance<Long>
 	{
 		this.speed = speed;
 	}
-	
+
 	/**
 	 * The number of start systems the participants may select.
 	 * 
-	 * @param numberOfStartSystems - the number
+	 * @param startSystemCount - the number
 	 */
-	public void setNumberOfStartSystems(int numberOfStartSystems)
+	public void setStartSystemCount(int startSystemCount)
 	{
-		this.numberOfStartSystems = numberOfStartSystems;
+		this.startSystemCount = startSystemCount;
+	}
+
+	/**
+	 * Is manual start system selection enabled?
+	 * 
+	 * @param startSystemSelectionEnabled - true or false
+	 */
+	public void setStartSystemSelectionEnabled(boolean startSystemSelectionEnabled)
+	{
+		this.startSystemSelectionEnabled = startSystemSelectionEnabled;
 	}
 
 	/**
@@ -411,12 +437,13 @@ public class Match extends ActivatableInstance<Long>
 		result = prime * result + ((creator == null) ? 0 : creator.getId().hashCode());
 		result = prime * result + ((finishedDate == null) ? 0 : finishedDate.hashCode());
 		result = prime * result + ((galaxy == null) ? 0 : galaxy.getId().hashCode());
-		result = prime * result + numberOfStartSystems;
 		result = prime * result + participantsMax;
 		result = prime * result + participantsMin;
 		result = prime * result + speed;
 		result = prime * result + ((startCondition == null) ? 0 : startCondition.hashCode());
 		result = prime * result + ((startDate == null) ? 0 : startDate.hashCode());
+		result = prime * result + startSystemCount;
+		result = prime * result + (startSystemSelectionEnabled ? 1231 : 1237);
 		result = prime * result + ((title == null) ? 0 : title.hashCode());
 		result = prime * result + ((victoryCondition == null) ? 0 : victoryCondition.hashCode());
 		return result;
@@ -464,8 +491,6 @@ public class Match extends ActivatableInstance<Long>
 		}
 		else if(!galaxy.getId().equals(other.galaxy.getId()))
 			return false;
-		if(numberOfStartSystems != other.numberOfStartSystems)
-			return false;
 		if(participantsMax != other.participantsMax)
 			return false;
 		if(participantsMin != other.participantsMin)
@@ -480,6 +505,10 @@ public class Match extends ActivatableInstance<Long>
 				return false;
 		}
 		else if(!startDate.equals(other.startDate))
+			return false;
+		if(startSystemCount != other.startSystemCount)
+			return false;
+		if(startSystemSelectionEnabled != other.startSystemSelectionEnabled)
 			return false;
 		if(title == null)
 		{

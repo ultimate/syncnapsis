@@ -106,9 +106,9 @@ public class SolarSystemPopulation extends ActivatableInstance<Long>
 	protected EnumPopulationPriority		attackPriority;
 
 	/**
-	 * The secessions that orginated from this population
+	 * The spin-offs that orginated from this population
 	 */
-	protected List<SolarSystemPopulation>	secessions;
+	protected List<SolarSystemPopulation>	spinoffs;
 
 	/**
 	 * The solar system this population "lives" in.<br>
@@ -238,14 +238,14 @@ public class SolarSystemPopulation extends ActivatableInstance<Long>
 	}
 
 	/**
-	 * The secessions that orginated from this population
+	 * The spinoffs that orginated from this population
 	 * 
-	 * @return secessions
+	 * @return spinoffs
 	 */
 	@OneToMany(mappedBy = "origin")
-	public List<SolarSystemPopulation> getSecessions()
+	public List<SolarSystemPopulation> getSpinoffs()
 	{
-		return secessions;
+		return spinoffs;
 	}
 
 	/**
@@ -357,13 +357,13 @@ public class SolarSystemPopulation extends ActivatableInstance<Long>
 	}
 
 	/**
-	 * The secessions that orginatef from this population
+	 * The spinoffs that orginatef from this population
 	 * 
-	 * @param secessions - the list of originated populations
+	 * @param spinoffs - the list of originated populations
 	 */
-	public void setSecessions(List<SolarSystemPopulation> secessions)
+	public void setSpinoffs(List<SolarSystemPopulation> spinoffs)
 	{
-		this.secessions = secessions;
+		this.spinoffs = spinoffs;
 	}
 
 	/*
