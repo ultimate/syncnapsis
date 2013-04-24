@@ -25,13 +25,13 @@ import com.syncnapsis.tests.annotations.TestCoversMethods;
 
 public class StringUtilTest extends LoggerTestCase
 {
-	public void testEncodePassword() throws Exception
+	public void testEncode() throws Exception
 	{
 		logger.debug("testing encodePassword...");
 
 		String password = "tomcat";
 		String encrypted = "536c0b339345616c1b33caf454454d8b8a190d6c";
-		assertEquals(encrypted, StringUtil.encodePassword(password, "SHA"));
+		assertEquals(encrypted, StringUtil.encode(password, "SHA"));
 	}
 
 	public void testFormat()

@@ -20,18 +20,21 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
+import com.syncnapsis.exceptions.PasswordEncryptionException;
 import com.syncnapsis.providers.AuthorityProvider;
 import com.syncnapsis.providers.impl.SystemTimeProvider;
 import com.syncnapsis.providers.impl.ThreadLocalSessionProvider;
 import com.syncnapsis.security.accesscontrol.FieldAccessController;
 import com.syncnapsis.security.accesscontrol.MethodAccessController;
 import com.syncnapsis.tests.LoggerTestCase;
+import com.syncnapsis.tests.annotations.TestCoversClasses;
 import com.syncnapsis.tests.annotations.TestCoversMethods;
 import com.syncnapsis.tests.annotations.TestExcludesMethods;
 import com.syncnapsis.utils.ReflectionsUtil;
 import com.syncnapsis.utils.reflections.Field;
 
-@TestExcludesMethods({"*Provider", "afterPropertiesSet"})
+@TestExcludesMethods({ "*Provider", "afterPropertiesSet" })
+@TestCoversClasses({ SecurityManager.class, PasswordEncryptionException.class })
 public class SecurityManagerTest extends LoggerTestCase
 {
 	public void testSecurityManagerClone() throws Exception
@@ -46,39 +49,51 @@ public class SecurityManagerTest extends LoggerTestCase
 		});
 		securityManager.setSessionProvider(new ThreadLocalSessionProvider());
 		securityManager.setTimeProvider(new SystemTimeProvider());
-		
+
 		SecurityManager clone = new SecurityManager(securityManager);
-		
+
 		List<Field> fields = ReflectionsUtil.findDefaultFields(clone.getClass());
-		
+
 		assertTrue(fields.size() > 0);
-		for(Field f: fields)
+		for(Field f : fields)
 		{
 			assertSame(f.get(securityManager), f.get(clone));
 		}
 	}
-	
-	@TestCoversMethods({"*AccessController", "*AccessControllers", "getAvailableAccessControllerTypes"})
+
+	@TestCoversMethods({ "*AccessController", "*AccessControllers", "getAvailableAccessControllerTypes" })
 	public void testAccessControllerManagement() throws Exception
 	{
 		SecurityManager securityManager = new SecurityManager();
-		
-		AccessController<?>[] controllers = new AccessController<?>[] {
-				new FieldAccessController(),
-				new MethodAccessController()
-		};
-		
+
+		AccessController<?>[] controllers = new AccessController<?>[] { new FieldAccessController(), new MethodAccessController() };
+
 		securityManager.setAccessControllers(Arrays.asList(controllers));
-		
+
 		assertNotNull(securityManager.getAccessController(Field.class));
 		assertEquals(controllers[0], securityManager.getAccessController(Field.class));
-		
+
 		assertNotNull(securityManager.getAccessController(Method.class));
 		assertEquals(controllers[1], securityManager.getAccessController(Method.class));
-		
+
 		Set<Class<?>> types = securityManager.getAvailableAccessControllerTypes();
 		assertEquals(2, types.size());
 		assertTrue(types.contains(Field.class));
 		assertTrue(types.contains(Method.class));
+	}
+	
+	@TestCoversMethods({"hashPassword", "validatePassword"})
+	public void testPasswordHashing() throws Exception
+	{
+		SecurityManager securityManager = new SecurityManager();
+		
+		String password = "mypw";
+		
+		String hash = securityManager.hashPassword(password);
+		
+		assertNotNull(hash);
+		assertFalse(hash.equals(securityManager.hashPassword(password)));
+		
+		assertTrue(securityManager.validatePassword(password, hash));
 	}
 }

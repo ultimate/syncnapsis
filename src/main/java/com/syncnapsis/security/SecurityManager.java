@@ -14,6 +14,8 @@
  */
 package com.syncnapsis.security;
 
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -25,9 +27,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.util.Assert;
 
+import com.syncnapsis.exceptions.PasswordEncryptionException;
 import com.syncnapsis.providers.AuthorityProvider;
 import com.syncnapsis.providers.SessionProvider;
 import com.syncnapsis.providers.TimeProvider;
+import com.syncnapsis.utils.PasswordHashUtil;
 import com.syncnapsis.utils.ReflectionsUtil;
 import com.syncnapsis.utils.spring.Bean;
 
@@ -239,6 +243,55 @@ public class SecurityManager extends Bean implements InitializingBean
 	public void setAuthorityProvider(AuthorityProvider authorityProvider)
 	{
 		this.authorityProvider = authorityProvider;
+	}
+
+	/**
+	 * Create the hash for a password
+	 * 
+	 * @see PasswordHashUtil#createHash(String)
+	 * @param password - the password to hash
+	 * @return the hash for the password
+	 * @throws PasswordEncryptionException if hashing fails
+	 */
+	public String hashPassword(String password) throws PasswordEncryptionException
+	{
+		try
+		{
+			return PasswordHashUtil.createHash(password);
+		}
+		catch(NoSuchAlgorithmException e)
+		{
+			throw new PasswordEncryptionException("error creating password hash", e);
+		}
+		catch(InvalidKeySpecException e)
+		{
+			throw new PasswordEncryptionException("error creating password hash", e);
+		}
+	}
+
+	/**
+	 * Check wether a password is valid for the given hash.
+	 * 
+	 * @see PasswordHashUtil#validatePassword(String, String)
+	 * @param password - the password to validate
+	 * @param hash - the hash representing the encoded password
+	 * @return true if the password is valid, false otherwise
+	 * @throws PasswordEncryptionException if validating fails
+	 */
+	public boolean validatePassword(String password, String hash) throws PasswordEncryptionException
+	{
+		try
+		{
+			return PasswordHashUtil.validatePassword(password, hash);
+		}
+		catch(NoSuchAlgorithmException e)
+		{
+			throw new PasswordEncryptionException("error validating password", e);
+		}
+		catch(InvalidKeySpecException e)
+		{
+			throw new PasswordEncryptionException("error validating password", e);
+		}
 	}
 
 	/*

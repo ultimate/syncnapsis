@@ -55,16 +55,16 @@ public abstract class StringUtil
 	public static String					REGEXP_BINARY_8	= "([0-1]{8})*";
 
 	/**
-	 * Encode a password with the given algorithm using MessageDigest
+	 * Encode a string with the given algorithm using MessageDigest
 	 * 
 	 * @see MessageDigest#getInstance(String)
-	 * @param password - the password to encode
+	 * @param s - the string to encode
 	 * @param algorithm - the algorithm for MessageDigest
 	 * @return the encoded password
 	 */
-	public static String encodePassword(String password, String algorithm)
+	public static String encode(String s, String algorithm)
 	{
-		byte[] unencodedPassword = password.getBytes();
+		byte[] unencodedPassword = s.getBytes();
 
 		MessageDigest md = null;
 
@@ -76,7 +76,7 @@ public abstract class StringUtil
 		catch(Exception e)
 		{
 			logger.error("Exception: " + e);
-			return password;
+			return s;
 		}
 
 		md.reset();
