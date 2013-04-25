@@ -19,7 +19,7 @@
 	<groupId>com</groupId>
 	<artifactId>syncnapsis</artifactId>
 	<packaging>pom</packaging>
-	<version>1.0.0</version>
+	<version>0.8.0</version>
 	<name>syncnapsis-framework</name>
 	<url>http://github.com/organizations/syncnapsis</url>
 
@@ -150,6 +150,14 @@
 						<version>${jdbc.version}</version>
 					</dependency>
 				</dependencies>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>versions-maven-plugin</artifactId>
+				<version>1.3.1</version>
+				<configuration>
+					<generateBackupPoms>false</generateBackupPoms>
+				</configuration>				
 			</plugin>
 		</plugins>
 		<resources>
@@ -324,25 +332,6 @@
 		<!-- Database settings - End -->
 
 		<!-- Versions of Dependencies -->
-		<!-- pe-Dependencies (newest Versions) -->
-		<syncnapsis-core-application-base.version>0.2.0</syncnapsis-core-application-base.version>
-		<syncnapsis-core-data.version>0.5.0</syncnapsis-core-data.version>
-		<syncnapsis-core-game-base.version>0.2.0</syncnapsis-core-game-base.version>
-		<syncnapsis-core-utils.version>0.5.0</syncnapsis-core-utils.version>
-		<syncnapsis-core-websockets.version>0.7.0</syncnapsis-core-websockets.version>
-		<syncnapsis-dev-archive.version>0.9.0</syncnapsis-dev-archive.version>
-		<syncnapsis-dev-utils.version>0.9.0</syncnapsis-dev-utils.version>
-		<syncnapsis-examples-HelloWorld.version>0.6.5</syncnapsis-examples-HelloWorld.version>
-		<syncnapsis-examples-ui-playground.version>0.1.0</syncnapsis-examples-ui-playground.version>
-		<syncnapsis-modules-authority-api.version>0.2.0</syncnapsis-modules-authority-api.version>
-		<syncnapsis-modules-authority-generic-impl.version>0.2.0</syncnapsis-modules-authority-generic-impl.version>
-		<syncnapsis-modules-politics-api.version>0.2.0</syncnapsis-modules-politics-api.version>
-		<syncnapsis-modules-politics-complex-impl.version>0.2.0</syncnapsis-modules-politics-complex-impl.version>
-		<syncnapsis-modules-stats-api.version>0.2.0</syncnapsis-modules-stats-api.version>
-		<syncnapsis-modules-stats-base-impl.version>0.2.0</syncnapsis-modules-stats-base-impl.version>
-		<syncnapsis-universe-conquest.version>0.1.0</syncnapsis-universe-conquest.version>
-		<syncnapsis-universe-evolution.version>0.2.0</syncnapsis-universe-evolution.version>
-		<syncnapsis-universe-utils.version>0.2.0</syncnapsis-universe-utils.version>
 
 		<!-- Global-Dependencies -->
 		<servlet.version>3.1.1</servlet.version> <!-- 19.01.2012 -->
