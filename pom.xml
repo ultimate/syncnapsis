@@ -20,13 +20,13 @@
 	<groupId>com.syncnapsis.syncnapsis-universe</groupId>
 	<artifactId>syncnapsis-universe-conquest</artifactId>
 	<packaging>war</packaging>
-	<version>${syncnapsis-universe-conquest.version}</version>
+	<version>0.8.0</version>
 	<name>syncnapsis-universe-conquest</name>
 
 	<parent>
 		<groupId>com.syncnapsis</groupId>
 		<artifactId>syncnapsis-universe</artifactId>
-		<version>1.0.0</version>
+		<version>0.8.0</version>
 	</parent>
 
 	<build>
@@ -48,22 +48,22 @@
 		<dependency>
 			<groupId>com.syncnapsis.syncnapsis-core</groupId>
 			<artifactId>syncnapsis-core-websockets</artifactId>
-			<version>${syncnapsis-core-websockets.version}</version>
+			<version>0.8.0</version>
 		</dependency>
 		<dependency>
 			<groupId>com.syncnapsis.syncnapsis-modules</groupId>
 			<artifactId>syncnapsis-modules-stats-base-impl</artifactId>
-			<version>${syncnapsis-modules-stats-base-impl.version}</version>
+			<version>0.8.0</version>
 		</dependency>
 		<dependency>
 			<groupId>com.syncnapsis.syncnapsis-universe</groupId>
 			<artifactId>syncnapsis-universe-utils</artifactId>
-			<version>${syncnapsis-universe-utils.version}</version>
+			<version>0.8.0</version>
 		</dependency>
 		<dependency>
 			<groupId>com.syncnapsis.syncnapsis-core</groupId>
 			<artifactId>syncnapsis-core-game-base</artifactId>
-			<version>${syncnapsis-core-game-base.version}</version>
+			<version>0.8.0</version>
 		</dependency>
 		<!-- BASE - START -->
 		<dependency>
