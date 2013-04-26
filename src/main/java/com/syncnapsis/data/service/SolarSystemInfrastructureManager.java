@@ -14,6 +14,8 @@
  */
 package com.syncnapsis.data.service;
 
+import java.util.List;
+
 import com.syncnapsis.data.model.SolarSystemInfrastructure;
 
 /**
@@ -21,6 +23,23 @@ import com.syncnapsis.data.model.SolarSystemInfrastructure;
  * 
  * @author ultimate
  */
-public interface SolarSystemInfrastructureManager  extends GenericManager<SolarSystemInfrastructure, Long>
+public interface SolarSystemInfrastructureManager extends GenericManager<SolarSystemInfrastructure, Long>
 {
+	/**
+	 * Get all infrastructures for a given match
+	 * 
+	 * @param matchId - the match
+	 * @return the List of SolarSystemInfrastrutures
+	 */
+	public List<SolarSystemInfrastructure> getByMatch(long matchId);
+
+//	/**
+//	 * Create a new SolarSystemInfrastructure for the given Match and SolarSystem
+//	 * 
+//	 * @param matchId - the Match for the infrastructure
+//	 * @param systemId - the SolarSystem for the infrastructure
+//	 * @param infrastructure - the infrastructure value
+//	 * @return the newly created SolarSystemInfrastructure entity
+//	 */
+//	public SolarSystemInfrastructure initialize(long matchId, long systemId, int infrastructure);
 }

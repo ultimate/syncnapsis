@@ -14,6 +14,8 @@
  */
 package com.syncnapsis.data.service;
 
+import java.util.List;
+
 import com.syncnapsis.data.model.SolarSystem;
 
 /**
@@ -21,6 +23,25 @@ import com.syncnapsis.data.model.SolarSystem;
  * 
  * @author ultimate
  */
-public interface SolarSystemManager  extends GenericManager<SolarSystem, Long>
+public interface SolarSystemManager extends GenericManager<SolarSystem, Long>
 {
+	/**
+	 * Get all SolarSystems for a Galaxy
+	 * 
+	 * @param galaxyId - the id of the Galaxy
+	 * @return the list of SolarSystems
+	 */
+	public List<SolarSystem> getByGalaxy(long galaxyId);
+
+//	/**
+//	 * Create a new SolarSystem with the given parameters
+//	 * 
+//	 * @param galaxyId - the Galaxy the SolarSystem is in
+//	 * @param coords - the coordinates for the SolarSystem
+//	 * @param name - the name for the SolarSystem
+//	 * @param size - the size of the SolarSystem
+//	 * @param habitability - the habitability of the SolarSystem
+//	 * @return the newly created SolarSystem entity
+//	 */
+//	public SolarSystem create(long galaxyId, Vector.Integer coords, String name, int size, int habitability);
 }
