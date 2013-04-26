@@ -14,6 +14,8 @@
  */
 package com.syncnapsis.data.dao;
 
+import java.util.List;
+
 import com.syncnapsis.data.model.SolarSystemInfrastructure;
 
 /**
@@ -23,4 +25,11 @@ import com.syncnapsis.data.model.SolarSystemInfrastructure;
  */
 public interface SolarSystemInfrastructureDao extends GenericDao<SolarSystemInfrastructure, Long>
 {
+	/**
+	 * Get all infrastructures for a given match
+	 * 
+	 * @param matchId - the match
+	 * @return the List of SolarSystemInfrastrutures
+	 */
+	public List<SolarSystemInfrastructure> getByMatch(long matchId);
 }

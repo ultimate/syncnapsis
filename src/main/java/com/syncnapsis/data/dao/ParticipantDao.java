@@ -14,6 +14,8 @@
  */
 package com.syncnapsis.data.dao;
 
+import java.util.List;
+
 import com.syncnapsis.data.model.Participant;
 
 /**
@@ -23,4 +25,11 @@ import com.syncnapsis.data.model.Participant;
  */
 public interface ParticipantDao extends GenericDao<Participant, Long>
 {
+	/**
+	 * Get all Participants for a match
+	 * 
+	 * @param matchId - the match
+	 * @return the List of Participants
+	 */
+	public List<Participant> getByMatch(long matchId);
 }

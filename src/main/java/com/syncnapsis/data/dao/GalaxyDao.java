@@ -14,6 +14,8 @@
  */
 package com.syncnapsis.data.dao;
 
+import java.util.List;
+
 import com.syncnapsis.data.model.Galaxy;
 
 /**
@@ -23,4 +25,11 @@ import com.syncnapsis.data.model.Galaxy;
  */
 public interface GalaxyDao extends GenericNameDao<Galaxy, Long>
 {
+	/**
+	 * Get all galaxies created by the given player.
+	 * 
+	 * @param playerId - the creator
+	 * @return the list of Galaxy entities
+	 */
+	public List<Galaxy> getByCreator(long playerId);
 }

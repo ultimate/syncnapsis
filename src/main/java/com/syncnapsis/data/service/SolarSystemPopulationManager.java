@@ -38,6 +38,14 @@ public interface SolarSystemPopulationManager extends GenericManager<SolarSystem
 	public List<SolarSystemPopulation> getByParticipant(long participantId);
 
 	/**
+	 * Get all SolarSystemPopulations for a given match.
+	 * 
+	 * @param matchId - the match to get the populations for
+	 * @return the list of SolarSystemPopulations
+	 */
+	public List<SolarSystemPopulation> getByMatch(long matchId);
+
+	/**
 	 * Create a new SolarSystemPopulation for a start system selected the current player as a
 	 * participant
 	 * 

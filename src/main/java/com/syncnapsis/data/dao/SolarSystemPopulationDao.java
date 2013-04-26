@@ -14,6 +14,8 @@
  */
 package com.syncnapsis.data.dao;
 
+import java.util.List;
+
 import com.syncnapsis.data.model.SolarSystemPopulation;
 
 /**
@@ -23,4 +25,20 @@ import com.syncnapsis.data.model.SolarSystemPopulation;
  */
 public interface SolarSystemPopulationDao extends GenericDao<SolarSystemPopulation, Long>
 {
+	/**
+	 * Get all SolarSystemPopulations belonging to the given participant (and the corresponding
+	 * Match).
+	 * 
+	 * @param participantId - the participant to get the populations for
+	 * @return the list of SolarSystemPopulations
+	 */
+	public List<SolarSystemPopulation> getByParticipant(long participantId);
+
+	/**
+	 * Get all SolarSystemPopulations for a given match.
+	 * 
+	 * @param matchId - the match to get the populations for
+	 * @return the list of SolarSystemPopulations
+	 */
+	public List<SolarSystemPopulation> getByMatch(long matchId);
 }

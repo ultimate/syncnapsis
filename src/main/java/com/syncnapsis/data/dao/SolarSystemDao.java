@@ -14,6 +14,8 @@
  */
 package com.syncnapsis.data.dao;
 
+import java.util.List;
+
 import com.syncnapsis.data.model.SolarSystem;
 
 /**
@@ -23,4 +25,11 @@ import com.syncnapsis.data.model.SolarSystem;
  */
 public interface SolarSystemDao extends GenericDao<SolarSystem, Long>
 {
+	/**
+	 * Get all SolarSystems for a Galaxy
+	 * 
+	 * @param galaxyId - the id of the Galaxy
+	 * @return the list of SolarSystems
+	 */
+	public List<SolarSystem> getByGalaxy(long galaxyId);
 }

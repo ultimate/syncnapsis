@@ -14,6 +14,8 @@
  */
 package com.syncnapsis.data.dao;
 
+import java.util.List;
+
 import com.syncnapsis.data.model.Match;
 
 /**
@@ -23,4 +25,26 @@ import com.syncnapsis.data.model.Match;
  */
 public interface MatchDao extends GenericNameDao<Match, Long>
 {
+
+	/**
+	 * Get the list of matches for a player
+	 * 
+	 * @param playerId - the id of the player
+	 * @param planned - include planned matches?
+	 * @param active - include active matches?
+	 * @param finished - include finished matches?
+	 * @return the list of matches
+	 */
+	public List<Match> getByPlayer(long playerId, boolean planned, boolean active, boolean finished);
+
+	/**
+	 * Get the list of matches for a galaxy
+	 * 
+	 * @param galaxyId - the id of the galaxy
+	 * @param planned - include planned matches?
+	 * @param active - include active matches?
+	 * @param finished - include finished matches?
+	 * @return the list of matches
+	 */
+	public List<Match> getByGalaxy(long galaxyId, boolean planned, boolean active, boolean finished);
 }
