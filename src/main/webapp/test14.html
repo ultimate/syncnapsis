@@ -623,7 +623,7 @@
 					
 					removed++;
 				}
-				galaxy.animation = -1;
+				galaxy.animation = -1; // animation = -1 --> shrink and explode, 1 --> reposition
 				console.log("updated: " + updated + " removed: " + removed);
 				
 				galaxy.particleSystem.geometry.verticesNeedUpdate = true;
