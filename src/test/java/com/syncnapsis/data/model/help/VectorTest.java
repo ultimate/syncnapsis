@@ -20,13 +20,13 @@ import com.syncnapsis.utils.ReflectionsUtil;
 /**
  * @author ultimate
  */
-public class CoordinatesTest extends LoggerTestCase
+public class VectorTest extends LoggerTestCase
 {
 	public void testGenericTypes() throws Exception
 	{
-		assertEquals(Integer.class, ReflectionsUtil.getActualTypeArguments(new Coordinates.Integer(), Coordinates.class)[0]);
-		assertEquals(Long.class, ReflectionsUtil.getActualTypeArguments(new Coordinates.Long(), Coordinates.class)[0]);
-		assertEquals(Float.class, ReflectionsUtil.getActualTypeArguments(new Coordinates.Float(), Coordinates.class)[0]);
-		assertEquals(Double.class, ReflectionsUtil.getActualTypeArguments(new Coordinates.Double(), Coordinates.class)[0]);
+		assertEquals(Integer.class, ReflectionsUtil.getActualTypeArguments(new Vector.Integer(), Vector.class)[0]);
+		assertEquals(Long.class, ReflectionsUtil.getActualTypeArguments(new Vector.Long(), Vector.class)[0]);
+		assertEquals(Float.class, ReflectionsUtil.getActualTypeArguments(new Vector.Float(), Vector.class)[0]);
+		assertEquals(Double.class, ReflectionsUtil.getActualTypeArguments(new Vector.Double(), Vector.class)[0]);
 	}
 }

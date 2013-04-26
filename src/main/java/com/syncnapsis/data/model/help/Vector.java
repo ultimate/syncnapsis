@@ -26,7 +26,7 @@ import com.syncnapsis.data.model.base.Model;
  * @author ultimate
  */
 @MappedSuperclass
-public abstract class Coordinates<N extends Number> implements Model
+public abstract class Vector<N extends Number> implements Model
 {
 	/**
 	 * The x-coordinate
@@ -48,7 +48,7 @@ public abstract class Coordinates<N extends Number> implements Model
 	 * @param y - the y-coordinate
 	 * @param z - the z-coordinate
 	 */
-	public Coordinates(N x, N y, N z)
+	public Vector(N x, N y, N z)
 	{
 		super();
 		setX(x);
@@ -61,7 +61,7 @@ public abstract class Coordinates<N extends Number> implements Model
 	 * 
 	 * @return x
 	 */
-	@Column(name = "coordinateX", nullable = false)
+	@Column(nullable = false)
 	public N getX()
 	{
 		return x;
@@ -72,7 +72,7 @@ public abstract class Coordinates<N extends Number> implements Model
 	 * 
 	 * @return y
 	 */
-	@Column(name = "coordinateY", nullable = false)
+	@Column(nullable = false)
 	public N getY()
 	{
 		return y;
@@ -83,7 +83,7 @@ public abstract class Coordinates<N extends Number> implements Model
 	 * 
 	 * @return z
 	 */
-	@Column(name = "coordinateZ", nullable = false)
+	@Column(nullable = false)
 	public N getZ()
 	{
 		return z;
@@ -154,7 +154,7 @@ public abstract class Coordinates<N extends Number> implements Model
 			return false;
 		if(getClass() != obj.getClass())
 			return false;
-		Coordinates other = (Coordinates) obj;
+		Vector other = (Vector) obj;
 		if(x == null)
 		{
 			if(other.x != null)
@@ -185,7 +185,7 @@ public abstract class Coordinates<N extends Number> implements Model
 	 * @author ultimate
 	 */
 	@Embeddable
-	public static final class Integer extends Coordinates<java.lang.Integer>
+	public static final class Integer extends Vector<java.lang.Integer>
 	{
 		/**
 		 * Default Constructor initializing all coords with <code>0</code>
@@ -214,7 +214,7 @@ public abstract class Coordinates<N extends Number> implements Model
 	 * @author ultimate
 	 */
 	@Embeddable
-	public static final class Long extends Coordinates<java.lang.Long>
+	public static final class Long extends Vector<java.lang.Long>
 	{
 		/**
 		 * Default Constructor initializing all coords with <code>0L</code>
@@ -243,7 +243,7 @@ public abstract class Coordinates<N extends Number> implements Model
 	 * @author ultimate
 	 */
 	@Embeddable
-	public static final class Float extends Coordinates<java.lang.Float>
+	public static final class Float extends Vector<java.lang.Float>
 	{
 		/**
 		 * Default Constructor initializing all coords with <code>0.0F</code>
@@ -272,7 +272,7 @@ public abstract class Coordinates<N extends Number> implements Model
 	 * @author ultimate
 	 */
 	@Embeddable
-	public static final class Double extends Coordinates<java.lang.Double>
+	public static final class Double extends Vector<java.lang.Double>
 	{
 		/**
 		 * Default Constructor initializing all coords with <code>0.0</code>
