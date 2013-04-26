@@ -14,6 +14,8 @@
  */
 package com.syncnapsis.data.dao.hibernate;
 
+import java.util.List;
+
 import com.syncnapsis.data.dao.GalaxyDao;
 import com.syncnapsis.data.model.Galaxy;
 
@@ -31,5 +33,16 @@ public class GalaxyDaoHibernate extends GenericNameDaoHibernate<Galaxy, Long> im
 	public GalaxyDaoHibernate()
 	{
 		super(Galaxy.class, "name");
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see com.syncnapsis.data.dao.GalaxyDao#getByCreator(long)
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Galaxy> getByCreator(long playerId)
+	{
+		return createQuery("from Galaxy g where g.creator.id=?", playerId).list();
 	}
 }
