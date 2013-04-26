@@ -20,13 +20,15 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Random;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.util.Assert;
 
 import com.syncnapsis.enums.EnumGalaxyType;
 import com.syncnapsis.utils.MathUtil;
 import com.syncnapsis.utils.math.Functions;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.util.Assert;
 
 /**
  * Diese Klasse repräsentiert die Definition und Spezifikation einer Galaxie.
@@ -51,7 +53,7 @@ public class GalaxySpecification implements Serializable
 	/**
 	 * Logger-Instanz
 	 */
-	protected transient final Logger logger = LoggerFactory.getLogger(getClass());
+	protected transient final Logger			logger				= LoggerFactory.getLogger(getClass());
 
 	/**
 	 * Die Größe in x-Richtung
@@ -74,7 +76,7 @@ public class GalaxySpecification implements Serializable
 	/**
 	 * Die zu erwartende Anzahl von Sektoren bzw. Systemen in dieser Galaxie
 	 */
-	protected long								sectors;
+	protected int								sectors;
 
 	/**
 	 * Liste der Wahrscheinlichkeitsmatrizen, die aus den verschiedenen
@@ -116,7 +118,7 @@ public class GalaxySpecification implements Serializable
 		this.xSize = xSize;
 		this.ySize = ySize;
 		this.zSize = zSize;
-		this.sectors = (long) (getVolume() * density);
+		this.sectors = (int) (getVolume() * density);
 		this.matrixes = new ArrayList<ProbabilityMatrix>();
 		this.threads = new ArrayList<GalaxyGenerationThread>();
 		this.gridSize = 1;
@@ -131,7 +133,7 @@ public class GalaxySpecification implements Serializable
 	 * @param sectors - Die zu erwartende Anzahl von Sektoren bzw. Systemen in
 	 *            dieser Galaxie
 	 */
-	public GalaxySpecification(int xSize, int ySize, int zSize, long sectors)
+	public GalaxySpecification(int xSize, int ySize, int zSize, int sectors)
 	{
 		super();
 		this.xSize = xSize;
@@ -160,7 +162,7 @@ public class GalaxySpecification implements Serializable
 		this.xSize = xSize;
 		this.ySize = ySize;
 		this.zSize = zSize;
-		this.sectors = (long) (getVolume() * density);
+		this.sectors = (int) (getVolume() * density);
 		this.matrixes = new ArrayList<ProbabilityMatrix>();
 		this.threads = new ArrayList<GalaxyGenerationThread>();
 		this.gridSize = gridSize;
@@ -177,7 +179,7 @@ public class GalaxySpecification implements Serializable
 	 * @param gridSize - Eine optionale Gittergröße, mit der die Galaxie nach
 	 *            der Berechnung skaliert wird.
 	 */
-	public GalaxySpecification(int xSize, int ySize, int zSize, long sectors, int gridSize)
+	public GalaxySpecification(int xSize, int ySize, int zSize, int sectors, int gridSize)
 	{
 		super();
 		this.xSize = xSize;
@@ -257,7 +259,7 @@ public class GalaxySpecification implements Serializable
 	 * 
 	 * @return sectors
 	 */
-	public long getNumberOfSectors()
+	public int getNumberOfSectors()
 	{
 		return this.sectors;
 	}
@@ -328,6 +330,7 @@ public class GalaxySpecification implements Serializable
 		List<int[]> sectors = new ArrayList<int[]>();
 		ProbabilityMatrix m = generateMatrix();
 		logger.debug("Generating Sectors...");
+		int probsAbove1 = 0;
 		for(int x = m.getXMin(); x <= m.getXMax(); x++)
 		{
 			for(int y = m.getYMin(); y <= m.getYMax(); y++)
@@ -337,10 +340,78 @@ public class GalaxySpecification implements Serializable
 					if(Math.random() < m.getProbability(x, y, z))
 						sectors.add(new int[] { x, y, z });
 					if(m.getProbability(x, y, z) >= 1)
-						logger.warn("Sector: " + x + "," + y + "," + z + " - Probability > 1");
+						probsAbove1++;
 				}
 			}
 		}
+		logger.debug(probsAbove1 + " probabilities above 1");
+		logger.debug(sectors.size() + " sectors generated");
+		if(this.gridSize > 1)
+			processGridSize(sectors, gridSize);
+		logger.debug("Sector generation finished");
+		return sectors;
+	}
+
+	public List<int[]> generateCoordinates2()
+	{
+		List<int[]> sectors = new ArrayList<int[]>(this.sectors);
+		logger.debug("Generating Sectors...");
+		double sum = 0;
+		ProbabilityMatrix summedMatrix = new ProbabilityMatrix(this.pm.getXSize(), this.pm.getYSize(), this.pm.getZSize());
+		for(int x = summedMatrix.getXMin(); x <= summedMatrix.getXMax(); x++)
+		{
+			for(int y = summedMatrix.getYMin(); y <= summedMatrix.getYMax(); y++)
+			{
+				for(int z = summedMatrix.getZMin(); z <= summedMatrix.getZMax(); z++)
+				{
+					sum += this.pm.getProbability(x, y, z);
+					summedMatrix.setProbability(x, y, z, sum);
+				}
+			}
+		}
+		Random r = new Random();
+		int i;
+		int maxStep = (this.pm.getVolume() + 1) / 2;
+		int step;
+		double randSum;
+		int[] iUsed = new int[this.sectors];
+		logger.debug("preparation done");
+		int collisions = 0;
+		for(int s = 0; s < this.sectors; s++)
+		{
+			do
+			{
+				randSum = r.nextDouble() * sum;
+				step = maxStep;
+				i = step - 1;
+				do
+				{
+					step = (step + 1) / 2;
+
+					if(summedMatrix.getProbability(i) < randSum)
+						i += step;
+					else if(summedMatrix.getProbability(i - 1) > randSum)
+						i -= step;
+					else
+						break;
+				} while(true);
+
+				for(int j = 0; j < s; j++)
+				{
+					if(iUsed[j] == i)
+					{
+						collisions++;
+						continue;
+					}
+				}
+				break;
+			} while(true);
+
+			iUsed[s] = i;
+
+			sectors.add(summedMatrix.getCoords(i));
+		}
+		logger.debug(collisions + " collisions");
 		logger.debug(sectors.size() + " sectors generated");
 		if(this.gridSize > 1)
 			processGridSize(sectors, gridSize);
@@ -522,8 +593,8 @@ public class GalaxySpecification implements Serializable
 				for(int z = m.getZMin(); z <= m.getZMax(); z++)
 				{
 					r = getRadius(x, y, z);
-					x2 = cosOffset*x - sinOffset*y;
-					y2 = sinOffset*x + cosOffset*y;
+					x2 = cosOffset * x - sinOffset * y;
+					y2 = sinOffset * x + cosOffset * y;
 					r2Normed = Math.abs(Math.sqrt(y2 * y2 + z * z) / Math.sqrt(this.ySize * this.ySize / 4.0 + this.zSize * this.zSize / 4.0));
 					if(r <= 1 * sizeLimitation)
 					{
@@ -609,8 +680,8 @@ public class GalaxySpecification implements Serializable
 		{
 			for(int y = m.getYMin(); y <= m.getYMax(); y++)
 			{
-				x2 = cosOffset*x - sinOffset*y;
-				y2 = sinOffset*x + cosOffset*y;
+				x2 = cosOffset * x - sinOffset * y;
+				y2 = sinOffset * x + cosOffset * y;
 				for(int z = m.getZMin(); z <= m.getZMax(); z++)
 				{
 					rMinToSP = Double.POSITIVE_INFINITY;
@@ -715,8 +786,8 @@ public class GalaxySpecification implements Serializable
 		{
 			for(int y = m.getYMin(); y <= m.getYMax(); y++)
 			{
-				x2 = cosOffset*x - sinOffset*y;
-				y2 = sinOffset*x + cosOffset*y;
+				x2 = cosOffset * x - sinOffset * y;
+				y2 = sinOffset * x + cosOffset * y;
 				for(int z = m.getZMin(); z <= m.getZMax(); z++)
 				{
 					rMinToSP = Double.POSITIVE_INFINITY;
@@ -1162,7 +1233,7 @@ public class GalaxySpecification implements Serializable
 		/**
 		 * Logger-Instanz
 		 */
-		protected transient final Logger logger = LoggerFactory.getLogger(getClass());
+		protected transient final Logger	logger	= LoggerFactory.getLogger(getClass());
 
 		/**
 		 * Der zu generierende Galaxietype
@@ -1278,4 +1349,39 @@ public class GalaxySpecification implements Serializable
 	{
 		ois.defaultReadObject();
 	}
+
+	// public static void main(String[] args)
+	// {
+	// int xMin = -2;
+	// int xMax = 5;
+	// int yMin = -4;
+	// int yMax = 10;
+	// int zMin = -6;
+	// int zMax = 15;
+	//
+	// int i;
+	// int count = 0;
+	// int x2, y2, z2;
+	// for(int x = xMin; x <= xMax; x++)
+	// {
+	// for(int y = yMin; y <= yMax; y++)
+	// {
+	// for(int z = zMin; z <= zMax; z++)
+	// {
+	// i = ((x - xMin) * (yMax - yMin + 1) + (y - yMin)) * (zMax - zMin + 1) + (z - zMin);
+	// z2 = i % (zMax - zMin + 1) + zMin;
+	// y2 = (i - (z2 - zMin)) / (zMax - zMin + 1) % (yMax - yMin + 1) + yMin;
+	// x2 = (((i - (z2 - zMin)) / (zMax - zMin + 1)) - (y2 - yMin)) / (yMax - yMin + 1) + xMin;
+	// System.out.println("x=" + x + " y=" + y + " z=" + z + " -- i=" + i + " vs. " + count +
+	// " -- x2=" + x2 + " y2=" + y2 + " z2=" + z2);
+	// if(x != x2) return;
+	// if(y != y2) return;
+	// if(z != z2) return;
+	// if(i != count) return;
+	// count++;
+	// }
+	// }
+	// }
+	// System.out.println("done!");
+	// }
 }

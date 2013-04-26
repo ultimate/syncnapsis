@@ -42,6 +42,9 @@ public abstract class UniverseGenerator
 {
 	protected static transient final Logger	logger	= LoggerFactory.getLogger(UniverseGenerator.class);
 
+	private static final boolean			paint	= true;
+	private static final boolean			js		= true;
+
 	/**
 	 * @param args
 	 */
@@ -51,66 +54,94 @@ public abstract class UniverseGenerator
 		logger.debug("Generating Universe...");
 		logger.debug("----------------------");
 
-		GalaxySpecification gs = new GalaxySpecification(200, 200, 100, 0.025, 10);
-		// GalaxySpecification gs = new GalaxySpecification(100, 100, 50, 0.1, 10);
-		// GalaxySpecification gs = new GalaxySpecification(100, 100, 50, 20000, 6);
-		// gs.addTypeEx();
+//		GalaxySpecification gs = new GalaxySpecification(200, 200, 100, 0.025, 10);
+//		 GalaxySpecification gs = new GalaxySpecification(100, 100, 50, 0.1, 10);
+		 GalaxySpecification gs = new GalaxySpecification(100, 100, 50, 20000, 6);
+//		 GalaxySpecification gs = new GalaxySpecification(100, 100, 50, 1000, 6);
+		 gs.addTypeEx();
 		// gs.addTypeEx(1.0, 0.5);
 		// gs.addTypeS0(1.0, 0.2, 1);
 		// gs.addTypeSB0(1.0, 0.2, 0.5, 0);
-		 gs.addTypeSx(5, 2, 1.5, 1, 0);
+//		gs.addTypeSx(5, 2, 1.5, 1, 0);
 		// gs.addTypeSx(3, 1.5, -1, 0);
 		// gs.addTypeSBx(1, 1, 0);
 		// gs.addTypeRx(5);
-		 gs.addTypeAx(0.5, 1, 4);
-		 gs.addTypeAx(0.7, 3, 5);
-		 gs.addTypeAx(0.3, 4, 8);
-		 gs.addTypeAx(0.2, 7, 12);
-		 gs.addTypeAx(0.6, 5, 9);
-		 gs.addTypeAx(0.4, 3, 8);
+//		gs.addTypeAx(0.5, 1, 4);
+//		gs.addTypeAx(0.7, 3, 5);
+//		gs.addTypeAx(0.3, 4, 8);
+//		gs.addTypeAx(0.2, 7, 12);
+//		gs.addTypeAx(0.6, 5, 9);
+//		gs.addTypeAx(0.4, 3, 8);
 
 		List<int[]> coords = gs.generateCoordinates();
+		gs.generateCoordinates2(); // warm up
 
+		long start1 = System.currentTimeMillis();
+		List<int[]> coords1 = gs.generateCoordinates();
+		long duration1 = System.currentTimeMillis() - start1;
+
+		long start2 = System.currentTimeMillis();
+		List<int[]> coords2 = gs.generateCoordinates2();
+		long duration2 = System.currentTimeMillis() - start2;
+
+		logger.debug("1: coords=" + coords1.size() + " time=" + duration1);
+		logger.debug("2: coords=" + coords2.size() + " time=" + duration2);
+
+		long time = System.currentTimeMillis();
+		if(paint)
+		{
+			logger.debug("----------------------");
+			logger.debug("Generating Universe is done!");
+			logger.debug("Painting...");
+			paint(gs, coords, "" + time);
+			paint(gs, coords1, "coords1");
+			paint(gs, coords2, "coords2");
+			logger.debug("Painting is done!");
+		}
+
+		if(js)
+		{
+			logger.debug("----------------------");
+			try
+			{
+				logger.debug("writing coords...");
+				createJS(coords, time + ".js");
+				createJS(coords1, "coords1.js");
+				createJS(coords2, "coords2.js");
+				logger.debug("  coords written");
+			}
+			catch(IOException e)
+			{
+				logger.error("Could not write coords to file: " + e.getMessage());
+			}
+		}
 		logger.debug("----------------------");
-		logger.debug("Generating Universe is done!");
-		logger.debug("Painting...");
-
+	}
+	
+	private static void paint(GalaxySpecification gs, List<int[]> coords, String filename)
+	{
 		JFrame view = new GalaxyViewFrame(gs, coords);
+		view.setTitle(view.getTitle() + " - " + filename);
 		view.requestFocus();
 
 		BufferedImage imageXY = GalaxyViewImages.createView(EnumGalaxyViewMode.xy, gs, coords);
 		BufferedImage imageYZ = GalaxyViewImages.createView(EnumGalaxyViewMode.yz, gs, coords);
 		BufferedImage imageXZ = GalaxyViewImages.createView(EnumGalaxyViewMode.xz, gs, coords);
 
-		long time = System.currentTimeMillis();
 		try
 		{
 			logger.debug("writing 3 images...");
-			ImageIO.write(imageXY, "png", new File("image_" + time + "_XY.png"));
+			ImageIO.write(imageXY, "png", new File("image_" + filename + "_XY.png"));
 			logger.debug("  image XY written");
-			ImageIO.write(imageYZ, "png", new File("image_" + time + "_YZ.png"));
+			ImageIO.write(imageYZ, "png", new File("image_" + filename + "_YZ.png"));
 			logger.debug("  image YZ written");
-			ImageIO.write(imageXZ, "png", new File("image_" + time + "_XZ.png"));
+			ImageIO.write(imageXZ, "png", new File("image_" + filename + "_XZ.png"));
 			logger.debug("  image XZ written");
 		}
 		catch(IOException e)
 		{
 			logger.error("Could not write image to file: " + e.getMessage());
 		}
-
-		try
-		{
-			logger.debug("writing coords...");
-			createJS(coords, time + ".js");
-			logger.debug("  coords written");
-		}
-		catch(IOException e)
-		{
-			logger.error("Could not write coords to file: " + e.getMessage());
-		}
-
-		logger.debug("Painting is done!");
-		logger.debug("----------------------");
 	}
 
 	private static void createJS(List<int[]> coords, String filename) throws IOException

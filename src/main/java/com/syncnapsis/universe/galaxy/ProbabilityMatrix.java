@@ -54,6 +54,18 @@ public class ProbabilityMatrix implements Cloneable, Serializable
 	 * Die Größe in z-Richtung
 	 */
 	private int					zSize;
+
+	private int					xMin;
+	private int					xMax;
+	private int					yMin;
+	private int					yMax;
+	private int					zMin;
+	private int					zMax;
+
+	/**
+	 * The total volume (xSize * ySize * zSize)
+	 */
+	private int					volume;
 	/**
 	 * Die Gewichtung dieser Matrix im Vergleich zu anderen
 	 * Wahrscheinlichkeitsmatrizen
@@ -78,6 +90,15 @@ public class ProbabilityMatrix implements Cloneable, Serializable
 		this.ySize = ySize;
 		this.zSize = zSize;
 		this.weight = 1.0;
+		// calc volume
+		this.volume = xSize * ySize * zSize;
+		// calc min max
+		this.xMin = (-xSize + 1) / 2;
+		this.yMin = (-ySize + 1) / 2;
+		this.zMin = (-zSize + 1) / 2;
+		this.xMax = xSize / 2;
+		this.yMax = ySize / 2;
+		this.zMax = zSize / 2;
 	}
 
 	/**
@@ -117,7 +138,7 @@ public class ProbabilityMatrix implements Cloneable, Serializable
 	 */
 	public int getXMin()
 	{
-		return (-xSize + 1) / 2;
+		return xMin;
 	}
 
 	/**
@@ -127,7 +148,7 @@ public class ProbabilityMatrix implements Cloneable, Serializable
 	 */
 	public int getXMax()
 	{
-		return xSize / 2;
+		return xMax;
 	}
 
 	/**
@@ -137,7 +158,7 @@ public class ProbabilityMatrix implements Cloneable, Serializable
 	 */
 	public int getYMin()
 	{
-		return (-ySize + 1) / 2;
+		return yMin;
 	}
 
 	/**
@@ -147,7 +168,7 @@ public class ProbabilityMatrix implements Cloneable, Serializable
 	 */
 	public int getYMax()
 	{
-		return ySize / 2;
+		return yMax;
 	}
 
 	/**
@@ -157,7 +178,7 @@ public class ProbabilityMatrix implements Cloneable, Serializable
 	 */
 	public int getZMin()
 	{
-		return (-zSize + 1) / 2;
+		return zMin;
 	}
 
 	/**
@@ -167,7 +188,17 @@ public class ProbabilityMatrix implements Cloneable, Serializable
 	 */
 	public int getZMax()
 	{
-		return zSize / 2;
+		return zMax;
+	}
+
+	/**
+	 * The total volume (xSize * ySize * zSize)
+	 * 
+	 * @return volume
+	 */
+	public int getVolume()
+	{
+		return volume;
 	}
 
 	/**
@@ -208,6 +239,15 @@ public class ProbabilityMatrix implements Cloneable, Serializable
 		return this.matrix[x + (xSize - 1) / 2][y + (ySize - 1) / 2][z + (zSize - 1) / 2];
 	}
 
+	public double getProbability(int i)
+	{
+		checkRange(i);
+		int z = i % zSize;
+		int y = (i - z) / zSize % ySize;
+		int x = (((i - z) / zSize) - y) / ySize;
+		return this.matrix[x][y][z];
+	}
+
 	/**
 	 * Der Wahrscheinlichkeitseintrag an der Stelle x,y,z
 	 * 
@@ -220,6 +260,15 @@ public class ProbabilityMatrix implements Cloneable, Serializable
 	{
 		checkRange(x, y, z);
 		this.matrix[x + (xSize - 1) / 2][y + (ySize - 1) / 2][z + (zSize - 1) / 2] = probability;
+	}
+
+	public void setProbability(int i, double probability)
+	{
+		checkRange(i);
+		int z = i % zSize;
+		int y = (i - z) / zSize % ySize;
+		int x = (((i - z) / zSize) - y) / ySize;
+		this.matrix[x][y][z] = probability;
 	}
 
 	/**
@@ -236,6 +285,15 @@ public class ProbabilityMatrix implements Cloneable, Serializable
 		this.matrix[x + (xSize - 1) / 2][y + (ySize - 1) / 2][z + (zSize - 1) / 2] += addend;
 	}
 
+	public void addProbability(int i, double addend)
+	{
+		checkRange(i);
+		int z = i % zSize;
+		int y = (i - z) / zSize % ySize;
+		int x = (((i - z) / zSize) - y) / ySize;
+		this.matrix[x][y][z] += addend;
+	}
+
 	/**
 	 * Multipliziert die Wahrscheinlichkeit ad der Stelle x,y,z
 	 * 
@@ -248,6 +306,15 @@ public class ProbabilityMatrix implements Cloneable, Serializable
 	{
 		checkRange(x, y, z);
 		this.matrix[x + (xSize - 1) / 2][y + (ySize - 1) / 2][z + (zSize - 1) / 2] *= factor;
+	}
+
+	public void multiplyProbability(int i, double factor)
+	{
+		checkRange(i);
+		int z = i % zSize;
+		int y = (i - z) / zSize % ySize;
+		int x = (((i - z) / zSize) - y) / ySize;
+		this.matrix[x][y][z] *= factor;
 	}
 
 	/**
@@ -276,9 +343,28 @@ public class ProbabilityMatrix implements Cloneable, Serializable
 	 */
 	private void checkRange(int x, int y, int z)
 	{
-		Assert.isTrue(x >= getXMin() && x <= getXMax(), "x not in range: " + x + " Range: " + getXMin() + ".." + getXMax());
-		Assert.isTrue(y >= getYMin() && y <= getYMax(), "y not in range: " + y + " Range: " + getYMin() + ".." + getYMax());
-		Assert.isTrue(z >= getZMin() && z <= getZMax(), "z not in range: " + z + " Range: " + getZMin() + ".." + getZMax());
+		Assert.isTrue(x >= xMin && x <= xMax, "x not in range: " + x + " Range: " + xMin + ".." + xMax);
+		Assert.isTrue(y >= yMin && y <= yMax, "y not in range: " + y + " Range: " + yMin + ".." + yMax);
+		Assert.isTrue(z >= zMin && z <= zMax, "z not in range: " + z + " Range: " + zMin + ".." + zMax);
+	}
+
+	private void checkRange(int i)
+	{
+		Assert.isTrue(i >= 0 && i < volume, "i not in range: " + i + " Range: " + 0 + ".." + volume + " (exclusive)");
+	}
+
+	public int getIndex(int x, int y, int z)
+	{
+		checkRange(x, y, z);
+		return ((x - xMin) * (ySize) + (y - yMin)) * (zSize) + (z - zMin);
+	}
+
+	public int[] getCoords(int i)
+	{
+		int z = i % zSize + zMin;
+		int y = (i - (z - zMin)) / zSize % ySize + yMin;
+		int x = (((i - (z - zMin)) / zSize) - (y - yMin)) / ySize + xMin;
+		return new int[] { x, y, z };
 	}
 
 	/**
@@ -291,7 +377,7 @@ public class ProbabilityMatrix implements Cloneable, Serializable
 	 * @see ProbabilityMatrix#sumOfProbabilities()
 	 * @param expectedNumberOfResults
 	 */
-	public void norm(long expectedNumberOfResults)
+	public void norm(int expectedNumberOfResults)
 	{
 		double factor = normedSumOfProbabilities(expectedNumberOfResults) * this.weight;
 		for(int x = 0; x < xSize; x++)
@@ -396,11 +482,11 @@ public class ProbabilityMatrix implements Cloneable, Serializable
 			return false;
 		if(Double.doubleToLongBits(weight) != Double.doubleToLongBits(other.weight))
 			return false;
-		for(int x = getXMin(); x <= getXMax(); x++)
+		for(int x = xMin; x <= xMax; x++)
 		{
-			for(int y = getYMin(); y <= getYMax(); y++)
+			for(int y = yMin; y <= yMax; y++)
 			{
-				for(int z = getZMin(); z <= getZMax(); z++)
+				for(int z = zMin; z <= zMax; z++)
 				{
 					if(Math.abs(getProbability(x, y, z) - other.getProbability(x, y, z)) > 0.00000001)
 						return false;
