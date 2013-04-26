@@ -26,6 +26,7 @@
 		<column>sizeX</column>
 		<column>sizeY</column>
 		<column>sizeZ</column>
+		<column>seed</column>
 		<row>
 			<value description="id">1</value>
 			<value description="version">1</value>
@@ -36,9 +37,10 @@
 			<value description="sizeX">200</value>
 			<value description="sizeY">200</value>
 			<value description="sizeZ">200</value>
+			<value description="seed">0</value>
 		</row>
 	</table>
-	
+
 	<table name="solarsystem">
 		<column>id</column>
 		<column>version</column>
@@ -373,9 +375,9 @@
 			<value description="coordinateZ">-100</value>
 			<value description="size">1</value>
 			<value description="habitability">1</value>
-		</row>		
+		</row>
 	</table>
-	
+
 	<table name="match">
 		<column>id</column>
 		<column>version</column>
@@ -387,8 +389,11 @@
 		<column>startDate</column>
 		<column>finishedDate</column>
 		<column>speed</column>
+		<column>seed</column>
 		<column>startSystemCount</column>
 		<column>startSystemSelectionEnabled</column>
+		<column>plannedJoinType</column>
+		<column>startedJoinType</column>
 		<column>participantsMax</column>
 		<column>participantsMin</column>
 		<column>startCondition</column>
@@ -404,8 +409,11 @@
 			<value description="startDate">2012-01-01</value>
 			<null />
 			<value description="speed">1</value>
+			<value description="seed">0</value>
 			<value description="startSystemCount">1</value>
 			<value description="startSystemSelectionEnabled">1</value>
+			<value description="plannedJoinType">invitationsOnly</value>
+			<value description="startedJoinType">none</value>
 			<value description="participantsMax">10</value>
 			<value description="participantsMin">2</value>
 			<value description="startCondition">immediately</value>
@@ -422,15 +430,18 @@
 			<value description="startDate">2012-01-01</value>
 			<value description="finishedDate">2012-02-01</value>
 			<value description="speed">1</value>
+			<value description="seed">0</value>
 			<value description="startSystemCount">1</value>
 			<value description="startSystemSelectionEnabled">1</value>
+			<value description="plannedJoinType">joiningEnabled</value>
+			<value description="startedJoinType">none</value>
 			<value description="participantsMax">10</value>
 			<value description="participantsMin">2</value>
 			<value description="startCondition">manually</value>
 			<value description="victoryCondition">extermination</value>
 		</row>
 	</table>
-	
+
 	<table name="participant">
 		<column>id</column>
 		<column>version</column>
@@ -486,7 +497,7 @@
 			<value description="destructionType">destroyed</value>
 		</row>
 	</table>
-	
+
 	<table name="solarsysteminfrastructure">
 		<column>id</column>
 		<column>version</column>
@@ -532,21 +543,21 @@
 			<value description="infrastructure">100</value>
 		</row>
 	</table>
-	
+
 	<table name="solarsystempopulation">
 		<column>id</column>
 		<column>version</column>
 		<column>activated</column>
 		<column>fkInfrastructure</column>
 		<column>fkParticipant</column>
-		<column>originationDate</column>		
-		<column>colonizationDate</column>		
-		<column>destructionDate</column>		
-		<column>destructionType</column>		
-		<column>population</column>		
-		<column>buildPriority</column>		
+		<column>originationDate</column>
+		<column>colonizationDate</column>
+		<column>destructionDate</column>
+		<column>destructionType</column>
+		<column>population</column>
+		<column>buildPriority</column>
 		<column>attackPriority</column>
-		<row>	
+		<row>
 			<value description="id">11</value>
 			<value description="version">1</value>
 			<value description="activated">1</value>
@@ -559,8 +570,8 @@
 			<value description="population">10000</value>
 			<value description="buildPriority">balanced</value>
 			<value description="attackPriority">balanced</value>
-		</row>	
-		<row>	
+		</row>
+		<row>
 			<value description="id">12</value>
 			<value description="version">1</value>
 			<value description="activated">1</value>
@@ -573,8 +584,8 @@
 			<value description="population">10000</value>
 			<value description="buildPriority">balanced</value>
 			<value description="attackPriority">balanced</value>
-		</row>		
-		<row>	
+		</row>
+		<row>
 			<value description="id">21</value>
 			<value description="version">1</value>
 			<value description="activated">1</value>
@@ -587,8 +598,8 @@
 			<value description="population">10000</value>
 			<value description="buildPriority">balanced</value>
 			<value description="attackPriority">balanced</value>
-		</row>		
-		<row>	
+		</row>
+		<row>
 			<value description="id">22</value>
 			<value description="version">1</value>
 			<value description="activated">1</value>
@@ -601,8 +612,8 @@
 			<value description="population">0</value>
 			<value description="buildPriority">balanced</value>
 			<value description="attackPriority">balanced</value>
-		</row>		
-		<row>	
+		</row>
+		<row>
 			<value description="id">23</value>
 			<value description="version">1</value>
 			<value description="activated">1</value>
@@ -615,9 +626,9 @@
 			<value description="population">1000</value>
 			<value description="buildPriority">balanced</value>
 			<value description="attackPriority">population</value>
-		</row>			
+		</row>
 	</table>
-	
+
 	<table name="solarsystempopulation_origin">
 		<column>fkPopulation</column>
 		<column>fkOrigin</column>

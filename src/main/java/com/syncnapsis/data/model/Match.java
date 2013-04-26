@@ -29,6 +29,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import com.syncnapsis.data.model.base.ActivatableInstance;
+import com.syncnapsis.enums.EnumJoinType;
 import com.syncnapsis.enums.EnumStartCondition;
 import com.syncnapsis.enums.EnumVictoryCondition;
 
@@ -85,6 +86,11 @@ public class Match extends ActivatableInstance<Long>
 	protected int					speed;
 
 	/**
+	 * The seed used for the random generator for creating the SolarSystemInfrastructures
+	 */
+	protected long					seed;
+
+	/**
 	 * The number of start systems the participants may select.
 	 */
 	protected int					startSystemCount;
@@ -93,6 +99,15 @@ public class Match extends ActivatableInstance<Long>
 	 * Is manual start system selection enabled?
 	 */
 	protected boolean				startSystemSelectionEnabled;
+
+	/**
+	 * The join rules defined for joins <b>before</b> the match has been started.
+	 */
+	protected EnumJoinType			plannedJoinType;
+	/**
+	 * The join rules defined for joins <b>after</b> the match has been started.
+	 */
+	protected EnumJoinType			startedJoinType;
 
 	/**
 	 * The maximum number of participants
@@ -206,6 +221,17 @@ public class Match extends ActivatableInstance<Long>
 	}
 
 	/**
+	 * The seed used for the random generator for creating the SolarSystemInfrastructures
+	 * 
+	 * @return seed
+	 */
+	@Column(nullable = false)
+	public long getSeed()
+	{
+		return seed;
+	}
+
+	/**
 	 * The number of start systems the participants may select.
 	 * 
 	 * @return startSystemCount
@@ -225,6 +251,30 @@ public class Match extends ActivatableInstance<Long>
 	public boolean isStartSystemSelectionEnabled()
 	{
 		return startSystemSelectionEnabled;
+	}
+
+	/**
+	 * The join rules defined for joins <b>before</b> the match has been started.
+	 * 
+	 * @return plannedJoinType
+	 */
+	@Column(nullable = false, length = LENGTH_ENUM)
+	@Enumerated(value = EnumType.STRING)
+	public EnumJoinType getPlannedJoinType()
+	{
+		return plannedJoinType;
+	}
+
+	/**
+	 * The join rules defined for joins <b>after</b> the match has been started.
+	 * 
+	 * @return startedJoinType
+	 */
+	@Column(nullable = false, length = LENGTH_ENUM)
+	@Enumerated(value = EnumType.STRING)
+	public EnumJoinType getStartedJoinType()
+	{
+		return startedJoinType;
 	}
 
 	/**
@@ -250,18 +300,6 @@ public class Match extends ActivatableInstance<Long>
 	}
 
 	/**
-	 * The victory condition for this match
-	 * 
-	 * @return victoryCondition
-	 */
-	@Column(nullable = true, length = LENGTH_ENUM)
-	@Enumerated(value = EnumType.STRING)
-	public EnumVictoryCondition getVictoryCondition()
-	{
-		return victoryCondition;
-	}
-
-	/**
 	 * The start condition for this match
 	 * 
 	 * @return startCondition
@@ -271,6 +309,18 @@ public class Match extends ActivatableInstance<Long>
 	public EnumStartCondition getStartCondition()
 	{
 		return startCondition;
+	}
+
+	/**
+	 * The victory condition for this match
+	 * 
+	 * @return victoryCondition
+	 */
+	@Column(nullable = true, length = LENGTH_ENUM)
+	@Enumerated(value = EnumType.STRING)
+	public EnumVictoryCondition getVictoryCondition()
+	{
+		return victoryCondition;
 	}
 
 	/**
@@ -355,6 +405,16 @@ public class Match extends ActivatableInstance<Long>
 	}
 
 	/**
+	 * The seed used for the random generator for creating the SolarSystemInfrastructures
+	 * 
+	 * @param seeed - the seed
+	 */
+	public void setSeed(long seed)
+	{
+		this.seed = seed;
+	}
+
+	/**
 	 * The number of start systems the participants may select.
 	 * 
 	 * @param startSystemCount - the number
@@ -372,6 +432,26 @@ public class Match extends ActivatableInstance<Long>
 	public void setStartSystemSelectionEnabled(boolean startSystemSelectionEnabled)
 	{
 		this.startSystemSelectionEnabled = startSystemSelectionEnabled;
+	}
+
+	/**
+	 * The join rules defined for joins <b>before</b> the match has been started.
+	 * 
+	 * @param plannedJoinType - the EnumJoinType
+	 */
+	public void setPlannedJoinType(EnumJoinType plannedJoinType)
+	{
+		this.plannedJoinType = plannedJoinType;
+	}
+
+	/**
+	 * The join rules defined for joins <b>after</b> the match has been started.
+	 * 
+	 * @param startedJoinType - the EnumJoinType
+	 */
+	public void setStartedJoinType(EnumJoinType startedJoinType)
+	{
+		this.startedJoinType = startedJoinType;
 	}
 
 	/**
@@ -436,14 +516,17 @@ public class Match extends ActivatableInstance<Long>
 		result = prime * result + ((creationDate == null) ? 0 : creationDate.hashCode());
 		result = prime * result + ((creator == null) ? 0 : creator.getId().hashCode());
 		result = prime * result + ((finishedDate == null) ? 0 : finishedDate.hashCode());
-		result = prime * result + ((galaxy == null) ? 0 : galaxy.getId().hashCode());
+		result = prime * result + ((galaxy == null) ? 0 : galaxy.hashCode());
 		result = prime * result + participantsMax;
 		result = prime * result + participantsMin;
+		result = prime * result + ((plannedJoinType == null) ? 0 : plannedJoinType.hashCode());
+		result = prime * result + (int) (seed ^ (seed >>> 32));
 		result = prime * result + speed;
 		result = prime * result + ((startCondition == null) ? 0 : startCondition.hashCode());
 		result = prime * result + ((startDate == null) ? 0 : startDate.hashCode());
 		result = prime * result + startSystemCount;
 		result = prime * result + (startSystemSelectionEnabled ? 1231 : 1237);
+		result = prime * result + ((startedJoinType == null) ? 0 : startedJoinType.hashCode());
 		result = prime * result + ((title == null) ? 0 : title.hashCode());
 		result = prime * result + ((victoryCondition == null) ? 0 : victoryCondition.hashCode());
 		return result;
@@ -489,11 +572,15 @@ public class Match extends ActivatableInstance<Long>
 			if(other.galaxy != null)
 				return false;
 		}
-		else if(!galaxy.getId().equals(other.galaxy.getId()))
+		else if(!galaxy.equals(other.galaxy))
 			return false;
 		if(participantsMax != other.participantsMax)
 			return false;
 		if(participantsMin != other.participantsMin)
+			return false;
+		if(plannedJoinType != other.plannedJoinType)
+			return false;
+		if(seed != other.seed)
 			return false;
 		if(speed != other.speed)
 			return false;
@@ -509,6 +596,8 @@ public class Match extends ActivatableInstance<Long>
 		if(startSystemCount != other.startSystemCount)
 			return false;
 		if(startSystemSelectionEnabled != other.startSystemSelectionEnabled)
+			return false;
+		if(startedJoinType != other.startedJoinType)
 			return false;
 		if(title == null)
 		{

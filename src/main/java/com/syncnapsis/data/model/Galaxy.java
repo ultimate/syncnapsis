@@ -17,7 +17,10 @@ package com.syncnapsis.data.model;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.AttributeOverride;
+import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -27,6 +30,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import com.syncnapsis.data.model.base.ActivatableInstance;
+import com.syncnapsis.data.model.help.Vector;
 
 /**
  * Entity representing a galaxy usable to create matches.<br>
@@ -53,22 +57,18 @@ public class Galaxy extends ActivatableInstance<Long>
 	 * The date and time this galaxy was created
 	 */
 	protected Date				creationDate;
-	
+
 	/**
-	 * The x-size (width) of the galaxy.<br>
-	 * This means x-coordinates are within the interval [ -sizeX/2 ; sizeX/2 ]
+	 * The size of the galaxy.<br>
+	 * This means coordinates are within the interval [ -size?/2 ; size?/2 ] where ? is one of three
+	 * coordinates.
 	 */
-	protected int				sizeX;
+	protected Vector.Integer	size	= new Vector.Integer();
+
 	/**
-	 * The y-size of the galaxy.<br>
-	 * This means y-coordinates are within the interval [ -sizeY/2 ; sizeY/2 ]
+	 * The seed that has been used for the random generator to generate the SolarSystems
 	 */
-	protected int				sizeY;
-	/**
-	 * The z-size of the galaxy.<br>
-	 * This means z-coordinates are within the interval [ -sizeZ/2 ; sizeZ/2 ]
-	 */
-	protected int				sizeZ;
+	protected long				seed;
 
 	/**
 	 * The solar systems belonging to this galaxy
@@ -116,39 +116,30 @@ public class Galaxy extends ActivatableInstance<Long>
 	}
 
 	/**
-	 * The x-size (width) of the galaxy.<br>
-	 * This means x-coordinates are within the interval [ -sizeX/2 ; sizeX/2 ]
+	 * The size of the galaxy.<br>
+	 * This means coordinates are within the interval [ -size?/2 ; size?/2 ] where ? is one of three
+	 * coordinates.
 	 * 
-	 * @return sizeX
+	 * @return size
 	 */
-	@Column(nullable = false)
-	public int getSizeX()
+	@Embedded
+	@AttributeOverrides({ @AttributeOverride(name = "x", column = @Column(name = "sizeX", nullable = false)),
+			@AttributeOverride(name = "y", column = @Column(name = "sizeY", nullable = false)),
+			@AttributeOverride(name = "z", column = @Column(name = "sizeZ", nullable = false)) })
+	public Vector.Integer getSize()
 	{
-		return sizeX;
+		return size;
 	}
 
 	/**
-	 * The y-size of the galaxy.<br>
-	 * This means y-coordinates are within the interval [ -sizeY/2 ; sizeY/2 ]
+	 * The seed that has been used for the random generator to generate the SolarSystems
 	 * 
-	 * @return sizeY
+	 * @return seed
 	 */
 	@Column(nullable = false)
-	public int getSizeY()
+	public long getSeed()
 	{
-		return sizeY;
-	}
-
-	/**
-	 * The z-size of the galaxy.<br>
-	 * This means z-coordinates are within the interval [ -sizeZ/2 ; sizeZ/2 ]
-	 * 
-	 * @return sizeZ
-	 */
-	@Column(nullable = false)
-	public int getSizeZ()
-	{
-		return sizeZ;
+		return seed;
 	}
 
 	/**
@@ -204,36 +195,25 @@ public class Galaxy extends ActivatableInstance<Long>
 	}
 
 	/**
-	 * The x-size (width) of the galaxy.<br>
-	 * This means x-coordinates are within the interval [ -sizeX/2 ; sizeX/2 ]
+	 * The size of the galaxy.<br>
+	 * This means coordinates are within the interval [ -size?/2 ; size?/2 ] where ? is one of three
+	 * coordinates.
 	 * 
-	 * @param sizeX - the x-size
+	 * @param size - the size
 	 */
-	public void setSizeX(int sizeX)
+	public void setSize(Vector.Integer size)
 	{
-		this.sizeX = sizeX;
+		this.size = size;
 	}
 
 	/**
-	 * The y-size of the galaxy.<br>
-	 * This means y-coordinates are within the interval [ -sizeY/2 ; sizeY/2 ]
+	 * The seed that has been used for the random generator to generate the SolarSystems
 	 * 
-	 * @param sizeY - the y-size
+	 * @param seed - the seed
 	 */
-	public void setSizeY(int sizeY)
+	public void setSeed(long seed)
 	{
-		this.sizeY = sizeY;
-	}
-
-	/**
-	 * The z-size of the galaxy.<br>
-	 * This means z-coordinates are within the interval [ -sizeZ/2 ; sizeZ/2 ]
-	 * 
-	 * @param sizeZ - the z-size
-	 */
-	public void setSizeZ(int sizeZ)
-	{
-		this.sizeZ = sizeZ;
+		this.seed = seed;
 	}
 
 	/**
@@ -268,9 +248,8 @@ public class Galaxy extends ActivatableInstance<Long>
 		result = prime * result + ((creationDate == null) ? 0 : creationDate.hashCode());
 		result = prime * result + ((creator == null) ? 0 : creator.getId().hashCode());
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
-		result = prime * result + sizeX;
-		result = prime * result + sizeY;
-		result = prime * result + sizeZ;
+		result = prime * result + (int) (seed ^ (seed >>> 32));
+		result = prime * result + ((size == null) ? 0 : size.hashCode());
 		return result;
 	}
 
@@ -309,11 +288,14 @@ public class Galaxy extends ActivatableInstance<Long>
 		}
 		else if(!name.equals(other.name))
 			return false;
-		if(sizeX != other.sizeX)
+		if(seed != other.seed)
 			return false;
-		if(sizeY != other.sizeY)
-			return false;
-		if(sizeZ != other.sizeZ)
+		if(size == null)
+		{
+			if(other.size != null)
+				return false;
+		}
+		else if(!size.equals(other.size))
 			return false;
 		return true;
 	}

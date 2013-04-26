@@ -33,9 +33,9 @@ public class SolarSystemDaoTest extends GenericDaoTestCase<SolarSystem, Long>
 		Long existingId = solarSystemDao.getAll().get(0).getId();
 
 		SolarSystem solarSystem = new SolarSystem();
-		solarSystem.setCoordinateX(1);
-		solarSystem.setCoordinateY(1);
-		solarSystem.setCoordinateZ(1);
+		solarSystem.getCoords().setX(1);
+		solarSystem.getCoords().setY(2);
+		solarSystem.getCoords().setZ(3);
 		solarSystem.setGalaxy(galaxyDao.getByName("galaxy1"));
 		solarSystem.setHabitability(100);
 		solarSystem.setName("any name");
@@ -51,6 +51,26 @@ public class SolarSystemDaoTest extends GenericDaoTestCase<SolarSystem, Long>
 		setBadEntityId(-1L);
 
 		setGenericDao(solarSystemDao);
+	}
+	
+	public void testCoords() throws Exception
+	{
+		SolarSystem sys = solarSystemDao.get(1L);
+		
+		assertNotNull(sys);
+		assertNotNull(sys.getCoords());
+		
+		assertNotNull(sys.getCoords().getX());
+		assertTrue(sys.getCoords().getX() instanceof Integer);
+		assertTrue(sys.getCoords().getX() == 100);
+		
+		assertNotNull(sys.getCoords().getY());
+		assertTrue(sys.getCoords().getY() instanceof Integer);
+		assertTrue(sys.getCoords().getY() == 100);
+		
+		assertNotNull(sys.getCoords().getZ());
+		assertTrue(sys.getCoords().getZ() instanceof Integer);
+		assertTrue(sys.getCoords().getZ() == 100);
 	}
 
 	// insert individual Tests here

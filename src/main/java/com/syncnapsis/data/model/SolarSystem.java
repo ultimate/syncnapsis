@@ -14,13 +14,17 @@
  */
 package com.syncnapsis.data.model;
 
+import javax.persistence.AttributeOverride;
+import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import com.syncnapsis.data.model.base.ActivatableInstance;
+import com.syncnapsis.data.model.help.Vector;
 
 /**
  * Entity representation of a simple solar system.<br>
@@ -37,35 +41,28 @@ public class SolarSystem extends ActivatableInstance<Long>
 	/**
 	 * The Galaxy this solar system is in
 	 */
-	protected Galaxy	galaxy;
+	protected Galaxy			galaxy;
 
 	/**
 	 * The name of this solar system
 	 */
-	protected String	name;
+	protected String			name;
 
 	/**
-	 * The X-Component of the Coordinates/Position of this solar system
+	 * The the Coordinates/Position of this solar system.<br>
+	 * (Initialized with default coords for convenience)
 	 */
-	protected int		coordinateX;
-	/**
-	 * The Y-Component of the Coordinates/Position of this solar system
-	 */
-	protected int		coordinateY;
-	/**
-	 * The Z-Component of the Coordinates/Position of this solar system
-	 */
-	protected int		coordinateZ;
+	protected Vector.Integer	coords	= new Vector.Integer();
 
 	/**
 	 * The size of this solar system (in a range from 0 to 100)
 	 */
-	protected int		size;
+	protected int				size;
 
 	/**
 	 * The habitability of this solar system (in a range from 0 to 100)
 	 */
-	protected int		habitability;
+	protected int				habitability;
 
 	/**
 	 * The Galaxy this solar system is in
@@ -91,36 +88,17 @@ public class SolarSystem extends ActivatableInstance<Long>
 	}
 
 	/**
-	 * The X-Component of the Coordinates/Position of this solar system
+	 * The Coordinates/Position of this solar system
 	 * 
-	 * @return coordinateX
+	 * @return coords
 	 */
-	@Column(nullable = false)
-	public int getCoordinateX()
+	@Embedded
+	@AttributeOverrides({ @AttributeOverride(name = "x", column = @Column(name = "coordinateX", nullable = false)),
+			@AttributeOverride(name = "y", column = @Column(name = "coordinateY", nullable = false)),
+			@AttributeOverride(name = "z", column = @Column(name = "coordinateZ", nullable = false)) })
+	public Vector.Integer getCoords()
 	{
-		return coordinateX;
-	}
-
-	/**
-	 * The Y-Component of the Coordinates/Position of this solar system
-	 * 
-	 * @return coordinateY
-	 */
-	@Column(nullable = false)
-	public int getCoordinateY()
-	{
-		return coordinateY;
-	}
-
-	/**
-	 * The Z-Component of the Coordinates/Position of this solar system
-	 * 
-	 * @return coordinateZ
-	 */
-	@Column(nullable = false)
-	public int getCoordinateZ()
-	{
-		return coordinateZ;
+		return coords;
 	}
 
 	/**
@@ -166,33 +144,13 @@ public class SolarSystem extends ActivatableInstance<Long>
 	}
 
 	/**
-	 * The X-Component of the Coordinates/Position of this solar system
+	 * The Coordinates/Position of this solar system
 	 * 
-	 * @param coordinateX - the coordinate's component
+	 * @param coords - the coordinates
 	 */
-	public void setCoordinateX(int coordinateX)
+	public void setCoords(Vector.Integer coords)
 	{
-		this.coordinateX = coordinateX;
-	}
-
-	/**
-	 * The Y-Component of the Coordinates/Position of this solar system
-	 * 
-	 * @param coordinateY - the coordinate's component
-	 */
-	public void setCoordinateY(int coordinateY)
-	{
-		this.coordinateY = coordinateY;
-	}
-
-	/**
-	 * The Z-Component of the Coordinates/Position of this solar system
-	 * 
-	 * @param coordinateZ - the coordinate's component
-	 */
-	public void setCoordinateZ(int coordinateZ)
-	{
-		this.coordinateZ = coordinateZ;
+		this.coords = coords;
 	}
 
 	/**
@@ -220,9 +178,7 @@ public class SolarSystem extends ActivatableInstance<Long>
 	{
 		final int prime = 31;
 		int result = super.hashCode();
-		result = prime * result + coordinateX;
-		result = prime * result + coordinateY;
-		result = prime * result + coordinateZ;
+		result = prime * result + ((coords == null) ? 0 : coords.hashCode());
 		result = prime * result + ((galaxy == null) ? 0 : galaxy.getId().hashCode());
 		result = prime * result + habitability;
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
@@ -240,11 +196,12 @@ public class SolarSystem extends ActivatableInstance<Long>
 		if(getClass() != obj.getClass())
 			return false;
 		SolarSystem other = (SolarSystem) obj;
-		if(coordinateX != other.coordinateX)
-			return false;
-		if(coordinateY != other.coordinateY)
-			return false;
-		if(coordinateZ != other.coordinateZ)
+		if(coords == null)
+		{
+			if(other.coords != null)
+				return false;
+		}
+		else if(!coords.equals(other.coords))
 			return false;
 		if(galaxy == null)
 		{

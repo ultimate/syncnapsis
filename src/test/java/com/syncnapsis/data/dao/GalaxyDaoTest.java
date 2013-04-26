@@ -39,9 +39,9 @@ public class GalaxyDaoTest extends GenericNameDaoTestCase<Galaxy, Long>
 		galaxy.setCreationDate(new Date(timeProvider.get()));
 		galaxy.setCreator(playerDao.getByUsername("user1"));
 		galaxy.setName("any name");
-		galaxy.setSizeX(1000);
-		galaxy.setSizeY(1000);
-		galaxy.setSizeZ(1000);
+		galaxy.getSize().setX(100);
+		galaxy.getSize().setY(200);
+		galaxy.getSize().setZ(300);
 		// set individual properties here
 		
 		setEntity(galaxy);
@@ -54,6 +54,25 @@ public class GalaxyDaoTest extends GenericNameDaoTestCase<Galaxy, Long>
 		setExistingEntityName(existingName);
 		
 		setGenericNameDao(galaxyDao);
+	}
+	public void testSize() throws Exception
+	{
+		Galaxy galaxy = galaxyDao.get(1L);
+		
+		assertNotNull(galaxy);
+		assertNotNull(galaxy.getSize());
+		
+		assertNotNull(galaxy.getSize().getX());
+		assertTrue(galaxy.getSize().getX() instanceof Integer);
+		assertTrue(galaxy.getSize().getX() == 200);
+		
+		assertNotNull(galaxy.getSize().getY());
+		assertTrue(galaxy.getSize().getY() instanceof Integer);
+		assertTrue(galaxy.getSize().getY() == 200);
+		
+		assertNotNull(galaxy.getSize().getZ());
+		assertTrue(galaxy.getSize().getZ() instanceof Integer);
+		assertTrue(galaxy.getSize().getZ() == 200);
 	}
 	
 	// insert individual Tests here
