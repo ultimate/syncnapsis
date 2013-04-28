@@ -120,9 +120,8 @@ public class UserManagerImpl extends GenericNameManagerImpl<User, Long> implemen
 	@Override
 	public User login(String username, String password)
 	{
-		String pwEnc = StringUtil.encodePassword(password, securityManager.getEncryptionAlgorithm());
 		User user = getByName(username);
-		if(pwEnc.equals(user.getPassword()))
+		if(securityManager.validatePassword(password, user.getPassword()))
 		{
 			securityManager.getUserProvider().set(user);
 			securityManager.getLocaleProvider().set(user.getLocale());
@@ -179,7 +178,7 @@ public class UserManagerImpl extends GenericNameManagerImpl<User, Long> implemen
 		user.setLastActiveDate(new Date(securityManager.getTimeProvider().get()));
 		user.setLocale(securityManager.getLocaleProvider().get());
 		// user.setNickname(nickname);
-		user.setPassword(StringUtil.encodePassword(password, securityManager.getEncryptionAlgorithm()));
+		user.setPassword(securityManager.hashPassword(password));
 		user.setRegistrationDate(new Date(securityManager.getTimeProvider().get()));
 		user.setRole(userRoleManager.getByName(ApplicationBaseConstants.ROLE_NORMAL_USER));
 		user.setRoleExpireDate(null);

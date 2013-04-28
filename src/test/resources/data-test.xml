@@ -1,8 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- - Syncnapsis Framework - Copyright (c) 2012 ultimate - - This program is free software; you can redistribute it and/or modify it under the terms of - the GNU General Public License as published by 
-	the Free Software Foundation; either version - 3 of the License, or any later version. - - This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; - without even the implied 
-	warranty of MECHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. - See the GNU General Public License for more details. - - You should have received a copy of the GNU General Plublic License along with 
-	this program; - if not, see <http://www.gnu.org/licenses/>. -->
+<!--
+  - Syncnapsis Framework - Copyright (c) 2012 ultimate 
+  - 
+  - This program is free software; you can redistribute it and/or modify it under the terms of 
+  - the GNU General Public License as published by the Free Software Foundation; either version 
+  - 3 of the License, or any later version. 
+  - 
+  - This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; 
+  - without even the implied warranty of MECHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+  - See the GNU General Public License for more details. 
+  - 
+  - You should have received a copy of the GNU General Plublic License along with this program; 
+  - if not, see <http://www.gnu.org/licenses/>. 
+  -->
 <!DOCTYPE dataset SYSTEM "dataset.dtd">
 <dataset>
 	<table name="parameter">
@@ -243,7 +253,7 @@
 			<value description="version">1</value>
 			<value description="username">admin</value>
 			<value description="email">admin@syncnapsis.com</value>
-			<value description="password">d033e22ae348aeb5660fc2140aec35850c4da997</value>
+			<value description="password">1000:f44963469d592d5648668945379d2ae969de43db26a32f60:b42983e9692adc9d5162bda2cf91ec47c63e7db37277c96f</value>
 			<value description="fkUserRole">1</value>
 			<null />
 			<value description="activated">1</value>
@@ -273,7 +283,7 @@
 			<value description="version">1</value>
 			<value description="username">user1</value>
 			<value description="email">user1@syncnapsis.com</value>
-			<value description="password">b3daa77b4c04a9551b8781d03191fe098f325e67</value>
+			<value description="password">1000:3eff9b066f1696af832c571f88fbc2019ff8e7f6544c606e:f0c1229a02dc24c9e18274c0ddaaeb2977488e60ea1eafd2</value>
 			<value description="fkUserRole">1</value>
 			<null />
 			<value description="activated">1</value>
@@ -303,7 +313,7 @@
 			<value description="version">1</value>
 			<value description="username">user2</value>
 			<value description="email">user2@syncnapsis.com</value>
-			<value description="password">a1881c06eec96db9901c7bbfe41c42a3f08e9cb4</value>
+			<value description="password">1000:aa406ee8102adf7b1982a6fd95d5f03f31b32a0b9c76b9a2:7e04661d8eb93b93ecd0e1306d1b5f53070561c068d5c949</value>
 			<value description="fkUserRole">1</value>
 			<null />
 			<value description="activated">1</value>

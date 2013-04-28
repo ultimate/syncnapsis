@@ -40,11 +40,12 @@ import com.syncnapsis.enums.EnumDateFormat;
 import com.syncnapsis.enums.EnumGender;
 import com.syncnapsis.enums.EnumLocale;
 import com.syncnapsis.providers.TimeProvider;
-import com.syncnapsis.utils.StringUtil;
+import com.syncnapsis.security.BaseApplicationManager;
 
 public class ApplicationBaseDataGenerator extends DataGenerator implements InitializingBean
 {
 	protected TimeProvider				timeProvider;
+	protected BaseApplicationManager	securityManager;
 
 	protected MessengerManager			messengerManager;
 	protected MessengerContactManager	messengerContactManager;
@@ -63,6 +64,16 @@ public class ApplicationBaseDataGenerator extends DataGenerator implements Initi
 	public void setTimeProvider(TimeProvider timeProvider)
 	{
 		this.timeProvider = timeProvider;
+	}
+
+	public BaseApplicationManager getSecurityManager()
+	{
+		return securityManager;
+	}
+
+	public void setSecurityManager(BaseApplicationManager securityManager)
+	{
+		this.securityManager = securityManager;
 	}
 
 	public MessengerManager getMessengerManager()
@@ -131,6 +142,7 @@ public class ApplicationBaseDataGenerator extends DataGenerator implements Initi
 		super.afterPropertiesSet();
 
 		Assert.notNull(timeProvider, "timeProvider must not be null!");
+		Assert.notNull(securityManager, "securityManager must not be null!");
 
 		Assert.notNull(messengerManager, "messengerManager must not be null!");
 		Assert.notNull(messengerContactManager, "messengerContactManager must not be null!");
@@ -206,7 +218,7 @@ public class ApplicationBaseDataGenerator extends DataGenerator implements Initi
 		user.setLocale(EnumLocale.getDefault());
 		user.setMessengerContacts(new ArrayList<MessengerContact>());
 		user.setNickname("nick_" + name);
-		user.setPassword(StringUtil.encodePassword(name, "SHA"));
+		user.setPassword(securityManager.hashPassword(name));
 		user.setRegistrationDate(new Date(timeProvider.get() - 3600000L));
 		user.setRole(userRoleManager.getByName(rolename));
 		user.setRoleExpireDate(null);

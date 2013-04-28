@@ -40,7 +40,6 @@ import com.syncnapsis.tests.annotations.TestCoversMethods;
 import com.syncnapsis.tests.annotations.TestExcludesMethods;
 import com.syncnapsis.utils.HibernateUtil;
 import com.syncnapsis.utils.ServletUtil;
-import com.syncnapsis.utils.StringUtil;
 import com.syncnapsis.websockets.service.rpc.RPCCall;
 import com.syncnapsis.websockets.service.rpc.RPCHandler;
 
@@ -143,7 +142,7 @@ public class UserManagerImplTest extends GenericNameManagerImplTestCase<User, Lo
 			assertNotNull(newUser.getId());
 			assertEquals(username, newUser.getUsername());
 			assertEquals(email, newUser.getEmail());
-			assertEquals(StringUtil.encodePassword(password, securityManager.getEncryptionAlgorithm()), newUser.getPassword());
+			assertTrue(securityManager.validatePassword(password, newUser.getPassword()));
 			assertNotNull(newUser.getAccountStatusExpireDate());
 			assertTrue(newUser.getAccountStatusExpireDate().after(new Date(securityManager.getTimeProvider().get())));
 			
