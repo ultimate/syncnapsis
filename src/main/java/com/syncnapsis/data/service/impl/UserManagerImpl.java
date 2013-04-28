@@ -33,7 +33,6 @@ import com.syncnapsis.enums.EnumGender;
 import com.syncnapsis.exceptions.UserNotFoundException;
 import com.syncnapsis.exceptions.UserRegistrationFailedException;
 import com.syncnapsis.security.BaseApplicationManager;
-import com.syncnapsis.utils.StringUtil;
 import com.syncnapsis.utils.TimeZoneUtil;
 import com.syncnapsis.websockets.service.rpc.RPCCall;
 
