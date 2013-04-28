@@ -37,7 +37,7 @@
 		<dependency>
 			<groupId>com.syncnapsis.syncnapsis-core</groupId>
 			<artifactId>syncnapsis-core-application-base</artifactId>
-			<version>1.0.0</version>
+			<version>0.8.0</version>
 		</dependency>
 		<dependency>
 			<groupId>com.syncnapsis.syncnapsis-core</groupId>
