@@ -38,7 +38,6 @@ import com.syncnapsis.tests.annotations.TestCoversClasses;
 import com.syncnapsis.tests.annotations.TestCoversMethods;
 import com.syncnapsis.tests.annotations.TestExcludesMethods;
 import com.syncnapsis.utils.HibernateUtil;
-import com.syncnapsis.utils.StringUtil;
 
 @TestCoversClasses({ PlayerManager.class, PlayerManagerImpl.class })
 @TestExcludesMethods({ "*etSecurityManager", "afterPropertiesSet" })
@@ -302,7 +301,7 @@ public class PlayerManagerImplTest extends GenericManagerImplTestCase<Player, Lo
 		assertNotNull(newPlayer.getUser());
 		assertEquals(username, newPlayer.getUser().getUsername());
 		assertEquals(email, newPlayer.getUser().getEmail());
-		assertEquals(StringUtil.encodePassword(password, securityManager.getEncryptionAlgorithm()), newPlayer.getUser().getPassword());
+		assertTrue(securityManager.validatePassword(password, newPlayer.getUser().getPassword()));
 
 		assertNotNull(playerManager.getByUsername(username));
 	}
