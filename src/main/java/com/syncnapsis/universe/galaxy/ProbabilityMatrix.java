@@ -377,7 +377,7 @@ public class ProbabilityMatrix implements Cloneable, Serializable
 	 * @see ProbabilityMatrix#sumOfProbabilities()
 	 * @param expectedNumberOfResults
 	 */
-	public void norm(int expectedNumberOfResults)
+	public void norm(long expectedNumberOfResults)
 	{
 		double factor = normedSumOfProbabilities(expectedNumberOfResults) * this.weight;
 		for(int x = 0; x < xSize; x++)
