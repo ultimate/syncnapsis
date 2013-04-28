@@ -169,7 +169,7 @@ public abstract class RPCFilter extends FilterEngine implements InitializingBean
 		{
 			try
 			{
-				Object result = rpcHandler.doRPC(call, getAuthorities());
+				Object result = doRPC(call);
 
 				if(result != null)
 				{
@@ -189,7 +189,7 @@ public abstract class RPCFilter extends FilterEngine implements InitializingBean
 			{
 				logger.error("Exception doing RPC: " + e.getMessage());
 				resp.sendError(HttpServletResponse.SC_FORBIDDEN);
-			}	
+			}
 			catch(IllegalArgumentException e)
 			{
 				logger.error("Exception doing RPC: " + e.getMessage());
@@ -205,6 +205,20 @@ public abstract class RPCFilter extends FilterEngine implements InitializingBean
 		{
 			resp.sendError(HttpServletResponse.SC_NOT_FOUND);
 		}
+	}
+
+	/**
+	 * Internal forwarding to <code>rpcHandler.doRPC(..)</code> for the ability of overwriting.<br>
+	 * This method will be call in
+	 * {@link RPCFilter#doFilter(ServletRequest, ServletResponse, FilterChain)}
+	 * 
+	 * @see RPCHandler#doRPC(RPCCall, Object...)
+	 * @param call - the RPCCall to execute
+	 * @return the invocation result
+	 */
+	protected Object doRPC(RPCCall call) throws IllegalArgumentException, IllegalAccessException, InvocationTargetException
+	{
+		return rpcHandler.doRPC(call, getAuthorities());
 	}
 
 	/**
