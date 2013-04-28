@@ -29,6 +29,7 @@ import org.springframework.util.Assert;
 import com.syncnapsis.enums.EnumGalaxyType;
 import com.syncnapsis.utils.MathUtil;
 import com.syncnapsis.utils.math.Functions;
+import com.syncnapsis.utils.math.Array3D;
 
 /**
  * Diese Klasse repräsentiert die Definition und Spezifikation einer Galaxie.
@@ -40,7 +41,7 @@ import com.syncnapsis.utils.math.Functions;
  * Sektoren bzw. Systemen generiert werden kann. Der Galaxie können über die
  * Methoden addType* Galaxietypen hinzugefügt werden.
  * 
- * @see ProbabilityMatrix
+ * @see Array3D
  * @author ultimate
  */
 public class GalaxySpecification implements Serializable
@@ -58,19 +59,19 @@ public class GalaxySpecification implements Serializable
 	/**
 	 * Die Größe in x-Richtung
 	 * 
-	 * @see ProbabilityMatrix#getXSize()
+	 * @see Array3D#getXSize()
 	 */
 	protected int								xSize;
 	/**
 	 * Die Größe in y-Richtung
 	 * 
-	 * @see ProbabilityMatrix#getYSize()
+	 * @see Array3D#getYSize()
 	 */
 	protected int								ySize;
 	/**
 	 * Die Größe in z-Richtung
 	 * 
-	 * @see ProbabilityMatrix#getZSize()
+	 * @see Array3D#getZSize()
 	 */
 	protected int								zSize;
 	/**
@@ -82,7 +83,7 @@ public class GalaxySpecification implements Serializable
 	 * Liste der Wahrscheinlichkeitsmatrizen, die aus den verschiedenen
 	 * Galaxytypen berechnet wurden
 	 */
-	protected ArrayList<ProbabilityMatrix>		matrixes;
+	protected ArrayList<Array3D>		matrixes;
 
 	/**
 	 * Liste der Threads für die parallele Berechnung der
@@ -101,7 +102,7 @@ public class GalaxySpecification implements Serializable
 	/**
 	 * Die endgültige berechnete Wahrscheinlichkeitsmatrix
 	 */
-	protected ProbabilityMatrix					pm;
+	protected Array3D					pm;
 
 	/**
 	 * Erzeugt eine neue (noch leere) Galaxie.
@@ -119,7 +120,7 @@ public class GalaxySpecification implements Serializable
 		this.ySize = ySize;
 		this.zSize = zSize;
 		this.sectors = (int) (getVolume() * density);
-		this.matrixes = new ArrayList<ProbabilityMatrix>();
+		this.matrixes = new ArrayList<Array3D>();
 		this.threads = new ArrayList<GalaxyGenerationThread>();
 		this.gridSize = 1;
 	}
@@ -140,7 +141,7 @@ public class GalaxySpecification implements Serializable
 		this.ySize = ySize;
 		this.zSize = zSize;
 		this.sectors = sectors;
-		this.matrixes = new ArrayList<ProbabilityMatrix>();
+		this.matrixes = new ArrayList<Array3D>();
 		this.threads = new ArrayList<GalaxyGenerationThread>();
 		this.gridSize = 1;
 	}
@@ -163,7 +164,7 @@ public class GalaxySpecification implements Serializable
 		this.ySize = ySize;
 		this.zSize = zSize;
 		this.sectors = (int) (getVolume() * density);
-		this.matrixes = new ArrayList<ProbabilityMatrix>();
+		this.matrixes = new ArrayList<Array3D>();
 		this.threads = new ArrayList<GalaxyGenerationThread>();
 		this.gridSize = gridSize;
 	}
@@ -186,7 +187,7 @@ public class GalaxySpecification implements Serializable
 		this.ySize = ySize;
 		this.zSize = zSize;
 		this.sectors = sectors;
-		this.matrixes = new ArrayList<ProbabilityMatrix>();
+		this.matrixes = new ArrayList<Array3D>();
 		this.threads = new ArrayList<GalaxyGenerationThread>();
 		this.gridSize = gridSize;
 	}
@@ -292,7 +293,7 @@ public class GalaxySpecification implements Serializable
 	 * 
 	 * @param m - die Matrix
 	 */
-	public void addMatrix(ProbabilityMatrix m)
+	public void addMatrix(Array3D m)
 	{
 		this.matrixes.add(m);
 	}
@@ -303,7 +304,7 @@ public class GalaxySpecification implements Serializable
 	 * 
 	 * @param ms - die Matrizen
 	 */
-	public void addMatrixes(List<ProbabilityMatrix> ms)
+	public void addMatrixes(List<Array3D> ms)
 	{
 		this.matrixes.addAll(ms);
 	}
@@ -313,7 +314,7 @@ public class GalaxySpecification implements Serializable
 	 * 
 	 * @return die Liste
 	 */
-	public List<ProbabilityMatrix> getMatrixes()
+	public List<Array3D> getMatrixes()
 	{
 		return Collections.unmodifiableList(this.matrixes);
 	}
@@ -328,7 +329,7 @@ public class GalaxySpecification implements Serializable
 	public List<int[]> generateCoordinates()
 	{
 		List<int[]> sectors = new ArrayList<int[]>();
-		ProbabilityMatrix m = generateMatrix();
+		Array3D m = generateMatrix();
 		logger.debug("Generating Sectors...");
 		int probsAbove1 = 0;
 		for(int x = m.getXMin(); x <= m.getXMax(); x++)
@@ -337,9 +338,9 @@ public class GalaxySpecification implements Serializable
 			{
 				for(int z = m.getZMin(); z <= m.getZMax(); z++)
 				{
-					if(Math.random() < m.getProbability(x, y, z))
+					if(Math.random() < m.get(x, y, z))
 						sectors.add(new int[] { x, y, z });
-					if(m.getProbability(x, y, z) >= 1)
+					if(m.get(x, y, z) >= 1)
 						probsAbove1++;
 				}
 			}
@@ -357,15 +358,15 @@ public class GalaxySpecification implements Serializable
 		List<int[]> sectors = new ArrayList<int[]>(this.sectors);
 		logger.debug("Generating Sectors...");
 		double sum = 0;
-		ProbabilityMatrix summedMatrix = new ProbabilityMatrix(this.pm.getXSize(), this.pm.getYSize(), this.pm.getZSize());
+		Array3D summedMatrix = new Array3D(this.pm.getXSize(), this.pm.getYSize(), this.pm.getZSize());
 		for(int x = summedMatrix.getXMin(); x <= summedMatrix.getXMax(); x++)
 		{
 			for(int y = summedMatrix.getYMin(); y <= summedMatrix.getYMax(); y++)
 			{
 				for(int z = summedMatrix.getZMin(); z <= summedMatrix.getZMax(); z++)
 				{
-					sum += this.pm.getProbability(x, y, z);
-					summedMatrix.setProbability(x, y, z, sum);
+					sum += this.pm.get(x, y, z);
+					summedMatrix.set(x, y, z, sum);
 				}
 			}
 		}
@@ -388,9 +389,9 @@ public class GalaxySpecification implements Serializable
 				{
 					step = (step + 1) / 2;
 
-					if(summedMatrix.getProbability(i) < randSum)
+					if(summedMatrix.get(i) < randSum)
 						i += step;
-					else if(summedMatrix.getProbability(i - 1) > randSum)
+					else if(summedMatrix.get(i - 1) > randSum)
 						i -= step;
 					else
 						break;
@@ -409,7 +410,7 @@ public class GalaxySpecification implements Serializable
 
 			iUsed[s] = i;
 
-			sectors.add(summedMatrix.getCoords(i));
+			sectors.add(summedMatrix.getIndexes(i));
 		}
 		logger.debug(collisions + " collisions");
 		logger.debug(sectors.size() + " sectors generated");
@@ -426,7 +427,7 @@ public class GalaxySpecification implements Serializable
 	 * 
 	 * @return die Wahrscheinlichkeistmatrix
 	 */
-	public ProbabilityMatrix generateMatrix()
+	public Array3D generateMatrix()
 	{
 		logger.debug("Generating Matrix...");
 		logger.debug("Waiting for Threads to be finished...");
@@ -438,7 +439,7 @@ public class GalaxySpecification implements Serializable
 		logger.debug("All " + this.threads.size() + " Threads joined");
 		logger.debug("Adding matrixes...");
 		int count = 0;
-		for(ProbabilityMatrix m : matrixes)
+		for(Array3D m : matrixes)
 		{
 			if(this.pm == null)
 				this.pm = m.clone();
@@ -446,8 +447,8 @@ public class GalaxySpecification implements Serializable
 				this.pm.addMatrix(m);
 			logger.debug("Matrix added " + (++count) + " of " + this.matrixes.size());
 		}
-		this.matrixes = new ArrayList<ProbabilityMatrix>();
-		ProbabilityMatrix mRet = pm.clone();
+		this.matrixes = new ArrayList<Array3D>();
+		Array3D mRet = pm.clone();
 		logger.debug("Norming matrix");
 		mRet.norm(this.sectors);
 		logger.debug("Matrix generation finished");
@@ -488,9 +489,9 @@ public class GalaxySpecification implements Serializable
 	 * @param sizeLimitation - eine Größenbeschränkung für den Galaxietyp
 	 * @return die Wahrscheinlichkeitsmatrix
 	 */
-	protected ProbabilityMatrix generateTypeEx(double weight, double sizeLimitation)
+	protected Array3D generateTypeEx(double weight, double sizeLimitation)
 	{
-		ProbabilityMatrix m = new ProbabilityMatrix(this.xSize, this.ySize, this.zSize);
+		Array3D m = new Array3D(this.xSize, this.ySize, this.zSize);
 		m.setWeight(weight);
 
 		double r = 0;
@@ -502,9 +503,9 @@ public class GalaxySpecification implements Serializable
 				{
 					r = getRadius(x, y, z);
 					if(r > sizeLimitation)
-						m.setProbability(x, y, z, 0);
+						m.set(x, y, z, 0);
 					else
-						m.setProbability(x, y, z, Functions.gaussModified(r / sizeLimitation));
+						m.set(x, y, z, Functions.gaussModified(r / sizeLimitation));
 				}
 			}
 		}
@@ -522,9 +523,9 @@ public class GalaxySpecification implements Serializable
 	 * @param sizeLimitation - eine Größenbeschränkung für den Galaxietyp
 	 * @return die Wahrscheinlichkeitsmatrix
 	 */
-	protected ProbabilityMatrix generateTypeS0(double weight, double thickness, double sizeLimitation)
+	protected Array3D generateTypeS0(double weight, double thickness, double sizeLimitation)
 	{
-		ProbabilityMatrix m = new ProbabilityMatrix(this.xSize, this.ySize, this.zSize);
+		Array3D m = new Array3D(this.xSize, this.ySize, this.zSize);
 		m.setWeight(weight);
 
 		double r = 0;
@@ -551,7 +552,7 @@ public class GalaxySpecification implements Serializable
 							zNormed = zNormed / zMax;
 						sigma = thickness * sizeLimitation - r * thickness / 2.0;
 						p = Functions.gauss(zNormed, sigma, true);
-						m.setProbability(x, y, z, p);
+						m.set(x, y, z, p);
 					}
 				}
 			}
@@ -572,9 +573,9 @@ public class GalaxySpecification implements Serializable
 	 * @return die Wahrscheinlichkeitsmatrix
 	 * @param rotationOffset - der Drehoffset
 	 */
-	protected ProbabilityMatrix generateTypeSB0(double weight, double thickness, double sizeLimitation, double rotationOffset)
+	protected Array3D generateTypeSB0(double weight, double thickness, double sizeLimitation, double rotationOffset)
 	{
-		ProbabilityMatrix m = new ProbabilityMatrix(this.xSize, this.ySize, this.zSize);
+		Array3D m = new Array3D(this.xSize, this.ySize, this.zSize);
 		m.setWeight(weight);
 
 		thickness = thickness / 2.0;
@@ -605,7 +606,7 @@ public class GalaxySpecification implements Serializable
 							r2Normed = r2Normed / r2Max;
 						sigma = thickness * sizeLimitation - r * thickness / 2.0;
 						p = Functions.gauss(r2Normed, sigma, true);
-						m.setProbability(x, y, z, p);
+						m.set(x, y, z, p);
 					}
 				}
 			}
@@ -628,9 +629,9 @@ public class GalaxySpecification implements Serializable
 	 * @return die Wahrscheinlichkeitsmatrix
 	 */
 	@SuppressWarnings("unchecked")
-	protected ProbabilityMatrix generateTypeSx(double weight, double numberOfArms, double numberOfTurns, double direction, double rotationOffset)
+	protected Array3D generateTypeSx(double weight, double numberOfArms, double numberOfTurns, double direction, double rotationOffset)
 	{
-		ProbabilityMatrix m = new ProbabilityMatrix(this.xSize, this.ySize, this.zSize);
+		Array3D m = new Array3D(this.xSize, this.ySize, this.zSize);
 		m.setWeight(weight);
 
 		double[] phi0 = new double[(int) numberOfArms];
@@ -708,7 +709,7 @@ public class GalaxySpecification implements Serializable
 						p = Functions.gauss(rMinToSP / deltaRing / rMax);
 					else
 						p = 0;
-					m.setProbability(x, y, z, p);
+					m.set(x, y, z, p);
 				}
 			}
 		}
@@ -729,9 +730,9 @@ public class GalaxySpecification implements Serializable
 	 * @return die Wahrscheinlichkeitsmatrix
 	 */
 	@SuppressWarnings("unchecked")
-	protected ProbabilityMatrix generateTypeSBx(double weight, double numberOfTurns, double direction, double rotationOffset)
+	protected Array3D generateTypeSBx(double weight, double numberOfTurns, double direction, double rotationOffset)
 	{
-		ProbabilityMatrix m = new ProbabilityMatrix(this.xSize, this.ySize, this.zSize);
+		Array3D m = new Array3D(this.xSize, this.ySize, this.zSize);
 		m.setWeight(weight);
 
 		double numberOfArms = 2;
@@ -814,7 +815,7 @@ public class GalaxySpecification implements Serializable
 						p = Functions.gauss(rMinToSP / deltaRing / rMax);
 					else
 						p = 0;
-					m.setProbability(x, y, z, p);
+					m.set(x, y, z, p);
 				}
 			}
 		}
@@ -833,9 +834,9 @@ public class GalaxySpecification implements Serializable
 	 * @return die Wahrscheinlichkeitsmatrix
 	 */
 	@SuppressWarnings("unchecked")
-	protected ProbabilityMatrix generateTypeRx(double weight, double numberOfRings)
+	protected Array3D generateTypeRx(double weight, double numberOfRings)
 	{
-		ProbabilityMatrix m = new ProbabilityMatrix(this.xSize, this.ySize, this.zSize);
+		Array3D m = new Array3D(this.xSize, this.ySize, this.zSize);
 		m.setWeight(weight);
 
 		double xS = 0;
@@ -899,7 +900,7 @@ public class GalaxySpecification implements Serializable
 						p = Functions.gauss(rMinToSP / deltaRing / rMax);
 					else
 						p = 0;
-					m.setProbability(x, y, z, p);
+					m.set(x, y, z, p);
 				}
 			}
 		}
@@ -919,9 +920,9 @@ public class GalaxySpecification implements Serializable
 	 * @param phiEnd - der Endwinkel für den Bogen in Rad
 	 * @return die Wahrscheinlichkeitsmatrix
 	 */
-	protected ProbabilityMatrix generateTypeAx(double weight, double radius, double phiStart, double phiEnd)
+	protected Array3D generateTypeAx(double weight, double radius, double phiStart, double phiEnd)
 	{
-		ProbabilityMatrix m = new ProbabilityMatrix(this.xSize, this.ySize, this.zSize);
+		Array3D m = new Array3D(this.xSize, this.ySize, this.zSize);
 		m.setWeight(weight);
 
 		double xS = 0;
@@ -974,7 +975,7 @@ public class GalaxySpecification implements Serializable
 						p = Functions.gauss(rMinToSP / deltaRing / rMax);
 					else
 						p = 0;
-					m.setProbability(x, y, z, p);
+					m.set(x, y, z, p);
 				}
 			}
 		}
@@ -1242,7 +1243,7 @@ public class GalaxySpecification implements Serializable
 		/**
 		 * Die berechnete Wahrscheinlichkeitsmatrix
 		 */
-		private ProbabilityMatrix			m;
+		private Array3D			m;
 		/**
 		 * Die Gewichtung dieser Wahrscheinlichkeitsmatrix
 		 */
@@ -1335,7 +1336,7 @@ public class GalaxySpecification implements Serializable
 		 * 
 		 * @return die berechnete Wahrscheinlichkeitsmatrix
 		 */
-		public ProbabilityMatrix getMatrix()
+		public Array3D getMatrix()
 		{
 			Assert.notNull(m, "m is null");
 			return m;
