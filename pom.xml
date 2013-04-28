@@ -20,13 +20,13 @@
     <groupId>com.syncnapsis.syncnapsis-core</groupId>
     <artifactId>syncnapsis-core-websockets</artifactId>
     <packaging>jar</packaging>
-    <version>${syncnapsis-core-websockets.version}</version>
+    <version>0.8.0</version>
 	<name>syncnapsis-core-websockets</name>
 	
 	<parent>
 		<groupId>com.syncnapsis</groupId>
 		<artifactId>syncnapsis-core</artifactId>
-		<version>1.0.0</version>
+		<version>0.8.0</version>
 	</parent>
     
     <build>
@@ -37,12 +37,12 @@
         <dependency>
             <groupId>com.syncnapsis.syncnapsis-core</groupId>
             <artifactId>syncnapsis-core-utils</artifactId>
-            <version>${syncnapsis-core-utils.version}</version>
+            <version>0.8.0</version>
         </dependency>
         <dependency>
             <groupId>com.syncnapsis.syncnapsis-core</groupId>
             <artifactId>syncnapsis-core-data</artifactId>
-            <version>${syncnapsis-core-data.version}</version>
+            <version>0.8.0</version>
             <optional>true</optional>
         </dependency>
     </dependencies>
