@@ -24,7 +24,6 @@
         <mapping class="com.syncnapsis.data.model.BlackListEntry"/>
         <mapping class="com.syncnapsis.data.model.Messenger"/>
         <mapping class="com.syncnapsis.data.model.MessengerContact"/>
-        <mapping class="com.syncnapsis.data.model.News"/>
         <mapping class="com.syncnapsis.data.model.Parameter"/>
         <mapping class="com.syncnapsis.data.model.Pinboard"/>
         <mapping class="com.syncnapsis.data.model.PinboardMessage"/>
