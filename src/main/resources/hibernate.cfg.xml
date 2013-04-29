@@ -34,7 +34,6 @@
         <mapping class="com.syncnapsis.data.model.MenuQuickLaunchItem"/>
         <mapping class="com.syncnapsis.data.model.Messenger"/>
         <mapping class="com.syncnapsis.data.model.MessengerContact"/>
-        <mapping class="com.syncnapsis.data.model.News"/>
         <mapping class="com.syncnapsis.data.model.Parameter"/>
         <mapping class="com.syncnapsis.data.model.Player"/>
         <mapping class="com.syncnapsis.data.model.PlayerRank"/>
