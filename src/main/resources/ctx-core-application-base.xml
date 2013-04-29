@@ -33,8 +33,6 @@
 	
 	<bean id="messengerDao" class="com.syncnapsis.data.dao.hibernate.MessengerDaoHibernate" />
 
-	<bean id="newsDao" class="com.syncnapsis.data.dao.hibernate.NewsDaoHibernate" />
-
 	<bean id="parameterDao" class="com.syncnapsis.data.dao.hibernate.ParameterDaoHibernate" />
 
 	<bean id="pinboardDao" class="com.syncnapsis.data.dao.hibernate.PinboardDaoHibernate" />
@@ -74,11 +72,6 @@
 
 	<bean id="messengerManager" class="com.syncnapsis.data.service.impl.MessengerManagerImpl">
 		<constructor-arg ref="messengerDao" />
-	</bean>
-
-	<bean id="newsManager" class="com.syncnapsis.data.service.impl.NewsManagerImpl">
-		<constructor-arg ref="newsDao" />
-		<constructor-arg ref="parameterManager" />
 	</bean>
 
 	<bean id="parameterManager" class="com.syncnapsis.data.service.impl.ParameterManagerImpl">
