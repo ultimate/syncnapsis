@@ -14,6 +14,8 @@
  */
 package com.syncnapsis.data.dao.hibernate;
 
+import java.util.List;
+
 import com.syncnapsis.data.dao.SolarSystemDao;
 import com.syncnapsis.data.model.SolarSystem;
 
@@ -31,5 +33,16 @@ public class SolarSystemDaoHibernate extends GenericDaoHibernate<SolarSystem, Lo
 	public SolarSystemDaoHibernate()
 	{
 		super(SolarSystem.class);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see com.syncnapsis.data.dao.SolarSystemDao#getByGalaxy(long)
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<SolarSystem> getByGalaxy(long galaxyId)
+	{
+		return createQuery("from SolarSystem s where s.galaxy.id=?", galaxyId).list();
 	}
 }

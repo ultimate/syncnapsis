@@ -14,6 +14,8 @@
  */
 package com.syncnapsis.data.dao;
 
+import java.util.List;
+
 import com.syncnapsis.data.dao.hibernate.SolarSystemDaoHibernate;
 import com.syncnapsis.data.model.SolarSystem;
 import com.syncnapsis.tests.GenericDaoTestCase;
@@ -71,6 +73,20 @@ public class SolarSystemDaoTest extends GenericDaoTestCase<SolarSystem, Long>
 		assertNotNull(sys.getCoords().getZ());
 		assertTrue(sys.getCoords().getZ() instanceof Integer);
 		assertTrue(sys.getCoords().getZ() == 100);
+	}
+
+	public void testGetByGalaxy() throws Exception
+	{
+		long galaxy = 1L;
+		List<SolarSystem> result = solarSystemDao.getByGalaxy(galaxy);
+
+		assertNotNull(result);
+		assertEquals(27, result.size());
+
+		for(SolarSystem s: result)
+		{
+			assertEquals(galaxy, (long) s.getGalaxy().getId());
+		}
 	}
 
 	// insert individual Tests here
