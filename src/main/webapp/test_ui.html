@@ -129,6 +129,8 @@
 	#menu #menu_content {
 		width: 100%;
 		color: rgba(255,255,255,0.9);
+		overflow: hidden;
+		height: 300px;
 	}
 	#menu #menu_content div {
 		height: 0px;
@@ -145,29 +147,12 @@
 		margin-top: -2px;
 	}
 	#menu #menu_content div.selected {
-		/*height: 300px;*/
+		height: 300px;
 		max-height: 300px;
 		overflow: hidden;
 		transition: all 1s;
 		padding-top: 5px;
 		padding-bottom: 5px;
-	}
-	
-	#menu #menu_content #menu_1.selected {
-		height: 200px;
-		transition: all 1s;
-	}
-	#menu #menu_content #menu_2.selected {
-		height: 100px;
-		transition: all 1s;
-	}
-	#menu #menu_content #menu_3.selected {
-		height: 300px;
-		transition: all 1s;
-	}
-	#menu #menu_content #menu_4.selected {
-		height: 500px;
-		transition: all 1s;
 	}
 	
 	#bar_top, #bar_bottom {
@@ -181,19 +166,28 @@
 		line-height: 2.6em;
 	}
 	#bar_bottom {
-		height: 30px;
+		height: 31px;
 		line-height: 2.6em;
+		margin-bottom: 1px;
+		overflow: hidden;
+	}
+	#bar_bottom.open{
+		height: 130px;
+	}
+	#bar_bottom > log_bar {
+		display: inline;
+		top: 0px;
+		height: 30px;
+		margin-bottom: 1px;
 	}
 	#bar_bottom #log_title {
 		width: 80px;
-		height: 100%;
 		position: absolute;
 		left: 0px;
 		padding-left: 5px;
 		padding-right: 5px;
 	}
 	#bar_bottom > #log {
-		height: 100%;
 		position: absolute;
 		width: 212px;
 	}
@@ -208,15 +202,40 @@
 	}
 	#bar_bottom #log_menu {
 		width: 80px;
-		height: 100%;
 		position: absolute;
 		right: 0px;
 		padding-left: 5px;
 		padding-right: 5px;
 	}
-	#bar_bottom > div {
-		display: inline;
+	#bar_bottom.open #log_content {
+		opacity: 1;
+	}
+	#bar_bottom #log_content {
+		position: absolute;
+		top: 32px;
 		bottom: 0px;
+		overflow-x: hidden;
+		overflow-y: auto;
+		width: 398px;
+	}
+	#bar_bottom #log_content div {
+		width: 500%;
+	}
+	#bar_bottom #log_content div > span {
+		display: inline-block;
+		width: 0%;
+		overflow: hidden;
+		float: left;
+		height: 100px;
+		min-height: 100px;
+	}
+	#bar_bottom #log_content div > span + span {
+		border-left: 1px solid rgba(0,255,255,0.5);
+		margin-left: -2px;
+	}
+	#bar_bottom #log_content div > span.selected {
+		width: 21%;
+		height: auto;
 	}
 	
 	.frame {	
@@ -263,6 +282,20 @@
 			setTimeout(function() { load(progress+5); }, time);
 		document.getElementById("debug_load").disabled = "disabled";
 	};
+	var clsName;
+	openLog = function()
+	{
+		if(clsName)
+		{
+			document.getElementById("bar_bottom").className = clsName;
+			clsName = null;
+		}
+		else
+		{
+			clsName = document.getElementById("bar_bottom").className;
+			document.getElementById("bar_bottom").className += " open";
+		}
+	};
 
 </script>
 <script type="text/javascript">
@@ -289,14 +322,17 @@
 		}
 		document.getElementById("loader_clippath").setAttribute("d", d);
 		if(progress == 100)
-		{
-			initBar("nav");
-			initBar("log");
-		
-			document.getElementById("overlay").className += " invisible";
-			setTimeout(function() {document.getElementById("overlay").className += " hidden";}, 3000);
-		}
+			init();
 	};
+		
+	init = function()
+	{
+		initBar("nav");
+		initBar("log");
+	
+		document.getElementById("overlay").className += " invisible";
+		setTimeout(function() {document.getElementById("overlay").className += " hidden";}, 3000);
+	};	
 	
 	initBar = function(name)
 	{
@@ -328,28 +364,27 @@
 		}
 	};
 	
-	selectMenu = function(id)
+	selectContent = function(id, groupName, selectorName, contentName)
 	{
-		var children = document.getElementById("nav").children.length;
-		var nav;
-		var menu;
+		var children = document.getElementById(groupName).children.length;
+		var selector;
+		var content;
 		for(var i = 1; i <= children; i++)
 		{
-			nav = document.getElementById("nav_" + i);
-			menu = document.getElementById("menu_" + i);
+			selector = document.getElementById(selectorName + "_" + i);
+			content = document.getElementById(contentName + "_" + i);
 			if(i == id)
 			{
-				nav.className = "selected";
-				menu.className = "selected";
+				selector.className = "selected";
+				content.className = "selected";
 			}
 			else
 			{
-				nav.className = "";
-				menu.className = "";
+				selector.className = "";
+				content.className = "";
 			}
 		}
-	};
-	
+	};	
 
 </script>
 </head>
@@ -370,21 +405,43 @@
 		</div>
 	</div>
 	<div id="bar_bottom" class="centered_x atbottom">
-		<div id="log_title" class="frame">
+		<div id="log_title" class="frame log_bar">
 			Event-Log:
 		</div>
-		<div id="log" class="menubar centered_x">
-			<a id="log_1" href="javascript: selectLog(1);"><div class="frame">Chat (<span id="log_1_count">1</span>)</div></a>
-			<a id="log_2" href="javascript: selectLog(2);"><div class="frame">Match (<span id="log_2_count">7</span>)</div></a>
+		<div id="log" class="menubar centered_x log_bar">
+			<a id="log_1" href="javascript: selectContent(1, 'log', 'log', 'log_content');"><div class="frame">Pinboard (<span id="log_1_count">1</span>)</div></a>
+			<a id="log_2" href="javascript: selectContent(2, 'log', 'log', 'log_content');"><div class="frame">Match (<span id="log_2_count">7</span>)</div></a>
+			<!--
+			<a id="log_3" href="javascript: selectContent(3, 'log', 'log', 'log_content');"><div class="frame">Test (<span id="log_3_count">0</span>)</div></a>
+			-->
 		</div>
-		<div id="log_menu" class="frame">
+		<div id="log_menu" class="frame log_bar">
 			aaaa
 		</div>
-		<div id="log_content" class="frame">
-			<div id="log_1_content">
-				
-			</div>
-			<div id="log_2_content">
+		<div id="log_content" class="frame atbottom">
+			<div>
+			<span id="log_content_1" class="selected">
+				<ul>
+					<li><b>13:34:23 User1:</b> bla bla bla</li>
+					<li><b>13:35:44 User2:</b> selber</li>
+					<li><b>13:36:23 User1:</b> bla</li>
+					<li><b>13:37:23 User1:</b> bla</li>
+					<li><b>13:38:23 User1:</b> bla</li>
+					<li><b>13:39:23 User1:</b> bla</li>
+					<li><b>13:40:23 User1:</b> bla</li>
+					<li><b>13:41:23 User1:</b> bla</li>
+				</ul>
+			</span>
+			<span id="log_content_2">
+				<ul>
+					<li><b>12:14:23 INFO:</b> Colonization successful</li>
+					<li><b>14:25:44 WARN:</b> Incoming attack</li>
+					<li><b>14:30:23 WARN:</b> Colony lost</li>
+				</ul>
+			</span>
+			<span id="log_content_3">
+				foo bar
+			</span>
 			</div>
 		</div>
 	</div>
@@ -392,10 +449,10 @@
 		<div id="userbar" class="frame">
 		</div>
 		<div id="nav" class="menubar">
-			<a id="nav_1" href="javascript: selectMenu(1);" class="selected"><div class="frame">a</div></a>
-			<a id="nav_2" href="javascript: selectMenu(2);"><div class="frame">b</div></a>
-			<a id="nav_3" href="javascript: selectMenu(3);"><div class="frame">c</div></a>
-			<a id="nav_4" href="javascript: selectMenu(4);"><div class="frame">d</div></a>
+			<a id="nav_1" href="javascript: selectContent(1, 'nav', 'nav', 'menu');" class="selected"><div class="frame">a</div></a>
+			<a id="nav_2" href="javascript: selectContent(2, 'nav', 'nav', 'menu');"><div class="frame">b</div></a>
+			<a id="nav_3" href="javascript: selectContent(3, 'nav', 'nav', 'menu');"><div class="frame">c</div></a>
+			<a id="nav_4" href="javascript: selectContent(4, 'nav', 'nav', 'menu');"><div class="frame">d</div></a>
 			<!--<div class="frame"><a id="nav_2" href="">b</a></div>-->
 		</div>
 		<div id="menu_content" class="frame">
@@ -486,7 +543,8 @@
 	<!-- for debug only -->
 	<div id="debug">
 		debug...<br>
-		<input id="debug_load" type="button" value="load" onclick="load(0);" />
+		<input id="debug_load" type="button" value="load" onclick="load(0);" /><br/>
+		<input id="debug_open" type="button" value="open/close log" onclick="openLog();" /><br/>
 	</div>
 </body>
 </html>
