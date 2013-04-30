@@ -16,6 +16,7 @@ package com.syncnapsis.data.dao;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import com.syncnapsis.data.dao.hibernate.ParticipantDaoHibernate;
 import com.syncnapsis.data.model.Participant;
@@ -27,16 +28,16 @@ import com.syncnapsis.tests.annotations.TestCoversClasses;
 public class ParticipantDaoTest extends GenericDaoTestCase<Participant, Long>
 {
 	private EmpireDao		empireDao;
-	private MatchDao matchDao;
+	private MatchDao		matchDao;
 	private ParticipantDao	participantDao;
 
 	@Override
 	protected void setUp() throws Exception
 	{
 		super.setUp();
-		
+
 		Long existingId = participantDao.getAll().get(0).getId();
-		
+
 		Participant participant = new Participant();
 		participant.setDestructionDate(new Date(timeProvider.get()));
 		participant.setDestructionType(EnumDestructionType.destroyed);
@@ -46,16 +47,32 @@ public class ParticipantDaoTest extends GenericDaoTestCase<Participant, Long>
 		participant.setRank(1);
 		participant.setRivals(new ArrayList<Participant>());
 		// set individual properties here
-		
+
 		setEntity(participant);
-		
+
 		setEntityProperty("rank");
 		setEntityPropertyValue(2);
-		
+
 		setExistingEntityId(existingId);
 		setBadEntityId(-1L);
-		
+
 		setGenericDao(participantDao);
 	}
+
+	public void testGetByMatch() throws Exception
+	{
+		long match = 1L;
+		
+		List<Participant> result = participantDao.getByMatch(match);
+
+		assertNotNull(result);
+		assertEquals(2, result.size());
+
+		for(Participant p : result)
+		{
+			assertEquals(match, (long) p.getMatch().getId());
+		}
+	}
+
 	// insert individual Tests here
 }

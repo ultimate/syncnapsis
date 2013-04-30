@@ -14,6 +14,8 @@
  */
 package com.syncnapsis.data.dao.hibernate;
 
+import java.util.List;
+
 import com.syncnapsis.data.dao.ParticipantDao;
 import com.syncnapsis.data.model.Participant;
 
@@ -31,5 +33,16 @@ public class ParticipantDaoHibernate extends GenericDaoHibernate<Participant, Lo
 	public ParticipantDaoHibernate()
 	{
 		super(Participant.class);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see com.syncnapsis.data.dao.ParticipantDao#getByMatch(long)
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Participant> getByMatch(long matchId)
+	{
+		return createQuery("from Participant p where p.match.id=?", matchId).list();
 	}
 }
