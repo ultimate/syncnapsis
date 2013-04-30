@@ -14,6 +14,8 @@
  */
 package com.syncnapsis.data.dao.hibernate;
 
+import java.util.List;
+
 import com.syncnapsis.data.dao.SolarSystemInfrastructureDao;
 import com.syncnapsis.data.model.SolarSystemInfrastructure;
 
@@ -22,7 +24,8 @@ import com.syncnapsis.data.model.SolarSystemInfrastructure;
  * 
  * @author ultimate
  */
-public class SolarSystemInfrastructureDaoHibernate extends GenericDaoHibernate<SolarSystemInfrastructure, Long> implements SolarSystemInfrastructureDao
+public class SolarSystemInfrastructureDaoHibernate extends GenericDaoHibernate<SolarSystemInfrastructure, Long> implements
+		SolarSystemInfrastructureDao
 {
 	/**
 	 * Create a new DAO-Instance using the super-class GenericDaoHibernate
@@ -31,5 +34,16 @@ public class SolarSystemInfrastructureDaoHibernate extends GenericDaoHibernate<S
 	public SolarSystemInfrastructureDaoHibernate()
 	{
 		super(SolarSystemInfrastructure.class);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see com.syncnapsis.data.dao.SolarSystemInfrastructureDao#getByMatch(long)
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<SolarSystemInfrastructure> getByMatch(long matchId)
+	{
+		return createQuery("from SolarSystemInfrastructure i where i.match.id=?", matchId).list();
 	}
 }

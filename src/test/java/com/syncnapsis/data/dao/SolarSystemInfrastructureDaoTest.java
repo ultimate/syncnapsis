@@ -15,8 +15,10 @@
 package com.syncnapsis.data.dao;
 
 import java.util.Date;
+import java.util.List;
 
 import com.syncnapsis.data.dao.hibernate.SolarSystemInfrastructureDaoHibernate;
+import com.syncnapsis.data.model.Match;
 import com.syncnapsis.data.model.SolarSystemInfrastructure;
 import com.syncnapsis.tests.GenericDaoTestCase;
 import com.syncnapsis.tests.annotations.TestCoversClasses;
@@ -26,6 +28,7 @@ public class SolarSystemInfrastructureDaoTest extends GenericDaoTestCase<SolarSy
 {
 	private SolarSystemDao					solarSystemDao;
 	private SolarSystemInfrastructureDao	solarSystemInfrastructureDao;
+	private MatchDao						matchDao;
 
 	@Override
 	protected void setUp() throws Exception
@@ -49,6 +52,40 @@ public class SolarSystemInfrastructureDaoTest extends GenericDaoTestCase<SolarSy
 		setBadEntityId(-1L);
 
 		setGenericDao(solarSystemInfrastructureDao);
+	}
+
+	public void testGetByMatch() throws Exception
+	{
+		long matchId = 1L;
+		Match match = matchDao.get(matchId);
+		
+		List<SolarSystemInfrastructure> result = solarSystemInfrastructureDao.getByMatch(matchId);
+
+		assertNotNull(result);
+		assertTrue(result.size() > 0);
+
+		for(SolarSystemInfrastructure i : result)
+		{
+			assertEquals(matchId, (long) i.getMatch().getId());
+			assertEquals(match.getGalaxy().getId(), i.getSolarSystem().getGalaxy().getId());
+		}
+		
+		// normally there should be an infrastructure for every SolarSystem
+		// of the match's galaxy, but test data is not complete for this... 
+//		boolean found;
+//		for(SolarSystem s: match.getGalaxy().getSolarSystems())
+//		{
+//			found = false;
+//			for(SolarSystemInfrastructure i : result)
+//			{
+//				if(i.getSolarSystem().getId().equals(s.getId()))
+//				{
+//					found = true;
+//					break;
+//				}
+//			}
+//			assertTrue(found);
+//		}
 	}
 
 	// insert individual Tests here
