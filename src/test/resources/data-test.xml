@@ -39,6 +39,18 @@
 			<value description="sizeZ">200</value>
 			<value description="seed">0</value>
 		</row>
+		<row>
+			<value description="id">2</value>
+			<value description="version">1</value>
+			<value description="activated">1</value>
+			<value description="name">Empty</value>
+			<value description="fkCreator">0</value>
+			<value description="creationDate">2012-01-01</value>
+			<value description="sizeX">1</value>
+			<value description="sizeY">1</value>
+			<value description="sizeZ">1</value>
+			<value description="seed">0</value>
+		</row>
 	</table>
 
 	<table name="solarsystem">
@@ -440,6 +452,132 @@
 			<value description="startCondition">manually</value>
 			<value description="victoryCondition">extermination</value>
 		</row>
+		<row>
+			<value description="id">11</value>
+			<value description="version">1</value>
+			<value description="activated">1</value>
+			<value description="title">Cube planned</value>
+			<value description="fkGalaxy">1</value>
+			<value description="fkCreator">1</value>
+			<value description="creationDate">2012-01-01</value>
+			<null />
+			<null />
+			<value description="speed">1</value>
+			<value description="seed">0</value>
+			<value description="startSystemCount">1</value>
+			<value description="startSystemSelectionEnabled">1</value>
+			<value description="plannedJoinType">joiningEnabled</value>
+			<value description="startedJoinType">none</value>
+			<value description="participantsMax">10</value>
+			<value description="participantsMin">2</value>
+			<value description="startCondition">manually</value>
+			<value description="victoryCondition">extermination</value>
+		</row>
+		<row>
+			<value description="id">12</value>
+			<value description="version">1</value>
+			<value description="activated">1</value>
+			<value description="title">Cube started</value>
+			<value description="fkGalaxy">1</value>
+			<value description="fkCreator">2</value>
+			<value description="creationDate">2012-01-01</value>
+			<value description="startDate">2012-01-01</value>
+			<null />
+			<value description="speed">1</value>
+			<value description="seed">0</value>
+			<value description="startSystemCount">1</value>
+			<value description="startSystemSelectionEnabled">1</value>
+			<value description="plannedJoinType">joiningEnabled</value>
+			<value description="startedJoinType">none</value>
+			<value description="participantsMax">10</value>
+			<value description="participantsMin">2</value>
+			<value description="startCondition">manually</value>
+			<value description="victoryCondition">extermination</value>
+		</row>
+		<row>
+			<value description="id">13</value>
+			<value description="version">1</value>
+			<value description="activated">1</value>
+			<value description="title">Cube finished</value>
+			<value description="fkGalaxy">1</value>
+			<value description="fkCreator">1</value>
+			<value description="creationDate">2012-01-01</value>
+			<value description="startDate">2012-01-01</value>
+			<value description="finished">2012-02-01</value>
+			<value description="speed">1</value>
+			<value description="seed">0</value>
+			<value description="startSystemCount">1</value>
+			<value description="startSystemSelectionEnabled">1</value>
+			<value description="plannedJoinType">joiningEnabled</value>
+			<value description="startedJoinType">none</value>
+			<value description="participantsMax">10</value>
+			<value description="participantsMin">2</value>
+			<value description="startCondition">manually</value>
+			<value description="victoryCondition">extermination</value>
+		</row>
+		<row>
+			<value description="id">21</value>
+			<value description="version">1</value>
+			<value description="activated">1</value>
+			<value description="title">Empty planned</value>
+			<value description="fkGalaxy">2</value>
+			<value description="fkCreator">2</value>
+			<value description="creationDate">2012-01-01</value>
+			<null />
+			<null />
+			<value description="speed">1</value>
+			<value description="seed">0</value>
+			<value description="startSystemCount">1</value>
+			<value description="startSystemSelectionEnabled">1</value>
+			<value description="plannedJoinType">joiningEnabled</value>
+			<value description="startedJoinType">none</value>
+			<value description="participantsMax">10</value>
+			<value description="participantsMin">2</value>
+			<value description="startCondition">manually</value>
+			<value description="victoryCondition">extermination</value>
+		</row>
+		<row>
+			<value description="id">22</value>
+			<value description="version">1</value>
+			<value description="activated">1</value>
+			<value description="title">Empty started</value>
+			<value description="fkGalaxy">2</value>
+			<value description="fkCreator">1</value>
+			<value description="creationDate">2012-01-01</value>
+			<value description="startDate">2012-01-01</value>
+			<null />
+			<value description="speed">1</value>
+			<value description="seed">0</value>
+			<value description="startSystemCount">1</value>
+			<value description="startSystemSelectionEnabled">1</value>
+			<value description="plannedJoinType">joiningEnabled</value>
+			<value description="startedJoinType">none</value>
+			<value description="participantsMax">10</value>
+			<value description="participantsMin">2</value>
+			<value description="startCondition">manually</value>
+			<value description="victoryCondition">extermination</value>
+		</row>
+		<row>
+			<value description="id">23</value>
+			<value description="version">1</value>
+			<value description="activated">1</value>
+			<value description="title">Empty finished</value>
+			<value description="fkGalaxy">2</value>
+			<value description="fkCreator">2</value>
+			<value description="creationDate">2012-01-01</value>
+			<value description="startDate">2012-01-01</value>
+			<value description="finished">2012-02-01</value>
+			<value description="speed">1</value>
+			<value description="seed">0</value>
+			<value description="startSystemCount">1</value>
+			<value description="startSystemSelectionEnabled">1</value>
+			<value description="plannedJoinType">joiningEnabled</value>
+			<value description="startedJoinType">none</value>
+			<value description="participantsMax">10</value>
+			<value description="participantsMin">2</value>
+			<value description="startCondition">manually</value>
+			<value description="victoryCondition">extermination</value>
+		</row>
 	</table>
 
 	<table name="participant">
@@ -478,7 +616,7 @@
 			<value description="id">21</value>
 			<value description="version">1</value>
 			<value description="activated">1</value>
-			<value description="fkMatch">1</value>
+			<value description="fkMatch">2</value>
 			<value description="fkEmpire">1</value>
 			<value description="rank">1</value>
 			<value description="joinedDate">2012-01-01</value>
@@ -489,7 +627,7 @@
 			<value description="id">22</value>
 			<value description="version">1</value>
 			<value description="activated">1</value>
-			<value description="fkMatch">1</value>
+			<value description="fkMatch">2</value>
 			<value description="fkEmpire">2</value>
 			<value description="rank">2</value>
 			<value description="joinedDate">2012-01-01</value>

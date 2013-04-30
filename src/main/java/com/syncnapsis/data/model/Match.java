@@ -191,7 +191,7 @@ public class Match extends ActivatableInstance<Long>
 	 * @return startDate
 	 */
 	@Temporal(TemporalType.TIMESTAMP)
-	@Column(nullable = false)
+	@Column(nullable = true)
 	public Date getStartDate()
 	{
 		return startDate;
