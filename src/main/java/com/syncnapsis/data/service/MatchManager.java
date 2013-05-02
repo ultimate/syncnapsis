@@ -89,6 +89,17 @@ public interface MatchManager extends GenericNameManager<Match, Long>
 	public Match finishMatch(long matchId);
 
 	/**
+	 * Get the list of matches for a creator
+	 * 
+	 * @param creatorId - the id of the creator
+	 * @param planned - include planned matches?
+	 * @param active - include active matches?
+	 * @param finished - include finished matches?
+	 * @return the list of matches
+	 */
+	public List<Match> getByCreator(long creatorId, boolean planned, boolean active, boolean finished);
+	
+	/**
 	 * Get the list of matches for a player
 	 * 
 	 * @param playerId - the id of the player

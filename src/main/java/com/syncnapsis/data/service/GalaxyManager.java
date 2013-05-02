@@ -27,6 +27,14 @@ import com.syncnapsis.data.model.Galaxy;
 public interface GalaxyManager extends GenericNameManager<Galaxy, Long>
 {
 	/**
+	 * Get all galaxies created by the given player.
+	 * 
+	 * @param playerId - the creator
+	 * @return the list of Galaxy entities
+	 */
+	public List<Galaxy> getByCreator(long playerId);
+
+	/**
 	 * Create a Galaxy from the list describing the underlying SolarSystems. All properties set
 	 * within the the map-list will be used to create the SolarSystems, other properties not found
 	 * will be randomly initialized.
