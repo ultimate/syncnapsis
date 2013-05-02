@@ -15,6 +15,7 @@
 package com.syncnapsis.data.dao;
 
 import java.util.Date;
+import java.util.List;
 
 import com.syncnapsis.data.dao.hibernate.SolarSystemPopulationDaoHibernate;
 import com.syncnapsis.data.model.SolarSystemPopulation;
@@ -60,5 +61,34 @@ public class SolarSystemPopulationDaoTest extends GenericDaoTestCase<SolarSystem
 
 		setGenericDao(solarSystemPopulationDao);
 	}
+
+	public void testGetByParticipant() throws Exception
+	{
+		long participant = 11L;
+		List<SolarSystemPopulation> result = solarSystemPopulationDao.getByParticipant(participant);
+
+		assertNotNull(result);
+		assertTrue(result.size() > 0);
+
+		for(SolarSystemPopulation p : result)
+		{
+			assertEquals(participant, (long) p.getParticipant().getId());
+		}
+	}
+	
+	public void testGetByMatch() throws Exception
+	{
+		long match = 1L;
+		List<SolarSystemPopulation> result = solarSystemPopulationDao.getByMatch(match);
+		
+		assertNotNull(result);
+		assertTrue(result.size() > 0);
+		
+		for(SolarSystemPopulation p : result)
+		{
+			assertEquals(match, (long) p.getInfrastructure().getMatch().getId());
+		}
+	}
+	
 	// insert individual Tests here
 }

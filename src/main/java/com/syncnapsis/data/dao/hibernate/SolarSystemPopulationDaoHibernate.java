@@ -14,6 +14,8 @@
  */
 package com.syncnapsis.data.dao.hibernate;
 
+import java.util.List;
+
 import com.syncnapsis.data.dao.SolarSystemPopulationDao;
 import com.syncnapsis.data.model.SolarSystemPopulation;
 
@@ -31,5 +33,27 @@ public class SolarSystemPopulationDaoHibernate extends GenericDaoHibernate<Solar
 	public SolarSystemPopulationDaoHibernate()
 	{
 		super(SolarSystemPopulation.class);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see com.syncnapsis.data.dao.SolarSystemPopulationDao#getByParticipant(long)
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<SolarSystemPopulation> getByParticipant(long participantId)
+	{
+		return createQuery("from SolarSystemPopulation p where p.participant.id=?", participantId).list();
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see com.syncnapsis.data.dao.SolarSystemPopulationDao#getByMatch(long)
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<SolarSystemPopulation> getByMatch(long matchId)
+	{
+		return createQuery("from SolarSystemPopulation p where p.infrastructure.match.id=?", matchId).list();
 	}
 }
