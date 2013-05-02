@@ -24,7 +24,7 @@ import org.hibernate.Query;
 
 import com.syncnapsis.data.dao.GenericDao;
 import com.syncnapsis.data.model.base.ActivatableInstance;
-import com.syncnapsis.data.model.base.BaseObject;
+import com.syncnapsis.data.model.base.Identifiable;
 
 /**
  * Dao-Implementierung für Hibernate für den generischen Zugriff auf beliebige
@@ -32,7 +32,7 @@ import com.syncnapsis.data.model.base.BaseObject;
  * 
  * @author ultimate
  */
-public class GenericDaoHibernate<T extends BaseObject<PK>, PK extends Serializable> extends UniversalDaoHibernate implements GenericDao<T, PK>
+public class GenericDaoHibernate<T extends Identifiable<PK>, PK extends Serializable> extends UniversalDaoHibernate implements GenericDao<T, PK>
 {
 	/**
 	 * Die Modell-Klasse

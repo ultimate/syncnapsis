@@ -18,7 +18,7 @@ import java.io.Serializable;
 import java.util.List;
 
 import com.syncnapsis.data.dao.GenericNameDao;
-import com.syncnapsis.data.model.base.BaseObject;
+import com.syncnapsis.data.model.base.Identifiable;
 import com.syncnapsis.exceptions.ObjectNotFoundException;
 
 /**
@@ -27,7 +27,7 @@ import com.syncnapsis.exceptions.ObjectNotFoundException;
  * 
  * @author ultimate
  */
-public class GenericNameDaoHibernate<T extends BaseObject<PK>, PK extends Serializable> extends GenericDaoHibernate<T, PK> implements
+public class GenericNameDaoHibernate<T extends Identifiable<PK>, PK extends Serializable> extends GenericDaoHibernate<T, PK> implements
 		GenericNameDao<T, PK>
 {
 	/**

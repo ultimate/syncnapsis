@@ -17,7 +17,7 @@ package com.syncnapsis.data.dao;
 import java.io.Serializable;
 import java.util.List;
 
-import com.syncnapsis.data.model.base.BaseObject;
+import com.syncnapsis.data.model.base.Identifiable;
 
 /**
  * Generische DAO (Data Access Object), die die Standard CRUD-Operationen
@@ -28,7 +28,7 @@ import com.syncnapsis.data.model.base.BaseObject;
  * @param <PK> die Klasse des Primärschlüssels
  * @author ultimate
  */
-public interface GenericDao<T extends BaseObject<PK>, PK extends Serializable>
+public interface GenericDao<T extends Identifiable<PK>, PK extends Serializable>
 // extends UniversalDao
 {
 	/**

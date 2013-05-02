@@ -17,7 +17,7 @@ package com.syncnapsis.data.dao;
 import java.io.Serializable;
 import java.util.List;
 
-import com.syncnapsis.data.model.base.BaseObject;
+import com.syncnapsis.data.model.base.Identifiable;
 
 /**
  * Generische DAO (Data Access Object), die erweiterte Operationen nach Name zur Verfügung stellt.
@@ -26,7 +26,7 @@ import com.syncnapsis.data.model.base.BaseObject;
  * @param <PK> die Klasse des Primärschlüssels
  * @author ultimate
  */
-public interface GenericNameDao<T extends BaseObject<PK>, PK extends Serializable> extends GenericDao<T, PK>
+public interface GenericNameDao<T extends Identifiable<PK>, PK extends Serializable> extends GenericDao<T, PK>
 {
 	/**
 	 * Lade eine Liste aller Einträge, sortiert nach Name
