@@ -19,12 +19,13 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 
 import org.jmock.Expectations;
+
 import com.syncnapsis.data.dao.GenericDao;
-import com.syncnapsis.data.model.base.BaseObject;
+import com.syncnapsis.data.model.base.Identifiable;
 import com.syncnapsis.data.service.GenericManager;
 import com.syncnapsis.providers.TimeProvider;
 
-public abstract class GenericManagerImplTestCase<T extends BaseObject<PK>, PK extends Serializable, M extends GenericManager<T, PK>, D extends GenericDao<T, PK>>
+public abstract class GenericManagerImplTestCase<T extends Identifiable<PK>, PK extends Serializable, M extends GenericManager<T, PK>, D extends GenericDao<T, PK>>
 		extends BaseDaoTestCase
 {
 	protected T						entity;

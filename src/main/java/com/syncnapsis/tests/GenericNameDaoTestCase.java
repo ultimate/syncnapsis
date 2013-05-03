@@ -18,9 +18,9 @@ import java.io.Serializable;
 import java.util.List;
 
 import com.syncnapsis.data.dao.GenericNameDao;
-import com.syncnapsis.data.model.base.BaseObject;
+import com.syncnapsis.data.model.base.Identifiable;
 
-public abstract class GenericNameDaoTestCase<T extends BaseObject<PK>, PK extends Serializable> extends GenericDaoTestCase<T, PK>
+public abstract class GenericNameDaoTestCase<T extends Identifiable<PK>, PK extends Serializable> extends GenericDaoTestCase<T, PK>
 {
 	protected GenericNameDao<T, PK> genericNameDao;
 	protected String existingEntityName;

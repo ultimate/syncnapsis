@@ -20,12 +20,12 @@ import java.util.ArrayList;
 import org.jmock.Expectations;
 
 import com.syncnapsis.data.dao.GenericNameDao;
-import com.syncnapsis.data.model.base.BaseObject;
+import com.syncnapsis.data.model.base.Identifiable;
 import com.syncnapsis.data.service.GenericNameManager;
 import com.syncnapsis.data.service.impl.GenericNameManagerImpl;
 import com.syncnapsis.security.Validator;
 
-public abstract class GenericNameManagerImplTestCase<T extends BaseObject<PK>, PK extends Serializable, M extends GenericNameManager<T, PK>, D extends GenericNameDao<T, PK>>
+public abstract class GenericNameManagerImplTestCase<T extends Identifiable<PK>, PK extends Serializable, M extends GenericNameManager<T, PK>, D extends GenericNameDao<T, PK>>
 		extends GenericManagerImplTestCase<T, PK, M, D>
 {
 	protected void setUp() throws Exception
