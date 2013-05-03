@@ -16,9 +16,9 @@ package ${package}.data.dao;
 
 import ${package}.data.dao.hibernate.${model}DaoHibernate;
 import ${package}.data.model.${model};
-import ${package}.tests.GenericDaoTestCase;
-import ${package}.tests.GenericNameDaoTestCase;
-import ${package}.tests.annotations.TestCoversClasses;
+import com.syncnapsis.tests.GenericDaoTestCase;
+import com.syncnapsis.tests.GenericNameDaoTestCase;
+import com.syncnapsis.tests.annotations.TestCoversClasses;
 
 @TestCoversClasses({${model}Dao.class, ${model}DaoHibernate.class})
 public class ${model}DaoTest extends GenericNameDaoTestCase<${model}, ${pkType}>

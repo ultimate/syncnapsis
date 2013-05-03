@@ -17,8 +17,8 @@ package ${package}.data.service.impl;
 import ${package}.data.dao.${model}Dao;
 import ${package}.data.model.${model};
 import ${package}.data.service.${model}Manager;
-import ${package}.tests.GenericNameManagerImplTestCase;
-import ${package}.tests.annotations.TestCoversClasses;
+import com.syncnapsis.tests.GenericNameManagerImplTestCase;
+import com.syncnapsis.tests.annotations.TestCoversClasses;
 
 @TestCoversClasses( { ${model}Manager.class, ${model}ManagerImpl.class })
 public class ${model}ManagerImplTest extends GenericNameManagerImplTestCase<${model}, ${pkType}, ${model}Manager, ${model}Dao>
