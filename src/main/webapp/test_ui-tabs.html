@@ -19,6 +19,9 @@
 		border: 1px solid rgba(0,255,255,0.8);
 		background: rgba(0,255,255,0.3);
 	}	
+	a {	
+		color: rgba(255,255,255,0.9);
+	}
 		
 	#debug {
 		position: absolute;
@@ -72,6 +75,10 @@
 		width: 0%;
 		overflow-x: hidden;
 		overflow-y: hidden;
+		padding-right: 0px;
+		padding-left: 0px;
+		padding-top: 5px;
+		padding-bottom: 5px;
 		float: left;
 		height: 200px;
 		min-height: 200px;
@@ -85,6 +92,8 @@
 		/*height: auto;
 		overflow-x: hidden;
 		overflow-y: auto;*/
+		padding-right: 5px;
+		padding-left: 5px;
 	}
 	
 	.tabbar_vertical {
@@ -217,11 +226,11 @@
 	// debug-js
 	init = function()
 	{
-		initTabs("tabbarh_2", MODE_HORIZONTAL, "tabcontainerh");
+		initTabs("tabbarh_2", MODE_HORIZONTAL, "tabcontainerh", MODE_HORIZONTAL);
 		initTabs("tabbarh_3", MODE_HORIZONTAL, "tabcontainerh");
 		initTabs("tabbarh_4", MODE_HORIZONTAL, "tabcontainerh");
 		initTabs("tabbarh_5", MODE_HORIZONTAL, "tabcontainerh");
-		initTabs("tabbarv_2", MODE_VERTICAL, "tabcontainerv");
+		initTabs("tabbarv_2", MODE_VERTICAL, "tabcontainerv", MODE_VERTICAL);
 		initTabs("tabbarv_3", MODE_VERTICAL, "tabcontainerv");
 		initTabs("tabbarv_4", MODE_VERTICAL, "tabcontainerv");
 		initTabs("tabbarv_5", MODE_VERTICAL, "tabcontainerv");
@@ -234,25 +243,55 @@
 	var MODE_HORIZONTAL = 1;
 	var MODE_VERTICAL = 2;
 	
-	initTabs = function(barId, mode, containerId)
+	initTabs = function(barId, barMode, containerId, containerMode)
 	{
 		var bar = document.getElementById(barId);
 		var container = document.getElementById(containerId);
 		var size;
 		var sizeParam;
-		if(mode == MODE_HORIZONTAL)
+		if(barMode == MODE_HORIZONTAL)
 		{
 			size = bar.offsetWidth;
 			sizeParam = "width";
 			bar.classList.add("tabbar_horizontal");
-			container.classList.add("tabcontainer_horizontal");
 		}
-		else
+		else if(barMode == MODE_VERTICAL)
 		{
 			size = bar.offsetHeight;
 			sizeParam = "height";
 			bar.classList.add("tabbar_vertical");
+		}
+		if(containerMode == MODE_HORIZONTAL)
+		{
+			container.classList.add("tabcontainer_horizontal");
+			var containerChildren = container.children[0].children;
+			var childrenCount = containerChildren.length;
+			var span;
+			for(var i = 0; i < childrenCount; i++)
+			{
+				span = document.createElement("span");
+				// always remove first child (since new elements are added at the end)
+				span.appendChild(containerChildren[0]);
+				if(i == 0)
+					span.classList.add("selected");
+				container.children[0].appendChild(span);
+			}
+		}
+		else if(containerMode == MODE_VERTICAL)
+		{
 			container.classList.add("tabcontainer_vertical");
+			var containerChildren = container.children[0].children;
+			var childrenCount = containerChildren.length;
+			var span;
+			for(var i = 0; i < childrenCount; i++)
+			{
+				span = document.createElement("div");
+				// always remove first child (since new elements are added at the end)
+				span.appendChild(containerChildren[0]);
+				if(i == 0)
+					span.classList.add("selected");
+				container.children[0].appendChild(span);
+			}
 		}
 		var children = bar.children;
 		var childrenCount = children.length;
@@ -264,7 +303,11 @@
 		
 		for(var i = 0; i < childrenCount; i++)
 		{
-			children[i].href = "javascript: selectTab('" + barId + "', '" + containerId + "', " + i + ");";
+			children[i].href="#"; // add this if you want a "hand" cursor instead of an "arrow"
+			children[i].onclick = function(i)
+			{
+				return function() {selectTab(barId, containerId, i)};
+			}(i);
 			if(gap == 0)
 				children[i].style[sizeParam] = s0 + "px";
 			else
@@ -276,7 +319,8 @@
 					children[i].style[sizeParam] = (s0+1) + "px";	
 				else
 					children[i].style[sizeParam] = (s0) + "px";		
-			}
+			}			
+			children[i].style.lineHeight = children[i].offsetHeight + "px";
 			//console.log("width set child #" + i + ": " + children[i].style[sizeParam]);	
 		}
 	};
@@ -350,37 +394,37 @@
 	</div>
 	<div id="tabcontainerh" class="frame">
 		<div>
-			<span class="selected">
+			<span>
 				foo<br>bar<br>foo<br>bar<br>foo<br>bar<br>foo<br>bar<br>
 			</span>
-			<span class="">
+			<p>
 				This is menu #2 with a very long text that should automatically wrap to fill this box.<br>
 				As you can see the surrounding container will be automatically resized to fit best for the content.
-			</span>
-			<span class="">
+			</p>
+			<b>
 				blub
-			</span>
-			<span class="">
+			</b>
+			<div>
 				Let's stretch the content to max ;-)<br>
 				A lot of options...
 				<ul><li>1</li><li>2</li><li>3</li><li>4</li><li>5</li><li>6</li><li>7</li><li>8</li><li>9</li><li>10</li>
 				<li>11</li><li>12</li><li>13</li><li>14</li><li>15</li><li>16</li><li>17</li><li>18</li><li>19</li><li>20</li></ul>
-			</span>
+			</div>
 		</div>
 	</div>
 	<div id="tabcontainerv" class="frame">
 		<div>
-			<div class="selected">
+			<span>
 				foo<br>bar<br>foo<br>bar<br>foo<br>bar<br>foo<br>bar<br>
-			</div>
-			<div class="">
+			</span>
+			<p>
 				This is menu #2 with a very long text that should automatically wrap to fill this box.<br>
 				As you can see the surrounding container will be automatically resized to fit best for the content.
-			</div>
-			<div class="">
+			</p>
+			<b>
 				blub
-			</div>
-			<div class="">
+			</b>
+			<div>
 				Let's stretch the content to max ;-)<br>
 				A lot of options...
 				<ul><li>1</li><li>2</li><li>3</li><li>4</li><li>5</li><li>6</li><li>7</li><li>8</li><li>9</li><li>10</li>
