@@ -27,7 +27,9 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TreeMap;
 
-import com.syncnapsis.data.model.base.BaseObject;
+import javax.persistence.Entity;
+
+import com.syncnapsis.data.model.base.Identifiable;
 import com.syncnapsis.utils.FileUtil;
 import com.syncnapsis.utils.ReflectionsUtil;
 
@@ -129,7 +131,7 @@ public abstract class CodeGenerator
 
 		System.out.println("loading models...");
 		Map<String, String> models = findModels(mainDir);
-		if(templates.size() == 0)
+		if(models.size() == 0)
 		{
 			System.out.println("  --> no models found!");
 			return 0;
@@ -185,6 +187,7 @@ public abstract class CodeGenerator
 		List<File> files = FileUtil.listFilesIncludingSubfoldersAsList(directory);
 		for(File file : files)
 		{
+			System.out.println(file.getAbsolutePath());
 			if(file.isDirectory())
 				continue;
 			if(file.getName().endsWith(EXTENSION_JAVA))
@@ -198,20 +201,20 @@ public abstract class CodeGenerator
 				try
 				{
 					Class<?> cls = Class.forName(clss);
-					if(BaseObject.class.isAssignableFrom(cls))
+					if(cls.getAnnotation(Entity.class) != null && Identifiable.class.isAssignableFrom(cls))
 					{
 						models.put(clss, load(file));
-						// System.out.println("Model loaded: '" + clss + "'");
+						 System.out.println("Model loaded: '" + clss + "'");
 					}
 				}
 				catch(ClassNotFoundException e)
 				{
-					// System.out.println("Class '" + clss +
-					// "' not found on classpath -> ignoring");
+					 System.out.println("Class '" + clss +
+					 "' not found on classpath -> ignoring");
 				}
 				catch(IOException e)
 				{
-					// System.out.println("Could not load model file for '" + clss + "'");
+					 System.out.println("Could not load model file for '" + clss + "'");
 				}
 			}
 		}
@@ -284,7 +287,7 @@ public abstract class CodeGenerator
 		try
 		{
 			Class<?> cls = Class.forName(modelName);
-			pkType = ((Class<?>) ReflectionsUtil.getActualTypeArguments(cls, BaseObject.class)[0]).getSimpleName();
+			pkType = ((Class<?>) ReflectionsUtil.getActualTypeArguments(cls, Identifiable.class)[0]).getSimpleName();
 		}
 		catch(ClassNotFoundException e)
 		{
