@@ -17,7 +17,7 @@ package com.syncnapsis.data.service;
 import java.io.Serializable;
 import java.util.List;
 
-import com.syncnapsis.data.model.base.BaseObject;
+import com.syncnapsis.data.model.base.Identifiable;
 
 /**
  * Generic Manager, offering extended functionality for named entities.
@@ -26,7 +26,7 @@ import com.syncnapsis.data.model.base.BaseObject;
  * @param <PK> the primary key Class
  * @author ultimate
  */
-public interface GenericNameManager<T extends BaseObject<PK>, PK extends Serializable> extends GenericManager<T, PK>
+public interface GenericNameManager<T extends Identifiable<PK>, PK extends Serializable> extends GenericManager<T, PK>
 {
 	/**
 	 * Load a list of all entities ordered by name.<br>

@@ -20,7 +20,7 @@ import java.util.List;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.syncnapsis.data.dao.GenericNameDao;
-import com.syncnapsis.data.model.base.BaseObject;
+import com.syncnapsis.data.model.base.Identifiable;
 import com.syncnapsis.data.service.GenericNameManager;
 import com.syncnapsis.security.Validator;
 
@@ -31,7 +31,7 @@ import com.syncnapsis.security.Validator;
  * @author ultimate
  */
 @Transactional
-public class GenericNameManagerImpl<T extends BaseObject<PK>, PK extends Serializable> extends GenericManagerImpl<T, PK> implements
+public class GenericNameManagerImpl<T extends Identifiable<PK>, PK extends Serializable> extends GenericManagerImpl<T, PK> implements
 		GenericNameManager<T, PK>
 {
 	/**

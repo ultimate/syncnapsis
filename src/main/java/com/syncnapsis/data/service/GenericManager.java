@@ -17,7 +17,7 @@ package com.syncnapsis.data.service;
 import java.io.Serializable;
 import java.util.List;
 
-import com.syncnapsis.data.model.base.BaseObject;
+import com.syncnapsis.data.model.base.Identifiable;
 
 /**
  * Generischer Manager, der die Standard CRUD-Operationen (Create, Retrieve,
@@ -27,7 +27,7 @@ import com.syncnapsis.data.model.base.BaseObject;
  * @param <PK> die Klasse des Primärschlüssels
  * @author ultimate
  */
-public interface GenericManager<T extends BaseObject<PK>, PK extends Serializable>
+public interface GenericManager<T extends Identifiable<PK>, PK extends Serializable>
 {
 	/**
 	 * Generische Methode um alle Objekte eines Typs zu laden (nur aktivierte).
