@@ -1,38 +1,56 @@
 package com.syncnapsis;
 
+import java.util.Random;
+
 public class TestSomething
 {
 	public static void main(String[] args)
 	{
-		int xMin = -2;
-		int xMax = 5;
-		int yMin = -4;
-		int yMax = 10;
-		int zMin = -6;
-		int zMax = 15;
-
-		int i;
-		int count = 0;
-		int x2, y2, z2;
-		for(int x = xMin; x <= xMax; x++)
-		{
-			for(int y = yMin; y <= yMax; y++)
-			{
-				for(int z = zMin; z <= zMax; z++)
-				{
-					i = ((x - xMin) * (yMax - yMin + 1) + (y - yMin)) * (zMax - zMin + 1) + (z - zMin);
-					z2 = i % (zMax - zMin + 1) + zMin;
-					y2 = (i - (z2 - zMin)) / (zMax - zMin + 1) % (yMax - yMin + 1) + yMin;
-					x2 = (((i - (z2 - zMin)) / (zMax - zMin + 1)) - (y2 - yMin)) / (yMax - yMin + 1) + xMin;
-					System.out.println("x=" + x + " y=" + y + " z=" + z + " -- i=" + i + " vs. " + count + " -- x2=" + x2 + " y2=" + y2 + " z2=" + z2);
-					if(x != x2)	return;
-					if(y != y2)	return;
-					if(z != z2)	return;
-					if(i != count)	return;
-					count++;
-				}
-			}
-		}
-		System.out.println("done!");
+		Random r = new Random();
+		long seed1 = System.currentTimeMillis();
+		Random rS11 = new Random(seed1);
+		Random rS12 = new Random(seed1); 
+		long seed2 = "syncnapsis".hashCode();
+		Random rS21 = new Random (seed2);
+		Random rS22 = new Random (seed2);
+		Random rS23 = new Random (seed2);
+		Random rS24 = new Random (seed2);
+		
+		print1(r);
+		print1(rS11);
+		print1(rS12);
+		print1(rS21);
+		print1(rS22);
+		print2(rS23);
+		print3(rS24);
 	}
+	
+	private static void print1(Random r)
+	{
+		System.out.print(r.nextInt() + "   ");
+		System.out.print(r.nextDouble() + "   ");
+		System.out.print(r.nextFloat() + "   ");
+		System.out.print(r.nextGaussian() + "   ");
+		System.out.print(r.nextInt() + "   ");
+		System.out.println("-----------");
+	}
+	private static void print2(Random r)
+	{
+		System.out.print(r.nextInt() + "   ");
+		System.out.print(r.nextLong() + "   ");
+		System.out.print(r.nextFloat() + "   ");
+		System.out.print(r.nextLong() + r.nextLong() + "   ");
+		System.out.print(r.nextInt() + "   ");
+		System.out.println("-----------");
+	}
+	private static void print3(Random r)
+	{
+		System.out.print(r.nextLong() + "   ");
+		System.out.print(r.nextInt() + "   ");
+		System.out.print(r.nextInt() + "   ");
+		System.out.print(r.nextLong() + r.nextLong() + "   ");
+		System.out.print(r.nextInt() + "   ");
+		System.out.println("-----------");
+	}
+	
 }
