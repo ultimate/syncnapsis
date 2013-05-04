@@ -16,6 +16,8 @@ package com.syncnapsis.tests;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 
 import junit.framework.TestCase;
@@ -43,11 +45,25 @@ public abstract class LoggerTestCase extends TestCase
 	/**
 	 * Logger-Instance
 	 */
-	protected Logger	logger			= LoggerFactory.getLogger(getClass());
+	protected Logger					logger		= LoggerFactory.getLogger(getClass());
 	/**
 	 * Mockery for creating mocks
 	 */
-	protected Mockery	mockContext		= new Mockery();
+	protected Mockery					mockContext	= new Mockery();
+	/**
+	 * A SimpleDateFormat usable for parsing dates held in a ThreadLocale for thread safety
+	 */
+	protected ThreadLocal<DateFormat>	dateFormat	= new ThreadLocal<DateFormat>() {
+														/*
+														 * (non-Javadoc)
+														 * @see java.lang.ThreadLocal#initialValue()
+														 */
+														@Override
+														protected DateFormat initialValue()
+														{
+															return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+														}
+													};
 
 	/**
 	 * Default Constructor.<br>

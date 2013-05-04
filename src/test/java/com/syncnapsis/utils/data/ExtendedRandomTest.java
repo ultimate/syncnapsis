@@ -23,48 +23,50 @@ import com.syncnapsis.tests.annotations.TestCoversClasses;
 import com.syncnapsis.tests.annotations.TestExcludesMethods;
 import com.syncnapsis.utils.TimeZoneUtil;
 
-@TestCoversClasses({ RandomData.class, DefaultData.class })
+@TestCoversClasses({ ExtendedRandom.class, DefaultData.class })
 @TestExcludesMethods("toRegExpString")
-public class RandomDataTest extends LoggerTestCase
+public class ExtendedRandomTest extends LoggerTestCase
 {
-	private static final int	BOOLEAN_CYCLES	= 100000;
-	private static final double	DELTA			= 0.01;
+	private static final int			BOOLEAN_CYCLES	= 100000;
+	private static final double			DELTA			= 0.01;
 
-	public void testRandomString() throws Exception
+	private static final ExtendedRandom	random			= new ExtendedRandom();
+
+	public void testNextString() throws Exception
 	{
 		String source = DefaultData.STRING_ASCII_LETTERS_LOWER + DefaultData.STRING_ASCII_LETTERS_UPPER;
 		String regexp = "[" + source + "]+";
 		String r;
 		for(int i = 0; i < 20; i++)
 		{
-			r = RandomData.randomString(10, source);
+			r = random.nextString(10, source);
 			assertTrue(r.matches(regexp));
 		}
 	}
 
-	public void testRandomDomain() throws Exception
+	public void testNextDomain() throws Exception
 	{
 		String regexp = DefaultData.REGEXP_DOMAIN;
 		String r;
 		for(int i = 0; i < 20; i++)
 		{
-			r = RandomData.randomDomain();
+			r = random.nextDomain();
 			assertTrue(r.matches(regexp));
 		}
 	}
 
-	public void testRandomEmail() throws Exception
+	public void testNextEmail() throws Exception
 	{
 		String regexp = DefaultData.REGEXP_EMAIL;
 		String r;
 		for(int i = 0; i < 20; i++)
 		{
-			r = RandomData.randomEmail(i + 20);
+			r = random.nextEmail(i + 20);
 			assertTrue(r.matches(regexp));
 		}
 	}
 
-	public void testRandomBoolean() throws Exception
+	public void testNextBoolean() throws Exception
 	{
 		int t = 0;
 		int f = 0;
@@ -72,7 +74,7 @@ public class RandomDataTest extends LoggerTestCase
 
 		for(int i = 0; i < BOOLEAN_CYCLES; i++)
 		{
-			b = RandomData.randomBoolean();
+			b = random.nextBoolean();
 			if(b)
 				t++;
 			else
@@ -87,7 +89,7 @@ public class RandomDataTest extends LoggerTestCase
 
 		for(int i = 0; i < BOOLEAN_CYCLES; i++)
 		{
-			b = RandomData.randomBoolean(3, 7);
+			b = random.nextBoolean(3, 7);
 			if(b)
 				t++;
 			else
@@ -98,7 +100,7 @@ public class RandomDataTest extends LoggerTestCase
 		assertEquals(0.7, f / (double) (t + f), DELTA);
 	}
 
-	public void testRandomInt() throws Exception
+	public void testNextInt() throws Exception
 	{
 		int min, max, r;
 
@@ -107,7 +109,7 @@ public class RandomDataTest extends LoggerTestCase
 		{
 			min = i - (int) (Math.random() * 20);
 			max = i + (int) (Math.random() * 20);
-			r = RandomData.randomInt(min, max);
+			r = random.nextInt(min, max);
 			assertTrue(r >= min);
 			assertTrue(r <= max);
 		}
@@ -116,22 +118,22 @@ public class RandomDataTest extends LoggerTestCase
 		{
 			max = i - (int) (Math.random() * 20);
 			min = i + (int) (Math.random() * 20);
-			r = RandomData.randomInt(min, max);
+			r = random.nextInt(min, max);
 			assertTrue(r >= max);
 			assertTrue(r <= min);
 		}
 
-		r = RandomData.randomInt(-1, -1);
+		r = random.nextInt(-1, -1);
 		assertEquals(-1, r);
 
-		r = RandomData.randomInt(0, 0);
+		r = random.nextInt(0, 0);
 		assertEquals(0, r);
 
-		r = RandomData.randomInt(1, 1);
+		r = random.nextInt(1, 1);
 		assertEquals(1, r);
 	}
 
-	public void testRandomLong() throws Exception
+	public void testNextLong() throws Exception
 	{
 		long min, max, r;
 
@@ -140,7 +142,7 @@ public class RandomDataTest extends LoggerTestCase
 		{
 			min = i * Integer.MAX_VALUE - (long) (Math.random() * 20);
 			max = i * Integer.MAX_VALUE + (long) (Math.random() * 20);
-			r = RandomData.randomLong(min, max);
+			r = random.nextLong(min, max);
 			assertTrue(r >= min);
 			assertTrue(r <= max);
 		}
@@ -149,36 +151,36 @@ public class RandomDataTest extends LoggerTestCase
 		{
 			max = i * Integer.MAX_VALUE - (long) (Math.random() * 20);
 			min = i * Integer.MAX_VALUE + (long) (Math.random() * 20);
-			r = RandomData.randomLong(min, max);
+			r = random.nextLong(min, max);
 			assertTrue(r >= max);
 			assertTrue(r <= min);
 		}
 
-		r = RandomData.randomLong(-1, -1);
+		r = random.nextLong(-1, -1);
 		assertEquals(-1, r);
 
-		r = RandomData.randomLong(0, 0);
+		r = random.nextLong(0, 0);
 		assertEquals(0, r);
 
-		r = RandomData.randomLong(1, 1);
+		r = random.nextLong(1, 1);
 		assertEquals(1, r);
 	}
 
-	public void testRandomDate() throws Exception
+	public void testNextDate() throws Exception
 	{
 		Date from, until;
 		Date r;
 		for(int i = 0; i < 100; i++)
 		{
-			from = new Date(RandomData.randomLong(0, System.currentTimeMillis() / 2));
-			until = new Date(RandomData.randomLong(System.currentTimeMillis() / 2, System.currentTimeMillis()));
-			r = RandomData.randomDate(from, until);
+			from = new Date(random.nextLong(0, System.currentTimeMillis() / 2));
+			until = new Date(random.nextLong(System.currentTimeMillis() / 2, System.currentTimeMillis()));
+			r = random.nextDate(from, until);
 			assertTrue(from.before(r));
 			assertTrue(until.after(r));
 		}
 	}
 
-	public void testRandomEnum() throws Exception
+	public void testNextEnum() throws Exception
 	{
 		int male = 0;
 		int female = 0;
@@ -191,7 +193,7 @@ public class RandomDataTest extends LoggerTestCase
 		EnumGender r;
 		for(int i = 0; i < total; i++)
 		{
-			r = RandomData.randomEnum(EnumGender.class);
+			r = random.nextEnum(EnumGender.class);
 			if(r == EnumGender.male)
 				male++;
 			else if(r == EnumGender.female)
@@ -215,13 +217,13 @@ public class RandomDataTest extends LoggerTestCase
 		assertEquals(prob, unknown / (double) total, DELTA);
 	}
 
-	public void testRandomTimeZoneId() throws Exception
+	public void testNextTimeZoneId() throws Exception
 	{
 		String r;
 		TimeZone t;
 		for(int i = 0; i < 100; i++)
 		{
-			r = RandomData.randomTimeZoneId();
+			r = random.nextTimeZoneId();
 			t = TimeZoneUtil.getTimeZone(r);
 			assertNotNull(t);
 		}
