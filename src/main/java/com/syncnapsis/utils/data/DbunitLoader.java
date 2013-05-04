@@ -37,6 +37,7 @@ import org.dbunit.dataset.xml.FlatDtdDataSet;
 import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
 import org.dbunit.dataset.xml.FlatXmlWriter;
 import org.dbunit.dataset.xml.XmlDataSet;
+import org.dbunit.dataset.xml.XmlDataSetWriter;
 import org.dbunit.operation.DatabaseOperation;
 
 /**
@@ -85,6 +86,7 @@ public class DbunitLoader
 	 * @param password - Password für die DB-Verbindung (kann mit username
 	 *            zusammen null sein)
 	 * @param file - die Eingabeatei für den Import
+	 * @param flat - use flat xml format?
 	 * @param excludeTableNames - eine optionale Liste der ausgeschlossenen
 	 *            Tabellennamen. Wenn sie leer ist werden alle Tabellen
 	 *            behandelt.
@@ -95,10 +97,10 @@ public class DbunitLoader
 	 * @throws IOException - wenn die Importdatei ungültig ist oder nicht
 	 *             gelesen werden kann
 	 */
-	public static void fullDatabaseImport(String driverClass, String jdbcConnection, String username, String password, File file,
+	public static void fullDatabaseImport(String driverClass, String jdbcConnection, String username, String password, File file, boolean flat,
 			String... excludeTableNames) throws ClassNotFoundException, SQLException, IOException, DatabaseUnitException
 	{
-		fullDatabaseImport(getConnection(driverClass, jdbcConnection, username, password), file, excludeTableNames);
+		fullDatabaseImport(getConnection(driverClass, jdbcConnection, username, password), file, flat, excludeTableNames);
 	}
 
 	/**
@@ -107,6 +109,7 @@ public class DbunitLoader
 	 * 
 	 * @param connection - eine IDatabaseConnection für die Verwendung in Dbunit
 	 * @param file - die Eingabeatei für den Import
+	 * @param flat - use flat xml format?
 	 * @param excludeTableNames - eine optionale Liste der ausgeschlossenen
 	 *            Tabellennamen. Wenn sie leer ist werden alle Tabellen
 	 *            behandelt.
@@ -116,7 +119,7 @@ public class DbunitLoader
 	 * @throws SQLException - wenn keine Verbindung zur DB hergestellt werden
 	 *             kann oder der Import schief läuft
 	 */
-	public static void fullDatabaseImport(IDatabaseConnection connection, File file, String... excludeTableNames) throws IOException,
+	public static void fullDatabaseImport(IDatabaseConnection connection, File file, boolean flat, String... excludeTableNames) throws IOException,
 			DatabaseUnitException, SQLException
 	{
 		BufferedInputStream bis = new BufferedInputStream(new FileInputStream(file));
@@ -126,9 +129,19 @@ public class DbunitLoader
 			excludeFilter = new ExcludeTableFilter(excludeTableNames);
 		else
 			excludeFilter = new ExcludeTableFilter();
-		FlatXmlDataSetBuilder builder = new FlatXmlDataSetBuilder();
-		builder.setColumnSensing(true);
-		IDataSet excludeDataset = new FilteredDataSet(excludeFilter, builder.build(bis));
+		
+		IDataSet set;
+		if(flat)
+		{
+			FlatXmlDataSetBuilder builder = new FlatXmlDataSetBuilder();
+			builder.setColumnSensing(true);
+			set = builder.build(bis);
+		}
+		else
+		{
+			set = new XmlDataSet(bis);
+		}
+		IDataSet excludeDataset = new FilteredDataSet(excludeFilter, set);
 		IDataSet dataSet = new FilteredDataSet(new DatabaseSequenceFilter(connection), excludeDataset);
 
 		bis.close();
@@ -146,6 +159,7 @@ public class DbunitLoader
 	 * @param password - Password für die DB-Verbindung (kann mit username
 	 *            zusammen null sein)
 	 * @param file - die Eingabeatei für den Import
+	 * @param flat - use flat xml format?
 	 * @param excludeTableNames - eine optionale Liste der ausgeschlossenen
 	 *            Tabellennamen. Wenn sie leer ist werden alle Tabellen
 	 *            behandelt.
@@ -154,11 +168,12 @@ public class DbunitLoader
 	 * @throws DatabaseUnitException - wenn ein Fehler beim Import auftritt
 	 * @throws SQLException - wenn keine Verbindung zur DB hergestellt werden
 	 *             kann oder der Import schief läuft
+	 * @throws ClassNotFoundException
 	 */
 	public static void cleanDatabase(String driverClass, String jdbcConnection, String username, String password, File file,
-			String... excludeTableNames) throws IOException, DatabaseUnitException, SQLException
+			String... excludeTableNames) throws IOException, DatabaseUnitException, SQLException, ClassNotFoundException
 	{
-
+		cleanDatabase(getConnection(driverClass, jdbcConnection, username, password), file, excludeTableNames);
 	}
 
 	/**
@@ -167,6 +182,7 @@ public class DbunitLoader
 	 * 
 	 * @param connection - eine IDatabaseConnection für die Verwendung in Dbunit
 	 * @param file - die Eingabeatei für den Import
+	 * @param flat - use flat xml format?
 	 * @param excludeTableNames - eine optionale Liste der ausgeschlossenen
 	 *            Tabellennamen. Wenn sie leer ist werden alle Tabellen
 	 *            behandelt.
@@ -205,6 +221,7 @@ public class DbunitLoader
 	 *            zusammen null sein)
 	 * @param file - die Ausgabedatei für den Export
 	 * @param docTypeSystemId - eine optionale Angabe einer DTD
+	 * @param flat - use flat xml format?
 	 * @param excludeTableNames - eine optionale Liste der ausgeschlossenen
 	 *            Tabellennamen. Wenn sie leer ist werden alle Tabellen
 	 *            behandelt.
@@ -217,9 +234,10 @@ public class DbunitLoader
 	 *             hergestellt werden kann
 	 */
 	public static void fullDatabaseExport(String driverClass, String jdbcConnection, String username, String password, File file,
-			String docTypeSystemId, String... excludeTableNames) throws ClassNotFoundException, SQLException, IOException, DatabaseUnitException
+			String docTypeSystemId, boolean flat, String... excludeTableNames) throws ClassNotFoundException, SQLException, IOException,
+			DatabaseUnitException
 	{
-		fullDatabaseExport(getConnection(driverClass, jdbcConnection, username, password), file, docTypeSystemId, excludeTableNames);
+		fullDatabaseExport(getConnection(driverClass, jdbcConnection, username, password), file, docTypeSystemId, flat, excludeTableNames);
 	}
 
 	/**
@@ -229,6 +247,7 @@ public class DbunitLoader
 	 * @param connection - eine IDatabaseConnection für die Verwendung in Dbunit
 	 * @param file - die Ausgabedatei für den Export
 	 * @param docTypeSystemId - eine optionale Angabe einer DTD
+	 * @param flat - use flat xml format?
 	 * @param excludeTableNames - eine optionale Liste der ausgeschlossenen
 	 *            Tabellennamen. Wenn sie leer ist werden alle Tabellen
 	 *            behandelt.
@@ -238,8 +257,8 @@ public class DbunitLoader
 	 * @throws IOException - wenn die Exportdatei ungültig ist oder nicht
 	 *             geschrieben werden kann
 	 */
-	public static void fullDatabaseExport(IDatabaseConnection connection, File file, String docTypeSystemId, String... excludeTableNames)
-			throws DataSetException, SQLException, IOException
+	public static void fullDatabaseExport(IDatabaseConnection connection, File file, String docTypeSystemId, boolean flat,
+			String... excludeTableNames) throws DataSetException, SQLException, IOException
 	{
 		BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(file));
 
@@ -251,18 +270,27 @@ public class DbunitLoader
 		IDataSet excludeDataset = new FilteredDataSet(excludeFilter, connection.createDataSet());
 		IDataSet dataset = new FilteredDataSet(new DatabaseSequenceFilter(connection), excludeDataset);
 
-		if(docTypeSystemId != null)
+		if(flat)
 		{
-			BufferedOutputStream dtdbos = new BufferedOutputStream(new FileOutputStream(file.getAbsoluteFile().getParent() + "\\" + docTypeSystemId));
-			FlatDtdDataSet.write(dataset, dtdbos);
-			dtdbos.flush();
-			dtdbos.close();
+			if(docTypeSystemId != null)
+			{
+				BufferedOutputStream dtdbos = new BufferedOutputStream(new FileOutputStream(file.getAbsoluteFile().getParent() + "\\" + docTypeSystemId));
+				FlatDtdDataSet.write(dataset, dtdbos);
+				dtdbos.flush();
+				dtdbos.close();
+			}
+			
+			FlatXmlWriter datasetWriter = new FlatXmlWriter(bos);
+			datasetWriter.setDocType(docTypeSystemId);
+			datasetWriter.setIncludeEmptyTable(true);
+			datasetWriter.write(dataset);
 		}
-
-		FlatXmlWriter datasetWriter = new FlatXmlWriter(bos);
-		datasetWriter.setDocType(docTypeSystemId);
-		datasetWriter.setIncludeEmptyTable(true);
-		datasetWriter.write(dataset);
+		else
+		{
+			XmlDataSetWriter datasetWriter = new XmlDataSetWriter(bos, null);
+			datasetWriter.setIncludeColumnComments(false);
+			datasetWriter.write(dataset);
+		}
 
 		bos.flush();
 		bos.close();
