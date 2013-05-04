@@ -166,7 +166,7 @@ public class ApplicationBaseDataGenerator extends DataGenerator implements Initi
 		String name;
 		for(int i = 0; i < amount; i++)
 		{
-			name = RandomData.randomString(RandomData.randomInt(3, 10), nameSource);
+			name = random.nextString(random.nextInt(3, 10), nameSource);
 
 			user = getOrCreateUser(name, ApplicationBaseConstants.ROLE_NORMAL_USER);
 			logger.debug("created user #" + i + ": " + user.getUsername() + " [" + user.getId() + "]");
@@ -197,7 +197,7 @@ public class ApplicationBaseDataGenerator extends DataGenerator implements Initi
 	public User createUser(String name, String rolename)
 	{
 		if(name == null)
-			name = RandomData.randomString(RandomData.randomInt(3, 10), DefaultData.STRING_ASCII_COMPLETE_NO_CONTROLCHARS);
+			name = random.nextString(random.nextInt(3, 10), DefaultData.STRING_ASCII_COMPLETE_NO_CONTROLCHARS);
 
 		if(rolename == null)
 			rolename = ApplicationBaseConstants.ROLE_NORMAL_USER;
@@ -206,12 +206,12 @@ public class ApplicationBaseDataGenerator extends DataGenerator implements Initi
 		user.setAccountStatus(EnumAccountStatus.active);
 		user.setAccountStatusExpireDate(null);
 		user.setActivated(true);
-		user.setBirthday(RandomData.randomDate(new Date(0), new Date(timeProvider.get())));
-		user.setCity(RandomData.randomString(RandomData.randomInt(3, 20), DefaultData.STRING_ASCII_COMPLETE_NO_CONTROLCHARS));
+		user.setBirthday(random.nextDate(new Date(0), new Date(timeProvider.get())));
+		user.setCity(random.nextString(random.nextInt(3, 20), DefaultData.STRING_ASCII_COMPLETE_NO_CONTROLCHARS));
 		user.setDateFormat(EnumDateFormat.getDefault());
 		user.setDeleteDate(null);
-		user.setDescription(RandomData.randomString(RandomData.randomInt(20, 2000), DefaultData.STRING_ASCII_COMPLETE_NO_CONTROLCHARS));
-		user.setEmail(RandomData.randomEmail(Model.LENGTH_EMAIL));
+		user.setDescription(random.nextString(random.nextInt(20, 2000), DefaultData.STRING_ASCII_COMPLETE_NO_CONTROLCHARS));
+		user.setEmail(random.nextEmail(Model.LENGTH_EMAIL));
 		user.setId(null);
 		user.setImageURL(null);
 		user.setLastActiveDate(new Date(timeProvider.get()));
@@ -222,33 +222,33 @@ public class ApplicationBaseDataGenerator extends DataGenerator implements Initi
 		user.setRegistrationDate(new Date(timeProvider.get() - 3600000L));
 		user.setRole(userRoleManager.getByName(rolename));
 		user.setRoleExpireDate(null);
-		user.setSessionTimeout(RandomData.randomInt(30, 120 * 60));
-		user.setGender(RandomData.randomEnum(EnumGender.class));
-		user.setShowEmail(RandomData.randomBoolean(1, 9));
-		user.setTimeZoneID(RandomData.randomTimeZoneId());
-		user.setTitle(RandomData.randomString(RandomData.randomInt(2, 20), DefaultData.STRING_ASCII_COMPLETE_NO_CONTROLCHARS));
+		user.setSessionTimeout(random.nextInt(30, 120 * 60));
+		user.setGender(random.nextEnum(EnumGender.class));
+		user.setShowEmail(random.nextBoolean(1, 9));
+		user.setTimeZoneID(random.nextTimeZoneId());
+		user.setTitle(random.nextString(random.nextInt(2, 20), DefaultData.STRING_ASCII_COMPLETE_NO_CONTROLCHARS));
 		user.setUserContacts1(new ArrayList<UserContact>());
 		user.setUserContacts2(new ArrayList<UserContact>());
 		user.setUsername(name);
-		user.setUsingAdvancedMenu(RandomData.randomBoolean(1, 9));
+		user.setUsingAdvancedMenu(random.nextBoolean(1, 9));
 		user.setUsingInfiniteSession(!name.startsWith("user1"));
-		user.setUsingTooltips(RandomData.randomBoolean(9, 1));
+		user.setUsingTooltips(random.nextBoolean(9, 1));
 		user.setVersion(null);
 
 		user = userManager.save(user);
 
 		MessengerContact messengerContact;
 
-		int prob = RandomData.randomInt(0, messengers.size());
+		int prob = random.nextInt(0, messengers.size());
 		for(Messenger messenger : messengers)
 		{
-			if(RandomData.randomBoolean(prob, messengers.size() - prob))
+			if(random.nextBoolean(prob, messengers.size() - prob))
 			{
 				messengerContact = new MessengerContact();
-				if(RandomData.randomBoolean(2, 8))
-					messengerContact.setAddress(RandomData.randomEmail(Model.LENGTH_EMAIL));
+				if(random.nextBoolean(2, 8))
+					messengerContact.setAddress(random.nextEmail(Model.LENGTH_EMAIL));
 				else
-					messengerContact.setAddress(RandomData.randomString(RandomData.randomInt(5, 20), DefaultData.STRING_EMAIL_COMPLETE_NO_DOT_NO_AT));
+					messengerContact.setAddress(random.nextString(random.nextInt(5, 20), DefaultData.STRING_EMAIL_COMPLETE_NO_DOT_NO_AT));
 				messengerContact.setUser(user);
 				messengerContact.setMessenger(messenger);
 				messengerContact = messengerContactManager.save(messengerContact);

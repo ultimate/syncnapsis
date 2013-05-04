@@ -22,7 +22,7 @@ import com.syncnapsis.data.service.ParameterManager;
 import com.syncnapsis.exceptions.DeserializationException;
 import com.syncnapsis.exceptions.SerializationException;
 import com.syncnapsis.utils.data.DefaultData;
-import com.syncnapsis.utils.data.RandomData;
+import com.syncnapsis.utils.data.ExtendedRandom;
 import com.syncnapsis.utils.serialization.Serializer;
 import com.syncnapsis.websockets.service.rpc.RPCCall;
 
@@ -51,6 +51,11 @@ public class ActionManagerImpl extends GenericNameManagerImpl<Action, Long> impl
 	 * The Serializer used to deserialize the stored RPC arguments
 	 */
 	protected Serializer<String>	serializer;
+
+	/**
+	 * The extended random number generator for creating codes 
+	 */
+	protected final ExtendedRandom	random		= new ExtendedRandom();
 
 	/**
 	 * Standard Constructor
@@ -181,10 +186,10 @@ public class ActionManagerImpl extends GenericNameManagerImpl<Action, Long> impl
 
 		do
 		{
-			code = RandomData.randomString(parameterManager.getInteger(ApplicationBaseConstants.PARAM_ACTION_CODE_LENGTH), CODE_SOURCE);
+			code = random.nextString(parameterManager.getInteger(ApplicationBaseConstants.PARAM_ACTION_CODE_LENGTH), CODE_SOURCE);
 			action = getByCode(code);
 		} while(action != null);
-		
+
 		return code;
 	}
 }
