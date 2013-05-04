@@ -16,24 +16,26 @@ package com.syncnapsis.data.model.base;
 
 import java.io.Serializable;
 
-import com.syncnapsis.security.annotations.Accessible;
-
 /**
  * Interface for identifiable Objects.<br>
- * Those Objects must provide an ID via getId() and setId(PK id).<br>
- * <br>
- * Usage examples:<br>
- * <ul>
- * <li>matching authority-Objects to values in {@link Accessible}-Annotations</li>
- * <li>super Interface for com.syncnapsis.BaseObject (in com.syncnapsis.data)</li>
- * </ul>
+ * Those Objects must provide an ID via getId() and setId(PK id).
  * 
  * @author ultimate
  * @param <PK> - the type of the id
  */
 public interface Identifiable<PK extends Serializable>
 {
+	/**
+	 * Get the id of this object
+	 * 
+	 * @return the id
+	 */
 	public PK getId();
 
+	/**
+	 * Set the id for this object
+	 * 
+	 * @param id - the id
+	 */
 	public void setId(PK id);
 }
