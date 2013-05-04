@@ -43,6 +43,11 @@ public abstract class DataGenerator implements InitializingBean
 
 	public static final boolean			flat	= true;
 
+	/**
+	 * The extended random number generator used to generate random values
+	 */
+	protected final ExtendedRandom		random	= new ExtendedRandom("syncnapsis".hashCode());
+
 	protected String					projectDirectory;
 	protected String[]					excludeTableList;
 
