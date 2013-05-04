@@ -95,7 +95,7 @@ public class GameBaseDataGenerator extends ApplicationBaseDataGenerator implemen
 		String name;
 		for(int i = 0; i < amount; i++)
 		{
-			name = RandomData.randomString(RandomData.randomInt(3, 10), nameSource);
+			name = random.nextString(random.nextInt(3, 10), nameSource);
 
 			player = getOrCreatePlayer(name, ApplicationBaseConstants.ROLE_NORMAL_USER, GameBaseConstants.ROLE_NORMAL_PLAYER);
 			logger.debug("created user #" + i + ": " + player.getUser().getUsername() + " [" + player.getUser().getId() + "]");
@@ -148,7 +148,7 @@ public class GameBaseDataGenerator extends ApplicationBaseDataGenerator implemen
 	{
 		Empire empire = new Empire();
 		empire.setActivated(true);
-		empire.setDescription(RandomData.randomString(RandomData.randomInt(20, 2000), DefaultData.STRING_ASCII_COMPLETE_NO_CONTROLCHARS));
+		empire.setDescription(random.nextString(random.nextInt(20, 2000), DefaultData.STRING_ASCII_COMPLETE_NO_CONTROLCHARS));
 		empire.setFullName("full_" + name);
 		empire.setId(null);
 		empire.setImageURL(null);
