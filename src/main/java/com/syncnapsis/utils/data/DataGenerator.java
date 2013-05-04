@@ -41,6 +41,8 @@ public abstract class DataGenerator implements InitializingBean
 {
 	protected transient final Logger	logger	= LoggerFactory.getLogger(getClass());
 
+	public static final boolean			flat	= true;
+
 	protected String					projectDirectory;
 	protected String[]					excludeTableList;
 
@@ -116,7 +118,7 @@ public abstract class DataGenerator implements InitializingBean
 
 			// Backup der zu verändernden Tabellen
 			logger.info("creating dbunit-database-backup...");
-			DbunitLoader.fullDatabaseExport(connection, tmp, docTypeSystemId, excludeTableList);
+			DbunitLoader.fullDatabaseExport(connection, tmp, docTypeSystemId, flat, excludeTableList);
 
 			// Leeren der zu verändernden Tabellen
 			logger.info("deleting database content...");
@@ -134,7 +136,7 @@ public abstract class DataGenerator implements InitializingBean
 
 				// Exportieren der veränderten Tabellen mit Dbunit
 				logger.info("exporting testdata...");
-				DbunitLoader.fullDatabaseExport(connection, dummy, docTypeSystemId, excludeTableList);
+				DbunitLoader.fullDatabaseExport(connection, dummy, docTypeSystemId, flat, excludeTableList);
 
 				// Leeren der zu verändernden Tabellen
 				logger.info("deleting database content...");
@@ -150,12 +152,12 @@ public abstract class DataGenerator implements InitializingBean
 
 				// Exportieren der veränderten Tabellen mit Dbunit
 				logger.info("exporting testdata...");
-				DbunitLoader.fullDatabaseExport(connection, generated, docTypeSystemId, excludeTableList);
+				DbunitLoader.fullDatabaseExport(connection, generated, docTypeSystemId, flat, excludeTableList);
 			}
 
 			// Wiederherstellung der veränderten Tabellen
 			logger.info("restoring dbunit-database-backup...");
-			DbunitLoader.fullDatabaseImport(connection, tmp, excludeTableList);
+			DbunitLoader.fullDatabaseImport(connection, tmp, flat, excludeTableList);
 		}
 		catch(IOException e)
 		{
