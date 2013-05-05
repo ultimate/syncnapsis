@@ -29,6 +29,8 @@
 	<bean id="menuItemDao" class="com.syncnapsis.data.dao.hibernate.MenuItemDaoHibernate" />
 	
 	<bean id="menuQuickLaunchItemDao" class="com.syncnapsis.data.dao.hibernate.MenuQuickLaunchItemDaoHibernate" />
+
+	<bean id="newsDao" class="com.syncnapsis.data.dao.hibernate.NewsDaoHibernate" />
 	
     <!-- =================================================================== -->
     <!-- Service					                                         -->
@@ -59,6 +61,11 @@
 		<constructor-arg ref="menuQuickLaunchItemDao" />
 		<constructor-arg ref="menuItemManager" />
 		<constructor-arg ref="userManager" />
+	</bean>
+
+	<bean id="newsManager" class="com.syncnapsis.data.service.impl.NewsManagerImpl">
+		<constructor-arg ref="newsDao" />
+		<constructor-arg ref="parameterManager" />
 	</bean>
 	
 </beans>
