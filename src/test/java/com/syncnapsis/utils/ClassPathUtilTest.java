@@ -26,7 +26,7 @@ public class ClassPathUtilTest extends LoggerTestCase
 	@TestCoversMethods("add*")
 	public void testAddURLToClassPath() throws Exception
 	{
-		String className = packageName + ".data.model.base.Model";
+		String className = packageName + ".utils.dev.CodeScanner";
 		Class<?> cls;
 		
 		try
@@ -44,7 +44,7 @@ public class ClassPathUtilTest extends LoggerTestCase
 		logger.debug("adding path to classpath");
 		
 		File workingDir = new File(".");
-		File f = new File(workingDir.getAbsoluteFile().getParentFile().getParentFile().getAbsolutePath() + "/syncnapsis-core-data/target/classes/");
+		File f = new File(workingDir.getAbsoluteFile().getParentFile().getParentFile().getParentFile().getAbsolutePath() + "/syncnapsis-dev/syncnapsis-dev-utils/target/classes/");
 		logger.debug(f.getAbsolutePath());
 		assertTrue(f.exists());
 		
