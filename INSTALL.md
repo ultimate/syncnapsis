@@ -34,3 +34,79 @@ F. jetty 8.1.9
 G. maven 2.2.1
 (or higher version within maven 2 - not maven 3!)
 -> http://maven.apache.org/download.cgi
+
+installing & configuring the tools
+==================================
+
+To run syncnapsis we need the java runtime environment and the jetty servlet container but if you want to build or use syncnapsis we need some more.
+The following steps will give you a short guide on how to install the required tools and configure your development environment.
+
+1. Install java
+Download and install the Java JDK (see A).
+Installation should be self explaning.
+
+2. Install git
+Download and install git for windows (see B) first.
+Whithin that installation you have the choice between "Explorer Integration" or not. I personally prefer tortoise git (see C) for explorer integration, so if you choose to deselect that option I recommend to install tortoise git afterwards.
+The rest of the installations should be self explaning. For me all the default selected settings (except "Explorer Integration" for git for windows) were satisfying...
+
+3. Install postgres
+Download and install postgreSQL database (see D).
+The installation should be self explaning as well... Be sure to remember the password you define for the super user "postgres" during installation.
+Before we proceed we have to create the database and the db-user used by syncnapsis during tests.
+3.1. start pgAdmin (you will find this installed with your postgreSQL database
+3.2. login to localhost with the super-user "postgres" and the password you defined during installation by double clicking the server "PostgreSQL 9.1 (localhost:5432)" on the left
+3.3. right click the role option in the tree view (don't know the English label since my postgres is installed in German) to create a new login-role (aka. user)
+- name that user "syncnapsis_test" with password "syncnapsis_test" (on second tab)
+3.4. right click the database option in the tree view (don't know the English label here, too) to create a new database
+- name that database "syncnapsis_test"
+- select "syncnapsis_test" as the owner
+- ensure encoding is set to UTF-8
+3.5. to browse the database double click the new item in the tree view: "syncnapsis_test"
+Generally it is the best option to create separate databases (and users) for tests and production since you do not want to overwrite the "real" database accidentially. So repeat the previous steps again for your individual user and database...
+
+4. Install eclipse
+Actually installing eclipse is simply done be donwloading and unpacking the archive to the location you want eclipse to be installed - that's it...
+
+5. Install jetty
+installing jetty is simple, since it is ready to use just by extracting the archive as well. But personally prefer to add a start script for instant use:
+- create a file called "start.bat" with the following content: "java -jar start.jar" (without quotation marks)
+Now we need to create the context file for syncnapsis or your project or otherwise it won't be loaded on jetty startup:
+To do this create a file named "syncnapsis.xml" in %jett_home%/contexts with the following content:
+	<?xml version="1.0"  encoding="ISO-8859-1"?>
+	<!DOCTYPE Configure PUBLIC "-//Jetty//Configure//EN" "http://www.eclipse.org/jetty/configure.dtd">
+	<Configure class="org.eclipse.jetty.webapp.WebAppContext">
+		<Set name="contextPath">/universe</Set>
+		<Set name="resourceBase">D:/info/syncnapsis/syncnapsis-universe/syncnapsis-universe-conquest/target/webapp</Set>
+		<Set name="copyWebDir">false</Set>
+	</Configure>
+Of course you have to modify the properties according to your requirements so here is the short explanation:
+- contextPath: the path the application will be available - in this example: http://localhost:8080/universe
+- resourceBase: the path to the assembled webapp in your project / syncnapsis project (syncnapsis is configured to create a webapp dir in the target folder of the specififc project) - of course you can use the hello-world project here as well
+- copyWebDir: configures jetty directly to access the files within the webapp assembly folder and not to copy the files into a directory within jetty (guarantees the application to be always up-to-date when developing)
+The name of the file is up to your choice and does not have any influence on the configuration.
+
+6. Install maven
+maven is installed by just extracting the archive, too. Generally maven is ready to start immediately but I personally prefer to do some configurations I want to explain shortly:
+Maven contains a repository holding all the libraries used by your project. Normally this repository is located in your profiles director at .m2/repository but since I like separating data from the OS I relocated this repository.
+- to change the path of your local repo you have to edit %maven_home%/conf/settings.xml. Within that file there should be a line containing the location of your repo which has to uncommented and modified to the desired location, e.g.
+	<localRepository>D:/info/repository</localRepository>
+
+7. Configure the environment variables
+Some of the tools we just installed require some environment variables to work properly as well as the build tools from syncnapsis will need some.
+To edit the environment variables navigate to (assuming you have Windows 7 or 8)
+- right-click on computer -> properties
+- select extended system settings (don't know the exact label, but it should be the last option on the upper left)
+- select the third tab "extended" (or something like that)
+- select "Environment Variables"
+- create all of the following variables in the lower "system variables" part (all paths below are examples and might have to be modified for your system)
+M2_HOME: 	D:\info\develop\apache-maven-2.2.1
+M2_REPO: 	D:\info\repository
+S_HOME:		D:\info\syncnapsis
+JAVA_HOME:	C:\Program Files\Java\jdk1.7.0
+DEV_PATH:	%M2_HOME%\bin;%S_HOME%\bin;%JAVA_HOME%\bin
+PATH:		append ;%DEV_PATH% to the existing value
+- verify the onfiguration by opening a console and type the following commands. If they are found (and some output other than "not found" is printed the environment is configured correctly.
+mvn 		-> maven is configured correctly
+java		-> java is configured correctly
+s_java		-> syncnapsis is configured correctly
