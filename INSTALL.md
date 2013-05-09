@@ -103,8 +103,9 @@ To edit the environment variables navigate to (assuming you have Windows 7 or 8)
 M2_HOME: 	D:\info\develop\apache-maven-2.2.1
 M2_REPO: 	D:\info\repository
 S_HOME:		D:\info\syncnapsis
+GIT_HOME:	C:\Program Files (x86)\Git
 JAVA_HOME:	C:\Program Files\Java\jdk1.7.0
-DEV_PATH:	%M2_HOME%\bin;%S_HOME%\bin;%JAVA_HOME%\bin
+DEV_PATH:	%M2_HOME%\bin;%S_HOME%\bin;%JAVA_HOME%\bin;%GIT_HOME%\bin
 PATH:		append ;%DEV_PATH% to the existing value
 - verify the onfiguration by opening a console and type the following commands. If they are found (and some output other than "not found" is printed the environment is configured correctly.
 mvn 		-> maven is configured correctly
@@ -147,7 +148,16 @@ Maven will create several ".project" and ".classpath" files and a ".settings" di
 - you can choose wether you want to import those group projects as well. They are not necessary for building or programming (they are just used for configuration and modularity)
 - for each project do: File -> Import -> Existing Projects into Workspace -> Next -> Browse to the project directory -> select the project -> Finish
 When you are finished there should be one project for each project directory you can see within the syncnapsis-directory (and subdirectories).
-If you just want to use/build some of the modules be sure to remember the dependencies
+If you just want to use/build some of the modules be sure to remember the dependencies and at least add all required projects to make them available as prerequisites.
+Finally you will notice all the projects are marked with a red exclamation mark notifying you something prevents the projects from being built because eclipse does not know "M2_REPO"...
+- select "Window" -> "Preferences" -> "Java" -> "Build Path" -> "Classpath Variables"
+- create a new variable named "M2_REPO" poiting to your maven repo (see above)
+- confirm with OK and let eclipse rebuild the whole workspace
 
-4. building syncnapsis
+4. additional eclipse configuration 
+The following configurations are optional, but if you want to participate in syncnapsis I kindly ask you to configure your workspace with the following settings to guarantee a uniform style of the code:
+- select "Window" -> "Preferences" -> "Java" -> "Code Style" -> "Formatter" -> "import" -> select "format-java.xml" from the syncnapsis-directory
+- select "Window" -> "Preferences" -> "Java Script" -> "Code Style" -> "Formatter" -> "import" -> select "format-js.xml" from the syncnapsis-directory
+
+5. building syncnapsis
 
