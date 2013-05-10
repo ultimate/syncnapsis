@@ -20,7 +20,7 @@
     <groupId>com.syncnapsis.syncnapsis-core</groupId>
     <artifactId>syncnapsis-core-data</artifactId>
     <packaging>jar</packaging>
-    <version>0.8.0</version>
+    <version>0.8.1</version>
 	<name>syncnapsis-core-data</name>
 	
 	<parent>
@@ -37,7 +37,7 @@
         <dependency>
             <groupId>com.syncnapsis.syncnapsis-core</groupId>
             <artifactId>syncnapsis-core-utils</artifactId>
-            <version>0.8.0</version>
+            <version>0.8.1</version>
         </dependency>
 		<!-- DATABASE - START -->
 		<dependency>
@@ -49,12 +49,11 @@
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-core</artifactId>
 			<version>${hibernate.version}</version>
-			<exclusions>
-				<exclusion>
-					<groupId>commons-collections</groupId>
-					<artifactId>commons-collections</artifactId>
-				</exclusion>
-			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>commons-dbcp</groupId>
+			<artifactId>commons-dbcp</artifactId>
+			<version>${commons.dbcp.version}</version>
 		</dependency>
 		<!-- DATABASE - END -->
     </dependencies>
@@ -65,5 +64,6 @@
     <properties>
     	<!-- Database-Dependencies -->
 		<hibernate.version>4.0.1.Final</hibernate.version> <!-- 19.01.2012 -->
+		<commons.dbcp.version>1.4</commons.dbcp.version> <!-- 19.01.2012 -->
 	</properties>
 </project>
