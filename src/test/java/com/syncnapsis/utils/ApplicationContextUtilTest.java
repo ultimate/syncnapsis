@@ -25,6 +25,7 @@ public class ApplicationContextUtilTest extends BaseSpringContextTestCase
 	{
 		// so wird verhindert, dass für dieses Object automatisch autowire angewandt wird
 		this.autowired = true;
+		initApplicationContext();
 	}
 	
 	public void testAutowire() throws Exception
