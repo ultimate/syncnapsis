@@ -11,8 +11,9 @@ Before we can acutally start with syncnapsis specific stuff we want to be well p
 The following list contains all the stuff you will have to download and since we do not necessarily wait for a download each time we process to the next step in this guide I included this so we can donwload all the stuff before we start and while we do the first steps.
 The versions posted here are those versions I worked with by 2013-05-06. Please forgive me if I might forget to update versions in future but newer versions should mostly work...
 
-A. Java JDK 6 or 7
+A. Java JDK 6
 (be sure to install the JDK - the JRE won't be enough)
+(currently some plugins used have issues with Java 7 so i recommend Java 6)
 -> http://www.oracle.com/technetwork/java/javase/downloads/index.html
 
 B. Git for Windows 1.8.1.2 (msysgit)
@@ -104,7 +105,7 @@ M2_HOME: 	D:\info\develop\apache-maven-2.2.1
 M2_REPO: 	D:\info\repository
 S_HOME:		D:\info\syncnapsis
 GIT_HOME:	C:\Program Files (x86)\Git
-JAVA_HOME:	C:\Program Files\Java\jdk1.7.0
+JAVA_HOME:	C:\Program Files\Java\jdk1.6.0_38
 DEV_PATH:	%M2_HOME%\bin;%S_HOME%\bin;%JAVA_HOME%\bin;%GIT_HOME%\bin
 PATH:		append ;%DEV_PATH% to the existing value
 - verify the onfiguration by opening a console and type the following commands. If they are found (and some output other than "not found" is printed the environment is configured correctly.
@@ -204,21 +205,22 @@ appendix
 
 script explanation:
 
-s_assemble.bat
-s_build.bat
-s_build_untested.bat
-s_clean.bat
-s_copyright.bat
-s_db.bat
-s_db_drop.bat
-s_db_prepare.bat
-s_db_sequence.bat
-s_eclipse.bat
-s_git_activatepwstore.bat
-s_git_checkoutmaster.bat
-s_git_initsubmodules.bat
-s_git_pullall.bat
-s_git_pushall.bat
-s_java.bat
-s_process_rb.bat
-s_version.bat
+s_assemble.bat - Use a syncnapsis tool to directly include all content of the required syncnapsis-libraries for a web-application into the web-applications assembly folder by copying them from the library projects if they are found as jars in the /lib directory. This way content is directly accessible within the webapp-directory and not within jars which might be required for static content like *.html, *.css, *.js  etc.
+s_build.bat - Execute the maven-command for building the project including tests (the list of tasks may depend on the projects configuration but will mostly include, resource-processing, compiling and webapp-assembling if necessary)
+s_build_untested.bat - Execute the maven-command for building the project excluding tests (the list of tasks may depend on the projects configuration but will mostly include, resource-processing, compiling and webapp-assembling if necessary)
+s_clean.bat - Execute the maven-command to delete the projects output folder /target. This may be required if dependencies change to prevent duplicate inclusion or simply to remove outdated components.
+s_copyright.bat - Use a syncnapsis tool to add coypright information from the templates defined in syncnapsis-dev-utils to every source file not containing copyright-info yet (*.java, *.js, *.xml, *.bat, ...)
+s_db.bat - Run s_db_drop, s_db_prepare and s_db_sequence (explanation below)
+s_db_drop.bat - Use a syncnapsis tool to drop all constraints, tables and sequences of the database specified by the jdbc.properties. (Currently only postgreSQL is supported.) This might be required, especially if tables are removed from the hibernate-configuration so the maven hibernate-plugin won't drop them.
+s_db_prepare.bat - Execute the maven-command to prepare the database by creating tables and filling them with test-data. It will create the initially required state for testing.
+s_db_sequence.bat - Use a syncnapsis tool to updated the hibernate sequence to the highest currently used ID. The hibernate sequence is used globally for all tables but can't yet be configured with a start-value so updating the sequence is required to avoid possible duplicate ID conflicts.
+s_eclipse.bat - Execute the maven-command to create the eclipse project files.
+s_git_activatepwstore.bat - Execute the git-command to active password-storage for a repository and all of it's submodules. This way password won't have to be provided on every push (or pull for private repos). Warn: Password will be stored unencrypted in .git-credentials
+s_git_checkoutmaster.bat - Execute the git-command to check-out / swith to the master branch which is required after submodule-initialization of the following command.
+s_git_initsubmodules.bat - Execute the git-command to initialize all submodules recursively.
+s_git_pullall.bat - Execute the git-command to pull the lastest revision from the remote repo for this project and all submodules.
+s_git_pushall.bat - Execute the git-command to push this project and all submodules to their remote repo.
+s_java.bat - Wrapper script for the java-command automatically including some syncnapsis-projects and their basic dependencies to the classpath.
+s_version.bat - Execute the maven-command to update the version for the current project including updating all dependant projects within the syncnapsis project structure.
+
+note: All maven commands are executed for the current project and all underlying child projects. So when executed at top level of syncnapsis all projects will be travered recursively.
