@@ -41,34 +41,34 @@ installing & configuring the tools
 To run syncnapsis we need the java runtime environment and the jetty servlet container but if you want to build or use syncnapsis we need some more.
 The following steps will give you a short guide on how to install the required tools and configure your development environment.
 
-1. Install java
+1.1. Install java
 Download and install the Java JDK (see A).
 Installation should be self explaning.
 
-2. Install git
+1.2. Install git
 Download and install git for windows (see B) first.
 Whithin that installation you have the choice between "Explorer Integration" or not. I personally prefer tortoise git (see C) for explorer integration, so if you choose to deselect that option I recommend to install tortoise git afterwards.
 The rest of the installations should be self explaning. For me all the default selected settings (except "Explorer Integration" for git for windows) were satisfying...
 
-3. Install postgres
+1.3. Install postgres
 Download and install postgreSQL database (see D).
 The installation should be self explaning as well... Be sure to remember the password you define for the super user "postgres" during installation.
 Before we proceed we have to create the database and the db-user used by syncnapsis during tests.
-3.1. start pgAdmin (you will find this installed with your postgreSQL database
-3.2. login to localhost with the super-user "postgres" and the password you defined during installation by double clicking the server "PostgreSQL 9.1 (localhost:5432)" on the left
-3.3. right click the role option in the tree view (don't know the English label since my postgres is installed in German) to create a new login-role (aka. user)
+1.3.1. start pgAdmin (you will find this installed with your postgreSQL database
+1.3.2. login to localhost with the super-user "postgres" and the password you defined during installation by double clicking the server "PostgreSQL 9.1 (localhost:5432)" on the left
+1.3.3. right click the role option in the tree view (don't know the English label since my postgres is installed in German) to create a new login-role (aka. user)
 - name that user "syncnapsis_test" with password "syncnapsis_test" (on second tab)
-3.4. right click the database option in the tree view (don't know the English label here, too) to create a new database
+1.3.4. right click the database option in the tree view (don't know the English label here, too) to create a new database
 - name that database "syncnapsis_test"
 - select "syncnapsis_test" as the owner
 - ensure encoding is set to UTF-8
-3.5. to browse the database double click the new item in the tree view: "syncnapsis_test"
+1.3.5. to browse the database double click the new item in the tree view: "syncnapsis_test"
 Generally it is the best option to create separate databases (and users) for tests and production since you do not want to overwrite the "real" database accidentially. So repeat the previous steps again for your individual user and database...
 
-4. Install eclipse
+1.4. Install eclipse
 Actually installing eclipse is simply done be donwloading and unpacking the archive to the location you want eclipse to be installed - that's it...
 
-5. Install jetty
+1.5. Install jetty
 installing jetty is simple, since it is ready to use just by extracting the archive as well. But personally prefer to add a start script for instant use:
 - create a file called "start.bat" with the following content: "java -jar start.jar" (without quotation marks)
 Now we need to create the context file for syncnapsis or your project or otherwise it won't be loaded on jetty startup:
@@ -86,13 +86,13 @@ Of course you have to modify the properties according to your requirements so he
 - copyWebDir: configures jetty directly to access the files within the webapp assembly folder and not to copy the files into a directory within jetty (guarantees the application to be always up-to-date when developing)
 The name of the file is up to your choice and does not have any influence on the configuration.
 
-6. Install maven
+1.6. Install maven
 maven is installed by just extracting the archive, too. Generally maven is ready to start immediately but I personally prefer to do some configurations I want to explain shortly:
 Maven contains a repository holding all the libraries used by your project. Normally this repository is located in your profiles director at .m2/repository but since I like separating data from the OS I relocated this repository.
 - to change the path of your local repo you have to edit %maven_home%/conf/settings.xml. Within that file there should be a line containing the location of your repo which has to uncommented and modified to the desired location, e.g.
 	<localRepository>D:/info/repository</localRepository>
 
-7. Configure the environment variables
+1.7. Configure the environment variables
 Some of the tools we just installed require some environment variables to work properly as well as the build tools from syncnapsis will need some.
 To edit the environment variables navigate to (assuming you have Windows 7 or 8)
 - right-click on computer -> properties
@@ -110,6 +110,7 @@ PATH:		append ;%DEV_PATH% to the existing value
 - verify the onfiguration by opening a console and type the following commands. If they are found (and some output other than "not found" is printed the environment is configured correctly.
 mvn 		-> maven is configured correctly
 java		-> java is configured correctly
+git			-> java is configured correctly
 s_java		-> syncnapsis is configured correctly
 
 installing syncnapsis
@@ -117,7 +118,7 @@ installing syncnapsis
 
 Well now that we got all the tools we can finally start installing and using syncnapsis. Using git we can simply clone the complete repository from github and using maven the build procedure is very easy as well.
 
-1. clone syncnapsis from github:
+2.1. clone syncnapsis from github:
 in the folder you want the syncnapsis-directory to be placed do the following:
 - right-click "Git clone" (using tortoise git explorer integration)
 - select URL: https://github.com/syncnapsis/syncnapsis.git
@@ -125,7 +126,7 @@ in the folder you want the syncnapsis-directory to be placed do the following:
 - click "OK"
 Now syncnapsis will be cloned (this may take a while...)
 
-2. init & pull all the submodules
+2.2. init & pull all the submodules
 Since syncnapsis is a modular project git requires you to init and pull all the submodules. I provided a script that will do that for you, so you don't have to do it manually for all the modules (which are quite a lot...). Additionally git does not automatically swith to the master branch which will be done in an extra command.
 - open a console and navigate to your syncnapsis-directory
 - execute "s_git_initsubmodules"
@@ -138,7 +139,7 @@ Now you should see the following modules at top level of syncnapsis:
 - syncnapsis-universe
 Wihtin all of these directories there should be multiple modules and each of those directories should not be empty but contain at least a the maven "pom.xml" and a "src"-folder. If this is the case, initialization was successful and we can start using syncnapsis :-)
 
-3. using syncnapsis in eclipse
+2.3. using syncnapsis in eclipse
 If you just want to build syncnapsis without modifying you can skip the following steps...
 To use the project within eclipse we need a project file to be generated by maven. As a shortcut I created a script for that, too:
 - in the console type "s_eclipse" within the syncnapsis-directory
@@ -154,19 +155,70 @@ Finally you will notice all the projects are marked with a red exclamation mark 
 - create a new variable named "M2_REPO" poiting to your maven repo (see above)
 - confirm with OK and let eclipse rebuild the whole workspace
 
-4. additional eclipse configuration 
+2.4. additional eclipse configuration 
 The following configurations are optional, but if you want to participate in syncnapsis I kindly ask you to configure your workspace with the following settings to guarantee a uniform style of the code:
 - select "Window" -> "Preferences" -> "Java" -> "Code Style" -> "Formatter" -> "import" -> select "format-java.xml" from the syncnapsis-directory
 - select "Window" -> "Preferences" -> "Java Script" -> "Code Style" -> "Formatter" -> "import" -> select "format-js.xml" from the syncnapsis-directory
 
-5. building syncnapsis (simple)
+2.5. building syncnapsis (simple)
 Assuming you did not make any changes to syncnapsis building is done using a single command:
 - just enter "s_build_untested" in the console in the syncnapsis-directory and all underlying projects will be build in dependency order and installed to your local repo
 
-6. building syncnapsis (advanced)
+2.6. building syncnapsis (advanced)
 The full build process (including tests, setting up the database, etc.) ist not yet fully automated but is quite good to handle using a couple of scripts
-- execute "s_db" inside one of the child projects (this is a fusion of the following three commands, see explanation below). Of course you can execute all the commands separately, too if you want full control.
--- executes "s_db_drop" inside one of the child projects (currently only works in projects containing a jdbc.properties like syncnapsis-core-application-base or syncnapsis-universe-conquest etc.)
--- executes "s_db_prepare" at top level of syncnapsis
--- executes "s_db_sequence" inside one of the child projects (reason see "s_db_drop")
+- note: doing the full build will require a simple build before the first time or otherwise configuration files are not present for the database generation
+- executes "s_db_drop" inside one of the child projects (currently only works in projects containing a jdbc.properties like syncnapsis-core-application-base or syncnapsis-universe-conquest etc.)
+- executes "s_db_prepare" at top level of syncnapsis
+- executes "s_db_sequence" inside one of the child projects (reason see "s_db_drop")
 - execute "s_build" at top level of syncnapsis
+
+2.7. running syncnapsis
+Now that we built syncnapsis we are able to run one of the web-applications contained in this project. Currently these are:
+- syncnapsis-examples-HelloWorld
+- syncnapsis-universe-conquest
+To run one of those we need a little more than the pure build as done above:
+- the syncnapsis web-application rely on several files contained the modules they depend on. Unfortunately not all of those are available when they are packed in jar-files (e.g. javascript, css, html files). So we need to copy them directly into the webapp directory of the web-application we would like to use.
+- This is done by using "s_assemble" within the desired project's directory. The script will copy all content contained in thoses syncnapsis-*.jar files that have been placed in the lib directory when assembling the webapp-directory during "s_build"
+Now we are ready to start...
+- navigate to your jetty installation
+- run jetty using the "start.bat" created earlier
+- wait until the SelectChannelConnector has been started
+- open "http://localhost:8080/yourctx" in a browser (where yourctx is the name of the context you defined in 1.5)
+
+how to proceed
+==============
+
+Now syncnapsis is running you have several options
+
+- have fun playing
+- have fun programming
+- have fun reconfiguring
+- have fun playing again
+
+I hope this short guide helped you to start quickly and did not contain too much errors ;-)
+
+best regard - ultimate
+
+appendix
+========
+
+script explanation:
+
+s_assemble.bat
+s_build.bat
+s_build_untested.bat
+s_clean.bat
+s_copyright.bat
+s_db.bat
+s_db_drop.bat
+s_db_prepare.bat
+s_db_sequence.bat
+s_eclipse.bat
+s_git_activatepwstore.bat
+s_git_checkoutmaster.bat
+s_git_initsubmodules.bat
+s_git_pullall.bat
+s_git_pushall.bat
+s_java.bat
+s_process_rb.bat
+s_version.bat
