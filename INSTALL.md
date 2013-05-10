@@ -159,5 +159,14 @@ The following configurations are optional, but if you want to participate in syn
 - select "Window" -> "Preferences" -> "Java" -> "Code Style" -> "Formatter" -> "import" -> select "format-java.xml" from the syncnapsis-directory
 - select "Window" -> "Preferences" -> "Java Script" -> "Code Style" -> "Formatter" -> "import" -> select "format-js.xml" from the syncnapsis-directory
 
-5. building syncnapsis
+5. building syncnapsis (simple)
+Assuming you did not make any changes to syncnapsis building is done using a single command:
+- just enter "s_build_untested" in the console in the syncnapsis-directory and all underlying projects will be build in dependency order and installed to your local repo
 
+6. building syncnapsis (advanced)
+The full build process (including tests, setting up the database, etc.) ist not yet fully automated but is quite good to handle using a couple of scripts
+- execute "s_db" inside one of the child projects (this is a fusion of the following three commands, see explanation below). Of course you can execute all the commands separately, too if you want full control.
+-- executes "s_db_drop" inside one of the child projects (currently only works in projects containing a jdbc.properties like syncnapsis-core-application-base or syncnapsis-universe-conquest etc.)
+-- executes "s_db_prepare" at top level of syncnapsis
+-- executes "s_db_sequence" inside one of the child projects (reason see "s_db_drop")
+- execute "s_build" at top level of syncnapsis
