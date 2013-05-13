@@ -15,6 +15,7 @@
 package com.syncnapsis.utils.data;
 
 import com.syncnapsis.data.model.help.Vector;
+import com.syncnapsis.utils.math.Array3D;
 
 /**
  * @author ultimate
@@ -45,8 +46,10 @@ public abstract class VectorGenerator<V extends Vector<N>, N extends Number> ext
 	 * The max value for z (inclusive)
 	 */
 	protected N	zMax;
-	
+
 	/**
+	 * Construct a new VectorGenerator with the given bounds
+	 * 
 	 * @param xMin - The min value for x (inclusive)
 	 * @param xMax - The max value for x (inclusive)
 	 * @param yMin - The min value for y (inclusive)
@@ -80,76 +83,91 @@ public abstract class VectorGenerator<V extends Vector<N>, N extends Number> ext
 		this.zMax = zMax;
 	}
 
-	public N getxMin()
+	public N getXMin()
 	{
 		return xMin;
 	}
 
-	public void setxMin(N xMin)
+	public void setXMin(N xMin)
 	{
 		this.xMin = xMin;
 	}
 
-	public N getxMax()
+	public N getXMax()
 	{
 		return xMax;
 	}
 
-	public void setxMax(N xMax)
+	public void setXMax(N xMax)
 	{
 		this.xMax = xMax;
 	}
 
-	public N getyMin()
+	public N getYMin()
 	{
 		return yMin;
 	}
 
-	public void setyMin(N yMin)
+	public void setYMin(N yMin)
 	{
 		this.yMin = yMin;
 	}
 
-	public N getyMax()
+	public N getYMax()
 	{
 		return yMax;
 	}
 
-	public void setyMax(N yMax)
+	public void setYMax(N yMax)
 	{
 		this.yMax = yMax;
 	}
 
-	public N getzMin()
+	public N getZMin()
 	{
 		return zMin;
 	}
 
-	public void setzMin(N zMin)
+	public void setZMin(N zMin)
 	{
 		this.zMin = zMin;
 	}
 
-	public N getzMax()
+	public N getZMax()
 	{
 		return zMax;
 	}
 
-	public void setzMax(N zMax)
+	public void setZMax(N zMax)
 	{
 		this.zMax = zMax;
 	}
 
 	public static class Integer extends VectorGenerator<Vector.Integer, java.lang.Integer>
 	{
+		/**
+		 * Construct a new VectorGenerator with the given bounds
+		 * 
+		 * @param xMin - The min value for x (inclusive)
+		 * @param xMax - The max value for x (inclusive)
+		 * @param yMin - The min value for y (inclusive)
+		 * @param yMax - The max value for y (inclusive)
+		 * @param zMin - The min value for z (inclusive)
+		 * @param zMax - The max value for z (inclusive)
+		 */
+		public Integer(int xMin, int xMax, int yMin, int yMax, int zMin, int zMax)
+		{
+			super(xMin, xMax, yMin, yMax, zMin, zMax);
+		}
+
 		/*
 		 * (non-Javadoc)
 		 * @see com.syncnapsis.utils.data.Generator#generate(java.lang.Object[])
 		 */
 		@Override
-		public com.syncnapsis.data.model.help.Vector.Integer generate(Object... args)
+		public Vector.Integer generate(Object... args)
 		{
-			return new Vector.Integer(random.ne, y, z)
+			return new Vector.Integer(random.nextInt(xMin, xMax), random.nextInt(yMin, yMax), random.nextInt(zMin, zMax));
 		}
 	}
 }
