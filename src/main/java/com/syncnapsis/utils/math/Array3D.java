@@ -103,11 +103,26 @@ public class Array3D implements Cloneable, Serializable
 	 */
 	public Array3D(int xSize, int ySize, int zSize)
 	{
+		this(xSize, ySize, zSize, 0.0);
+	}
+	
+	/**
+	 * Create a new three-dimensional Array and init it with the given size. The bounds will
+	 * automatically be calculated from the size with<br>
+	 * <code>iMin = (-iSize + 1) / 2</code> and <code>iMax = iSize / 2</code>
+	 * 
+	 * @param xSize - The size in x-direction (first index)
+	 * @param ySize - The size in y-direction (second index)
+	 * @param zSize - The size in z-direction (third index)
+	 * @param initialValue - The initial value for all cells
+	 */
+	public Array3D(int xSize, int ySize, int zSize, double initialValue)
+	{
 		Assert.isTrue(xSize > 0, "xSize <= 0");
 		Assert.isTrue(ySize > 0, "ySize <= 0");
 		Assert.isTrue(zSize > 0, "zSize <= 0");
-
-		init((-xSize + 1) / 2, xSize / 2, (-ySize + 1) / 2, ySize / 2, (-zSize + 1) / 2, zSize / 2);
+		
+		init((-xSize + 1) / 2, xSize / 2, (-ySize + 1) / 2, ySize / 2, (-zSize + 1) / 2, zSize / 2, initialValue);
 	}
 
 	/**
@@ -122,11 +137,27 @@ public class Array3D implements Cloneable, Serializable
 	 */
 	public Array3D(int xMin, int xMax, int yMin, int yMax, int zMin, int zMax)
 	{
+		this(xMin, xMax, yMin, yMax, zMin, zMax, 0.0);
+	}
+
+	/**
+	 * Create a new three-dimensional Array and init it from the given bounds.
+	 * 
+	 * @param xMin - The smallest index in x-direction (first index)
+	 * @param xMax - The largest index in x-direction (first index)
+	 * @param yMin - The smallest index in y-direction (second index)
+	 * @param yMax - The largest index in y-direction (second index)
+	 * @param zMin - The smallest index in z-direction (third index)
+	 * @param zMax - The largest index in z-direction (third index)
+	 * @param initialValue - The initial value for all cells
+	 */
+	public Array3D(int xMin, int xMax, int yMin, int yMax, int zMin, int zMax, double initialValue)
+	{
 		Assert.isTrue(xMin <= xMax, "xMin > xMax");
 		Assert.isTrue(yMin <= yMax, "yMin > yMax");
 		Assert.isTrue(zMin <= zMax, "zMin > zMax");
 
-		init(xMin, xMax, yMin, yMax, zMin, zMax);
+		init(xMin, xMax, yMin, yMax, zMin, zMax, initialValue);
 	}
 
 	/**
@@ -138,8 +169,9 @@ public class Array3D implements Cloneable, Serializable
 	 * @param yMax - The largest index in y-direction (second index)
 	 * @param zMin - The smallest index in z-direction (third index)
 	 * @param zMax - The largest index in z-direction (third index)
+	 * @param initialValue - The initial value for all cells
 	 */
-	private void init(int xMin, int xMax, int yMin, int yMax, int zMin, int zMax)
+	private void init(int xMin, int xMax, int yMin, int yMax, int zMin, int zMax, double initialValue)
 	{
 		// set size
 		this.xSize = xMax - xMin + 1;
@@ -147,6 +179,13 @@ public class Array3D implements Cloneable, Serializable
 		this.zSize = zMax - zMin + 1;
 		// init matrix
 		this.matrix = new double[xSize][ySize][zSize];
+		if(initialValue != 0.0)
+		{
+			for(int x = 0; x < xSize; x++)
+				for(int y = 0; y < ySize; y++)
+					for(int z = 0; z < zSize; z++)
+						this.matrix[x][y][z] = initialValue;
+		}
 		this.weight = 1.0;
 		// calc volume
 		this.volume = xSize * ySize * zSize;

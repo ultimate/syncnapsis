@@ -14,7 +14,9 @@
  */
 package com.syncnapsis.utils.data;
 
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 import java.util.TimeZone;
 
 import com.syncnapsis.enums.EnumGender;
@@ -24,7 +26,7 @@ import com.syncnapsis.tests.annotations.TestExcludesMethods;
 import com.syncnapsis.utils.TimeZoneUtil;
 
 @TestCoversClasses({ ExtendedRandom.class, DefaultData.class })
-@TestExcludesMethods("toRegExpString")
+@TestExcludesMethods({ "toRegExpString", "nextDouble" })
 public class ExtendedRandomTest extends LoggerTestCase
 {
 	private static final int			BOOLEAN_CYCLES	= 100000;
@@ -226,6 +228,23 @@ public class ExtendedRandomTest extends LoggerTestCase
 			r = random.nextTimeZoneId();
 			t = TimeZoneUtil.getTimeZone(r);
 			assertNotNull(t);
+		}
+	}
+
+	public void testNextEntry()
+	{
+		Integer[] array = new Integer[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+		List<Integer> list = Arrays.asList(array);
+
+		Integer entry;
+		for(int i = 0; i < 100; i++)
+		{
+			entry = random.nextEntry(array);
+			// use the list instead of the array since array has no contains(..)
+			assertTrue(list.contains(entry));
+
+			entry = random.nextEntry(list);
+			assertTrue(list.contains(entry));
 		}
 	}
 }

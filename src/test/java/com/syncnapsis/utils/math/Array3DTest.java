@@ -27,8 +27,8 @@ import com.syncnapsis.utils.math.Array3D;
 @TestExcludesMethods({ "hashCode" })
 public class Array3DTest extends LoggerTestCase
 {
-	@TestCoversMethods({ "get*", "set*", "checkRange" })
-	public void testProbabilityMatrixIndexes() throws Exception
+	@TestCoversMethods({ "init", "get*", "set*", "checkRange" })
+	public void testIndexes() throws Exception
 	{
 		logger.debug("testing probabilityMatrixIndexes...");
 
@@ -284,6 +284,52 @@ public class Array3DTest extends LoggerTestCase
 					count++;
 				}
 			}
+		}
+	}
+
+	public void testAdd() throws Exception
+	{
+		Array3D m = new Array3D(3, 2, 1);
+		m.set(-1, 0, 0, 0.1);
+		m.set(-1, 1, 0, 0.2);
+		m.set(0, 0, 0, 0.3);
+		m.set(0, 1, 0, 0.4);
+		m.set(1, 0, 0, 0.5);
+		m.set(1, 1, 0, 0.6);
+
+		double oldValue;
+		double rand;
+		for(int i = 0; i < m.getVolume(); i++)
+		{
+			oldValue = m.get(i);
+			rand = Math.random();
+
+			m.add(i, rand);
+
+			assertTrue(oldValue + rand == m.get(i));
+		}
+	}
+
+	public void testMultiply() throws Exception
+	{
+		Array3D m = new Array3D(3, 2, 1);
+		m.set(-1, 0, 0, 0.1);
+		m.set(-1, 1, 0, 0.2);
+		m.set(0, 0, 0, 0.3);
+		m.set(0, 1, 0, 0.4);
+		m.set(1, 0, 0, 0.5);
+		m.set(1, 1, 0, 0.6);
+
+		double oldValue;
+		double rand;
+		for(int i = 0; i < m.getVolume(); i++)
+		{
+			oldValue = m.get(i);
+			rand = Math.random();
+
+			m.multiply(i, rand);
+
+			assertTrue(oldValue * rand == m.get(i));
 		}
 	}
 }
