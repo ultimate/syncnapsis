@@ -324,4 +324,212 @@ public abstract class MathUtil
 		}
 		return minDist;
 	}
+
+	/**
+	 * Modification of {@link Math#ceil(double)} taking an additional argument representing the
+	 * requested accuracy in the following way:<br>
+	 * <code>double fac = Math.pow(10, digits);<br>
+	 * return fac * Math.ceil(a / fac);</code>
+	 * 
+	 * @param a - a value
+	 * @param cutOfDigits - the number of digits to shift the value before and after ceiling
+	 * @return the new value
+	 */
+	public static double ceil(double a, int cutOfDigits)
+	{
+		double fac = Math.pow(10, cutOfDigits);
+		return fac * Math.ceil(a / fac);
+	}
+
+	/**
+	 * Modification of {@link Math#floor(double)} taking an additional argument representing the
+	 * requested accuracy in the following way:<br>
+	 * <code>double fac = Math.pow(10, digits);<br>
+	 * return fac * Math.floor(a / fac);</code>
+	 * 
+	 * @param a - a value
+	 * @param cutOfDigits - the number of digits to shift the value before and after flooring
+	 * @return the new value
+	 */
+	public static double floor(double a, int cutOfDigits)
+	{
+		double fac = Math.pow(10, cutOfDigits);
+		return fac * Math.floor(a / fac);
+	}
+
+	/**
+	 * Modification of {@link Math#round(double)} taking an additional argument representing the
+	 * requested accuracy in the following way:<br>
+	 * <code>double fac = Math.pow(10, digits);<br>
+	 * return fac * Math.round(a / fac);</code>
+	 * 
+	 * @param a - a value
+	 * @param cutOfDigits - the number of digits to shift the value before and after rounding
+	 * @return the new value
+	 */
+	public static double round(double a, int cutOfDigits)
+	{
+		double fac = Math.pow(10, cutOfDigits);
+		return fac * Math.round(a / fac);
+	}
+
+	/**
+	 * {@link Math#ceil(double)}-like operation for integers, e.g.:
+	 * <ul>
+	 * <li>1234, 3 --> 2000</li>
+	 * <li>1234, 2 --> 1300</li>
+	 * <li>1234, 1 --> 1240</li>
+	 * </ul>
+	 * Some "unusual" cases:
+	 * <ul>
+	 * <li>1234, 5 --> 100000</li>
+	 * <li>1234, 4 --> 10000</li>
+	 * <li>1234, 0 --> 1234</li>
+	 * <li>1234, -1 --> 1234</li>
+	 * </ul>
+	 * 
+	 * @param a - a value
+	 * @param cutOfDigits - the number of digits to "cut of"
+	 * @return the new value
+	 */
+	public static int ceil(int a, int cutOfDigits)
+	{
+		if(cutOfDigits <= 0)
+			return a;
+		int fac = 1;
+		while(--cutOfDigits >= 0)
+			fac *= 10;
+		int ret = (a / fac) * fac;
+		if(a > ret)
+			ret += fac;
+		return ret;
+	}
+
+	/**
+	 * {@link Math#floor(double)}-like operation for integers, e.g.:
+	 * <ul>
+	 * <li>1234, 3 --> 1000</li>
+	 * <li>1234, 2 --> 1200</li>
+	 * <li>1234, 1 --> 1230</li>
+	 * </ul>
+	 * Some "unusual" cases:
+	 * <ul>
+	 * <li>1234, 5 --> 0</li>
+	 * <li>1234, 4 --> 0</li>
+	 * <li>1234, 0 --> 1234</li>
+	 * <li>1234, -1 --> 1234</li>
+	 * </ul>
+	 * 
+	 * @param a - a value
+	 * @param cutOfDigits - the number of digits to "cut of"
+	 * @return the new value
+	 */
+	public static int floor(int a, int cutOfDigits)
+	{
+		if(cutOfDigits <= 0)
+			return a;
+		int fac = 1;
+		while(--cutOfDigits >= 0)
+			fac *= 10;
+		int ret = (a / fac) * fac;
+		return ret;
+	}
+
+	/**
+	 * {@link Math#round(double)}-like operation for integers, e.g.:
+	 * <ul>
+	 * <li>1234, 3 --> 1000 (like floor, since digits are < 5)</li>
+	 * <li>1234, 2 --> 1200 (like floor, since digits are < 5)</li>
+	 * <li>1234, 1 --> 1230 (like floor, since digits are < 5)</li>
+	 * <li>5678, 3 --> 6000 (like ceil, since digits are >= 5)</li>
+	 * <li>5678, 2 --> 5700 (like ceil, since digits are >= 5)</li>
+	 * <li>5678, 1 --> 5680 (like ceil, since digits are >= 5)</li>
+	 * </ul>
+	 * Some "unusual" cases:
+	 * <ul>
+	 * <li>1234, 5 --> 0 (like floor, since digits are < 5)</li>
+	 * <li>1234, 4 --> 0 (like floor, since digits are < 5)</li>
+	 * <li>1234, 0 --> 1234 (like floor, since digits are < 5)</li>
+	 * <li>1234, -1 --> 1234 (like floor, since digits are < 5)</li>
+	 * <li>5678, 5 --> 100000 (like ceil, since digits are >= 5)</li>
+	 * <li>5678, 4 --> 10000 (like ceil, since digits are >= 5)</li>
+	 * <li>5678, 0 --> 5678 (like ceil, since digits are >= 5)</li>
+	 * <li>5678, -1 --> 5678 (like ceil, since digits are >= 5)</li>
+	 * </ul>
+	 * 
+	 * @param a - a value
+	 * @param cutOfDigits - the number of digits to "cut of"
+	 * @return the new value
+	 */
+	public static int round(int a, int cutOfDigits)
+	{
+		if(cutOfDigits <= 0)
+			return a;
+		int fac = 1;
+		while(--cutOfDigits >= 0)
+			fac *= 10;
+		int ret = (a / fac) * fac;
+		if(a - ret > fac / 2)
+			ret += fac;
+		return ret;
+	}
+
+	/**
+	 * {@link Math#ceil(double)}-like operation for integers preserving the given number of digits
+	 * in contrary to {@link MathUtil#ceil(int, int)} where cut-of-digits are specified:<br>
+	 * <code>return ceil(a, getDigits(a) - preserveDigits)</code>
+	 * 
+	 * @param a - a value
+	 * @param preserveDigits - the number of digits to preserve
+	 * @return the new value
+	 */
+	public static int ceil2(int a, int preserveDigits)
+	{
+		return ceil(a, getDigits(a) - preserveDigits);
+	}
+
+	/**
+	 * {@link Math#floor(double)}-like operation for integers preserving the given number of digits
+	 * in contrary to {@link MathUtil#floor(int, int)} where cut-of-digits are specified:<br>
+	 * <code>return floor(a, getDigits(a) - preserveDigits)</code>
+	 * 
+	 * @param a - a value
+	 * @param preserveDigits - the number of digits to preserve
+	 * @return the new value
+	 */
+	public static int floor2(int a, int preserveDigits)
+	{
+		return floor(a, getDigits(a) - preserveDigits);
+	}
+
+	/**
+	 * {@link Math#round(double)}-like operation for integers preserving the given number of digits
+	 * in contrary to {@link MathUtil#round(int, int)} where cut-of-digits are specified:<br>
+	 * <code>return round(a, getDigits(a) - preserveDigits)</code>
+	 * 
+	 * @param a - a value
+	 * @param preserveDigits - the number of digits to preserve
+	 * @return the new value
+	 */
+	public static int round2(int a, int preserveDigits)
+	{
+		return round(a, getDigits(a) - preserveDigits);
+	}
+
+	/**
+	 * Get the number of digits for the given value
+	 * 
+	 * @param a - a value
+	 * @return the number of digits
+	 */
+	public static int getDigits(int a)
+	{
+		int digits = 0;
+		while(a != 0)
+		{
+			digits++;
+			a /= 10;
+		}
+		return digits;
+	}
 }
