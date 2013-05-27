@@ -57,6 +57,16 @@ public class SolarSystemInfrastructure extends ActivatableInstance<Long>
 	protected Date							firstColonizationDate;
 
 	/**
+	 * The size of this solar system (in a range from 0 to 100)
+	 */
+	protected int							size;
+
+	/**
+	 * The habitability of this solar system (in a range from 0 to 100)
+	 */
+	protected int							habitability;
+
+	/**
 	 * The current amount/value of infrastructure
 	 */
 	protected int							infrastructure;
@@ -104,6 +114,28 @@ public class SolarSystemInfrastructure extends ActivatableInstance<Long>
 	}
 
 	/**
+	 * The size of this solar system (in a range from 0 to 100)
+	 * 
+	 * @return size
+	 */
+	@Column(nullable = false)
+	public int getSize()
+	{
+		return size;
+	}
+
+	/**
+	 * The habitability of this solar system (in a range from 0 to 100)
+	 * 
+	 * @return habitability
+	 */
+	@Column(nullable = false)
+	public int getHabitability()
+	{
+		return habitability;
+	}
+
+	/**
 	 * The current amount/value of infrastructure
 	 * 
 	 * @return infrastructure
@@ -138,6 +170,7 @@ public class SolarSystemInfrastructure extends ActivatableInstance<Long>
 	/**
 	 * 
 	 * The match this solar system infrastructure is for
+	 * 
 	 * @param match - the Match
 	 */
 	public void setMatch(Match match)
@@ -154,6 +187,26 @@ public class SolarSystemInfrastructure extends ActivatableInstance<Long>
 	public void setFirstColonizationDate(Date firstColonizationDate)
 	{
 		this.firstColonizationDate = firstColonizationDate;
+	}
+
+	/**
+	 * The size of this solar system (in a range from 0 to 100)
+	 * 
+	 * @param size - the size
+	 */
+	public void setSize(int size)
+	{
+		this.size = size;
+	}
+
+	/**
+	 * The habitability of this solar system (in a range from 0 to 100)
+	 * 
+	 * @param habitability - the habitability
+	 */
+	public void setHabitability(int habitability)
+	{
+		this.habitability = habitability;
 	}
 
 	/**
@@ -186,8 +239,10 @@ public class SolarSystemInfrastructure extends ActivatableInstance<Long>
 		final int prime = 31;
 		int result = super.hashCode();
 		result = prime * result + ((firstColonizationDate == null) ? 0 : firstColonizationDate.hashCode());
+		result = prime * result + habitability;
 		result = prime * result + infrastructure;
 		result = prime * result + ((match == null) ? 0 : match.getId().hashCode());
+		result = prime * result + size;
 		result = prime * result + ((solarSystem == null) ? 0 : solarSystem.getId().hashCode());
 		return result;
 	}
@@ -213,14 +268,9 @@ public class SolarSystemInfrastructure extends ActivatableInstance<Long>
 		}
 		else if(!firstColonizationDate.equals(other.firstColonizationDate))
 			return false;
-		if(infrastructure != other.infrastructure)
+		if(habitability != other.habitability)
 			return false;
-		if(solarSystem == null)
-		{
-			if(other.solarSystem != null)
-				return false;
-		}
-		else if(!solarSystem.getId().equals(other.solarSystem.getId()))
+		if(infrastructure != other.infrastructure)
 			return false;
 		if(match == null)
 		{
@@ -228,6 +278,15 @@ public class SolarSystemInfrastructure extends ActivatableInstance<Long>
 				return false;
 		}
 		else if(!match.getId().equals(other.match.getId()))
+			return false;
+		if(size != other.size)
+			return false;
+		if(solarSystem == null)
+		{
+			if(other.solarSystem != null)
+				return false;
+		}
+		else if(!solarSystem.getId().equals(other.solarSystem.getId()))
 			return false;
 		return true;
 	}

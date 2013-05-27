@@ -62,8 +62,6 @@
 		<column>coordinateX</column>
 		<column>coordinateY</column>
 		<column>coordinateZ</column>
-		<column>size</column>
-		<column>habitability</column>
 		<row>
 			<value description="id">1</value>
 			<value description="version">1</value>
@@ -73,8 +71,6 @@
 			<value description="coordinateX">100</value>
 			<value description="coordinateY">100</value>
 			<value description="coordinateZ">100</value>
-			<value description="size">1</value>
-			<value description="habitability">1</value>
 		</row>
 		<row>
 			<value description="id">2</value>
@@ -85,8 +81,6 @@
 			<value description="coordinateX">0</value>
 			<value description="coordinateY">100</value>
 			<value description="coordinateZ">100</value>
-			<value description="size">1</value>
-			<value description="habitability">1</value>
 		</row>
 		<row>
 			<value description="id">3</value>
@@ -97,8 +91,6 @@
 			<value description="coordinateX">-100</value>
 			<value description="coordinateY">100</value>
 			<value description="coordinateZ">100</value>
-			<value description="size">1</value>
-			<value description="habitability">1</value>
 		</row>
 		<row>
 			<value description="id">4</value>
@@ -109,8 +101,6 @@
 			<value description="coordinateX">100</value>
 			<value description="coordinateY">0</value>
 			<value description="coordinateZ">100</value>
-			<value description="size">1</value>
-			<value description="habitability">1</value>
 		</row>
 		<row>
 			<value description="id">5</value>
@@ -121,8 +111,6 @@
 			<value description="coordinateX">0</value>
 			<value description="coordinateY">0</value>
 			<value description="coordinateZ">100</value>
-			<value description="size">1</value>
-			<value description="habitability">1</value>
 		</row>
 		<row>
 			<value description="id">6</value>
@@ -133,8 +121,6 @@
 			<value description="coordinateX">-100</value>
 			<value description="coordinateY">0</value>
 			<value description="coordinateZ">100</value>
-			<value description="size">1</value>
-			<value description="habitability">1</value>
 		</row>
 		<row>
 			<value description="id">7</value>
@@ -145,8 +131,6 @@
 			<value description="coordinateX">100</value>
 			<value description="coordinateY">-100</value>
 			<value description="coordinateZ">100</value>
-			<value description="size">1</value>
-			<value description="habitability">1</value>
 		</row>
 		<row>
 			<value description="id">8</value>
@@ -157,8 +141,6 @@
 			<value description="coordinateX">0</value>
 			<value description="coordinateY">-100</value>
 			<value description="coordinateZ">100</value>
-			<value description="size">1</value>
-			<value description="habitability">1</value>
 		</row>
 		<row>
 			<value description="id">9</value>
@@ -169,8 +151,6 @@
 			<value description="coordinateX">-100</value>
 			<value description="coordinateY">-100</value>
 			<value description="coordinateZ">100</value>
-			<value description="size">1</value>
-			<value description="habitability">1</value>
 		</row>
 		<row>
 			<value description="id">11</value>
@@ -181,8 +161,6 @@
 			<value description="coordinateX">100</value>
 			<value description="coordinateY">100</value>
 			<value description="coordinateZ">0</value>
-			<value description="size">1</value>
-			<value description="habitability">1</value>
 		</row>
 		<row>
 			<value description="id">12</value>
@@ -193,8 +171,6 @@
 			<value description="coordinateX">0</value>
 			<value description="coordinateY">100</value>
 			<value description="coordinateZ">0</value>
-			<value description="size">1</value>
-			<value description="habitability">1</value>
 		</row>
 		<row>
 			<value description="id">13</value>
@@ -205,8 +181,6 @@
 			<value description="coordinateX">-100</value>
 			<value description="coordinateY">100</value>
 			<value description="coordinateZ">0</value>
-			<value description="size">1</value>
-			<value description="habitability">1</value>
 		</row>
 		<row>
 			<value description="id">14</value>
@@ -217,8 +191,6 @@
 			<value description="coordinateX">100</value>
 			<value description="coordinateY">0</value>
 			<value description="coordinateZ">0</value>
-			<value description="size">1</value>
-			<value description="habitability">1</value>
 		</row>
 		<row>
 			<value description="id">15</value>
@@ -229,8 +201,6 @@
 			<value description="coordinateX">0</value>
 			<value description="coordinateY">0</value>
 			<value description="coordinateZ">0</value>
-			<value description="size">1</value>
-			<value description="habitability">1</value>
 		</row>
 		<row>
 			<value description="id">16</value>
@@ -241,8 +211,6 @@
 			<value description="coordinateX">-100</value>
 			<value description="coordinateY">0</value>
 			<value description="coordinateZ">0</value>
-			<value description="size">1</value>
-			<value description="habitability">1</value>
 		</row>
 		<row>
 			<value description="id">17</value>
@@ -253,8 +221,6 @@
 			<value description="coordinateX">100</value>
 			<value description="coordinateY">-100</value>
 			<value description="coordinateZ">0</value>
-			<value description="size">1</value>
-			<value description="habitability">1</value>
 		</row>
 		<row>
 			<value description="id">18</value>
@@ -265,8 +231,6 @@
 			<value description="coordinateX">0</value>
 			<value description="coordinateY">-100</value>
 			<value description="coordinateZ">0</value>
-			<value description="size">1</value>
-			<value description="habitability">1</value>
 		</row>
 		<row>
 			<value description="id">19</value>
@@ -277,8 +241,6 @@
 			<value description="coordinateX">-100</value>
 			<value description="coordinateY">-100</value>
 			<value description="coordinateZ">0</value>
-			<value description="size">1</value>
-			<value description="habitability">1</value>
 		</row>
 		<row>
 			<value description="id">21</value>
@@ -289,8 +251,6 @@
 			<value description="coordinateX">100</value>
 			<value description="coordinateY">100</value>
 			<value description="coordinateZ">-100</value>
-			<value description="size">1</value>
-			<value description="habitability">1</value>
 		</row>
 		<row>
 			<value description="id">22</value>
@@ -301,8 +261,6 @@
 			<value description="coordinateX">0</value>
 			<value description="coordinateY">100</value>
 			<value description="coordinateZ">-100</value>
-			<value description="size">1</value>
-			<value description="habitability">1</value>
 		</row>
 		<row>
 			<value description="id">23</value>
@@ -313,8 +271,6 @@
 			<value description="coordinateX">-100</value>
 			<value description="coordinateY">100</value>
 			<value description="coordinateZ">-100</value>
-			<value description="size">1</value>
-			<value description="habitability">1</value>
 		</row>
 		<row>
 			<value description="id">24</value>
@@ -325,8 +281,6 @@
 			<value description="coordinateX">100</value>
 			<value description="coordinateY">0</value>
 			<value description="coordinateZ">-100</value>
-			<value description="size">1</value>
-			<value description="habitability">1</value>
 		</row>
 		<row>
 			<value description="id">25</value>
@@ -337,8 +291,6 @@
 			<value description="coordinateX">0</value>
 			<value description="coordinateY">0</value>
 			<value description="coordinateZ">-100</value>
-			<value description="size">1</value>
-			<value description="habitability">1</value>
 		</row>
 		<row>
 			<value description="id">26</value>
@@ -349,8 +301,6 @@
 			<value description="coordinateX">-100</value>
 			<value description="coordinateY">0</value>
 			<value description="coordinateZ">-100</value>
-			<value description="size">1</value>
-			<value description="habitability">1</value>
 		</row>
 		<row>
 			<value description="id">27</value>
@@ -361,8 +311,6 @@
 			<value description="coordinateX">100</value>
 			<value description="coordinateY">-100</value>
 			<value description="coordinateZ">-100</value>
-			<value description="size">1</value>
-			<value description="habitability">1</value>
 		</row>
 		<row>
 			<value description="id">28</value>
@@ -373,8 +321,6 @@
 			<value description="coordinateX">0</value>
 			<value description="coordinateY">-100</value>
 			<value description="coordinateZ">-100</value>
-			<value description="size">1</value>
-			<value description="habitability">1</value>
 		</row>
 		<row>
 			<value description="id">29</value>
@@ -385,8 +331,6 @@
 			<value description="coordinateX">-100</value>
 			<value description="coordinateY">-100</value>
 			<value description="coordinateZ">-100</value>
-			<value description="size">1</value>
-			<value description="habitability">1</value>
 		</row>
 	</table>
 
@@ -644,6 +588,8 @@
 		<column>fkMatch</column>
 		<column>firstColonizationDate</column>
 		<column>infrastructure</column>
+		<column>size</column>
+		<column>habitability</column>
 		<row>
 			<value description="id">11</value>
 			<value description="version">1</value>
@@ -652,6 +598,8 @@
 			<value description="fkMatch">1</value>
 			<value description="firstColonizationDate">2012-01-01</value>
 			<value description="infrastructure">100</value>
+			<value description="size">1</value>
+			<value description="habitability">1</value>
 		</row>
 		<row>
 			<value description="id">12</value>
@@ -661,6 +609,8 @@
 			<value description="fkMatch">1</value>
 			<value description="firstColonizationDate">2012-01-01</value>
 			<value description="infrastructure">100</value>
+			<value description="size">1</value>
+			<value description="habitability">1</value>
 		</row>
 		<row>
 			<value description="id">21</value>
@@ -670,6 +620,8 @@
 			<value description="fkMatch">2</value>
 			<value description="firstColonizationDate">2012-01-01</value>
 			<value description="infrastructure">100</value>
+			<value description="size">1</value>
+			<value description="habitability">1</value>
 		</row>
 		<row>
 			<value description="id">22</value>
@@ -679,6 +631,8 @@
 			<value description="fkMatch">2</value>
 			<value description="firstColonizationDate">2012-01-01</value>
 			<value description="infrastructure">100</value>
+			<value description="size">1</value>
+			<value description="habitability">1</value>
 		</row>
 	</table>
 

@@ -55,16 +55,6 @@ public class SolarSystem extends ActivatableInstance<Long>
 	protected Vector.Integer	coords	= new Vector.Integer();
 
 	/**
-	 * The size of this solar system (in a range from 0 to 100)
-	 */
-	protected int				size;
-
-	/**
-	 * The habitability of this solar system (in a range from 0 to 100)
-	 */
-	protected int				habitability;
-
-	/**
 	 * The Galaxy this solar system is in
 	 * 
 	 * @return galaxy
@@ -102,28 +92,6 @@ public class SolarSystem extends ActivatableInstance<Long>
 	}
 
 	/**
-	 * The size of this solar system (in a range from 0 to 100)
-	 * 
-	 * @return size
-	 */
-	@Column(nullable = false)
-	public int getSize()
-	{
-		return size;
-	}
-
-	/**
-	 * The habitability of this solar system (in a range from 0 to 100)
-	 * 
-	 * @return habitability
-	 */
-	@Column(nullable = false)
-	public int getHabitability()
-	{
-		return habitability;
-	}
-
-	/**
 	 * The Galaxy this solar system is in
 	 * 
 	 * @param galaxy
@@ -153,26 +121,6 @@ public class SolarSystem extends ActivatableInstance<Long>
 		this.coords = coords;
 	}
 
-	/**
-	 * The size of this solar system (in a range from 0 to 100)
-	 * 
-	 * @param size - the size
-	 */
-	public void setSize(int size)
-	{
-		this.size = size;
-	}
-
-	/**
-	 * The habitability of this solar system (in a range from 0 to 100)
-	 * 
-	 * @param habitability - the habitability
-	 */
-	public void setHabitability(int habitability)
-	{
-		this.habitability = habitability;
-	}
-
 	@Override
 	public int hashCode()
 	{
@@ -180,9 +128,7 @@ public class SolarSystem extends ActivatableInstance<Long>
 		int result = super.hashCode();
 		result = prime * result + ((coords == null) ? 0 : coords.hashCode());
 		result = prime * result + ((galaxy == null) ? 0 : galaxy.getId().hashCode());
-		result = prime * result + habitability;
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
-		result = prime * result + size;
 		return result;
 	}
 
@@ -210,16 +156,12 @@ public class SolarSystem extends ActivatableInstance<Long>
 		}
 		else if(!galaxy.getId().equals(other.galaxy.getId()))
 			return false;
-		if(habitability != other.habitability)
-			return false;
 		if(name == null)
 		{
 			if(other.name != null)
 				return false;
 		}
 		else if(!name.equals(other.name))
-			return false;
-		if(size != other.size)
 			return false;
 		return true;
 	}

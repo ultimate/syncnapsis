@@ -39,7 +39,9 @@ public class SolarSystemInfrastructureDaoTest extends GenericDaoTestCase<SolarSy
 
 		SolarSystemInfrastructure solarSystemInfrastructure = new SolarSystemInfrastructure();
 		solarSystemInfrastructure.setFirstColonizationDate(new Date(timeProvider.get()));
+		solarSystemInfrastructure.setHabitability(100);
 		solarSystemInfrastructure.setInfrastructure(200);
+		solarSystemInfrastructure.setSize(100);
 		solarSystemInfrastructure.setSolarSystem(solarSystemDao.getAll().get(0));
 		// set individual properties here
 

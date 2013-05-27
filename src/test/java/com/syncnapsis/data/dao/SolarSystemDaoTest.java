@@ -39,9 +39,7 @@ public class SolarSystemDaoTest extends GenericDaoTestCase<SolarSystem, Long>
 		solarSystem.getCoords().setY(2);
 		solarSystem.getCoords().setZ(3);
 		solarSystem.setGalaxy(galaxyDao.getByName("galaxy1"));
-		solarSystem.setHabitability(100);
 		solarSystem.setName("any name");
-		solarSystem.setSize(100);
 		// set individual properties here
 
 		setEntity(solarSystem);
