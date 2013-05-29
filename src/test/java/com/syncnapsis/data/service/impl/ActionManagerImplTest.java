@@ -50,8 +50,8 @@ public class ActionManagerImplTest extends GenericNameManagerImplTestCase<Action
 	public void testGetByCode() throws Exception
 	{
 		// getByCode invokes getByName!
-		MethodCall managerCall = new MethodCall("getByName", entity, "code");
-		MethodCall daoCall = managerCall;
+		MethodCall managerCall = new MethodCall("getByCode", entity, "code");
+		MethodCall daoCall = new MethodCall("getByName", entity, "code");
 		simpleGenericTest(managerCall, daoCall);
 	}
 
