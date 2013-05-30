@@ -14,15 +14,26 @@
  */
 package com.syncnapsis.data.service.impl;
 
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+
 import com.syncnapsis.data.dao.GalaxyDao;
 import com.syncnapsis.data.model.Galaxy;
+import com.syncnapsis.data.model.help.Vector;
 import com.syncnapsis.data.service.GalaxyManager;
+import com.syncnapsis.data.service.SolarSystemManager;
 import com.syncnapsis.tests.GenericNameManagerImplTestCase;
 import com.syncnapsis.tests.annotations.TestCoversClasses;
+import com.syncnapsis.tests.annotations.TestExcludesMethods;
+import com.syncnapsis.utils.data.VectorGenerator;
 
-@TestCoversClasses( { GalaxyManager.class, GalaxyManagerImpl.class })
+@TestCoversClasses({ GalaxyManager.class, GalaxyManagerImpl.class })
+@TestExcludesMethods({ "afterPropertiesSet", "*etSecurityManager" })
 public class GalaxyManagerImplTest extends GenericNameManagerImplTestCase<Galaxy, Long, GalaxyManager, GalaxyDao>
 {
+	private SolarSystemManager	solarSystemManager;
+
 	@Override
 	protected void setUp() throws Exception
 	{
@@ -30,6 +41,32 @@ public class GalaxyManagerImplTest extends GenericNameManagerImplTestCase<Galaxy
 		setEntity(new Galaxy());
 		setDaoClass(GalaxyDao.class);
 		setMockDao(mockContext.mock(GalaxyDao.class));
-		setMockManager(new GalaxyManagerImpl(mockDao));
+		setMockManager(new GalaxyManagerImpl(mockDao, solarSystemManager));
+	}
+
+	public void testGetByCreator() throws Exception
+	{
+		MethodCall managerCall = new MethodCall("getByCreator", new ArrayList<Galaxy>(), 1L);
+		MethodCall daoCall = managerCall;
+		simpleGenericTest(managerCall, daoCall);
+	}
+
+	public void testCreate() throws Exception
+	{
+
+	}
+
+	public void testCalculateSize() throws Exception
+	{
+		List<Vector.Integer> coords = new LinkedList<Vector.Integer>();
+		int xSize = 1100;
+		int ySize = 2200;
+		int zSize = 500;
+		VectorGenerator generator = new VectorGenerator(xSize, ySize, zSize);
+		int max = 1100;
+		for(int i = 0; i < 10000; i++)
+		{
+			coords.add(new Vector.Integer(x, y, z));
+		}
 	}
 }

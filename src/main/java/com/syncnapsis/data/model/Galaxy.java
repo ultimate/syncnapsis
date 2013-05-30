@@ -60,8 +60,8 @@ public class Galaxy extends ActivatableInstance<Long>
 
 	/**
 	 * The size of the galaxy.<br>
-	 * This means coordinates are within the interval [ -size?/2 ; size?/2 ] where ? is one of three
-	 * coordinates.
+	 * This means coordinates are within the interval <code>[ -min? ; max? ]</code> where ? is one
+	 * of three coordinates and <code>size? = max? - min? + 1</code>
 	 */
 	protected Vector.Integer	size	= new Vector.Integer();
 
@@ -117,8 +117,8 @@ public class Galaxy extends ActivatableInstance<Long>
 
 	/**
 	 * The size of the galaxy.<br>
-	 * This means coordinates are within the interval [ -size?/2 ; size?/2 ] where ? is one of three
-	 * coordinates.
+	 * This means coordinates are within the interval <code>[ -min? ; max? ]</code> where ? is one
+	 * of three coordinates and <code>size? = max? - min? + 1</code>
 	 * 
 	 * @return size
 	 */
@@ -196,8 +196,8 @@ public class Galaxy extends ActivatableInstance<Long>
 
 	/**
 	 * The size of the galaxy.<br>
-	 * This means coordinates are within the interval [ -size?/2 ; size?/2 ] where ? is one of three
-	 * coordinates.
+	 * This means coordinates are within the interval <code>[ -min? ; max? ]</code> where ? is one
+	 * of three coordinates and <code>size? = max? - min? + 1</code>
 	 * 
 	 * @param size - the size
 	 */

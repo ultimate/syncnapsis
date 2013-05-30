@@ -16,7 +16,10 @@ package com.syncnapsis.data.service;
 
 import java.util.List;
 
+import com.syncnapsis.data.model.Galaxy;
 import com.syncnapsis.data.model.SolarSystem;
+import com.syncnapsis.data.model.help.Vector;
+import com.syncnapsis.utils.data.ExtendedRandom;
 
 /**
  * Manager-Interface for access to SolarSystem.
@@ -33,15 +36,35 @@ public interface SolarSystemManager extends GenericManager<SolarSystem, Long>
 	 */
 	public List<SolarSystem> getByGalaxy(long galaxyId);
 
-//	/**
-//	 * Create a new SolarSystem with the given parameters
-//	 * 
-//	 * @param galaxyId - the Galaxy the SolarSystem is in
-//	 * @param coords - the coordinates for the SolarSystem
-//	 * @param name - the name for the SolarSystem
-//	 * @param size - the size of the SolarSystem
-//	 * @param habitability - the habitability of the SolarSystem
-//	 * @return the newly created SolarSystem entity
-//	 */
-//	public SolarSystem create(long galaxyId, Vector.Integer coords, String name, int size, int habitability);
+	/**
+	 * Create a new SolarSystem with the given parameters
+	 * 
+	 * @param galaxy - the Galaxy the SolarSystem is in
+	 * @param coords - the coordinates for the SolarSystem
+	 * @param name - the name for the SolarSystem
+	 * @param random - the random number generator used to generate more parameters if required
+	 * @return the newly created SolarSystem entity
+	 */
+	public SolarSystem create(Galaxy galaxy, Vector.Integer coords, String name);
+	
+	/**
+	 * Create a new SolarSystem from the given List of parameters.<br>
+	 * Therefore systemNames will taken from the list in the following way:
+	 * <ul>
+	 * <li><code>systemNames == null || systemNames.size() == 0</code> : random systemNames will be
+	 * generated</li>
+	 * <li><code>systemNames.size() >= systemCoords.size()</code> : name for systemCoords[i] =
+	 * systemNames[i]</li>
+	 * <li><code>systemNames.size() < systemCoords.size()</code> : name for systemCoords[i] =
+	 * systemNames[i%systemNames.size()] + counter if necessary (e.g. "example I", "example II",
+	 * ...)</li>
+	 * </ul>
+	 * 
+	 * @param galaxy - the Galaxy the SolarSystem is in
+	 * @param systemCoords - the list containing all the systemCoords for the SolarSystems
+	 * @param systemNames - the list containing possible systemNames for the SolarSystems (optional)
+	 * @param random - the random number generator used to generate more parameters if required
+	 * @return the newly created SolarSystem entity
+	 */
+	public SolarSystem create(Galaxy galaxy, List<Vector.Integer> systemCoords, List<String> systemNames, int index, ExtendedRandom random);
 }

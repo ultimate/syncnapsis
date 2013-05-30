@@ -1,46 +1,48 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- 
-  - Syncnapsis Framework - Copyright (c) 2012 ultimate
-  - 
-  - This program is free software; you can redistribute it and/or modify it under the terms of 
-  - the GNU General Public License as published by the Free Software Foundation; either version 
-  - 3 of the License, or any later version. 
-  - 
-  - This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; 
-  - without even the implied warranty of MECHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
-  - See the GNU General Public License for more details. 
-  - 
-  - You should have received a copy of the GNU General Plublic License along with this program; 
-  - if not, see <http://www.gnu.org/licenses/>. 
-  -->
-<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+<!-- - Syncnapsis Framework - Copyright (c) 2012 ultimate - - This program 
+	is free software; you can redistribute it and/or modify it under the terms 
+	of - the GNU General Public License as published by the Free Software Foundation; 
+	either version - 3 of the License, or any later version. - - This program 
+	is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; 
+	- without even the implied warranty of MECHANTABILITY or FITNESS FOR A PARTICULAR 
+	PURPOSE. - See the GNU General Public License for more details. - - You should 
+	have received a copy of the GNU General Plublic License along with this program; 
+	- if not, see <http://www.gnu.org/licenses/>. -->
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
             http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd
             http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.0.xsd"
 	default-lazy-init="true">
 
 	<!-- =================================================================== -->
-	<!-- DAO 																 -->
+	<!-- DAO -->
 	<!-- =================================================================== -->
 
 	<bean id="galaxyDao" class="com.syncnapsis.data.dao.hibernate.GalaxyDaoHibernate" />
 
 	<bean id="matchDao" class="com.syncnapsis.data.dao.hibernate.MatchDaoHibernate" />
 
-	<bean id="participantDao" class="com.syncnapsis.data.dao.hibernate.ParticipantDaoHibernate" />
+	<bean id="participantDao"
+		class="com.syncnapsis.data.dao.hibernate.ParticipantDaoHibernate" />
 
-	<bean id="solarSystemDao" class="com.syncnapsis.data.dao.hibernate.SolarSystemDaoHibernate" />
+	<bean id="solarSystemDao"
+		class="com.syncnapsis.data.dao.hibernate.SolarSystemDaoHibernate" />
 
-	<bean id="solarSystemInfrastructureDao" class="com.syncnapsis.data.dao.hibernate.SolarSystemInfrastructureDaoHibernate" />
+	<bean id="solarSystemInfrastructureDao"
+		class="com.syncnapsis.data.dao.hibernate.SolarSystemInfrastructureDaoHibernate" />
 
-	<bean id="solarSystemPopulationDao" class="com.syncnapsis.data.dao.hibernate.SolarSystemPopulationDaoHibernate" />
+	<bean id="solarSystemPopulationDao"
+		class="com.syncnapsis.data.dao.hibernate.SolarSystemPopulationDaoHibernate" />
 
 	<!-- =================================================================== -->
-	<!-- Service															 -->
+	<!-- Service -->
 	<!-- =================================================================== -->
 
 	<bean id="galaxyManager" class="com.syncnapsis.data.service.impl.GalaxyManagerImpl">
 		<constructor-arg ref="galaxyDao" />
+		<property name="securityManager" ref="securityManager" />
 	</bean>
 
 	<bean id="matchManager" class="com.syncnapsis.data.service.impl.MatchManagerImpl">
@@ -55,16 +57,18 @@
 		<constructor-arg ref="solarSystemDao" />
 	</bean>
 
-	<bean id="solarSystemInfrastructureManager" class="com.syncnapsis.data.service.impl.SolarSystemInfrastructureManagerImpl">
+	<bean id="solarSystemInfrastructureManager"
+		class="com.syncnapsis.data.service.impl.SolarSystemInfrastructureManagerImpl">
 		<constructor-arg ref="solarSystemInfrastructureDao" />
 	</bean>
 
-	<bean id="solarSystemPopulationManager" class="com.syncnapsis.data.service.impl.SolarSystemPopulationManagerImpl">
+	<bean id="solarSystemPopulationManager"
+		class="com.syncnapsis.data.service.impl.SolarSystemPopulationManagerImpl">
 		<constructor-arg ref="solarSystemPopulationDao" />
 	</bean>
 
 	<!-- =================================================================== -->
-	<!-- non-DB-Managers													 -->
+	<!-- non-DB-Managers -->
 	<!-- =================================================================== -->
 
 	<bean id="uiManager" class="com.syncnapsis.client.UIManagerImpl">
@@ -82,71 +86,68 @@
 	</bean>
 
 	<!-- =================================================================== -->
-	<!-- WebSockets 														 -->
+	<!-- WebSockets -->
 	<!-- =================================================================== -->
 
-	<bean id="rpcHandler" class="com.syncnapsis.websockets.service.rpc.DelegatingRPCHandler">
+	<bean id="rpcHandler"
+		class="com.syncnapsis.websockets.service.rpc.DelegatingRPCHandler">
 		<property name="delegate" ref="logRPCHandler" />
 	</bean>
 
 	<!-- =================================================================== -->
-	<!-- Security															 -->
+	<!-- Security -->
 	<!-- =================================================================== -->
 
 	<bean id="securityManager" class="com.syncnapsis.security.BaseGameManager">
 		<constructor-arg ref="baseGameManager" />
 	</bean>
-	
+
 	<!-- =================================================================== -->
-	<!-- Utilities															 -->
+	<!-- Utilities -->
 	<!-- =================================================================== -->
-	
+
 	<bean id="mailer" class="com.syncnapsis.utils.mail.BaseGameMailer">
-		<constructor-arg value="mail.properties"/>
+		<constructor-arg value="mail.properties" />
 	</bean>
 
 	<!-- =================================================================== -->
-    <!-- Hibernate					                                         -->
-    <!-- =================================================================== -->
-    
-    <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
-        <property name="driverClassName" value="${jdbc.driverClassName}"/>
-        <property name="url" value="${jdbc.url}"/>
-        <property name="username" value="${jdbc.username}"/>
-        <property name="password" value="${jdbc.password}"/>
-        <property name="maxActive" value="100"/>
-        <property name="maxWait" value="1000"/>
-        <property name="poolPreparedStatements" value="true"/>
-        <!-- 
-        <property name="defaultAutoCommit" value="true"/>
-         -->
-    </bean>
-    
-    <bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
-        <property name="dataSource" ref="dataSource"/>
-        <property name="configLocation" value="classpath:hibernate.cfg.xml"/>
-        <property name="hibernateProperties">        
-            <props>
-                <prop key="hibernate.dialect">${hibernate.dialect}</prop>
-                <!-- 
-                <prop key="hibernate.jdbc.batch_size">0</prop>
-                <prop key="hibernate.show_sql">false</prop>
-                <prop key="hibernate.format_sql">true</prop>
-                <prop key="hibernate.use_sql_comments">true</prop>
-                <prop key="hibernate.query.substitutions">true 1, false 0</prop>
-                <prop key="hibernate.max_fetch_depth">6</prop>
-                <prop key="hibernate.hbm2ddl.auto">${hibernate.hbm2ddlauto}</prop>
-                <prop key="hibernate.cache.use_second_level_cache">${hibernate.use_second_level_cache}</prop>
-                <prop key="hibernate.cache.provider_class">org.hibernate.cache.EhCacheProvider</prop>
-                 -->
-            </props>
-        </property>
-    </bean>
-    
-	<bean id="transactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+	<!-- Hibernate -->
+	<!-- =================================================================== -->
+
+	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
+		destroy-method="close">
+		<property name="driverClassName" value="${jdbc.driverClassName}" />
+		<property name="url" value="${jdbc.url}" />
+		<property name="username" value="${jdbc.username}" />
+		<property name="password" value="${jdbc.password}" />
+		<property name="maxActive" value="100" />
+		<property name="maxWait" value="1000" />
+		<property name="poolPreparedStatements" value="true" />
+		<!-- <property name="defaultAutoCommit" value="true"/> -->
+	</bean>
+
+	<bean id="sessionFactory"
+		class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<property name="configLocation" value="classpath:hibernate.cfg.xml" />
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.dialect">${hibernate.dialect}</prop>
+				<!-- <prop key="hibernate.jdbc.batch_size">0</prop> <prop key="hibernate.show_sql">false</prop> 
+					<prop key="hibernate.format_sql">true</prop> <prop key="hibernate.use_sql_comments">true</prop> 
+					<prop key="hibernate.query.substitutions">true 1, false 0</prop> <prop key="hibernate.max_fetch_depth">6</prop> 
+					<prop key="hibernate.hbm2ddl.auto">${hibernate.hbm2ddlauto}</prop> <prop 
+					key="hibernate.cache.use_second_level_cache">${hibernate.use_second_level_cache}</prop> 
+					<prop key="hibernate.cache.provider_class">org.hibernate.cache.EhCacheProvider</prop> -->
+			</props>
+		</property>
+	</bean>
+
+	<bean id="transactionManager"
+		class="org.springframework.orm.hibernate4.HibernateTransactionManager">
 		<property name="sessionFactory" ref="sessionFactory" />
 	</bean>
-	
+
 	<tx:annotation-driven transaction-manager="transactionManager" />
 
 </beans>

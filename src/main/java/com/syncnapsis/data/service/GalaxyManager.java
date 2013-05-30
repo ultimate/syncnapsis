@@ -15,9 +15,9 @@
 package com.syncnapsis.data.service;
 
 import java.util.List;
-import java.util.Map;
 
 import com.syncnapsis.data.model.Galaxy;
+import com.syncnapsis.data.model.help.Vector;
 
 /**
  * Manager-Interface for access to Galaxy.
@@ -35,15 +35,18 @@ public interface GalaxyManager extends GenericNameManager<Galaxy, Long>
 	public List<Galaxy> getByCreator(long playerId);
 
 	/**
-	 * Create a Galaxy from the list describing the underlying SolarSystems. All properties set
-	 * within the the map-list will be used to create the SolarSystems, other properties not found
-	 * will be randomly initialized.
+	 * Create a Galaxy from the list describing the underlying SolarSystems. The coordinates will be
+	 * used to initialize the SolarSystems which will either be named randomly or from the given
+	 * name list (see {@link SolarSystemManager#create(Galaxy, List, List, int)})
+	 * The size of the galaxy will be calculated automatically from the given coordinates.
 	 * 
+	 * @param name - the name for the Galaxy
+	 * @param systemCoords - the list containing all the systemCoords for the SolarSystems
+	 * @param systemNames - the list containing possible systemNames for the SolarSystems (optional)
 	 * @param seed - the seed used for the random generator. If null a random seed will be used
-	 * @param systemList - the list describing the SolarSystems
 	 * @return the newly created Galaxy
 	 */
-	public Galaxy createGalaxy(Long seed, List<Map<String, Object>> systemList);
+	public Galaxy create(String name, List<Vector.Integer> systemCoords, List<String> systemNames, Long seed);
 
 	/**
 	 * Create a Galaxy from the given configuration. The underlying SolarSystems will be created
@@ -55,5 +58,5 @@ public interface GalaxyManager extends GenericNameManager<Galaxy, Long>
 	 * @param configuration - the galaxy configuration
 	 * @return the newly created Galaxy
 	 */
-	public Galaxy createGalaxy(Object configuration);
+	public Galaxy create(Object configuration);
 }
