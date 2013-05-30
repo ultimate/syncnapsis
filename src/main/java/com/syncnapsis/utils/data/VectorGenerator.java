@@ -221,6 +221,43 @@ public class VectorGenerator extends Generator<Vector<Integer>>
 	}
 
 	/**
+	 * Construct a new VectorGenerator with the given bounds for creating a new underlying Array3D
+	 * with even probability distribution
+	 * 
+	 * @param size - The size as an Vector
+	 */
+	public VectorGenerator(Vector.Integer size)
+	{
+		this(size.getX(), size.getY(), size.getZ());
+	}
+
+	/**
+	 * Construct a new VectorGenerator with the given bounds for creating a new underlying Array3D
+	 * with even probability distribution
+	 * 
+	 * @see Generator#Generator(ExtendedRandom)
+	 * @param size - The size as an Vector
+	 * @param random - the random number generator
+	 */
+	public VectorGenerator(Vector.Integer size, ExtendedRandom random)
+	{
+		this(size.getX(), size.getY(), size.getZ(), random);
+	}
+
+	/**
+	 * Construct a new VectorGenerator with the given bounds for creating a new underlying Array3D
+	 * with even probability distribution
+	 * 
+	 * @see Generator#Generator(long)
+	 * @param size - The size as an Vector
+	 * @param seed - the seed for the random number generator
+	 */
+	public VectorGenerator(Vector.Integer size, long seed)
+	{
+		this(size.getX(), size.getY(), size.getZ(), seed);
+	}
+
+	/**
 	 * Initialize this VectorGenerator and do all precalculations required for random Vector
 	 * generation.
 	 * 
