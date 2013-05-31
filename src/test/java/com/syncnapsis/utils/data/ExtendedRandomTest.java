@@ -22,17 +22,73 @@ import java.util.TimeZone;
 import com.syncnapsis.enums.EnumGender;
 import com.syncnapsis.tests.LoggerTestCase;
 import com.syncnapsis.tests.annotations.TestCoversClasses;
+import com.syncnapsis.tests.annotations.TestCoversMethods;
 import com.syncnapsis.tests.annotations.TestExcludesMethods;
 import com.syncnapsis.utils.TimeZoneUtil;
 
 @TestCoversClasses({ ExtendedRandom.class, DefaultData.class })
-@TestExcludesMethods({ "toRegExpString", "nextDouble" })
+@TestExcludesMethods({ "toRegExpString", "nextDouble", "hashCode" })
 public class ExtendedRandomTest extends LoggerTestCase
 {
 	private static final int			BOOLEAN_CYCLES	= 100000;
 	private static final double			DELTA			= 0.01;
 
 	private static final ExtendedRandom	random			= new ExtendedRandom();
+
+	@TestCoversMethods({ "getSeed", "getInitialSeed" })
+	public void testGetSeed() throws Exception
+	{
+		long seed = 1234;
+		ExtendedRandom r1 = new ExtendedRandom(seed);
+		ExtendedRandom r2 = new ExtendedRandom(seed);
+		ExtendedRandom r3 = new ExtendedRandom();
+
+		assertEquals(seed, r1.getInitialSeed());
+		assertEquals(seed, r2.getInitialSeed());
+		assertTrue(seed != r3.getInitialSeed());
+
+		// the "random" initial seed used, when not providing a seed is scrambled in
+		// java.lang.Random
+		// before being set. Let's check wether reiniting a random with the scrambled seed results
+		// in
+		// an equal random
+		assertEquals(r3.getInitialSeed(), new ExtendedRandom(r3.getInitialSeed()).getInitialSeed());
+
+		assertTrue(r1.getSeed() == r2.getSeed());
+		assertFalse(r1.getSeed() == r3.getSeed());
+
+		r1.nextBoolean();
+		assertFalse(r1.getSeed() == r2.getSeed());
+
+		r2.nextBoolean();
+		assertTrue(r1.getSeed() == r2.getSeed());
+	}
+
+	@TestCoversMethods({ "equals", "matchGaussian" })
+	public void testEquals() throws Exception
+	{
+		long seed = 1234;
+		ExtendedRandom r1 = new ExtendedRandom(seed);
+		ExtendedRandom r2 = new ExtendedRandom(seed);
+		ExtendedRandom r3 = new ExtendedRandom();
+
+		assertTrue(r1.matchGaussian(r2));
+		assertTrue(r1.matchGaussian(r3));
+		assertTrue(r1.equals(r2));
+		assertFalse(r1.equals(r3));
+		
+		r1.nextGaussian();
+		assertFalse(r1.matchGaussian(r2));
+		assertFalse(r1.matchGaussian(r3));
+		assertFalse(r1.equals(r2));
+		assertFalse(r1.equals(r3));
+		
+		r2.nextGaussian();
+		assertTrue(r1.matchGaussian(r2));
+		assertFalse(r1.matchGaussian(r3));
+		assertTrue(r1.equals(r2));
+		assertFalse(r1.equals(r3));
+	}
 
 	public void testNextString() throws Exception
 	{

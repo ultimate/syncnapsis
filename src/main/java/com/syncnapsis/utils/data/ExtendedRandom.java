@@ -19,9 +19,11 @@ import java.lang.reflect.Method;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.atomic.AtomicLong;
 
 import org.springframework.util.Assert;
 
+import com.syncnapsis.utils.ReflectionsUtil;
 import com.syncnapsis.utils.TimeZoneUtil;
 
 /**
@@ -36,12 +38,15 @@ public class ExtendedRandom extends Random
 	 */
 	private static final long	serialVersionUID	= 1L;
 
+	private final long			initialSeed;
+
 	/**
 	 * Create a new extended Random
 	 */
 	public ExtendedRandom()
 	{
 		super();
+		this.initialSeed = getSeed();
 	}
 
 	/**
@@ -52,6 +57,98 @@ public class ExtendedRandom extends Random
 	public ExtendedRandom(long seed)
 	{
 		super(seed);
+		this.initialSeed = seed;
+	}
+
+	/**
+	 * Get the seed this random has been initiated with.
+	 * 
+	 * @return the initial seed
+	 */
+	public long getInitialSeed()
+	{
+		return initialSeed;
+	}
+
+	/**
+	 * Get the current seed for this random.<br>
+	 * Since the seed is updated with every next call due to the natural behaviour of {@link Random}
+	 * this is NOT the initial seed.
+	 * 
+	 * @see ExtendedRandom#getInitialSeed()
+	 * @return the current seed
+	 */
+	public long getSeed()
+	{
+		try
+		{
+			return ((AtomicLong) ReflectionsUtil.getField(this, "seed")).get();
+		}
+		catch(IllegalAccessException e)
+		{
+			throw new RuntimeException(e);
+		}
+		catch(NoSuchFieldException e)
+		{
+			// should not happen
+			throw new RuntimeException(e);
+		}
+	}
+
+	/**
+	 * Check wether the gaussian state of this random matches
+	 * 
+	 * @return true or false
+	 */
+	protected boolean matchGaussian(Random r)
+	{
+		try
+		{
+			boolean this_haveNNG = (Boolean) ReflectionsUtil.getField(this, "haveNextNextGaussian");
+			double this_NNG = (Double) ReflectionsUtil.getField(this, "nextNextGaussian");
+			boolean other_haveNNG = (Boolean) ReflectionsUtil.getField(r, "haveNextNextGaussian");
+			double other_NNG= (Double) ReflectionsUtil.getField(r, "nextNextGaussian");
+			return this_haveNNG == other_haveNNG && this_NNG == other_NNG; 
+		}
+		catch(IllegalAccessException e)
+		{
+		}
+		catch(NoSuchFieldException e)
+		{
+		}
+		return false;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode()
+	{
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + (int) (initialSeed ^ (initialSeed >>> 32));
+		return result;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj)
+	{
+		if(this == obj)
+			return true;
+		if(obj == null)
+			return false;
+		if(getClass() != obj.getClass())
+			return false;
+		ExtendedRandom other = (ExtendedRandom) obj;
+		if(initialSeed != other.initialSeed)
+			return false;
+		return matchGaussian(other);
 	}
 
 	/**
