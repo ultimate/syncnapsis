@@ -55,7 +55,7 @@ public class GeneratorTest extends LoggerTestCase
 		}
 
 		@Override
-		public Integer generate(Object... args)
+		public Integer generate(ExtendedRandom random, Object... args)
 		{
 			return random.nextInt();
 		}

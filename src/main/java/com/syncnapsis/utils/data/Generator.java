@@ -26,7 +26,7 @@ public abstract class Generator<T>
 	/**
 	 * The underlying extended random number generator.
 	 */
-	protected ExtendedRandom	random;
+	private ExtendedRandom	random;
 
 	/**
 	 * Create a new Generator with a new {@link ExtendedRandom}
@@ -59,6 +59,18 @@ public abstract class Generator<T>
 	}
 
 	/**
+	 * Generate a new instance of type T from the given arguments and the given random number
+	 * generator (underlying random number generator will be ignored).<br>
+	 * The requirement of the optional arguments will be defined by the implementing/overwriting
+	 * class.
+	 * 
+	 * @param random - the random number generator to use
+	 * @param args - optional arguments
+	 * @return the generated instance
+	 */
+	public abstract T generate(ExtendedRandom random, Object... args);
+
+	/**
 	 * Generate a new instance of type T from the given arguments and the underlying random number
 	 * generator.<br>
 	 * The requirement of the optional arguments will be defined by the implementing/overwriting
@@ -67,5 +79,8 @@ public abstract class Generator<T>
 	 * @param args - optional arguments
 	 * @return the generated instance
 	 */
-	public abstract T generate(Object... args);
+	public final T generate(Object... args)
+	{
+		return generate(this.random, args);
+	}
 }
