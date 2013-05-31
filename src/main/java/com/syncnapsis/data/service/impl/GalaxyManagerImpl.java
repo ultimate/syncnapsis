@@ -202,11 +202,11 @@ public class GalaxyManagerImpl extends GenericNameManagerImpl<Galaxy, Long> impl
 				minY = c.getY();
 			if(c.getZ() < minZ)
 				minZ = c.getZ();
-			if(c.getX() < maxX)
+			if(c.getX() > maxX)
 				maxX = c.getX();
-			if(c.getY() < maxY)
+			if(c.getY() > maxY)
 				maxY = c.getY();
-			if(c.getZ() < maxZ)
+			if(c.getZ() > maxZ)
 				maxZ = c.getZ();
 		}
 
