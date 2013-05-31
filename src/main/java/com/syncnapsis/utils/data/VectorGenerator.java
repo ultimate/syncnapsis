@@ -363,7 +363,7 @@ public class VectorGenerator extends Generator<Vector<Integer>>
 	 * @see com.syncnapsis.utils.data.Generator#generate(java.lang.Object[])
 	 */
 	@Override
-	public Vector.Integer generate(Object... args)
+	public Vector.Integer generate(ExtendedRandom random, Object... args)
 	{
 		double randSum;
 		int step;
@@ -371,7 +371,7 @@ public class VectorGenerator extends Generator<Vector<Integer>>
 		do
 		{
 			// generate a random sum
-			randSum = this.random.nextDouble() * this.vectorProbabilitySum;
+			randSum = random.nextDouble() * this.vectorProbabilitySum;
 			// find the index for this sum with binary search
 			step = this.stepMax;
 			i = step - 1;
