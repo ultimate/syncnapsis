@@ -45,7 +45,7 @@ import com.syncnapsis.utils.math.Array3D;
  * 
  * @author ultimate
  */
-public class VectorGenerator extends Generator<Vector<Integer>>
+public class VectorGenerator extends Generator<Vector.Integer>
 {
 	/**
 	 * The array of probabilties
