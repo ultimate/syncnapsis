@@ -63,6 +63,7 @@ public interface SolarSystemManager extends GenericManager<SolarSystem, Long>
 	 * @param galaxy - the Galaxy the SolarSystem is in
 	 * @param systemCoords - the list containing all the systemCoords for the SolarSystems
 	 * @param systemNames - the list containing possible systemNames for the SolarSystems (optional)
+	 * @param index - the index of the SolarSystem to generate within the systemCoords
 	 * @param random - the random number generator used to generate more parameters if required
 	 * @return the newly created SolarSystem entity
 	 */
