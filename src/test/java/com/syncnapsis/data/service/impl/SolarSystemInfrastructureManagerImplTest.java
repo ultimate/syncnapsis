@@ -14,6 +14,8 @@
  */
 package com.syncnapsis.data.service.impl;
 
+import java.util.ArrayList;
+
 import com.syncnapsis.data.dao.SolarSystemInfrastructureDao;
 import com.syncnapsis.data.model.SolarSystemInfrastructure;
 import com.syncnapsis.data.service.SolarSystemInfrastructureManager;
@@ -31,5 +33,12 @@ public class SolarSystemInfrastructureManagerImplTest extends GenericManagerImpl
 		setDaoClass(SolarSystemInfrastructureDao.class);
 		setMockDao(mockContext.mock(SolarSystemInfrastructureDao.class));
 		setMockManager(new SolarSystemInfrastructureManagerImpl(mockDao));
+	}
+
+	public void testGetByMatch() throws Exception
+	{
+		MethodCall managerCall = new MethodCall("getByMatch", new ArrayList<SolarSystemInfrastructure>(), 1L);
+		MethodCall daoCall = managerCall;
+		simpleGenericTest(managerCall, daoCall);
 	}
 }

@@ -14,6 +14,8 @@
  */
 package com.syncnapsis.data.service.impl;
 
+import java.util.List;
+
 import com.syncnapsis.data.dao.SolarSystemInfrastructureDao;
 import com.syncnapsis.data.model.SolarSystemInfrastructure;
 import com.syncnapsis.data.service.SolarSystemInfrastructureManager;
@@ -23,12 +25,13 @@ import com.syncnapsis.data.service.SolarSystemInfrastructureManager;
  * 
  * @author ultimate
  */
-public class SolarSystemInfrastructureManagerImpl extends GenericManagerImpl<SolarSystemInfrastructure, Long> implements SolarSystemInfrastructureManager
+public class SolarSystemInfrastructureManagerImpl extends GenericManagerImpl<SolarSystemInfrastructure, Long> implements
+		SolarSystemInfrastructureManager
 {
 	/**
 	 * SolarSystemInfrastructureDao for database access
 	 */
-	protected SolarSystemInfrastructureDao			solarSystemInfrastructureDao;
+	protected SolarSystemInfrastructureDao	solarSystemInfrastructureDao;
 
 	/**
 	 * Standard Constructor
@@ -39,5 +42,15 @@ public class SolarSystemInfrastructureManagerImpl extends GenericManagerImpl<Sol
 	{
 		super(solarSystemInfrastructureDao);
 		this.solarSystemInfrastructureDao = solarSystemInfrastructureDao;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see com.syncnapsis.data.service.SolarSystemInfrastructureManager#getByMatch(long)
+	 */
+	@Override
+	public List<SolarSystemInfrastructure> getByMatch(long matchId)
+	{
+		return solarSystemInfrastructureDao.getByMatch(matchId);
 	}
 }
