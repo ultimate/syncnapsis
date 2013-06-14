@@ -28,40 +28,46 @@ public interface MatchDao extends GenericNameDao<Match, Long>
 {
 	/**
 	 * Get the list of matches for a creator for the given reference date:<br>
-	 * This will mean the match state (planned, active, finished) will be determined for this
-	 * timestamp.
+	 * This will mean the match state (planned, active, finished, canceled) will be determined for
+	 * this timestamp.
 	 * 
 	 * @param creatorId - the id of the creator
 	 * @param planned - include planned matches?
 	 * @param active - include active matches?
 	 * @param finished - include finished matches?
+	 * @param canceled - include canceled matches?
+	 * @param referenceDate - the date at which to evaluate the match states
 	 * @return the list of matches
 	 */
-	public List<Match> getByCreator(long creatorId, boolean planned, boolean active, boolean finished, Date referenceDate);
+	public List<Match> getByCreator(long creatorId, boolean planned, boolean active, boolean finished, boolean canceled, Date referenceDate);
 
 	/**
 	 * Get the list of matches for a player for the given reference date:<br>
-	 * This will mean the match state (planned, active, finished) will be determined for this
-	 * timestamp.
+	 * This will mean the match state (planned, active, finished, canceled) will be determined for
+	 * this timestamp.
 	 * 
 	 * @param playerId - the id of the player
 	 * @param planned - include planned matches?
 	 * @param active - include active matches?
 	 * @param finished - include finished matches?
+	 * @param canceled - include canceled matches?
+	 * @param referenceDate - the date at which to evaluate the match states
 	 * @return the list of matches
 	 */
-	public List<Match> getByPlayer(long playerId, boolean planned, boolean active, boolean finished, Date referenceDate);
+	public List<Match> getByPlayer(long playerId, boolean planned, boolean active, boolean finished, boolean canceled, Date referenceDate);
 
 	/**
 	 * Get the list of matches for a galaxy for the given reference date:<br>
-	 * This will mean the match state (planned, active, finished) will be determined for this
-	 * timestamp.
+	 * This will mean the match state (planned, active, finished, canceled) will be determined for
+	 * this timestamp.
 	 * 
 	 * @param galaxyId - the id of the galaxy
 	 * @param planned - include planned matches?
 	 * @param active - include active matches?
 	 * @param finished - include finished matches?
+	 * @param canceled - include canceled matches?
+	 * @param referenceDate - the date at which to evaluate the match states
 	 * @return the list of matches
 	 */
-	public List<Match> getByGalaxy(long galaxyId, boolean planned, boolean active, boolean finished, Date referenceDate);
+	public List<Match> getByGalaxy(long galaxyId, boolean planned, boolean active, boolean finished, boolean canceled, Date referenceDate);
 }

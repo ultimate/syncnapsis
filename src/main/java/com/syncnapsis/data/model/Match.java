@@ -30,6 +30,7 @@ import javax.persistence.TemporalType;
 
 import com.syncnapsis.data.model.base.ActivatableInstance;
 import com.syncnapsis.enums.EnumJoinType;
+import com.syncnapsis.enums.EnumMatchState;
 import com.syncnapsis.enums.EnumStartCondition;
 import com.syncnapsis.enums.EnumVictoryCondition;
 
@@ -69,16 +70,23 @@ public class Match extends ActivatableInstance<Long>
 	 * The date and time this match was created
 	 */
 	protected Date					creationDate;
-
 	/**
 	 * The date and time this match started (or will start)
 	 */
 	protected Date					startDate;
-
 	/**
 	 * The date and time this match ended (or null if still running)
 	 */
 	protected Date					finishedDate;
+	/**
+	 * The date and time this match was canceled
+	 */
+	protected Date					canceledDate;
+
+	/**
+	 * The state of this match
+	 */
+	protected EnumMatchState		state;
 
 	/**
 	 * The speed this match is played with (a factor for travel times and growth rates)
@@ -94,11 +102,14 @@ public class Match extends ActivatableInstance<Long>
 	 * The number of start systems the participants may select.
 	 */
 	protected int					startSystemCount;
-
 	/**
 	 * Is manual start system selection enabled?
 	 */
 	protected boolean				startSystemSelectionEnabled;
+	/**
+	 * The total population for all start systems
+	 */
+	protected int					startPopulation;
 
 	/**
 	 * The join rules defined for joins <b>before</b> the match has been started.
@@ -132,6 +143,13 @@ public class Match extends ActivatableInstance<Long>
 	 * @see EnumVictoryCondition
 	 */
 	protected EnumVictoryCondition	victoryCondition;
+
+	/**
+	 * A parameter defining the amount or value for the victoryCondition if necessary
+	 * 
+	 * @see Match#victoryCondition
+	 */
+	protected int					victoryParameter;
 
 	/**
 	 * The participants in this match
@@ -210,6 +228,30 @@ public class Match extends ActivatableInstance<Long>
 	}
 
 	/**
+	 * The date and time this match was canceled
+	 * 
+	 * @return canceledDate
+	 */
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(nullable = true)
+	public Date getCanceledDate()
+	{
+		return canceledDate;
+	}
+
+	/**
+	 * The state of this match
+	 * 
+	 * @return state
+	 */
+	@Enumerated(value = EnumType.STRING)
+	@Column(nullable = false, length = LENGTH_ENUM)
+	public EnumMatchState getState()
+	{
+		return state;
+	}
+
+	/**
 	 * The speed this match is played with (a factor for travel times and growth rates)
 	 * 
 	 * @return speed
@@ -251,6 +293,17 @@ public class Match extends ActivatableInstance<Long>
 	public boolean isStartSystemSelectionEnabled()
 	{
 		return startSystemSelectionEnabled;
+	}
+
+	/**
+	 * The total population for all start systems
+	 * 
+	 * @return startPopulation
+	 */
+	@Column(nullable = false)
+	public int getStartPopulation()
+	{
+		return startPopulation;
 	}
 
 	/**
@@ -321,6 +374,18 @@ public class Match extends ActivatableInstance<Long>
 	public EnumVictoryCondition getVictoryCondition()
 	{
 		return victoryCondition;
+	}
+
+	/**
+	 * A parameter defining the amount or value for the victoryCondition if necessary
+	 * 
+	 * @see Match#victoryCondition
+	 * @return victoryParameter
+	 */
+	@Column(nullable = false)
+	public int getVictoryParameter()
+	{
+		return victoryParameter;
 	}
 
 	/**
@@ -395,6 +460,26 @@ public class Match extends ActivatableInstance<Long>
 	}
 
 	/**
+	 * The date and time this match was canceled
+	 * 
+	 * @param canceledDate - the date and time
+	 */
+	public void setCanceledDate(Date canceledDate)
+	{
+		this.canceledDate = canceledDate;
+	}
+
+	/**
+	 * The state of this match
+	 * 
+	 * @param state - the state
+	 */
+	public void setState(EnumMatchState state)
+	{
+		this.state = state;
+	}
+
+	/**
 	 * The speed this match is played with (a factor for travel times and growth rates)
 	 * 
 	 * @param speed - the speed factor
@@ -432,6 +517,16 @@ public class Match extends ActivatableInstance<Long>
 	public void setStartSystemSelectionEnabled(boolean startSystemSelectionEnabled)
 	{
 		this.startSystemSelectionEnabled = startSystemSelectionEnabled;
+	}
+
+	/**
+	 * The total population for all start systems
+	 * 
+	 * @param startPopulation - the population count
+	 */
+	public void setStartPopulation(int startPopulation)
+	{
+		this.startPopulation = startPopulation;
 	}
 
 	/**
@@ -473,6 +568,16 @@ public class Match extends ActivatableInstance<Long>
 	{
 		this.participantsMin = participantsMin;
 	}
+	
+	/**
+	 * The start condition for this match
+	 * 
+	 * @param startCondition - the start condition
+	 */
+	public void setStartCondition(EnumStartCondition startCondition)
+	{
+		this.startCondition = startCondition;
+	}
 
 	/**
 	 * The victory condition for this match
@@ -485,13 +590,14 @@ public class Match extends ActivatableInstance<Long>
 	}
 
 	/**
-	 * The start condition for this match
+	 * A parameter defining the amount or value for the victoryCondition if necessary
 	 * 
-	 * @param startCondition - the start condition
+	 * @see Match#victoryCondition
+	 * @param victoryParameter - the victory parameter
 	 */
-	public void setStartCondition(EnumStartCondition startCondition)
+	public void setVictoryParameter(int victoryParameter)
 	{
-		this.startCondition = startCondition;
+		this.victoryParameter = victoryParameter;
 	}
 
 	/**
@@ -513,10 +619,11 @@ public class Match extends ActivatableInstance<Long>
 	{
 		final int prime = 31;
 		int result = super.hashCode();
+		result = prime * result + ((canceledDate == null) ? 0 : canceledDate.hashCode());
 		result = prime * result + ((creationDate == null) ? 0 : creationDate.hashCode());
 		result = prime * result + ((creator == null) ? 0 : creator.getId().hashCode());
 		result = prime * result + ((finishedDate == null) ? 0 : finishedDate.hashCode());
-		result = prime * result + ((galaxy == null) ? 0 : galaxy.hashCode());
+		result = prime * result + ((galaxy == null) ? 0 : galaxy.getId().hashCode());
 		result = prime * result + participantsMax;
 		result = prime * result + participantsMin;
 		result = prime * result + ((plannedJoinType == null) ? 0 : plannedJoinType.hashCode());
@@ -524,18 +631,17 @@ public class Match extends ActivatableInstance<Long>
 		result = prime * result + speed;
 		result = prime * result + ((startCondition == null) ? 0 : startCondition.hashCode());
 		result = prime * result + ((startDate == null) ? 0 : startDate.hashCode());
+		result = prime * result + startPopulation;
 		result = prime * result + startSystemCount;
 		result = prime * result + (startSystemSelectionEnabled ? 1231 : 1237);
 		result = prime * result + ((startedJoinType == null) ? 0 : startedJoinType.hashCode());
+		result = prime * result + ((state == null) ? 0 : state.hashCode());
 		result = prime * result + ((title == null) ? 0 : title.hashCode());
 		result = prime * result + ((victoryCondition == null) ? 0 : victoryCondition.hashCode());
+		result = prime * result + victoryParameter;
 		return result;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * @see com.syncnapsis.data.model.base.BaseObject#equals(java.lang.Object)
-	 */
 	@Override
 	public boolean equals(Object obj)
 	{
@@ -546,6 +652,13 @@ public class Match extends ActivatableInstance<Long>
 		if(getClass() != obj.getClass())
 			return false;
 		Match other = (Match) obj;
+		if(canceledDate == null)
+		{
+			if(other.canceledDate != null)
+				return false;
+		}
+		else if(!canceledDate.equals(other.canceledDate))
+			return false;
 		if(creationDate == null)
 		{
 			if(other.creationDate != null)
@@ -572,7 +685,7 @@ public class Match extends ActivatableInstance<Long>
 			if(other.galaxy != null)
 				return false;
 		}
-		else if(!galaxy.equals(other.galaxy))
+		else if(!galaxy.getId().equals(other.galaxy.getId()))
 			return false;
 		if(participantsMax != other.participantsMax)
 			return false;
@@ -593,11 +706,15 @@ public class Match extends ActivatableInstance<Long>
 		}
 		else if(!startDate.equals(other.startDate))
 			return false;
+		if(startPopulation != other.startPopulation)
+			return false;
 		if(startSystemCount != other.startSystemCount)
 			return false;
 		if(startSystemSelectionEnabled != other.startSystemSelectionEnabled)
 			return false;
 		if(startedJoinType != other.startedJoinType)
+			return false;
+		if(state != other.state)
 			return false;
 		if(title == null)
 		{
@@ -607,6 +724,8 @@ public class Match extends ActivatableInstance<Long>
 		else if(!title.equals(other.title))
 			return false;
 		if(victoryCondition != other.victoryCondition)
+			return false;
+		if(victoryParameter != other.victoryParameter)
 			return false;
 		return true;
 	}

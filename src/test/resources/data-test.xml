@@ -344,16 +344,20 @@
 		<column>creationDate</column>
 		<column>startDate</column>
 		<column>finishedDate</column>
+		<column>canceledDate</column>
+		<column>state</column>
 		<column>speed</column>
 		<column>seed</column>
 		<column>startSystemCount</column>
 		<column>startSystemSelectionEnabled</column>
+		<column>startPopulation</column>
 		<column>plannedJoinType</column>
 		<column>startedJoinType</column>
 		<column>participantsMax</column>
 		<column>participantsMin</column>
 		<column>startCondition</column>
 		<column>victoryCondition</column>
+		<column>victoryParameter</column>
 		<row>
 			<value description="id">1</value>
 			<value description="version">1</value>
@@ -364,16 +368,20 @@
 			<value description="creationDate">2012-01-01</value>
 			<value description="startDate">2012-01-01</value>
 			<null />
+			<null />
+			<value description="state">active</value>
 			<value description="speed">1</value>
 			<value description="seed">0</value>
 			<value description="startSystemCount">1</value>
 			<value description="startSystemSelectionEnabled">1</value>
+			<value description="startPopulation">100</value>
 			<value description="plannedJoinType">invitationsOnly</value>
 			<value description="startedJoinType">none</value>
 			<value description="participantsMax">10</value>
 			<value description="participantsMin">2</value>
 			<value description="startCondition">immediately</value>
 			<value description="victoryCondition">extermination</value>
+			<value description="victoryParameter">0</value>
 		</row>
 		<row>
 			<value description="id">2</value>
@@ -385,16 +393,20 @@
 			<value description="creationDate">2012-01-01</value>
 			<value description="startDate">2012-01-01</value>
 			<value description="finishedDate">2012-02-01</value>
+			<null/>
+			<value description="state">finished</value>
 			<value description="speed">1</value>
 			<value description="seed">0</value>
 			<value description="startSystemCount">1</value>
 			<value description="startSystemSelectionEnabled">1</value>
+			<value description="startPopulation">100</value>
 			<value description="plannedJoinType">joiningEnabled</value>
 			<value description="startedJoinType">none</value>
 			<value description="participantsMax">10</value>
 			<value description="participantsMin">2</value>
 			<value description="startCondition">manually</value>
 			<value description="victoryCondition">extermination</value>
+			<value description="victoryParameter">0</value>
 		</row>
 		<row>
 			<value description="id">11</value>
@@ -406,16 +418,20 @@
 			<value description="creationDate">2012-01-01</value>
 			<null />
 			<null />
+			<null />
+			<value description="state">planned</value>
 			<value description="speed">1</value>
 			<value description="seed">0</value>
 			<value description="startSystemCount">1</value>
 			<value description="startSystemSelectionEnabled">1</value>
+			<value description="startPopulation">100</value>
 			<value description="plannedJoinType">joiningEnabled</value>
 			<value description="startedJoinType">none</value>
 			<value description="participantsMax">10</value>
 			<value description="participantsMin">2</value>
 			<value description="startCondition">manually</value>
 			<value description="victoryCondition">extermination</value>
+			<value description="victoryParameter">0</value>
 		</row>
 		<row>
 			<value description="id">12</value>
@@ -427,16 +443,20 @@
 			<value description="creationDate">2012-01-01</value>
 			<value description="startDate">2012-01-01</value>
 			<null />
+			<null />
+			<value description="state">active</value>
 			<value description="speed">1</value>
 			<value description="seed">0</value>
 			<value description="startSystemCount">1</value>
 			<value description="startSystemSelectionEnabled">1</value>
+			<value description="startPopulation">100</value>
 			<value description="plannedJoinType">joiningEnabled</value>
 			<value description="startedJoinType">none</value>
 			<value description="participantsMax">10</value>
 			<value description="participantsMin">2</value>
 			<value description="startCondition">manually</value>
 			<value description="victoryCondition">extermination</value>
+			<value description="victoryParameter">0</value>
 		</row>
 		<row>
 			<value description="id">13</value>
@@ -447,17 +467,46 @@
 			<value description="fkCreator">1</value>
 			<value description="creationDate">2012-01-01</value>
 			<value description="startDate">2012-01-01</value>
-			<value description="finished">2012-02-01</value>
+			<value description="finishedDate">2012-02-01</value>
+			<null />
+			<value description="state">finished</value>
 			<value description="speed">1</value>
 			<value description="seed">0</value>
 			<value description="startSystemCount">1</value>
 			<value description="startSystemSelectionEnabled">1</value>
+			<value description="startPopulation">100</value>
 			<value description="plannedJoinType">joiningEnabled</value>
 			<value description="startedJoinType">none</value>
 			<value description="participantsMax">10</value>
 			<value description="participantsMin">2</value>
 			<value description="startCondition">manually</value>
 			<value description="victoryCondition">extermination</value>
+			<value description="victoryParameter">0</value>
+		</row>
+		<row>
+			<value description="id">14</value>
+			<value description="version">1</value>
+			<value description="activated">1</value>
+			<value description="title">Cube canceled</value>
+			<value description="fkGalaxy">1</value>
+			<value description="fkCreator">1</value>
+			<value description="creationDate">2012-01-01</value>
+			<null />
+			<null />
+			<value description="canceledDate">2012-02-01</value>
+			<value description="state">canceled</value>
+			<value description="speed">1</value>
+			<value description="seed">0</value>
+			<value description="startSystemCount">1</value>
+			<value description="startSystemSelectionEnabled">1</value>
+			<value description="startPopulation">100</value>
+			<value description="plannedJoinType">joiningEnabled</value>
+			<value description="startedJoinType">none</value>
+			<value description="participantsMax">10</value>
+			<value description="participantsMin">2</value>
+			<value description="startCondition">manually</value>
+			<value description="victoryCondition">extermination</value>
+			<value description="victoryParameter">0</value>
 		</row>
 		<row>
 			<value description="id">21</value>
@@ -469,16 +518,20 @@
 			<value description="creationDate">2012-01-01</value>
 			<null />
 			<null />
+			<null />
+			<value description="state">planned</value>
 			<value description="speed">1</value>
 			<value description="seed">0</value>
 			<value description="startSystemCount">1</value>
 			<value description="startSystemSelectionEnabled">1</value>
+			<value description="startPopulation">100</value>
 			<value description="plannedJoinType">joiningEnabled</value>
 			<value description="startedJoinType">none</value>
 			<value description="participantsMax">10</value>
 			<value description="participantsMin">2</value>
 			<value description="startCondition">manually</value>
 			<value description="victoryCondition">extermination</value>
+			<value description="victoryParameter">0</value>
 		</row>
 		<row>
 			<value description="id">22</value>
@@ -490,16 +543,20 @@
 			<value description="creationDate">2012-01-01</value>
 			<value description="startDate">2012-01-01</value>
 			<null />
+			<null />
+			<value description="state">active</value>
 			<value description="speed">1</value>
 			<value description="seed">0</value>
 			<value description="startSystemCount">1</value>
 			<value description="startSystemSelectionEnabled">1</value>
+			<value description="startPopulation">100</value>
 			<value description="plannedJoinType">joiningEnabled</value>
 			<value description="startedJoinType">none</value>
 			<value description="participantsMax">10</value>
 			<value description="participantsMin">2</value>
 			<value description="startCondition">manually</value>
 			<value description="victoryCondition">extermination</value>
+			<value description="victoryParameter">0</value>
 		</row>
 		<row>
 			<value description="id">23</value>
@@ -510,17 +567,46 @@
 			<value description="fkCreator">2</value>
 			<value description="creationDate">2012-01-01</value>
 			<value description="startDate">2012-01-01</value>
-			<value description="finished">2012-02-01</value>
+			<value description="finishedDate">2012-02-01</value>
+			<null/>
+			<value description="state">finished</value>
 			<value description="speed">1</value>
 			<value description="seed">0</value>
 			<value description="startSystemCount">1</value>
 			<value description="startSystemSelectionEnabled">1</value>
+			<value description="startPopulation">100</value>
 			<value description="plannedJoinType">joiningEnabled</value>
 			<value description="startedJoinType">none</value>
 			<value description="participantsMax">10</value>
 			<value description="participantsMin">2</value>
 			<value description="startCondition">manually</value>
 			<value description="victoryCondition">extermination</value>
+			<value description="victoryParameter">0</value>
+		</row>
+		<row>
+			<value description="id">24</value>
+			<value description="version">1</value>
+			<value description="activated">1</value>
+			<value description="title">Empty canceled</value>
+			<value description="fkGalaxy">2</value>
+			<value description="fkCreator">2</value>
+			<value description="creationDate">2012-01-01</value>
+			<null />
+			<null />
+			<value description="canceledDate">2012-02-01</value>
+			<value description="state">canceled</value>
+			<value description="speed">1</value>
+			<value description="seed">0</value>
+			<value description="startSystemCount">1</value>
+			<value description="startSystemSelectionEnabled">1</value>
+			<value description="startPopulation">100</value>
+			<value description="plannedJoinType">joiningEnabled</value>
+			<value description="startedJoinType">none</value>
+			<value description="participantsMax">10</value>
+			<value description="participantsMin">2</value>
+			<value description="startCondition">manually</value>
+			<value description="victoryCondition">extermination</value>
+			<value description="victoryParameter">0</value>
 		</row>
 	</table>
 
