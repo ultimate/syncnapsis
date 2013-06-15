@@ -14,21 +14,30 @@
  */
 package com.syncnapsis.data.service.impl;
 
+import org.springframework.beans.factory.InitializingBean;
+import org.springframework.util.Assert;
+
 import com.syncnapsis.data.dao.ParticipantDao;
 import com.syncnapsis.data.model.Participant;
 import com.syncnapsis.data.service.ParticipantManager;
+import com.syncnapsis.security.BaseGameManager;
 
 /**
  * Manager-Implementation for access to Participant.
  * 
  * @author ultimate
  */
-public class ParticipantManagerImpl extends GenericManagerImpl<Participant, Long> implements ParticipantManager
+public class ParticipantManagerImpl extends GenericManagerImpl<Participant, Long> implements ParticipantManager, InitializingBean
 {
 	/**
 	 * ParticipantDao for database access
 	 */
-	protected ParticipantDao			participantDao;
+	protected ParticipantDao	participantDao;
+
+	/**
+	 * The SecurityManager
+	 */
+	protected BaseGameManager		securityManager;
 
 	/**
 	 * Standard Constructor
@@ -39,5 +48,35 @@ public class ParticipantManagerImpl extends GenericManagerImpl<Participant, Long
 	{
 		super(participantDao);
 		this.participantDao = participantDao;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.springframework.beans.factory.InitializingBean#afterPropertiesSet()
+	 */
+	@Override
+	public void afterPropertiesSet() throws Exception
+	{
+		Assert.notNull(securityManager, "securityManager must not be null!");
+	}
+
+	/**
+	 * The SecurityManager (BaseGameManager)
+	 * 
+	 * @return securityManager
+	 */
+	public BaseGameManager getSecurityManager()
+	{
+		return securityManager;
+	}
+
+	/**
+	 * The SecurityManager (BaseGameManager)
+	 * 
+	 * @param securityManager - the SecurityManager
+	 */
+	public void setSecurityManager(BaseGameManager securityManager)
+	{
+		this.securityManager = securityManager;
 	}
 }

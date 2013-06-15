@@ -16,6 +16,7 @@ package com.syncnapsis.data.service;
 
 import java.util.List;
 
+import com.syncnapsis.data.model.Match;
 import com.syncnapsis.data.model.Participant;
 
 /**
@@ -25,41 +26,42 @@ import com.syncnapsis.data.model.Participant;
  */
 public interface ParticipantManager extends GenericManager<Participant, Long>
 {
+
 	/**
 	 * Let the current Player join the given match as a Participant.
 	 * 
-	 * @param matchId - the match to join
+	 * @param match - the match to join
 	 * @return the newly created Participant associating the Player with the Match
 	 */
-	public Participant joinMatch(long matchId);
+	public Participant joinMatch(Match match);
 
 	/**
 	 * Let the current Player leave a (non-started) match.
 	 * 
-	 * @param matchId - the match to leave
+	 * @param match - the match to leave
 	 * @return true if the match was left, false otherwise
 	 */
-	public boolean leaveMatch(long matchId);
+	public boolean leaveMatch(Match match);
 
 	/**
 	 * Add the given Player as a participant for the given Match. This require the current user to
 	 * be the creator of the Match.
 	 * 
-	 * @param matchId - the match to add the player to
+	 * @param match - the match to add the player to
 	 * @param playerId - the player to add
 	 * @return true if adding was successful, false otherwise
 	 */
-	public boolean addParticipant(long matchId, long playerId);
+	public boolean addParticipant(Match match, long playerId);
 
 	/**
 	 * Remove the given Player as a participant for the given Match. This require the current user
 	 * to be the creator of the Match.
 	 * 
-	 * @param matchId - the match to remove the player to
+	 * @param match - the match to remove the player to
 	 * @param playerId - the player to remove
 	 * @return true if removing was successful, false otherwise
 	 */
-	public boolean removeParticipant(long matchId, long playerId);
+	public boolean removeParticipant(Match match, long playerId);
 
 	/**
 	 * Cleanup the given participant after all of his populations have been destroyed or the player

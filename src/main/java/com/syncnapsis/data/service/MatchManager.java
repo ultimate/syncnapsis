@@ -18,6 +18,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.syncnapsis.data.model.Match;
+import com.syncnapsis.enums.EnumJoinType;
 import com.syncnapsis.enums.EnumStartCondition;
 import com.syncnapsis.enums.EnumVictoryCondition;
 
@@ -29,25 +30,73 @@ import com.syncnapsis.enums.EnumVictoryCondition;
 public interface MatchManager extends GenericNameManager<Match, Long>
 {
 	/**
+	 * Get the list of matches for a creator for the given reference date:<br>
+	 * This will mean the match state (planned, active, finished, canceled) will be determined for
+	 * this timestamp.
+	 * 
+	 * @param creatorId - the id of the creator
+	 * @param planned - include planned matches?
+	 * @param active - include active matches?
+	 * @param finished - include finished matches?
+	 * @param canceled - include canceled matches?
+	 * @return the list of matches
+	 */
+	public List<Match> getByCreator(long creatorId, boolean planned, boolean active, boolean finished, boolean canceled);
+
+	/**
+	 * Get the list of matches for a player for the given reference date:<br>
+	 * This will mean the match state (planned, active, finished, canceled) will be determined for
+	 * this timestamp.
+	 * 
+	 * @param playerId - the id of the player
+	 * @param planned - include planned matches?
+	 * @param active - include active matches?
+	 * @param finished - include finished matches?
+	 * @param canceled - include canceled matches?
+	 * @return the list of matches
+	 */
+	public List<Match> getByPlayer(long playerId, boolean planned, boolean active, boolean finished, boolean canceled);
+
+	/**
+	 * Get the list of matches for a galaxy for the given reference date:<br>
+	 * This will mean the match state (planned, active, finished, canceled) will be determined for
+	 * this timestamp.
+	 * 
+	 * @param galaxyId - the id of the galaxy
+	 * @param planned - include planned matches?
+	 * @param active - include active matches?
+	 * @param finished - include finished matches?
+	 * @param canceled - include canceled matches?
+	 * @return the list of matches
+	 */
+	public List<Match> getByGalaxy(long galaxyId, boolean planned, boolean active, boolean finished, boolean canceled);
+
+	/**
 	 * Create a new match and start it if the startCondition demands it.
 	 * 
 	 * @see EnumStartCondition
 	 * @param title - the title of the match
 	 * @param galaxyId - the galaxy for the match
 	 * @param speed - the speed of the match
+	 * @param seed - an optional seed for the match
 	 * @param startCondition - the start condition
 	 * @param startDate - the start date (if required for the start condition)
 	 * @param startSystemSelectionEnabled - is start system selection enabled?
 	 * @param startSystemCount - the number of start systems for each participant
+	 * @param startPopulation - the total population for all start systems
 	 * @param victoryCondition - the victory condition
+	 * @param victoryParameter - the victory parameter
 	 * @param participantsMax - the max number of participants
 	 * @param participantsMin - the min number of participants
-	 * @param participantIds - a list of participants invited
+	 * @param participantIds - a list of participants invited (as player ids)
+	 * @param plannedJoinType - the join type before the match is started
+	 * @param startedJoinType - the join type after the match is started
 	 * @return the match created
 	 */
-	public Match createMatch(String title, long galaxyId, int speed, EnumStartCondition startCondition, Date startDate,
-			boolean startSystemSelectionEnabled, int startSystemCount, EnumVictoryCondition victoryCondition, int participantsMax,
-			int participantsMin, List<Long> participantIds);
+	public Match createMatch(String title, long galaxyId, int speed, Long seed, EnumStartCondition startCondition, Date startDate,
+			boolean startSystemSelectionEnabled, int startSystemCount, int startPopulation, EnumVictoryCondition victoryCondition,
+			int victoryParamter, int participantsMax, int participantsMin, List<Long> participantIds, EnumJoinType plannedJoinType,
+			EnumJoinType startedJoinType);
 
 	/**
 	 * Force the start of the given match no matter if the start condition is met or not.<br>
@@ -59,12 +108,21 @@ public interface MatchManager extends GenericNameManager<Match, Long>
 	 * furthermore be registered for calculation services etc.<br>
 	 * <br>
 	 * Starting the match will perform a security check wether the calling user is equal to the
-	 * creator.
+	 * creator or if the match is started by the system itself.
 	 * 
-	 * @param matchId - the id of the match to start
+	 * @param match - the match to start
 	 * @return the match entity
 	 */
-	public Match startMatch(long matchId);
+	public Match startMatch(Match match);
+
+	/**
+	 * Start the given match if the start condition is met.<br>
+	 * 
+	 * @see MatchManager#startMatch(Match)
+	 * @param match - the match to start
+	 * @return the match entity
+	 */
+	public Match startMatchIfNecessary(Match match);
 
 	/**
 	 * Cancel a planned game if it has not yet been started. This will include cleaning up all
@@ -74,50 +132,17 @@ public interface MatchManager extends GenericNameManager<Match, Long>
 	 * Canceling the match will perform a security check wether the calling user is equal to the
 	 * creator.
 	 * 
-	 * @param matchId - the id of the match to cancel
+	 * @param match - the match to cancel
 	 * @return true if the match has been canceled, false otherwise
 	 */
-	public boolean cancelMatch(long matchId);
+	public boolean cancelMatch(Match match);
 
 	/**
 	 * Clean up the given match by setting all remaining required properties for the match and all
 	 * associated entities. This will include setting finish and or destruction dates etc.
 	 * 
-	 * @param matchId - the id of the match to finish
+	 * @param match - the match to finish
 	 * @return the match entity
 	 */
-	public Match finishMatch(long matchId);
-
-	/**
-	 * Get the list of matches for a creator
-	 * 
-	 * @param creatorId - the id of the creator
-	 * @param planned - include planned matches?
-	 * @param active - include active matches?
-	 * @param finished - include finished matches?
-	 * @return the list of matches
-	 */
-	public List<Match> getByCreator(long creatorId, boolean planned, boolean active, boolean finished);
-	
-	/**
-	 * Get the list of matches for a player
-	 * 
-	 * @param playerId - the id of the player
-	 * @param planned - include planned matches?
-	 * @param active - include active matches?
-	 * @param finished - include finished matches?
-	 * @return the list of matches
-	 */
-	public List<Match> getByPlayer(long playerId, boolean planned, boolean active, boolean finished);
-
-	/**
-	 * Get the list of matches for a galaxy
-	 * 
-	 * @param galaxyId - the id of the galaxy
-	 * @param planned - include planned matches?
-	 * @param active - include active matches?
-	 * @param finished - include finished matches?
-	 * @return the list of matches
-	 */
-	public List<Match> getByGalaxy(long galaxyId, boolean planned, boolean active, boolean finished);
+	public Match finishMatch(Match match);
 }

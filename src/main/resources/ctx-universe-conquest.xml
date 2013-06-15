@@ -48,10 +48,13 @@
 
 	<bean id="matchManager" class="com.syncnapsis.data.service.impl.MatchManagerImpl">
 		<constructor-arg ref="matchDao" />
+		<constructor-arg ref="galaxyManager" />
+		<constructor-arg ref="participantManager" />
 	</bean>
 
 	<bean id="participantManager" class="com.syncnapsis.data.service.impl.ParticipantManagerImpl">
 		<constructor-arg ref="participantDao" />
+		<property name="securityManager" ref="securityManager" />
 	</bean>
 
 	<bean id="solarSystemManager" class="com.syncnapsis.data.service.impl.SolarSystemManagerImpl">
