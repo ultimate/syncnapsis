@@ -14,6 +14,7 @@
  */
 package com.syncnapsis.data.model;
 
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -59,6 +60,12 @@ public class Participant extends ActivatableInstance<Long>
 	 * The current rank of this participant/empire within the match
 	 */
 	protected int							rank;
+
+	/**
+	 * The current value being used to determine the rank of this participant/empire within the
+	 * match.
+	 */
+	protected int							rankValue;
 
 	/**
 	 * The date the participant (empire/player) joined the match
@@ -127,6 +134,18 @@ public class Participant extends ActivatableInstance<Long>
 	public int getRank()
 	{
 		return rank;
+	}
+
+	/**
+	 * The current value being used to determine the rank of this participant/empire within the
+	 * match.
+	 * 
+	 * @return rankValue
+	 */
+	@Column(nullable = false)
+	public int getRankValue()
+	{
+		return rankValue;
 	}
 
 	/**
@@ -232,6 +251,17 @@ public class Participant extends ActivatableInstance<Long>
 	}
 
 	/**
+	 * The current value being used to determine the rank of this participant/empire within the
+	 * match.
+	 * 
+	 * @param rankValue - the rank value
+	 */
+	public void setRankValue(int rankValue)
+	{
+		this.rankValue = rankValue;
+	}
+
+	/**
 	 * The date the participant (empire/player) joined the match
 	 * 
 	 * @param joinedDate - the date and time
@@ -294,6 +324,10 @@ public class Participant extends ActivatableInstance<Long>
 	// this.systemsDisputed = systemsDisputed;
 	// }
 
+	/*
+	 * (non-Javadoc)
+	 * @see com.syncnapsis.data.model.base.BaseObject#hashCode()
+	 */
 	@Override
 	public int hashCode()
 	{
@@ -305,6 +339,7 @@ public class Participant extends ActivatableInstance<Long>
 		result = prime * result + ((joinedDate == null) ? 0 : joinedDate.hashCode());
 		result = prime * result + ((match == null) ? 0 : match.getId().hashCode());
 		result = prime * result + rank;
+		result = prime * result + rankValue;
 		return result;
 	}
 
@@ -350,7 +385,35 @@ public class Participant extends ActivatableInstance<Long>
 			return false;
 		if(rank != other.rank)
 			return false;
+		if(rankValue != other.rankValue)
+			return false;
 		return true;
 	}
 
+	/**
+	 * A comparator using {@link Participant#rankValue} to compare entities
+	 */
+	public static final Comparator<Participant>	BY_RANKVALUE	= new Comparator<Participant>() {
+																	@Override
+																	public int compare(Participant o1, Participant o2)
+																	{
+																		return o2.rankValue - o1.rankValue;
+																	}
+																};
+	/**
+	 * A comparator using {@link Participant#empire} to compare entities
+	 */
+	public static final Comparator<Participant>	BY_EMPIRE		= new Comparator<Participant>() {
+																	@Override
+																	public int compare(Participant o1, Participant o2)
+																	{
+																		long delta = o1.empire.getId() - o2.empire.getId();
+																		if(delta > 0)
+																			return 1;
+																		else if(delta < 0)
+																			return -1;
+																		else
+																			return 0;
+																	}
+																};
 }
