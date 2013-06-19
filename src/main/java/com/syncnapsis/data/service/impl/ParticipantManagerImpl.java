@@ -18,9 +18,11 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.util.Assert;
 
 import com.syncnapsis.data.dao.ParticipantDao;
+import com.syncnapsis.data.model.Match;
 import com.syncnapsis.data.model.Participant;
 import com.syncnapsis.data.service.ParticipantManager;
 import com.syncnapsis.security.BaseGameManager;
+import com.syncnapsis.security.accesscontrol.MatchAccessController;
 
 /**
  * Manager-Implementation for access to Participant.
@@ -79,4 +81,19 @@ public class ParticipantManagerImpl extends GenericManagerImpl<Participant, Long
 	{
 		this.securityManager = securityManager;
 	}
+
+	/**
+	 * Shortcut for
+	 * <code>securityManager.getAccessController(Match.class).isAccessibe(match, operation, securityManager.getPlayerProvider().get())</code>
+	 * 
+	 * @see MatchAccessController
+	 * @return true or false
+	 */
+	protected boolean isAccessible(Match match, int operation)
+	{
+		return securityManager.getAccessController(Match.class).isAccessible(match, operation, securityManager.getPlayerProvider().get());
+	}
+	
+//	Assert.isTrue(isAccessible(match, MatchAccessController.OPERATION_START), "no access rights for 'start match " + match.getId() + "'");
+
 }

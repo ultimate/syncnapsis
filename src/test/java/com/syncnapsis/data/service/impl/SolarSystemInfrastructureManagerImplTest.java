@@ -41,4 +41,9 @@ public class SolarSystemInfrastructureManagerImplTest extends GenericManagerImpl
 		MethodCall daoCall = managerCall;
 		simpleGenericTest(managerCall, daoCall);
 	}
+	
+	public void testInitialize() throws Exception
+	{
+		fail("unimplemented");
+	}
 }

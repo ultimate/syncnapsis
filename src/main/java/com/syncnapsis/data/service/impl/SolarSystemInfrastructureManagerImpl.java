@@ -17,8 +17,12 @@ package com.syncnapsis.data.service.impl;
 import java.util.List;
 
 import com.syncnapsis.data.dao.SolarSystemInfrastructureDao;
+import com.syncnapsis.data.model.Match;
+import com.syncnapsis.data.model.SolarSystem;
 import com.syncnapsis.data.model.SolarSystemInfrastructure;
 import com.syncnapsis.data.service.SolarSystemInfrastructureManager;
+import com.syncnapsis.utils.data.ExtendedRandom;
+import com.syncnapsis.utils.data.Generator;
 
 /**
  * Manager-Implementation for access to SolarSystemInfrastructure.
@@ -31,7 +35,12 @@ public class SolarSystemInfrastructureManagerImpl extends GenericManagerImpl<Sol
 	/**
 	 * SolarSystemInfrastructureDao for database access
 	 */
-	protected SolarSystemInfrastructureDao	solarSystemInfrastructureDao;
+	protected SolarSystemInfrastructureDao			solarSystemInfrastructureDao;
+
+	/**
+	 * A generator for SolarSystemInfrastructure
+	 */
+	protected Generator<SolarSystemInfrastructure>	infrastructureGenerator;
 
 	/**
 	 * Standard Constructor
@@ -52,5 +61,18 @@ public class SolarSystemInfrastructureManagerImpl extends GenericManagerImpl<Sol
 	public List<SolarSystemInfrastructure> getByMatch(long matchId)
 	{
 		return solarSystemInfrastructureDao.getByMatch(matchId);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see
+	 * com.syncnapsis.data.service.SolarSystemInfrastructureManager#initialize(com.syncnapsis.data
+	 * .model.Match, com.syncnapsis.data.model.SolarSystem,
+	 * com.syncnapsis.utils.data.ExtendedRandom)
+	 */
+	@Override
+	public SolarSystemInfrastructure initialize(Match match, SolarSystem system, ExtendedRandom random)
+	{
+		return save(infrastructureGenerator.generate(random, match, system));
 	}
 }

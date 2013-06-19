@@ -18,9 +18,11 @@ import java.util.Date;
 import java.util.List;
 
 import com.syncnapsis.data.model.Match;
+import com.syncnapsis.data.model.Participant;
 import com.syncnapsis.enums.EnumJoinType;
 import com.syncnapsis.enums.EnumStartCondition;
 import com.syncnapsis.enums.EnumVictoryCondition;
+import com.syncnapsis.utils.data.ExtendedRandom;
 
 /**
  * Manager-Interface for access to Match.
@@ -126,8 +128,8 @@ public interface MatchManager extends GenericNameManager<Match, Long>
 
 	/**
 	 * Cancel a planned game if it has not yet been started. This will include cleaning up all
-	 * remaining data like start system selections, associated
-	 * participants, initialized galaxies and more...<br>
+	 * remaining data like start system selections, associated participants, initialized galaxies
+	 * and more...<br>
 	 * <br>
 	 * Canceling the match will perform a security check wether the calling user is equal to the
 	 * creator.
@@ -145,4 +147,53 @@ public interface MatchManager extends GenericNameManager<Match, Long>
 	 * @return the match entity
 	 */
 	public Match finishMatch(Match match);
+
+	/**
+	 * Check wether the victory condition for the given match is met. If the condition is met the
+	 * match is ready to be finished by using {@link MatchManager#finishMatch(Match)}
+	 * 
+	 * @param match - the match to check
+	 * @return true or false
+	 */
+	public boolean isVictoryConditionMet(Match match);
+
+	/**
+	 * Update the rankings for the given match.
+	 * 
+	 * @param match - the match to update
+	 * @return the match entity
+	 */
+	public Match updateRanking(Match match);
+
+	/**
+	 * Assign the specified number of rivals to each participant from within the choice of all other
+	 * participants within the list. This method guarantees every participant is exactly rival for
+	 * the n participants and receives n rivals itself where n is the number of rivals specified.
+	 * Furthermore it will guarantee not to assign a rival multiple times to the same participant.<br>
+	 * <br>
+	 * The algorithm is design in such a way that calling this method twice with the same list of
+	 * participants, number of rivals and random number generator the assigned rivals will be
+	 * identical. This will also include the case where the order of the participants within the
+	 * list has been changed, since this order does not have any influence on the result of the
+	 * algorithm.<br>
+	 * <br>
+	 * <b>Note:</b> The participant entities won't be saved to database - this method only assigns
+	 * the rivals as references.
+	 * 
+	 * @param participants - the number of participants
+	 * @param rivals - the number of rivals to assign for each participant
+	 * @param random - the ExtendedRandom-number generator
+	 * @return the matrix of rival associations
+	 */
+	public void assignRivals(List<Participant> participants, int rivals, ExtendedRandom random);
+
+	/**
+	 * Return the number of rivals to assign for the given number of total participants primarily
+	 * used in vedetta mode. This method will currently return zero for all game mode other than
+	 * {@link EnumVictoryCondition#vendetta}<br>
+	 * 
+	 * @param match - the match to get the number of rivals for
+	 * @return the number of rivals
+	 */
+	public int getNumberOfRivals(Match match);
 }

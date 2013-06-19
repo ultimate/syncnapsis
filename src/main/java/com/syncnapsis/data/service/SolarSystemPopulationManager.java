@@ -22,6 +22,7 @@ import com.syncnapsis.data.model.SolarSystemInfrastructure;
 import com.syncnapsis.data.model.SolarSystemPopulation;
 import com.syncnapsis.enums.EnumDestructionType;
 import com.syncnapsis.enums.EnumPopulationPriority;
+import com.syncnapsis.utils.data.ExtendedRandom;
 
 /**
  * Manager-Interface for access to SolarSystemPopulation.
@@ -63,9 +64,10 @@ public interface SolarSystemPopulationManager extends GenericManager<SolarSystem
 	 * this participant.
 	 * 
 	 * @param participant - the participant to create the start systems for
+	 * @param random - the ExtendedRandom-number-generator used to randomly select the systems
 	 * @return the list of start system populations
 	 */
-	public List<SolarSystemPopulation> randomSelectStartSystems(Participant participant);
+	public List<SolarSystemPopulation> randomSelectStartSystems(Participant participant, ExtendedRandom random);
 
 	/**
 	 * Create a new SolarSystemPopulation as a spin of from the given origin population.<br>

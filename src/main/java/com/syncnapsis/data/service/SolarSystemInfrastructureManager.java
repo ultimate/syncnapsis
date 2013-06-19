@@ -16,7 +16,10 @@ package com.syncnapsis.data.service;
 
 import java.util.List;
 
+import com.syncnapsis.data.model.Match;
+import com.syncnapsis.data.model.SolarSystem;
 import com.syncnapsis.data.model.SolarSystemInfrastructure;
+import com.syncnapsis.utils.data.ExtendedRandom;
 
 /**
  * Manager-Interface for access to SolarSystemInfrastructure.
@@ -33,13 +36,13 @@ public interface SolarSystemInfrastructureManager extends GenericManager<SolarSy
 	 */
 	public List<SolarSystemInfrastructure> getByMatch(long matchId);
 
-//	/**
-//	 * Create a new SolarSystemInfrastructure for the given Match and SolarSystem
-//	 * 
-//	 * @param matchId - the Match for the infrastructure
-//	 * @param systemId - the SolarSystem for the infrastructure
-//	 * @param infrastructure - the infrastructure value
-//	 * @return the newly created SolarSystemInfrastructure entity
-//	 */
-//	public SolarSystemInfrastructure initialize(long matchId, long systemId, int infrastructure);
+	/**
+	 * Create a new SolarSystemInfrastructure for the given Match and SolarSystem
+	 * 
+	 * @param match - the Match for the infrastructure
+	 * @param system - the SolarSystem for the infrastructure
+	 * @param random - the ExtendedRandom-number-generator
+	 * @return the newly created SolarSystemInfrastructure entity
+	 */
+	public SolarSystemInfrastructure initialize(Match match, SolarSystem system, ExtendedRandom random);
 }

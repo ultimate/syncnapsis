@@ -16,6 +16,18 @@
 <!DOCTYPE dataset SYSTEM "dataset.dtd">
 <dataset>
 
+	<table name="parameter">
+		<column>id</column>
+		<column>name</column>
+		<column>value</column>
+		<column>version</column>
+		<row>
+			<value description="id">101</value>
+			<value description="name">match.vendetta.param.default</value>
+			<value description="value">40</value>
+			<value description="version">1</value>
+		</row>
+	</table>
 	<table name="galaxy">
 		<column>id</column>
 		<column>version</column>
@@ -617,6 +629,7 @@
 		<column>fkMatch</column>
 		<column>fkEmpire</column>
 		<column>rank</column>
+		<column>rankValue</column>
 		<column>joinedDate</column>
 		<column>destructionDate</column>
 		<column>destructionType</column>
@@ -627,6 +640,7 @@
 			<value description="fkMatch">1</value>
 			<value description="fkEmpire">1</value>
 			<value description="rank">0</value>
+			<value description="rankValue">0</value>
 			<value description="joinedDate">2012-01-01</value>
 			<null />
 			<null />
@@ -638,6 +652,7 @@
 			<value description="fkMatch">1</value>
 			<value description="fkEmpire">2</value>
 			<value description="rank">0</value>
+			<value description="rankValue">0</value>
 			<value description="joinedDate">2012-01-01</value>
 			<null />
 			<null />
@@ -649,6 +664,7 @@
 			<value description="fkMatch">2</value>
 			<value description="fkEmpire">1</value>
 			<value description="rank">1</value>
+			<value description="rankValue">10</value>
 			<value description="joinedDate">2012-01-01</value>
 			<null />
 			<null />
@@ -660,6 +676,7 @@
 			<value description="fkMatch">2</value>
 			<value description="fkEmpire">2</value>
 			<value description="rank">2</value>
+			<value description="rankValue">5</value>
 			<value description="joinedDate">2012-01-01</value>
 			<value description="destructionDate">2012-02-01</value>
 			<value description="destructionType">destroyed</value>

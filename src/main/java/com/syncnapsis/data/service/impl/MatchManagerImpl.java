@@ -14,26 +14,36 @@
  */
 package com.syncnapsis.data.service.impl;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.util.Assert;
 
+import com.syncnapsis.constants.UniverseConquestConstants;
 import com.syncnapsis.data.dao.MatchDao;
 import com.syncnapsis.data.model.Galaxy;
 import com.syncnapsis.data.model.Match;
 import com.syncnapsis.data.model.Participant;
-import com.syncnapsis.data.model.Player;
+import com.syncnapsis.data.model.SolarSystem;
 import com.syncnapsis.data.model.SolarSystemPopulation;
 import com.syncnapsis.data.service.GalaxyManager;
 import com.syncnapsis.data.service.MatchManager;
+import com.syncnapsis.data.service.ParameterManager;
 import com.syncnapsis.data.service.ParticipantManager;
+import com.syncnapsis.data.service.SolarSystemInfrastructureManager;
 import com.syncnapsis.data.service.SolarSystemPopulationManager;
 import com.syncnapsis.enums.EnumJoinType;
+import com.syncnapsis.enums.EnumMatchState;
 import com.syncnapsis.enums.EnumStartCondition;
 import com.syncnapsis.enums.EnumVictoryCondition;
 import com.syncnapsis.security.BaseGameManager;
+import com.syncnapsis.security.accesscontrol.MatchAccessController;
+import com.syncnapsis.utils.HibernateUtil;
+import com.syncnapsis.utils.data.ExtendedRandom;
 
 /**
  * Manager-Implementation for access to Match.
@@ -45,25 +55,33 @@ public class MatchManagerImpl extends GenericNameManagerImpl<Match, Long> implem
 	/**
 	 * MatchDao for database access
 	 */
-	protected MatchDao						matchDao;
+	protected MatchDao							matchDao;
 
 	/**
 	 * The GalaxyManager
 	 */
-	protected GalaxyManager					galaxyManager;
+	protected GalaxyManager						galaxyManager;
 	/**
 	 * The ParticipantManager
 	 */
-	protected ParticipantManager			participantManager;
+	protected ParticipantManager				participantManager;
 	/**
 	 * The SolarSystemPopulationManager
 	 */
-	protected SolarSystemPopulationManager	solarSystemPopulationManager;
+	protected SolarSystemPopulationManager		solarSystemPopulationManager;
+	/**
+	 * The SolarSystemInfrastructureManager
+	 */
+	protected SolarSystemInfrastructureManager	solarSystemInfrastructureManager;
+	/**
+	 * The ParameterManager
+	 */
+	protected ParameterManager					parameterManager;
 
 	/**
 	 * The SecurityManager
 	 */
-	protected BaseGameManager				securityManager;
+	protected BaseGameManager					securityManager;
 
 	/**
 	 * Standard Constructor
@@ -72,15 +90,20 @@ public class MatchManagerImpl extends GenericNameManagerImpl<Match, Long> implem
 	 * @param galaxyManager - the GalaxyManager
 	 * @param participantManager - the ParticipantManager
 	 * @param solarSystemPopulationManager - the SolarSystemPopulationManager
+	 * @param solarSystemInfrastructureManager - the PolarSystemInfrastructureManager
+	 * @param parameterManager - the ParameterManager
 	 */
 	public MatchManagerImpl(MatchDao matchDao, GalaxyManager galaxyManager, ParticipantManager participantManager,
-			SolarSystemPopulationManager solarSystemPopulationManager)
+			SolarSystemPopulationManager solarSystemPopulationManager, SolarSystemInfrastructureManager solarSystemInfrastructureManager,
+			ParameterManager parameterManager)
 	{
 		super(matchDao);
 		this.matchDao = matchDao;
 		this.galaxyManager = galaxyManager;
 		this.participantManager = participantManager;
 		this.solarSystemPopulationManager = solarSystemPopulationManager;
+		this.solarSystemInfrastructureManager = solarSystemInfrastructureManager;
+		this.parameterManager = parameterManager;
 	}
 
 	/*
@@ -111,6 +134,18 @@ public class MatchManagerImpl extends GenericNameManagerImpl<Match, Long> implem
 	public void setSecurityManager(BaseGameManager securityManager)
 	{
 		this.securityManager = securityManager;
+	}
+
+	/**
+	 * Shortcut for
+	 * <code>securityManager.getAccessController(Match.class).isAccessibe(match, operation, securityManager.getPlayerProvider().get())</code>
+	 * 
+	 * @see MatchAccessController
+	 * @return true or false
+	 */
+	protected boolean isAccessible(Match match, int operation)
+	{
+		return securityManager.getAccessController(Match.class).isAccessible(match, operation, securityManager.getPlayerProvider().get());
 	}
 
 	/*
@@ -162,6 +197,8 @@ public class MatchManagerImpl extends GenericNameManagerImpl<Match, Long> implem
 			int victoryParameter, int participantsMax, int participantsMin, List<Long> participantIds, EnumJoinType plannedJoinType,
 			EnumJoinType startedJoinType)
 	{
+		Assert.isTrue(isAccessible(null, MatchAccessController.OPERATION_CREATE), "no access rights for 'create match'");
+
 		Galaxy galaxy = galaxyManager.get(galaxyId);
 		Assert.notNull(galaxy, "galaxy with ID " + galaxyId + " not found!");
 
@@ -184,10 +221,16 @@ public class MatchManagerImpl extends GenericNameManagerImpl<Match, Long> implem
 		match.setStartSystemSelectionEnabled(startSystemSelectionEnabled);
 		match.setTitle(title);
 		match.setVictoryCondition(victoryCondition);
+		match.setVictoryParameter(victoryParameter);
 
 		match = save(match);
 
-		// TODO create infrastructures
+		// create infrastructures
+		ExtendedRandom random = new ExtendedRandom(seed);
+		for(SolarSystem system : galaxy.getSolarSystems())
+		{
+			solarSystemInfrastructureManager.initialize(match, system, random);
+		}
 
 		// add participants
 		for(long playerId : participantIds)
@@ -196,7 +239,7 @@ public class MatchManagerImpl extends GenericNameManagerImpl<Match, Long> implem
 				logger.warn("could not add player " + playerId + " to match " + match.getId());
 		}
 
-		// flush?
+		HibernateUtil.currentSession().flush();
 
 		return startMatchIfNecessary(get(match.getId()));
 	}
@@ -208,9 +251,7 @@ public class MatchManagerImpl extends GenericNameManagerImpl<Match, Long> implem
 	@Override
 	public Match startMatch(Match match)
 	{
-		Player current = securityManager.getPlayerProvider().get();
-		Assert.isTrue(match.getCreator().equals(current), "current player " + current.getId()
-				+ " is not allowed to start the match created by player " + match.getCreator().getId());
+		Assert.isTrue(isAccessible(match, MatchAccessController.OPERATION_START), "no access rights for 'start match " + match.getId() + "'");
 		return performStartMatch(match);
 	}
 
@@ -262,45 +303,77 @@ public class MatchManagerImpl extends GenericNameManagerImpl<Match, Long> implem
 			startDate = new Date(securityManager.getTimeProvider().get());
 			match.setStartDate(startDate);
 		}
+		match.setState(EnumMatchState.active);
+
+		switch(match.getVictoryCondition())
+		{
+			case domination:
+				// set during game creation
+				break;
+			case extermination:
+				// allways 100%
+				match.setVictoryParameter(100);
+				break;
+			case vendetta:
+				// TODO make vendetta percentage selectable?
+				match.setVictoryParameter(parameterManager.getInteger(UniverseConquestConstants.PARAM_MATCH_VENDETTA_PERCENTAGE_DEFAULT));
+				break;
+		}
+
+		// create the randon - since this is the second step in randomization, so let's add 1 :-)
+		ExtendedRandom random = new ExtendedRandom(match.getSeed() + 1);
+
+		// assign the rivals
+		int numberOfRivals = getNumberOfRivals(match);
+		if(numberOfRivals > 0)
+			assignRivals(match.getParticipants(), numberOfRivals, random);
 
 		List<SolarSystemPopulation> populations;
 		for(Participant p : match.getParticipants())
 		{
 			// assign start populations
-			populations = solarSystemPopulationManager.randomSelectStartSystems(p);
+			populations = solarSystemPopulationManager.randomSelectStartSystems(p, random);
 			// mark populations with start date
 			for(SolarSystemPopulation population : populations)
 			{
 				population.setColonizationDate(startDate);
 				solarSystemPopulationManager.save(population);
 			}
+			participantManager.save(p);
 		}
 
-		// TODO assign rivals (vendetta)
-
-		return match;
+		return save(match);
 	}
 
-	/**
-	 * Return the number of rivals to assign in vedetta mode for the given number of total
-	 * participants.<br>
-	 * 
-	 * @param participants - the number of participants
-	 * @return the number of rivals
+	/*
+	 * (non-Javadoc)
+	 * @see com.syncnapsis.data.service.MatchManager#assignRivals(java.util.List, int,
+	 * com.syncnapsis.utils.data.ExtendedRandom)
 	 */
-	protected int getNumberOfRivals(int participants, EnumVictoryCondition condition)
+	@Override
+	public void assignRivals(List<Participant> participants, int rivals, ExtendedRandom random)
 	{
-		return (participants + 2) / 3;
-		// 1 > 0 > 0 / 0
-		// 2 > 1 > 1 / 1
-		// 3 > 2 > 1 / 1
-		// 4 > 3 > 1 / 2
-		// 5 > 4 > 2 / 2
-		// 6 > 5 > 2 / 2
-		// 7 > 6 > 2 / 3
-		// 8 > 7 > 3 / 3
-		// 9 > 8 > 3 / 3
-		// 10 > 9 > 3 / 4
+		// make a copy of the list since we do not want to modify the original
+		List<Participant> parts = new ArrayList<Participant>(participants);
+		// sort list to guarantee same pre-conditions
+		Collections.sort(parts, Participant.BY_EMPIRE);
+		// shuffle for randomization
+		Collections.shuffle(parts, random);
+
+		// TODO assign rivals
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see com.syncnapsis.data.service.MatchManager#getNumberOfRivals(com.syncnapsis.data.model.Match)
+	 */
+	@Override
+	public int getNumberOfRivals(Match match)
+	{
+		if(match.getVictoryCondition() == EnumVictoryCondition.vendetta)
+			return (int) Math.ceil((match.getParticipants().size() - 1) * match.getVictoryParameter() / 100.0);
+		else
+			return 0;
 	}
 
 	/*
@@ -310,9 +383,17 @@ public class MatchManagerImpl extends GenericNameManagerImpl<Match, Long> implem
 	@Override
 	public boolean cancelMatch(Match match)
 	{
-		Assert.isTrue(match.getS)
-		// TODO Auto-generated method stub
-		return false;
+		Assert.isTrue(isAccessible(match, MatchAccessController.OPERATION_CANCEL), "no access rights for 'cancel match " + match.getId() + "'");
+
+		if(match.getCanceledDate() != null || match.getFinishedDate() != null)
+			return false;
+
+		Date now = new Date(securityManager.getTimeProvider().get());
+
+		match.setCanceledDate(now);
+		match.setState(EnumMatchState.canceled);
+		save(match);
+		return true;
 	}
 
 	/*
@@ -322,7 +403,131 @@ public class MatchManagerImpl extends GenericNameManagerImpl<Match, Long> implem
 	@Override
 	public Match finishMatch(Match match)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		// called by System
+
+		// check victory condition
+		if(!isVictoryConditionMet(match))
+			return match; // throw Exception?
+
+		Date now = new Date(securityManager.getTimeProvider().get());
+
+		// TODO destroy players / colonies etc. ?
+
+		match.setFinishedDate(now);
+		match.setState(EnumMatchState.finished);
+
+		return save(match);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see
+	 * com.syncnapsis.data.service.MatchManager#isVictoryConditionMet(com.syncnapsis.data.model.
+	 * Match)
+	 */
+	@Override
+	public boolean isVictoryConditionMet(Match match)
+	{
+		updateRanking(match);
+
+		Participant leader = null; // a leader/winner (if existing), must not be the only one
+		for(Participant p : match.getParticipants())
+		{
+			if(p.getRank() == 1)
+			{
+				leader = p;
+				break;
+			}
+		}
+
+		if(leader == null)
+			return false;
+
+		return leader.getRankValue() >= match.getVictoryParameter();
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see com.syncnapsis.data.service.MatchManager#updateRanking(com.syncnapsis.data.model.Match)
+	 */
+	@Override
+	public Match updateRanking(Match match)
+	{
+		int totalPopulation = 0;
+		for(Participant p : match.getParticipants())
+		{
+			for(SolarSystemPopulation pop : p.getPopulations())
+			{
+				if(pop.getDestructionDate() == null)
+					totalPopulation += pop.getPopulation();
+			}
+		}
+
+		int rankValue;
+		double tmp;
+		List<Participant> updatedParticipants = new LinkedList<Participant>();
+		for(Participant p : match.getParticipants())
+		{
+			if(p.getDestructionDate() != null)
+				continue; // do not update rank, when participant is already destroyed
+
+			rankValue = 0;
+
+			switch(match.getVictoryCondition())
+			{
+				case domination:
+					tmp = 0.0;
+					for(SolarSystemPopulation pop : p.getPopulations())
+					{
+						// count +1/totalSystems for each existing population
+						if(pop.getDestructionDate() == null)
+							tmp += 1.0 / match.getGalaxy().getSolarSystems().size();
+					}
+					rankValue = (int) Math.floor(100 * tmp);
+					break;
+				case extermination:
+					for(SolarSystemPopulation pop : p.getPopulations())
+					{
+						// count +pop for each existing population
+						if(pop.getDestructionDate() == null)
+							rankValue += pop.getPopulation();
+					}
+					rankValue = (int) Math.floor(100.0 * rankValue / totalPopulation);
+					break;
+				case vendetta:
+					tmp = 0.0;
+					for(Participant rival : p.getRivals())
+					{
+						// count 1/rivals for each destroyed rival
+						if(rival.getDestructionDate() != null)
+							tmp += 1.0 / p.getRivals().size();
+					}
+					rankValue = (int) Math.floor(100 * tmp);
+					break;
+			}
+
+			p.setRankValue(rankValue);
+
+			updatedParticipants.add(p);
+		}
+
+		Collections.sort(updatedParticipants, Participant.BY_RANKVALUE);
+
+		int count = 0;
+		int rank = 0;
+		int value = 0;
+		for(Participant p : updatedParticipants)
+		{
+			count++;
+			if(p.getRankValue() != value)
+			{
+				value = p.getRankValue();
+				rank = count;
+			}
+			p.setRank(rank);
+			participantManager.save(p);
+		}
+
+		return get(match.getId());
 	}
 }
