@@ -50,6 +50,9 @@
 		<constructor-arg ref="matchDao" />
 		<constructor-arg ref="galaxyManager" />
 		<constructor-arg ref="participantManager" />
+		<constructor-arg ref="solarSystemPopulationManager" />
+		<constructor-arg ref="solarSystemInfrastructureManager" />
+		<constructor-arg ref="parameterManager" />
 	</bean>
 
 	<bean id="participantManager" class="com.syncnapsis.data.service.impl.ParticipantManagerImpl">
@@ -104,6 +107,17 @@
 
 	<bean id="securityManager" class="com.syncnapsis.security.BaseGameManager">
 		<constructor-arg ref="baseGameManager" />
+		<property name="accessControllers">
+			<list>
+				<ref bean="fieldAccessController" />
+				<ref bean="methodAccessController" />
+				<ref bean="matchAccessController" />
+			</list>
+		</property>
+	</bean>
+
+	<bean id="matchAccessController"
+		class="com.syncnapsis.security.accesscontrol.MatchAccessController">
 	</bean>
 
 	<!-- =================================================================== -->
