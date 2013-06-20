@@ -16,6 +16,9 @@ package com.syncnapsis.utils;
 
 import java.awt.Shape;
 import java.awt.geom.PathIterator;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import com.syncnapsis.utils.math.BezierCurve;
 
@@ -531,5 +534,231 @@ public abstract class MathUtil
 			a /= 10;
 		}
 		return digits;
+	}
+
+	/**
+	 * Apply the given permutation to the array. The permutation must contain each index within the
+	 * range from 0 to n-1 exactly once (and no other indexes) and therefore represents the new
+	 * order of the elements within the array.
+	 * 
+	 * @param array - the array to permute
+	 * @param perm - the permutation
+	 * @return the modified array for convenience
+	 */
+	public static <T> T[] perm(T[] array, int[] perm)
+	{
+		permCheck(array.length, perm);
+		T[] tmp = Arrays.copyOf(array, array.length);
+		for(int i = 0; i < array.length; i++)
+		{
+			array[i] = tmp[perm[i]];
+		}
+		return array;
+	}
+
+	/**
+	 * Apply the given permutation to the array. The permutation must contain each index within the
+	 * range from 0 to n-1 exactly once (and no other indexes) and therefore represents the new
+	 * order of the elements within the array.
+	 * 
+	 * @param array - the array to permute
+	 * @param perm - the permutation
+	 * @return the modified array for convenience
+	 */
+	public static int[] perm(int[] array, int[] perm)
+	{
+		permCheck(array.length, perm);
+		int[] tmp = Arrays.copyOf(array, array.length);
+		for(int i = 0; i < array.length; i++)
+		{
+			array[i] = tmp[perm[i]];
+		}
+		return array;
+	}
+
+	/**
+	 * Apply the given permutation to the array. The permutation must contain each index within the
+	 * range from 0 to n-1 exactly once (and no other indexes) and therefore represents the new
+	 * order of the elements within the array.
+	 * 
+	 * @param array - the array to permute
+	 * @param perm - the permutation
+	 * @return the modified array for convenience
+	 */
+	public static long[] perm(long[] array, int[] perm)
+	{
+		permCheck(array.length, perm);
+		long[] tmp = Arrays.copyOf(array, array.length);
+		for(int i = 0; i < array.length; i++)
+		{
+			array[i] = tmp[perm[i]];
+		}
+		return array;
+	}
+
+	/**
+	 * Apply the given permutation to the array. The permutation must contain each index within the
+	 * range from 0 to n-1 exactly once (and no other indexes) and therefore represents the new
+	 * order of the elements within the array.
+	 * 
+	 * @param array - the array to permute
+	 * @param perm - the permutation
+	 * @return the modified array for convenience
+	 */
+	public static double[] perm(double[] array, int[] perm)
+	{
+		permCheck(array.length, perm);
+		double[] tmp = Arrays.copyOf(array, array.length);
+		for(int i = 0; i < array.length; i++)
+		{
+			array[i] = tmp[perm[i]];
+		}
+		return array;
+	}
+
+	/**
+	 * Apply the given permutation to the array. The permutation must contain each index within the
+	 * range from 0 to n-1 exactly once (and no other indexes) and therefore represents the new
+	 * order of the elements within the array.
+	 * 
+	 * @param array - the array to permute
+	 * @param perm - the permutation
+	 * @return the modified array for convenience
+	 */
+	public static float[] perm(float[] array, int[] perm)
+	{
+		permCheck(array.length, perm);
+		float[] tmp = Arrays.copyOf(array, array.length);
+		for(int i = 0; i < array.length; i++)
+		{
+			array[i] = tmp[perm[i]];
+		}
+		return array;
+	}
+
+	/**
+	 * Apply the given permutation to the array. The permutation must contain each index within the
+	 * range from 0 to n-1 exactly once (and no other indexes) and therefore represents the new
+	 * order of the elements within the array.
+	 * 
+	 * @param array - the array to permute
+	 * @param perm - the permutation
+	 * @return the modified array for convenience
+	 */
+	public static boolean[] perm(boolean[] array, int[] perm)
+	{
+		permCheck(array.length, perm);
+		boolean[] tmp = Arrays.copyOf(array, array.length);
+		for(int i = 0; i < array.length; i++)
+		{
+			array[i] = tmp[perm[i]];
+		}
+		return array;
+	}
+
+	/**
+	 * Apply the given permutation to the array. The permutation must contain each index within the
+	 * range from 0 to n-1 exactly once (and no other indexes) and therefore represents the new
+	 * order of the elements within the array.
+	 * 
+	 * @param array - the array to permute
+	 * @param perm - the permutation
+	 * @return the modified array for convenience
+	 */
+	public static short[] perm(short[] array, int[] perm)
+	{
+		permCheck(array.length, perm);
+		short[] tmp = Arrays.copyOf(array, array.length);
+		for(int i = 0; i < array.length; i++)
+		{
+			array[i] = tmp[perm[i]];
+		}
+		return array;
+	}
+
+	/**
+	 * Apply the given permutation to the array. The permutation must contain each index within the
+	 * range from 0 to n-1 exactly once (and no other indexes) and therefore represents the new
+	 * order of the elements within the array.
+	 * 
+	 * @param array - the array to permute
+	 * @param perm - the permutation
+	 * @return the modified array for convenience
+	 */
+	public static byte[] perm(byte[] array, int[] perm)
+	{
+		permCheck(array.length, perm);
+		byte[] tmp = Arrays.copyOf(array, array.length);
+		for(int i = 0; i < array.length; i++)
+		{
+			array[i] = tmp[perm[i]];
+		}
+		return array;
+	}
+
+	/**
+	 * Apply the given permutation to the array. The permutation must contain each index within the
+	 * range from 0 to n-1 exactly once (and no other indexes) and therefore represents the new
+	 * order of the elements within the array.
+	 * 
+	 * @param array - the array to permute
+	 * @param perm - the permutation
+	 * @return the modified array for convenience
+	 */
+	public static char[] perm(char[] array, int[] perm)
+	{
+		permCheck(array.length, perm);
+		char[] tmp = Arrays.copyOf(array, array.length);
+		for(int i = 0; i < array.length; i++)
+		{
+			array[i] = tmp[perm[i]];
+		}
+		return array;
+	}
+
+	/**
+	 * Apply the given permutation to the array. The permutation must contain each index within the
+	 * range from 0 to n-1 exactly once (and no other indexes) and therefore represents the new
+	 * order of the elements within the array.
+	 * 
+	 * @param array - the array to permute
+	 * @param perm - the permutation
+	 * @return the modified array for convenience
+	 */
+	public static <T> List<T> perm(List<T> c, int[] perm)
+	{
+		permCheck(c.size(), perm);
+		List<T> tmp = new ArrayList<T>(c);
+		c.clear();
+		for(int i = 0; i < c.size(); i++)
+		{
+			c.add(tmp.get(perm[i]));
+		}
+		return c;
+	}
+
+	/**
+	 * Check wether the given permutation is valid. The permutation must contain each index within 0
+	 * and length-1 exactly once (and no other indexes are allowed!)
+	 * 
+	 * @param length - the length required
+	 * @param perm - the permutation to check
+	 */
+	protected static void permCheck(int length, int[] perm)
+	{
+		if(length != perm.length)
+			throw new IllegalArgumentException("perm must have same length as the array given");
+		int[] indexOccurence = new int[length];
+		for(int i = 0; i < length; i++)
+		{
+			if(perm[i] >= length || indexOccurence[perm[i]] > 0)
+				throw new IllegalArgumentException("not a valid permutation: each index from 0 to n-1 must occur exactly once!");
+			indexOccurence[perm[i]]++;
+		}
+	}
+	
+	public static int permCycleLength(int[] perm, boolean fullRepeat)
+	{
+		
 	}
 }

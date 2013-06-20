@@ -107,8 +107,8 @@ public class ExtendedRandom extends Random
 			boolean this_haveNNG = (Boolean) ReflectionsUtil.getField(this, "haveNextNextGaussian");
 			double this_NNG = (Double) ReflectionsUtil.getField(this, "nextNextGaussian");
 			boolean other_haveNNG = (Boolean) ReflectionsUtil.getField(r, "haveNextNextGaussian");
-			double other_NNG= (Double) ReflectionsUtil.getField(r, "nextNextGaussian");
-			return this_haveNNG == other_haveNNG && this_NNG == other_NNG; 
+			double other_NNG = (Double) ReflectionsUtil.getField(r, "nextNextGaussian");
+			return this_haveNNG == other_haveNNG && this_NNG == other_NNG;
 		}
 		catch(IllegalAccessException e)
 		{
@@ -401,5 +401,78 @@ public class ExtendedRandom extends Random
 		String region = nextEntry(TimeZoneUtil.getRegions());
 		String id = nextEntry(TimeZoneUtil.getIdsByRegions(region));
 		return region + "/" + id;
+	}
+
+	/**
+	 * Permute the given array. The algorithm uses the Fisher-Yates-Algorithm and therefore
+	 * guarantees each permutation to be equally likely.
+	 * 
+	 * @param arr - the array to permute (will be modified)
+	 * @return the permuted arry for convenience
+	 */
+	public int[] nextPerm(int[] arr)
+	{
+		for(int i = arr.length - 1; i > 0; i--)
+			swap(arr, i, nextInt(i + 1));
+		return arr;
+	}
+
+	/**
+	 * Create a new array of length n in the form [0, 1, 2, ... n-1] and apply
+	 * {@link ExtendedRandom#nextPerm(int[])}
+	 * 
+	 * @param length - the length of the array to generate
+	 * @return the permuted arry
+	 */
+	public int[] nextPerm(int n)
+	{
+		int[] arr = new int[n];
+		for(int i = 0; i < n; i++)
+			arr[i] = i;
+		return nextPerm(arr);
+	}
+
+	/**
+	 * Permute the given array. The algorithm uses the Sattolo-Algorithm and therefore
+	 * guarantees the permutation to consist of a single cycle of max length n. (Note that not all
+	 * permutations are possible with this algorithm, but all cycles will be possible).
+	 * 
+	 * @param arr - the array to permute (will be modified)
+	 * @return the permuted arry for convenience
+	 */
+	public int[] nextPerm2(int[] arr)
+	{
+		for(int i = arr.length - 1; i > 0; i--)
+			swap(arr, i, nextInt(i));
+		return arr;
+	}
+
+	/**
+	 * Create a new array of length n in the form [0, 1, 2, ... n-1] and apply
+	 * {@link ExtendedRandom#nextPerm2(int[])}
+	 * 
+	 * @param length - the length of the array to generate
+	 * @return the permuted arry
+	 */
+	public int[] nextPerm2(int n)
+	{
+		int[] arr = new int[n];
+		for(int i = 0; i < n; i++)
+			arr[i] = i;
+		return nextPerm2(arr);
+	}
+
+	/**
+	 * Swap the elements at the given indexes i and j within the array
+	 * 
+	 * @param arr - the array to manipulate
+	 * @param i - the first index
+	 * @param j - the second index
+	 */
+	private void swap(int[] arr, int i, int j)
+	{
+		int tmp = arr[i];
+		arr[i] = arr[j];
+		arr[j] = tmp;
 	}
 }
