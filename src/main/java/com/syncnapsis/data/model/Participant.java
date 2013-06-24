@@ -68,6 +68,12 @@ public class Participant extends ActivatableInstance<Long>
 	protected int							rankValue;
 
 	/**
+	 * Is the calculated rank final (not modifiable any more)? The flag will be set on calculation
+	 * when the player is destroyed.
+	 */
+	protected boolean						rankFinal;
+
+	/**
 	 * The date the participant (empire/player) joined the match
 	 */
 	protected Date							joinedDate;
@@ -148,6 +154,18 @@ public class Participant extends ActivatableInstance<Long>
 		return rankValue;
 	}
 
+	/**
+	 * Is the calculated rank final (not modifiable any more)? The flag will be set on calculation
+	 * when the player is destroyed.
+	 * 
+	 * @return rankFinal
+	 */
+	@Column(nullable = false)
+	public boolean isRankFinal()
+	{
+		return rankFinal;
+	}
+	
 	/**
 	 * The date the participant (empire/player) joined the match
 	 * 
@@ -262,6 +280,17 @@ public class Participant extends ActivatableInstance<Long>
 	}
 
 	/**
+	 * Is the calculated rank final (not modifiable any more)? The flag will be set on calculation
+	 * when the player is destroyed.
+	 * 
+	 * @param rankFinal - true or false
+	 */
+	public void setRankFinal(boolean rankFinal)
+	{
+		this.rankFinal = rankFinal;
+	}
+
+	/**
 	 * The date the participant (empire/player) joined the match
 	 * 
 	 * @param joinedDate - the date and time
@@ -339,10 +368,15 @@ public class Participant extends ActivatableInstance<Long>
 		result = prime * result + ((joinedDate == null) ? 0 : joinedDate.hashCode());
 		result = prime * result + ((match == null) ? 0 : match.getId().hashCode());
 		result = prime * result + rank;
+		result = prime * result + (rankFinal ? 1231 : 1237);
 		result = prime * result + rankValue;
 		return result;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see com.syncnapsis.data.model.base.BaseObject#equals(java.lang.Object)
+	 */
 	@Override
 	public boolean equals(Object obj)
 	{
@@ -384,6 +418,8 @@ public class Participant extends ActivatableInstance<Long>
 		else if(!match.getId().equals(other.match.getId()))
 			return false;
 		if(rank != other.rank)
+			return false;
+		if(rankFinal != other.rankFinal)
 			return false;
 		if(rankValue != other.rankValue)
 			return false;
