@@ -756,9 +756,66 @@ public abstract class MathUtil
 			indexOccurence[perm[i]]++;
 		}
 	}
-	
-	public static int permCycleLength(int[] perm, boolean fullRepeat)
+
+	/**
+	 * Get the cycle length of a permutation. The cycle length is defined as the number of times the
+	 * permutation has to be applied to an array until the original array reoccurrs in every entry.<br>
+	 * <br>
+	 * Note: This is a stronger check than {@link MathUtil#permPartialCycleLength(int[])}
+	 * 
+	 * @param perm - the permutation to check
+	 * @return the cycle length
+	 */
+	public static int permCycleLength(int[] perm)
 	{
-		
+		return permCycleLength(perm, true);
+	}
+
+	/**
+	 * Get the partial cycle length of a permutation. The partial cycle length is defined as the
+	 * number of times the permutation has to be applied to an array until any entry of the array
+	 * occurrs at it's original position.<br>
+	 * <br>
+	 * Note: This is a weaker check than {@link MathUtil#permCycleLength(int[])}).
+	 * 
+	 * @param perm - the permutation to check
+	 * @return the partial cycle length
+	 */
+	public static int permPartialCycleLength(int[] perm)
+	{
+		return permCycleLength(perm, false);
+	}
+
+	/**
+	 * Unified method for {@link MathUtil#permCycleLength(int[])} and
+	 * {@link MathUtil#permPartialCycleLength(int[])}.
+	 * 
+	 * @param perm
+	 * @param fullCycle
+	 * @return
+	 */
+	protected static int permCycleLength(int[] perm, boolean fullCycle)
+	{
+		permCheck(perm.length, perm);
+
+		int[] arr = new int[perm.length];
+		for(int i = 0; i < perm.length; i++)
+			arr[i] = i;
+
+		int reoccurred;
+		int count = 0;
+		while(true)
+		{
+			count++;
+			reoccurred = 0;
+			perm(arr, perm);
+			for(int j = 0; j < arr.length; j++)
+			{
+				if(j == arr[j])
+					reoccurred++;
+			}
+			if(reoccurred == perm.length || (!fullCycle && reoccurred > 0))
+				return count;
+		}
 	}
 }

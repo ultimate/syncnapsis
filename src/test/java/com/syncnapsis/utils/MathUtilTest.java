@@ -249,15 +249,15 @@ public class MathUtilTest extends LoggerTestCase
 		assertEquals(4, MathUtil.getDigits(-1111));
 	}
 
-	public void testCheckPerm() throws Exception
+	public void testPermCheck() throws Exception
 	{
-		MathUtil.checkPerm(3, new int[] { 0, 1, 2 });
-		MathUtil.checkPerm(3, new int[] { 2, 0, 1 });
-		MathUtil.checkPerm(3, new int[] { 1, 2, 0 });
+		MathUtil.permCheck(3, new int[] { 0, 1, 2 });
+		MathUtil.permCheck(3, new int[] { 2, 0, 1 });
+		MathUtil.permCheck(3, new int[] { 1, 2, 0 });
 
 		try
 		{
-			MathUtil.checkPerm(3, new int[] { 0, 1, 2, 3 });
+			MathUtil.permCheck(3, new int[] { 0, 1, 2, 3 });
 			fail("expected Exception not occurred!");
 		}
 		catch(IllegalArgumentException e)
@@ -266,7 +266,7 @@ public class MathUtilTest extends LoggerTestCase
 		}
 		try
 		{
-			MathUtil.checkPerm(3, new int[] { 0, 1 });
+			MathUtil.permCheck(3, new int[] { 0, 1 });
 			fail("expected Exception not occurred!");
 		}
 		catch(IllegalArgumentException e)
@@ -275,7 +275,7 @@ public class MathUtilTest extends LoggerTestCase
 		}
 		try
 		{
-			MathUtil.checkPerm(3, new int[] { 0, 1, 3 });
+			MathUtil.permCheck(3, new int[] { 0, 1, 3 });
 			fail("expected Exception not occurred!");
 		}
 		catch(IllegalArgumentException e)
@@ -284,7 +284,7 @@ public class MathUtilTest extends LoggerTestCase
 		}
 		try
 		{
-			MathUtil.checkPerm(3, new int[] { 0, 1, 1 });
+			MathUtil.permCheck(3, new int[] { 0, 1, 1 });
 			fail("expected Exception not occurred!");
 		}
 		catch(IllegalArgumentException e)
@@ -293,13 +293,32 @@ public class MathUtilTest extends LoggerTestCase
 		}
 	}
 
-	public void testApplyPerm() throws Exception
+	public void testPerm() throws Exception
 	{
 		int[] perm = new int[] { 2, 3, 1, 5, 4, 0 };
 
 		Integer[] original = new Integer[] { 10, 22, 44, 32, 23, 57 };
 		Integer[] permuted = new Integer[] { 44, 32, 22, 57, 23, 10 };
 
-		assertEquals(permuted, MathUtil.applyPerm(original, perm));
+		assertEquals(permuted, MathUtil.perm(original, perm));
+	}
+
+	@TestCoversMethods({ "permCycleLength", "permPartialCycleLength" })
+	public void testPermCycleLength() throws Exception
+	{
+		int[] perm = new int[] {1, 0, 4, 2, 3};
+		
+		assertEquals(6, MathUtil.permCycleLength(perm));
+		assertEquals(2, MathUtil.permPartialCycleLength(perm));
+		
+		try
+		{
+			MathUtil.permCycleLength(new int[] {0, 1, 3});
+			fail("expected Exception not occurred!");
+		}
+		catch(IllegalArgumentException e)
+		{
+			assertNotNull(e);
+		}
 	}
 }

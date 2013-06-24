@@ -30,7 +30,7 @@ import com.syncnapsis.utils.MathUtil;
 import com.syncnapsis.utils.TimeZoneUtil;
 
 @TestCoversClasses({ ExtendedRandom.class, DefaultData.class })
-@TestExcludesMethods({ "toRegExpString", "nextDouble", "hashCode" })
+@TestExcludesMethods({ "toRegExpString", "nextDouble", "hashCode", "swap" })
 public class ExtendedRandomTest extends LoggerTestCase
 {
 	private static final int			BOOLEAN_CYCLES	= 100000;
@@ -338,35 +338,32 @@ public class ExtendedRandomTest extends LoggerTestCase
 
 		int[] original = new int[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
 		for(int i = 0; i < length * 2; i++)
-			logger.debug("perm #" + i + " = " + arrayPrint(MathUtil.applyPerm(original, result)));
+			logger.debug("perm #" + i + " = " + arrayPrint(MathUtil.perm(original, result)));
 
 		// check reoccurring of numbers
-		Map<Integer, Integer> reoccurrences = new HashMap<Integer, Integer>();
+		Map<Integer, Integer> cycleLengths = new HashMap<Integer, Integer>();
+		Map<Integer, Integer> partialCycleLengths = new HashMap<Integer, Integer>();
 		for(int i = 0; i < 100; i++)
 		{
 			int[] perm = random2.nextPerm(10);
-			int[] arr = new int[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
-			int reoccurred;
-			int count = 0;
-			do
-			{
-				count++;
-				reoccurred = 0;
-				MathUtil.applyPerm(arr, perm);
-				for(int j = 0; j < arr.length; j++)
-				{
-					if(j == arr[j])
-						reoccurred++;
-				}
-			} while(reoccurred < arr.length);
-			if(reoccurrences.get(count) == null)
-				reoccurrences.put(count, 1);
+			int cycleLength = MathUtil.permCycleLength(perm);
+			int partialCycleLength = MathUtil.permPartialCycleLength(perm);
+			
+			assertTrue(partialCycleLength <= cycleLength);
+
+			if(cycleLengths.get(cycleLength) == null)
+				cycleLengths.put(cycleLength, 1);
 			else
-				reoccurrences.put(count, reoccurrences.get(count) + 1);
+				cycleLengths.put(cycleLength, cycleLengths.get(cycleLength) + 1);
+			if(partialCycleLengths.get(partialCycleLength) == null)
+				partialCycleLengths.put(partialCycleLength, 1);
+			else
+				partialCycleLengths.put(partialCycleLength, partialCycleLengths.get(partialCycleLength) + 1);
 		}
-		logger.debug("" + reoccurrences);
+		logger.debug("cycle lengths: " + cycleLengths);
+		logger.debug("partial cycle lengths: " + partialCycleLengths);
 		// when using perm a cycle varies in length
-		assertFalse(1 == reoccurrences.size());
+		assertFalse(1 == cycleLengths.size());
 	}
 
 	public void testNextPerm2() throws Exception
@@ -400,35 +397,32 @@ public class ExtendedRandomTest extends LoggerTestCase
 
 		int[] original = new int[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
 		for(int i = 0; i < length * 2; i++)
-			logger.debug("perm #" + i + " = " + arrayPrint(MathUtil.applyPerm(original, result)));
+			logger.debug("perm #" + i + " = " + arrayPrint(MathUtil.perm(original, result)));
 		// check reoccurring of numbers
-		Map<Integer, Integer> reoccurrences = new HashMap<Integer, Integer>();
+		Map<Integer, Integer> cycleLengths = new HashMap<Integer, Integer>();
+		Map<Integer, Integer> partialCycleLengths = new HashMap<Integer, Integer>();
 		for(int i = 0; i < 100; i++)
 		{
 			int[] perm = random2.nextPerm2(10);
-			int[] arr = new int[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
-			int reoccurred;
-			int count = 0;
-			do
-			{
-				count++;
-				reoccurred = 0;
-				MathUtil.applyPerm(arr, perm);
-				for(int j = 0; j < arr.length; j++)
-				{
-					if(j == arr[j])
-						reoccurred++;
-				}
-			} while(reoccurred < perm.length);
-			if(reoccurrences.get(count) == null)
-				reoccurrences.put(count, 1);
+			int cycleLength = MathUtil.permCycleLength(perm);
+			int partialCycleLength = MathUtil.permPartialCycleLength(perm);
+			
+			assertTrue(partialCycleLength <= cycleLength);
+
+			if(cycleLengths.get(cycleLength) == null)
+				cycleLengths.put(cycleLength, 1);
 			else
-				reoccurrences.put(count, reoccurrences.get(count) + 1);
+				cycleLengths.put(cycleLength, cycleLengths.get(cycleLength) + 1);
+			if(partialCycleLengths.get(partialCycleLength) == null)
+				partialCycleLengths.put(partialCycleLength, 1);
+			else
+				partialCycleLengths.put(partialCycleLength, partialCycleLengths.get(partialCycleLength) + 1);
 		}
-		logger.debug("" + reoccurrences);
+		logger.debug("cycle lengths: " + cycleLengths);
+		logger.debug("partial cycle lengths: " + partialCycleLengths);
 		// when using perm2 a cycle is always of length 10
-		assertEquals(1, reoccurrences.size());
-		assertEquals(100, (int) reoccurrences.get(10));
+		assertEquals(1, cycleLengths.size());
+		assertEquals(100, (int) cycleLengths.get(10));
 	}
 
 	private String arrayPrint(int[] arr)
