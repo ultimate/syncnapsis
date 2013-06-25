@@ -43,6 +43,7 @@ import com.syncnapsis.enums.EnumVictoryCondition;
 import com.syncnapsis.security.BaseGameManager;
 import com.syncnapsis.security.accesscontrol.MatchAccessController;
 import com.syncnapsis.utils.HibernateUtil;
+import com.syncnapsis.utils.MathUtil;
 import com.syncnapsis.utils.data.ExtendedRandom;
 
 /**
@@ -357,15 +358,46 @@ public class MatchManagerImpl extends GenericNameManagerImpl<Match, Long> implem
 		List<Participant> parts = new ArrayList<Participant>(participants);
 		// sort list to guarantee same pre-conditions
 		Collections.sort(parts, Participant.BY_EMPIRE);
-		// shuffle for randomization
-		Collections.shuffle(parts, random);
 
-		// TODO assign rivals
+		// Get a random permutation which will give us a pattern for assigning the rivals.
+		// We will check the permutation for the partial cycle length since we must assure no
+		// participants is it's own rival...
+		int[] randomization;
+		if(rivals < participants.size())
+		{
+			// Use nextPerm to have the possibility of smaller cycles than number of participants.
+			// But perform a check to assure cycle is long enough to prevent duplicates!
+			do
+			{
+				randomization = random.nextPerm(participants.size());
+			} while(MathUtil.permPartialCycleLength(randomization) < rivals);
+		}
+		else
+		{
+			// use nextPerm2 to guarantee cycle length equal to participants size
+			randomization = random.nextPerm2(participants.size());
+		}
+
+		// now assign the desired number of rivals
+		int r;
+		for(int i = 0; i < rivals; i++)
+		{
+			MathUtil.perm(parts, randomization);
+
+			r = 0;
+			for(Participant p : participants)
+			{
+				if(p.getRivals() == null)
+					p.setRivals(new ArrayList<Participant>(rivals));
+				p.getRivals().add(parts.get(r++));
+			}
+		}
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.syncnapsis.data.service.MatchManager#getNumberOfRivals(com.syncnapsis.data.model.Match)
+	 * @see
+	 * com.syncnapsis.data.service.MatchManager#getNumberOfRivals(com.syncnapsis.data.model.Match)
 	 */
 	@Override
 	public int getNumberOfRivals(Match match)
@@ -428,8 +460,6 @@ public class MatchManagerImpl extends GenericNameManagerImpl<Match, Long> implem
 	@Override
 	public boolean isVictoryConditionMet(Match match)
 	{
-		updateRanking(match);
-
 		Participant leader = null; // a leader/winner (if existing), must not be the only one
 		for(Participant p : match.getParticipants())
 		{
@@ -440,7 +470,7 @@ public class MatchManagerImpl extends GenericNameManagerImpl<Match, Long> implem
 			}
 		}
 
-		if(leader == null)
+		if(leader == null) // can only happen if ranking has not yet been determined
 			return false;
 
 		return leader.getRankValue() >= match.getVictoryParameter();
@@ -462,50 +492,56 @@ public class MatchManagerImpl extends GenericNameManagerImpl<Match, Long> implem
 					totalPopulation += pop.getPopulation();
 			}
 		}
+		
+		logger.debug("total population = " + totalPopulation);
 
-		int rankValue;
-		double tmp;
+		int rankValue, ref;
+		int destroyed = 0;
 		List<Participant> updatedParticipants = new LinkedList<Participant>();
 		for(Participant p : match.getParticipants())
 		{
 			if(p.getDestructionDate() != null)
-				continue; // do not update rank, when participant is already destroyed
+				destroyed++;
+
+			// do not update rank, when rank is final (participant already destroyed)
+			if(p.isRankFinal())
+				continue;
 
 			rankValue = 0;
+			ref = 0;
 
 			switch(match.getVictoryCondition())
 			{
 				case domination:
-					tmp = 0.0;
+					ref = match.getGalaxy().getSolarSystems().size();
 					for(SolarSystemPopulation pop : p.getPopulations())
 					{
 						// count +1/totalSystems for each existing population
 						if(pop.getDestructionDate() == null)
-							tmp += 1.0 / match.getGalaxy().getSolarSystems().size();
+							rankValue++;
 					}
-					rankValue = (int) Math.floor(100 * tmp);
 					break;
 				case extermination:
+					ref = totalPopulation;
 					for(SolarSystemPopulation pop : p.getPopulations())
 					{
 						// count +pop for each existing population
 						if(pop.getDestructionDate() == null)
 							rankValue += pop.getPopulation();
 					}
-					rankValue = (int) Math.floor(100.0 * rankValue / totalPopulation);
 					break;
 				case vendetta:
-					tmp = 0.0;
+					ref = p.getRivals().size();
 					for(Participant rival : p.getRivals())
 					{
 						// count 1/rivals for each destroyed rival
 						if(rival.getDestructionDate() != null)
-							tmp += 1.0 / p.getRivals().size();
+							rankValue++;
 					}
-					rankValue = (int) Math.floor(100 * tmp);
 					break;
 			}
 
+			rankValue = (int) Math.floor(100 * rankValue / ref);
 			p.setRankValue(rankValue);
 
 			updatedParticipants.add(p);
@@ -518,13 +554,26 @@ public class MatchManagerImpl extends GenericNameManagerImpl<Match, Long> implem
 		int value = 0;
 		for(Participant p : updatedParticipants)
 		{
-			count++;
+			if(p.isRankFinal())
+				continue;
+
 			if(p.getRankValue() != value)
 			{
 				value = p.getRankValue();
-				rank = count;
+				rank = count+1;
+			}			
+			
+			if(p.getDestructionDate() == null)
+			{
+				count++;
+				p.setRank(rank);
 			}
-			p.setRank(rank);
+			else
+			{
+				p.setRank(match.getParticipants().size() + 1 - destroyed);
+				p.setRankFinal(true);
+			}
+			
 			participantManager.save(p);
 		}
 

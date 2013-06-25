@@ -150,7 +150,9 @@ public interface MatchManager extends GenericNameManager<Match, Long>
 
 	/**
 	 * Check wether the victory condition for the given match is met. If the condition is met the
-	 * match is ready to be finished by using {@link MatchManager#finishMatch(Match)}
+	 * match is ready to be finished by using {@link MatchManager#finishMatch(Match)}. This requires
+	 * the match's ranking to be up-to-date since this method won't update the ranking before
+	 * checking the condition.
 	 * 
 	 * @param match - the match to check
 	 * @return true or false
