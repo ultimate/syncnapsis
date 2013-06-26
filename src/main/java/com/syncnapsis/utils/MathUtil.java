@@ -730,7 +730,7 @@ public abstract class MathUtil
 		permCheck(c.size(), perm);
 		List<T> tmp = new ArrayList<T>(c);
 		c.clear();
-		for(int i = 0; i < c.size(); i++)
+		for(int i = 0; i < tmp.size(); i++)
 		{
 			c.add(tmp.get(perm[i]));
 		}
