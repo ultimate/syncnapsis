@@ -18,13 +18,16 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.jmock.Expectations;
 import org.springframework.mock.web.MockHttpSession;
 
 import com.syncnapsis.constants.ApplicationBaseConstants;
 import com.syncnapsis.data.dao.MatchDao;
+import com.syncnapsis.data.model.Empire;
 import com.syncnapsis.data.model.Galaxy;
 import com.syncnapsis.data.model.Match;
 import com.syncnapsis.data.model.Participant;
@@ -46,6 +49,7 @@ import com.syncnapsis.security.BaseGameManager;
 import com.syncnapsis.tests.GenericNameManagerImplTestCase;
 import com.syncnapsis.tests.annotations.TestCoversClasses;
 import com.syncnapsis.tests.annotations.TestExcludesMethods;
+import com.syncnapsis.utils.data.ExtendedRandom;
 
 @TestCoversClasses({ MatchManager.class, MatchManagerImpl.class })
 @TestExcludesMethods({ "isAccessible" })
@@ -237,7 +241,103 @@ public class MatchManagerImplTest extends GenericNameManagerImplTestCase<Match, 
 
 	public void testAssignRivals() throws Exception
 	{
-		fail("unimplemented");
+		int maxParticipants = 10;
+
+		List<Participant> participants = new ArrayList<Participant>(10);
+
+		Participant newP;
+		List<Long> rivalList = new ArrayList<Long>(maxParticipants);
+		Map<Long, Integer> isRivalMap = new HashMap<Long, Integer>();
+		// increase participants one by one
+		for(int i = 1; i <= maxParticipants; i++)
+		{
+			newP = new Participant();
+			newP.setId((long) i);
+			newP.setEmpire(new Empire());
+			newP.getEmpire().setId((long) i);
+			participants.add(newP);
+
+			logger.debug("participants: " + participants.size());
+
+			// do the check for each possible amount of rivals
+			for(int rivals = 1; rivals < participants.size(); rivals++)
+			{
+				logger.debug("  rivals: " + rivals);
+				// redo procedure 10 times
+				for(int j = 0; j < 10; j++)
+				{
+					mockManager.assignRivals(participants, rivals, new ExtendedRandom());
+
+					isRivalMap.clear();
+					for(Participant p : participants)
+					{
+						rivalList.clear();
+						// convert rival list to int-list
+						for(Participant rival : p.getRivals())
+						{
+							if(!rivalList.contains(rival.getId()))
+								rivalList.add(rival.getId());
+
+							if(!isRivalMap.containsKey(rival.getId()))
+								isRivalMap.put(rival.getId(), 1);
+							else
+								isRivalMap.put(rival.getId(), isRivalMap.get(rival.getId()) + 1);
+						}
+
+						logger.debug(p.getId() + " -> " + rivalList);
+
+						// if size matches there have been no duplicates
+						assertEquals(rivals, rivalList.size());
+						// check for the participant not to be it's own rival
+						assertFalse(rivalList.contains(p.getId()));
+
+						// clear rivals for next iteration
+						p.getRivals().clear();
+					}
+
+					assertEquals(participants.size(), isRivalMap.size());
+					for(Integer isRival : isRivalMap.values())
+					{
+						assertEquals(rivals, (int) isRival);
+					}
+				}
+			}
+		}
+
+		// check reproducability
+
+		long seed = 123456789;
+		int numberOfRivals = 4;
+		boolean[][] rivals1 = new boolean[participants.size()][participants.size()];
+		boolean[][] rivals2 = new boolean[participants.size()][participants.size()];
+		// create two rival-matrixes with the same seed and compare them
+		mockManager.assignRivals(participants, numberOfRivals, new ExtendedRandom(seed));
+		for(Participant p : participants)
+		{
+			for(Participant r : p.getRivals())
+			{
+				rivals1[(int) (long) p.getId() - 1][(int) (long) r.getId() - 1] = true;
+			}
+			p.getRivals().clear();
+		}
+		Collections.shuffle(participants);
+		mockManager.assignRivals(participants, numberOfRivals, new ExtendedRandom(seed));
+		for(Participant p : participants)
+		{
+			for(Participant r : p.getRivals())
+			{
+				rivals2[(int) (long) p.getId() - 1][(int) (long) r.getId() - 1] = true;
+			}
+			p.getRivals().clear();
+		}
+		
+		for(int i1 = 0; i1 < rivals1.length; i1++)
+		{			
+			for(int i2 = 0; i2 < rivals1.length; i2++)
+			{
+				assertEquals(rivals1[i1][i2], rivals2[i1][i2]);
+			}
+		}
 	}
 
 	public void testGetNumberOfRivals() throws Exception
@@ -340,7 +440,7 @@ public class MatchManagerImplTest extends GenericNameManagerImplTestCase<Match, 
 
 		int totalPop = pop0 + pop1 + pop2 + pop3 + pop4;
 		logger.debug("total population = " + totalPop);
-		
+
 		// mark one participant's rank as final
 		int destroyedParticipant = 3;
 		match.getParticipants().get(destroyedParticipant).setRank(5);

@@ -358,34 +358,38 @@ public class MatchManagerImpl extends GenericNameManagerImpl<Match, Long> implem
 		List<Participant> parts = new ArrayList<Participant>(participants);
 		// sort list to guarantee same pre-conditions
 		Collections.sort(parts, Participant.BY_EMPIRE);
+		// we need two copies:
+		// 1 for the rivals to be shuffled (parts)
+		// 1 for the sorted parts being accessed in the end (backup)
+		List<Participant> backup = new ArrayList<Participant>(parts);
 
 		// Get a random permutation which will give us a pattern for assigning the rivals.
 		// We will check the permutation for the partial cycle length since we must assure no
 		// participants is it's own rival...
 		int[] randomization;
-		if(rivals < participants.size())
+		if(rivals < parts.size())
 		{
 			// Use nextPerm to have the possibility of smaller cycles than number of participants.
 			// But perform a check to assure cycle is long enough to prevent duplicates!
 			do
 			{
-				randomization = random.nextPerm(participants.size());
-			} while(MathUtil.permPartialCycleLength(randomization) < rivals);
+				randomization = random.nextPerm(parts.size());
+			} while(MathUtil.permPartialCycleLength(randomization) <= rivals);
 		}
 		else
 		{
 			// use nextPerm2 to guarantee cycle length equal to participants size
-			randomization = random.nextPerm2(participants.size());
+			randomization = random.nextPerm2(parts.size());
 		}
 
 		// now assign the desired number of rivals
 		int r;
 		for(int i = 0; i < rivals; i++)
 		{
-			MathUtil.perm(parts, randomization);
+			parts = MathUtil.perm(parts, randomization);
 
 			r = 0;
-			for(Participant p : participants)
+			for(Participant p : backup)
 			{
 				if(p.getRivals() == null)
 					p.setRivals(new ArrayList<Participant>(rivals));
@@ -492,7 +496,7 @@ public class MatchManagerImpl extends GenericNameManagerImpl<Match, Long> implem
 					totalPopulation += pop.getPopulation();
 			}
 		}
-		
+
 		logger.debug("total population = " + totalPopulation);
 
 		int rankValue, ref;
@@ -560,9 +564,9 @@ public class MatchManagerImpl extends GenericNameManagerImpl<Match, Long> implem
 			if(p.getRankValue() != value)
 			{
 				value = p.getRankValue();
-				rank = count+1;
-			}			
-			
+				rank = count + 1;
+			}
+
 			if(p.getDestructionDate() == null)
 			{
 				count++;
@@ -573,7 +577,7 @@ public class MatchManagerImpl extends GenericNameManagerImpl<Match, Long> implem
 				p.setRank(match.getParticipants().size() + 1 - destroyed);
 				p.setRankFinal(true);
 			}
-			
+
 			participantManager.save(p);
 		}
 
