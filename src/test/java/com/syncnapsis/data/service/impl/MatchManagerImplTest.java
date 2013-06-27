@@ -40,12 +40,15 @@ import com.syncnapsis.data.service.GalaxyManager;
 import com.syncnapsis.data.service.MatchManager;
 import com.syncnapsis.data.service.ParameterManager;
 import com.syncnapsis.data.service.ParticipantManager;
+import com.syncnapsis.data.service.PlayerManager;
 import com.syncnapsis.data.service.SolarSystemInfrastructureManager;
 import com.syncnapsis.data.service.SolarSystemPopulationManager;
+import com.syncnapsis.enums.EnumMatchState;
 import com.syncnapsis.enums.EnumStartCondition;
 import com.syncnapsis.enums.EnumVictoryCondition;
 import com.syncnapsis.mock.MockTimeProvider;
 import com.syncnapsis.security.BaseGameManager;
+import com.syncnapsis.security.accesscontrol.MatchAccessController;
 import com.syncnapsis.tests.GenericNameManagerImplTestCase;
 import com.syncnapsis.tests.annotations.TestCoversClasses;
 import com.syncnapsis.tests.annotations.TestExcludesMethods;
@@ -60,6 +63,7 @@ public class MatchManagerImplTest extends GenericNameManagerImplTestCase<Match, 
 	private SolarSystemPopulationManager		solarSystemPopulationManager;
 	private SolarSystemInfrastructureManager	solarSystemInfrastructureManager;
 	private ParameterManager					parameterManager;
+	private PlayerManager						playerManager;
 
 	private BaseGameManager						securityManager;
 
@@ -330,9 +334,9 @@ public class MatchManagerImplTest extends GenericNameManagerImplTestCase<Match, 
 			}
 			p.getRivals().clear();
 		}
-		
+
 		for(int i1 = 0; i1 < rivals1.length; i1++)
-		{			
+		{
 			for(int i2 = 0; i2 < rivals1.length; i2++)
 			{
 				assertEquals(rivals1[i1][i2], rivals2[i1][i2]);
@@ -370,12 +374,165 @@ public class MatchManagerImplTest extends GenericNameManagerImplTestCase<Match, 
 
 	public void testCancelMatch() throws Exception
 	{
-		fail("unimplemented");
+		int participants = 5;
+
+		Player creator = playerManager.getByUsername("user1");
+		Player other = playerManager.getByUsername("user2");
+		Player admin = playerManager.getByUsername("admin");
+
+		final Match match = new Match();
+		match.setState(EnumMatchState.planned);
+		match.setCreator(creator);
+		match.setParticipants(new ArrayList<Participant>(participants));
+		for(int i = 0; i < participants; i++)
+			match.getParticipants().add(new Participant());
+
+		securityManager.getSessionProvider().set(new MockHttpSession());
+
+		// test with creator
+		securityManager.getPlayerProvider().set(creator);
+		mockContext.checking(new Expectations() {
+			{
+				oneOf(mockDao).save(match);
+				will(returnValue(match));
+			}
+		});
+		mockManager.cancelMatch(match);
+		mockContext.assertIsSatisfied();
+		checkAndResetCanceledOrFinishedMatch(match, true, EnumMatchState.planned);
+
+		// test with admin
+		securityManager.getPlayerProvider().set(admin);
+		mockContext.checking(new Expectations() {
+			{
+				oneOf(mockDao).save(match);
+				will(returnValue(match));
+			}
+		});
+		mockManager.cancelMatch(match);
+		mockContext.assertIsSatisfied();
+		checkAndResetCanceledOrFinishedMatch(match, true, EnumMatchState.planned);
+		
+		// test with other player
+		securityManager.getPlayerProvider().set(other);
+		assertFalse(((MatchManagerImpl) mockManager).isAccessible(match, MatchAccessController.OPERATION_CANCEL));
+		try
+		{
+			mockManager.cancelMatch(match);
+			fail("expected exception not occurred!");
+		}
+		catch(IllegalArgumentException e)
+		{
+			assertNotNull(e);
+		}
+		
+		// test with illegal state (already started)
+		securityManager.getPlayerProvider().set(creator);
+		match.setState(EnumMatchState.active);
+		assertFalse(((MatchManagerImpl) mockManager).isAccessible(match, MatchAccessController.OPERATION_CANCEL));
+		try
+		{
+			mockManager.cancelMatch(match);
+			fail("expected exception not occurred!");
+		}
+		catch(IllegalArgumentException e)
+		{
+			assertNotNull(e);
+		}
+		
+		// but for an admin this should be possible
+		securityManager.getPlayerProvider().set(admin);
+		mockContext.checking(new Expectations() {
+			{
+				oneOf(mockDao).save(match);
+				will(returnValue(match));
+			}
+		});
+		mockManager.cancelMatch(match);
+		mockContext.assertIsSatisfied();
+		checkAndResetCanceledOrFinishedMatch(match, true, EnumMatchState.planned);
 	}
 
 	public void testFinishMatch() throws Exception
 	{
-		fail("unimplemented");
+		int participants = 5;
+
+		final Match match = new Match();
+		match.setVictoryParameter(participants * 10);
+		match.setParticipants(new ArrayList<Participant>(participants));
+		Participant p;
+		for(int i = 0; i < participants; i++)
+		{
+			p = new Participant();
+			p.setRank(i + 1);
+			p.setRankValue((participants - 1 - i) * 10);
+			match.getParticipants().add(p);
+		}
+		
+		// pre-check
+		assertFalse(mockManager.isVictoryConditionMet(match));
+
+		// match is not active
+		match.setState(EnumMatchState.planned);
+		mockManager.finishMatch(match);
+		mockContext.assertIsSatisfied();
+		assertNull(match.getFinishedDate());
+		
+		// now match is active // but victory condition still not met
+		match.setState(EnumMatchState.active);
+		mockManager.finishMatch(match);
+		mockContext.assertIsSatisfied();
+		assertNull(match.getFinishedDate());
+
+		// now victory condition will be met
+		match.setVictoryParameter((participants - 1) * 10);
+		assertTrue(mockManager.isVictoryConditionMet(match));
+
+		// check with victory condition met
+		mockContext.checking(new Expectations() {
+			{
+				oneOf(mockDao).save(match);
+				will(returnValue(match));
+			}
+		});
+		mockManager.finishMatch(match);
+		mockContext.assertIsSatisfied();
+		checkAndResetCanceledOrFinishedMatch(match, false, EnumMatchState.active);
+	}
+
+	private void checkAndResetCanceledOrFinishedMatch(Match match, boolean trueForCanceledFalseForFinished, EnumMatchState resetToState)
+	{
+		Date date, other;
+
+		if(trueForCanceledFalseForFinished)
+		{
+			date = match.getCanceledDate();
+			other = match.getFinishedDate();
+			assertEquals(EnumMatchState.canceled, match.getState());
+		}
+		else
+		{
+			date = match.getFinishedDate();
+			other = match.getCanceledDate();
+			assertEquals(EnumMatchState.finished, match.getState());
+		}
+		
+		assertNotNull(date);
+		assertEquals(referenceTime, date.getTime());
+		assertNull(other);
+
+		for(Participant p : match.getParticipants())
+			assertTrue(p.isRankFinal());
+		
+		if(resetToState != null)
+		{
+			match.setCanceledDate(null);
+			match.setFinishedDate(null);
+			match.setState(resetToState);
+
+			for(Participant p : match.getParticipants())
+				p.setRankFinal(false);
+		}
 	}
 
 	public void testIsVictoryConditionMet() throws Exception

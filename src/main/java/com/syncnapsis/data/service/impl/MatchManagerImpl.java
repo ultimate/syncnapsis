@@ -298,6 +298,9 @@ public class MatchManagerImpl extends GenericNameManagerImpl<Match, Long> implem
 	 */
 	protected Match performStartMatch(Match match)
 	{
+		if(match.getState() != EnumMatchState.planned)
+			throw new IllegalArgumentException("match already started, finished or canceled");
+
 		Date startDate = match.getStartDate();
 		if(startDate == null)
 		{
@@ -417,19 +420,26 @@ public class MatchManagerImpl extends GenericNameManagerImpl<Match, Long> implem
 	 * @see com.syncnapsis.data.service.MatchManager#cancelMatch(com.syncnapsis.data.model.Match)
 	 */
 	@Override
-	public boolean cancelMatch(Match match)
+	public Match cancelMatch(Match match)
 	{
 		Assert.isTrue(isAccessible(match, MatchAccessController.OPERATION_CANCEL), "no access rights for 'cancel match " + match.getId() + "'");
 
 		if(match.getCanceledDate() != null || match.getFinishedDate() != null)
-			return false;
+			return match; // throw Exception?
 
 		Date now = new Date(securityManager.getTimeProvider().get());
 
+		// finalize ranking
+		for(Participant p : match.getParticipants())
+		{
+			p.setRankFinal(true);
+			participantManager.save(p);
+		}
+
 		match.setCanceledDate(now);
 		match.setState(EnumMatchState.canceled);
-		save(match);
-		return true;
+		
+		return save(match);
 	}
 
 	/*
@@ -440,6 +450,9 @@ public class MatchManagerImpl extends GenericNameManagerImpl<Match, Long> implem
 	public Match finishMatch(Match match)
 	{
 		// called by System
+		
+		if(match.getState() != EnumMatchState.active)
+			return match; // throw Exception?
 
 		// check victory condition
 		if(!isVictoryConditionMet(match))
@@ -447,7 +460,12 @@ public class MatchManagerImpl extends GenericNameManagerImpl<Match, Long> implem
 
 		Date now = new Date(securityManager.getTimeProvider().get());
 
-		// TODO destroy players / colonies etc. ?
+		// finalize ranking
+		for(Participant p : match.getParticipants())
+		{
+			p.setRankFinal(true);
+			participantManager.save(p);
+		}
 
 		match.setFinishedDate(now);
 		match.setState(EnumMatchState.finished);

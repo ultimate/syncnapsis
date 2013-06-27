@@ -127,17 +127,17 @@ public interface MatchManager extends GenericNameManager<Match, Long>
 	public Match startMatchIfNecessary(Match match);
 
 	/**
-	 * Cancel a planned game if it has not yet been started. This will include cleaning up all
-	 * remaining data like start system selections, associated participants, initialized galaxies
-	 * and more...<br>
+	 * Cancel a planned game if it has not yet been started. This may include cleaning up
+	 * remaining data if necessary.<br>
 	 * <br>
 	 * Canceling the match will perform a security check wether the calling user is equal to the
-	 * creator.
+	 * creator or is an admin/moderator. Additionally admins/moderators even have the right to
+	 * cancel active matches.
 	 * 
 	 * @param match - the match to cancel
-	 * @return true if the match has been canceled, false otherwise
+	 * @return the match entity
 	 */
-	public boolean cancelMatch(Match match);
+	public Match cancelMatch(Match match);
 
 	/**
 	 * Clean up the given match by setting all remaining required properties for the match and all
