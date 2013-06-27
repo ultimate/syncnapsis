@@ -284,7 +284,7 @@
 			<value description="username">user1</value>
 			<value description="email">user1@syncnapsis.com</value>
 			<value description="password">1000:3eff9b066f1696af832c571f88fbc2019ff8e7f6544c606e:f0c1229a02dc24c9e18274c0ddaaeb2977488e60ea1eafd2</value>
-			<value description="fkUserRole">1</value>
+			<value description="fkUserRole">3</value>
 			<null />
 			<value description="activated">1</value>
 			<value description="registrationDate">2008-01-01</value>
@@ -314,7 +314,7 @@
 			<value description="username">user2</value>
 			<value description="email">user2@syncnapsis.com</value>
 			<value description="password">1000:aa406ee8102adf7b1982a6fd95d5f03f31b32a0b9c76b9a2:7e04661d8eb93b93ecd0e1306d1b5f53070561c068d5c949</value>
-			<value description="fkUserRole">1</value>
+			<value description="fkUserRole">3</value>
 			<null />
 			<value description="activated">1</value>
 			<value description="registrationDate">2008-01-01</value>
