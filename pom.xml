@@ -139,7 +139,7 @@
 					<password>${jdbc.password}</password>
 					<url>${jdbc.url}</url>
 					<schema>${db.dbunit.schema}</schema>
-					<type>CLEAN_INSERT</type>
+					<type>INSERT</type>
 					<src>${db.dbunit.src}</src>
 					<skip>${db.dbunit.skip}</skip>
 				</configuration>
