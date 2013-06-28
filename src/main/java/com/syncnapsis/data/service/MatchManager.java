@@ -97,7 +97,7 @@ public interface MatchManager extends GenericNameManager<Match, Long>
 	 */
 	public Match createMatch(String title, long galaxyId, int speed, Long seed, EnumStartCondition startCondition, Date startDate,
 			boolean startSystemSelectionEnabled, int startSystemCount, int startPopulation, EnumVictoryCondition victoryCondition,
-			int victoryParamter, int participantsMax, int participantsMin, List<Long> participantIds, EnumJoinType plannedJoinType,
+			int victoryParameter, int participantsMax, int participantsMin, List<Long> participantIds, EnumJoinType plannedJoinType,
 			EnumJoinType startedJoinType);
 
 	/**

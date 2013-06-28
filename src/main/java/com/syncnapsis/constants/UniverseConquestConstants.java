@@ -23,5 +23,5 @@ public class UniverseConquestConstants
 	/**
 	 * The name for the parameter containing the default percentage for rivals in vendetta mode
 	 */
-	public static final String PARAM_MATCH_VENDETTA_PERCENTAGE_DEFAULT = "match.vendetta.percentage.default";
+	public static final String PARAM_MATCH_VENDETTA_PARAM_DEFAULT = "match.vendetta.param.default";
 }

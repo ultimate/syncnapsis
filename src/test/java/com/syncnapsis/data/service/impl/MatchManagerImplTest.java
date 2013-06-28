@@ -19,13 +19,17 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import org.hamcrest.BaseMatcher;
+import org.hamcrest.Description;
 import org.jmock.Expectations;
 import org.springframework.mock.web.MockHttpSession;
 
 import com.syncnapsis.constants.ApplicationBaseConstants;
+import com.syncnapsis.constants.UniverseConquestConstants;
 import com.syncnapsis.data.dao.MatchDao;
 import com.syncnapsis.data.model.Empire;
 import com.syncnapsis.data.model.Galaxy;
@@ -33,6 +37,7 @@ import com.syncnapsis.data.model.Match;
 import com.syncnapsis.data.model.Participant;
 import com.syncnapsis.data.model.Player;
 import com.syncnapsis.data.model.SolarSystem;
+import com.syncnapsis.data.model.SolarSystemInfrastructure;
 import com.syncnapsis.data.model.SolarSystemPopulation;
 import com.syncnapsis.data.model.User;
 import com.syncnapsis.data.model.UserRole;
@@ -43,6 +48,7 @@ import com.syncnapsis.data.service.ParticipantManager;
 import com.syncnapsis.data.service.PlayerManager;
 import com.syncnapsis.data.service.SolarSystemInfrastructureManager;
 import com.syncnapsis.data.service.SolarSystemPopulationManager;
+import com.syncnapsis.enums.EnumJoinType;
 import com.syncnapsis.enums.EnumMatchState;
 import com.syncnapsis.enums.EnumStartCondition;
 import com.syncnapsis.enums.EnumVictoryCondition;
@@ -108,7 +114,139 @@ public class MatchManagerImplTest extends GenericNameManagerImplTestCase<Match, 
 
 	public void testCreateMatch() throws Exception
 	{
-		fail("unimplemented");
+		Long galaxyId = 1L;
+		Player creator = playerManager.getByUsername("user1");
+		int participantsMax = 5;
+		int participantsMin = 3;
+		EnumJoinType plannedJoinType = EnumJoinType.invitationsOnly;
+		long seed = 123456789;
+		int speed = 100;
+		EnumStartCondition startCondition = EnumStartCondition.manually;
+		Date startDate = new Date(2345);
+		EnumJoinType startedJoinType = EnumJoinType.none;
+		int startSystemCount = 2;
+		int startPopulation = 1000;
+		boolean startSystemSelectionEnabled = true;
+		String title = "test-battle";
+		EnumVictoryCondition victoryCondition = EnumVictoryCondition.domination;
+		int victoryParameter = 100;
+
+		final Galaxy galaxy = galaxyManager.get(galaxyId);
+
+		final Match match = new Match();
+		match.setId(123L);
+		match.setActivated(true);
+		match.setCreationDate(new Date(referenceTime));
+		match.setCreator(creator);
+		match.setFinishedDate(null);
+		match.setGalaxy(galaxy);
+		match.setParticipantsMax(participantsMax);
+		match.setParticipantsMin(participantsMin);
+		match.setPlannedJoinType(plannedJoinType);
+		match.setSeed(seed);
+		match.setSpeed(speed);
+		match.setStartCondition(startCondition);
+		match.setStartDate(startDate);
+		match.setStartedJoinType(startedJoinType);
+		match.setStartPopulation(startPopulation);
+		match.setStartSystemCount(startSystemCount);
+		match.setStartSystemSelectionEnabled(startSystemSelectionEnabled);
+		match.setTitle(title);
+		match.setVictoryCondition(victoryCondition);
+		match.setVictoryParameter(victoryParameter);
+
+		final List<Long> playerIds = new ArrayList<Long>();
+		playerIds.add(1L);
+		playerIds.add(2L);
+
+		final ExtendedRandom random = new ExtendedRandom(seed);
+
+		securityManager.getSessionProvider().set(new MockHttpSession());
+		securityManager.getPlayerProvider().set(creator);
+
+		Match result;
+
+		final SolarSystemInfrastructureManager mockInfrastructureManager = mockContext.mock(SolarSystemInfrastructureManager.class);
+		final ParticipantManager mockParticipantManager = mockContext.mock(ParticipantManager.class);
+		MatchManagerImpl mockManager = new MatchManagerImpl(mockDao, galaxyManager, mockParticipantManager, solarSystemPopulationManager,
+				mockInfrastructureManager, parameterManager);
+		mockManager.setSecurityManager(((MatchManagerImpl) this.mockManager).getSecurityManager());
+
+		// expectatins are a bit more complicated here...
+		mockContext.checking(new Expectations() {
+			{
+				oneOf(mockDao).save(with(new BaseMatcher<Match>() {
+					@Override
+					public boolean matches(Object arg0)
+					{
+						if(((Match) arg0).getId() != null)
+							return false;
+						((Match) arg0).setId(match.getId());
+						return match.equals(arg0);
+					}
+
+					@Override
+					public void describeTo(Description arg0)
+					{
+					}
+				}));
+				will(returnValue(match));
+			}
+		});
+		mockContext.checking(new Expectations() {
+			{
+				oneOf(mockDao).get(match.getId());
+				will(returnValue(match));
+			}
+		});
+		mockContext.checking(new Expectations() {
+			{
+				exactly(galaxy.getSolarSystems().size()).of(mockInfrastructureManager).initialize(with(equal(match)),
+						with(new BaseMatcher<SolarSystem>() {
+							private List<SolarSystem>	used	= new LinkedList<SolarSystem>();
+
+							@Override
+							public boolean matches(Object arg0)
+							{
+								boolean matches = galaxy.getSolarSystems().contains(arg0) && !used.contains(arg0);
+								used.add((SolarSystem) arg0);
+								return matches;
+							}
+
+							@Override
+							public void describeTo(Description arg0)
+							{
+							}
+						}), with(equal(random)));
+				will(returnValue(new SolarSystemInfrastructure()));
+			}
+		});
+		mockContext.checking(new Expectations() {
+			{
+				exactly(playerIds.size()).of(mockParticipantManager).addParticipant(with(equal(match)), with(new BaseMatcher<Long>() {
+					private List<Long>	used	= new LinkedList<Long>();
+
+					@Override
+					public boolean matches(Object arg0)
+					{
+						boolean matches = playerIds.contains(arg0) && !used.contains(arg0);
+						used.add((Long) arg0);
+						return matches;
+					}
+
+					@Override
+					public void describeTo(Description arg0)
+					{
+					}
+				}));
+				will(returnValue(true));
+			}
+		});
+		result = mockManager.createMatch(title, galaxyId, speed, seed, startCondition, startDate, startSystemSelectionEnabled, startSystemCount,
+				startPopulation, victoryCondition, victoryParameter, participantsMax, participantsMin, playerIds, plannedJoinType, startedJoinType);
+		mockContext.assertIsSatisfied();
+		assertNotNull(result);
+		assertEquals(match, result);
 	}
 
 	public void testStartMatch() throws Exception
@@ -240,7 +378,169 @@ public class MatchManagerImplTest extends GenericNameManagerImplTestCase<Match, 
 
 	public void testPerformStartMatch() throws Exception
 	{
-		fail("unimplemented");
+		final SolarSystemPopulationManager mockSolarSystemPopulationManager = mockContext.mock(SolarSystemPopulationManager.class);
+		MatchManagerImpl mockManager = new MatchManagerImpl(mockDao, galaxyManager, participantManager, mockSolarSystemPopulationManager,
+				solarSystemInfrastructureManager, parameterManager);
+		mockManager.setSecurityManager(((MatchManagerImpl) this.mockManager).getSecurityManager());
+
+		int participants = 5;
+		final Match match = new Match();
+		match.setParticipants(new ArrayList<Participant>(participants));
+		Participant p;
+		for(int i = 0; i < participants; i++)
+		{
+			p = new Participant();
+			p.setId((long) i + 1);
+			p.setEmpire(new Empire());
+			p.getEmpire().setId((long) i + 1);
+		}
+		Collections.shuffle(match.getParticipants());
+		match.setStartSystemCount(3);
+		match.setSeed(123L);
+
+		final List<SolarSystemPopulation> populations = new ArrayList<SolarSystemPopulation>(match.getStartSystemCount());
+		for(int i = 0; i < match.getStartSystemCount(); i++)
+			populations.add(new SolarSystemPopulation());
+
+		final ExtendedRandom random = new ExtendedRandom(match.getSeed());
+
+		// test without start date // domination
+		int victoryParameter = 70;
+		match.setVictoryParameter(victoryParameter);
+		match.setVictoryCondition(EnumVictoryCondition.domination);
+		match.setState(EnumMatchState.planned);
+		mockContext.checking(new Expectations() {
+			{
+				oneOf(mockDao).save(match);
+				will(returnValue(match));
+			}
+		});
+		mockContext.checking(new Expectations() {
+			{
+				oneOf(mockDao).get(null);
+				will(returnValue(match));
+			}
+		});
+		mockContext.checking(new Expectations() {
+			{
+				exactly(match.getParticipants().size()).of(mockSolarSystemPopulationManager).randomSelectStartSystems(with(any(Participant.class)),
+						with(equal(random)));
+				will(returnValue(populations));
+			}
+		});
+		mockContext.checking(new Expectations() {
+			{
+				exactly(match.getParticipants().size()*match.getStartSystemCount()).of(mockSolarSystemPopulationManager).save(with(any(SolarSystemPopulation.class)));
+				will(returnValue(new SolarSystemPopulation()));
+			}
+		});
+		Match result1 = ((MatchManagerImpl) mockManager).performStartMatch(match);
+		assertSame(match, result1);
+		mockContext.assertIsSatisfied();
+		assertNotNull(match);
+		assertNotNull(match.getStartDate());
+		assertEquals(new Date(referenceTime), match.getStartDate());
+		assertEquals(victoryParameter, match.getVictoryParameter());
+		for(Participant p1 : match.getParticipants())
+		{
+			assertNull(p1.getRivals());
+		}
+
+		// test with start date // extermination
+		match.setVictoryCondition(EnumVictoryCondition.extermination);
+		Date aStartDate = new Date(4321);
+		match.setStartDate(aStartDate);
+		match.setState(EnumMatchState.planned); // reset state
+		mockContext.checking(new Expectations() {
+			{
+				oneOf(mockDao).save(match);
+				will(returnValue(match));
+			}
+		});
+		mockContext.checking(new Expectations() {
+			{
+				oneOf(mockDao).get(null);
+				will(returnValue(match));
+			}
+		});
+		mockContext.checking(new Expectations() {
+			{
+				exactly(match.getParticipants().size()).of(mockSolarSystemPopulationManager).randomSelectStartSystems(with(any(Participant.class)),
+						with(equal(random)));
+				will(returnValue(populations));
+			}
+		});
+		mockContext.checking(new Expectations() {
+			{
+				exactly(match.getParticipants().size()*match.getStartSystemCount()).of(mockSolarSystemPopulationManager).save(with(any(SolarSystemPopulation.class)));
+				will(returnValue(new SolarSystemPopulation()));
+			}
+		});
+		Match result2 = ((MatchManagerImpl) mockManager).performStartMatch(match);
+		assertSame(match, result2);
+		mockContext.assertIsSatisfied();
+		assertNotNull(match);
+		assertNotNull(match.getStartDate());
+		assertEquals(aStartDate, match.getStartDate());
+		assertEquals(100, match.getVictoryParameter());
+		for(Participant p1 : match.getParticipants())
+		{
+			assertNull(p1.getRivals());
+		}
+
+		// test the third victory condition // vendetta
+		match.setVictoryCondition(EnumVictoryCondition.vendetta);
+		match.setState(EnumMatchState.planned); // reset state
+		mockContext.checking(new Expectations() {
+			{
+				oneOf(mockDao).save(match);
+				will(returnValue(match));
+			}
+		});
+		mockContext.checking(new Expectations() {
+			{
+				oneOf(mockDao).get(null);
+				will(returnValue(match));
+			}
+		});
+		mockContext.checking(new Expectations() {
+			{
+				exactly(match.getParticipants().size()).of(mockSolarSystemPopulationManager).randomSelectStartSystems(with(any(Participant.class)),
+						with(equal(random)));
+				will(returnValue(populations));
+			}
+		});
+		mockContext.checking(new Expectations() {
+			{
+				exactly(match.getParticipants().size()*match.getStartSystemCount()).of(mockSolarSystemPopulationManager).save(with(any(SolarSystemPopulation.class)));
+				will(returnValue(new SolarSystemPopulation()));
+			}
+		});
+		Match result3 = ((MatchManagerImpl) mockManager).performStartMatch(match);
+		assertSame(match, result3);
+		mockContext.assertIsSatisfied();
+		assertNotNull(match);
+		assertNotNull(match.getStartDate());
+		assertEquals(aStartDate, match.getStartDate());
+		assertEquals((int) parameterManager.getInteger(UniverseConquestConstants.PARAM_MATCH_VENDETTA_PARAM_DEFAULT), match.getVictoryParameter());
+		int rivals = mockManager.getNumberOfRivals(match);
+		for(Participant p1 : match.getParticipants())
+		{
+			assertNotNull(p1.getRivals());
+			assertEquals(rivals, p1.getRivals());
+		}
+
+		// test with illegal state
+		match.setState(EnumMatchState.active);
+		try
+		{
+			((MatchManagerImpl) mockManager).performStartMatch(match);
+			fail("expected exception not occurred!");
+		}
+		catch(IllegalArgumentException e)
+		{
+			assertNotNull(e);
+		}
 	}
 
 	public void testAssignRivals() throws Exception
@@ -412,7 +712,7 @@ public class MatchManagerImplTest extends GenericNameManagerImplTestCase<Match, 
 		mockManager.cancelMatch(match);
 		mockContext.assertIsSatisfied();
 		checkAndResetCanceledOrFinishedMatch(match, true, EnumMatchState.planned);
-		
+
 		// test with other player
 		securityManager.getPlayerProvider().set(other);
 		assertFalse(((MatchManagerImpl) mockManager).isAccessible(match, MatchAccessController.OPERATION_CANCEL));
@@ -425,7 +725,7 @@ public class MatchManagerImplTest extends GenericNameManagerImplTestCase<Match, 
 		{
 			assertNotNull(e);
 		}
-		
+
 		// test with illegal state (already started)
 		securityManager.getPlayerProvider().set(creator);
 		match.setState(EnumMatchState.active);
@@ -439,7 +739,7 @@ public class MatchManagerImplTest extends GenericNameManagerImplTestCase<Match, 
 		{
 			assertNotNull(e);
 		}
-		
+
 		// but for an admin this should be possible
 		securityManager.getPlayerProvider().set(admin);
 		mockContext.checking(new Expectations() {
@@ -468,7 +768,7 @@ public class MatchManagerImplTest extends GenericNameManagerImplTestCase<Match, 
 			p.setRankValue((participants - 1 - i) * 10);
 			match.getParticipants().add(p);
 		}
-		
+
 		// pre-check
 		assertFalse(mockManager.isVictoryConditionMet(match));
 
@@ -477,7 +777,7 @@ public class MatchManagerImplTest extends GenericNameManagerImplTestCase<Match, 
 		mockManager.finishMatch(match);
 		mockContext.assertIsSatisfied();
 		assertNull(match.getFinishedDate());
-		
+
 		// now match is active // but victory condition still not met
 		match.setState(EnumMatchState.active);
 		mockManager.finishMatch(match);
@@ -516,14 +816,14 @@ public class MatchManagerImplTest extends GenericNameManagerImplTestCase<Match, 
 			other = match.getCanceledDate();
 			assertEquals(EnumMatchState.finished, match.getState());
 		}
-		
+
 		assertNotNull(date);
 		assertEquals(referenceTime, date.getTime());
 		assertNull(other);
 
 		for(Participant p : match.getParticipants())
 			assertTrue(p.isRankFinal());
-		
+
 		if(resetToState != null)
 		{
 			match.setCanceledDate(null);

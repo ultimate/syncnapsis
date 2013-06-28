@@ -218,6 +218,7 @@ public class MatchManagerImpl extends GenericNameManagerImpl<Match, Long> implem
 		match.setStartCondition(startCondition);
 		match.setStartDate(startDate);
 		match.setStartedJoinType(startedJoinType);
+		match.setStartPopulation(startPopulation);
 		match.setStartSystemCount(startSystemCount);
 		match.setStartSystemSelectionEnabled(startSystemSelectionEnabled);
 		match.setTitle(title);
@@ -320,7 +321,7 @@ public class MatchManagerImpl extends GenericNameManagerImpl<Match, Long> implem
 				break;
 			case vendetta:
 				// TODO make vendetta percentage selectable?
-				match.setVictoryParameter(parameterManager.getInteger(UniverseConquestConstants.PARAM_MATCH_VENDETTA_PERCENTAGE_DEFAULT));
+				match.setVictoryParameter(parameterManager.getInteger(UniverseConquestConstants.PARAM_MATCH_VENDETTA_PARAM_DEFAULT));
 				break;
 		}
 
@@ -331,6 +332,8 @@ public class MatchManagerImpl extends GenericNameManagerImpl<Match, Long> implem
 		int numberOfRivals = getNumberOfRivals(match);
 		if(numberOfRivals > 0)
 			assignRivals(match.getParticipants(), numberOfRivals, random);
+		
+		match = save(match);
 
 		List<SolarSystemPopulation> populations;
 		for(Participant p : match.getParticipants())
@@ -343,10 +346,9 @@ public class MatchManagerImpl extends GenericNameManagerImpl<Match, Long> implem
 				population.setColonizationDate(startDate);
 				solarSystemPopulationManager.save(population);
 			}
-			participantManager.save(p);
 		}
 
-		return save(match);
+		return get(match.getId());
 	}
 
 	/*
