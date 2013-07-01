@@ -65,12 +65,12 @@ public class MatchAccessController implements AccessController<Match>
 		return target.getCreator().equals(player) || isModerator(player) || isAdmin(player);
 	}
 
-	public boolean isModerator(Player player)
+	protected boolean isModerator(Player player)
 	{
 		return player.getUser().getRole().getRolename().equals(ApplicationBaseConstants.ROLE_MODERATOR);
 	}
 
-	public boolean isAdmin(Player player)
+	protected boolean isAdmin(Player player)
 	{
 		return player.getUser().getRole().getRolename().equals(ApplicationBaseConstants.ROLE_ADMIN);
 	}
