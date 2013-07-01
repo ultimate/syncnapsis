@@ -304,6 +304,8 @@ public class CoverageTestCase extends LoggerTestCase
 			return "Serializable Method";
 		if(m.isAnnotationPresent(Untested.class))
 			return "Untested (by annotation)";
+		if(m.getName().startsWith("$SWITCH_TABLE$"))
+			return "Enum-Switch-Table";
 		if(this.specialMethods.contains(m.getName()))
 			return "Special-Method-Ignore-List";
 		return null;
