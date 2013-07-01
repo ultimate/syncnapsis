@@ -61,7 +61,7 @@ import com.syncnapsis.tests.annotations.TestExcludesMethods;
 import com.syncnapsis.utils.data.ExtendedRandom;
 
 @TestCoversClasses({ MatchManager.class, MatchManagerImpl.class })
-@TestExcludesMethods({ "isAccessible" })
+@TestExcludesMethods({ "isAccessible", "*etSecurityManager", "afterPropertiesSet" })
 public class MatchManagerImplTest extends GenericNameManagerImplTestCase<Match, Long, MatchManager, MatchDao>
 {
 	private GalaxyManager						galaxyManager;

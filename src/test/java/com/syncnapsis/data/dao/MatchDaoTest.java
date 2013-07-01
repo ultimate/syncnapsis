@@ -26,6 +26,7 @@ import com.syncnapsis.enums.EnumStartCondition;
 import com.syncnapsis.enums.EnumVictoryCondition;
 import com.syncnapsis.tests.GenericNameDaoTestCase;
 import com.syncnapsis.tests.annotations.TestCoversClasses;
+import com.syncnapsis.tests.annotations.TestCoversMethods;
 
 @TestCoversClasses({ MatchDao.class, MatchDaoHibernate.class })
 public class MatchDaoTest extends GenericNameDaoTestCase<Match, Long>
@@ -74,99 +75,104 @@ public class MatchDaoTest extends GenericNameDaoTestCase<Match, Long>
 
 	// insert individual Tests here
 
+	@TestCoversMethods({ "getByCreator", "getBy" })
 	public void testGetByCreator() throws Exception
 	{
 		Long creator = 2L;
 		Date refDate1 = dateFormat.get().parse("2012-01-15 00:00:00");
 		Date refDate2 = dateFormat.get().parse("2012-02-15 00:00:00");
-		
+
 		getByTest("getByCreator", refDate1, creator, creator, null, null, 2, 2, 0, 0);
 		getByTest("getByCreator", refDate2, creator, creator, null, null, 1, 1, 1, 1);
 	}
-	
+
+	@TestCoversMethods({ "getByGalaxy", "getBy" })
 	public void testGetByGalaxy() throws Exception
 	{
 		Long galaxy = 1L;
 		Date refDate1 = dateFormat.get().parse("2012-01-15 00:00:00");
 		Date refDate2 = dateFormat.get().parse("2012-02-15 00:00:00");
-		
+
 		getByTest("getByGalaxy", refDate1, galaxy, null, galaxy, null, 2, 4, 0, 0);
 		getByTest("getByGalaxy", refDate2, galaxy, null, galaxy, null, 1, 2, 2, 1);
 	}
-	
+
+	@TestCoversMethods({ "getByPlayer", "getBy" })
 	public void testGetByPlayer() throws Exception
 	{
 		Long player = 1L;
 		Date refDate1 = dateFormat.get().parse("2012-01-15 00:00:00");
 		Date refDate2 = dateFormat.get().parse("2012-02-15 00:00:00");
-		
+
 		getByTest("getByPlayer", refDate1, player, null, null, player, 0, 2, 0, 0);
 		getByTest("getByPlayer", refDate2, player, null, null, player, 0, 1, 1, 0);
 	}
-	
+
 	@SuppressWarnings("unchecked")
-	private void getByTest(String methodName, Date refDate, long arg, Long creator, Long galaxy, Long player, int planned, int active, int finished, int canceled) throws Exception
+	private void getByTest(String methodName, Date refDate, long arg, Long creator, Long galaxy, Long player, int planned, int active, int finished,
+			int canceled) throws Exception
 	{
 		List<Match> result;
-		
-		Method method = matchDao.getClass().getMethod(methodName, new Class<?>[] {long.class, boolean.class, boolean.class, boolean.class, boolean.class, Date.class});
-		
-		result = (List<Match>) method.invoke(matchDao, new Object[] {arg, false, false, false, false, refDate});
+
+		Method method = matchDao.getClass().getMethod(methodName,
+				new Class<?>[] { long.class, boolean.class, boolean.class, boolean.class, boolean.class, Date.class });
+
+		result = (List<Match>) method.invoke(matchDao, new Object[] { arg, false, false, false, false, refDate });
 		checkMatches(result, 0, creator, galaxy, player);
-		
-		result = (List<Match>) method.invoke(matchDao, new Object[] {arg, true, false, false, false, refDate});
+
+		result = (List<Match>) method.invoke(matchDao, new Object[] { arg, true, false, false, false, refDate });
 		checkMatches(result, planned, creator, galaxy, player);
 		for(Match m : result)
 		{
 			assertTrue(m.getStartDate() == null || m.getStartDate().after(refDate));
 			assertTrue(m.getCanceledDate() == null || m.getCanceledDate().after(refDate));
 		}
-		
-		result = (List<Match>) method.invoke(matchDao, new Object[] {arg, false, true, false, false, refDate});
+
+		result = (List<Match>) method.invoke(matchDao, new Object[] { arg, false, true, false, false, refDate });
 		checkMatches(result, active, creator, galaxy, player);
 		for(Match m : result)
 		{
 			assertTrue(m.getStartDate() != null && m.getStartDate().before(refDate));
 			assertTrue(m.getCanceledDate() == null || m.getCanceledDate().after(refDate));
 		}
-		
-		result = (List<Match>) method.invoke(matchDao, new Object[] {arg, false, false, true, false, refDate});
+
+		result = (List<Match>) method.invoke(matchDao, new Object[] { arg, false, false, true, false, refDate });
 		checkMatches(result, finished, creator, galaxy, player);
 		for(Match m : result)
 		{
 			assertTrue(m.getStartDate() != null && m.getStartDate().before(refDate));
 			assertTrue(m.getFinishedDate() != null && m.getFinishedDate().before(refDate));
 		}
-		
-		result = (List<Match>) method.invoke(matchDao, new Object[] {arg, false, false, false, true, refDate});
+
+		result = (List<Match>) method.invoke(matchDao, new Object[] { arg, false, false, false, true, refDate });
 		checkMatches(result, canceled, creator, galaxy, player);
 		for(Match m : result)
 		{
 			assertTrue(m.getCanceledDate() != null && m.getCanceledDate().before(refDate));
 		}
-		
+
 		// combination
 
-		result = (List<Match>) method.invoke(matchDao, new Object[] {arg, true, true, false, false, refDate});
-		checkMatches(result, planned+active , creator, galaxy, player);
-		
-		result = (List<Match>) method.invoke(matchDao, new Object[] {arg, true, false, true, false, refDate});
-		checkMatches(result, planned+finished, creator, galaxy, player);
+		result = (List<Match>) method.invoke(matchDao, new Object[] { arg, true, true, false, false, refDate });
+		checkMatches(result, planned + active, creator, galaxy, player);
 
-		result = (List<Match>) method.invoke(matchDao, new Object[] {arg, true, false, false, true, refDate});
-		checkMatches(result, planned+canceled, creator, galaxy, player);
+		result = (List<Match>) method.invoke(matchDao, new Object[] { arg, true, false, true, false, refDate });
+		checkMatches(result, planned + finished, creator, galaxy, player);
 
-		result = (List<Match>) method.invoke(matchDao, new Object[] {arg, false, true, true, false, refDate});
-		checkMatches(result, active+finished, creator, galaxy, player);
-		
-		result = (List<Match>) method.invoke(matchDao, new Object[] {arg, false, true, false, true, refDate});
-		checkMatches(result, active+canceled, creator, galaxy, player);
-		
-		result = (List<Match>) method.invoke(matchDao, new Object[] {arg, false, false, true, true, refDate});
-		checkMatches(result, finished+canceled, creator, galaxy, player);
-		
-		result = (List<Match>) method.invoke(matchDao, new Object[] {arg, true, true, true, true, refDate});
-		checkMatches(result, planned+active+finished+canceled, creator, galaxy, player);
+		result = (List<Match>) method.invoke(matchDao, new Object[] { arg, true, false, false, true, refDate });
+		checkMatches(result, planned + canceled, creator, galaxy, player);
+
+		result = (List<Match>) method.invoke(matchDao, new Object[] { arg, false, true, true, false, refDate });
+		checkMatches(result, active + finished, creator, galaxy, player);
+
+		result = (List<Match>) method.invoke(matchDao, new Object[] { arg, false, true, false, true, refDate });
+		checkMatches(result, active + canceled, creator, galaxy, player);
+
+		result = (List<Match>) method.invoke(matchDao, new Object[] { arg, false, false, true, true, refDate });
+		checkMatches(result, finished + canceled, creator, galaxy, player);
+
+		result = (List<Match>) method.invoke(matchDao, new Object[] { arg, true, true, true, true, refDate });
+		checkMatches(result, planned + active + finished + canceled, creator, galaxy, player);
 	}
 
 	private void checkMatches(List<Match> matches, int size, Long creator, Long galaxy, Long player)
@@ -182,7 +188,7 @@ public class MatchDaoTest extends GenericNameDaoTestCase<Match, Long>
 			if(player != null)
 			{
 				boolean found = false;
-				for(Participant p: m.getParticipants())
+				for(Participant p : m.getParticipants())
 				{
 					if(p.getEmpire().getPlayer().getId().equals(player))
 						found = true;
