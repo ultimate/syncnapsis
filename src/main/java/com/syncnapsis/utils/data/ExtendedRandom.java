@@ -38,6 +38,30 @@ public class ExtendedRandom extends Random
 	 */
 	private static final long	serialVersionUID	= 1L;
 
+	/**
+	 * 50% of all values of a gaussian normal distribution will be within
+	 * <code>+/- 0.675*sigma</code>.
+	 */
+	public static final double	GAUSS_50			= 0.675;
+	/**
+	 * 90% of all values of a gaussian normal distribution will be within
+	 * <code>+/- 1.645*sigma</code>.
+	 */
+	public static final double	GAUSS_90			= 1.645;
+	/**
+	 * 95% of all values of a gaussian normal distribution will be within
+	 * <code>+/- 1.960*sigma</code>.
+	 */
+	public static final double	GAUSS_95			= 1.960;
+	/**
+	 * 99% of all values of a gaussian normal distribution will be within
+	 * <code>+/- 2.576*sigma</code>.
+	 */
+	public static final double	GAUSS_99			= 2.576;
+
+	/**
+	 * The seed this ExtendedRandom was initialized with.
+	 */
 	private final long			initialSeed;
 
 	/**
@@ -152,7 +176,8 @@ public class ExtendedRandom extends Random
 	}
 
 	/**
-	 * Create a new random Integer within the interval [min; max] (both inclusive).<br>
+	 * Create a new equally distributed random Integer within the interval [min; max] (both
+	 * inclusive).<br>
 	 * If min and max are swapped they will be re-swapped internally to guarantee min is smaller
 	 * than max.
 	 * 
@@ -223,6 +248,73 @@ public class ExtendedRandom extends Random
 		Assert.isTrue(probabilityFalse >= 0, "probabilityFalse must be >= 0");
 		int val = nextInt(-probabilityFalse, probabilityTrue - 1);
 		return val >= 0;
+	}
+
+	/**
+	 * Create a new "normally" distributed random Double within the interval [min; max[ (min
+	 * inclusive, max exclusive).<br>
+	 * If min and max are swapped they will be re-swapped internally to guarantee min is smaller
+	 * than max.
+	 * 
+	 * @param min - the minimum (inclusive)
+	 * @param max - the maximum (exclusive)
+	 * @return the "normally" distributed value
+	 */
+	public double nextGaussian(double min, double max)
+	{
+		if(min == max)
+			return min;
+		if(min > max)
+		{
+			double tmp = min;
+			min = max;
+			max = tmp;
+		}
+		double g;
+		do
+		{
+			g = nextGaussian();
+			// we have a value in an unknown interval since the gaussian normal distribution does not
+			// end at a specific point.
+			// But since we know 99% of all values are within +/- 2.576*sigma we can stretch those
+			// values to the desired interval length:
+			g *= (max - min) / (2 * GAUSS_99);
+			// now we need to shift the distribution to the center of the interval;
+			g += (max + min) / 2;
+		} while(g > max || g < min);
+		return g;
+	}
+
+	/**
+	 * Create a new "normally" distributed random Integer within the interval [min; max] (both
+	 * inclusive).<br>
+	 * If min and max are swapped they will be re-swapped internally to guarantee min is smaller
+	 * than max.
+	 * 
+	 * @see ExtendedRandom#nextGaussian(double, double)
+	 * @param min - the minimum (inclusive)
+	 * @param max - the maximum (inclusive)
+	 * @return the "normally" distributed random value
+	 */
+	public int nextGaussian(int min, int max)
+	{
+		return (int) Math.round(nextGaussian((double) min, (double) max));
+	}
+
+	/**
+	 * Create a new "normally" distributed random Integer within the interval [min; max] (both
+	 * inclusive).<br>
+	 * If min and max are swapped they will be re-swapped internally to guarantee min is smaller
+	 * than max.
+	 * 
+	 * @see ExtendedRandom#nextGaussian(double, double)
+	 * @param min - the minimum (inclusive)
+	 * @param max - the maximum (inclusive)
+	 * @return the "normally" distributed random value
+	 */
+	public long nextGaussian(long min, long max)
+	{
+		return Math.round(nextGaussian((double) min, (double) max));
 	}
 
 	/**

@@ -307,6 +307,84 @@ public class ExtendedRandomTest extends LoggerTestCase
 		}
 	}
 
+	@TestCoversMethods("nextGaussian")
+	public void testNextGaussian_double()
+	{
+		double min, max;
+		double g;
+		for(int i = 0; i < 100; i++)
+		{
+			min = i * 12.34 - 56;
+			max = i * 12.34 + 56;
+			g = random.nextGaussian(min, max);
+			assertTrue(g >= min && g <= max);
+		}
+	}
+
+	@TestCoversMethods("nextGaussian")
+	public void testNextGaussian_long()
+	{
+		long min, max;
+		long g;
+		for(int i = 0; i < 100; i++)
+		{
+			min = (long) (i * 12.34 - 56);
+			max = (long) (i * 12.34 + 56);
+			g = random.nextGaussian(min, max);
+			assertTrue(g >= min && g <= max);
+		}
+	}
+
+	@TestCoversMethods("nextGaussian")
+	public void testNextGaussian_int()
+	{
+		int min, max;
+		int g;
+		for(int i = 0; i < 100; i++)
+		{
+			min = (int) (i * 12.34 - 56);
+			max = (int) (i * 12.34 + 56);
+			g = random.nextGaussian(min, max);
+			assertTrue(g >= min && g <= max);
+		}
+	}
+
+	public void testNextGaussian_distribution()
+	{
+		int cycles = 1000000;
+		int[] count = new int[101];
+		for(int i = 0; i < cycles; i++)
+		{
+			count[random.nextGaussian(0, count.length - 1)]++;
+		}
+		logger.debug(arrayPrint(count));
+		StringBuilder graph = new StringBuilder();
+		StringBuilder line;
+		boolean appended = true;
+		int row = 0;
+		do
+		{
+			appended = false;
+			line = new StringBuilder();
+			for(int c : count)
+			{
+				if(c > row)
+				{
+					line.append("I");
+					appended = true;
+				}
+				else
+				{
+					line.append(" ");
+				}
+			}
+			line.append("\n");
+			graph.insert(0, line);
+			row += cycles/1000;
+		} while(appended);
+		System.out.println(graph);
+	}
+
 	public void testNextPerm() throws Exception
 	{
 		int[] result, result2;
@@ -348,7 +426,7 @@ public class ExtendedRandomTest extends LoggerTestCase
 			int[] perm = random2.nextPerm(10);
 			int cycleLength = MathUtil.permCycleLength(perm);
 			int partialCycleLength = MathUtil.permPartialCycleLength(perm);
-			
+
 			assertTrue(partialCycleLength <= cycleLength);
 
 			if(cycleLengths.get(cycleLength) == null)
@@ -406,7 +484,7 @@ public class ExtendedRandomTest extends LoggerTestCase
 			int[] perm = random2.nextPerm2(10);
 			int cycleLength = MathUtil.permCycleLength(perm);
 			int partialCycleLength = MathUtil.permPartialCycleLength(perm);
-			
+
 			assertTrue(partialCycleLength <= cycleLength);
 
 			if(cycleLengths.get(cycleLength) == null)
