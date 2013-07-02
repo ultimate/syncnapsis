@@ -50,7 +50,7 @@ public abstract class Generator<T>
 	/**
 	 * Create a new Generator with the given {@link ExtendedRandom}
 	 * 
-	 * @param random
+	 * @param random - the extended random number generator
 	 */
 	public Generator(ExtendedRandom random)
 	{
