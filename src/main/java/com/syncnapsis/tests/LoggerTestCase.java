@@ -256,6 +256,7 @@ public abstract class LoggerTestCase extends TestCase
 
 			for(int i = 0; i < array.length; i++)
 			{
+				val += array[i];
 				if(i % scaleX == 0)
 				{
 					if(val > row)
@@ -268,10 +269,6 @@ public abstract class LoggerTestCase extends TestCase
 						line.append(" ");
 					}
 					val = 0;
-				}
-				else
-				{
-					val += array[i];
 				}
 			}
 			line.append("\n");
