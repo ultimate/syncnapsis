@@ -127,6 +127,10 @@
 	<bean id="mailer" class="com.syncnapsis.utils.mail.BaseGameMailer">
 		<constructor-arg value="mail.properties" />
 	</bean>
+	
+	<bean id="infrastructureGenerator" class="com.syncnapsis.utils.data.SolarSystemInfrastructureGenerator" >
+		<constructor-arg ref="parameterManager"/>
+	</bean>
 
 	<!-- =================================================================== -->
 	<!-- Hibernate -->
