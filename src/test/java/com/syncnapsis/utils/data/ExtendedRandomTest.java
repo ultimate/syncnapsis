@@ -502,28 +502,4 @@ public class ExtendedRandomTest extends LoggerTestCase
 		assertEquals(1, cycleLengths.size());
 		assertEquals(100, (int) cycleLengths.get(10));
 	}
-
-	private String arrayPrint(int[] arr)
-	{
-		StringBuilder sb = new StringBuilder();
-		sb.append("[");
-		for(int i = 0; i < arr.length; i++)
-		{
-			if(i > 0)
-				sb.append(", ");
-			sb.append(arr[i]);
-		}
-		sb.append("]");
-		return sb.toString();
-	}
-
-	private boolean arrayEquals(int[] a1, int[] a2)
-	{
-		if(a1.length != a2.length)
-			return false;
-		for(int i = 0; i < a1.length; i++)
-			if(a1[i] != a2[i])
-				return false;
-		return true;
-	}
 }
