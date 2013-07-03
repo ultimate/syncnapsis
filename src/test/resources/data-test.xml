@@ -27,6 +27,24 @@
 			<value description="value">40</value>
 			<value description="version">1</value>
 		</row>
+		<row>
+			<value description="id">102</value>
+			<value description="name">solarsystem.habitability.max</value>
+			<value description="value">1000</value>
+			<value description="version">1</value>
+		</row>
+		<row>
+			<value description="id">103</value>
+			<value description="name">solarsystem.size.max</value>
+			<value description="value">1000</value>
+			<value description="version">1</value>
+		</row>
+		<row>
+			<value description="id">104</value>
+			<value description="name">solarsystem.population.factor</value>
+			<value description="value">1000000</value>
+			<value description="version">1</value>
+		</row>
 	</table>
 	<table name="galaxy">
 		<column>id</column>

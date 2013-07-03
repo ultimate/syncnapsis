@@ -507,7 +507,7 @@ public class MatchManagerImpl extends GenericNameManagerImpl<Match, Long> implem
 	@Override
 	public Match updateRanking(Match match)
 	{
-		int totalPopulation = 0;
+		long totalPopulation = 0;
 		for(Participant p : match.getParticipants())
 		{
 			for(SolarSystemPopulation pop : p.getPopulations())
@@ -519,7 +519,8 @@ public class MatchManagerImpl extends GenericNameManagerImpl<Match, Long> implem
 
 		logger.debug("total population = " + totalPopulation);
 
-		int rankValue, ref;
+		int rankValue;
+		double ref;
 		int destroyed = 0;
 		List<Participant> updatedParticipants = new LinkedList<Participant>();
 		for(Participant p : match.getParticipants())
@@ -565,7 +566,7 @@ public class MatchManagerImpl extends GenericNameManagerImpl<Match, Long> implem
 					break;
 			}
 
-			rankValue = (int) Math.floor(100 * rankValue / ref);
+			rankValue = (int) Math.floor(100.0 * rankValue / ref);
 			p.setRankValue(rankValue);
 
 			updatedParticipants.add(p);

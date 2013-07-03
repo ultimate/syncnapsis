@@ -86,7 +86,7 @@ public class SolarSystemPopulation extends ActivatableInstance<Long>
 	/**
 	 * The current amount/value of population
 	 */
-	protected int							population;
+	protected long							population;
 
 	/**
 	 * The priority to use for building a colony (population).<br>
@@ -201,7 +201,7 @@ public class SolarSystemPopulation extends ActivatableInstance<Long>
 	 * @return population
 	 */
 	@Column(nullable = false)
-	public int getPopulation()
+	public long getPopulation()
 	{
 		return population;
 	}
@@ -324,7 +324,7 @@ public class SolarSystemPopulation extends ActivatableInstance<Long>
 	 * 
 	 * @param population - the amount/value
 	 */
-	public void setPopulation(int population)
+	public void setPopulation(long population)
 	{
 		this.population = population;
 	}
@@ -382,7 +382,7 @@ public class SolarSystemPopulation extends ActivatableInstance<Long>
 		result = prime * result + ((origin == null) ? 0 : origin.getId().hashCode());
 		result = prime * result + ((originationDate == null) ? 0 : originationDate.hashCode());
 		result = prime * result + ((participant == null) ? 0 : participant.getId().hashCode());
-		result = prime * result + population;
+		result = prime * result + (int) (population ^ (population >>> 32));
 		return result;
 	}
 

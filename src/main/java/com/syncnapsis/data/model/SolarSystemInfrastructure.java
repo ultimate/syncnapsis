@@ -69,7 +69,7 @@ public class SolarSystemInfrastructure extends ActivatableInstance<Long>
 	/**
 	 * The current amount/value of infrastructure
 	 */
-	protected int							infrastructure;
+	protected long							infrastructure;
 
 	/**
 	 * The populations present in this solar system (includes old populations as well)
@@ -141,7 +141,7 @@ public class SolarSystemInfrastructure extends ActivatableInstance<Long>
 	 * @return infrastructure
 	 */
 	@Column(nullable = false)
-	public int getInfrastructure()
+	public long getInfrastructure()
 	{
 		return infrastructure;
 	}
@@ -214,7 +214,7 @@ public class SolarSystemInfrastructure extends ActivatableInstance<Long>
 	 * 
 	 * @param infrastructure - the amount/value
 	 */
-	public void setInfrastructure(int infrastructure)
+	public void setInfrastructure(long infrastructure)
 	{
 		this.infrastructure = infrastructure;
 	}
@@ -240,7 +240,7 @@ public class SolarSystemInfrastructure extends ActivatableInstance<Long>
 		int result = super.hashCode();
 		result = prime * result + ((firstColonizationDate == null) ? 0 : firstColonizationDate.hashCode());
 		result = prime * result + habitability;
-		result = prime * result + infrastructure;
+		result = prime * result + (int) (infrastructure ^ (infrastructure >>> 32));
 		result = prime * result + ((match == null) ? 0 : match.getId().hashCode());
 		result = prime * result + size;
 		result = prime * result + ((solarSystem == null) ? 0 : solarSystem.getId().hashCode());
