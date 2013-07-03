@@ -28,9 +28,11 @@ import com.syncnapsis.data.service.GalaxyManager;
 import com.syncnapsis.data.service.SolarSystemManager;
 import com.syncnapsis.tests.GenericManagerImplTestCase;
 import com.syncnapsis.tests.annotations.TestCoversClasses;
+import com.syncnapsis.tests.annotations.TestExcludesMethods;
 import com.syncnapsis.utils.data.ExtendedRandom;
 
 @TestCoversClasses({ SolarSystemManager.class, SolarSystemManagerImpl.class })
+@TestExcludesMethods("*etNameGenerator")
 public class SolarSystemManagerImplTest extends GenericManagerImplTestCase<SolarSystem, Long, SolarSystemManager, SolarSystemDao>
 {
 	private GalaxyManager	galaxyManager;
@@ -43,6 +45,13 @@ public class SolarSystemManagerImplTest extends GenericManagerImplTestCase<Solar
 		setDaoClass(SolarSystemDao.class);
 		setMockDao(mockContext.mock(SolarSystemDao.class));
 		setMockManager(new SolarSystemManagerImpl(mockDao));
+	}
+
+	public void testGetByGalaxy() throws Exception
+	{
+		MethodCall managerCall = new MethodCall("getByGalaxy", new ArrayList<SolarSystem>(), 1L);
+		MethodCall daoCall = new MethodCall("getByGalaxy", new ArrayList<SolarSystem>(), 1L);
+		simpleGenericTest(managerCall, daoCall);
 	}
 
 	public void testGetName() throws Exception
@@ -120,7 +129,7 @@ public class SolarSystemManagerImplTest extends GenericManagerImplTestCase<Solar
 
 			SolarSystem result = mockManager.create(galaxy, systemCoords, systemNames, i, random);
 			mockContext.assertIsSatisfied();
-			
+
 			assertNotNull(result);
 			assertEquals(expected, result);
 		}
