@@ -65,12 +65,31 @@ public class MatchAccessControllerTest extends LoggerTestCase
 		match.setCreator(creator);
 		
 		// OPERATION_ADD_PARTICIPANT
+		match.setState(EnumMatchState.planned);
 		assertTrue(controller.isAccessible(match, MatchAccessController.OPERATION_ADD_PARTICIPANT, creator));
 		assertTrue(controller.isAccessible(match, MatchAccessController.OPERATION_ADD_PARTICIPANT, admin));
 		assertTrue(controller.isAccessible(match, MatchAccessController.OPERATION_ADD_PARTICIPANT, moderator));
 		assertFalse(controller.isAccessible(match, MatchAccessController.OPERATION_ADD_PARTICIPANT, other));
+		match.setState(EnumMatchState.active);
+		assertFalse(controller.isAccessible(match, MatchAccessController.OPERATION_ADD_PARTICIPANT, creator));
+		assertTrue(controller.isAccessible(match, MatchAccessController.OPERATION_ADD_PARTICIPANT, admin));
+		assertTrue(controller.isAccessible(match, MatchAccessController.OPERATION_ADD_PARTICIPANT, moderator));
+		assertFalse(controller.isAccessible(match, MatchAccessController.OPERATION_ADD_PARTICIPANT, other));
+		
+		// OPERATION_REMOVE_PARTICIPANT
+		match.setState(EnumMatchState.planned);
+		assertTrue(controller.isAccessible(match, MatchAccessController.OPERATION_REMOVE_PARTICIPANT, creator));
+		assertTrue(controller.isAccessible(match, MatchAccessController.OPERATION_REMOVE_PARTICIPANT, admin));
+		assertTrue(controller.isAccessible(match, MatchAccessController.OPERATION_REMOVE_PARTICIPANT, moderator));
+		assertFalse(controller.isAccessible(match, MatchAccessController.OPERATION_REMOVE_PARTICIPANT, other));
+		match.setState(EnumMatchState.active);
+		assertFalse(controller.isAccessible(match, MatchAccessController.OPERATION_REMOVE_PARTICIPANT, creator));
+		assertTrue(controller.isAccessible(match, MatchAccessController.OPERATION_REMOVE_PARTICIPANT, admin));
+		assertTrue(controller.isAccessible(match, MatchAccessController.OPERATION_REMOVE_PARTICIPANT, moderator));
+		assertFalse(controller.isAccessible(match, MatchAccessController.OPERATION_REMOVE_PARTICIPANT, other));
 		
 		// OPERATION_CANCEL
+		match.setState(EnumMatchState.planned);
 		assertTrue(controller.isAccessible(match, MatchAccessController.OPERATION_CANCEL, creator));
 		assertTrue(controller.isAccessible(match, MatchAccessController.OPERATION_CANCEL, admin));
 		assertTrue(controller.isAccessible(match, MatchAccessController.OPERATION_CANCEL, moderator));
@@ -82,25 +101,49 @@ public class MatchAccessControllerTest extends LoggerTestCase
 		assertFalse(controller.isAccessible(match, MatchAccessController.OPERATION_CANCEL, other));
 		
 		// OPERATION_CREATE
+		match.setState(EnumMatchState.planned);
+		assertTrue(controller.isAccessible(match, MatchAccessController.OPERATION_CREATE, creator));
+		assertTrue(controller.isAccessible(match, MatchAccessController.OPERATION_CREATE, admin));
+		assertTrue(controller.isAccessible(match, MatchAccessController.OPERATION_CREATE, moderator));
+		assertTrue(controller.isAccessible(match, MatchAccessController.OPERATION_CREATE, other));
+		match.setState(EnumMatchState.active);
 		assertTrue(controller.isAccessible(match, MatchAccessController.OPERATION_CREATE, creator));
 		assertTrue(controller.isAccessible(match, MatchAccessController.OPERATION_CREATE, admin));
 		assertTrue(controller.isAccessible(match, MatchAccessController.OPERATION_CREATE, moderator));
 		assertTrue(controller.isAccessible(match, MatchAccessController.OPERATION_CREATE, other));
 		
 		// OPERATION_JOIN
+		match.setState(EnumMatchState.planned);
+		assertTrue(controller.isAccessible(match, MatchAccessController.OPERATION_JOIN, creator));
+		assertTrue(controller.isAccessible(match, MatchAccessController.OPERATION_JOIN, admin));
+		assertTrue(controller.isAccessible(match, MatchAccessController.OPERATION_JOIN, moderator));
+		assertTrue(controller.isAccessible(match, MatchAccessController.OPERATION_JOIN, other));
+		match.setState(EnumMatchState.active);
 		assertTrue(controller.isAccessible(match, MatchAccessController.OPERATION_JOIN, creator));
 		assertTrue(controller.isAccessible(match, MatchAccessController.OPERATION_JOIN, admin));
 		assertTrue(controller.isAccessible(match, MatchAccessController.OPERATION_JOIN, moderator));
 		assertTrue(controller.isAccessible(match, MatchAccessController.OPERATION_JOIN, other));
 		
 		// OPERATION_LEAVE
+		match.setState(EnumMatchState.planned);
+		assertTrue(controller.isAccessible(match, MatchAccessController.OPERATION_LEAVE, creator));
+		assertTrue(controller.isAccessible(match, MatchAccessController.OPERATION_LEAVE, admin));
+		assertTrue(controller.isAccessible(match, MatchAccessController.OPERATION_LEAVE, moderator));
+		assertTrue(controller.isAccessible(match, MatchAccessController.OPERATION_LEAVE, other));
+		match.setState(EnumMatchState.active);
 		assertTrue(controller.isAccessible(match, MatchAccessController.OPERATION_LEAVE, creator));
 		assertTrue(controller.isAccessible(match, MatchAccessController.OPERATION_LEAVE, admin));
 		assertTrue(controller.isAccessible(match, MatchAccessController.OPERATION_LEAVE, moderator));
 		assertTrue(controller.isAccessible(match, MatchAccessController.OPERATION_LEAVE, other));
 		
 		// OPERATION_START
+		match.setState(EnumMatchState.planned);
 		assertTrue(controller.isAccessible(match, MatchAccessController.OPERATION_START, creator));
+		assertTrue(controller.isAccessible(match, MatchAccessController.OPERATION_START, admin));
+		assertTrue(controller.isAccessible(match, MatchAccessController.OPERATION_START, moderator));
+		assertFalse(controller.isAccessible(match, MatchAccessController.OPERATION_START, other));
+		match.setState(EnumMatchState.active);
+		assertFalse(controller.isAccessible(match, MatchAccessController.OPERATION_START, creator));
 		assertTrue(controller.isAccessible(match, MatchAccessController.OPERATION_START, admin));
 		assertTrue(controller.isAccessible(match, MatchAccessController.OPERATION_START, moderator));
 		assertFalse(controller.isAccessible(match, MatchAccessController.OPERATION_START, other));

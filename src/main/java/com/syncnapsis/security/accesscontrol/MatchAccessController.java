@@ -26,12 +26,13 @@ import com.syncnapsis.security.AccessController;
  */
 public class MatchAccessController implements AccessController<Match>
 {
-	public static final int	OPERATION_CREATE			= 1;
-	public static final int	OPERATION_START				= 2;
-	public static final int	OPERATION_CANCEL			= 3;
-	public static final int	OPERATION_ADD_PARTICIPANT	= 4;
-	public static final int	OPERATION_JOIN				= 5;
-	public static final int	OPERATION_LEAVE				= 6;
+	public static final int	OPERATION_CREATE				= 1;
+	public static final int	OPERATION_START					= 2;
+	public static final int	OPERATION_CANCEL				= 3;
+	public static final int	OPERATION_ADD_PARTICIPANT		= 4;
+	public static final int	OPERATION_REMOVE_PARTICIPANT	= 5;
+	public static final int	OPERATION_JOIN					= 6;
+	public static final int	OPERATION_LEAVE					= 7;
 
 	/*
 	 * (non-Javadoc)
@@ -59,9 +60,9 @@ public class MatchAccessController implements AccessController<Match>
 			return true; // everybody
 		if(operation == OPERATION_LEAVE)
 			return true; // everybody
-		if(operation == OPERATION_CANCEL && target.getState() == EnumMatchState.active)
+		if(target.getState() != EnumMatchState.planned)
 			return isModerator(player) || isAdmin(player);
-		
+
 		return target.getCreator().equals(player) || isModerator(player) || isAdmin(player);
 	}
 
