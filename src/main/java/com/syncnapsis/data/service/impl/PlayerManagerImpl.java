@@ -113,6 +113,7 @@ public class PlayerManagerImpl extends GenericManagerImpl<Player, Long> implemen
 		if(player != null)
 		{
 			securityManager.getPlayerProvider().set(player);
+			securityManager.getEmpireProvider().set(player.getCurrentEmpire());
 			return player;
 		}
 		else

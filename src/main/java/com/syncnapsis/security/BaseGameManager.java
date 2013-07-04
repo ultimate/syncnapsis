@@ -16,6 +16,7 @@ package com.syncnapsis.security;
 
 import org.springframework.util.Assert;
 
+import com.syncnapsis.providers.EmpireProvider;
 import com.syncnapsis.providers.PlayerProvider;
 import com.syncnapsis.utils.mail.BaseGameMailer;
 
@@ -30,6 +31,10 @@ public class BaseGameManager extends BaseApplicationManager
 	 * The PlayerProvider
 	 */
 	protected PlayerProvider	playerProvider;
+	/**
+	 * The EmpireProvider
+	 */
+	protected EmpireProvider	empireProvider;
 
 	/**
 	 * Default Constructor
@@ -48,6 +53,7 @@ public class BaseGameManager extends BaseApplicationManager
 	{
 		super(manager);
 		this.playerProvider = manager.playerProvider;
+		this.empireProvider = manager.empireProvider;
 	}
 
 	/*
@@ -59,6 +65,7 @@ public class BaseGameManager extends BaseApplicationManager
 	{
 		super.afterPropertiesSet();
 		Assert.notNull(playerProvider, "playerProvider must not be null!");
+		Assert.notNull(empireProvider, "empireProvider must not be null!");
 		Assert.isTrue(this.mailer == null || this.mailer instanceof BaseGameMailer, "mailer must be an instance of BaseGameMailer");
 	}
 
@@ -80,6 +87,26 @@ public class BaseGameManager extends BaseApplicationManager
 	public void setPlayerProvider(PlayerProvider playerProvider)
 	{
 		this.playerProvider = playerProvider;
+	}
+
+	/**
+	 * The EmpireProvider
+	 * 
+	 * @return empireProvider
+	 */
+	public EmpireProvider getEmpireProvider()
+	{
+		return empireProvider;
+	}
+
+	/**
+	 * The EmpireProvider
+	 * 
+	 * @param empireProvider - The EmpireProvider
+	 */
+	public void setEmpireProvider(EmpireProvider empireProvider)
+	{
+		this.empireProvider = empireProvider;
 	}
 
 	/**
