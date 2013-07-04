@@ -45,4 +45,14 @@ public class ParticipantDaoHibernate extends GenericDaoHibernate<Participant, Lo
 	{
 		return createQuery("from Participant p where p.match.id=?", matchId).list();
 	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see com.syncnapsis.data.dao.ParticipantDao#getByMatchAndEmpire(long, long)
+	 */
+	@Override
+	public Participant getByMatchAndEmpire(long matchId, long empireId)
+	{
+		return (Participant) createQuery("from Participant p where p.match.id=? and p.empire.id=?", matchId, empireId).uniqueResult();
+	}
 }

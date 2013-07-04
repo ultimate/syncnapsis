@@ -195,7 +195,7 @@ public class MatchManagerImpl extends GenericNameManagerImpl<Match, Long> implem
 	@Override
 	public Match createMatch(String title, long galaxyId, int speed, Long seed, EnumStartCondition startCondition, Date startDate,
 			boolean startSystemSelectionEnabled, int startSystemCount, int startPopulation, EnumVictoryCondition victoryCondition,
-			int victoryParameter, int participantsMax, int participantsMin, List<Long> participantIds, EnumJoinType plannedJoinType,
+			int victoryParameter, int participantsMax, int participantsMin, List<Long> empireIds, EnumJoinType plannedJoinType,
 			EnumJoinType startedJoinType)
 	{
 		Assert.isTrue(isAccessible(null, MatchAccessController.OPERATION_CREATE), "no access rights for 'create match'");
@@ -235,10 +235,10 @@ public class MatchManagerImpl extends GenericNameManagerImpl<Match, Long> implem
 		}
 
 		// add participants
-		for(long playerId : participantIds)
+		for(long empireId : empireIds)
 		{
-			if(!participantManager.addParticipant(match, playerId))
-				logger.warn("could not add player " + playerId + " to match " + match.getId());
+			if(participantManager.addParticipant(match, empireId) == null)
+				logger.warn("could not add empire " + empireId + " to match " + match.getId());
 		}
 
 		HibernateUtil.currentSession().flush();

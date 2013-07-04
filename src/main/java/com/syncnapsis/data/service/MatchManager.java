@@ -90,14 +90,14 @@ public interface MatchManager extends GenericNameManager<Match, Long>
 	 * @param victoryParameter - the victory parameter
 	 * @param participantsMax - the max number of participants
 	 * @param participantsMin - the min number of participants
-	 * @param participantIds - a list of participants invited (as player ids)
+	 * @param empireIds - a list of empire to add as participants
 	 * @param plannedJoinType - the join type before the match is started
 	 * @param startedJoinType - the join type after the match is started
 	 * @return the match created
 	 */
 	public Match createMatch(String title, long galaxyId, int speed, Long seed, EnumStartCondition startCondition, Date startDate,
 			boolean startSystemSelectionEnabled, int startSystemCount, int startPopulation, EnumVictoryCondition victoryCondition,
-			int victoryParameter, int participantsMax, int participantsMin, List<Long> participantIds, EnumJoinType plannedJoinType,
+			int victoryParameter, int participantsMax, int participantsMin, List<Long> empireIds, EnumJoinType plannedJoinType,
 			EnumJoinType startedJoinType);
 
 	/**

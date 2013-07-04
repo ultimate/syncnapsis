@@ -239,7 +239,7 @@ public class MatchManagerImplTest extends GenericNameManagerImplTestCase<Match, 
 					{
 					}
 				}));
-				will(returnValue(true));
+				will(returnValue(new Participant()));
 			}
 		});
 		result = mockManager.createMatch(title, galaxyId, speed, seed, startCondition, startDate, startSystemSelectionEnabled, startSystemCount,

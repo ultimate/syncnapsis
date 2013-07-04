@@ -32,4 +32,13 @@ public interface ParticipantDao extends GenericDao<Participant, Long>
 	 * @return the List of Participants
 	 */
 	public List<Participant> getByMatch(long matchId);
+
+	/**
+	 * Get the Participant entity associating the given Empire with the given match
+	 * 
+	 * @param matchId - the match
+	 * @param empireId - the empire
+	 * @return the Participant if existing, null otherwise
+	 */
+	public Participant getByMatchAndEmpire(long matchId, long empireId);
 }

@@ -74,5 +74,17 @@ public class ParticipantDaoTest extends GenericDaoTestCase<Participant, Long>
 		}
 	}
 
+	public void testGetByMatchAndEmpire() throws Exception
+	{
+		long match = 1L;
+		long empire = 2L;
+		
+		Participant result = participantDao.getByMatchAndEmpire(match, empire);
+
+		assertNotNull(result);
+		assertEquals(match, (long) result.getMatch().getId());
+		assertEquals(empire, (long) result.getEmpire().getId());
+	}
+
 	// insert individual Tests here
 }

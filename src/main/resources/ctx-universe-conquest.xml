@@ -57,6 +57,7 @@
 
 	<bean id="participantManager" class="com.syncnapsis.data.service.impl.ParticipantManagerImpl">
 		<constructor-arg ref="participantDao" />
+		<constructor-arg ref="playerManager" />
 		<property name="securityManager" ref="securityManager" />
 	</bean>
 
