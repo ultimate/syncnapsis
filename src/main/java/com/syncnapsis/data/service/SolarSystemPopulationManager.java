@@ -106,7 +106,8 @@ public interface SolarSystemPopulationManager extends GenericManager<SolarSystem
 	 * 
 	 * @param population - the population to destroy
 	 * @param destructionType - the destruction type
+	 * @param destructionDate - the destruction date
 	 * @return the updated SolarSystemPopulation entity
 	 */
-	public SolarSystemPopulation destroy(SolarSystemPopulation population, EnumDestructionType destructionType);
+	public SolarSystemPopulation destroy(SolarSystemPopulation population, EnumDestructionType destructionType, Date destructionDate);
 }

@@ -14,13 +14,23 @@
  */
 package com.syncnapsis.data.service.impl;
 
+import java.util.Date;
+import java.util.List;
+
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.util.Assert;
 
 import com.syncnapsis.data.dao.ParticipantDao;
+import com.syncnapsis.data.model.Empire;
 import com.syncnapsis.data.model.Match;
 import com.syncnapsis.data.model.Participant;
+import com.syncnapsis.data.model.SolarSystemPopulation;
+import com.syncnapsis.data.service.EmpireManager;
 import com.syncnapsis.data.service.ParticipantManager;
+import com.syncnapsis.data.service.SolarSystemPopulationManager;
+import com.syncnapsis.enums.EnumDestructionType;
+import com.syncnapsis.enums.EnumJoinType;
+import com.syncnapsis.enums.EnumMatchState;
 import com.syncnapsis.security.BaseGameManager;
 import com.syncnapsis.security.accesscontrol.MatchAccessController;
 
@@ -34,22 +44,36 @@ public class ParticipantManagerImpl extends GenericManagerImpl<Participant, Long
 	/**
 	 * ParticipantDao for database access
 	 */
-	protected ParticipantDao	participantDao;
+	protected ParticipantDao				participantDao;
+
+	/**
+	 * The EmpireManager
+	 */
+	protected EmpireManager					empireManager;
+	/**
+	 * The SolarSystemPopulationManager
+	 */
+	protected SolarSystemPopulationManager	solarSystemPopulationManager;
 
 	/**
 	 * The SecurityManager
 	 */
-	protected BaseGameManager		securityManager;
+	protected BaseGameManager				securityManager;
 
 	/**
 	 * Standard Constructor
 	 * 
 	 * @param participantDao - ParticipantDao for database access
+	 * @param empireManager - the EmpireManager
+	 * @param solarSystemPopulationManager - the SolarSystemPopulationManager
 	 */
-	public ParticipantManagerImpl(ParticipantDao participantDao)
+	public ParticipantManagerImpl(ParticipantDao participantDao, EmpireManager empireManager,
+			SolarSystemPopulationManager solarSystemPopulationManager)
 	{
 		super(participantDao);
+		this.empireManager = empireManager;
 		this.participantDao = participantDao;
+		this.solarSystemPopulationManager = solarSystemPopulationManager;
 	}
 
 	/*
@@ -93,7 +117,211 @@ public class ParticipantManagerImpl extends GenericManagerImpl<Participant, Long
 	{
 		return securityManager.getAccessController(Match.class).isAccessible(match, operation, securityManager.getPlayerProvider().get());
 	}
-	
-//	Assert.isTrue(isAccessible(match, MatchAccessController.OPERATION_START), "no access rights for 'start match " + match.getId() + "'");
 
+	/*
+	 * (non-Javadoc)
+	 * @see
+	 * com.syncnapsis.data.service.ParticipantManager#joinMatch(com.syncnapsis.data.model.Match)
+	 */
+	@Override
+	public Participant joinMatch(Match match)
+	{
+		// security-check
+		Assert.isTrue(isAccessible(match, MatchAccessController.OPERATION_JOIN));
+
+		Empire empire = securityManager.getEmpireProvider().get();
+
+		// check the match state and join type
+		switch(match.getState())
+		{
+			case planned:
+				if(match.getPlannedJoinType() == EnumJoinType.joiningEnabled)
+					break;
+				// joining ist not allowed at this state -> return participant if existing
+				return getByMatchAndEmpire(match.getId(), empire.getId());
+			case active:
+				if(match.getStartedJoinType() == EnumJoinType.joiningEnabled)
+					break;
+			case canceled:
+			case finished:
+				// joining ist not allowed at this state -> return participant if existing
+				return getByMatchAndEmpire(match.getId(), empire.getId());
+		}
+
+		return addParticipant(match, empire);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see
+	 * com.syncnapsis.data.service.ParticipantManager#leaveMatch(com.syncnapsis.data.model.Match)
+	 */
+	@Override
+	public boolean leaveMatch(Match match)
+	{
+		// security-check
+		Assert.isTrue(isAccessible(match, MatchAccessController.OPERATION_JOIN));
+
+		return removeParticipant(match, securityManager.getEmpireProvider().get());
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see
+	 * com.syncnapsis.data.service.ParticipantManager#addParticipant(com.syncnapsis.data.model.Match
+	 * , long)
+	 */
+	@Override
+	public Participant addParticipant(Match match, long empireId)
+	{
+		// security-check
+		Assert.isTrue(isAccessible(match, MatchAccessController.OPERATION_ADD_PARTICIPANT));
+
+		// check the match state and join type
+		switch(match.getState())
+		{
+			case planned:
+				if(match.getPlannedJoinType() != EnumJoinType.none)
+					break;
+				// joining ist not allowed at this state -> return participant if existing
+				return getByMatchAndEmpire(match.getId(), empireId);
+			case active:
+				if(match.getStartedJoinType() != EnumJoinType.none)
+					break;
+			case canceled:
+			case finished:
+				// joining ist not allowed at this state -> return participant if existing
+				return getByMatchAndEmpire(match.getId(), empireId);
+		}
+
+		return addParticipant(match, empireManager.get(empireId));
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see
+	 * com.syncnapsis.data.service.ParticipantManager#removeParticipant(com.syncnapsis.data.model
+	 * .Match, long)
+	 */
+	@Override
+	public boolean removeParticipant(Match match, long empireId)
+	{
+		// security-check
+		Assert.isTrue(isAccessible(match, MatchAccessController.OPERATION_REMOVE_PARTICIPANT));
+
+		return removeParticipant(match, empireManager.get(empireId));
+	}
+
+	/**
+	 * Internal method for adding participants to a match to be called from
+	 * {@link ParticipantManagerImpl#addParticipant(Match, long)} and
+	 * {@link ParticipantManagerImpl#joinMatch(Match)}
+	 * 
+	 * @param match - the match to add the participant to
+	 * @param empire - the empire to add as an participant
+	 * @return the (maybe newly created) Participant associating the Empire with the Match
+	 */
+	protected Participant addParticipant(Match match, Empire empire)
+	{
+		Participant participant = getByMatchAndEmpire(match.getId(), empire.getId());
+
+		if(match.getState() == EnumMatchState.canceled || match.getState() == EnumMatchState.finished)
+			return participant;
+
+		if(participant == null)
+		{
+			participant = new Participant();
+			participant.setMatch(match);
+			participant.setEmpire(empire);
+		}
+		else if(match.getState() == EnumMatchState.active && participant.getDestructionDate().after(match.getStartDate()))
+		{
+			// you cannot join an active match you already have been part of
+			return participant;
+		}
+
+		Date now = new Date(securityManager.getTimeProvider().get());
+
+		participant.setActivated(true);
+		participant.setDestructionDate(null);
+		participant.setDestructionType(null);
+		participant.setJoinedDate(now);
+		participant.setRank(match.getParticipants().size());
+		participant.setRankFinal(false);
+
+		return save(participant);
+	}
+
+	/**
+	 * Internal method for removing participants to a match to be called from
+	 * {@link ParticipantManagerImpl#removeParticipant(Match, long)} and
+	 * {@link ParticipantManagerImpl#joinMatch(Match)}
+	 * 
+	 * @param match - the match to remove the participant to
+	 * @param empire - the empire to remove as an participant
+	 * @return true if removing was successful, false otherwise
+	 */
+	protected boolean removeParticipant(Match match, Empire empire)
+	{
+		Participant participant = getByMatchAndEmpire(match.getId(), empire.getId());
+
+		if(participant == null)
+			return false;
+
+		Date now = new Date(securityManager.getTimeProvider().get());
+
+		if(match.getState() == EnumMatchState.canceled || match.getState() == EnumMatchState.finished)
+		{
+			return false;
+		}
+		else if(match.getState() == EnumMatchState.planned)
+		{
+			// remove the participant "completely"
+			participant.setActivated(false);
+		}
+		
+		destroy(participant, EnumDestructionType.givenUp, now);
+		return true;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see
+	 * com.syncnapsis.data.service.ParticipantManager#destroy(com.syncnapsis.data.model.Participant)
+	 */
+	@Override
+	public Participant destroy(Participant participant, EnumDestructionType destructionType, Date destructionDate)
+	{
+		// destroy all remaining populations
+		for(SolarSystemPopulation population : participant.getPopulations())
+		{
+			solarSystemPopulationManager.destroy(population, destructionType, destructionDate);
+		}
+		
+		participant.setDestructionType(destructionType);
+		participant.setDestructionDate(destructionDate);
+		// participant.setRankFinal(true); // rank will be finalized on next rank update
+		
+		return save(participant);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see com.syncnapsis.data.service.ParticipantManager#getByMatch(long)
+	 */
+	@Override
+	public List<Participant> getByMatch(long matchId)
+	{
+		return participantDao.getByMatch(matchId);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see com.syncnapsis.data.service.ParticipantManager#getByMatchAndEmpire(long, long)
+	 */
+	@Override
+	public Participant getByMatchAndEmpire(long matchId, long empireId)
+	{
+		return participantDao.getByMatchAndEmpire(matchId, empireId);
+	}
 }
