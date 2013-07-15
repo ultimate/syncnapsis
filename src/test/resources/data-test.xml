@@ -118,6 +118,8 @@
 		<column>imageURL</column>
 		<column>primaryColor</column>
 		<column>secondaryColor</column>
+		<column>foundationDate</column>
+		<column>dissolutionDate</column>
 		<row>
 			<value description="id">0</value>
 			<value description="version">0</value>
@@ -129,6 +131,8 @@
 			<null/>
 			<value description="primaryColor">#000000</value>
 			<value description="secondaryColor">#000000</value>
+			<value description="foundationDate">2008-01-01</value>
+			<null />
 		</row>
 		<row>
 			<value description="id">1</value>
@@ -141,6 +145,8 @@
 			<null/>
 			<value description="primaryColor">#FF0000</value>
 			<value description="secondaryColor">#FF0000</value>
+			<value description="foundationDate">2008-01-01</value>
+			<null />
 		</row>
 		<row>
 			<value description="id">2</value>
@@ -153,6 +159,8 @@
 			<null/>
 			<value description="primaryColor">#00FF00</value>
 			<value description="secondaryColor">#00FF00</value>
+			<value description="foundationDate">2008-01-01</value>
+			<null />
 		</row>
 	</table>
 	

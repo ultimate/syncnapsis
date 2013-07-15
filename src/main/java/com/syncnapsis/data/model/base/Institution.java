@@ -15,9 +15,12 @@
 package com.syncnapsis.data.model.base;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 @MappedSuperclass
 public abstract class Institution<PK extends Serializable> extends ActivatableInstance<PK>
@@ -48,6 +51,15 @@ public abstract class Institution<PK extends Serializable> extends ActivatableIn
 	 * The primary color for this institution
 	 */
 	protected String	secondaryColor;
+
+	/**
+	 * The date this institution was founded
+	 */
+	protected Date		foundationDate;
+	/**
+	 * The date this institution was deleted
+	 */
+	protected Date		dissolutionDate;
 
 	/**
 	 * Kurzname bzw. Abkürzung des Imperiums. Muss einmalig sein.
@@ -116,6 +128,30 @@ public abstract class Institution<PK extends Serializable> extends ActivatableIn
 	}
 
 	/**
+	 * The date this institution was founded
+	 * 
+	 * @return foundationDate
+	 */
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(nullable = false)
+	public Date getFoundationDate()
+	{
+		return foundationDate;
+	}
+
+	/**
+	 * The date this institution was founded
+	 * 
+	 * @return dissolutionDate
+	 */
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(nullable = true)
+	public Date getDissolutionDate()
+	{
+		return dissolutionDate;
+	}
+
+	/**
 	 * Kurzname bzw. Abkürzung des Imperiums. Muss einmalig sein.
 	 * 
 	 * @param shortName - der Kurzname
@@ -175,6 +211,26 @@ public abstract class Institution<PK extends Serializable> extends ActivatableIn
 		this.secondaryColor = secondaryColor;
 	}
 
+	/**
+	 * The date this institution was founded
+	 * 
+	 * @param foundationDate - the date and time
+	 */
+	public void setFoundationDate(Date foundationDate)
+	{
+		this.foundationDate = foundationDate;
+	}
+
+	/**
+	 * The date this institution was deleted
+	 * 
+	 * @param dissolutionDate - the date and time
+	 */
+	public void setDissolutionDate(Date dissolutionDate)
+	{
+		this.dissolutionDate = dissolutionDate;
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * @see com.syncnapsis.data.model.base.BaseObject#hashCode()
@@ -184,12 +240,14 @@ public abstract class Institution<PK extends Serializable> extends ActivatableIn
 	{
 		final int prime = 31;
 		int result = super.hashCode();
+		result = prime * result + ((foundationDate == null) ? 0 : foundationDate.hashCode());
+		result = prime * result + ((dissolutionDate == null) ? 0 : dissolutionDate.hashCode());
 		result = prime * result + ((description == null) ? 0 : description.hashCode());
 		result = prime * result + ((fullName == null) ? 0 : fullName.hashCode());
 		result = prime * result + ((imageURL == null) ? 0 : imageURL.hashCode());
-		result = prime * result + ((shortName == null) ? 0 : shortName.hashCode());
 		result = prime * result + ((primaryColor == null) ? 0 : primaryColor.hashCode());
 		result = prime * result + ((secondaryColor == null) ? 0 : secondaryColor.hashCode());
+		result = prime * result + ((shortName == null) ? 0 : shortName.hashCode());
 		return result;
 	}
 
@@ -208,6 +266,20 @@ public abstract class Institution<PK extends Serializable> extends ActivatableIn
 		if(getClass() != obj.getClass())
 			return false;
 		Institution other = (Institution) obj;
+		if(foundationDate == null)
+		{
+			if(other.foundationDate != null)
+				return false;
+		}
+		else if(!foundationDate.equals(other.foundationDate))
+			return false;
+		if(dissolutionDate == null)
+		{
+			if(other.dissolutionDate != null)
+				return false;
+		}
+		else if(!dissolutionDate.equals(other.dissolutionDate))
+			return false;
 		if(description == null)
 		{
 			if(other.description != null)
@@ -229,13 +301,6 @@ public abstract class Institution<PK extends Serializable> extends ActivatableIn
 		}
 		else if(!imageURL.equals(other.imageURL))
 			return false;
-		if(shortName == null)
-		{
-			if(other.shortName != null)
-				return false;
-		}
-		else if(!shortName.equals(other.shortName))
-			return false;
 		if(primaryColor == null)
 		{
 			if(other.primaryColor != null)
@@ -249,6 +314,13 @@ public abstract class Institution<PK extends Serializable> extends ActivatableIn
 				return false;
 		}
 		else if(!secondaryColor.equals(other.secondaryColor))
+			return false;
+		if(shortName == null)
+		{
+			if(other.shortName != null)
+				return false;
+		}
+		else if(!shortName.equals(other.shortName))
 			return false;
 		return true;
 	}
