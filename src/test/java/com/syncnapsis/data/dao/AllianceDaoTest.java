@@ -14,12 +14,14 @@
  */
 package com.syncnapsis.data.dao;
 
+import java.util.Date;
 import java.util.List;
 
 import com.syncnapsis.data.dao.hibernate.AllianceDaoHibernate;
 import com.syncnapsis.data.model.Alliance;
 import com.syncnapsis.data.model.AllianceMemberRank;
 import com.syncnapsis.data.model.Empire;
+import com.syncnapsis.providers.TimeProvider;
 import com.syncnapsis.tests.GenericNameDaoTestCase;
 import com.syncnapsis.tests.annotations.TestCoversClasses;
 
@@ -28,6 +30,7 @@ public class AllianceDaoTest extends GenericNameDaoTestCase<Alliance, Long>
 {
 	private AllianceDao	allianceDao;
 	private EmpireDao empireDao;
+	private TimeProvider timeProvider;
 
 	@Override
 	protected void setUp() throws Exception
@@ -39,6 +42,7 @@ public class AllianceDaoTest extends GenericNameDaoTestCase<Alliance, Long>
 
 		Alliance alliance = new Alliance();
 		alliance.setShortName("any name");
+		alliance.setFoundationDate(new Date(timeProvider.get()));
 
 		setEntity(alliance);
 
