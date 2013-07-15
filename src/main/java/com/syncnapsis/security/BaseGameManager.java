@@ -119,4 +119,14 @@ public class BaseGameManager extends BaseApplicationManager
 	{
 		return (BaseGameMailer) this.mailer;
 	}
+
+	/**
+	 * The BaseGameMailer used to send mails
+	 * 
+	 * @param mailer - the mailer
+	 */
+	public void setMailer(BaseGameMailer mailer)
+	{
+		super.setMailer(mailer);
+	}
 }
