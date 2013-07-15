@@ -32,4 +32,19 @@ public interface EmpireManager extends GenericNameManager<Empire, Long>
 	 * @return die Liste der Imperien
 	 */
 	public List<Empire> getByPlayer(Long playerId);
+
+	/**
+	 * Create a new Empire for the Player currently logged in.<br>
+	 * This method will check wether the current Player is allowed to create another Empire or if
+	 * his limit has been reached.
+	 * 
+	 * @param fullName - the full name for the empire
+	 * @param shortName - the short name for the empire
+	 * @param description - an optional description for the empire
+	 * @param imageURL - an optional image url for the empire
+	 * @param primaryColor - the primary color for visualising the empire
+	 * @param secondaryColor - the secondary color for visualising the empire
+	 * @return the newly created Empire
+	 */
+	public Empire create(String fullName, String shortName, String description, String imageURL, String primaryColor, String secondaryColor);
 }

@@ -35,6 +35,7 @@
     
     <bean id="empireManager" class="com.syncnapsis.data.service.impl.EmpireManagerImpl">
         <constructor-arg ref="empireDao"/>
+        <property name="securityManager" ref="securityManager" />
     </bean>  
     
     <bean id="playerManager" class="com.syncnapsis.data.service.impl.PlayerManagerImpl">

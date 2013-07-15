@@ -27,21 +27,29 @@ public class GameBaseConstants
 	/**
 	 * Rollennamen: Premium-User
 	 */
-	public static final String	ROLE_PREMIUM_PLAYER	= "PREMIUM_PLAYER";
+	public static final String	ROLE_PREMIUM_PLAYER			= "PREMIUM_PLAYER";
 	/**
 	 * Rollennamen: Normaler User
 	 */
-	public static final String	ROLE_NORMAL_PLAYER	= "NORMAL_PLAYER";
+	public static final String	ROLE_NORMAL_PLAYER			= "NORMAL_PLAYER";
 	/**
 	 * Rollennamen: Demo-User
 	 */
-	public static final String	ROLE_DEMO_PLAYER	= "DEMO_PLAYER";
+	public static final String	ROLE_DEMO_PLAYER			= "DEMO_PLAYER";
 	/**
 	 * Schlüssel für die Spieler-ID in der Session
 	 */
-	public static final String	SESSION_PLAYER_KEY	= "j_player";
+	public static final String	SESSION_PLAYER_KEY			= "j_player";
 	/**
 	 * Schlüssel für die Imperiums-ID in der Session
 	 */
-	public static final String	SESSION_EMPIRE_KEY	= "j_empire";
+	public static final String	SESSION_EMPIRE_KEY			= "j_empire";
+	/**
+	 * Error-Key for "invalid empirename"
+	 */
+	public static final String	ERROR_EMPIRENAME_INVALID	= "error.invalid_empirename";
+	/**
+	 * Error-Key for "max empires reached"
+	 */
+	public static final String	ERROR_MAXEMPIRES			= "error.max_empires";
 }
