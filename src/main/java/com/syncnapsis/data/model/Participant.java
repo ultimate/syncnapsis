@@ -89,6 +89,11 @@ public class Participant extends ActivatableInstance<Long>
 	protected EnumDestructionType			destructionType;
 
 	/**
+	 * The number of start systems the player has selected
+	 */
+	protected int							startSystemsSelected;
+
+	/**
 	 * The rival(s) that have been randomly chosen for this participant when the matches victory
 	 * condition is set to {@link EnumVictoryCondition#vendetta}
 	 * 
@@ -165,7 +170,7 @@ public class Participant extends ActivatableInstance<Long>
 	{
 		return rankFinal;
 	}
-	
+
 	/**
 	 * The date the participant (empire/player) joined the match
 	 * 
@@ -201,6 +206,17 @@ public class Participant extends ActivatableInstance<Long>
 	public EnumDestructionType getDestructionType()
 	{
 		return destructionType;
+	}
+
+	/**
+	 * The number of start systems the player has selected
+	 * 
+	 * @return startSystemsSelected
+	 */
+	@Column(nullable = false)
+	public int getStartSystemsSelected()
+	{
+		return startSystemsSelected;
 	}
 
 	/**
@@ -322,6 +338,16 @@ public class Participant extends ActivatableInstance<Long>
 	}
 
 	/**
+	 * The number of start systems the player has selected
+	 * 
+	 * @param startSystemsSelected - the number of start systems
+	 */
+	public void setStartSystemsSelected(int startSystemsSelected)
+	{
+		this.startSystemsSelected = startSystemsSelected;
+	}
+
+	/**
 	 * The rival(s) that have been randomly chosen for this participant when the matches victory
 	 * condition is set to {@link EnumVictoryCondition#vendetta}
 	 * 
@@ -370,6 +396,7 @@ public class Participant extends ActivatableInstance<Long>
 		result = prime * result + rank;
 		result = prime * result + (rankFinal ? 1231 : 1237);
 		result = prime * result + rankValue;
+		result = prime * result + startSystemsSelected;
 		return result;
 	}
 
@@ -422,6 +449,8 @@ public class Participant extends ActivatableInstance<Long>
 		if(rankFinal != other.rankFinal)
 			return false;
 		if(rankValue != other.rankValue)
+			return false;
+		if(startSystemsSelected != other.startSystemsSelected)
 			return false;
 		return true;
 	}
