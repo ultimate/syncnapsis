@@ -285,6 +285,7 @@ public class MatchManagerImplTest extends GenericNameManagerImplTestCase<Match, 
 
 		Match match = new Match();
 		match.setCreator(creator);
+		match.setState(EnumMatchState.planned);
 
 		securityManager.getPlayerProvider().set(admin);
 		performed.set(false);
@@ -393,6 +394,7 @@ public class MatchManagerImplTest extends GenericNameManagerImplTestCase<Match, 
 			p.setId((long) i + 1);
 			p.setEmpire(new Empire());
 			p.getEmpire().setId((long) i + 1);
+			p.setActivated(i < participants-1);
 		}
 		Collections.shuffle(match.getParticipants());
 		match.setStartSystemCount(3);
@@ -423,14 +425,14 @@ public class MatchManagerImplTest extends GenericNameManagerImplTestCase<Match, 
 		});
 		mockContext.checking(new Expectations() {
 			{
-				exactly(match.getParticipants().size()).of(mockSolarSystemPopulationManager).randomSelectStartSystems(with(any(Participant.class)),
+				exactly(match.getParticipants().size()-1).of(mockSolarSystemPopulationManager).randomSelectStartSystems(with(any(Participant.class)),
 						with(equal(random)));
 				will(returnValue(populations));
 			}
 		});
 		mockContext.checking(new Expectations() {
 			{
-				exactly(match.getParticipants().size()*match.getStartSystemCount()).of(mockSolarSystemPopulationManager).save(with(any(SolarSystemPopulation.class)));
+				exactly((match.getParticipants().size()-1)*match.getStartSystemCount()).of(mockSolarSystemPopulationManager).save(with(any(SolarSystemPopulation.class)));
 				will(returnValue(new SolarSystemPopulation()));
 			}
 		});
@@ -465,14 +467,14 @@ public class MatchManagerImplTest extends GenericNameManagerImplTestCase<Match, 
 		});
 		mockContext.checking(new Expectations() {
 			{
-				exactly(match.getParticipants().size()).of(mockSolarSystemPopulationManager).randomSelectStartSystems(with(any(Participant.class)),
+				exactly(match.getParticipants().size()-1).of(mockSolarSystemPopulationManager).randomSelectStartSystems(with(any(Participant.class)),
 						with(equal(random)));
 				will(returnValue(populations));
 			}
 		});
 		mockContext.checking(new Expectations() {
 			{
-				exactly(match.getParticipants().size()*match.getStartSystemCount()).of(mockSolarSystemPopulationManager).save(with(any(SolarSystemPopulation.class)));
+				exactly((match.getParticipants().size()-1)*match.getStartSystemCount()).of(mockSolarSystemPopulationManager).save(with(any(SolarSystemPopulation.class)));
 				will(returnValue(new SolarSystemPopulation()));
 			}
 		});
@@ -505,14 +507,14 @@ public class MatchManagerImplTest extends GenericNameManagerImplTestCase<Match, 
 		});
 		mockContext.checking(new Expectations() {
 			{
-				exactly(match.getParticipants().size()).of(mockSolarSystemPopulationManager).randomSelectStartSystems(with(any(Participant.class)),
+				exactly(match.getParticipants().size()-1).of(mockSolarSystemPopulationManager).randomSelectStartSystems(with(any(Participant.class)),
 						with(equal(random)));
 				will(returnValue(populations));
 			}
 		});
 		mockContext.checking(new Expectations() {
 			{
-				exactly(match.getParticipants().size()*match.getStartSystemCount()).of(mockSolarSystemPopulationManager).save(with(any(SolarSystemPopulation.class)));
+				exactly((match.getParticipants().size()-1)*match.getStartSystemCount()).of(mockSolarSystemPopulationManager).save(with(any(SolarSystemPopulation.class)));
 				will(returnValue(new SolarSystemPopulation()));
 			}
 		});

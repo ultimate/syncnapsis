@@ -328,15 +328,23 @@ public class MatchManagerImpl extends GenericNameManagerImpl<Match, Long> implem
 		// create the randon - since this is the second step in randomization, so let's add 1 :-)
 		ExtendedRandom random = new ExtendedRandom(match.getSeed() + 1);
 
+		// get the list of "true" (activated) participants
+		List<Participant> participants = new ArrayList<Participant>(match.getParticipants().size());
+		for(Participant p: match.getParticipants())
+		{
+			if(p.isActivated())
+				participants.add(p);
+		}
+
 		// assign the rivals
 		int numberOfRivals = getNumberOfRivals(match);
 		if(numberOfRivals > 0)
-			assignRivals(match.getParticipants(), numberOfRivals, random);
+			assignRivals(participants, numberOfRivals, random);
 		
 		match = save(match);
 
 		List<SolarSystemPopulation> populations;
-		for(Participant p : match.getParticipants())
+		for(Participant p : participants)
 		{
 			// assign start populations
 			populations = solarSystemPopulationManager.randomSelectStartSystems(p, random);
