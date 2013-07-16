@@ -443,6 +443,8 @@ public class MatchManagerImpl extends GenericNameManagerImpl<Match, Long> implem
 		for(Participant p : match.getParticipants())
 		{
 			p.setRankFinal(true);
+			if(match.getState() == EnumMatchState.planned)
+				p.setActivated(false);
 			participantManager.save(p);
 		}
 

@@ -394,7 +394,7 @@ public class MatchManagerImplTest extends GenericNameManagerImplTestCase<Match, 
 			p.setId((long) i + 1);
 			p.setEmpire(new Empire());
 			p.getEmpire().setId((long) i + 1);
-			p.setActivated(i < participants-1);
+			p.setActivated(i < participants - 1);
 		}
 		Collections.shuffle(match.getParticipants());
 		match.setStartSystemCount(3);
@@ -425,14 +425,15 @@ public class MatchManagerImplTest extends GenericNameManagerImplTestCase<Match, 
 		});
 		mockContext.checking(new Expectations() {
 			{
-				exactly(match.getParticipants().size()-1).of(mockSolarSystemPopulationManager).randomSelectStartSystems(with(any(Participant.class)),
-						with(equal(random)));
+				exactly(match.getParticipants().size() - 1).of(mockSolarSystemPopulationManager).randomSelectStartSystems(
+						with(any(Participant.class)), with(equal(random)));
 				will(returnValue(populations));
 			}
 		});
 		mockContext.checking(new Expectations() {
 			{
-				exactly((match.getParticipants().size()-1)*match.getStartSystemCount()).of(mockSolarSystemPopulationManager).save(with(any(SolarSystemPopulation.class)));
+				exactly((match.getParticipants().size() - 1) * match.getStartSystemCount()).of(mockSolarSystemPopulationManager).save(
+						with(any(SolarSystemPopulation.class)));
 				will(returnValue(new SolarSystemPopulation()));
 			}
 		});
@@ -467,14 +468,15 @@ public class MatchManagerImplTest extends GenericNameManagerImplTestCase<Match, 
 		});
 		mockContext.checking(new Expectations() {
 			{
-				exactly(match.getParticipants().size()-1).of(mockSolarSystemPopulationManager).randomSelectStartSystems(with(any(Participant.class)),
-						with(equal(random)));
+				exactly(match.getParticipants().size() - 1).of(mockSolarSystemPopulationManager).randomSelectStartSystems(
+						with(any(Participant.class)), with(equal(random)));
 				will(returnValue(populations));
 			}
 		});
 		mockContext.checking(new Expectations() {
 			{
-				exactly((match.getParticipants().size()-1)*match.getStartSystemCount()).of(mockSolarSystemPopulationManager).save(with(any(SolarSystemPopulation.class)));
+				exactly((match.getParticipants().size() - 1) * match.getStartSystemCount()).of(mockSolarSystemPopulationManager).save(
+						with(any(SolarSystemPopulation.class)));
 				will(returnValue(new SolarSystemPopulation()));
 			}
 		});
@@ -507,14 +509,15 @@ public class MatchManagerImplTest extends GenericNameManagerImplTestCase<Match, 
 		});
 		mockContext.checking(new Expectations() {
 			{
-				exactly(match.getParticipants().size()-1).of(mockSolarSystemPopulationManager).randomSelectStartSystems(with(any(Participant.class)),
-						with(equal(random)));
+				exactly(match.getParticipants().size() - 1).of(mockSolarSystemPopulationManager).randomSelectStartSystems(
+						with(any(Participant.class)), with(equal(random)));
 				will(returnValue(populations));
 			}
 		});
 		mockContext.checking(new Expectations() {
 			{
-				exactly((match.getParticipants().size()-1)*match.getStartSystemCount()).of(mockSolarSystemPopulationManager).save(with(any(SolarSystemPopulation.class)));
+				exactly((match.getParticipants().size() - 1) * match.getStartSystemCount()).of(mockSolarSystemPopulationManager).save(
+						with(any(SolarSystemPopulation.class)));
 				will(returnValue(new SolarSystemPopulation()));
 			}
 		});
@@ -686,8 +689,13 @@ public class MatchManagerImplTest extends GenericNameManagerImplTestCase<Match, 
 		match.setState(EnumMatchState.planned);
 		match.setCreator(creator);
 		match.setParticipants(new ArrayList<Participant>(participants));
+		Participant p;
 		for(int i = 0; i < participants; i++)
-			match.getParticipants().add(new Participant());
+		{
+			p = new Participant();
+			p.setActivated(true);
+			match.getParticipants().add(p);
+		}
 
 		securityManager.getSessionProvider().set(new MockHttpSession());
 
@@ -752,7 +760,7 @@ public class MatchManagerImplTest extends GenericNameManagerImplTestCase<Match, 
 		});
 		mockManager.cancelMatch(match);
 		mockContext.assertIsSatisfied();
-		checkAndResetCanceledOrFinishedMatch(match, true, EnumMatchState.planned);
+		checkAndResetCanceledOrFinishedMatch(match, true, EnumMatchState.active);
 	}
 
 	public void testFinishMatch() throws Exception
@@ -824,7 +832,16 @@ public class MatchManagerImplTest extends GenericNameManagerImplTestCase<Match, 
 		assertNull(other);
 
 		for(Participant p : match.getParticipants())
+		{
 			assertTrue(p.isRankFinal());
+			if(trueForCanceledFalseForFinished)
+			{
+				if(resetToState == EnumMatchState.planned)
+					assertFalse(p.isActivated());
+				else
+					assertTrue(p.isActivated());
+			}
+		}
 
 		if(resetToState != null)
 		{
@@ -833,7 +850,10 @@ public class MatchManagerImplTest extends GenericNameManagerImplTestCase<Match, 
 			match.setState(resetToState);
 
 			for(Participant p : match.getParticipants())
+			{
 				p.setRankFinal(false);
+				p.setActivated(true);
+			}
 		}
 	}
 
