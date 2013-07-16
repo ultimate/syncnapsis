@@ -95,7 +95,8 @@ public interface ParticipantManager extends GenericManager<Participant, Long>
 	public List<Participant> getByMatch(long matchId);
 
 	/**
-	 * Get the Participant entity associating the given Empire with the given match
+	 * Get the Participant entity associating the given Empire with the given match (will only
+	 * return activated participants)
 	 * 
 	 * @param matchId - the match
 	 * @param empireId - the empire

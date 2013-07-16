@@ -53,6 +53,6 @@ public class ParticipantDaoHibernate extends GenericDaoHibernate<Participant, Lo
 	@Override
 	public Participant getByMatchAndEmpire(long matchId, long empireId)
 	{
-		return (Participant) createQuery("from Participant p where p.match.id=? and p.empire.id=?", matchId, empireId).uniqueResult();
+		return (Participant) createQuery("from Participant p where p.match.id=? and p.empire.id=? and p.activated=true", matchId, empireId).uniqueResult();
 	}
 }
