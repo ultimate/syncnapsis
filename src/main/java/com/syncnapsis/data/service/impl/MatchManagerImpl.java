@@ -518,10 +518,13 @@ public class MatchManagerImpl extends GenericNameManagerImpl<Match, Long> implem
 		long totalPopulation = 0;
 		for(Participant p : match.getParticipants())
 		{
-			for(SolarSystemPopulation pop : p.getPopulations())
+			if(p.isActivated())
 			{
-				if(pop.getDestructionDate() == null)
-					totalPopulation += pop.getPopulation();
+				for(SolarSystemPopulation pop : p.getPopulations())
+				{
+					if(pop.getDestructionDate() == null)
+						totalPopulation += pop.getPopulation();
+				}
 			}
 		}
 

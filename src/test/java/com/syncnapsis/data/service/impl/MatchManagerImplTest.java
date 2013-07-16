@@ -986,6 +986,7 @@ public class MatchManagerImplTest extends GenericNameManagerImplTestCase<Match, 
 	private Participant createParticipant(int... pops)
 	{
 		Participant p = new Participant();
+		p.setActivated(pops.length > 0);
 		p.setRivals(new ArrayList<Participant>(5));
 		p.setPopulations(new ArrayList<SolarSystemPopulation>(pops.length));
 
