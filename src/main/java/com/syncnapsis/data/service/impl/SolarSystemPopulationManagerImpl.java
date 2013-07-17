@@ -14,9 +14,17 @@
  */
 package com.syncnapsis.data.service.impl;
 
+import java.util.Date;
+import java.util.List;
+
 import com.syncnapsis.data.dao.SolarSystemPopulationDao;
+import com.syncnapsis.data.model.Participant;
+import com.syncnapsis.data.model.SolarSystemInfrastructure;
 import com.syncnapsis.data.model.SolarSystemPopulation;
 import com.syncnapsis.data.service.SolarSystemPopulationManager;
+import com.syncnapsis.enums.EnumDestructionType;
+import com.syncnapsis.enums.EnumPopulationPriority;
+import com.syncnapsis.utils.data.ExtendedRandom;
 
 /**
  * Manager-Implementation for access to SolarSystemPopulation.
@@ -28,7 +36,7 @@ public class SolarSystemPopulationManagerImpl extends GenericManagerImpl<SolarSy
 	/**
 	 * SolarSystemPopulationDao for database access
 	 */
-	protected SolarSystemPopulationDao			solarSystemPopulationDao;
+	protected SolarSystemPopulationDao	solarSystemPopulationDao;
 
 	/**
 	 * Standard Constructor
@@ -39,5 +47,96 @@ public class SolarSystemPopulationManagerImpl extends GenericManagerImpl<SolarSy
 	{
 		super(solarSystemPopulationDao);
 		this.solarSystemPopulationDao = solarSystemPopulationDao;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see com.syncnapsis.data.service.SolarSystemPopulationManager#getByParticipant(long)
+	 */
+	@Override
+	public List<SolarSystemPopulation> getByParticipant(long participantId)
+	{
+		return solarSystemPopulationDao.getByParticipant(participantId);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see com.syncnapsis.data.service.SolarSystemPopulationManager#getByMatch(long)
+	 */
+	@Override
+	public List<SolarSystemPopulation> getByMatch(long matchId)
+	{
+		return solarSystemPopulationDao.getByMatch(matchId);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see
+	 * com.syncnapsis.data.service.SolarSystemPopulationManager#selectStartSystem(com.syncnapsis
+	 * .data.model.SolarSystemInfrastructure, int)
+	 */
+	@Override
+	public SolarSystemPopulation selectStartSystem(SolarSystemInfrastructure infrastructure, int population)
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see
+	 * com.syncnapsis.data.service.SolarSystemPopulationManager#randomSelectStartSystems(com.syncnapsis
+	 * .data.model.Participant, com.syncnapsis.utils.data.ExtendedRandom)
+	 */
+	@Override
+	public List<SolarSystemPopulation> randomSelectStartSystems(Participant participant, ExtendedRandom random)
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see
+	 * com.syncnapsis.data.service.SolarSystemPopulationManager#spinoff(com.syncnapsis.data.model
+	 * .SolarSystemPopulation, com.syncnapsis.data.model.SolarSystemInfrastructure, java.util.Date,
+	 * int, com.syncnapsis.enums.EnumPopulationPriority,
+	 * com.syncnapsis.enums.EnumPopulationPriority)
+	 */
+	@Override
+	public SolarSystemPopulation spinoff(SolarSystemPopulation origin, SolarSystemInfrastructure targetInfrastructure, Date targetArrivalDate,
+			int population, EnumPopulationPriority attackPriority, EnumPopulationPriority buildPriority)
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see
+	 * com.syncnapsis.data.service.SolarSystemPopulationManager#resettle(com.syncnapsis.data.model
+	 * .SolarSystemPopulation, com.syncnapsis.data.model.SolarSystemInfrastructure, java.util.Date)
+	 */
+	@Override
+	public SolarSystemPopulation resettle(SolarSystemPopulation origin, SolarSystemInfrastructure targetInfrastructure, Date targetArrivalDate)
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see
+	 * com.syncnapsis.data.service.SolarSystemPopulationManager#destroy(com.syncnapsis.data.model
+	 * .SolarSystemPopulation, com.syncnapsis.enums.EnumDestructionType, java.util.Date)
+	 */
+	@Override
+	public SolarSystemPopulation destroy(SolarSystemPopulation population, EnumDestructionType destructionType, Date destructionDate)
+	{
+		population.setActivated(false);
+		population.setDestructionDate(destructionDate);
+		population.setDestructionType(destructionType);
+		
+		return save(population);
 	}
 }
