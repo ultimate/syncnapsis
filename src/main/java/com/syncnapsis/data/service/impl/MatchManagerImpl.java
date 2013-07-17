@@ -330,7 +330,7 @@ public class MatchManagerImpl extends GenericNameManagerImpl<Match, Long> implem
 
 		// get the list of "true" (activated) participants
 		List<Participant> participants = new ArrayList<Participant>(match.getParticipants().size());
-		for(Participant p: match.getParticipants())
+		for(Participant p : match.getParticipants())
 		{
 			if(p.isActivated())
 				participants.add(p);
@@ -340,7 +340,7 @@ public class MatchManagerImpl extends GenericNameManagerImpl<Match, Long> implem
 		int numberOfRivals = getNumberOfRivals(match);
 		if(numberOfRivals > 0)
 			assignRivals(participants, numberOfRivals, random);
-		
+
 		match = save(match);
 
 		List<SolarSystemPopulation> populations;
@@ -450,7 +450,7 @@ public class MatchManagerImpl extends GenericNameManagerImpl<Match, Long> implem
 
 		match.setCanceledDate(now);
 		match.setState(EnumMatchState.canceled);
-		
+
 		return save(match);
 	}
 
@@ -462,7 +462,7 @@ public class MatchManagerImpl extends GenericNameManagerImpl<Match, Long> implem
 	public Match finishMatch(Match match)
 	{
 		// called by System
-		
+
 		if(match.getState() != EnumMatchState.active)
 			return match; // throw Exception?
 
@@ -538,51 +538,54 @@ public class MatchManagerImpl extends GenericNameManagerImpl<Match, Long> implem
 		List<Participant> updatedParticipants = new LinkedList<Participant>();
 		for(Participant p : match.getParticipants())
 		{
-			if(p.getDestructionDate() != null)
-				destroyed++;
-
-			// do not update rank, when rank is final (participant already destroyed)
-			if(p.isRankFinal())
-				continue;
-
-			rankValue = 0;
-			ref = 0;
-
-			switch(match.getVictoryCondition())
+			if(p.isActivated())
 			{
-				case domination:
-					ref = match.getGalaxy().getSolarSystems().size();
-					for(SolarSystemPopulation pop : p.getPopulations())
-					{
-						// count +1/totalSystems for each existing population
-						if(pop.getDestructionDate() == null)
-							rankValue++;
-					}
-					break;
-				case extermination:
-					ref = totalPopulation;
-					for(SolarSystemPopulation pop : p.getPopulations())
-					{
-						// count +pop for each existing population
-						if(pop.getDestructionDate() == null)
-							rankValue += pop.getPopulation();
-					}
-					break;
-				case vendetta:
-					ref = p.getRivals().size();
-					for(Participant rival : p.getRivals())
-					{
-						// count 1/rivals for each destroyed rival
-						if(rival.getDestructionDate() != null)
-							rankValue++;
-					}
-					break;
+				if(p.getDestructionDate() != null)
+					destroyed++;
+
+				// do not update rank, when rank is final (participant already destroyed)
+				if(p.isRankFinal())
+					continue;
+
+				rankValue = 0;
+				ref = 0;
+
+				switch(match.getVictoryCondition())
+				{
+					case domination:
+						ref = match.getGalaxy().getSolarSystems().size();
+						for(SolarSystemPopulation pop : p.getPopulations())
+						{
+							// count +1/totalSystems for each existing population
+							if(pop.getDestructionDate() == null)
+								rankValue++;
+						}
+						break;
+					case extermination:
+						ref = totalPopulation;
+						for(SolarSystemPopulation pop : p.getPopulations())
+						{
+							// count +pop for each existing population
+							if(pop.getDestructionDate() == null)
+								rankValue += pop.getPopulation();
+						}
+						break;
+					case vendetta:
+						ref = p.getRivals().size();
+						for(Participant rival : p.getRivals())
+						{
+							// count 1/rivals for each destroyed rival
+							if(rival.getDestructionDate() != null)
+								rankValue++;
+						}
+						break;
+				}
+
+				rankValue = (int) Math.floor(100.0 * rankValue / ref);
+				p.setRankValue(rankValue);
+
+				updatedParticipants.add(p);
 			}
-
-			rankValue = (int) Math.floor(100.0 * rankValue / ref);
-			p.setRankValue(rankValue);
-
-			updatedParticipants.add(p);
 		}
 
 		Collections.sort(updatedParticipants, Participant.BY_RANKVALUE);
@@ -592,9 +595,6 @@ public class MatchManagerImpl extends GenericNameManagerImpl<Match, Long> implem
 		int value = 0;
 		for(Participant p : updatedParticipants)
 		{
-			if(p.isRankFinal())
-				continue;
-
 			if(p.getRankValue() != value)
 			{
 				value = p.getRankValue();
