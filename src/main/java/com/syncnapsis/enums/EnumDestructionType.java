@@ -55,4 +55,12 @@ public enum EnumDestructionType
 	 * population decreased to 0 due to negative growth rate (no population left)
 	 */
 	starved,
+	/**
+	 * a participant left a match
+	 */
+	left,
+	/**
+	 * a participant has been removed from the match (by the creator, an admin or moderator)
+	 */
+	removed
 }

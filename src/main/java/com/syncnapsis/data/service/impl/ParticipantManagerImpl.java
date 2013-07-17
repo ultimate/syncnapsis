@@ -115,7 +115,8 @@ public class ParticipantManagerImpl extends GenericManagerImpl<Participant, Long
 	 */
 	protected boolean isAccessible(Match match, int operation)
 	{
-		return securityManager.getAccessController(Match.class).isAccessible(match, operation, securityManager.getPlayerProvider().get());
+		return securityManager.getAccessController(Match.class).isAccessible(match, operation, securityManager.getPlayerProvider().get(),
+				securityManager.getEmpireProvider().get());
 	}
 
 	/*
@@ -130,6 +131,8 @@ public class ParticipantManagerImpl extends GenericManagerImpl<Participant, Long
 		Assert.isTrue(isAccessible(match, MatchAccessController.OPERATION_JOIN));
 
 		Empire empire = securityManager.getEmpireProvider().get();
+
+		Assert.notNull(empire, "current empire must not be null!");
 
 		// check the match state and join type
 		switch(match.getState())
@@ -162,7 +165,11 @@ public class ParticipantManagerImpl extends GenericManagerImpl<Participant, Long
 		// security-check
 		Assert.isTrue(isAccessible(match, MatchAccessController.OPERATION_JOIN));
 
-		return removeParticipant(match, securityManager.getEmpireProvider().get());
+		Empire empire = securityManager.getEmpireProvider().get();
+
+		Assert.notNull(empire, "current empire must not be null!");
+
+		return removeParticipant(match, empire);
 	}
 
 	/*
@@ -225,29 +232,38 @@ public class ParticipantManagerImpl extends GenericManagerImpl<Participant, Long
 	{
 		Participant participant = getByMatchAndEmpire(match.getId(), empire.getId());
 
-		if(match.getState() == EnumMatchState.canceled || match.getState() == EnumMatchState.finished)
-			return participant;
-
-		if(participant == null)
-		{
-			participant = new Participant();
-			participant.setMatch(match);
-			participant.setEmpire(empire);
-		}
-		else if(match.getState() == EnumMatchState.active && participant.getDestructionDate().after(match.getStartDate()))
-		{
-			// you cannot join an active match you already have been part of
-			return participant;
-		}
+		if(participant != null && participant.isActivated())
+			return participant; // already participating
+		else if(match.getState() == EnumMatchState.canceled || match.getState() == EnumMatchState.finished)
+			return null; // adding participants not allowed anymore
+		else if(match.getParticipantsMax() > 0 && match.getParticipants().size() >= match.getParticipantsMax())
+			return null; // the match is 'full'
 
 		Date now = new Date(securityManager.getTimeProvider().get());
+
+		if(participant == null)
+			participant = new Participant();
 
 		participant.setActivated(true);
 		participant.setDestructionDate(null);
 		participant.setDestructionType(null);
+		participant.setMatch(match);
+		participant.setEmpire(empire);
 		participant.setJoinedDate(now);
 		participant.setRank(match.getParticipants().size());
 		participant.setRankFinal(false);
+		participant.setRankValue(0);
+		participant.setStartSystemsSelected(0);
+
+		if(participant.getPopulations() != null)
+		{
+			// participant has selected start systems earlier, but has left -> reset them
+			for(SolarSystemPopulation population : participant.getPopulations())
+			{
+				population.setDestructionDate(null);
+				population.setDestructionType(null);
+			}
+		}
 
 		return save(participant);
 	}
@@ -280,7 +296,21 @@ public class ParticipantManagerImpl extends GenericManagerImpl<Participant, Long
 			participant.setActivated(false);
 		}
 		
-		destroy(participant, EnumDestructionType.givenUp, now);
+		EnumDestructionType destructionType;
+		if(empire.getPlayer().equals(securityManager.getPlayerProvider().get()))
+		{
+			if(match.getState() == EnumMatchState.planned)
+				destructionType = EnumDestructionType.left;
+			else
+				destructionType = EnumDestructionType.givenUp;
+		}
+		else
+		{
+			destructionType = EnumDestructionType.removed;
+		}
+
+		// destroy will perform the save
+		destroy(participant, destructionType, now);
 		return true;
 	}
 
@@ -295,13 +325,14 @@ public class ParticipantManagerImpl extends GenericManagerImpl<Participant, Long
 		// destroy all remaining populations
 		for(SolarSystemPopulation population : participant.getPopulations())
 		{
-			solarSystemPopulationManager.destroy(population, destructionType, destructionDate);
+			if(population.isActivated())
+				solarSystemPopulationManager.destroy(population, destructionType, destructionDate);
 		}
-		
+
 		participant.setDestructionType(destructionType);
 		participant.setDestructionDate(destructionDate);
 		// participant.setRankFinal(true); // rank will be finalized on next rank update
-		
+
 		return save(participant);
 	}
 
