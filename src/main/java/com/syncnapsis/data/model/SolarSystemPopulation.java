@@ -68,6 +68,20 @@ public class SolarSystemPopulation extends ActivatableInstance<Long>
 	protected Date							originationDate;
 
 	/**
+	 * The last progress calculated for the travel of this population from it's origin to it's
+	 * target (progress from started = 0.0 to arrived = 1.0).
+	 */
+	protected double						travelProgress;
+	/**
+	 * The date the last travelProgress was calculated
+	 */
+	protected Date							travelProgressDate;
+	/**
+	 * The speed this population is travelling with (in percent).
+	 */
+	protected int							travelSpeed;
+
+	/**
 	 * The date this population arrived at the associated solar system
 	 */
 	protected Date							colonizationDate;
@@ -87,6 +101,11 @@ public class SolarSystemPopulation extends ActivatableInstance<Long>
 	 * The current amount/value of population
 	 */
 	protected long							population;
+
+	/**
+	 * An optional amount of stored infrastructure taken from the origin population/system.
+	 */
+	protected long							storedInfrastructure;
 
 	/**
 	 * The priority to use for building a colony (population).<br>
@@ -160,6 +179,41 @@ public class SolarSystemPopulation extends ActivatableInstance<Long>
 	}
 
 	/**
+	 * The last progress calculated for the travel of this population from it's origin to it's
+	 * target (progress from started = 0.0 to arrived = 1.0).
+	 * 
+	 * @return travelProgress
+	 */
+	@Column(nullable = false)
+	public double getTravelProgress()
+	{
+		return travelProgress;
+	}
+
+	/**
+	 * The date the last travelProgress was calculated
+	 * 
+	 * @return travelProgressDate
+	 */
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(nullable = true)
+	public Date getTravelProgressDate()
+	{
+		return travelProgressDate;
+	}
+
+	/**
+	 * The speed this population is travelling with (in percent).
+	 * 
+	 * @return travelSpeed
+	 */
+	@Column(nullable = false)
+	public int getTravelSpeed()
+	{
+		return travelSpeed;
+	}
+
+	/**
 	 * The date this population arrived at the associated solar system
 	 * 
 	 * @return colonizationDate
@@ -204,6 +258,17 @@ public class SolarSystemPopulation extends ActivatableInstance<Long>
 	public long getPopulation()
 	{
 		return population;
+	}
+
+	/**
+	 * An optional amount of stored infrastructure taken from the origin population/system.
+	 * 
+	 * @return storedInfrastructure
+	 */
+	@Column(nullable = false)
+	public long getStoredInfrastructure()
+	{
+		return storedInfrastructure;
 	}
 
 	/**
@@ -290,6 +355,38 @@ public class SolarSystemPopulation extends ActivatableInstance<Long>
 	}
 
 	/**
+	 * The last progress calculated for the travel of this population from it's origin to it's
+	 * target (progress from started = 0.0 to arrived = 1.0).
+	 * 
+	 * 
+	 * @param travelProgress - the travel progress
+	 */
+	public void setTravelProgress(double travelProgress)
+	{
+		this.travelProgress = travelProgress;
+	}
+
+	/**
+	 * The date the last travelProgress was calculated
+	 * 
+	 * @param travelProgressDate - the date and time
+	 */
+	public void setTravelProgressDate(Date travelProgressDate)
+	{
+		this.travelProgressDate = travelProgressDate;
+	}
+
+	/**
+	 * The speed this population is travelling with (in percent).
+	 * 
+	 * @param travelSpeed - the speed in percent
+	 */
+	public void setTravelSpeed(int travelSpeed)
+	{
+		this.travelSpeed = travelSpeed;
+	}
+
+	/**
 	 * The date this population arrived at the associated solar system
 	 * 
 	 * @param colonizationDate - the date and time
@@ -327,6 +424,16 @@ public class SolarSystemPopulation extends ActivatableInstance<Long>
 	public void setPopulation(long population)
 	{
 		this.population = population;
+	}
+
+	/**
+	 * An optional amount of stored infrastructure taken from the origin population/system.
+	 * 
+	 * @param storedInfrastructure - the stored infrastructure value
+	 */
+	public void setStoredInfrastructure(long storedInfrastructure)
+	{
+		this.storedInfrastructure = storedInfrastructure;
 	}
 
 	/**
@@ -375,14 +482,22 @@ public class SolarSystemPopulation extends ActivatableInstance<Long>
 	{
 		final int prime = 31;
 		int result = super.hashCode();
+		result = prime * result + ((attackPriority == null) ? 0 : attackPriority.hashCode());
+		result = prime * result + ((buildPriority == null) ? 0 : buildPriority.hashCode());
 		result = prime * result + ((colonizationDate == null) ? 0 : colonizationDate.hashCode());
-		result = prime * result + ((destructionType == null) ? 0 : destructionType.hashCode());
 		result = prime * result + ((destructionDate == null) ? 0 : destructionDate.hashCode());
+		result = prime * result + ((destructionType == null) ? 0 : destructionType.hashCode());
 		result = prime * result + ((infrastructure == null) ? 0 : infrastructure.getId().hashCode());
 		result = prime * result + ((origin == null) ? 0 : origin.getId().hashCode());
 		result = prime * result + ((originationDate == null) ? 0 : originationDate.hashCode());
 		result = prime * result + ((participant == null) ? 0 : participant.getId().hashCode());
 		result = prime * result + (int) (population ^ (population >>> 32));
+		result = prime * result + (int) (storedInfrastructure ^ (storedInfrastructure >>> 32));
+		long temp;
+		temp = Double.doubleToLongBits(travelProgress);
+		result = prime * result + (int) (temp ^ (temp >>> 32));
+		result = prime * result + ((travelProgressDate == null) ? 0 : travelProgressDate.hashCode());
+		result = prime * result + travelSpeed;
 		return result;
 	}
 
@@ -400,6 +515,10 @@ public class SolarSystemPopulation extends ActivatableInstance<Long>
 		if(getClass() != obj.getClass())
 			return false;
 		SolarSystemPopulation other = (SolarSystemPopulation) obj;
+		if(attackPriority != other.attackPriority)
+			return false;
+		if(buildPriority != other.buildPriority)
+			return false;
 		if(colonizationDate == null)
 		{
 			if(other.colonizationDate != null)
@@ -407,14 +526,14 @@ public class SolarSystemPopulation extends ActivatableInstance<Long>
 		}
 		else if(!colonizationDate.equals(other.colonizationDate))
 			return false;
-		if(destructionType != other.destructionType)
-			return false;
 		if(destructionDate == null)
 		{
 			if(other.destructionDate != null)
 				return false;
 		}
 		else if(!destructionDate.equals(other.destructionDate))
+			return false;
+		if(destructionType != other.destructionType)
 			return false;
 		if(infrastructure == null)
 		{
@@ -445,6 +564,19 @@ public class SolarSystemPopulation extends ActivatableInstance<Long>
 		else if(!participant.getId().equals(other.participant.getId()))
 			return false;
 		if(population != other.population)
+			return false;
+		if(storedInfrastructure != other.storedInfrastructure)
+			return false;
+		if(Double.doubleToLongBits(travelProgress) != Double.doubleToLongBits(other.travelProgress))
+			return false;
+		if(travelProgressDate == null)
+		{
+			if(other.travelProgressDate != null)
+				return false;
+		}
+		else if(!travelProgressDate.equals(other.travelProgressDate))
+			return false;
+		if(travelSpeed != other.travelSpeed)
 			return false;
 		return true;
 	}

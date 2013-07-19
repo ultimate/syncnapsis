@@ -783,6 +783,10 @@
 		<column>population</column>
 		<column>buildPriority</column>
 		<column>attackPriority</column>
+		<column>travelProgress</column>
+		<column>travelProgressDate</column>
+		<column>travelSpeed</column>
+		<column>storedInfrastructure</column>
 		<row>
 			<value description="id">11</value>
 			<value description="version">1</value>
@@ -796,6 +800,10 @@
 			<value description="population">10000</value>
 			<value description="buildPriority">balanced</value>
 			<value description="attackPriority">balanced</value>
+			<value description="travelProgress">100.0</value>
+			<value description="travelProgressDate">2012-01-01</value>
+			<value description="travelSpeed">0</value>
+			<value description="storedInfrastructure">0</value>
 		</row>
 		<row>
 			<value description="id">12</value>
@@ -810,6 +818,10 @@
 			<value description="population">10000</value>
 			<value description="buildPriority">balanced</value>
 			<value description="attackPriority">balanced</value>
+			<value description="travelProgress">100.0</value>
+			<value description="travelProgressDate">2012-01-01</value>
+			<value description="travelSpeed">0</value>
+			<value description="storedInfrastructure">0</value>
 		</row>
 		<row>
 			<value description="id">21</value>
@@ -824,6 +836,10 @@
 			<value description="population">10000</value>
 			<value description="buildPriority">balanced</value>
 			<value description="attackPriority">balanced</value>
+			<value description="travelProgress">100.0</value>
+			<value description="travelProgressDate">2012-01-01</value>
+			<value description="travelSpeed">0</value>
+			<value description="storedInfrastructure">0</value>
 		</row>
 		<row>
 			<value description="id">22</value>
@@ -838,6 +854,10 @@
 			<value description="population">0</value>
 			<value description="buildPriority">balanced</value>
 			<value description="attackPriority">balanced</value>
+			<value description="travelProgress">100.0</value>
+			<value description="travelProgressDate">2012-01-01</value>
+			<value description="travelSpeed">0</value>
+			<value description="storedInfrastructure">0</value>
 		</row>
 		<row>
 			<value description="id">23</value>
@@ -852,6 +872,10 @@
 			<value description="population">1000</value>
 			<value description="buildPriority">balanced</value>
 			<value description="attackPriority">population</value>
+			<value description="travelProgress">100.0</value>
+			<value description="travelProgressDate">2012-01-20</value>
+			<value description="travelSpeed">0</value>
+			<value description="storedInfrastructure">0</value>
 		</row>
 	</table>
 
