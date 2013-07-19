@@ -66,6 +66,13 @@ public class Galaxy extends ActivatableInstance<Long>
 	protected Vector.Integer	size	= new Vector.Integer();
 
 	/**
+	 * The maximum gap between two neighbour SolarSystems.<br>
+	 * If the nearest neighbour is determined for every SolarSystem this is the maximum of all those
+	 * values.
+	 */
+	protected int				maxGap;
+
+	/**
 	 * The seed that has been used for the random generator to generate the SolarSystems
 	 */
 	protected long				seed;
@@ -129,6 +136,19 @@ public class Galaxy extends ActivatableInstance<Long>
 	public Vector.Integer getSize()
 	{
 		return size;
+	}
+
+	/**
+	 * The maximum gap between two neighbour SolarSystems.<br>
+	 * If the nearest neighbour is determined for every SolarSystem this is the maximum of all those
+	 * values.
+	 * 
+	 * @return maxGap
+	 */
+	@Column(nullable = false)
+	public int getMaxGap()
+	{
+		return maxGap;
 	}
 
 	/**
@@ -207,6 +227,18 @@ public class Galaxy extends ActivatableInstance<Long>
 	}
 
 	/**
+	 * The maximum gap between two neighbour SolarSystems.<br>
+	 * If the nearest neighbour is determined for every SolarSystem this is the maximum of all those
+	 * values.
+	 * 
+	 * @param maxGap - the maximum gap
+	 */
+	public void setMaxGap(int maxGap)
+	{
+		this.maxGap = maxGap;
+	}
+
+	/**
 	 * The seed that has been used for the random generator to generate the SolarSystems
 	 * 
 	 * @param seed - the seed
@@ -247,6 +279,7 @@ public class Galaxy extends ActivatableInstance<Long>
 		int result = super.hashCode();
 		result = prime * result + ((creationDate == null) ? 0 : creationDate.hashCode());
 		result = prime * result + ((creator == null) ? 0 : creator.getId().hashCode());
+		result = prime * result + maxGap;
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
 		result = prime * result + (int) (seed ^ (seed >>> 32));
 		result = prime * result + ((size == null) ? 0 : size.hashCode());
@@ -280,6 +313,8 @@ public class Galaxy extends ActivatableInstance<Long>
 				return false;
 		}
 		else if(!creator.getId().equals(other.creator.getId()))
+			return false;
+		if(maxGap != other.maxGap)
 			return false;
 		if(name == null)
 		{

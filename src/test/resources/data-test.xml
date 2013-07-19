@@ -57,6 +57,7 @@
 		<column>sizeY</column>
 		<column>sizeZ</column>
 		<column>seed</column>
+		<column>maxGap</column>
 		<row>
 			<value description="id">1</value>
 			<value description="version">1</value>
@@ -68,6 +69,7 @@
 			<value description="sizeY">200</value>
 			<value description="sizeZ">200</value>
 			<value description="seed">0</value>
+			<value description="maxGap">100</value>
 		</row>
 		<row>
 			<value description="id">2</value>
@@ -80,6 +82,7 @@
 			<value description="sizeY">1</value>
 			<value description="sizeZ">1</value>
 			<value description="seed">0</value>
+			<value description="maxGap">1</value>
 		</row>
 	</table>
 

@@ -99,7 +99,7 @@ public class GalaxyManagerImplTest extends GenericNameManagerImplTestCase<Galaxy
 
 		sessionProvider.set(new MockHttpSession());
 		playerProvider.set(creator);
-		
+
 		// seed given
 		final Galaxy expected = new Galaxy();
 		expected.setActivated(true);
@@ -108,6 +108,7 @@ public class GalaxyManagerImplTest extends GenericNameManagerImplTestCase<Galaxy
 		expected.setName(name);
 		expected.setSeed(seed);
 		expected.setSize(size);
+		expected.setMaxGap(((GalaxyManagerImpl) mockManager).calculateMaxGap(systemCoords));
 
 		mockContext.checking(new Expectations() {
 			{
@@ -138,10 +139,10 @@ public class GalaxyManagerImplTest extends GenericNameManagerImplTestCase<Galaxy
 		mockContext.assertIsSatisfied();
 		assertNotNull(result1);
 		assertEquals(expected, result1);
-		
+
 		// NO seed given
 		expected.setSeed(time);
-		
+
 		mockContext.checking(new Expectations() {
 			{
 				oneOf(mockDao).save(expected);
@@ -164,9 +165,9 @@ public class GalaxyManagerImplTest extends GenericNameManagerImplTestCase<Galaxy
 				}
 			});
 		}
-		
+
 		Galaxy galaxy = ((GalaxyManagerImpl) mockManager).create(name, systemCoords, systemNames, null, size);
-		
+
 		mockContext.assertIsSatisfied();
 		assertNotNull(galaxy);
 		assertEquals(expected, galaxy);
@@ -204,5 +205,27 @@ public class GalaxyManagerImplTest extends GenericNameManagerImplTestCase<Galaxy
 		assertEquals(xSize, (int) size.getX());
 		assertEquals(ySize, (int) size.getY());
 		assertEquals(zSize, (int) size.getZ());
+	}
+
+	public void testCalculateMaxGap() throws Exception
+	{
+		List<Vector.Integer> coords = new LinkedList<Vector.Integer>();
+		coords.add(new Vector.Integer(100, 0, 100));
+		coords.add(new Vector.Integer(-100, 0, 100));
+
+		assertEquals(200, ((GalaxyManagerImpl) mockManager).calculateMaxGap(coords));
+
+		coords.add(new Vector.Integer(100, 0, 0));
+
+		assertEquals(200, ((GalaxyManagerImpl) mockManager).calculateMaxGap(coords));
+
+		coords.add(new Vector.Integer(1000, 0, 0));
+
+		assertEquals(900, ((GalaxyManagerImpl) mockManager).calculateMaxGap(coords));
+
+		coords.add(new Vector.Integer(1000000000, 0, 0)); // test there is no integer overflow
+
+		assertEquals(999999000, ((GalaxyManagerImpl) mockManager).calculateMaxGap(coords));
+
 	}
 }

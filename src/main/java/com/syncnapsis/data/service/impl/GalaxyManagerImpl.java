@@ -163,6 +163,7 @@ public class GalaxyManagerImpl extends GenericNameManagerImpl<Galaxy, Long> impl
 		galaxy.setName(name);
 		galaxy.setSeed(seed);
 		galaxy.setSize(size);
+		galaxy.setMaxGap(calculateMaxGap(systemCoords));
 
 		galaxy = save(galaxy);
 
@@ -215,5 +216,38 @@ public class GalaxyManagerImpl extends GenericNameManagerImpl<Galaxy, Long> impl
 		int sizeZ = MathUtil.ceil2(maxZ - minZ + 1, SIZE_DIGITS);
 
 		return new Vector.Integer(sizeX, sizeY, sizeZ);
+	}
+
+	/**
+	 * Calculate {@link Galaxy#getMaxGap()}
+	 * 
+	 * @param coords - the coords to scan
+	 * @return maxGap
+	 */
+	protected int calculateMaxGap(List<Vector.Integer> coords)
+	{
+		long maxGapSquare = 0;
+		long minGapSquare;
+		long gapSquare;
+		for(Vector.Integer c1 : coords)
+		{
+			minGapSquare = Long.MAX_VALUE;
+			for(Vector.Integer c2 : coords)
+			{
+				if(c2 == c1)
+					continue;
+				// calculate the square only to avoid sqrt
+				//@formatter:off
+				gapSquare = ((long) (c1.getX() - c2.getX())) * ((long) (c1.getX() - c2.getX())) + 
+							((long) (c1.getY() - c2.getY())) * ((long) (c1.getY() - c2.getY())) +
+							((long) (c1.getZ() - c2.getZ())) * ((long) (c1.getZ() - c2.getZ()));
+				//@formatter:on
+				if(gapSquare < minGapSquare)
+					minGapSquare = gapSquare;
+			}
+			if(minGapSquare > maxGapSquare)
+				maxGapSquare = minGapSquare;
+		}
+		return (int) Math.ceil(Math.sqrt(maxGapSquare));
 	}
 }
