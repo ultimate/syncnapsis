@@ -21,17 +21,39 @@ import com.syncnapsis.enums.EnumMatchState;
 import com.syncnapsis.security.AccessController;
 
 /**
- * @author ultimate
+ * AccessController for {@link Match}
  * 
+ * @author ultimate
  */
 public class MatchAccessController implements AccessController<Match>
 {
+	/**
+	 * The operation "create"
+	 */
 	public static final int	OPERATION_CREATE				= 1;
+	/**
+	 * The operation "start"
+	 */
 	public static final int	OPERATION_START					= 2;
+	/**
+	 * The operation "cancel"
+	 */
 	public static final int	OPERATION_CANCEL				= 3;
+	/**
+	 * The operation "add participant"
+	 */
 	public static final int	OPERATION_ADD_PARTICIPANT		= 4;
+	/**
+	 * The operation "remove participant"
+	 */
 	public static final int	OPERATION_REMOVE_PARTICIPANT	= 5;
+	/**
+	 * The operation "join as a participant"
+	 */
 	public static final int	OPERATION_JOIN					= 6;
+	/**
+	 * The operation "leave" or "giveup"
+	 */
 	public static final int	OPERATION_LEAVE					= 7;
 
 	/*
@@ -66,11 +88,23 @@ public class MatchAccessController implements AccessController<Match>
 		return target.getCreator().equals(player) || isModerator(player) || isAdmin(player);
 	}
 
+	/**
+	 * Is the given player a moderator?
+	 * 
+	 * @param player - the player to check
+	 * @return true or false
+	 */
 	protected boolean isModerator(Player player)
 	{
 		return player.getUser().getRole().getRolename().equals(ApplicationBaseConstants.ROLE_MODERATOR);
 	}
 
+	/**
+	 * Is the given player an admin?
+	 * 
+	 * @param player - the player to check
+	 * @return true or false
+	 */
 	protected boolean isAdmin(Player player)
 	{
 		return player.getUser().getRole().getRolename().equals(ApplicationBaseConstants.ROLE_ADMIN);

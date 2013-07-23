@@ -45,6 +45,42 @@
 			<value description="value">1000000</value>
 			<value description="version">1</value>
 		</row>
+		<row>
+			<value description="id">105</value>
+			<value description="name">travel.max.factor</value>
+			<value description="value">10</value>
+			<value description="version">1</value>
+		</row>
+		<row>
+			<value description="id">106</value>
+			<value description="name">travel.exodus.factor</value>
+			<value description="value">20</value>
+			<value description="version">1</value>
+		</row>
+		<row>
+			<value description="id">107</value>
+			<value description="name">travel.speed.max</value>
+			<value description="value">1000</value>
+			<value description="version">1</value>
+		</row>
+		<row>
+			<value description="id">108</value>
+			<value description="name">travel.speed.min</value>
+			<value description="value">100</value>
+			<value description="version">1</value>
+		</row>
+		<row>
+			<value description="id">109</value>
+			<value description="name">match.speed.min</value>
+			<value description="value">100</value>
+			<value description="version">1</value>
+		</row>
+		<row>
+			<value description="id">110</value>
+			<value description="name">match.speed.max</value>
+			<value description="value">100</value>
+			<value description="version">1</value>
+		</row>
 	</table>
 	<table name="galaxy">
 		<column>id</column>

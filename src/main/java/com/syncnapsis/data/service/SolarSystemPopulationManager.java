@@ -56,7 +56,7 @@ public interface SolarSystemPopulationManager extends GenericManager<SolarSystem
 	 * @param population - the population for the SolarSystem
 	 * @return the newly created SolarSystemPopulation entity
 	 */
-	public SolarSystemPopulation selectStartSystem(SolarSystemInfrastructure infrastructure, int population);
+	public SolarSystemPopulation selectStartSystem(SolarSystemInfrastructure infrastructure, long population);
 
 	/**
 	 * Randomly create all required start systems as SolarSystemPopulations for the given
@@ -72,33 +72,36 @@ public interface SolarSystemPopulationManager extends GenericManager<SolarSystem
 	/**
 	 * Create a new SolarSystemPopulation as a spin of from the given origin population.<br>
 	 * If priorities are not set values from the origin will be used as default. The time of travel
-	 * will autmatically be calculated if the arrival time is not set or is not far enough in future
-	 * (travelling takes longer than time is remaining).
+	 * will autmatically be calculated from the desired (initial) travel speed.
 	 * 
 	 * @param origin - the origin population
 	 * @param targetInfrastructure - the infrastruture to travel to
-	 * @param targetArrivalDate - the requested time of arrival
+	 * @param travelSpeed - the speed to travel with (in percent)
 	 * @param population - the population for the spinoff
 	 * @param attackPriority - the attack priority (if null the origins priority will be used)
 	 * @param buildPriority - the build priority (if null the origins priority will be used)
 	 * @return the newly created SolarSystemPopulation entity
 	 */
-	public SolarSystemPopulation spinoff(SolarSystemPopulation origin, SolarSystemInfrastructure targetInfrastructure, Date targetArrivalDate,
-			int population, EnumPopulationPriority attackPriority, EnumPopulationPriority buildPriority);
+	public SolarSystemPopulation spinoff(SolarSystemPopulation origin, SolarSystemInfrastructure targetInfrastructure, int travelSpeed,
+			long population, EnumPopulationPriority attackPriority, EnumPopulationPriority buildPriority);
 
 	/**
 	 * Create a new SolarSystemPopulation as resettlement from the given origin population. The
 	 * original population will be destroyed (as given up) and a new population entity will be
-	 * created to maintain tracability-<br>
-	 * The time of travel will autmatically be calculated if the arrival time is not set or is not
-	 * far enough in future (travelling takes longer than time is remaining).<br>
+	 * created to maintain tracability.<br>
+	 * The time of travel will autmatically be calculated from the desired (initial) travel speed.<br>
+	 * Exodus mode will mean all infrastructure of the origin system will be disassembled to
+	 * increase the maximum travel distance and those infrastructure may be used to increase the
+	 * infrastructure of the target system additionally.
 	 * 
 	 * @param origin - the origin population
 	 * @param targetInfrastructure - the infrastruture to travel to
-	 * @param targetArrivalDate - the requested time of arrival
+	 * @param travelSpeed - the speed to travel with (in percent)
+	 * @param exodus - perform exodus on the origin system
 	 * @return the newly created SolarSystemPopulation entity
 	 */
-	public SolarSystemPopulation resettle(SolarSystemPopulation origin, SolarSystemInfrastructure targetInfrastructure, Date targetArrivalDate);
+	public SolarSystemPopulation resettle(SolarSystemPopulation origin, SolarSystemInfrastructure targetInfrastructure, int travelSpeed,
+			boolean exodus);
 
 	/**
 	 * Destroy the given population and clean up by setting several properties.<br>
@@ -110,4 +113,34 @@ public interface SolarSystemPopulationManager extends GenericManager<SolarSystem
 	 * @return the updated SolarSystemPopulation entity
 	 */
 	public SolarSystemPopulation destroy(SolarSystemPopulation population, EnumDestructionType destructionType, Date destructionDate);
+
+	/**
+	 * Merge the populations for this infrastructe if possible.<br>
+	 * Populations of the same participant (already arrived at the infrastructure) will be merged to
+	 * single entities by adding population values and preserving the oldest colonization date.<br>
+	 * Single popuations newly arrived may be updated during this process as well.
+	 * 
+	 * @param infrastructure - the infrastructure which's populations to merge
+	 * @return the list of merged populations
+	 */
+	public List<SolarSystemPopulation> merge(SolarSystemInfrastructure infrastructure);
+
+	/**
+	 * Update the travel speed of a population
+	 * 
+	 * @param population - the population to update
+	 * @param travelSpeed - the new speed to set
+	 * @return the updated population entity
+	 */
+	public SolarSystemPopulation updateTravelSpeed(SolarSystemPopulation population, int travelSpeed);
+
+	/**
+	 * Get the population with the earliest arrival/colonization date that is still present at the
+	 * given {@link SolarSystemInfrastructure} and therefore has the "home-bonus"
+	 * 
+	 * @param infrastructure - the infrastructure to scan
+	 * @return the "oldest" population for this system or null if there are currently no populations
+	 *         present
+	 */
+	public SolarSystemPopulation getHomePopulation(SolarSystemInfrastructure infrastructure);
 }

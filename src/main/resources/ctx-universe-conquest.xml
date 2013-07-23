@@ -74,6 +74,8 @@
 	<bean id="solarSystemPopulationManager"
 		class="com.syncnapsis.data.service.impl.SolarSystemPopulationManagerImpl">
 		<constructor-arg ref="solarSystemPopulationDao" />
+		<property name="calculator" ref="calculator" />
+		<property name="securityManager" ref="securityManager" />
 	</bean>
 
 	<!-- =================================================================== -->
@@ -114,12 +116,17 @@
 				<ref bean="fieldAccessController" />
 				<ref bean="methodAccessController" />
 				<ref bean="matchAccessController" />
+				<ref bean="solarSystemPopulationAccessController" />
 			</list>
 		</property>
 	</bean>
 
 	<bean id="matchAccessController"
 		class="com.syncnapsis.security.accesscontrol.MatchAccessController">
+	</bean>
+
+	<bean id="solarSystemPopulationAccessController"
+		class="com.syncnapsis.security.accesscontrol.SolarSystemPopulationAccessController">
 	</bean>
 
 	<!-- =================================================================== -->
@@ -129,9 +136,14 @@
 	<bean id="mailer" class="com.syncnapsis.utils.mail.BaseGameMailer">
 		<constructor-arg value="mail.properties" />
 	</bean>
-	
-	<bean id="infrastructureGenerator" class="com.syncnapsis.utils.data.SolarSystemInfrastructureGenerator" >
-		<constructor-arg ref="parameterManager"/>
+
+	<bean id="infrastructureGenerator"
+		class="com.syncnapsis.utils.data.SolarSystemInfrastructureGenerator">
+		<constructor-arg ref="parameterManager" />
+	</bean>
+
+	<bean id="calculator" class="com.syncnapsis.universe.CalculatorImpl">
+		<constructor-arg ref="parameterManager" />
 	</bean>
 
 	<!-- =================================================================== -->
