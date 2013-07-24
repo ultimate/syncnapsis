@@ -343,17 +343,12 @@ public class MatchManagerImpl extends GenericNameManagerImpl<Match, Long> implem
 
 		match = save(match);
 
-		List<SolarSystemPopulation> populations;
 		for(Participant p : participants)
 		{
 			// assign start populations
-			populations = solarSystemPopulationManager.randomSelectStartSystems(p, random);
-			// mark populations with start date
-			for(SolarSystemPopulation population : populations)
-			{
-				population.setColonizationDate(startDate);
-				solarSystemPopulationManager.save(population);
-			}
+			solarSystemPopulationManager.randomSelectStartSystems(p, random);
+			// start participating
+			participantManager.startParticipating(participantManager.get(p.getId()), startDate);
 		}
 
 		return get(match.getId());

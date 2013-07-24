@@ -295,7 +295,7 @@ public class ParticipantManagerImpl extends GenericManagerImpl<Participant, Long
 			// remove the participant "completely"
 			participant.setActivated(false);
 		}
-		
+
 		EnumDestructionType destructionType;
 		if(empire.getPlayer().equals(securityManager.getPlayerProvider().get()))
 		{
@@ -354,5 +354,24 @@ public class ParticipantManagerImpl extends GenericManagerImpl<Participant, Long
 	public Participant getByMatchAndEmpire(long matchId, long empireId)
 	{
 		return participantDao.getByMatchAndEmpire(matchId, empireId);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see
+	 * com.syncnapsis.data.service.ParticipantManager#startParticipating(com.syncnapsis.data.model
+	 * .Participant, java.util.Date)
+	 */
+	@Override
+	public Participant startParticipating(Participant participant, Date participationDate)
+	{
+		// mark populations with start date
+		for(SolarSystemPopulation population : participant.getPopulations())
+		{
+			population.setColonizationDate(participationDate);
+			solarSystemPopulationManager.save(population);
+		}
+
+		return participant;
 	}
 }

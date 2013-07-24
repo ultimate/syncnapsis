@@ -87,6 +87,16 @@ public interface ParticipantManager extends GenericManager<Participant, Long>
 	public Participant destroy(Participant participant, EnumDestructionType destructionType, Date destructionDate);
 
 	/**
+	 * Let the given Participant participate in the associated match starting from the given date.
+	 * To participate all the Participants populations will be fed with a colonization date.
+	 * 
+	 * @param participant - the participant to update
+	 * @param participationDate - the date to start participating
+	 * @return
+	 */
+	public Participant startParticipating(Participant participant, Date participationDate);
+
+	/**
 	 * Get all Participants for a match
 	 * 
 	 * @param matchId - the match

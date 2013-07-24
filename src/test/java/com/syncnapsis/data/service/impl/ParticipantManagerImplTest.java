@@ -656,9 +656,36 @@ public class ParticipantManagerImplTest extends GenericManagerImplTestCase<Parti
 				will(returnValue(participant));
 			}
 		});
-		
+
 		Participant result = mockManager.destroy(participant, destructionType, destructionDate);
 		assertEquals(participant, result);
+	}
+
+	public void testStartParticipating() throws Exception
+	{
+		final SolarSystemPopulationManager mockSolarSystemPopulationManager = mockContext.mock(SolarSystemPopulationManager.class);
+		ParticipantManagerImpl mockManager = new ParticipantManagerImpl(mockDao, empireManager, mockSolarSystemPopulationManager);
+
+		final int populations = 5;
+		Participant participant = new Participant();
+		participant.setPopulations(new ArrayList<SolarSystemPopulation>(populations));
+		for(int i = 0; i < populations; i++)
+			participant.getPopulations().add(new SolarSystemPopulation());
+
+		Date participationDate = new Date(1234);
+
+		final SolarSystemPopulation expected = new SolarSystemPopulation();
+		expected.setColonizationDate(participationDate);
+
+		mockContext.checking(new Expectations() {
+			{
+				exactly(populations).of(mockSolarSystemPopulationManager).save(expected);
+				will(returnValue(expected));
+			}
+		});
+
+		mockManager.startParticipating(participant, participationDate);
+		mockContext.assertIsSatisfied();
 	}
 
 	private class ParticipantManagerMockImpl extends ParticipantManagerImpl
