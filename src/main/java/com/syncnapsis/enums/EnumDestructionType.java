@@ -62,5 +62,9 @@ public enum EnumDestructionType
 	/**
 	 * a participant has been removed from the match (by the creator, an admin or moderator)
 	 */
-	removed
+	removed,
+	/**
+	 * the value of a population has been merged into another population
+	 */
+	merged
 }
