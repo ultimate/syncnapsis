@@ -14,6 +14,7 @@
  */
 package com.syncnapsis.data.model;
 
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -580,4 +581,15 @@ public class SolarSystemPopulation extends ActivatableInstance<Long>
 			return false;
 		return true;
 	}
+
+	/**
+	 * A comparator using {@link SolarSystemPopulation#colonizationDate} to compare entities
+	 */
+	public static final Comparator<SolarSystemPopulation>	BY_COLONIZATIONDATE	= new Comparator<SolarSystemPopulation>() {
+																						@Override
+																						public int compare(SolarSystemPopulation o1, SolarSystemPopulation o2)
+																						{
+																							return o1.getColonizationDate().compareTo(o2.getColonizationDate());
+																						}
+																					};
 }
