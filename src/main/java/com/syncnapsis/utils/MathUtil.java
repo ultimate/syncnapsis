@@ -21,6 +21,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.syncnapsis.utils.math.BezierCurve;
+import com.syncnapsis.utils.math.Vector;
 
 /**
  * Util-Klasse für die Berechnung mathematischer Formeln und Funktionen
@@ -66,6 +67,20 @@ public abstract class MathUtil
 	public static double distance(double x1, double y1, double z1, double x2, double y2, double z2)
 	{
 		return Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1) + (z2 - z1) * (z2 - z1));
+	}
+
+	/**
+	 * Calculate the distance of two 3D-points
+	 * 
+	 * @see MathUtil#distance(double, double, double, double, double, double)
+	 * @param vec1 - the first point
+	 * @param vec2 - the second point
+	 * @return the distance
+	 */
+	public static double distance(Vector<?> vec1, Vector<?> vec2)
+	{
+		return distance(vec1.getX().doubleValue(), vec1.getY().doubleValue(), vec1.getZ().doubleValue(), vec2.getX().doubleValue(), vec2.getY()
+				.doubleValue(), vec2.getZ().doubleValue());
 	}
 
 	/**
