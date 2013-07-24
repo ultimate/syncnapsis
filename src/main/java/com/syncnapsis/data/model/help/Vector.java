@@ -26,7 +26,7 @@ import com.syncnapsis.data.model.base.Model;
  * @author ultimate
  */
 @MappedSuperclass
-public abstract class Vector<N extends Number> implements Model
+public abstract class Vector<N extends Number> implements Model, com.syncnapsis.utils.math.Vector<N>
 {
 	/**
 	 * The x-coordinate
