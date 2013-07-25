@@ -15,18 +15,24 @@
 package com.syncnapsis.data.service.impl;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 
 import org.jmock.Expectations;
 
 import com.syncnapsis.data.dao.SolarSystemPopulationDao;
+import com.syncnapsis.data.model.Participant;
 import com.syncnapsis.data.model.SolarSystem;
 import com.syncnapsis.data.model.SolarSystemInfrastructure;
 import com.syncnapsis.data.model.SolarSystemPopulation;
 import com.syncnapsis.data.model.help.Vector;
 import com.syncnapsis.data.service.ParameterManager;
+import com.syncnapsis.data.service.SolarSystemInfrastructureManager;
 import com.syncnapsis.data.service.SolarSystemPopulationManager;
 import com.syncnapsis.enums.EnumDestructionType;
+import com.syncnapsis.mock.MockTimeProvider;
+import com.syncnapsis.security.BaseGameManager;
 import com.syncnapsis.tests.GenericManagerImplTestCase;
 import com.syncnapsis.tests.annotations.TestCoversClasses;
 import com.syncnapsis.utils.data.ExtendedRandom;
@@ -35,10 +41,12 @@ import com.syncnapsis.utils.data.ExtendedRandom;
 public class SolarSystemPopulationManagerImplTest extends
 		GenericManagerImplTestCase<SolarSystemPopulation, Long, SolarSystemPopulationManager, SolarSystemPopulationDao>
 {
-	private ParameterManager	parameterManager;
-	private final long			referenceTime	= 1234;
+	private SolarSystemInfrastructureManager	solarSystemInfrastructureManager;
+	private ParameterManager					parameterManager;
+	private BaseGameManager						securityManager;
+	private final long							referenceTime	= 1234;
 
-	private ExtendedRandom		random			= new ExtendedRandom();
+	private ExtendedRandom						random			= new ExtendedRandom();
 
 	@Override
 	protected void setUp() throws Exception
@@ -47,7 +55,11 @@ public class SolarSystemPopulationManagerImplTest extends
 		setEntity(new SolarSystemPopulation());
 		setDaoClass(SolarSystemPopulationDao.class);
 		setMockDao(mockContext.mock(SolarSystemPopulationDao.class));
-		setMockManager(new SolarSystemPopulationManagerImpl(mockDao, parameterManager));
+		setMockManager(new SolarSystemPopulationManagerImpl(mockDao, solarSystemInfrastructureManager, parameterManager));
+
+		BaseGameManager securityManager = new BaseGameManager(this.securityManager);
+		securityManager.setTimeProvider(new MockTimeProvider(referenceTime));
+		((SolarSystemPopulationManagerImpl) mockManager).setSecurityManager(securityManager);
 	}
 
 	public void testGetByMatch() throws Exception
@@ -112,12 +124,97 @@ public class SolarSystemPopulationManagerImplTest extends
 
 	public void testMerge() throws Exception
 	{
-		fail("unimplemented");
+		long inf = 500;
+
+		SolarSystemInfrastructure infrastructure = new SolarSystemInfrastructure();
+		infrastructure.setPopulations(new ArrayList<SolarSystemPopulation>());
+		infrastructure.setInfrastructure(inf);
+
+		Participant p1 = new Participant();
+		p1.setId(1L);
+		Participant p2 = new Participant();
+		p2.setId(2L);
+
+		long pop11 = 100000;
+		long pop12 = 2000;
+		long pop13 = 3000;
+		long pop21 = 10000;
+		long pop22 = 5000;
+		long pop23 = 4000;
+
+		long inf12 = 1000;
+
+		infrastructure.getPopulations().add(getPopulation(1L, pop11, 0, 1000, p1, true));
+		infrastructure.getPopulations().add(getPopulation(2L, pop12, inf12, 1200, p1, true));
+		infrastructure.getPopulations().add(getPopulation(3L, pop13, 0, 1400, p1, true));
+		infrastructure.getPopulations().add(getPopulation(4L, pop21, 0, 1100, p2, true));
+		infrastructure.getPopulations().add(getPopulation(5L, pop22, 0, 1150, p2, false));
+		infrastructure.getPopulations().add(getPopulation(6L, pop23, 0, 1600, p2, true));
+
+		int populationsToBeSaved = 0;
+		for(final SolarSystemPopulation p : infrastructure.getPopulations())
+		{
+			if(p.isActivated() && p.getColonizationDate().before(new Date(referenceTime)))
+			{
+				populationsToBeSaved++;
+				mockContext.checking(new Expectations() {
+					{
+						oneOf(mockDao).save(p);
+						will(returnValue(p));
+					}
+				});
+			}
+		}
+		assertEquals(3, populationsToBeSaved);
+
+		Collections.shuffle(infrastructure.getPopulations());
+
+		mockManager.merge(infrastructure);
+		mockContext.assertIsSatisfied();
+
+		Collections.sort(infrastructure.getPopulations(), new Comparator<SolarSystemPopulation>() {
+			@Override
+			public int compare(SolarSystemPopulation o1, SolarSystemPopulation o2)
+			{
+				return o1.getId().compareTo(o2.getId());
+			}
+		});
+
+		// check the update of the infrastructure from storedInfrastructure
+		assertEquals(inf12, infrastructure.getInfrastructure());
+		// check general manipulations on populations
+		for(long i = 0; i < infrastructure.getPopulations().size(); i++)
+		{
+			// assure correct order (for explicit population tests below)
+			assertEquals(i + 1, (long) infrastructure.getPopulations().get((int) i).getId());
+			// assure all stored infrastructure is removed
+			assertEquals(0L, infrastructure.getPopulations().get((int) i).getStoredInfrastructure());
+
+			// assure populations with value are not destroyed and vice-versa
+			if(infrastructure.getPopulations().get((int) i).getPopulation() > 0)
+			{
+				assertNull(infrastructure.getPopulations().get((int) i).getDestructionDate());
+				assertNull(infrastructure.getPopulations().get((int) i).getDestructionType());
+			}
+			else
+			{
+				assertEquals(infrastructure.getPopulations().get((int) i).getColonizationDate(), infrastructure.getPopulations().get((int) i).getDestructionDate());
+				assertEquals(EnumDestructionType.merged, infrastructure.getPopulations().get((int) i).getDestructionType());
+			}
+		}
+		// explicitly check the new pop-values
+		assertEquals(pop11 + pop12, infrastructure.getPopulations().get(0).getPopulation());
+		assertEquals(0, infrastructure.getPopulations().get(1).getPopulation());
+		assertEquals(pop13, infrastructure.getPopulations().get(2).getPopulation());
+		assertEquals(pop21, infrastructure.getPopulations().get(3).getPopulation());
+		assertEquals(pop22, infrastructure.getPopulations().get(4).getPopulation());
+		assertEquals(pop23, infrastructure.getPopulations().get(5).getPopulation());
 	}
 
 	public void testUpdateTravelSpeed() throws Exception
 	{
 		// don't test public updateTravelSpeed just test proctected version
+		// TODO use speedTest
 		fail("unimplemented");
 	}
 
@@ -168,6 +265,18 @@ public class SolarSystemPopulationManagerImplTest extends
 		population.setInfrastructure(new SolarSystemInfrastructure());
 		population.getInfrastructure().setSolarSystem(new SolarSystem());
 		population.getInfrastructure().getSolarSystem().setCoords(new Vector.Integer(x, y, z));
+		return population;
+	}
+
+	private SolarSystemPopulation getPopulation(long id, long pop, long inf, long colonizationDate, Participant participant, boolean activated)
+	{
+		SolarSystemPopulation population = new SolarSystemPopulation();
+		population.setId(id);
+		population.setActivated(activated);
+		population.setPopulation(pop);
+		population.setColonizationDate(new Date(colonizationDate));
+		population.setParticipant(participant);
+		population.setStoredInfrastructure(inf);
 		return population;
 	}
 }

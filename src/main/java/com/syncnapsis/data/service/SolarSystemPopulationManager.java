@@ -49,8 +49,9 @@ public interface SolarSystemPopulationManager extends GenericManager<SolarSystem
 	public List<SolarSystemPopulation> getByMatch(long matchId);
 
 	/**
-	 * Create a new SolarSystemPopulation for a start system selected the current player as a
-	 * participant
+	 * Create a new SolarSystemPopulation for a start system selected by the current player as a
+	 * participant. If a population already exists for the given infrastructure it will be updated
+	 * with the given population or even be deleted, if the update value is 0.
 	 * 
 	 * @param infrastructure - the SolarSystem represented by the it's SolarSystemInfrastructure
 	 * @param population - the population for the SolarSystem

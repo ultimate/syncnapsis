@@ -14,6 +14,8 @@
  */
 package com.syncnapsis.data.service.impl;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -25,6 +27,7 @@ import com.syncnapsis.data.model.Participant;
 import com.syncnapsis.data.model.SolarSystemInfrastructure;
 import com.syncnapsis.data.model.SolarSystemPopulation;
 import com.syncnapsis.data.service.ParameterManager;
+import com.syncnapsis.data.service.SolarSystemInfrastructureManager;
 import com.syncnapsis.data.service.SolarSystemPopulationManager;
 import com.syncnapsis.enums.EnumDestructionType;
 import com.syncnapsis.enums.EnumPopulationPriority;
@@ -45,33 +48,41 @@ public class SolarSystemPopulationManagerImpl extends GenericManagerImpl<SolarSy
 	/**
 	 * SolarSystemPopulationDao for database access
 	 */
-	protected SolarSystemPopulationDao	solarSystemPopulationDao;
+	protected SolarSystemPopulationDao			solarSystemPopulationDao;
+
+	/**
+	 * The SolarSystemInfrastructureManager
+	 */
+	protected SolarSystemInfrastructureManager	solarSystemInfrastructureManager;
 
 	/**
 	 * The ParameterManager
 	 */
-	protected ParameterManager			parameterManager;
+	protected ParameterManager					parameterManager;
 
 	/**
 	 * The universe conquenst {@link Calculator}
 	 */
-	protected Calculator				calculator;
+	protected Calculator						calculator;
 
 	/**
 	 * The SecurityManager
 	 */
-	protected BaseGameManager			securityManager;
+	protected BaseGameManager					securityManager;
 
 	/**
 	 * Standard Constructor
 	 * 
 	 * @param solarSystemPopulationDao - SolarSystemPopulationDao for database access
+	 * @param solarSystemInfrastructureManager - the SolarSystemInfrastructureManager
 	 * @param parameterManager - the ParameterManager
 	 */
-	public SolarSystemPopulationManagerImpl(SolarSystemPopulationDao solarSystemPopulationDao, ParameterManager parameterManager)
+	public SolarSystemPopulationManagerImpl(SolarSystemPopulationDao solarSystemPopulationDao,
+			SolarSystemInfrastructureManager solarSystemInfrastructureManager, ParameterManager parameterManager)
 	{
 		super(solarSystemPopulationDao);
 		this.solarSystemPopulationDao = solarSystemPopulationDao;
+		this.solarSystemInfrastructureManager = solarSystemInfrastructureManager;
 		this.parameterManager = parameterManager;
 	}
 
@@ -275,10 +286,60 @@ public class SolarSystemPopulationManagerImpl extends GenericManagerImpl<SolarSy
 	@Override
 	public List<SolarSystemPopulation> merge(SolarSystemInfrastructure infrastructure)
 	{
-		List<SolarSystemPopulation> populations = infrastructure.getPopulations();
-		
-		// TODO Auto-generated method stub
-		return null;
+		Date now = new Date(securityManager.getTimeProvider().get());
+
+		List<SolarSystemPopulation> populations = new ArrayList<SolarSystemPopulation>(infrastructure.getPopulations().size());
+		for(SolarSystemPopulation p : infrastructure.getPopulations())
+		{
+			if(p.isActivated() && p.getColonizationDate().before(now))
+				populations.add(p);
+		}
+
+		// sort by colonization date
+		Collections.sort(populations, SolarSystemPopulation.BY_COLONIZATIONDATE);
+
+		// traverse list backwards
+		// for each traversed entry look for the oldest population for the same participant and
+		// merge the entry into that population
+		SolarSystemPopulation newerPop, olderPop;
+		for(int i = populations.size() - 1; i >= 0; i--)
+		{
+			newerPop = populations.get(i);
+			olderPop = null;
+
+			for(int j = 0; j < i; j++)
+			{
+				if(populations.get(j).getParticipant().getId().equals(newerPop.getParticipant().getId()))
+				{
+					olderPop = populations.get(j);
+					break;
+				}
+			}
+
+			if(newerPop.getStoredInfrastructure() != 0)
+			{
+				infrastructure.setInfrastructure(Math.max(infrastructure.getInfrastructure(), newerPop.getStoredInfrastructure()));
+				newerPop.setStoredInfrastructure(0);
+			}
+
+			if(olderPop != null)
+			{
+				// update the population value
+				olderPop.setPopulation(olderPop.getPopulation() + newerPop.getPopulation());
+
+				// remove the newer population
+				newerPop.setPopulation(0);
+				newerPop.setActivated(false);
+				newerPop.setDestructionDate(newerPop.getColonizationDate());
+				newerPop.setDestructionType(EnumDestructionType.merged);
+			}
+
+			save(newerPop); // save newerPop only, olderPop will be saved later during iteration
+		}
+
+		infrastructure = solarSystemInfrastructureManager.save(infrastructure);
+
+		return infrastructure.getPopulations();
 	}
 
 	/*

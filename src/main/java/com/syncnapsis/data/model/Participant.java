@@ -472,13 +472,7 @@ public class Participant extends ActivatableInstance<Long>
 																	@Override
 																	public int compare(Participant o1, Participant o2)
 																	{
-																		long delta = o1.empire.getId() - o2.empire.getId();
-																		if(delta > 0)
-																			return 1;
-																		else if(delta < 0)
-																			return -1;
-																		else
-																			return 0;
+																		return o1.empire.getId().compareTo(o2.empire.getId());
 																	}
 																};
 }

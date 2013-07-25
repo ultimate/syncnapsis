@@ -74,6 +74,8 @@
 	<bean id="solarSystemPopulationManager"
 		class="com.syncnapsis.data.service.impl.SolarSystemPopulationManagerImpl">
 		<constructor-arg ref="solarSystemPopulationDao" />
+		<constructor-arg ref="solarSystemInfrastructureManager" />
+		<constructor-arg ref="parameterManager" />
 		<property name="calculator" ref="calculator" />
 		<property name="securityManager" ref="securityManager" />
 	</bean>
