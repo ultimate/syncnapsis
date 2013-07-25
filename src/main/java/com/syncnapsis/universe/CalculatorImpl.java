@@ -133,6 +133,37 @@ public class CalculatorImpl implements Calculator
 
 	/*
 	 * (non-Javadoc)
+	 * @see com.syncnapsis.universe.Calculator#calculateAvgGap(java.util.List)
+	 */
+	@Override
+	public int calculateAvgGap(List<Vector.Integer> coords)
+	{
+		double avgGap = 0;
+		long minGapSquare;
+		long gapSquare;
+		for(Vector.Integer c1 : coords)
+		{
+			minGapSquare = Long.MAX_VALUE;
+			for(Vector.Integer c2 : coords)
+			{
+				if(c2 == c1)
+					continue;
+				// calculate the square only to avoid sqrt
+				//@formatter:off
+				gapSquare = ((long) (c1.getX() - c2.getX())) * ((long) (c1.getX() - c2.getX())) + 
+							((long) (c1.getY() - c2.getY())) * ((long) (c1.getY() - c2.getY())) +
+							((long) (c1.getZ() - c2.getZ())) * ((long) (c1.getZ() - c2.getZ()));
+				//@formatter:on
+				if(gapSquare < minGapSquare)
+					minGapSquare = gapSquare;
+			}
+			avgGap += Math.sqrt(minGapSquare);
+		}
+		return (int) Math.round(avgGap / coords.size());
+	}
+
+	/*
+	 * (non-Javadoc)
 	 * @see
 	 * com.syncnapsis.universe.Calculator#getStandardTravelDistance(com.syncnapsis.data.model.Galaxy
 	 * )

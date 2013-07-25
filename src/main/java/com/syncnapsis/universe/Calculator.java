@@ -36,7 +36,7 @@ public interface Calculator
 	 * @return the size
 	 */
 	public Vector.Integer calculateSize(List<Vector.Integer> coords);
-	
+
 	/**
 	 * Calculate {@link Galaxy#getMaxGap()}
 	 * 
@@ -44,7 +44,16 @@ public interface Calculator
 	 * @return maxGap
 	 */
 	public int calculateMaxGap(List<Vector.Integer> coords);
-	
+
+	/**
+	 * Calculate the average gap (similar to {@link Calculator#calculateMaxGap(List)} just for the
+	 * average and not the max.
+	 * 
+	 * @param coords - the coords to scan
+	 * @return avgGap
+	 */
+	public int calculateAvgGap(List<Vector.Integer> coords);
+
 	/**
 	 * Get the standard travel distance for the given galaxy
 	 * 

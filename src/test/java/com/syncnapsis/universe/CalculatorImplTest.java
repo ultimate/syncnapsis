@@ -222,4 +222,21 @@ public class CalculatorImplTest extends LoggerTestCase
 		assertEquals(999999000, calculator.calculateMaxGap(coords));
 
 	}
+
+	public void testCalculateAvgGap() throws Exception
+	{
+		List<Vector.Integer> coords = new LinkedList<Vector.Integer>();
+		coords.add(new Vector.Integer(100, 0, 100));
+		coords.add(new Vector.Integer(-100, 0, -100));
+
+		assertEquals(283, calculator.calculateAvgGap(coords)); // sqrt(2)*200
+
+		coords.add(new Vector.Integer(100, 0, -100));
+
+		assertEquals(200, calculator.calculateAvgGap(coords));
+
+		coords.add(new Vector.Integer(-100, 0, 100));
+
+		assertEquals(200, calculator.calculateAvgGap(coords));
+	}
 }
