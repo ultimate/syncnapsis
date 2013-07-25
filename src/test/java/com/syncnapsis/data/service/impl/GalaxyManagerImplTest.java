@@ -108,7 +108,7 @@ public class GalaxyManagerImplTest extends GenericNameManagerImplTestCase<Galaxy
 		expected.setName(name);
 		expected.setSeed(seed);
 		expected.setSize(size);
-		expected.setMaxGap(((GalaxyManagerImpl) mockManager).calculateMaxGap(systemCoords));
+		expected.setMaxGap(GalaxyManagerImpl.calculateMaxGap(systemCoords));
 
 		mockContext.checking(new Expectations() {
 			{
@@ -201,7 +201,7 @@ public class GalaxyManagerImplTest extends GenericNameManagerImplTestCase<Galaxy
 		coords.add(new Vector.Integer(-34, -98, -78)); // extreme corner #1
 		coords.add(new Vector.Integer(68, 117, -29)); // extreme corner #2
 
-		Vector.Integer size = ((GalaxyManagerImpl) mockManager).calculateSize(coords);
+		Vector.Integer size = GalaxyManagerImpl.calculateSize(coords);
 		assertEquals(xSize, (int) size.getX());
 		assertEquals(ySize, (int) size.getY());
 		assertEquals(zSize, (int) size.getZ());
@@ -213,19 +213,19 @@ public class GalaxyManagerImplTest extends GenericNameManagerImplTestCase<Galaxy
 		coords.add(new Vector.Integer(100, 0, 100));
 		coords.add(new Vector.Integer(-100, 0, 100));
 
-		assertEquals(200, ((GalaxyManagerImpl) mockManager).calculateMaxGap(coords));
+		assertEquals(200, GalaxyManagerImpl.calculateMaxGap(coords));
 
 		coords.add(new Vector.Integer(100, 0, 0));
 
-		assertEquals(200, ((GalaxyManagerImpl) mockManager).calculateMaxGap(coords));
+		assertEquals(200, GalaxyManagerImpl.calculateMaxGap(coords));
 
 		coords.add(new Vector.Integer(1000, 0, 0));
 
-		assertEquals(900, ((GalaxyManagerImpl) mockManager).calculateMaxGap(coords));
+		assertEquals(900, GalaxyManagerImpl.calculateMaxGap(coords));
 
 		coords.add(new Vector.Integer(1000000000, 0, 0)); // test there is no integer overflow
 
-		assertEquals(999999000, ((GalaxyManagerImpl) mockManager).calculateMaxGap(coords));
+		assertEquals(999999000, GalaxyManagerImpl.calculateMaxGap(coords));
 
 	}
 }

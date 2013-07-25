@@ -186,7 +186,7 @@ public class GalaxyManagerImpl extends GenericNameManagerImpl<Galaxy, Long> impl
 	 * @param coords - the list of system coordinates
 	 * @return the size
 	 */
-	protected Vector.Integer calculateSize(List<Vector.Integer> coords)
+	protected static Vector.Integer calculateSize(List<Vector.Integer> coords)
 	{
 		int minX = Integer.MAX_VALUE;
 		int minY = Integer.MAX_VALUE;
@@ -224,7 +224,7 @@ public class GalaxyManagerImpl extends GenericNameManagerImpl<Galaxy, Long> impl
 	 * @param coords - the coords to scan
 	 * @return maxGap
 	 */
-	protected int calculateMaxGap(List<Vector.Integer> coords)
+	protected static int calculateMaxGap(List<Vector.Integer> coords)
 	{
 		long maxGapSquare = 0;
 		long minGapSquare;
