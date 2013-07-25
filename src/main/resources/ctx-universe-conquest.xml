@@ -43,6 +43,7 @@
 	<bean id="galaxyManager" class="com.syncnapsis.data.service.impl.GalaxyManagerImpl">
 		<constructor-arg ref="galaxyDao" />
 		<constructor-arg ref="solarSystemManager" />
+		<property name="calculator" ref="calculator" />
 		<property name="securityManager" ref="securityManager" />
 	</bean>
 

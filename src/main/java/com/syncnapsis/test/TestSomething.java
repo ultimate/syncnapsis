@@ -14,65 +14,83 @@
  */
 package com.syncnapsis.test;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
-import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.StringTokenizer;
 
-import com.syncnapsis.data.model.Player;
-import com.syncnapsis.data.model.base.Identifiable;
+import com.syncnapsis.data.model.help.Vector;
+import com.syncnapsis.data.service.impl.GalaxyManagerImpl;
 import com.syncnapsis.tests.annotations.Untested;
 import com.syncnapsis.utils.FileUtil;
 import com.syncnapsis.utils.IconUtil;
-import com.syncnapsis.utils.ReflectionsUtil;
 
 @Untested
+@SuppressWarnings("unused")
 public class TestSomething
 {
 	public static void main(String[] args) throws Exception
 	{
-		String a = "abc";
-		System.out.println(a);
-		System.out.println(a.replace("a", "1"));
-		System.out.println(a.replace("b", "2"));
-		System.out.println(a.replace("c", "3"));
+		File folder = new File("D:/info/syncnapsis/syncnapsis-examples/syncnapsis-examples-ui-playground/src/main/webapp");
+
+		Map<String, List<Vector<Integer>>> galaxies = new HashMap<String, List<Vector<Integer>>>();
+		List<Vector<Integer>> sectors;
+
+		for(File f : folder.listFiles())
+		{
+			if(f.getName().startsWith("sectors"))
+			{
+				System.out.print(f.getName());
+				sectors = new ArrayList<Vector<Integer>>(100000);
+
+				BufferedReader br = new BufferedReader(new FileReader(f));
+				String line;
+				String nextLine;
+				nextLine = br.readLine();
+				// when checking next line, last line can be skipped
+				while(nextLine != null)
+				{
+					line = nextLine;
+					nextLine = br.readLine();
+					if(!line.startsWith("\t["))
+						continue;
+
+					line = line.substring(2, line.indexOf(']'));
+
+					StringTokenizer st = new StringTokenizer(line, ",");
+					int x = Integer.parseInt(st.nextToken());
+					int y = Integer.parseInt(st.nextToken());
+					int z = Integer.parseInt(st.nextToken());
+					sectors.add(new Vector.Integer(x,y,z));
+				}
+				br.close();
+				
+//				System.out.println(" --> " + sectors.size() + " coords loaded!");
+
+				GalaxyManagerImpl.calculateSize();
+				System.out.println("\t" + sectors.size());
+//				System.out.println("\t" + xSize);
+//				System.out.println("\t" + ySize);
+//				System.out.println("\t" + zSize);
+			}
+		}
 		
-		System.exit(0);
 		
-		createIconFile("ultimate");
-		createIconFile("moronicjoker");
-		createIconFile("X");
-		createIconFile("no");
-		createIconFile("foo");
-		createIconFile("bazz");
-		createIconFile("thing");
-		createIconFile("abcdef");
-		createIconFile("nothing");
-
-		for(int i = 0; i < 20; i++)
-			System.out.println((i * 5) % 7 + 1);
-
-		for(byte b = Byte.MIN_VALUE; b < Byte.MAX_VALUE; b++)
-			System.out.println((b + 256) % 256);
-
-		ReflectionsUtil.getActualTypeArguments(Player.class, Identifiable.class); // warm up
-		long start = System.nanoTime();
-		Type[] t = ReflectionsUtil.getActualTypeArguments(Player.class, Identifiable.class);
-		long end = System.nanoTime();
-		System.out.println(t[0]);
-		System.out.println(end - start);
-
-		Map<Class<?>, Class<?>> idTypes = new HashMap<Class<?>, Class<?>>();
-		idTypes.put(Player.class, (Class<?>) t[0]);
-		idTypes.containsKey(Player.class); // warm up
-		idTypes.get(Player.class); // warm up
-		start = System.nanoTime();
-		idTypes.containsKey(Player.class);
-		Type t1 = idTypes.get(Player.class);
-		end = System.nanoTime();
-		System.out.println(t1);
-		System.out.println(end - start);
+		
+		// createIconFile("ultimate");
+		// createIconFile("moronicjoker");
+		// createIconFile("X");
+		// createIconFile("no");
+		// createIconFile("foo");
+		// createIconFile("bazz");
+		// createIconFile("thing");
+		// createIconFile("abcdef");
+		// createIconFile("nothing");
 	}
 
 	private static void createIconFile(String s) throws IOException

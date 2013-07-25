@@ -14,9 +14,12 @@
  */
 package com.syncnapsis.universe;
 
+import java.util.List;
+
 import com.syncnapsis.data.model.Galaxy;
 import com.syncnapsis.data.model.SolarSystemInfrastructure;
 import com.syncnapsis.data.model.SolarSystemPopulation;
+import com.syncnapsis.data.model.help.Vector;
 
 /**
  * Interface for the calculator service containing the mathematical game logic.
@@ -25,6 +28,23 @@ import com.syncnapsis.data.model.SolarSystemPopulation;
  */
 public interface Calculator
 {
+
+	/**
+	 * Calculate the size of the galaxy from the given list of system coordinates
+	 * 
+	 * @param coords - the list of system coordinates
+	 * @return the size
+	 */
+	public Vector.Integer calculateSize(List<Vector.Integer> coords);
+	
+	/**
+	 * Calculate {@link Galaxy#getMaxGap()}
+	 * 
+	 * @param coords - the coords to scan
+	 * @return maxGap
+	 */
+	public int calculateMaxGap(List<Vector.Integer> coords);
+	
 	/**
 	 * Get the standard travel distance for the given galaxy
 	 * 
@@ -75,4 +95,5 @@ public interface Calculator
 	 * @return the time needed for traveling the whole distance with the given speed in ms
 	 */
 	public long calculateTravelTime(SolarSystemInfrastructure origin, SolarSystemInfrastructure target, int travelSpeed);
+
 }

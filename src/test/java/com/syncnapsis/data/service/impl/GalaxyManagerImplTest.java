@@ -17,7 +17,6 @@ package com.syncnapsis.data.service.impl;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
-import java.util.LinkedList;
 import java.util.List;
 
 import org.jmock.Expectations;
@@ -108,7 +107,7 @@ public class GalaxyManagerImplTest extends GenericNameManagerImplTestCase<Galaxy
 		expected.setName(name);
 		expected.setSeed(seed);
 		expected.setSize(size);
-		expected.setMaxGap(GalaxyManagerImpl.calculateMaxGap(systemCoords));
+		expected.setMaxGap(mockManager.getCalculator().calculateMaxGap(systemCoords));
 
 		mockContext.checking(new Expectations() {
 			{
@@ -188,44 +187,5 @@ public class GalaxyManagerImplTest extends GenericNameManagerImplTestCase<Galaxy
 			assertNotNull(e);
 			assertEquals("not implemented yet", e.getMessage());
 		}
-	}
-
-	public void testCalculateSize() throws Exception
-	{
-		// example size...
-		int xSize = 110;
-		int ySize = 220;
-		int zSize = 50;
-
-		List<Vector.Integer> coords = new LinkedList<Vector.Integer>();
-		coords.add(new Vector.Integer(-34, -98, -78)); // extreme corner #1
-		coords.add(new Vector.Integer(68, 117, -29)); // extreme corner #2
-
-		Vector.Integer size = GalaxyManagerImpl.calculateSize(coords);
-		assertEquals(xSize, (int) size.getX());
-		assertEquals(ySize, (int) size.getY());
-		assertEquals(zSize, (int) size.getZ());
-	}
-
-	public void testCalculateMaxGap() throws Exception
-	{
-		List<Vector.Integer> coords = new LinkedList<Vector.Integer>();
-		coords.add(new Vector.Integer(100, 0, 100));
-		coords.add(new Vector.Integer(-100, 0, 100));
-
-		assertEquals(200, GalaxyManagerImpl.calculateMaxGap(coords));
-
-		coords.add(new Vector.Integer(100, 0, 0));
-
-		assertEquals(200, GalaxyManagerImpl.calculateMaxGap(coords));
-
-		coords.add(new Vector.Integer(1000, 0, 0));
-
-		assertEquals(900, GalaxyManagerImpl.calculateMaxGap(coords));
-
-		coords.add(new Vector.Integer(1000000000, 0, 0)); // test there is no integer overflow
-
-		assertEquals(999999000, GalaxyManagerImpl.calculateMaxGap(coords));
-
 	}
 }

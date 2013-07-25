@@ -14,6 +14,9 @@
  */
 package com.syncnapsis.universe;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import org.jmock.Expectations;
 
 import com.syncnapsis.constants.UniverseConquestConstants;
@@ -21,6 +24,7 @@ import com.syncnapsis.data.model.Galaxy;
 import com.syncnapsis.data.model.SolarSystem;
 import com.syncnapsis.data.model.SolarSystemInfrastructure;
 import com.syncnapsis.data.model.SolarSystemPopulation;
+import com.syncnapsis.data.model.help.Vector;
 import com.syncnapsis.data.service.ParameterManager;
 import com.syncnapsis.tests.LoggerTestCase;
 
@@ -178,5 +182,44 @@ public class CalculatorImplTest extends LoggerTestCase
 	public void testGetMaxPopulationExponent() throws Exception
 	{
 		assertEquals(12.0, calculator.getMaxPopulationExponent());
+	}
+
+	public void testCalculateSize() throws Exception
+	{
+		// example size...
+		int xSize = 110;
+		int ySize = 220;
+		int zSize = 50;
+
+		List<Vector.Integer> coords = new LinkedList<Vector.Integer>();
+		coords.add(new Vector.Integer(-34, -98, -78)); // extreme corner #1
+		coords.add(new Vector.Integer(68, 117, -29)); // extreme corner #2
+
+		Vector.Integer size = calculator.calculateSize(coords);
+		assertEquals(xSize, (int) size.getX());
+		assertEquals(ySize, (int) size.getY());
+		assertEquals(zSize, (int) size.getZ());
+	}
+
+	public void testCalculateMaxGap() throws Exception
+	{
+		List<Vector.Integer> coords = new LinkedList<Vector.Integer>();
+		coords.add(new Vector.Integer(100, 0, 100));
+		coords.add(new Vector.Integer(-100, 0, 100));
+
+		assertEquals(200, calculator.calculateMaxGap(coords));
+
+		coords.add(new Vector.Integer(100, 0, 0));
+
+		assertEquals(200, calculator.calculateMaxGap(coords));
+
+		coords.add(new Vector.Integer(1000, 0, 0));
+
+		assertEquals(900, calculator.calculateMaxGap(coords));
+
+		coords.add(new Vector.Integer(1000000000, 0, 0)); // test there is no integer overflow
+
+		assertEquals(999999000, calculator.calculateMaxGap(coords));
+
 	}
 }

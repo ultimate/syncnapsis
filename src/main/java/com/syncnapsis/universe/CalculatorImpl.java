@@ -14,6 +14,8 @@
  */
 package com.syncnapsis.universe;
 
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -22,7 +24,9 @@ import com.syncnapsis.data.model.Galaxy;
 import com.syncnapsis.data.model.Parameter;
 import com.syncnapsis.data.model.SolarSystemInfrastructure;
 import com.syncnapsis.data.model.SolarSystemPopulation;
+import com.syncnapsis.data.model.help.Vector;
 import com.syncnapsis.data.service.ParameterManager;
+import com.syncnapsis.utils.MathUtil;
 
 /**
  * Universe conquest {@link Calculator} implementation
@@ -49,6 +53,82 @@ public class CalculatorImpl implements Calculator
 	{
 		super();
 		this.parameterManager = parameterManager;
+	}
+
+	/**
+	 * The number of digits to ceil the size to.
+	 * 
+	 * @see MathUtil#ceil2(int, int)
+	 */
+	private static final int	SIZE_DIGITS	= 2;
+
+	/*
+	 * (non-Javadoc)
+	 * @see com.syncnapsis.universe.Calculator#calculateSize(java.util.List)
+	 */
+	@Override
+	public Vector.Integer calculateSize(List<Vector.Integer> coords)
+	{
+		int minX = Integer.MAX_VALUE;
+		int minY = Integer.MAX_VALUE;
+		int minZ = Integer.MAX_VALUE;
+		int maxX = Integer.MIN_VALUE;
+		int maxY = Integer.MIN_VALUE;
+		int maxZ = Integer.MIN_VALUE;
+
+		for(Vector.Integer c : coords)
+		{
+			if(c.getX() < minX)
+				minX = c.getX();
+			if(c.getY() < minY)
+				minY = c.getY();
+			if(c.getZ() < minZ)
+				minZ = c.getZ();
+			if(c.getX() > maxX)
+				maxX = c.getX();
+			if(c.getY() > maxY)
+				maxY = c.getY();
+			if(c.getZ() > maxZ)
+				maxZ = c.getZ();
+		}
+
+		int sizeX = MathUtil.ceil2(maxX - minX + 1, SIZE_DIGITS);
+		int sizeY = MathUtil.ceil2(maxY - minY + 1, SIZE_DIGITS);
+		int sizeZ = MathUtil.ceil2(maxZ - minZ + 1, SIZE_DIGITS);
+
+		return new Vector.Integer(sizeX, sizeY, sizeZ);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see com.syncnapsis.universe.Calculator#calculateMaxGap(java.util.List)
+	 */
+	@Override
+	public int calculateMaxGap(List<Vector.Integer> coords)
+	{
+		long maxGapSquare = 0;
+		long minGapSquare;
+		long gapSquare;
+		for(Vector.Integer c1 : coords)
+		{
+			minGapSquare = Long.MAX_VALUE;
+			for(Vector.Integer c2 : coords)
+			{
+				if(c2 == c1)
+					continue;
+				// calculate the square only to avoid sqrt
+				//@formatter:off
+				gapSquare = ((long) (c1.getX() - c2.getX())) * ((long) (c1.getX() - c2.getX())) + 
+							((long) (c1.getY() - c2.getY())) * ((long) (c1.getY() - c2.getY())) +
+							((long) (c1.getZ() - c2.getZ())) * ((long) (c1.getZ() - c2.getZ()));
+				//@formatter:on
+				if(gapSquare < minGapSquare)
+					minGapSquare = gapSquare;
+			}
+			if(minGapSquare > maxGapSquare)
+				maxGapSquare = minGapSquare;
+		}
+		return (int) Math.ceil(Math.sqrt(maxGapSquare));
 	}
 
 	/*
@@ -109,7 +189,7 @@ public class CalculatorImpl implements Calculator
 
 		if(pop > origin.getPopulation())
 			pop = origin.getPopulation();
-		
+
 		return (long) Math.floor(pop);
 	}
 
@@ -127,8 +207,7 @@ public class CalculatorImpl implements Calculator
 			throw new IllegalArgumentException("travelSpeed out of bounds: [" + minSpeed + ", " + maxSpeed + "]");
 
 		int matchSpeed = origin.getMatch().getSpeed();
-		
-		
+
 		// TODO Auto-generated method stub
 		return 0;
 	}

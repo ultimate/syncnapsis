@@ -26,8 +26,8 @@ import com.syncnapsis.data.model.help.Vector;
 import com.syncnapsis.data.service.GalaxyManager;
 import com.syncnapsis.data.service.SolarSystemManager;
 import com.syncnapsis.security.BaseGameManager;
+import com.syncnapsis.universe.Calculator;
 import com.syncnapsis.utils.HibernateUtil;
-import com.syncnapsis.utils.MathUtil;
 import com.syncnapsis.utils.data.ExtendedRandom;
 
 /**
@@ -38,13 +38,6 @@ import com.syncnapsis.utils.data.ExtendedRandom;
 public class GalaxyManagerImpl extends GenericNameManagerImpl<Galaxy, Long> implements GalaxyManager, InitializingBean
 {
 	/**
-	 * The number of digits to ceil the size to.
-	 * 
-	 * @see MathUtil#ceil2(int, int)
-	 */
-	private static final int		SIZE_DIGITS	= 2;
-
-	/**
 	 * GalaxyDao for database access
 	 */
 	protected GalaxyDao				galaxyDao;
@@ -53,6 +46,8 @@ public class GalaxyManagerImpl extends GenericNameManagerImpl<Galaxy, Long> impl
 	 * The SolarSystemManager
 	 */
 	protected SolarSystemManager	solarSystemManager;
+
+	protected Calculator			calculator;
 
 	/**
 	 * The SecurityManager (BaseGameManager)
@@ -79,7 +74,28 @@ public class GalaxyManagerImpl extends GenericNameManagerImpl<Galaxy, Long> impl
 	@Override
 	public void afterPropertiesSet() throws Exception
 	{
+		Assert.notNull(calculator, "calculator must not be null!");
 		Assert.notNull(securityManager, "securityManager must not be null!");
+	}
+
+	/**
+	 * The universe conquenst {@link Calculator}
+	 * 
+	 * @return calculator
+	 */
+	public Calculator getCalculator()
+	{
+		return calculator;
+	}
+
+	/**
+	 * The universe conquenst {@link Calculator}
+	 * 
+	 * @param calculator - the Calculator
+	 */
+	public void setCalculator(Calculator calculator)
+	{
+		this.calculator = calculator;
 	}
 
 	/**
@@ -120,7 +136,7 @@ public class GalaxyManagerImpl extends GenericNameManagerImpl<Galaxy, Long> impl
 	@Override
 	public Galaxy create(String name, List<Vector.Integer> systemCoords, List<String> systemNames, Long seed)
 	{
-		return create(name, systemCoords, systemNames, seed, calculateSize(systemCoords));
+		return create(name, systemCoords, systemNames, seed, calculator.calculateSize(systemCoords));
 	}
 
 	/*
@@ -163,7 +179,7 @@ public class GalaxyManagerImpl extends GenericNameManagerImpl<Galaxy, Long> impl
 		galaxy.setName(name);
 		galaxy.setSeed(seed);
 		galaxy.setSize(size);
-		galaxy.setMaxGap(calculateMaxGap(systemCoords));
+		galaxy.setMaxGap(calculator.calculateMaxGap(systemCoords));
 
 		galaxy = save(galaxy);
 
@@ -178,76 +194,5 @@ public class GalaxyManagerImpl extends GenericNameManagerImpl<Galaxy, Long> impl
 		HibernateUtil.currentSession().flush();
 
 		return get(galaxy.getId());
-	}
-
-	/**
-	 * Calculate the size of the galaxy from the given list of system coordinates
-	 * 
-	 * @param coords - the list of system coordinates
-	 * @return the size
-	 */
-	protected static Vector.Integer calculateSize(List<Vector.Integer> coords)
-	{
-		int minX = Integer.MAX_VALUE;
-		int minY = Integer.MAX_VALUE;
-		int minZ = Integer.MAX_VALUE;
-		int maxX = Integer.MIN_VALUE;
-		int maxY = Integer.MIN_VALUE;
-		int maxZ = Integer.MIN_VALUE;
-
-		for(Vector.Integer c : coords)
-		{
-			if(c.getX() < minX)
-				minX = c.getX();
-			if(c.getY() < minY)
-				minY = c.getY();
-			if(c.getZ() < minZ)
-				minZ = c.getZ();
-			if(c.getX() > maxX)
-				maxX = c.getX();
-			if(c.getY() > maxY)
-				maxY = c.getY();
-			if(c.getZ() > maxZ)
-				maxZ = c.getZ();
-		}
-
-		int sizeX = MathUtil.ceil2(maxX - minX + 1, SIZE_DIGITS);
-		int sizeY = MathUtil.ceil2(maxY - minY + 1, SIZE_DIGITS);
-		int sizeZ = MathUtil.ceil2(maxZ - minZ + 1, SIZE_DIGITS);
-
-		return new Vector.Integer(sizeX, sizeY, sizeZ);
-	}
-
-	/**
-	 * Calculate {@link Galaxy#getMaxGap()}
-	 * 
-	 * @param coords - the coords to scan
-	 * @return maxGap
-	 */
-	protected static int calculateMaxGap(List<Vector.Integer> coords)
-	{
-		long maxGapSquare = 0;
-		long minGapSquare;
-		long gapSquare;
-		for(Vector.Integer c1 : coords)
-		{
-			minGapSquare = Long.MAX_VALUE;
-			for(Vector.Integer c2 : coords)
-			{
-				if(c2 == c1)
-					continue;
-				// calculate the square only to avoid sqrt
-				//@formatter:off
-				gapSquare = ((long) (c1.getX() - c2.getX())) * ((long) (c1.getX() - c2.getX())) + 
-							((long) (c1.getY() - c2.getY())) * ((long) (c1.getY() - c2.getY())) +
-							((long) (c1.getZ() - c2.getZ())) * ((long) (c1.getZ() - c2.getZ()));
-				//@formatter:on
-				if(gapSquare < minGapSquare)
-					minGapSquare = gapSquare;
-			}
-			if(minGapSquare > maxGapSquare)
-				maxGapSquare = minGapSquare;
-		}
-		return (int) Math.ceil(Math.sqrt(maxGapSquare));
 	}
 }
