@@ -227,6 +227,39 @@ public class ExtendedRandomTest extends LoggerTestCase
 		assertEquals(1, r);
 	}
 
+	public void testNextDouble() throws Exception
+	{
+		double min, max, r;
+
+		// min < max
+		for(int i = -100; i <= 100; i++)
+		{
+			min = i - (int) (Math.random() * 20);
+			max = i + (int) (Math.random() * 20);
+			r = random.nextDouble(min, max);
+			assertTrue(r >= min);
+			assertTrue(r <= max);
+		}
+		// min > max (swapped)
+		for(int i = -100; i <= 100; i++)
+		{
+			max = i - (int) (Math.random() * 20);
+			min = i + (int) (Math.random() * 20);
+			r = random.nextDouble(min, max);
+			assertTrue(r >= max);
+			assertTrue(r <= min);
+		}
+
+		r = random.nextDouble(-1, -1);
+		assertEquals(-1.0, r);
+
+		r = random.nextDouble(0, 0);
+		assertEquals(0.0, r);
+
+		r = random.nextDouble(1, 1);
+		assertEquals(1.0, r);
+	}
+
 	public void testNextDate() throws Exception
 	{
 		Date from, until;

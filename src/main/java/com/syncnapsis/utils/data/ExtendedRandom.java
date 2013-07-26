@@ -228,9 +228,9 @@ public class ExtendedRandom extends Random
 		if(min == max)
 			return min;
 		if(min < max)
-			return ((long) (nextDouble() * (max - min + 1)) + min);
+			return ((nextDouble() * (max - min)) + min);
 		else
-			return ((long) (nextDouble() * (min - max + 1)) + max);
+			return ((nextDouble() * (min - max)) + max);
 	}
 
 	/**
