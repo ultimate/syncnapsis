@@ -204,4 +204,34 @@ public class StringUtilTest extends LoggerTestCase
 		assertEquals(2, StringUtil.countOccurrences(s, "aba", true));
 		assertEquals(1, StringUtil.countOccurrences(s, "aba", false));
 	}
+	
+	@SuppressWarnings("unused")
+	public void testToString() throws Exception
+	{
+		Object o = new Object() {
+			private int x = 5;
+			private Object member = new Object() {
+				private String s = "foo";
+			};
+		};
+
+		String oS_0 = StringUtil.toString(o, 0);
+		String oS_1 = StringUtil.toString(o, 1);
+		String oS_2 = StringUtil.toString(o, 2);
+
+		String oS = o.toString();
+		String memberS = ReflectionsUtil.getField(o, "member").toString();
+		
+		logger.debug(oS);
+		logger.debug(memberS);
+		logger.debug(oS_0);
+		logger.debug(oS_1);
+		logger.debug(oS_2);
+		
+		String cls = StringUtilTest.class.getName();
+		
+		assertEquals(oS + "[x=5, member=" + memberS + "]", oS_0);
+		assertEquals(oS + "[x=5, member=" + memberS + "[s=\"foo\"]]", oS_1);
+		assertEquals(oS_1, oS_2);
+	}
 }

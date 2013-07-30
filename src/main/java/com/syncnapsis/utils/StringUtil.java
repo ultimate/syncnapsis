@@ -16,13 +16,15 @@ package com.syncnapsis.utils;
 
 import java.security.MessageDigest;
 import java.text.MessageFormat;
+import java.util.List;
 import java.util.Locale;
-
-import com.syncnapsis.enums.EnumLocale;
 
 import org.dbunit.util.Base64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.syncnapsis.enums.EnumLocale;
+import com.syncnapsis.utils.reflections.Field;
 
 /**
  * Utility-Class for String operations like password encoding or message formatting.
@@ -365,5 +367,60 @@ public abstract class StringUtil
 				index++;
 		}
 		return count;
+	}
+
+	/**
+	 * Genericly convert an Object into a String containing all fields and their values.
+	 * 
+	 * @param o - the object to convert
+	 * @param depth - the depth for recursive invocation of this method
+	 * @return the String representation
+	 */
+	public static String toString(Object o, int depth)
+	{
+		List<Field> fields = ReflectionsUtil.findFields(o.getClass());
+		StringBuilder sb = new StringBuilder();
+		sb.append(o.getClass().getName());
+		sb.append("@" + Integer.toHexString(o.hashCode()));
+		sb.append("[");
+		Object val;
+		boolean first = true;
+		for(Field f : fields)
+		{
+			if(first)
+				first = false;
+			else
+				sb.append(", ");
+			sb.append(f.getName());
+			sb.append("=");
+			try
+			{
+				val = ReflectionsUtil.getField(o, f.getName());
+
+				if(val != null && depth > 0)
+				{
+					if(!ClassUtil.isNumber(f.getField().getType()) && !String.class.isAssignableFrom(f.getField().getType())
+							&& !f.getField().getType().isPrimitive() && !Boolean.class.isAssignableFrom(f.getField().getType())
+							&& !Character.class.isAssignableFrom(f.getField().getType()))
+						val = toString(val, depth - 1);
+				}
+			}
+			catch(IllegalAccessException e)
+			{
+				val = "/inaccessible/";
+			}
+			catch(NoSuchFieldException e)
+			{
+				logger.error(e.getMessage());
+				val = "/no-such-field/";
+			}
+
+			if(String.class.isAssignableFrom(f.getField().getType()))
+				sb.append("\"" + val + "\"");
+			else
+				sb.append(val);
+		}
+		sb.append("]");
+		return sb.toString();
 	}
 }
