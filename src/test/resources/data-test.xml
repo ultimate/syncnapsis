@@ -72,13 +72,13 @@
 		<row>
 			<value description="id">109</value>
 			<value description="name">match.speed.min</value>
-			<value description="value">100</value>
+			<value description="value">100</value> <!-- TODO -->
 			<value description="version">1</value>
 		</row>
 		<row>
 			<value description="id">110</value>
 			<value description="name">match.speed.max</value>
-			<value description="value">100</value>
+			<value description="value">100</value> <!-- TODO -->
 			<value description="version">1</value>
 		</row>
 	</table>

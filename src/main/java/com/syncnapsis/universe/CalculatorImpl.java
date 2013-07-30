@@ -109,6 +109,7 @@ public class CalculatorImpl implements Calculator
 		long maxGapSquare = 0;
 		long minGapSquare;
 		long gapSquare;
+		long sqX, sqY, sqZ, dX, dY, dZ;
 		for(Vector.Integer c1 : coords)
 		{
 			minGapSquare = Long.MAX_VALUE;
@@ -116,12 +117,22 @@ public class CalculatorImpl implements Calculator
 			{
 				if(c2 == c1)
 					continue;
+				dX = c1.getX() - c2.getX();
+				sqX = dX*dX;
+				if(sqX > minGapSquare)
+					continue;
+				dY = c1.getY() - c2.getY();
+				sqY = dY*dY;
+				if(sqY > minGapSquare)
+					continue;
+				dZ = c1.getZ() - c2.getZ();
+				sqZ = dZ*dZ;
+				if(sqZ > minGapSquare)
+					continue;
+				
 				// calculate the square only to avoid sqrt
-				//@formatter:off
-				gapSquare = ((long) (c1.getX() - c2.getX())) * ((long) (c1.getX() - c2.getX())) + 
-							((long) (c1.getY() - c2.getY())) * ((long) (c1.getY() - c2.getY())) +
-							((long) (c1.getZ() - c2.getZ())) * ((long) (c1.getZ() - c2.getZ()));
-				//@formatter:on
+				gapSquare = sqX + sqY + sqZ;
+				
 				if(gapSquare < minGapSquare)
 					minGapSquare = gapSquare;
 			}
@@ -141,6 +152,7 @@ public class CalculatorImpl implements Calculator
 		double avgGap = 0;
 		long minGapSquare;
 		long gapSquare;
+		long sqX, sqY, sqZ, dX, dY, dZ;
 		for(Vector.Integer c1 : coords)
 		{
 			minGapSquare = Long.MAX_VALUE;
@@ -148,12 +160,22 @@ public class CalculatorImpl implements Calculator
 			{
 				if(c2 == c1)
 					continue;
+				dX = c1.getX() - c2.getX();
+				sqX = dX*dX;
+				if(sqX > minGapSquare)
+					continue;
+				dY = c1.getY() - c2.getY();
+				sqY = dY*dY;
+				if(sqY > minGapSquare)
+					continue;
+				dZ = c1.getZ() - c2.getZ();
+				sqZ = dZ*dZ;
+				if(sqZ > minGapSquare)
+					continue;
+				
 				// calculate the square only to avoid sqrt
-				//@formatter:off
-				gapSquare = ((long) (c1.getX() - c2.getX())) * ((long) (c1.getX() - c2.getX())) + 
-							((long) (c1.getY() - c2.getY())) * ((long) (c1.getY() - c2.getY())) +
-							((long) (c1.getZ() - c2.getZ())) * ((long) (c1.getZ() - c2.getZ()));
-				//@formatter:on
+				gapSquare = sqX + sqY + sqZ;
+				
 				if(gapSquare < minGapSquare)
 					minGapSquare = gapSquare;
 			}

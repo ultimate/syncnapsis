@@ -25,8 +25,9 @@ import java.util.Map;
 import java.util.StringTokenizer;
 
 import com.syncnapsis.data.model.help.Vector;
-import com.syncnapsis.data.service.impl.GalaxyManagerImpl;
 import com.syncnapsis.tests.annotations.Untested;
+import com.syncnapsis.universe.Calculator;
+import com.syncnapsis.universe.CalculatorImpl;
 import com.syncnapsis.utils.FileUtil;
 import com.syncnapsis.utils.IconUtil;
 
@@ -36,18 +37,29 @@ public class TestSomething
 {
 	public static void main(String[] args) throws Exception
 	{
+		final Calculator calculator = new CalculatorImpl(null); // don't need ParameterManager
+
 		File folder = new File("D:/info/syncnapsis/syncnapsis-examples/syncnapsis-examples-ui-playground/src/main/webapp");
 
-		Map<String, List<Vector<Integer>>> galaxies = new HashMap<String, List<Vector<Integer>>>();
-		List<Vector<Integer>> sectors;
+		Map<String, List<Vector.Integer>> galaxies = new HashMap<String, List<Vector.Integer>>();
+		List<Vector.Integer> sectors;
+		Vector.Integer size;
+		
+		StringBuilder output = new StringBuilder();
 
+		long start;
+		CalculationThread<Integer> maxGapT;
+		CalculationThread<Integer> avgGapT;
 		for(File f : folder.listFiles())
 		{
 			if(f.getName().startsWith("sectors"))
 			{
 				System.out.print(f.getName());
-				sectors = new ArrayList<Vector<Integer>>(100000);
+				output.append(f.getName());
+				
+				sectors = new ArrayList<Vector.Integer>(100000);
 
+				start = System.currentTimeMillis();
 				BufferedReader br = new BufferedReader(new FileReader(f));
 				String line;
 				String nextLine;
@@ -66,22 +78,44 @@ public class TestSomething
 					int x = Integer.parseInt(st.nextToken());
 					int y = Integer.parseInt(st.nextToken());
 					int z = Integer.parseInt(st.nextToken());
-					sectors.add(new Vector.Integer(x,y,z));
+					sectors.add(new Vector.Integer(x, y, z));
 				}
 				br.close();
-				
-//				System.out.println(" --> " + sectors.size() + " coords loaded!");
 
-				GalaxyManagerImpl.calculateSize();
-				System.out.println("\t" + sectors.size());
-//				System.out.println("\t" + xSize);
-//				System.out.println("\t" + ySize);
-//				System.out.println("\t" + zSize);
+				size = calculator.calculateSize(sectors);
+				output.append("\t" + sectors.size());
+				output.append("\t" + size.getX());
+				output.append("\t" + size.getY());
+				output.append("\t" + size.getZ());
+
+//				if(sectors.size() < 30000)
+				{
+					final List<Vector.Integer> s = sectors;
+					maxGapT = new CalculationThread<Integer>() {
+						protected Integer calc()
+						{
+							return calculator.calculateMaxGap(s);
+						}
+					};
+					avgGapT = new CalculationThread<Integer>() {
+						protected Integer calc()
+						{
+							return calculator.calculateAvgGap(s);
+						}
+					};
+					maxGapT.start();
+					avgGapT.start();
+					output.append("\t" + maxGapT.getResult());
+					output.append("\t" + avgGapT.getResult());
+				}
+
+				output.append("\t(" + (System.currentTimeMillis() - start) + "ms)\n");
+				System.out.println("\t(" + (System.currentTimeMillis() - start) + "ms)\n");
 			}
 		}
 		
-		
-		
+		FileUtil.writeFile(new File(folder.getAbsolutePath() + "/sector-stats.txt"), output.toString());
+
 		// createIconFile("ultimate");
 		// createIconFile("moronicjoker");
 		// createIconFile("X");
@@ -96,5 +130,24 @@ public class TestSomething
 	private static void createIconFile(String s) throws IOException
 	{
 		FileUtil.writeFile(new File(s + ".svg"), IconUtil.createIcon(s));
+	}
+
+	private static abstract class CalculationThread<T> extends Thread
+	{
+		protected T	result;
+
+		@Override
+		public void run()
+		{
+			this.result = this.calc();
+		}
+
+		protected abstract T calc();
+
+		public T getResult() throws InterruptedException
+		{
+			this.join();
+			return this.result;
+		}
 	}
 }

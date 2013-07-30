@@ -35,6 +35,7 @@ import com.syncnapsis.security.BaseGameManager;
 import com.syncnapsis.security.accesscontrol.SolarSystemPopulationAccessController;
 import com.syncnapsis.universe.Calculator;
 import com.syncnapsis.utils.MathUtil;
+import com.syncnapsis.utils.StringUtil;
 import com.syncnapsis.utils.data.ExtendedRandom;
 
 /**
@@ -207,8 +208,7 @@ public class SolarSystemPopulationManagerImpl extends GenericManagerImpl<SolarSy
 	public SolarSystemPopulation spinoff(SolarSystemPopulation origin, SolarSystemInfrastructure targetInfrastructure, int travelSpeed,
 			long population, EnumPopulationPriority attackPriority, EnumPopulationPriority buildPriority)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return spinoff(origin, targetInfrastructure, travelSpeed, population, attackPriority, buildPriority, false);
 	}
 
 	/*
@@ -221,13 +221,38 @@ public class SolarSystemPopulationManagerImpl extends GenericManagerImpl<SolarSy
 	public SolarSystemPopulation resettle(SolarSystemPopulation origin, SolarSystemInfrastructure targetInfrastructure, int travelSpeed,
 			boolean exodus)
 	{
+		return spinoff(origin, targetInfrastructure, travelSpeed, origin.getPopulation(), null, null, exodus);
+	}
+
+	/**
+	 * Internal method being called within
+	 * {@link SolarSystemPopulationManagerImpl#spinoff(SolarSystemPopulation, SolarSystemInfrastructure, int, long, EnumPopulationPriority, EnumPopulationPriority)}
+	 * and
+	 * {@link SolarSystemPopulationManagerImpl#resettle(SolarSystemPopulation, SolarSystemInfrastructure, int, boolean)}
+	 * 
+	 * 
+	 * @param origin - the origin population
+	 * @param targetInfrastructure - the infrastruture to travel to
+	 * @param travelSpeed - the speed to travel with (in percent)
+	 * @param population - the population for the spinoff
+	 * @param attackPriority - the attack priority (if null the origins priority will be used)
+	 * @param buildPriority - the build priority (if null the origins priority will be used)
+	 * @param exodus - perform exodus on the origin system
+	 * @return the newly created SolarSystemPopulation entity
+	 */
+	protected SolarSystemPopulation spinoff(SolarSystemPopulation origin, SolarSystemInfrastructure targetInfrastructure, int travelSpeed,
+			long population, EnumPopulationPriority attackPriority, EnumPopulationPriority buildPriority, boolean exodus)
+	{
 		Date now = new Date(securityManager.getTimeProvider().get());
 
 		if(exodus)
 		{
+			if(population != origin.getPopulation())
+				throw new IllegalArgumentException("exodus requires all population to be moved away!");
+
 			// check if exodus is allowed (only if home population)
 			SolarSystemPopulation homePopulation = getHomePopulation(origin.getInfrastructure());
-			if(homePopulation != null && !origin.getId().equals(homePopulation.getId()))
+			if(!origin.getId().equals(homePopulation.getId()))
 				throw new IllegalArgumentException("exodus only allowed for home population!");
 		}
 
@@ -237,28 +262,36 @@ public class SolarSystemPopulationManagerImpl extends GenericManagerImpl<SolarSy
 		if(dist > maxDist)
 			throw new IllegalArgumentException("travel exceeds max distance!");
 
-		origin.setDestructionDate(now);
-		origin.setDestructionType(EnumDestructionType.givenUp);
+		SolarSystemPopulation spinoff = new SolarSystemPopulation();
+		spinoff.setActivated(true);
+		spinoff.setAttackPriority(attackPriority != null ? attackPriority : origin.getAttackPriority());
+		spinoff.setBuildPriority(buildPriority != null ? buildPriority : origin.getBuildPriority());
+		spinoff.setDestructionDate(null);
+		spinoff.setDestructionType(null);
+		spinoff.setInfrastructure(targetInfrastructure);
+		spinoff.setOrigin(origin);
+		spinoff.setOriginationDate(now);
+		spinoff.setParticipant(origin.getParticipant());
+		spinoff.setPopulation(population);
+		spinoff.setTravelProgress(0.0);
+		spinoff.setTravelProgressDate(now);
+		spinoff.setTravelSpeed(travelSpeed);
 
-		save(origin);
+		if(exodus)
+		{
+			spinoff.setStoredInfrastructure(origin.getInfrastructure().getInfrastructure() / 2);
+			origin.getInfrastructure().setInfrastructure(0);
+			solarSystemInfrastructureManager.save(origin.getInfrastructure());
+		}
+		
+		origin.setPopulation(origin.getPopulation() - population);
+		logger.debug("origin to be saved = " + StringUtil.toString(origin, 0));
+		if(origin.getPopulation() <= 0)
+			destroy(origin, EnumDestructionType.givenUp, now); // will perform save
+		else
+			save(origin);
 
-		SolarSystemPopulation resettled = new SolarSystemPopulation();
-		resettled.setActivated(true);
-		resettled.setAttackPriority(origin.getAttackPriority());
-		resettled.setBuildPriority(origin.getBuildPriority());
-		resettled.setDestructionDate(null);
-		resettled.setDestructionType(null);
-		resettled.setInfrastructure(targetInfrastructure);
-		resettled.setOrigin(origin);
-		resettled.setOriginationDate(now);
-		resettled.setParticipant(origin.getParticipant());
-		resettled.setPopulation(origin.getPopulation());
-		resettled.setStoredInfrastructure(exodus ? origin.getInfrastructure().getInfrastructure() / 2 : 0);
-		resettled.setTravelProgress(0.0);
-		resettled.setTravelProgressDate(now);
-		resettled.setTravelSpeed(travelSpeed);
-
-		return updateTravelSpeed(resettled, travelSpeed); // will perform save
+		return updateTravelSpeed(spinoff, travelSpeed, now); // will perform save
 	}
 
 	/*
@@ -368,7 +401,7 @@ public class SolarSystemPopulationManagerImpl extends GenericManagerImpl<SolarSy
 	protected SolarSystemPopulation updateTravelSpeed(SolarSystemPopulation population, int travelSpeed, Date speedChangeDate)
 	{
 		double newProgress;
-		if(speedChangeDate.after(population.getColonizationDate()))
+		if(population.getColonizationDate() != null && !speedChangeDate.before(population.getColonizationDate()))
 		{
 			newProgress = 1.0;
 			speedChangeDate = population.getColonizationDate();
@@ -376,7 +409,8 @@ public class SolarSystemPopulationManagerImpl extends GenericManagerImpl<SolarSy
 		}
 		else
 		{
-			long travelTime = calculator.calculateTravelTime(population.getOrigin().getInfrastructure(), population.getInfrastructure(), travelSpeed);
+			long travelTime = calculator.calculateTravelTime(population.getOrigin().getInfrastructure(), population.getInfrastructure(),
+					population.getTravelSpeed());
 			long timeTraveled = speedChangeDate.getTime() - population.getTravelProgressDate().getTime();
 			double percentTraveled = timeTraveled / (double) travelTime;
 			newProgress = population.getTravelProgress() + percentTraveled;
@@ -390,6 +424,7 @@ public class SolarSystemPopulationManagerImpl extends GenericManagerImpl<SolarSy
 		population.setTravelProgressDate(speedChangeDate);
 		population.setTravelSpeed(travelSpeed);
 
+		logger.debug("saving          =" + StringUtil.toString(population, 0));
 		return save(population);
 	}
 
