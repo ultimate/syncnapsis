@@ -380,7 +380,8 @@ public class MatchManagerImplTest extends GenericNameManagerImplTestCase<Match, 
 	public void testPerformStartMatch() throws Exception
 	{
 		final SolarSystemPopulationManager mockSolarSystemPopulationManager = mockContext.mock(SolarSystemPopulationManager.class);
-		MatchManagerImpl mockManager = new MatchManagerImpl(mockDao, galaxyManager, participantManager, mockSolarSystemPopulationManager,
+		final ParticipantManager mockParticipantManager = mockContext.mock(ParticipantManager.class);
+		MatchManagerImpl mockManager = new MatchManagerImpl(mockDao, galaxyManager, mockParticipantManager, mockSolarSystemPopulationManager,
 				solarSystemInfrastructureManager, parameterManager);
 		mockManager.setSecurityManager(((MatchManagerImpl) this.mockManager).getSecurityManager());
 
@@ -425,7 +426,7 @@ public class MatchManagerImplTest extends GenericNameManagerImplTestCase<Match, 
 		});
 		mockContext.checking(new Expectations() {
 			{
-				exactly(match.getParticipants().size() - 1).of(mockSolarSystemPopulationManager).randomSelectStartSystems(
+				exactly(match.getParticipants().size() - 1).of(mockParticipantManager).randomSelectStartSystems(
 						with(any(Participant.class)), with(equal(random)));
 				will(returnValue(populations));
 			}
@@ -468,7 +469,7 @@ public class MatchManagerImplTest extends GenericNameManagerImplTestCase<Match, 
 		});
 		mockContext.checking(new Expectations() {
 			{
-				exactly(match.getParticipants().size() - 1).of(mockSolarSystemPopulationManager).randomSelectStartSystems(
+				exactly(match.getParticipants().size() - 1).of(mockParticipantManager).randomSelectStartSystems(
 						with(any(Participant.class)), with(equal(random)));
 				will(returnValue(populations));
 			}
@@ -509,7 +510,7 @@ public class MatchManagerImplTest extends GenericNameManagerImplTestCase<Match, 
 		});
 		mockContext.checking(new Expectations() {
 			{
-				exactly(match.getParticipants().size() - 1).of(mockSolarSystemPopulationManager).randomSelectStartSystems(
+				exactly(match.getParticipants().size() - 1).of(mockParticipantManager).randomSelectStartSystems(
 						with(any(Participant.class)), with(equal(random)));
 				will(returnValue(populations));
 			}

@@ -17,12 +17,10 @@ package com.syncnapsis.data.service;
 import java.util.Date;
 import java.util.List;
 
-import com.syncnapsis.data.model.Participant;
 import com.syncnapsis.data.model.SolarSystemInfrastructure;
 import com.syncnapsis.data.model.SolarSystemPopulation;
 import com.syncnapsis.enums.EnumDestructionType;
 import com.syncnapsis.enums.EnumPopulationPriority;
-import com.syncnapsis.utils.data.ExtendedRandom;
 
 /**
  * Manager-Interface for access to SolarSystemPopulation.
@@ -47,28 +45,6 @@ public interface SolarSystemPopulationManager extends GenericManager<SolarSystem
 	 * @return the list of SolarSystemPopulations
 	 */
 	public List<SolarSystemPopulation> getByMatch(long matchId);
-
-	/**
-	 * Create a new SolarSystemPopulation for a start system selected by the current player as a
-	 * participant. If a population already exists for the given infrastructure it will be updated
-	 * with the given population or even be deleted, if the update value is 0.
-	 * 
-	 * @param infrastructure - the SolarSystem represented by the it's SolarSystemInfrastructure
-	 * @param population - the population for the SolarSystem
-	 * @return the newly created SolarSystemPopulation entity
-	 */
-	public SolarSystemPopulation selectStartSystem(SolarSystemInfrastructure infrastructure, long population);
-
-	/**
-	 * Randomly create all required start systems as SolarSystemPopulations for the given
-	 * participant. This requires either to be the creator of the match or the current player to be
-	 * this participant.
-	 * 
-	 * @param participant - the participant to create the start systems for
-	 * @param random - the ExtendedRandom-number-generator used to randomly select the systems
-	 * @return the list of start system populations
-	 */
-	public List<SolarSystemPopulation> randomSelectStartSystems(Participant participant, ExtendedRandom random);
 
 	/**
 	 * Create a new SolarSystemPopulation as a spin of from the given origin population.<br>

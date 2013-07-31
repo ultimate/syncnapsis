@@ -706,7 +706,7 @@ public class ParticipantManagerImplTest extends GenericManagerImplTestCase<Parti
 		{
 			assertNotNull(e);
 		}
-		
+
 		// not all systems selected
 		participant.getPopulations().remove(0);
 		try
@@ -718,6 +718,16 @@ public class ParticipantManagerImplTest extends GenericManagerImplTestCase<Parti
 		{
 			assertNotNull(e);
 		}
+	}
+
+	public void testSelectStartSystem() throws Exception
+	{
+		fail("unimplemented");
+	}
+
+	public void testRandomSelectStartSystems() throws Exception
+	{
+		fail("unimplemented");
 	}
 
 	private class ParticipantManagerMockImpl extends ParticipantManagerImpl

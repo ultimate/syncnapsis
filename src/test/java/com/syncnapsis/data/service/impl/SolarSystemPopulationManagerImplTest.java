@@ -29,6 +29,7 @@ import com.syncnapsis.data.model.SolarSystem;
 import com.syncnapsis.data.model.SolarSystemInfrastructure;
 import com.syncnapsis.data.model.SolarSystemPopulation;
 import com.syncnapsis.data.model.help.Vector;
+import com.syncnapsis.data.model.help.Vector.Integer;
 import com.syncnapsis.data.service.ParameterManager;
 import com.syncnapsis.data.service.SolarSystemInfrastructureManager;
 import com.syncnapsis.data.service.SolarSystemPopulationManager;
@@ -80,16 +81,6 @@ public class SolarSystemPopulationManagerImplTest extends
 		MethodCall managerCall = new MethodCall("getByParticipant", new ArrayList<SolarSystemPopulation>(), 1L);
 		MethodCall daoCall = managerCall;
 		simpleGenericTest(managerCall, daoCall);
-	}
-
-	public void testSelectStartSystem() throws Exception
-	{
-		fail("unimplemented");
-	}
-
-	public void testRandomSelectStartSystems() throws Exception
-	{
-		fail("unimplemented");
 	}
 
 	public void testSpinoff() throws Exception
@@ -655,6 +646,7 @@ public class SolarSystemPopulationManagerImplTest extends
 	{
 		private Vector.Integer	size;
 		private int				maxGap;
+		private int				minGap;
 		private int				avgGap;
 		private int				standardTravelDistance;
 		private double			maxTravelDistance;
@@ -678,6 +670,15 @@ public class SolarSystemPopulationManagerImplTest extends
 		public int calculateMaxGap(List<Vector.Integer> coords)
 		{
 			return maxGap;
+		}
+
+		/* (non-Javadoc)
+		 * @see com.syncnapsis.universe.Calculator#calculateMinGap(java.util.List)
+		 */
+		@Override
+		public int calculateMinGap(List<Integer> coords)
+		{
+			return minGap;
 		}
 
 		/*

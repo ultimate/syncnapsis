@@ -346,7 +346,7 @@ public class MatchManagerImpl extends GenericNameManagerImpl<Match, Long> implem
 		for(Participant p : participants)
 		{
 			// assign start populations
-			solarSystemPopulationManager.randomSelectStartSystems(p, random);
+			participantManager.randomSelectStartSystems(p, random);
 			// start participating
 			participantManager.startParticipating(participantManager.get(p.getId()), startDate);
 		}

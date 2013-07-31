@@ -23,7 +23,6 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.util.Assert;
 
 import com.syncnapsis.data.dao.SolarSystemPopulationDao;
-import com.syncnapsis.data.model.Participant;
 import com.syncnapsis.data.model.SolarSystemInfrastructure;
 import com.syncnapsis.data.model.SolarSystemPopulation;
 import com.syncnapsis.data.service.ParameterManager;
@@ -36,7 +35,6 @@ import com.syncnapsis.security.accesscontrol.SolarSystemPopulationAccessControll
 import com.syncnapsis.universe.Calculator;
 import com.syncnapsis.utils.MathUtil;
 import com.syncnapsis.utils.StringUtil;
-import com.syncnapsis.utils.data.ExtendedRandom;
 
 /**
  * Manager-Implementation for access to SolarSystemPopulation.
@@ -174,32 +172,6 @@ public class SolarSystemPopulationManagerImpl extends GenericManagerImpl<SolarSy
 	/*
 	 * (non-Javadoc)
 	 * @see
-	 * com.syncnapsis.data.service.SolarSystemPopulationManager#selectStartSystem(com.syncnapsis
-	 * .data.model.SolarSystemInfrastructure, long)
-	 */
-	@Override
-	public SolarSystemPopulation selectStartSystem(SolarSystemInfrastructure infrastructure, long population)
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * @see
-	 * com.syncnapsis.data.service.SolarSystemPopulationManager#randomSelectStartSystems(com.syncnapsis
-	 * .data.model.Participant, com.syncnapsis.utils.data.ExtendedRandom)
-	 */
-	@Override
-	public List<SolarSystemPopulation> randomSelectStartSystems(Participant participant, ExtendedRandom random)
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * @see
 	 * com.syncnapsis.data.service.SolarSystemPopulationManager#spinoff(com.syncnapsis.data.model
 	 * .SolarSystemPopulation, com.syncnapsis.data.model.SolarSystemInfrastructure, int, long,
 	 * com.syncnapsis.enums.EnumPopulationPriority, com.syncnapsis.enums.EnumPopulationPriority)
@@ -283,7 +255,7 @@ public class SolarSystemPopulationManagerImpl extends GenericManagerImpl<SolarSy
 			origin.getInfrastructure().setInfrastructure(0);
 			solarSystemInfrastructureManager.save(origin.getInfrastructure());
 		}
-		
+
 		origin.setPopulation(origin.getPopulation() - population);
 		logger.debug("origin to be saved = " + StringUtil.toString(origin, 0));
 		if(origin.getPopulation() <= 0)
