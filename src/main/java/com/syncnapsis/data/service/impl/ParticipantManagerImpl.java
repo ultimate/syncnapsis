@@ -365,6 +365,16 @@ public class ParticipantManagerImpl extends GenericManagerImpl<Participant, Long
 	@Override
 	public Participant startParticipating(Participant participant, Date participationDate)
 	{
+		if(participant.getPopulations().size() < participant.getMatch().getStartSystemCount())
+			throw new IllegalArgumentException("not all start systems selected!");
+		long pop= 0;
+		for(SolarSystemPopulation population: participant.getPopulations())
+		{
+			pop += population.getPopulation();
+		}
+		if(pop < participant.getMatch().getStartPopulation())
+			throw new IllegalArgumentException("not all start population assigned!");
+		
 		// mark populations with start date
 		for(SolarSystemPopulation population : participant.getPopulations())
 		{

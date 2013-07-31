@@ -667,15 +667,23 @@ public class ParticipantManagerImplTest extends GenericManagerImplTestCase<Parti
 		ParticipantManagerImpl mockManager = new ParticipantManagerImpl(mockDao, empireManager, mockSolarSystemPopulationManager);
 
 		final int populations = 5;
+		final long startPopulation = populations * 100000;
 		Participant participant = new Participant();
+		participant.setMatch(new Match());
+		participant.getMatch().setStartSystemCount(populations);
+		participant.getMatch().setStartPopulation(startPopulation);
 		participant.setPopulations(new ArrayList<SolarSystemPopulation>(populations));
 		for(int i = 0; i < populations; i++)
+		{
 			participant.getPopulations().add(new SolarSystemPopulation());
+			participant.getPopulations().get(i).setPopulation(startPopulation / populations);
+		}
 
 		Date participationDate = new Date(1234);
 
 		final SolarSystemPopulation expected = new SolarSystemPopulation();
 		expected.setColonizationDate(participationDate);
+		expected.setPopulation(startPopulation / populations);
 
 		mockContext.checking(new Expectations() {
 			{
@@ -686,6 +694,30 @@ public class ParticipantManagerImplTest extends GenericManagerImplTestCase<Parti
 
 		mockManager.startParticipating(participant, participationDate);
 		mockContext.assertIsSatisfied();
+
+		// not all population assigned
+		participant.getPopulations().get(0).setPopulation(startPopulation / populations / 2);
+		try
+		{
+			mockManager.startParticipating(participant, participationDate);
+			fail("expected Exception not occurred!");
+		}
+		catch(IllegalArgumentException e)
+		{
+			assertNotNull(e);
+		}
+		
+		// not all systems selected
+		participant.getPopulations().remove(0);
+		try
+		{
+			mockManager.startParticipating(participant, participationDate);
+			fail("expected Exception not occurred!");
+		}
+		catch(IllegalArgumentException e)
+		{
+			assertNotNull(e);
+		}
 	}
 
 	private class ParticipantManagerMockImpl extends ParticipantManagerImpl
