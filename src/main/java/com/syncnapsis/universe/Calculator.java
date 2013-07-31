@@ -46,6 +46,15 @@ public interface Calculator
 	public int calculateMaxGap(List<Vector.Integer> coords);
 
 	/**
+	 * Calculate the average gap (similar to {@link Calculator#calculateMinGap(List)} just for the
+	 * min and not the max.
+	 * 
+	 * @param coords - the coords to scan
+	 * @return minGap
+	 */
+	public int calculateMinGap(List<Vector.Integer> coords);
+
+	/**
 	 * Calculate the average gap (similar to {@link Calculator#calculateMaxGap(List)} just for the
 	 * average and not the max.
 	 * 

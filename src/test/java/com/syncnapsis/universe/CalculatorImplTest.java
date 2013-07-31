@@ -27,6 +27,7 @@ import com.syncnapsis.data.model.SolarSystemPopulation;
 import com.syncnapsis.data.model.help.Vector;
 import com.syncnapsis.data.service.ParameterManager;
 import com.syncnapsis.tests.LoggerTestCase;
+import com.syncnapsis.tests.annotations.TestCoversMethods;
 
 /**
  * @author ultimate
@@ -152,26 +153,26 @@ public class CalculatorImplTest extends LoggerTestCase
 
 		origin.getInfrastructure().setInfrastructure(1);
 		assertEquals(popMax, calculator.calculateMaxMovablePopulation(origin, 0));
-		assertEquals(1, calculator.calculateMaxMovablePopulation(origin, 5*gap));
-		assertEquals(0, calculator.calculateMaxMovablePopulation(origin, 10*gap));
+		assertEquals(1, calculator.calculateMaxMovablePopulation(origin, 5 * gap));
+		assertEquals(0, calculator.calculateMaxMovablePopulation(origin, 10 * gap));
 
 		origin.getInfrastructure().setInfrastructure(popMax);
 		assertEquals(popMax, calculator.calculateMaxMovablePopulation(origin, 0));
-		assertEquals(popMax, calculator.calculateMaxMovablePopulation(origin, 5*gap));
-		assertEquals(1, calculator.calculateMaxMovablePopulation(origin, 10*gap));
-		
+		assertEquals(popMax, calculator.calculateMaxMovablePopulation(origin, 5 * gap));
+		assertEquals(1, calculator.calculateMaxMovablePopulation(origin, 10 * gap));
+
 		// other population
 		origin.setPopulation(123456789);
-		
+
 		origin.getInfrastructure().setInfrastructure(1);
 		assertEquals(origin.getPopulation(), calculator.calculateMaxMovablePopulation(origin, 0));
-		assertEquals(1, calculator.calculateMaxMovablePopulation(origin, 5*gap));
-		assertEquals(0, calculator.calculateMaxMovablePopulation(origin, 10*gap));
-		
+		assertEquals(1, calculator.calculateMaxMovablePopulation(origin, 5 * gap));
+		assertEquals(0, calculator.calculateMaxMovablePopulation(origin, 10 * gap));
+
 		origin.getInfrastructure().setInfrastructure(popMax);
 		assertEquals(origin.getPopulation(), calculator.calculateMaxMovablePopulation(origin, 0));
-		assertEquals(origin.getPopulation(), calculator.calculateMaxMovablePopulation(origin, 5*gap));
-		assertEquals(1, calculator.calculateMaxMovablePopulation(origin, 10*gap));
+		assertEquals(origin.getPopulation(), calculator.calculateMaxMovablePopulation(origin, 5 * gap));
+		assertEquals(1, calculator.calculateMaxMovablePopulation(origin, 10 * gap));
 	}
 
 	public void testCalculateTravelTime() throws Exception
@@ -201,25 +202,30 @@ public class CalculatorImplTest extends LoggerTestCase
 		assertEquals(zSize, (int) size.getZ());
 	}
 
-	public void testCalculateMaxGap() throws Exception
+	@TestCoversMethods({ "calculateMaxGap", "calculateMinGap" })
+	public void testCalculateMaxMinGap() throws Exception
 	{
 		List<Vector.Integer> coords = new LinkedList<Vector.Integer>();
 		coords.add(new Vector.Integer(100, 0, 100));
 		coords.add(new Vector.Integer(-100, 0, 100));
 
 		assertEquals(200, calculator.calculateMaxGap(coords));
+		assertEquals(200, calculator.calculateMinGap(coords));
 
 		coords.add(new Vector.Integer(100, 0, 0));
 
 		assertEquals(200, calculator.calculateMaxGap(coords));
+		assertEquals(100, calculator.calculateMinGap(coords));
 
 		coords.add(new Vector.Integer(1000, 0, 0));
 
 		assertEquals(900, calculator.calculateMaxGap(coords));
+		assertEquals(100, calculator.calculateMinGap(coords));
 
 		coords.add(new Vector.Integer(1000000000, 0, 0)); // test there is no integer overflow
 
 		assertEquals(999999000, calculator.calculateMaxGap(coords));
+		assertEquals(100, calculator.calculateMinGap(coords));
 
 	}
 

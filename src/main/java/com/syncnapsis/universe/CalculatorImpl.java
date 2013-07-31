@@ -118,15 +118,56 @@ public class CalculatorImpl implements Calculator
 				if(c2 == c1)
 					continue;
 				dX = c1.getX() - c2.getX();
-				sqX = dX*dX;
+				sqX = dX * dX;
 				if(sqX > minGapSquare)
 					continue;
 				dY = c1.getY() - c2.getY();
-				sqY = dY*dY;
+				sqY = dY * dY;
 				if(sqY > minGapSquare)
 					continue;
 				dZ = c1.getZ() - c2.getZ();
-				sqZ = dZ*dZ;
+				sqZ = dZ * dZ;
+				if(sqZ > minGapSquare)
+					continue;
+
+				// calculate the square only to avoid sqrt
+				gapSquare = sqX + sqY + sqZ;
+
+				if(gapSquare < minGapSquare)
+					minGapSquare = gapSquare;
+			}
+			if(minGapSquare > maxGapSquare)
+				maxGapSquare = minGapSquare;
+		}
+		return (int) Math.ceil(Math.sqrt(maxGapSquare));
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see com.syncnapsis.universe.Calculator#calculateMinGap(java.util.List)
+	 */
+	@Override
+	public int calculateMinGap(List<Vector.Integer> coords)
+	{
+		long minGapSquare = Long.MAX_VALUE;
+		long gapSquare;
+		long sqX, sqY, sqZ, dX, dY, dZ;
+		Vector.Integer[] coordsA = coords.toArray(new Vector.Integer[coords.size()]);
+		for(int i1 = 0; i1 < coordsA.length; i1++)
+		{
+			for(int i2 = i1+1; i2 < coordsA.length; i2++)
+			{
+				
+				dX = coordsA[i1].getX() - coordsA[i2].getX();
+				sqX = dX * dX;
+				if(sqX > minGapSquare)
+					continue;
+				dY = coordsA[i1].getY() - coordsA[i2].getY();
+				sqY = dY * dY;
+				if(sqY > minGapSquare)
+					continue;
+				dZ = coordsA[i1].getZ() - coordsA[i2].getZ();
+				sqZ = dZ * dZ;
 				if(sqZ > minGapSquare)
 					continue;
 				
@@ -136,10 +177,8 @@ public class CalculatorImpl implements Calculator
 				if(gapSquare < minGapSquare)
 					minGapSquare = gapSquare;
 			}
-			if(minGapSquare > maxGapSquare)
-				maxGapSquare = minGapSquare;
 		}
-		return (int) Math.ceil(Math.sqrt(maxGapSquare));
+		return (int) Math.ceil(Math.sqrt(minGapSquare));
 	}
 
 	/*
@@ -161,21 +200,21 @@ public class CalculatorImpl implements Calculator
 				if(c2 == c1)
 					continue;
 				dX = c1.getX() - c2.getX();
-				sqX = dX*dX;
+				sqX = dX * dX;
 				if(sqX > minGapSquare)
 					continue;
 				dY = c1.getY() - c2.getY();
-				sqY = dY*dY;
+				sqY = dY * dY;
 				if(sqY > minGapSquare)
 					continue;
 				dZ = c1.getZ() - c2.getZ();
-				sqZ = dZ*dZ;
+				sqZ = dZ * dZ;
 				if(sqZ > minGapSquare)
 					continue;
-				
+
 				// calculate the square only to avoid sqrt
 				gapSquare = sqX + sqY + sqZ;
-				
+
 				if(gapSquare < minGapSquare)
 					minGapSquare = gapSquare;
 			}
