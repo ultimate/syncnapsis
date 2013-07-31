@@ -109,7 +109,7 @@ public class Match extends ActivatableInstance<Long>
 	/**
 	 * The total population for all start systems
 	 */
-	protected int					startPopulation;
+	protected long					startPopulation;
 
 	/**
 	 * The join rules defined for joins <b>before</b> the match has been started.
@@ -301,7 +301,7 @@ public class Match extends ActivatableInstance<Long>
 	 * @return startPopulation
 	 */
 	@Column(nullable = false)
-	public int getStartPopulation()
+	public long getStartPopulation()
 	{
 		return startPopulation;
 	}
@@ -524,7 +524,7 @@ public class Match extends ActivatableInstance<Long>
 	 * 
 	 * @param startPopulation - the population count
 	 */
-	public void setStartPopulation(int startPopulation)
+	public void setStartPopulation(long startPopulation)
 	{
 		this.startPopulation = startPopulation;
 	}
@@ -631,7 +631,7 @@ public class Match extends ActivatableInstance<Long>
 		result = prime * result + speed;
 		result = prime * result + ((startCondition == null) ? 0 : startCondition.hashCode());
 		result = prime * result + ((startDate == null) ? 0 : startDate.hashCode());
-		result = prime * result + startPopulation;
+		result = prime * result + (int) (startPopulation ^ (startPopulation >>> 32));
 		result = prime * result + startSystemCount;
 		result = prime * result + (startSystemSelectionEnabled ? 1231 : 1237);
 		result = prime * result + ((startedJoinType == null) ? 0 : startedJoinType.hashCode());
