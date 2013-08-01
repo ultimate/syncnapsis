@@ -18,6 +18,7 @@ import java.io.Serializable;
 import java.util.List;
 
 import com.syncnapsis.data.dao.GenericNameDao;
+import com.syncnapsis.data.model.base.ActivatableInstance;
 import com.syncnapsis.data.model.base.Identifiable;
 import com.syncnapsis.exceptions.ObjectNotFoundException;
 
@@ -54,13 +55,14 @@ public class GenericNameDaoHibernate<T extends Identifiable<PK>, PK extends Seri
 	 * 
 	 * @param persistentClass - Die Modell-Klasse
 	 * @param nameField - Das Feld nach dem gesucht/sortiert werden soll
+	 * @param deleteEnabled - enable true DELETE for {@link ActivatableInstance}s via {@link GenericDaoHibernate#delete(Object)}
 	 * @param idOverwrite - Soll beim initialen Speichern eines Objektes die
 	 *            autmatisch vergebene ID durch eine Vorgabe überschrieben
 	 *            werden?
 	 */
-	public GenericNameDaoHibernate(final Class<T> persistentClass, String nameField, boolean idOverwrite)
+	public GenericNameDaoHibernate(final Class<T> persistentClass, String nameField, boolean deleteEnabled, boolean idOverwrite)
 	{
-		super(persistentClass, idOverwrite);
+		super(persistentClass, deleteEnabled, idOverwrite);
 		this.nameField = nameField;
 	}
 

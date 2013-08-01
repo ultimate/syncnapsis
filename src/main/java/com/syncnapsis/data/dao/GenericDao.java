@@ -100,10 +100,11 @@ public interface GenericDao<T extends Identifiable<PK>, PK extends Serializable>
 	 */
 	public String remove(T object);
 
-	// /**
-	// * May not by supported by GenericDao! Use {@link GenericDao#remove(BaseObject)} instead.
-	// * @throws UnsupportedOperationException
-	// */
-	// @Override
-	// public void delete(Object o);
+	/**
+	 * True DELETE of the given entity if supported by the underlying DAO. For save usage ise
+	 * {@link GenericDao#remove(BaseObject)} instead.
+	 * 
+	 * @throws UnsupportedOperationException
+	 */
+	public void delete(T o);
 }

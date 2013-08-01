@@ -42,11 +42,16 @@ public class GenericDaoHibernate<T extends Identifiable<PK>, PK extends Serializ
 	 * Soll beim initialen Speichern eines Objektes die autmatisch vergebene ID
 	 * durch eine Vorgabe überschrieben werden?
 	 */
-	protected boolean	idOverwrite;
+	protected boolean				idOverwrite;
+	/**
+	 * Enable true DELETE for {@link ActivatableInstance}s via
+	 * {@link GenericDaoHibernate#delete(Object)}
+	 */
+	protected boolean				deleteEnabled;
 	/**
 	 * Ist diese Klasse ActivatableInstance?
 	 */
-	protected boolean	activatable;
+	protected boolean				activatable;
 
 	/**
 	 * Erzeugt eine neue DAO-Instanz der gegeben Modell-Klasse und idOverwrite =
@@ -56,7 +61,7 @@ public class GenericDaoHibernate<T extends Identifiable<PK>, PK extends Serializ
 	 */
 	public GenericDaoHibernate(final Class<? extends T> persistentClass)
 	{
-		this(persistentClass, false);
+		this(persistentClass, false, false);
 	}
 
 	/**
@@ -64,13 +69,16 @@ public class GenericDaoHibernate<T extends Identifiable<PK>, PK extends Serializ
 	 * idOverwrite
 	 * 
 	 * @param persistentClass - Die Modell-Klasse
+	 * @param deleteEnabled - enable true DELETE for {@link ActivatableInstance}s via
+	 *            {@link GenericDaoHibernate#delete(Object)}
 	 * @param idOverwrite - Soll beim initialen Speichern eines Objektes die
 	 *            autmatisch vergebene ID durch eine Vorgabe überschrieben
 	 *            werden?
 	 */
-	public GenericDaoHibernate(final Class<? extends T> persistentClass, boolean idOverwrite)
+	public GenericDaoHibernate(final Class<? extends T> persistentClass, boolean deleteEnabled, boolean idOverwrite)
 	{
 		this.persistentClass = persistentClass;
+		this.deleteEnabled = deleteEnabled;
 		this.idOverwrite = idOverwrite;
 
 		T inst = null;
@@ -84,6 +92,18 @@ public class GenericDaoHibernate<T extends Identifiable<PK>, PK extends Serializ
 			e.printStackTrace();
 		}
 		this.activatable = (inst instanceof ActivatableInstance);
+		if(!activatable)
+			this.deleteEnabled = true;
+	}
+
+	/**
+	 * Is true DELETE enabled (especially for {@link ActivatableInstance}s)
+	 * 
+	 * @return deleteEnabled
+	 */
+	public boolean isDeleteEnabled()
+	{
+		return deleteEnabled;
 	}
 
 	/*
@@ -217,15 +237,18 @@ public class GenericDaoHibernate<T extends Identifiable<PK>, PK extends Serializ
 			return "deleted";
 		}
 	}
-	
-	/*
-	 * (non-Javadoc)
-	 * @see com.syncnapsis.data.dao.hibernate.UniversalDaoHibernate#delete(java.lang.Object)
+
+	/**
+	 * This method only supports DELETE non-{@link ActivatableInstance}s or for
+	 * {@link ActivatableInstance}s if {@link GenericDaoHibernate#isDeleteEnabled()} is true.
 	 */
 	@Override
-	public void delete(Object o)
+	public void delete(T o)
 	{
-		throw new UnsupportedOperationException("delete(...) is not supported for GenericDaoHibernate. Use remove(...) instead!");
+		if(!this.deleteEnabled)
+			throw new UnsupportedOperationException("delete(...) is not supported for GenericDaoHibernate. Use remove(...) instead!");
+		else
+			super.delete(o);
 	}
 
 	/**
