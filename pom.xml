@@ -19,7 +19,7 @@
 	<groupId>com</groupId>
 	<artifactId>syncnapsis</artifactId>
 	<packaging>pom</packaging>
-	<version>0.8.0</version>
+	<version>0.8.2</version>
 	<name>syncnapsis-framework</name>
 	<url>http://github.com/organizations/syncnapsis</url>
 
