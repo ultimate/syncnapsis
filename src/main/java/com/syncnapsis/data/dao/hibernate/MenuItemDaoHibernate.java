@@ -32,7 +32,7 @@ public class MenuItemDaoHibernate extends GenericDaoHibernate<MenuItem, String> 
 	 */
 	public MenuItemDaoHibernate()
 	{
-		super(MenuItem.class, true);
+		super(MenuItem.class, false, true);
 	}
 
 	/*
