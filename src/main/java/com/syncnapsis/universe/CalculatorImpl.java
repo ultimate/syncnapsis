@@ -38,7 +38,17 @@ public class CalculatorImpl implements Calculator
 	/**
 	 * Logger-Instance
 	 */
-	protected transient final Logger	logger	= LoggerFactory.getLogger(getClass());
+	protected transient final Logger	logger		= LoggerFactory.getLogger(getClass());
+
+	/**
+	 * The number of digits to ceil the size to.
+	 * 
+	 * @see MathUtil#ceil2(int, int)
+	 */
+	private static final int			SIZE_DIGITS	= 2;
+
+	protected Long						maxPopulation;
+
 	/**
 	 * The ParameterManager
 	 */
@@ -54,13 +64,6 @@ public class CalculatorImpl implements Calculator
 		super();
 		this.parameterManager = parameterManager;
 	}
-
-	/**
-	 * The number of digits to ceil the size to.
-	 * 
-	 * @see MathUtil#ceil2(int, int)
-	 */
-	private static final int	SIZE_DIGITS	= 2;
 
 	/*
 	 * (non-Javadoc)
@@ -155,9 +158,9 @@ public class CalculatorImpl implements Calculator
 		Vector.Integer[] coordsA = coords.toArray(new Vector.Integer[coords.size()]);
 		for(int i1 = 0; i1 < coordsA.length; i1++)
 		{
-			for(int i2 = i1+1; i2 < coordsA.length; i2++)
+			for(int i2 = i1 + 1; i2 < coordsA.length; i2++)
 			{
-				
+
 				dX = coordsA[i1].getX() - coordsA[i2].getX();
 				sqX = dX * dX;
 				if(sqX > minGapSquare)
@@ -170,10 +173,10 @@ public class CalculatorImpl implements Calculator
 				sqZ = dZ * dZ;
 				if(sqZ > minGapSquare)
 					continue;
-				
+
 				// calculate the square only to avoid sqrt
 				gapSquare = sqX + sqY + sqZ;
-				
+
 				if(gapSquare < minGapSquare)
 					minGapSquare = gapSquare;
 			}
@@ -233,6 +236,37 @@ public class CalculatorImpl implements Calculator
 	public int getStandardTravelDistance(Galaxy galaxy)
 	{
 		return galaxy.getMaxGap();
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see com.syncnapsis.universe.Calculator#getMaxPopulation()
+	 */
+	@Override
+	public long getMaxPopulation()
+	{
+		if(maxPopulation == null)
+		{
+			int maxHab = parameterManager.getInteger(UniverseConquestConstants.PARAM_SOLARSYSTEM_HABITABILITY_MAX);
+			int maxSize = parameterManager.getInteger(UniverseConquestConstants.PARAM_SOLARSYSTEM_SIZE_MAX);
+			int popFactor = parameterManager.getInteger(UniverseConquestConstants.PARAM_SOLARSYSTEM_MAX_POPULATION_FACTOR);
+
+			maxPopulation = (long) maxHab * maxSize * popFactor;
+		}
+		return maxPopulation;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see com.syncnapsis.universe.Calculator#getMaxPopulation(com.syncnapsis.data.model.
+	 * SolarSystemInfrastructure)
+	 */
+	@Override
+	public long getMaxPopulation(SolarSystemInfrastructure infrastructure)
+	{
+		int popFactor = parameterManager.getInteger(UniverseConquestConstants.PARAM_SOLARSYSTEM_MAX_POPULATION_FACTOR);
+
+		return (long) infrastructure.getHabitability() * infrastructure.getSize() * popFactor;
 	}
 
 	/**
@@ -314,9 +348,6 @@ public class CalculatorImpl implements Calculator
 	 */
 	protected double getMaxPopulationExponent()
 	{
-		double maxHab = parameterManager.getInteger(UniverseConquestConstants.PARAM_SOLARSYSTEM_HABITABILITY_MAX);
-		double maxSize = parameterManager.getInteger(UniverseConquestConstants.PARAM_SOLARSYSTEM_SIZE_MAX);
-		double popFactor = parameterManager.getInteger(UniverseConquestConstants.PARAM_SOLARSYSTEM_MAX_POPULATION_FACTOR);
-		return Math.log10(maxHab * maxSize * popFactor);
+		return Math.log10(getMaxPopulation());
 	}
 }

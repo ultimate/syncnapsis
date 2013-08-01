@@ -72,6 +72,23 @@ public interface Calculator
 	public int getStandardTravelDistance(Galaxy galaxy);
 
 	/**
+	 * Get global absolute the maximum value for the population (and/or infrastructure) of any
+	 * SolarSystem.
+	 * 
+	 * @return max population
+	 */
+	public long getMaxPopulation();
+
+	/**
+	 * Get the maximum value for the population (and/or infrastructure) of the specified SolarSystem
+	 * (and SolarSystemInfrastructure).
+	 * 
+	 * @param infrastructure - the SolarSystemInfrastructre
+	 * @return the max population value
+	 */
+	public long getMaxPopulation(SolarSystemInfrastructure infrastructure);
+
+	/**
 	 * Calculate the maximum travel distance for the amount population to move away from the origin
 	 * population.<br>
 	 * The distance calculated may be dependent of
