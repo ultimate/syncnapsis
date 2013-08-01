@@ -60,6 +60,7 @@
 		<constructor-arg ref="participantDao" />
 		<constructor-arg ref="empireManager" />
 		<constructor-arg ref="solarSystemPopulationManager" />
+		<property name="calculator" ref="calculator" />
 		<property name="securityManager" ref="securityManager" />
 	</bean>
 
@@ -143,6 +144,7 @@
 	<bean id="infrastructureGenerator"
 		class="com.syncnapsis.utils.data.SolarSystemInfrastructureGenerator">
 		<constructor-arg ref="parameterManager" />
+		<constructor-arg ref="calculator" />
 	</bean>
 
 	<bean id="calculator" class="com.syncnapsis.universe.CalculatorImpl">

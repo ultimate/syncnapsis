@@ -539,6 +539,11 @@ public class SolarSystemPopulationManagerImplTest extends
 		speedTest(10000, 5000, 1000, 10000, 0.005);
 	}
 
+	public void testSelectStartSystem() throws Exception
+	{
+		fail("unimplemented!");
+	}
+
 	private void speedTest(long timeToTravel, long timeToArrival, int travelSpeed, int travelDistance, double expectedProgress) throws Exception
 	{
 		final SolarSystemPopulation origin = getPopulation(0, 0, 0);
@@ -672,7 +677,8 @@ public class SolarSystemPopulationManagerImplTest extends
 			return maxGap;
 		}
 
-		/* (non-Javadoc)
+		/*
+		 * (non-Javadoc)
 		 * @see com.syncnapsis.universe.Calculator#calculateMinGap(java.util.List)
 		 */
 		@Override
@@ -740,6 +746,27 @@ public class SolarSystemPopulationManagerImplTest extends
 			long time = (long) (100000.0 * dist / (double) travelSpeed);
 			logger.debug("time=" + time);
 			return time;
+		}
+
+		/*
+		 * (non-Javadoc)
+		 * @see com.syncnapsis.universe.Calculator#getMaxPopulation()
+		 */
+		@Override
+		public long getMaxPopulation()
+		{
+			return 1000000000000L;
+		}
+
+		/*
+		 * (non-Javadoc)
+		 * @see com.syncnapsis.universe.Calculator#getMaxPopulation(com.syncnapsis.data.model.
+		 * SolarSystemInfrastructure)
+		 */
+		@Override
+		public long getMaxPopulation(SolarSystemInfrastructure infrastructure)
+		{
+			return 1000000L * infrastructure.getHabitability() * infrastructure.getSize();
 		}
 	}
 }

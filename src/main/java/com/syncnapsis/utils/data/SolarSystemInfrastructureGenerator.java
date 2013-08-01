@@ -20,6 +20,7 @@ import com.syncnapsis.data.model.Parameter;
 import com.syncnapsis.data.model.SolarSystem;
 import com.syncnapsis.data.model.SolarSystemInfrastructure;
 import com.syncnapsis.data.service.ParameterManager;
+import com.syncnapsis.universe.Calculator;
 
 /**
  * Generator randomly generating SolarSystemInfrastructures for the SolarSystems within a Galaxy.<br>
@@ -41,38 +42,49 @@ public class SolarSystemInfrastructureGenerator extends Generator<SolarSystemInf
 	protected ParameterManager	parameterManager;
 
 	/**
+	 * The Calculator
+	 */
+	protected Calculator		calculator;
+
+	/**
 	 * Construct a new SolarSystemInfrastructureGenerator with the given referenced managers
 	 * 
 	 * @param parameterManager - the ParameterManager
+	 * @param calculator - the Calculator
 	 */
-	public SolarSystemInfrastructureGenerator(ParameterManager parameterManager)
+	public SolarSystemInfrastructureGenerator(ParameterManager parameterManager, Calculator calculator)
 	{
 		super();
 		this.parameterManager = parameterManager;
+		this.calculator = calculator;
 	}
 
 	/**
 	 * Construct a new SolarSystemInfrastructureGenerator with the given referenced managers
 	 * 
 	 * @param parameterManager - the ParameterManager
+	 * @param calculator - the Calculator
 	 * @param random - the extended random number generator
 	 */
-	public SolarSystemInfrastructureGenerator(ParameterManager parameterManager, ExtendedRandom random)
+	public SolarSystemInfrastructureGenerator(ParameterManager parameterManager, Calculator calculator, ExtendedRandom random)
 	{
 		super(random);
 		this.parameterManager = parameterManager;
+		this.calculator = calculator;
 	}
 
 	/**
 	 * Construct a new SolarSystemInfrastructureGenerator with the given referenced managers
 	 * 
 	 * @param parameterManager - the ParameterManager
+	 * @param calculator - the Calculator
 	 * @param seed - the seed for the Random
 	 */
-	public SolarSystemInfrastructureGenerator(ParameterManager parameterManager, long seed)
+	public SolarSystemInfrastructureGenerator(ParameterManager parameterManager, Calculator calculator, long seed)
 	{
 		super(seed);
 		this.parameterManager = parameterManager;
+		this.calculator = calculator;
 	}
 
 	/*
@@ -90,21 +102,23 @@ public class SolarSystemInfrastructureGenerator extends Generator<SolarSystemInf
 
 		int hab = random.nextGaussian(0, parameterManager.getInteger(UniverseConquestConstants.PARAM_SOLARSYSTEM_HABITABILITY_MAX));
 		int size = random.nextGaussian(0, parameterManager.getInteger(UniverseConquestConstants.PARAM_SOLARSYSTEM_SIZE_MAX));
-		long maxPop = (long) hab * size * parameterManager.getInteger(UniverseConquestConstants.PARAM_SOLARSYSTEM_MAX_POPULATION_FACTOR);
+
+		SolarSystemInfrastructure infrastructure = new SolarSystemInfrastructure();
+		infrastructure.setActivated(true);
+		infrastructure.setFirstColonizationDate(null);
+		infrastructure.setHabitability(hab);
+		infrastructure.setMatch(match);
+		infrastructure.setSize(size);
+		infrastructure.setSolarSystem(system);
+
+		long maxPop = calculator.getMaxPopulation(infrastructure);
 		// for the infrastructure we would like 0 most of the time
 		long inf = random.nextGaussian(-maxPop, maxPop);
 		// 50% chance for negative values (= no infrastructure)
 		if(inf < 0)
 			inf = 0;
 
-		SolarSystemInfrastructure infrastructure = new SolarSystemInfrastructure();
-		infrastructure.setActivated(true);
-		infrastructure.setFirstColonizationDate(null);
-		infrastructure.setHabitability(hab);
 		infrastructure.setInfrastructure(inf);
-		infrastructure.setMatch(match);
-		infrastructure.setSize(size);
-		infrastructure.setSolarSystem(system);
 
 		return infrastructure;
 	}

@@ -179,6 +179,19 @@ public class CalculatorImplTest extends LoggerTestCase
 	{
 		fail("unimplemented");
 	}
+	
+	public void testGetMaxPopulation() throws Exception
+	{
+		assertEquals(1000000000000L, calculator.getMaxPopulation());
+		
+		int hab = 234;
+		int size = 567;
+		SolarSystemInfrastructure infrastructure = new SolarSystemInfrastructure();
+		infrastructure.setHabitability(hab);
+		infrastructure.setSize(size);
+		
+		assertEquals(hab*size*1000000L, calculator.getMaxPopulation(infrastructure));
+	}
 
 	public void testGetMaxPopulationExponent() throws Exception
 	{

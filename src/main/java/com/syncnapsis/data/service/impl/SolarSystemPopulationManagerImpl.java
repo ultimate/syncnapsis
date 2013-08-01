@@ -23,6 +23,7 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.util.Assert;
 
 import com.syncnapsis.data.dao.SolarSystemPopulationDao;
+import com.syncnapsis.data.model.Participant;
 import com.syncnapsis.data.model.SolarSystemInfrastructure;
 import com.syncnapsis.data.model.SolarSystemPopulation;
 import com.syncnapsis.data.service.ParameterManager;
@@ -423,5 +424,55 @@ public class SolarSystemPopulationManagerImpl extends GenericManagerImpl<SolarSy
 		}
 
 		return homePop;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see
+	 * com.syncnapsis.data.service.SolarSystemPopulationManager#selectStartSystem(com.syncnapsis
+	 * .data.model.Participant, com.syncnapsis.data.model.SolarSystemInfrastructure, long)
+	 */
+	@Override
+	public SolarSystemPopulation selectStartSystem(Participant participant, SolarSystemInfrastructure infrastructure, long population)
+	{
+		SolarSystemPopulation pop = null;
+		for(SolarSystemPopulation p : infrastructure.getPopulations())
+		{
+			if(p.getParticipant().getId().equals(participant.getId()))
+			{
+				pop = p;
+				break;
+			}
+		}
+
+		if(population == 0)
+		{
+			if(pop != null)
+				solarSystemPopulationDao.delete(pop);
+			return null;
+		}
+
+		if(pop == null)
+		{
+			if(population == 0)
+				return null;
+			pop = new SolarSystemPopulation();
+			pop.setActivated(true);
+			pop.setAttackPriority(EnumPopulationPriority.balanced);
+			pop.setBuildPriority(EnumPopulationPriority.balanced);
+			pop.setColonizationDate(null);
+			pop.setDestructionDate(null);
+			pop.setDestructionType(null);
+			pop.setInfrastructure(infrastructure);
+			pop.setOrigin(null);
+			pop.setOriginationDate(null);
+			pop.setParticipant(participant);
+			pop.setStoredInfrastructure(0);
+			pop.setTravelProgress(0.0);
+			pop.setTravelProgressDate(null);
+			pop.setTravelSpeed(0);
+		}
+		pop.setPopulation(population);
+		return save(pop);
 	}
 }

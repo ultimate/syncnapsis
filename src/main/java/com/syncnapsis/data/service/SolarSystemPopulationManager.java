@@ -17,6 +17,7 @@ package com.syncnapsis.data.service;
 import java.util.Date;
 import java.util.List;
 
+import com.syncnapsis.data.model.Participant;
 import com.syncnapsis.data.model.SolarSystemInfrastructure;
 import com.syncnapsis.data.model.SolarSystemPopulation;
 import com.syncnapsis.enums.EnumDestructionType;
@@ -120,4 +121,22 @@ public interface SolarSystemPopulationManager extends GenericManager<SolarSystem
 	 *         present
 	 */
 	public SolarSystemPopulation getHomePopulation(SolarSystemInfrastructure infrastructure);
+
+	/**
+	 * Create a new SolarSystemPopulation for a start system selected for the given participant (and
+	 * empire). If a population already exists for the given infrastructure it will be updated with
+	 * the given population or even be deleted, if the update value is 0.<br>
+	 * If a population exists for the given infrastructure for a different participant this method
+	 * will throw an IllegalArgumentsException.<br>
+	 * Furthermore this method will check wether the participant has enough start population left
+	 * for creating the SolarSystemPopulation and will otherwise only assign the population left for
+	 * this participant.
+	 * 
+	 * @param participant - the participant to create the population for
+	 * @param infrastructure - the SolarSystem represented by the it's SolarSystemInfrastructure
+	 * @param population - the population for the SolarSystem
+	 * @return the newly created SolarSystemPopulation entity
+	 */
+	public SolarSystemPopulation selectStartSystem(Participant participant, SolarSystemInfrastructure infrastructure, long population);
+
 }

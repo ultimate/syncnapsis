@@ -20,6 +20,8 @@ import com.syncnapsis.data.model.SolarSystem;
 import com.syncnapsis.data.model.SolarSystemInfrastructure;
 import com.syncnapsis.data.service.ParameterManager;
 import com.syncnapsis.tests.BaseSpringContextTestCase;
+import com.syncnapsis.universe.Calculator;
+import com.syncnapsis.universe.CalculatorImpl;
 
 /**
  * @author ultimate
@@ -30,7 +32,8 @@ public class SolarSystemInfrastructureGeneratorTest extends BaseSpringContextTes
 
 	public void testGenerate() throws Exception
 	{
-		SolarSystemInfrastructureGenerator generator = new SolarSystemInfrastructureGenerator(parameterManager);
+		Calculator calculator = new CalculatorImpl(parameterManager);
+		SolarSystemInfrastructureGenerator generator = new SolarSystemInfrastructureGenerator(parameterManager, calculator);
 
 		int habitabilityMax = parameterManager.getInteger(UniverseConquestConstants.PARAM_SOLARSYSTEM_HABITABILITY_MAX);
 		int sizeMax = parameterManager.getInteger(UniverseConquestConstants.PARAM_SOLARSYSTEM_SIZE_MAX);
@@ -65,15 +68,16 @@ public class SolarSystemInfrastructureGeneratorTest extends BaseSpringContextTes
 			infrastructureMax = (long) infrastructure.getHabitability() * infrastructure.getSize()
 					* parameterManager.getInteger(UniverseConquestConstants.PARAM_SOLARSYSTEM_MAX_POPULATION_FACTOR);
 
-//			logger.debug("hab=" + infrastructure.getHabitability() + " size=" + infrastructure.getSize() + " inf-max=" + infrastructureMax + " inf="
-//					+ infrastructure.getInfrastructure());
+			// logger.debug("hab=" + infrastructure.getHabitability() + " size=" +
+			// infrastructure.getSize() + " inf-max=" + infrastructureMax + " inf="
+			// + infrastructure.getInfrastructure());
 			assertTrue(infrastructure.getInfrastructure() >= 0);
 			assertTrue(infrastructure.getInfrastructure() <= infrastructureMax);
 
 			habitabilities[infrastructure.getHabitability()]++;
 			sizes[infrastructure.getSize()]++;
 			infrastructures[(int) (100 * infrastructure.getInfrastructure() / infrastructureMax)]++;
-			
+
 			assertTrue(infrastructure.equals(generator.generate(random12, match, solarSystem)));
 			assertFalse(infrastructure.equals(generator.generate(random2, match, solarSystem)));
 		}
@@ -85,13 +89,14 @@ public class SolarSystemInfrastructureGeneratorTest extends BaseSpringContextTes
 		logger.debug("infrastructure-distribution:");
 		printDistribution(infrastructures, 5, 1);
 	}
-	
+
 	public void testGenerate_invalid()
 	{
-		SolarSystemInfrastructureGenerator generator = new SolarSystemInfrastructureGenerator(parameterManager);
-		
+		Calculator calculator = new CalculatorImpl(parameterManager);
+		SolarSystemInfrastructureGenerator generator = new SolarSystemInfrastructureGenerator(parameterManager, calculator);
+
 		ExtendedRandom random = new ExtendedRandom();
-		
+
 		// no match, no solarsystem
 		try
 		{

@@ -16,9 +16,12 @@ package com.syncnapsis.test;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -62,13 +65,7 @@ public class TestSomething
 
 		StringBuilder output = new StringBuilder();
 
-		long max = 1000 * 1000 * 1000000L;
-
 		long start;
-		long maxMovable;
-		CalculationThread<Integer> maxGapT;
-		CalculationThread<Integer> avgGapT;
-		CalculationThread<Integer> minGapT;
 		for(File f : folder.listFiles())
 		{
 			if(f.getName().startsWith("sectors"))
@@ -76,82 +73,21 @@ public class TestSomething
 				System.out.print(f.getName());
 				output.append(f.getName());
 
-				sectors = new ArrayList<Vector.Integer>(100000);
-
 				start = System.currentTimeMillis();
-				BufferedReader br = new BufferedReader(new FileReader(f));
-				String line;
-				String nextLine;
-				nextLine = br.readLine();
-				// when checking next line, last line can be skipped
-				while(nextLine != null)
-				{
-					line = nextLine;
-					nextLine = br.readLine();
-					if(!line.startsWith("\t["))
-						continue;
-
-					line = line.substring(2, line.indexOf(']'));
-
-					StringTokenizer st = new StringTokenizer(line, ",");
-					int x = Integer.parseInt(st.nextToken());
-					int y = Integer.parseInt(st.nextToken());
-					int z = Integer.parseInt(st.nextToken());
-					sectors.add(new Vector.Integer(x, y, z));
-				}
-				br.close();
-
-				size = calculator.calculateSize(sectors);
-				output.append("\t" + sectors.size());
-				output.append("\t" + size.getX());
-				output.append("\t" + size.getY());
-				output.append("\t" + size.getZ());
-
-				if(sectors.size() < 30000)
-				{
-					final List<Vector.Integer> s = sectors;
-					maxGapT = new CalculationThread<Integer>() {
-						protected Integer calc()
-						{
-							return calculator.calculateMaxGap(s);
-						}
-					};
-					avgGapT = new CalculationThread<Integer>() {
-						protected Integer calc()
-						{
-							return calculator.calculateAvgGap(s);
-						}
-					};
-					minGapT = new CalculationThread<Integer>() {
-						protected Integer calc()
-						{
-							return calculator.calculateMinGap(s);
-						}
-					};
-					maxGapT.start();
-					avgGapT.start();
-					minGapT.start();
-					output.append("\t" + avgGapT.getResult());
-					output.append("\t" + maxGapT.getResult());
-					output.append("\t(" + MathUtil.round(maxGapT.getResult().doubleValue() / avgGapT.getResult().doubleValue(), -1) + ":1)");
-					output.append("\t" + minGapT.getResult());
-					output.append("\t(1:" + MathUtil.round(avgGapT.getResult().doubleValue() / minGapT.getResult().doubleValue(), -1) + ")");
-
-					SolarSystemPopulation originMax = getPopulation(max, 1, maxGapT.getResult());
-					SolarSystemPopulation originMax2 = getPopulation(max, max / 2, maxGapT.getResult());
-					SolarSystemPopulation originEq = getPopulation(max, max, maxGapT.getResult());
-					SolarSystemPopulation originMin2 = getPopulation(max / 2, max, maxGapT.getResult());
-					SolarSystemPopulation originMin = getPopulation(1, max, maxGapT.getResult());
-
-					maxMovable = calculator.calculateMaxMovablePopulation(originMin2, avgGapT.getResult());
-					output.append("\t" + MathUtil.round(maxMovable / (double) (max / 2), -2));
-
-					maxMovable = calculator.calculateMaxMovablePopulation(originMax, maxGapT.getResult());
-					output.append("\t" + MathUtil.round(maxMovable / (double) (max), -2));
-
-					maxMovable = calculator.calculateMaxMovablePopulation(originMin, minGapT.getResult());
-					output.append("\t" + MathUtil.round(maxMovable / (double) (1), -2));
-				}
+				sectors = loadSectors(f);
+				
+				final Vector.Integer ref = sectors.get(10000);
+				
+				Collections.sort(sectors, new Comparator<Vector.Integer>() {
+					@Override
+					public int compare(com.syncnapsis.data.model.help.Vector.Integer o1, com.syncnapsis.data.model.help.Vector.Integer o2)
+					{
+						double dist1 = MathUtil.distance(ref, o1);
+						double dist2 = MathUtil.distance(ref, o2);
+						return (int) Math.signum(dist1 - dist2);
+					}
+				});
+//				getStats(calculator, sectors, output);
 
 				output.append("\t(" + (System.currentTimeMillis() - start) + "ms)\n");
 				System.out.print("\t(" + (System.currentTimeMillis() - start) + "ms)\n");
@@ -169,6 +105,91 @@ public class TestSomething
 		// createIconFile("thing");
 		// createIconFile("abcdef");
 		// createIconFile("nothing");
+	}
+
+	private static List<Vector.Integer> loadSectors(File file) throws IOException
+	{
+		List<Vector.Integer> sectors = new ArrayList<Vector.Integer>(100000);
+		BufferedReader br = new BufferedReader(new FileReader(file));
+		String line;
+		String nextLine;
+		nextLine = br.readLine();
+		// when checking next line, last line can be skipped
+		while(nextLine != null)
+		{
+			line = nextLine;
+			nextLine = br.readLine();
+			if(!line.startsWith("\t["))
+				continue;
+
+			line = line.substring(2, line.indexOf(']'));
+
+			StringTokenizer st = new StringTokenizer(line, ",");
+			int x = Integer.parseInt(st.nextToken());
+			int y = Integer.parseInt(st.nextToken());
+			int z = Integer.parseInt(st.nextToken());
+			sectors.add(new Vector.Integer(x, y, z));
+		}
+		br.close();
+		return sectors;
+	}
+
+	private static void getStats(final Calculator calculator, List<Vector.Integer> sectors, StringBuilder output) throws InterruptedException
+	{
+		long maxMovable;
+		long max = 1000 * 1000 * 1000000L;
+
+		Vector.Integer size = calculator.calculateSize(sectors);
+		output.append("\t" + sectors.size());
+		output.append("\t" + size.getX());
+		output.append("\t" + size.getY());
+		output.append("\t" + size.getZ());
+
+		if(sectors.size() < 30000)
+		{
+			final List<Vector.Integer> s = sectors;
+			CalculationThread<Integer> maxGapT = new CalculationThread<Integer>() {
+				protected Integer calc()
+				{
+					return calculator.calculateMaxGap(s);
+				}
+			};
+			CalculationThread<Integer> avgGapT = new CalculationThread<Integer>() {
+				protected Integer calc()
+				{
+					return calculator.calculateAvgGap(s);
+				}
+			};
+			CalculationThread<Integer> minGapT = new CalculationThread<Integer>() {
+				protected Integer calc()
+				{
+					return calculator.calculateMinGap(s);
+				}
+			};
+			maxGapT.start();
+			avgGapT.start();
+			minGapT.start();
+			output.append("\t" + avgGapT.getResult());
+			output.append("\t" + maxGapT.getResult());
+			output.append("\t(" + MathUtil.round(maxGapT.getResult().doubleValue() / avgGapT.getResult().doubleValue(), -1) + ":1)");
+			output.append("\t" + minGapT.getResult());
+			output.append("\t(1:" + MathUtil.round(avgGapT.getResult().doubleValue() / minGapT.getResult().doubleValue(), -1) + ")");
+
+			SolarSystemPopulation originMax = getPopulation(max, 1, maxGapT.getResult());
+			SolarSystemPopulation originMax2 = getPopulation(max, max / 2, maxGapT.getResult());
+			SolarSystemPopulation originEq = getPopulation(max, max, maxGapT.getResult());
+			SolarSystemPopulation originMin2 = getPopulation(max / 2, max, maxGapT.getResult());
+			SolarSystemPopulation originMin = getPopulation(1, max, maxGapT.getResult());
+
+			maxMovable = calculator.calculateMaxMovablePopulation(originMin2, avgGapT.getResult());
+			output.append("\t" + MathUtil.round(maxMovable / (double) (max / 2), -2));
+
+			maxMovable = calculator.calculateMaxMovablePopulation(originMax, maxGapT.getResult());
+			output.append("\t" + MathUtil.round(maxMovable / (double) (max), -2));
+
+			maxMovable = calculator.calculateMaxMovablePopulation(originMin, minGapT.getResult());
+			output.append("\t" + MathUtil.round(maxMovable / (double) (1), -2));
+		}
 	}
 
 	private static SolarSystemPopulation getPopulation(long inf, long pop, int maxGap)
