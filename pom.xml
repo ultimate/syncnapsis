@@ -20,13 +20,13 @@
     <groupId>com.syncnapsis.syncnapsis-modules</groupId>
     <artifactId>syncnapsis-modules-stats-api</artifactId>
     <packaging>jar</packaging>
-    <version>0.8.0</version>
+    <version>0.8.2</version>
 	<name>syncnapsis-modules-stats-api</name>
 	
 	<parent>
 		<groupId>com.syncnapsis</groupId>
 		<artifactId>syncnapsis-modules</artifactId>
-		<version>0.8.0</version>
+		<version>0.8.2</version>
 	</parent>
     
     <build>
