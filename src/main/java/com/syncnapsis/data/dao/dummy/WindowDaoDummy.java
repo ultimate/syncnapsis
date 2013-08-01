@@ -99,8 +99,14 @@ public class WindowDaoDummy implements WindowDao
 	@Override
 	public String remove(Window arg0)
 	{
-		this.windows.remove(arg0);
+		this.delete(arg0);
 		return "deleted";
+	}
+	
+	@Override
+	public void delete(Window o)
+	{
+		this.windows.remove(o);
 	}
 
 	@Override
