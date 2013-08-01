@@ -24,15 +24,16 @@ import com.syncnapsis.data.model.Person;
 
 /**
  * A PersonDao-Dummy
+ * 
  * @author ultimate
- *
+ * 
  */
 public class PersonDaoDummy implements PersonDao
 {
 	private List<Person>	persons;
 
 	private Long			idCount	= 0L;
-	
+
 	public PersonDaoDummy()
 	{
 		this.persons = new LinkedList<Person>();
@@ -40,14 +41,14 @@ public class PersonDaoDummy implements PersonDao
 		this.persons.add(newPerson());
 		this.persons.add(newPerson());
 		this.persons.add(newPerson());
-		this.persons.add(newPerson());		
+		this.persons.add(newPerson());
 	}
-	
+
 	private Person newPerson()
 	{
 		return newPerson(idCount++, 1, Integer.toHexString((int) (Math.random() * 1000000)), Integer.toHexString((int) (Math.random() * 1000000)));
 	}
-	
+
 	private Person newPerson(Long id, Integer version, String firstName, String lastName)
 	{
 		Person p = new Person();
@@ -133,8 +134,14 @@ public class PersonDaoDummy implements PersonDao
 	@Override
 	public String remove(Person arg0)
 	{
-		this.persons.remove(arg0);
+		this.delete(arg0);
 		return "deleted";
+	}
+
+	@Override
+	public void delete(Person o)
+	{
+		this.persons.remove(o);
 	}
 
 	@Override
