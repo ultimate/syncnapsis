@@ -76,17 +76,7 @@ public class TestSomething
 				start = System.currentTimeMillis();
 				sectors = loadSectors(f);
 				
-				final Vector.Integer ref = sectors.get(10000);
-				
-				Collections.sort(sectors, new Comparator<Vector.Integer>() {
-					@Override
-					public int compare(com.syncnapsis.data.model.help.Vector.Integer o1, com.syncnapsis.data.model.help.Vector.Integer o2)
-					{
-						double dist1 = MathUtil.distance(ref, o1);
-						double dist2 = MathUtil.distance(ref, o2);
-						return (int) Math.signum(dist1 - dist2);
-					}
-				});
+				sortSectors(sectors);
 //				getStats(calculator, sectors, output);
 
 				output.append("\t(" + (System.currentTimeMillis() - start) + "ms)\n");
@@ -94,8 +84,11 @@ public class TestSomething
 			}
 		}
 
-		FileUtil.writeFile(new File(folder.getAbsolutePath() + "/sector-stats.txt"), output.toString());
+//		FileUtil.writeFile(new File(folder.getAbsolutePath() + "/sector-stats.txt"), output.toString());
 
+		
+		// icon experiment...		
+		
 		// createIconFile("ultimate");
 		// createIconFile("moronicjoker");
 		// createIconFile("X");
@@ -190,6 +183,27 @@ public class TestSomething
 			maxMovable = calculator.calculateMaxMovablePopulation(originMin, minGapT.getResult());
 			output.append("\t" + MathUtil.round(maxMovable / (double) (1), -2));
 		}
+	}
+
+	private static void sortSectors(List<Vector.Integer> sectors)
+	{
+		final Vector.Integer ref = sectors.get(10000);
+
+		Collections.sort(sectors, new Comparator<Vector.Integer>() {
+			@Override
+			public int compare(com.syncnapsis.data.model.help.Vector.Integer o1, com.syncnapsis.data.model.help.Vector.Integer o2)
+			{
+				// @formatter:off
+				int distSq1 = 	(o1.getX() - ref.getX())*(o1.getX() - ref.getX()) +
+								(o1.getY() - ref.getY())*(o1.getY() - ref.getY()) + 
+								(o1.getZ() - ref.getZ())*(o1.getZ() - ref.getZ()); 
+				int distSq2 = 	(o2.getX() - ref.getX())*(o2.getX() - ref.getX()) +
+								(o2.getY() - ref.getY())*(o2.getY() - ref.getY()) + 
+								(o2.getZ() - ref.getZ())*(o2.getZ() - ref.getZ()); 
+				// @formatter:on
+				return (int) Math.signum(distSq1 - distSq2);
+			}
+		});
 	}
 
 	private static SolarSystemPopulation getPopulation(long inf, long pop, int maxGap)
