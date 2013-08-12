@@ -49,7 +49,7 @@ public class SolarSystemPopulationAccessControllerTest extends LoggerTestCase
 		assertTrue(controller.isAccessible(population, 0, owner));
 
 		// other
-		assertTrue(controller.isAccessible(population, 0, other));
+		assertFalse(controller.isAccessible(population, 0, other));
 	}
 
 	private long	playerId	= 0;
