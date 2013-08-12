@@ -38,11 +38,12 @@ import com.syncnapsis.tests.GenericNameManagerImplTestCase;
 import com.syncnapsis.tests.annotations.TestCoversClasses;
 import com.syncnapsis.tests.annotations.TestCoversMethods;
 import com.syncnapsis.tests.annotations.TestExcludesMethods;
+import com.syncnapsis.universe.Calculator;
 import com.syncnapsis.utils.data.ExtendedRandom;
 import com.syncnapsis.utils.data.VectorGenerator;
 
 @TestCoversClasses({ GalaxyManager.class, GalaxyManagerImpl.class })
-@TestExcludesMethods({ "afterPropertiesSet", "*etSecurityManager" })
+@TestExcludesMethods({ "afterPropertiesSet", "*etSecurityManager", "*etCalculator" })
 public class GalaxyManagerImplTest extends GenericNameManagerImplTestCase<Galaxy, Long, GalaxyManager, GalaxyDao>
 {
 	private SolarSystemManager	solarSystemManager;
@@ -50,6 +51,7 @@ public class GalaxyManagerImplTest extends GenericNameManagerImplTestCase<Galaxy
 	private SessionProvider		sessionProvider;
 	private PlayerManager		playerManager;
 	private BaseGameManager		securityManager;
+	private Calculator			calculator;
 
 	@Override
 	protected void setUp() throws Exception
@@ -94,6 +96,7 @@ public class GalaxyManagerImplTest extends GenericNameManagerImplTestCase<Galaxy
 		final SolarSystemManager mockSolarSystemManager = mockContext.mock(SolarSystemManager.class);
 		GalaxyManagerImpl mockManager = new GalaxyManagerImpl(mockDao, mockSolarSystemManager);
 		mockManager.setSecurityManager(securityManager);
+		mockManager.setCalculator(calculator);
 		mockManager.afterPropertiesSet();
 
 		sessionProvider.set(new MockHttpSession());
