@@ -24,12 +24,15 @@ public class MessageManagerImplTest extends BaseSpringContextTestCase
 	private SessionProvider		sessionProvider;
 	private BaseGameManager		securityManager;
 	private ConnectionProvider	connectionProvider;
+	
+	private static final String beanName = "messageManager";
 
 	public void testPostPinboardMessage()
 	{
 		MessageManagerImpl messageManager = new MessageManagerImpl();
 		messageManager.setConnectionProvider(connectionProvider);
 		messageManager.setSecurityManager(securityManager);
+		messageManager.setBeanName(beanName);
 
 		sessionProvider.set(new MockHttpSession());
 
@@ -89,7 +92,7 @@ public class MessageManagerImplTest extends BaseSpringContextTestCase
 
 	public void testUpdatePinboard()
 	{
-		// nothing to test
+		// nothing to test (client stub only)
 	}
 
 	public void testRequestPinboardUpdate()
@@ -97,6 +100,7 @@ public class MessageManagerImplTest extends BaseSpringContextTestCase
 		MessageManagerImpl messageManager = new MessageManagerImpl();
 		messageManager.setConnectionProvider(connectionProvider);
 		messageManager.setSecurityManager(securityManager);
+		messageManager.setBeanName(beanName);
 
 		sessionProvider.set(new MockHttpSession());
 
