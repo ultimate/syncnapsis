@@ -687,6 +687,7 @@
 		<column>fkEmpire</column>
 		<column>rank</column>
 		<column>rankValue</column>
+		<column>rankDate</column>
 		<column>rankFinal</column>
 		<column>joinedDate</column>
 		<column>destructionDate</column>
@@ -700,6 +701,7 @@
 			<value description="fkEmpire">1</value>
 			<value description="rank">0</value>
 			<value description="rankValue">0</value>
+			<value description="rankDate">2012-01-01</value>
 			<value description="rankFinal">0</value>
 			<value description="joinedDate">2012-01-01</value>
 			<null />
@@ -714,6 +716,7 @@
 			<value description="fkEmpire">2</value>
 			<value description="rank">0</value>
 			<value description="rankValue">0</value>
+			<value description="rankDate">2012-01-01</value>
 			<value description="rankFinal">0</value>
 			<value description="joinedDate">2012-01-01</value>
 			<null />
@@ -728,6 +731,7 @@
 			<value description="fkEmpire">1</value>
 			<value description="rank">1</value>
 			<value description="rankValue">10</value>
+			<value description="rankDate">2012-01-01</value>
 			<value description="rankFinal">0</value>
 			<value description="joinedDate">2012-01-01</value>
 			<null />
@@ -742,6 +746,7 @@
 			<value description="fkEmpire">2</value>
 			<value description="rank">2</value>
 			<value description="rankValue">5</value>
+			<value description="rankDate">2012-02-01</value>
 			<value description="rankFinal">0</value>
 			<value description="joinedDate">2012-01-01</value>
 			<value description="destructionDate">2012-02-01</value>
@@ -760,6 +765,7 @@
 		<column>infrastructure</column>
 		<column>size</column>
 		<column>habitability</column>
+		<column>lastUpdateDate</column>
 		<row>
 			<value description="id">11</value>
 			<value description="version">1</value>
@@ -770,6 +776,7 @@
 			<value description="infrastructure">100</value>
 			<value description="size">1</value>
 			<value description="habitability">1</value>
+			<value description="lastUpdateDate">2012-01-01</value>
 		</row>
 		<row>
 			<value description="id">12</value>
@@ -781,6 +788,7 @@
 			<value description="infrastructure">100</value>
 			<value description="size">1</value>
 			<value description="habitability">1</value>
+			<value description="lastUpdateDate">2012-01-01</value>
 		</row>
 		<row>
 			<value description="id">21</value>
@@ -792,6 +800,7 @@
 			<value description="infrastructure">100</value>
 			<value description="size">1</value>
 			<value description="habitability">1</value>
+			<value description="lastUpdateDate">2012-01-01</value>
 		</row>
 		<row>
 			<value description="id">22</value>
@@ -803,6 +812,7 @@
 			<value description="infrastructure">100</value>
 			<value description="size">1</value>
 			<value description="habitability">1</value>
+			<value description="lastUpdateDate">2012-01-01</value>
 		</row>
 	</table>
 
@@ -823,6 +833,7 @@
 		<column>travelProgressDate</column>
 		<column>travelSpeed</column>
 		<column>storedInfrastructure</column>
+		<column>lastUpdateDate</column>
 		<row>
 			<value description="id">11</value>
 			<value description="version">1</value>
@@ -840,6 +851,7 @@
 			<value description="travelProgressDate">2012-01-01</value>
 			<value description="travelSpeed">0</value>
 			<value description="storedInfrastructure">0</value>
+			<value description="lastUpdateDate">2012-01-01</value>
 		</row>
 		<row>
 			<value description="id">12</value>
@@ -858,6 +870,7 @@
 			<value description="travelProgressDate">2012-01-01</value>
 			<value description="travelSpeed">0</value>
 			<value description="storedInfrastructure">0</value>
+			<value description="lastUpdateDate">2012-01-01</value>
 		</row>
 		<row>
 			<value description="id">21</value>
@@ -876,6 +889,7 @@
 			<value description="travelProgressDate">2012-01-01</value>
 			<value description="travelSpeed">0</value>
 			<value description="storedInfrastructure">0</value>
+			<value description="lastUpdateDate">2012-01-01</value>
 		</row>
 		<row>
 			<value description="id">22</value>
@@ -894,6 +908,7 @@
 			<value description="travelProgressDate">2012-01-01</value>
 			<value description="travelSpeed">0</value>
 			<value description="storedInfrastructure">0</value>
+			<value description="lastUpdateDate">2012-01-01</value>
 		</row>
 		<row>
 			<value description="id">23</value>
@@ -912,6 +927,7 @@
 			<value description="travelProgressDate">2012-01-20</value>
 			<value description="travelSpeed">0</value>
 			<value description="storedInfrastructure">0</value>
+			<value description="lastUpdateDate">2012-01-20</value>
 		</row>
 	</table>
 
