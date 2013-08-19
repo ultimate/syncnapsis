@@ -45,16 +45,17 @@ public class SolarSystemPopulationDaoTest extends GenericDaoTestCase<SolarSystem
 		solarSystemPopulation.setDestructionDate(new Date(timeProvider.get()));
 		solarSystemPopulation.setDestructionType(EnumDestructionType.destroyed);
 		solarSystemPopulation.setInfrastructure(solarSystemInfrastructureDao.getAll().get(0));
+		solarSystemPopulation.setLastUpdateDate(new Date(timeProvider.get()));
 		solarSystemPopulation.setOrigin(solarSystemPopulationDao.get(existingId));
 		solarSystemPopulation.setOriginationDate(new Date(timeProvider.get()));
 		solarSystemPopulation.setParticipant(participantDao.getAll().get(0));
-		solarSystemPopulation.setPopulation(200);
+		solarSystemPopulation.setPopulation(200L);
 		// set individual properties here
 
 		setEntity(solarSystemPopulation);
 
 		setEntityProperty("population");
-		setEntityPropertyValue(100);
+		setEntityPropertyValue(100L);
 
 		setExistingEntityId(existingId);
 		setBadEntityId(-1L);
@@ -75,20 +76,20 @@ public class SolarSystemPopulationDaoTest extends GenericDaoTestCase<SolarSystem
 			assertEquals(participant, (long) p.getParticipant().getId());
 		}
 	}
-	
+
 	public void testGetByMatch() throws Exception
 	{
 		long match = 1L;
 		List<SolarSystemPopulation> result = solarSystemPopulationDao.getByMatch(match);
-		
+
 		assertNotNull(result);
 		assertTrue(result.size() > 0);
-		
+
 		for(SolarSystemPopulation p : result)
 		{
 			assertEquals(match, (long) p.getInfrastructure().getMatch().getId());
 		}
 	}
-	
+
 	// insert individual Tests here
 }

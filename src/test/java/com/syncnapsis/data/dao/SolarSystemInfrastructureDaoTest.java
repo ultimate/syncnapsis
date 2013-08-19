@@ -41,6 +41,7 @@ public class SolarSystemInfrastructureDaoTest extends GenericDaoTestCase<SolarSy
 		solarSystemInfrastructure.setFirstColonizationDate(new Date(timeProvider.get()));
 		solarSystemInfrastructure.setHabitability(100);
 		solarSystemInfrastructure.setInfrastructure(200);
+		solarSystemInfrastructure.setLastUpdateDate(new Date(timeProvider.get()));
 		solarSystemInfrastructure.setSize(100);
 		solarSystemInfrastructure.setSolarSystem(solarSystemDao.getAll().get(0));
 		// set individual properties here
@@ -48,7 +49,7 @@ public class SolarSystemInfrastructureDaoTest extends GenericDaoTestCase<SolarSy
 		setEntity(solarSystemInfrastructure);
 
 		setEntityProperty("infrastructure");
-		setEntityPropertyValue(100);
+		setEntityPropertyValue(100L);
 
 		setExistingEntityId(existingId);
 		setBadEntityId(-1L);
@@ -60,7 +61,7 @@ public class SolarSystemInfrastructureDaoTest extends GenericDaoTestCase<SolarSy
 	{
 		long matchId = 1L;
 		Match match = matchDao.get(matchId);
-		
+
 		List<SolarSystemInfrastructure> result = solarSystemInfrastructureDao.getByMatch(matchId);
 
 		assertNotNull(result);
@@ -71,23 +72,23 @@ public class SolarSystemInfrastructureDaoTest extends GenericDaoTestCase<SolarSy
 			assertEquals(matchId, (long) i.getMatch().getId());
 			assertEquals(match.getGalaxy().getId(), i.getSolarSystem().getGalaxy().getId());
 		}
-		
+
 		// normally there should be an infrastructure for every SolarSystem
-		// of the match's galaxy, but test data is not complete for this... 
-//		boolean found;
-//		for(SolarSystem s: match.getGalaxy().getSolarSystems())
-//		{
-//			found = false;
-//			for(SolarSystemInfrastructure i : result)
-//			{
-//				if(i.getSolarSystem().getId().equals(s.getId()))
-//				{
-//					found = true;
-//					break;
-//				}
-//			}
-//			assertTrue(found);
-//		}
+		// of the match's galaxy, but test data is not complete for this...
+		// boolean found;
+		// for(SolarSystem s: match.getGalaxy().getSolarSystems())
+		// {
+		// found = false;
+		// for(SolarSystemInfrastructure i : result)
+		// {
+		// if(i.getSolarSystem().getId().equals(s.getId()))
+		// {
+		// found = true;
+		// break;
+		// }
+		// }
+		// assertTrue(found);
+		// }
 	}
 
 	// insert individual Tests here

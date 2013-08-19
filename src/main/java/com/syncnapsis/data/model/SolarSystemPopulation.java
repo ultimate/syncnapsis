@@ -99,6 +99,11 @@ public class SolarSystemPopulation extends ActivatableInstance<Long>
 	protected EnumDestructionType			destructionType;
 
 	/**
+	 * The date of the last update for this population
+	 */
+	protected Date							lastUpdateDate;
+
+	/**
 	 * The current amount/value of population
 	 */
 	protected long							population;
@@ -250,6 +255,18 @@ public class SolarSystemPopulation extends ActivatableInstance<Long>
 		return destructionType;
 	}
 
+	/**
+	 * The date of the last update for this population
+	 * 
+	 * @return lastUpdateDate
+	 */
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(nullable = true)
+	public Date getLastUpdateDate()
+	{
+		return lastUpdateDate;
+	}
+	
 	/**
 	 * The current amount/value of population
 	 * 
@@ -418,6 +435,17 @@ public class SolarSystemPopulation extends ActivatableInstance<Long>
 	}
 
 	/**
+	 * The date of the last update for this population
+	 * 
+	 * @param lastUpdateDate - the date and time
+	 */
+	public void setLastUpdateDate(Date lastUpdateDate)
+	{
+		this.lastUpdateDate = lastUpdateDate;
+	}
+
+
+	/**
 	 * The current amount/value of population
 	 * 
 	 * @param population - the amount/value
@@ -489,6 +517,7 @@ public class SolarSystemPopulation extends ActivatableInstance<Long>
 		result = prime * result + ((destructionDate == null) ? 0 : destructionDate.hashCode());
 		result = prime * result + ((destructionType == null) ? 0 : destructionType.hashCode());
 		result = prime * result + ((infrastructure == null) ? 0 : infrastructure.getId().hashCode());
+		result = prime * result + ((lastUpdateDate == null) ? 0 : lastUpdateDate.hashCode());
 		result = prime * result + ((origin == null) ? 0 : origin.getId().hashCode());
 		result = prime * result + ((originationDate == null) ? 0 : originationDate.hashCode());
 		result = prime * result + ((participant == null) ? 0 : participant.getId().hashCode());
@@ -543,6 +572,13 @@ public class SolarSystemPopulation extends ActivatableInstance<Long>
 		}
 		else if(!infrastructure.getId().equals(other.infrastructure.getId()))
 			return false;
+		if(lastUpdateDate == null)
+		{
+			if(other.lastUpdateDate != null)
+				return false;
+		}
+		else if(!lastUpdateDate.equals(other.lastUpdateDate))
+			return false;
 		if(origin == null)
 		{
 			if(other.origin != null)
@@ -586,10 +622,12 @@ public class SolarSystemPopulation extends ActivatableInstance<Long>
 	 * A comparator using {@link SolarSystemPopulation#colonizationDate} to compare entities
 	 */
 	public static final Comparator<SolarSystemPopulation>	BY_COLONIZATIONDATE	= new Comparator<SolarSystemPopulation>() {
-																						@Override
-																						public int compare(SolarSystemPopulation o1, SolarSystemPopulation o2)
-																						{
-																							return o1.getColonizationDate().compareTo(o2.getColonizationDate());
-																						}
-																					};
+																					@Override
+																					public int compare(SolarSystemPopulation o1,
+																							SolarSystemPopulation o2)
+																					{
+																						return o1.getColonizationDate().compareTo(
+																								o2.getColonizationDate());
+																					}
+																				};
 }

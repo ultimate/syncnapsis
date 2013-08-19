@@ -72,6 +72,11 @@ public class SolarSystemInfrastructure extends ActivatableInstance<Long>
 	protected long							infrastructure;
 
 	/**
+	 * The date of the last update for this population
+	 */
+	protected Date							lastUpdateDate;
+
+	/**
 	 * The populations present in this solar system (includes old populations as well)
 	 */
 	protected List<SolarSystemPopulation>	populations;
@@ -144,6 +149,18 @@ public class SolarSystemInfrastructure extends ActivatableInstance<Long>
 	public long getInfrastructure()
 	{
 		return infrastructure;
+	}
+
+	/**
+	 * The date of the last update for this population
+	 * 
+	 * @return lastUpdateDate
+	 */
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(nullable = false)
+	public Date getLastUpdateDate()
+	{
+		return lastUpdateDate;
 	}
 
 	/**
@@ -220,6 +237,16 @@ public class SolarSystemInfrastructure extends ActivatableInstance<Long>
 	}
 
 	/**
+	 * The date of the last update for this population
+	 * 
+	 * @param lastUpdateDate - the date and time
+	 */
+	public void setLastUpdateDate(Date lastUpdateDate)
+	{
+		this.lastUpdateDate = lastUpdateDate;
+	}
+
+	/**
 	 * The populations present in this solar system (includes old populations as well)
 	 * 
 	 * @param populations - the list of solar system populations
@@ -241,6 +268,7 @@ public class SolarSystemInfrastructure extends ActivatableInstance<Long>
 		result = prime * result + ((firstColonizationDate == null) ? 0 : firstColonizationDate.hashCode());
 		result = prime * result + habitability;
 		result = prime * result + (int) (infrastructure ^ (infrastructure >>> 32));
+		result = prime * result + ((lastUpdateDate == null) ? 0 : lastUpdateDate.hashCode());
 		result = prime * result + ((match == null) ? 0 : match.getId().hashCode());
 		result = prime * result + size;
 		result = prime * result + ((solarSystem == null) ? 0 : solarSystem.getId().hashCode());
@@ -271,6 +299,13 @@ public class SolarSystemInfrastructure extends ActivatableInstance<Long>
 		if(habitability != other.habitability)
 			return false;
 		if(infrastructure != other.infrastructure)
+			return false;
+		if(lastUpdateDate == null)
+		{
+			if(other.lastUpdateDate != null)
+				return false;
+		}
+		else if(!lastUpdateDate.equals(other.lastUpdateDate))
 			return false;
 		if(match == null)
 		{

@@ -68,6 +68,11 @@ public class Participant extends ActivatableInstance<Long>
 	protected int							rankValue;
 
 	/**
+	 * The date the rank was last calculated
+	 */
+	protected Date							rankDate;
+
+	/**
 	 * Is the calculated rank final (not modifiable any more)? The flag will be set on calculation
 	 * when the player is destroyed.
 	 */
@@ -157,6 +162,18 @@ public class Participant extends ActivatableInstance<Long>
 	public int getRankValue()
 	{
 		return rankValue;
+	}
+
+	/**
+	 * The date the rank was last calculated
+	 * 
+	 * @return rankDate
+	 */
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(nullable = false)
+	public Date getRankDate()
+	{
+		return rankDate;
 	}
 
 	/**
@@ -296,6 +313,16 @@ public class Participant extends ActivatableInstance<Long>
 	}
 
 	/**
+	 * The date the rank was last calculated
+	 * 
+	 * @param rankDate - the date and time
+	 */
+	public void setRankDate(Date rankDate)
+	{
+		this.rankDate = rankDate;
+	}
+
+	/**
 	 * Is the calculated rank final (not modifiable any more)? The flag will be set on calculation
 	 * when the player is destroyed.
 	 * 
@@ -394,6 +421,7 @@ public class Participant extends ActivatableInstance<Long>
 		result = prime * result + ((joinedDate == null) ? 0 : joinedDate.hashCode());
 		result = prime * result + ((match == null) ? 0 : match.getId().hashCode());
 		result = prime * result + rank;
+		result = prime * result + ((rankDate == null) ? 0 : rankDate.hashCode());
 		result = prime * result + (rankFinal ? 1231 : 1237);
 		result = prime * result + rankValue;
 		result = prime * result + startSystemsSelected;
@@ -445,6 +473,13 @@ public class Participant extends ActivatableInstance<Long>
 		else if(!match.getId().equals(other.match.getId()))
 			return false;
 		if(rank != other.rank)
+			return false;
+		if(rankDate == null)
+		{
+			if(other.rankDate != null)
+				return false;
+		}
+		else if(!rankDate.equals(other.rankDate))
 			return false;
 		if(rankFinal != other.rankFinal)
 			return false;
