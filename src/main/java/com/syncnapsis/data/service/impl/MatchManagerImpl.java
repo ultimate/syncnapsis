@@ -584,6 +584,8 @@ public class MatchManagerImpl extends GenericNameManagerImpl<Match, Long> implem
 		}
 
 		Collections.sort(updatedParticipants, Participant.BY_RANKVALUE);
+		
+		Date now = new Date(securityManager.getTimeProvider().get());
 
 		int count = 0;
 		int rank = 0;
@@ -606,6 +608,7 @@ public class MatchManagerImpl extends GenericNameManagerImpl<Match, Long> implem
 				p.setRank(match.getParticipants().size() + 1 - destroyed);
 				p.setRankFinal(true);
 			}
+			p.setRankDate(now);
 
 			participantManager.save(p);
 		}

@@ -14,13 +14,18 @@
  */
 package com.syncnapsis.data.service.impl;
 
+import java.util.Date;
 import java.util.List;
+
+import org.springframework.beans.factory.InitializingBean;
+import org.springframework.util.Assert;
 
 import com.syncnapsis.data.dao.SolarSystemInfrastructureDao;
 import com.syncnapsis.data.model.Match;
 import com.syncnapsis.data.model.SolarSystem;
 import com.syncnapsis.data.model.SolarSystemInfrastructure;
 import com.syncnapsis.data.service.SolarSystemInfrastructureManager;
+import com.syncnapsis.security.BaseGameManager;
 import com.syncnapsis.utils.data.ExtendedRandom;
 import com.syncnapsis.utils.data.Generator;
 
@@ -30,7 +35,7 @@ import com.syncnapsis.utils.data.Generator;
  * @author ultimate
  */
 public class SolarSystemInfrastructureManagerImpl extends GenericManagerImpl<SolarSystemInfrastructure, Long> implements
-		SolarSystemInfrastructureManager
+		SolarSystemInfrastructureManager, InitializingBean
 {
 	/**
 	 * SolarSystemInfrastructureDao for database access
@@ -43,6 +48,11 @@ public class SolarSystemInfrastructureManagerImpl extends GenericManagerImpl<Sol
 	protected Generator<SolarSystemInfrastructure>	infrastructureGenerator;
 
 	/**
+	 * The SecurityManager
+	 */
+	protected BaseGameManager						securityManager;
+
+	/**
 	 * Standard Constructor
 	 * 
 	 * @param solarSystemInfrastructureDao - SolarSystemInfrastructureDao for database access
@@ -51,6 +61,57 @@ public class SolarSystemInfrastructureManagerImpl extends GenericManagerImpl<Sol
 	{
 		super(solarSystemInfrastructureDao);
 		this.solarSystemInfrastructureDao = solarSystemInfrastructureDao;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.springframework.beans.factory.InitializingBean#afterPropertiesSet()
+	 */
+	@Override
+	public void afterPropertiesSet() throws Exception
+	{
+		Assert.notNull(infrastructureGenerator, "infrastructureGenerator must not be null!");
+		Assert.notNull(securityManager, "securityManager must not be null!");
+	}
+
+	/**
+	 * The SecurityManager (BaseGameManager)
+	 * 
+	 * @return securityManager
+	 */
+	public BaseGameManager getSecurityManager()
+	{
+		return securityManager;
+	}
+
+	/**
+	 * The SecurityManager (BaseGameManager)
+	 * 
+	 * @param securityManager - the SecurityManager
+	 */
+	public void setSecurityManager(BaseGameManager securityManager)
+	{
+		this.securityManager = securityManager;
+	}
+
+	/**
+	 * A generator for SolarSystemInfrastructure
+	 * 
+	 * @return infrastructureGenerator
+	 */
+	public Generator<SolarSystemInfrastructure> getInfrastructureGenerator()
+	{
+		return infrastructureGenerator;
+	}
+
+	/**
+	 * A generator for SolarSystemInfrastructure
+	 * 
+	 * @param infrastructureGenerator - the Generator
+	 */
+	public void setInfrastructureGenerator(Generator<SolarSystemInfrastructure> infrastructureGenerator)
+	{
+		this.infrastructureGenerator = infrastructureGenerator;
 	}
 
 	/*
@@ -73,6 +134,8 @@ public class SolarSystemInfrastructureManagerImpl extends GenericManagerImpl<Sol
 	@Override
 	public SolarSystemInfrastructure initialize(Match match, SolarSystem system, ExtendedRandom random)
 	{
-		return save(infrastructureGenerator.generate(random, match, system));
+		SolarSystemInfrastructure infrastructure = infrastructureGenerator.generate(random, match, system);
+		infrastructure.setLastUpdateDate(new Date(securityManager.getTimeProvider().get()));
+		return save(infrastructure);
 	}
 }

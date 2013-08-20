@@ -39,12 +39,14 @@ import com.syncnapsis.mock.MockTimeProvider;
 import com.syncnapsis.security.BaseGameManager;
 import com.syncnapsis.tests.GenericManagerImplTestCase;
 import com.syncnapsis.tests.annotations.TestCoversClasses;
+import com.syncnapsis.tests.annotations.TestExcludesMethods;
 import com.syncnapsis.universe.Calculator;
 import com.syncnapsis.utils.MathUtil;
 import com.syncnapsis.utils.StringUtil;
 import com.syncnapsis.utils.data.ExtendedRandom;
 
 @TestCoversClasses({ SolarSystemPopulationManager.class, SolarSystemPopulationManagerImpl.class })
+@TestExcludesMethods({ "isAccessible", "*etSecurityManager", "afterPropertiesSet", "*etCalculator" })
 public class SolarSystemPopulationManagerImplTest extends
 		GenericManagerImplTestCase<SolarSystemPopulation, Long, SolarSystemPopulationManager, SolarSystemPopulationDao>
 {
@@ -132,6 +134,7 @@ public class SolarSystemPopulationManagerImplTest extends
 		origin.setDestructionDate(null);
 		origin.setDestructionType(null);
 		origin.setInfrastructure(infrastructure1);
+		origin.setLastUpdateDate(new Date(0));
 		origin.setOrigin(null);
 		origin.setParticipant(p1);
 		origin.setPopulation(pop);
@@ -149,6 +152,7 @@ public class SolarSystemPopulationManagerImplTest extends
 		originModified.setDestructionDate(null);
 		originModified.setDestructionType(null);
 		originModified.setInfrastructure(infrastructure1);
+		originModified.setLastUpdateDate(new Date(referenceTime));
 		originModified.setOrigin(null);
 		originModified.setParticipant(p1);
 		originModified.setPopulation(pop - deltaPop);
@@ -165,6 +169,7 @@ public class SolarSystemPopulationManagerImplTest extends
 		spinoffExpected.setDestructionDate(null);
 		spinoffExpected.setDestructionType(null);
 		spinoffExpected.setInfrastructure(infrastructure2);
+		spinoffExpected.setLastUpdateDate(new Date(referenceTime));
 		spinoffExpected.setOrigin(originModified);
 		spinoffExpected.setOriginationDate(new Date(referenceTime));
 		spinoffExpected.setParticipant(p1);
@@ -262,6 +267,7 @@ public class SolarSystemPopulationManagerImplTest extends
 		origin.setDestructionDate(null);
 		origin.setDestructionType(null);
 		origin.setInfrastructure(infrastructure1);
+		origin.setLastUpdateDate(new Date(0));
 		origin.setOrigin(null);
 		origin.setParticipant(p1);
 		origin.setPopulation(pop);
@@ -300,6 +306,7 @@ public class SolarSystemPopulationManagerImplTest extends
 		originModified.setDestructionDate(new Date(referenceTime));
 		originModified.setDestructionType(EnumDestructionType.givenUp);
 		originModified.setInfrastructure(infrastructure1);
+		originModified.setLastUpdateDate(new Date(referenceTime));
 		originModified.setOrigin(null);
 		originModified.setParticipant(p1);
 		originModified.setPopulation(0);
@@ -316,6 +323,7 @@ public class SolarSystemPopulationManagerImplTest extends
 		resettledExpected.setDestructionDate(null);
 		resettledExpected.setDestructionType(null);
 		resettledExpected.setInfrastructure(infrastructure2);
+		resettledExpected.setLastUpdateDate(new Date(referenceTime));
 		resettledExpected.setOrigin(originModified);
 		resettledExpected.setOriginationDate(new Date(referenceTime));
 		resettledExpected.setParticipant(p1);
@@ -409,11 +417,13 @@ public class SolarSystemPopulationManagerImplTest extends
 		in.setActivated(true);
 		in.setDestructionDate(null);
 		in.setDestructionType(null);
+		in.setLastUpdateDate(null);
 
 		final SolarSystemPopulation out = new SolarSystemPopulation();
 		out.setActivated(false);
 		out.setDestructionDate(destructionDate);
 		out.setDestructionType(destructionType);
+		out.setLastUpdateDate(destructionDate);
 
 		mockContext.checking(new Expectations() {
 			{
@@ -541,7 +551,70 @@ public class SolarSystemPopulationManagerImplTest extends
 
 	public void testSelectStartSystem() throws Exception
 	{
-		fail("unimplemented!");
+		Participant p1 = new Participant();
+		p1.setId(1L);
+		Participant p2 = new Participant();
+		p2.setId(2L);
+
+		SolarSystemInfrastructure infrastructure = new SolarSystemInfrastructure();
+		infrastructure.setId(1234L);
+		infrastructure.setPopulations(new ArrayList<SolarSystemPopulation>(5));
+
+		final SolarSystemPopulation pop1 = new SolarSystemPopulation();
+		pop1.setActivated(true);
+		pop1.setAttackPriority(EnumPopulationPriority.balanced);
+		pop1.setBuildPriority(EnumPopulationPriority.balanced);
+		pop1.setInfrastructure(infrastructure);
+		pop1.setParticipant(p1);
+		pop1.setPopulation(1000);
+		final SolarSystemPopulation pop2 = new SolarSystemPopulation();
+		pop2.setActivated(true);
+		pop2.setAttackPriority(EnumPopulationPriority.balanced);
+		pop2.setBuildPriority(EnumPopulationPriority.balanced);
+		pop2.setInfrastructure(infrastructure);
+		pop2.setParticipant(p2);
+		pop2.setPopulation(2000);
+
+		infrastructure.getPopulations().add(pop1);
+		infrastructure.getPopulations().add(pop2);
+
+		long population = 10000;
+		SolarSystemPopulation changed;
+
+		// update present population
+		mockContext.checking(new Expectations() {
+			{
+				oneOf(mockDao).save(pop1);
+				will(returnValue(pop1));
+			}
+		});
+		changed = mockManager.selectStartSystem(p1, infrastructure, population);
+		mockContext.assertIsSatisfied();
+		assertSame(pop1, changed);
+		assertEquals(population, changed.getPopulation());
+		
+		// remove present population
+		mockContext.checking(new Expectations() {
+			{
+				oneOf(mockDao).delete(pop1);
+			}
+		});
+		changed = mockManager.selectStartSystem(p1, infrastructure, 0);
+		mockContext.assertIsSatisfied();
+		assertNull(changed);
+		
+		// no population present
+		infrastructure.getPopulations().clear();
+		
+		mockContext.checking(new Expectations() {
+			{
+				oneOf(mockDao).save(pop1);
+				will(returnValue(pop1));
+			}
+		});
+		changed = mockManager.selectStartSystem(p1, infrastructure, population);
+		mockContext.assertIsSatisfied();
+		assertEquals(pop1, changed);
 	}
 
 	private void speedTest(long timeToTravel, long timeToArrival, int travelSpeed, int travelDistance, double expectedProgress) throws Exception

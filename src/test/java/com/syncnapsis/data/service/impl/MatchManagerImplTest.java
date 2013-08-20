@@ -936,11 +936,11 @@ public class MatchManagerImplTest extends GenericNameManagerImplTestCase<Match, 
 		match.setVictoryCondition(EnumVictoryCondition.extermination);
 		mockManager.updateRanking(match);
 		mockContext.assertIsSatisfied();
-		checkRank(match.getParticipants(), 0, 1, (int) Math.floor(100.0 * pop0 / totalPop), false);
-		checkRank(match.getParticipants(), 1, 3, (int) Math.floor(100.0 * pop1 / totalPop), false);
-		checkRank(match.getParticipants(), 2, 4, (int) Math.floor(100.0 * pop2 / totalPop), true);
-		checkRank(match.getParticipants(), 3, 5, (int) Math.floor(100.0 * pop3 / totalPop), true);
-		checkRank(match.getParticipants(), 4, 2, (int) Math.floor(100.0 * pop4 / totalPop), false);
+		checkRank(match.getParticipants(), 0, 1, (int) Math.floor(100.0 * pop0 / totalPop), false, false);
+		checkRank(match.getParticipants(), 1, 3, (int) Math.floor(100.0 * pop1 / totalPop), false, false);
+		checkRank(match.getParticipants(), 2, 4, (int) Math.floor(100.0 * pop2 / totalPop), true, false);
+		checkRank(match.getParticipants(), 3, 5, (int) Math.floor(100.0 * pop3 / totalPop), true, true);
+		checkRank(match.getParticipants(), 4, 2, (int) Math.floor(100.0 * pop4 / totalPop), false, false);
 
 		resetRanks(match.getParticipants(), destroyedParticipant);
 
@@ -954,11 +954,11 @@ public class MatchManagerImplTest extends GenericNameManagerImplTestCase<Match, 
 		match.setVictoryCondition(EnumVictoryCondition.domination);
 		mockManager.updateRanking(match);
 		mockContext.assertIsSatisfied();
-		checkRank(match.getParticipants(), 0, 1, (int) Math.floor(100.0 * 10 / systems), false);
-		checkRank(match.getParticipants(), 1, 2, (int) Math.floor(100.0 * 6 / systems), false);
-		checkRank(match.getParticipants(), 2, 4, (int) Math.floor(100.0 * 0 / systems), true);
-		checkRank(match.getParticipants(), 3, 5, (int) Math.floor(100.0 * 0 / systems), true);
-		checkRank(match.getParticipants(), 4, 3, (int) Math.floor(100.0 * 5 / systems), false);
+		checkRank(match.getParticipants(), 0, 1, (int) Math.floor(100.0 * 10 / systems), false, false);
+		checkRank(match.getParticipants(), 1, 2, (int) Math.floor(100.0 * 6 / systems), false, false);
+		checkRank(match.getParticipants(), 2, 4, (int) Math.floor(100.0 * 0 / systems), true, false);
+		checkRank(match.getParticipants(), 3, 5, (int) Math.floor(100.0 * 0 / systems), true, true);
+		checkRank(match.getParticipants(), 4, 3, (int) Math.floor(100.0 * 5 / systems), false, false);
 
 		resetRanks(match.getParticipants(), destroyedParticipant);
 
@@ -975,18 +975,22 @@ public class MatchManagerImplTest extends GenericNameManagerImplTestCase<Match, 
 		assertEquals(2, rivals);
 		mockManager.updateRanking(match);
 		mockContext.assertIsSatisfied();
-		checkRank(match.getParticipants(), 0, 2, (int) Math.floor(100.0 * 1 / rivals), false);
-		checkRank(match.getParticipants(), 1, 1, (int) Math.floor(100.0 * 2 / rivals), false);
-		checkRank(match.getParticipants(), 2, 4, (int) Math.floor(100.0 * 1 / rivals), true);
-		checkRank(match.getParticipants(), 3, 5, (int) Math.floor(100.0 * 0 / rivals), true);
-		checkRank(match.getParticipants(), 4, 3, (int) Math.floor(100.0 * 0 / rivals), false);
+		checkRank(match.getParticipants(), 0, 2, (int) Math.floor(100.0 * 1 / rivals), false, false);
+		checkRank(match.getParticipants(), 1, 1, (int) Math.floor(100.0 * 2 / rivals), false, false);
+		checkRank(match.getParticipants(), 2, 4, (int) Math.floor(100.0 * 1 / rivals), true, false);
+		checkRank(match.getParticipants(), 3, 5, (int) Math.floor(100.0 * 0 / rivals), true, true);
+		checkRank(match.getParticipants(), 4, 3, (int) Math.floor(100.0 * 0 / rivals), false, false);
 	}
 
-	private void checkRank(List<Participant> participants, int index, int rankExpected, int rankValueExpected, boolean rankFinalExpected)
+	private void checkRank(List<Participant> participants, int index, int rankExpected, int rankValueExpected, boolean rankFinalExpected, boolean wasFinalBefore)
 	{
 		assertEquals(rankExpected, participants.get(index).getRank());
 		assertEquals(rankValueExpected, participants.get(index).getRankValue());
 		assertEquals(rankFinalExpected, participants.get(index).isRankFinal());
+		if(wasFinalBefore)
+			assertNull(participants.get(index).getRankDate());
+		else
+			assertEquals(new Date(referenceTime), participants.get(index).getRankDate());
 	}
 
 	private void resetRanks(List<Participant> participants, Integer... ignoreIndexes)

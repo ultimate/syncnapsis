@@ -242,6 +242,7 @@ public class SolarSystemPopulationManagerImpl extends GenericManagerImpl<SolarSy
 		spinoff.setDestructionDate(null);
 		spinoff.setDestructionType(null);
 		spinoff.setInfrastructure(targetInfrastructure);
+		spinoff.setLastUpdateDate(now);
 		spinoff.setOrigin(origin);
 		spinoff.setOriginationDate(now);
 		spinoff.setParticipant(origin.getParticipant());
@@ -257,6 +258,7 @@ public class SolarSystemPopulationManagerImpl extends GenericManagerImpl<SolarSy
 			solarSystemInfrastructureManager.save(origin.getInfrastructure());
 		}
 
+		origin.setLastUpdateDate(now);
 		origin.setPopulation(origin.getPopulation() - population);
 		logger.debug("origin to be saved = " + StringUtil.toString(origin, 0));
 		if(origin.getPopulation() <= 0)
@@ -279,6 +281,7 @@ public class SolarSystemPopulationManagerImpl extends GenericManagerImpl<SolarSy
 		population.setActivated(false);
 		population.setDestructionDate(destructionDate);
 		population.setDestructionType(destructionType);
+		population.setLastUpdateDate(destructionDate);
 
 		return save(population);
 	}
@@ -335,14 +338,20 @@ public class SolarSystemPopulationManagerImpl extends GenericManagerImpl<SolarSy
 
 				// remove the newer population
 				newerPop.setPopulation(0);
-				newerPop.setActivated(false);
-				newerPop.setDestructionDate(newerPop.getColonizationDate());
-				newerPop.setDestructionType(EnumDestructionType.merged);
+				// save using destroy
+				destroy(newerPop, EnumDestructionType.merged, newerPop.getColonizationDate());
 			}
-
-			save(newerPop); // save newerPop only, olderPop will be saved later during iteration
+			else
+			{
+				newerPop.setLastUpdateDate(now);
+				// save newerPop only, olderPop will be saved later during iteration
+				// save even if no changes have been made in this iteration, since changes may have
+				// been made before.
+				save(newerPop);
+			}
 		}
 
+		infrastructure.setLastUpdateDate(now);
 		infrastructure = solarSystemInfrastructureManager.save(infrastructure);
 
 		return infrastructure.getPopulations();
@@ -393,6 +402,7 @@ public class SolarSystemPopulationManagerImpl extends GenericManagerImpl<SolarSy
 			population.setColonizationDate(colonizationDate);
 		}
 
+		population.setLastUpdateDate(speedChangeDate);
 		population.setTravelProgress(newProgress);
 		population.setTravelProgressDate(speedChangeDate);
 		population.setTravelSpeed(travelSpeed);
@@ -464,6 +474,7 @@ public class SolarSystemPopulationManagerImpl extends GenericManagerImpl<SolarSy
 			pop.setDestructionDate(null);
 			pop.setDestructionType(null);
 			pop.setInfrastructure(infrastructure);
+			pop.setLastUpdateDate(null);
 			pop.setOrigin(null);
 			pop.setOriginationDate(null);
 			pop.setParticipant(participant);
