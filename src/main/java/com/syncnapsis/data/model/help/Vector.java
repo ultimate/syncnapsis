@@ -178,6 +178,16 @@ public abstract class Vector<N extends Number> implements Model, com.syncnapsis.
 			return false;
 		return true;
 	}
+	
+	/*
+	 * (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString()
+	{
+		return "Vector [x=" + x + ", y=" + y + ", z=" + z + "]";
+	}
 
 	/**
 	 * Integer implementation of Coordinates
