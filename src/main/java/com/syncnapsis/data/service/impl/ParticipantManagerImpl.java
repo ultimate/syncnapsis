@@ -15,27 +15,28 @@
 package com.syncnapsis.data.service.impl;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.util.Assert;
 
-import com.sun.org.apache.bcel.internal.generic.BALOAD;
 import com.syncnapsis.data.dao.ParticipantDao;
 import com.syncnapsis.data.model.Empire;
 import com.syncnapsis.data.model.Match;
 import com.syncnapsis.data.model.Participant;
-import com.syncnapsis.data.model.SolarSystem;
 import com.syncnapsis.data.model.SolarSystemInfrastructure;
 import com.syncnapsis.data.model.SolarSystemPopulation;
+import com.syncnapsis.data.model.help.Vector;
 import com.syncnapsis.data.service.EmpireManager;
 import com.syncnapsis.data.service.ParticipantManager;
+import com.syncnapsis.data.service.SolarSystemInfrastructureManager;
 import com.syncnapsis.data.service.SolarSystemPopulationManager;
 import com.syncnapsis.enums.EnumDestructionType;
 import com.syncnapsis.enums.EnumJoinType;
 import com.syncnapsis.enums.EnumMatchState;
-import com.syncnapsis.enums.EnumPopulationPriority;
 import com.syncnapsis.security.BaseGameManager;
 import com.syncnapsis.security.accesscontrol.MatchAccessController;
 import com.syncnapsis.universe.Calculator;
@@ -51,26 +52,30 @@ public class ParticipantManagerImpl extends GenericManagerImpl<Participant, Long
 	/**
 	 * ParticipantDao for database access
 	 */
-	protected ParticipantDao				participantDao;
+	protected ParticipantDao					participantDao;
 
 	/**
 	 * The EmpireManager
 	 */
-	protected EmpireManager					empireManager;
+	protected EmpireManager						empireManager;
 	/**
 	 * The SolarSystemPopulationManager
 	 */
-	protected SolarSystemPopulationManager	solarSystemPopulationManager;
+	protected SolarSystemPopulationManager		solarSystemPopulationManager;
+	/**
+	 * The SolarSystemInfrastructureManager
+	 */
+	protected SolarSystemInfrastructureManager	solarSystemInfrastructureManager;
 
 	/**
 	 * The universe-conquest {@link Calculator}
 	 */
-	protected Calculator					calculator;
+	protected Calculator						calculator;
 
 	/**
 	 * The SecurityManager
 	 */
-	protected BaseGameManager				securityManager;
+	protected BaseGameManager					securityManager;
 
 	/**
 	 * Standard Constructor
@@ -80,12 +85,13 @@ public class ParticipantManagerImpl extends GenericManagerImpl<Participant, Long
 	 * @param solarSystemPopulationManager - the SolarSystemPopulationManager
 	 */
 	public ParticipantManagerImpl(ParticipantDao participantDao, EmpireManager empireManager,
-			SolarSystemPopulationManager solarSystemPopulationManager)
+			SolarSystemPopulationManager solarSystemPopulationManager, SolarSystemInfrastructureManager solarSystemInfrastructureManager)
 	{
 		super(participantDao);
 		this.empireManager = empireManager;
 		this.participantDao = participantDao;
 		this.solarSystemPopulationManager = solarSystemPopulationManager;
+		this.solarSystemInfrastructureManager = solarSystemInfrastructureManager;
 	}
 
 	/*
@@ -412,6 +418,7 @@ public class ParticipantManagerImpl extends GenericManagerImpl<Participant, Long
 		for(SolarSystemPopulation population : participant.getPopulations())
 		{
 			population.setColonizationDate(participationDate);
+			population.setLastUpdateDate(participationDate);
 			solarSystemPopulationManager.save(population);
 		}
 
@@ -448,9 +455,21 @@ public class ParticipantManagerImpl extends GenericManagerImpl<Participant, Long
 	@Override
 	public List<SolarSystemPopulation> randomSelectStartSystems(Participant participant, ExtendedRandom random)
 	{
+		List<SolarSystemInfrastructure> infrastructures = new ArrayList<SolarSystemInfrastructure>(
+				solarSystemInfrastructureManager.getByMatch(participant.getMatch().getId()));
+
 		int startSystems = participant.getMatch().getStartSystemCount();
 		List<SolarSystemPopulation> populations = new ArrayList<SolarSystemPopulation>(startSystems);
 		populations.addAll(participant.getPopulations());
+
+		// calculate center of current selection and total selected population
+		Vector.Integer centerOfSelection = getCenter(participant.getPopulations());
+		if(centerOfSelection == null) 
+		{
+			// select a random center
+			centerOfSelection = random.nextEntry(infrastructures).getSolarSystem().getCoords();
+		}
+		sortByDistance(infrastructures, centerOfSelection);
 
 		long selectedPop = 0;
 		for(SolarSystemPopulation population : participant.getPopulations())
@@ -460,29 +479,72 @@ public class ParticipantManagerImpl extends GenericManagerImpl<Participant, Long
 
 		long remainingPop = participant.getMatch().getStartPopulation() - selectedPop;
 		long pop;
+		long maxPop;
+		long avgPopRemaining;
+		int infrastructureIndex;
 
-		SolarSystem system;
 		SolarSystemPopulation population;
 		SolarSystemInfrastructure infrastructure;
 		while(populations.size() < startSystems)
 		{
+			avgPopRemaining = remainingPop / (startSystems - populations.size());
 			// select a random system / infrastructure
-			infrastructure = ; 
+			do
+			{
+				infrastructureIndex = Math.abs(random.nextGaussian(-infrastructures.size() + 1, infrastructures.size() - 1));
+				logger.debug("selecting infrastructure @ " + infrastructureIndex);
+				infrastructure = infrastructures.get(infrastructureIndex);
+				maxPop = calculator.getMaxPopulation(infrastructure);
+			} while(maxPop < avgPopRemaining); // assure no (almost) unhabitable system is chosen
 			// select a random amount of remaining pop
+			pop = random.nextGaussian(0, 2 * avgPopRemaining);
+			pop = Math.max(pop, maxPop);
 			// reduce remaining pop
-			
-			pop = random.nextGaussian(min, max);
-			pop = Math.max(pop, calculator.getMaxPopulation(infrastructure));
-				
-
+			remainingPop -= pop;
+			// select the start system
 			population = solarSystemPopulationManager.selectStartSystem(participant, infrastructure, pop);
 			populations.add(population);
 		}
 
+		// some population may be left due to rounding, randomization or player's selection
 		// add the remaining pop arbitrary
 		if(remainingPop != 0)
 		{
+			// randomly traverse all selected populations
+			int[] perm = random.nextPerm(populations.size());
+			for(int i : perm)
+			{
+				population = populations.get(i);
+				// get the max allowed population
+				maxPop = calculator.getMaxPopulation(population.getInfrastructure());
+				// check if there is room for the remaining pop and add as much as possible
+				if(population.getPopulation() + remainingPop > maxPop)
+				{
+					remainingPop = population.getPopulation() + remainingPop - maxPop;
+					population.setPopulation(maxPop);
+				}
+				else
+				{
+					population.setPopulation(population.getPopulation() + remainingPop);
+					remainingPop = 0;
+					break;
+				}
+			}
+			if(remainingPop != 0)
+			{
+				// selected systems are not able to support the required amount of population
+				// overfill a random population (we accept this population will start to decrease
+				// immediately on match start, but player still has the opportunity to move them
+				// away if he is fast enough...)
+				population = populations.get(perm[0]);
+				population.setPopulation(population.getPopulation() + remainingPop);
+			}
+		}
 
+		// save all populations
+		for(SolarSystemPopulation p : populations)
+		{
+			solarSystemPopulationManager.save(p);
 		}
 
 		// update the participant
@@ -490,5 +552,63 @@ public class ParticipantManagerImpl extends GenericManagerImpl<Participant, Long
 		save(participant);
 
 		return populations;
+	}
+
+	/**
+	 * Get the center of a list of populations
+	 * 
+	 * @param populations - the list of populations
+	 * @return the center point
+	 */
+	protected Vector.Integer getCenter(List<SolarSystemPopulation> populations)
+	{
+		Vector.Integer centerOfSelection = new Vector.Integer();
+		if(populations.size() != 0)
+		{
+			for(SolarSystemPopulation population : populations)
+			{
+				centerOfSelection.setX(centerOfSelection.getX() + population.getInfrastructure().getSolarSystem().getCoords().getX());
+				centerOfSelection.setY(centerOfSelection.getY() + population.getInfrastructure().getSolarSystem().getCoords().getY());
+				centerOfSelection.setZ(centerOfSelection.getZ() + population.getInfrastructure().getSolarSystem().getCoords().getZ());
+			}
+			// finish average calculation
+			centerOfSelection.setX(centerOfSelection.getX() / populations.size());
+			centerOfSelection.setY(centerOfSelection.getY() / populations.size());
+			centerOfSelection.setZ(centerOfSelection.getZ() / populations.size());
+		}
+		else
+		{
+			return null;
+		}
+		return centerOfSelection;
+	}
+
+	/**
+	 * Sort the given list of infrastructures by their distance to the reference point starting with
+	 * the infrastructure with the smallest distance.
+	 * 
+	 * @param infrastructures - the list of infrastructures to sort
+	 * @param ref - the reference point
+	 */
+	protected void sortByDistance(List<SolarSystemInfrastructure> infrastructures, final Vector.Integer ref)
+	{
+		// sort systems by distance from center of selection
+		Collections.sort(infrastructures, new Comparator<SolarSystemInfrastructure>() {
+			@Override
+			public int compare(SolarSystemInfrastructure o1, SolarSystemInfrastructure o2)
+			{
+				Vector.Integer c1 = o1.getSolarSystem().getCoords();
+				Vector.Integer c2 = o2.getSolarSystem().getCoords();
+				// @formatter:off
+				int distSq1 = 	(c1.getX() - ref.getX())*(c1.getX() - ref.getX()) +
+								(c1.getY() - ref.getY())*(c1.getY() - ref.getY()) + 
+								(c1.getZ() - ref.getZ())*(c1.getZ() - ref.getZ()); 
+				int distSq2 = 	(c2.getX() - ref.getX())*(c2.getX() - ref.getX()) +
+								(c2.getY() - ref.getY())*(c2.getY() - ref.getY()) + 
+								(c2.getZ() - ref.getZ())*(c2.getZ() - ref.getZ()); 
+				// @formatter:on
+				return (int) Math.signum(distSq1 - distSq2);
+			}
+		});
 	}
 }

@@ -15,10 +15,14 @@
 package com.syncnapsis.data.service.impl;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.LinkedList;
+import java.util.List;
 
 import org.jmock.Expectations;
+import org.jmock.api.Invocation;
+import org.jmock.lib.action.CustomAction;
 import org.springframework.mock.web.MockHttpSession;
 
 import com.syncnapsis.constants.ApplicationBaseConstants;
@@ -27,30 +31,41 @@ import com.syncnapsis.data.model.Empire;
 import com.syncnapsis.data.model.Match;
 import com.syncnapsis.data.model.Participant;
 import com.syncnapsis.data.model.Player;
+import com.syncnapsis.data.model.SolarSystem;
+import com.syncnapsis.data.model.SolarSystemInfrastructure;
 import com.syncnapsis.data.model.SolarSystemPopulation;
 import com.syncnapsis.data.model.User;
 import com.syncnapsis.data.model.UserRole;
+import com.syncnapsis.data.model.help.Vector;
 import com.syncnapsis.data.service.EmpireManager;
 import com.syncnapsis.data.service.ParticipantManager;
+import com.syncnapsis.data.service.SolarSystemInfrastructureManager;
 import com.syncnapsis.data.service.SolarSystemPopulationManager;
 import com.syncnapsis.enums.EnumDestructionType;
 import com.syncnapsis.enums.EnumJoinType;
 import com.syncnapsis.enums.EnumMatchState;
 import com.syncnapsis.mock.MockTimeProvider;
+import com.syncnapsis.mock.util.ReturnArgAction;
 import com.syncnapsis.security.BaseGameManager;
 import com.syncnapsis.tests.GenericManagerImplTestCase;
 import com.syncnapsis.tests.annotations.TestCoversClasses;
 import com.syncnapsis.tests.annotations.TestExcludesMethods;
+import com.syncnapsis.universe.Calculator;
+import com.syncnapsis.utils.data.ExtendedRandom;
 
 @TestCoversClasses({ ParticipantManager.class, ParticipantManagerImpl.class })
-@TestExcludesMethods({ "isAccessible", "*etSecurityManager", "afterPropertiesSet" })
+@TestExcludesMethods({ "isAccessible", "*etSecurityManager", "afterPropertiesSet", "*etCalculator" })
 public class ParticipantManagerImplTest extends GenericManagerImplTestCase<Participant, Long, ParticipantManager, ParticipantDao>
 {
-	private BaseGameManager					securityManager;
-	private EmpireManager					empireManager;
-	private SolarSystemPopulationManager	solarSystemPopulationManager;
+	private BaseGameManager						securityManager;
+	private EmpireManager						empireManager;
+	private SolarSystemPopulationManager		solarSystemPopulationManager;
+	private SolarSystemInfrastructureManager	solarSystemInfrastructureManager;
+	private Calculator							calculator;
 
-	private final long						referenceTime	= 1234;
+	private final long							referenceTime	= 1234;
+
+	private final ExtendedRandom				random			= new ExtendedRandom(referenceTime);
 
 	@Override
 	protected void setUp() throws Exception
@@ -59,7 +74,7 @@ public class ParticipantManagerImplTest extends GenericManagerImplTestCase<Parti
 		setEntity(new Participant());
 		setDaoClass(ParticipantDao.class);
 		setMockDao(mockContext.mock(ParticipantDao.class));
-		setMockManager(new ParticipantManagerImpl(mockDao, empireManager, solarSystemPopulationManager));
+		setMockManager(new ParticipantManagerImpl(mockDao, empireManager, solarSystemPopulationManager, solarSystemInfrastructureManager));
 
 		BaseGameManager securityManager = new BaseGameManager(this.securityManager);
 		securityManager.setTimeProvider(new MockTimeProvider(referenceTime));
@@ -85,7 +100,8 @@ public class ParticipantManagerImplTest extends GenericManagerImplTestCase<Parti
 		// Behaviour of addParticipant is not checked here. Test will only cover preconditions
 		// (security check etc) within joinMatch and check forwarding to addParticipant.
 
-		ParticipantManagerMockImpl mockManager = new ParticipantManagerMockImpl(mockDao, empireManager, solarSystemPopulationManager);
+		ParticipantManagerMockImpl mockManager = new ParticipantManagerMockImpl(mockDao, empireManager, solarSystemPopulationManager,
+				solarSystemInfrastructureManager);
 		mockManager.setSecurityManager(securityManager);
 		securityManager.getSessionProvider().set(new MockHttpSession());
 
@@ -184,7 +200,8 @@ public class ParticipantManagerImplTest extends GenericManagerImplTestCase<Parti
 		// Behaviour of removeParticipant is not checked here. Test will only cover preconditions
 		// (security check etc) within leaveMatch and check forwarding to removeParticipant.
 
-		ParticipantManagerMockImpl mockManager = new ParticipantManagerMockImpl(mockDao, empireManager, solarSystemPopulationManager);
+		ParticipantManagerMockImpl mockManager = new ParticipantManagerMockImpl(mockDao, empireManager, solarSystemPopulationManager,
+				solarSystemInfrastructureManager);
 		mockManager.setSecurityManager(securityManager);
 		securityManager.getSessionProvider().set(new MockHttpSession());
 
@@ -218,7 +235,8 @@ public class ParticipantManagerImplTest extends GenericManagerImplTestCase<Parti
 		// addParticipant.
 		final EmpireManager mockEmpireManager = mockContext.mock(EmpireManager.class);
 
-		ParticipantManagerMockImpl mockManager = new ParticipantManagerMockImpl(mockDao, mockEmpireManager, solarSystemPopulationManager);
+		ParticipantManagerMockImpl mockManager = new ParticipantManagerMockImpl(mockDao, mockEmpireManager, solarSystemPopulationManager,
+				solarSystemInfrastructureManager);
 		mockManager.setSecurityManager(securityManager);
 		securityManager.getSessionProvider().set(new MockHttpSession());
 
@@ -328,7 +346,8 @@ public class ParticipantManagerImplTest extends GenericManagerImplTestCase<Parti
 
 		final EmpireManager mockEmpireManager = mockContext.mock(EmpireManager.class);
 
-		ParticipantManagerMockImpl mockManager = new ParticipantManagerMockImpl(mockDao, mockEmpireManager, solarSystemPopulationManager);
+		ParticipantManagerMockImpl mockManager = new ParticipantManagerMockImpl(mockDao, mockEmpireManager, solarSystemPopulationManager,
+				solarSystemInfrastructureManager);
 		mockManager.setSecurityManager(securityManager);
 		securityManager.getSessionProvider().set(new MockHttpSession());
 
@@ -478,7 +497,8 @@ public class ParticipantManagerImplTest extends GenericManagerImplTestCase<Parti
 
 		final EmpireManager mockEmpireManager = mockContext.mock(EmpireManager.class);
 
-		ParticipantManagerMockImpl2 mockManager = new ParticipantManagerMockImpl2(mockDao, mockEmpireManager, solarSystemPopulationManager);
+		ParticipantManagerMockImpl2 mockManager = new ParticipantManagerMockImpl2(mockDao, mockEmpireManager, solarSystemPopulationManager,
+				solarSystemInfrastructureManager);
 		BaseGameManager securityManager = new BaseGameManager(this.securityManager);
 		securityManager.setTimeProvider(new MockTimeProvider(referenceTime));
 		mockManager.setSecurityManager(securityManager);
@@ -602,7 +622,8 @@ public class ParticipantManagerImplTest extends GenericManagerImplTestCase<Parti
 	{
 		final SolarSystemPopulationManager mockSolarSystemPopulationManager = mockContext.mock(SolarSystemPopulationManager.class);
 
-		ParticipantManagerMockImpl mockManager = new ParticipantManagerMockImpl(mockDao, empireManager, mockSolarSystemPopulationManager);
+		ParticipantManagerMockImpl mockManager = new ParticipantManagerMockImpl(mockDao, empireManager, mockSolarSystemPopulationManager,
+				solarSystemInfrastructureManager);
 		mockManager.setSecurityManager(securityManager);
 		securityManager.getSessionProvider().set(new MockHttpSession());
 
@@ -664,7 +685,8 @@ public class ParticipantManagerImplTest extends GenericManagerImplTestCase<Parti
 	public void testStartParticipating() throws Exception
 	{
 		final SolarSystemPopulationManager mockSolarSystemPopulationManager = mockContext.mock(SolarSystemPopulationManager.class);
-		ParticipantManagerImpl mockManager = new ParticipantManagerImpl(mockDao, empireManager, mockSolarSystemPopulationManager);
+		ParticipantManagerImpl mockManager = new ParticipantManagerImpl(mockDao, empireManager, mockSolarSystemPopulationManager,
+				solarSystemInfrastructureManager);
 
 		final int populations = 5;
 		final long startPopulation = populations * 100000;
@@ -684,6 +706,7 @@ public class ParticipantManagerImplTest extends GenericManagerImplTestCase<Parti
 		final SolarSystemPopulation expected = new SolarSystemPopulation();
 		expected.setColonizationDate(participationDate);
 		expected.setPopulation(startPopulation / populations);
+		expected.setLastUpdateDate(participationDate);
 
 		mockContext.checking(new Expectations() {
 			{
@@ -722,12 +745,308 @@ public class ParticipantManagerImplTest extends GenericManagerImplTestCase<Parti
 
 	public void testSelectStartSystem() throws Exception
 	{
-		fail("unimplemented");
+		final SolarSystemPopulationManager mockSolarSystemPopulationManager = mockContext.mock(SolarSystemPopulationManager.class);
+		ParticipantManagerImpl mockManager = new ParticipantManagerImpl(mockDao, empireManager, mockSolarSystemPopulationManager,
+				solarSystemInfrastructureManager);
+		mockManager.setSecurityManager(securityManager);
+		
+		securityManager.getSessionProvider().set(new MockHttpSession());
+
+		// prepare empires/participants
+		int count = 5;
+		List<Participant> participants = new ArrayList<Participant>(count);
+		for(int i = 0; i < count; i++)
+		{
+			Empire empire = new Empire();
+			empire.setId(111L * count);
+
+			Participant participant = new Participant();
+			participant.setEmpire(empire);
+
+			participants.add(participant);
+		}
+		final Participant participant = participants.get(0);
+		Collections.shuffle(participants);
+
+		securityManager.getEmpireProvider().set(participant.getEmpire());
+
+		// prepare match
+		Match match = new Match();
+		match.setParticipants(participants);
+
+		final SolarSystemInfrastructure infrastructure = new SolarSystemInfrastructure();
+		infrastructure.setMatch(match);
+
+		final int population = 100000;
+
+		mockContext.checking(new Expectations() {
+			{
+				oneOf(mockSolarSystemPopulationManager).selectStartSystem(participant, infrastructure, population);
+				will(returnValue(new SolarSystemPopulation()));
+			}
+		});
+
+		SolarSystemPopulation result = mockManager.selectStartSystem(infrastructure, population);
+		mockContext.assertIsSatisfied();
+		assertNotNull(result);
+
+		Empire other = new Empire();
+		other.setId(count * 2 * 111L);
+		securityManager.getEmpireProvider().set(other);
+		try
+		{
+			mockManager.selectStartSystem(infrastructure, population);
+			fail("expected Exception not occurred!");
+		}
+		catch(IllegalArgumentException e)
+		{
+			assertNotNull(e);
+		}
 	}
 
 	public void testRandomSelectStartSystems() throws Exception
 	{
-		fail("unimplemented");
+		final EmpireManager mockEmpireManager = mockContext.mock(EmpireManager.class);
+		final SolarSystemPopulationManager mockSolarSystemPopulationManager = mockContext.mock(SolarSystemPopulationManager.class);
+		final SolarSystemInfrastructureManager mockSolarSystemInfrastructureManager = mockContext.mock(SolarSystemInfrastructureManager.class);
+		final ParticipantManagerImpl mockManager = new ParticipantManagerImpl(mockDao, mockEmpireManager, mockSolarSystemPopulationManager,
+				mockSolarSystemInfrastructureManager);
+		mockManager.setCalculator(calculator);
+
+		// initialize infrastructures
+		final int infs = 100;
+		final List<SolarSystemInfrastructure> infrastructures = new ArrayList<SolarSystemInfrastructure>(infs);
+		for(int i = 0; i < infs; i++)
+		{
+			infrastructures.add(getRandomInfrastructure());
+		}
+
+		final long matchId = 123;
+		final long participantId = 456;
+		final int startSystemCount = 5;
+		final long startPopulation = 10000000;
+
+		final Match match = new Match();
+		match.setId(matchId);
+		match.setStartSystemCount(startSystemCount);
+		match.setStartPopulation(startPopulation);
+
+		final Participant participant = new Participant();
+		participant.setId(participantId);
+		participant.setMatch(match);
+		participant.setPopulations(new ArrayList<SolarSystemPopulation>(startSystemCount*2));
+
+		List<SolarSystemPopulation> result;
+		long populationAssigned;
+
+		// no systems selected yet
+		participant.setStartSystemsSelected(0);
+		// participant.getPopulations().clear();
+		mockContext.checking(new Expectations() {
+			{
+				oneOf(mockSolarSystemInfrastructureManager).getByMatch(matchId);
+				will(returnValue(infrastructures));
+			}
+		});
+		mockContext.checking(new Expectations() {
+			{
+				exactly(startSystemCount).of(mockSolarSystemPopulationManager).selectStartSystem(with(same(participant)),
+						with(any(SolarSystemInfrastructure.class)), with(any(long.class)));
+				will(new CustomAction("return startsystem") {
+					@Override
+					public Object invoke(Invocation invocation) throws Throwable
+					{
+						Participant participant = (Participant) invocation.getParameter(0);
+						SolarSystemInfrastructure infrastructure = (SolarSystemInfrastructure) invocation.getParameter(1);
+						long population = (Long) invocation.getParameter(2);
+						SolarSystemPopulation pop = new SolarSystemPopulation();
+						pop.setParticipant(participant);
+						pop.setInfrastructure(infrastructure);
+						pop.setPopulation(population);
+						return pop;
+					}
+				});
+			}
+		});
+		mockContext.checking(new Expectations() {
+			{
+				exactly(startSystemCount).of(mockSolarSystemPopulationManager).save(with(any(SolarSystemPopulation.class)));
+				will(new ReturnArgAction());
+			}
+		});
+		mockContext.checking(new Expectations() {
+			{
+				oneOf(mockDao).save(participant);
+				will(returnValue(participant));
+			}
+		});
+
+		result = mockManager.randomSelectStartSystems(participant, random);
+		mockContext.assertIsSatisfied();
+
+		assertNotNull(result);
+		assertEquals(startSystemCount, result.size());
+		assertEquals(startSystemCount, participant.getStartSystemsSelected());
+		populationAssigned = 0;
+		for(SolarSystemPopulation pop: result)
+		{
+			populationAssigned += pop.getPopulation();
+		}
+		assertEquals(startPopulation, populationAssigned);
+		
+		// check with preselected populations
+		final int systemSelected = 3;
+		participant.setStartSystemsSelected(systemSelected);
+		SolarSystemPopulation population;
+		for(int i = 0; i < systemSelected; i++)
+		{
+			population = new SolarSystemPopulation();
+			population.setParticipant(participant);
+			population.setInfrastructure(random.nextEntry(infrastructures));
+			population.setPopulation((i+1)*1000000);
+			
+			participant.getPopulations().add(population);
+		}
+		
+		mockContext.checking(new Expectations() {
+			{
+				oneOf(mockSolarSystemInfrastructureManager).getByMatch(matchId);
+				will(returnValue(infrastructures));
+			}
+		});
+		mockContext.checking(new Expectations() {
+			{
+				exactly(startSystemCount-systemSelected).of(mockSolarSystemPopulationManager).selectStartSystem(with(same(participant)),
+						with(any(SolarSystemInfrastructure.class)), with(any(long.class)));
+				will(new CustomAction("return startsystem") {
+					@Override
+					public Object invoke(Invocation invocation) throws Throwable
+					{
+						Participant participant = (Participant) invocation.getParameter(0);
+						SolarSystemInfrastructure infrastructure = (SolarSystemInfrastructure) invocation.getParameter(1);
+						long population = (Long) invocation.getParameter(2);
+						SolarSystemPopulation pop = new SolarSystemPopulation();
+						pop.setParticipant(participant);
+						pop.setInfrastructure(infrastructure);
+						pop.setPopulation(population);
+						return pop;
+					}
+				});
+			}
+		});
+		mockContext.checking(new Expectations() {
+			{
+				exactly(startSystemCount).of(mockSolarSystemPopulationManager).save(with(any(SolarSystemPopulation.class)));
+				will(new ReturnArgAction());
+			}
+		});
+		mockContext.checking(new Expectations() {
+			{
+				oneOf(mockDao).save(participant);
+				will(returnValue(participant));
+			}
+		});
+
+		result = mockManager.randomSelectStartSystems(participant, random);
+		mockContext.assertIsSatisfied();
+
+		assertNotNull(result);
+		assertEquals(startSystemCount, result.size());
+		assertEquals(startSystemCount, participant.getStartSystemsSelected());
+		populationAssigned = 0;
+		for(SolarSystemPopulation pop: result)
+		{
+			populationAssigned += pop.getPopulation();
+		}
+		assertEquals(startPopulation, populationAssigned);
+	}
+
+	public void testGetCenter() throws Exception
+	{
+		ParticipantManagerImpl m = new ParticipantManagerImpl(mockDao, empireManager, solarSystemPopulationManager, solarSystemInfrastructureManager);
+
+		List<SolarSystemPopulation> populations = new ArrayList<SolarSystemPopulation>(10);
+
+		populations.add(getPopulation(100, 100, 100));
+		assertEquals(new Vector.Integer(100, 100, 100), m.getCenter(populations));
+
+		populations.add(getPopulation(100, 100, -100));
+		assertEquals(new Vector.Integer(100, 100, 0), m.getCenter(populations));
+
+		populations.add(getPopulation(100, -100, 100));
+		populations.add(getPopulation(100, -100, -100));
+		assertEquals(new Vector.Integer(100, 0, 0), m.getCenter(populations));
+
+		populations.add(getPopulation(-100, 100, 100));
+		populations.add(getPopulation(-100, 100, -100));
+		populations.add(getPopulation(-100, -100, 100));
+		populations.add(getPopulation(-100, -100, -100));
+		assertEquals(new Vector.Integer(0, 0, 0), m.getCenter(populations));
+	}
+
+	public void testSortByDistance() throws Exception
+	{
+		ParticipantManagerImpl m = new ParticipantManagerImpl(mockDao, empireManager, solarSystemPopulationManager, solarSystemInfrastructureManager);
+
+		List<SolarSystemInfrastructure> infrastructures = new ArrayList<SolarSystemInfrastructure>(10);
+
+		int center = 1234;
+		int count = 0;
+		infrastructures.add(getInfrastructure(center, center, center + count++));
+		infrastructures.add(getInfrastructure(center, center + count++, center));
+		infrastructures.add(getInfrastructure(center + count++, center, center));
+		infrastructures.add(getInfrastructure(center, center, center + count++));
+		infrastructures.add(getInfrastructure(center, center + count++, center));
+		infrastructures.add(getInfrastructure(center + count++, center, center));
+		infrastructures.add(getInfrastructure(center, center, center + count++));
+		infrastructures.add(getInfrastructure(center, center + count++, center));
+		infrastructures.add(getInfrastructure(center + count++, center, center));
+		infrastructures.add(getInfrastructure(center, center, center + count++));
+		infrastructures.add(getInfrastructure(center, center + count++, center));
+		infrastructures.add(getInfrastructure(center + count++, center, center));
+
+		List<SolarSystemInfrastructure> unshuffledCopy = new ArrayList<SolarSystemInfrastructure>(infrastructures);
+		Collections.shuffle(infrastructures);
+
+		Vector.Integer ref = new Vector.Integer(center, center, center);
+
+		m.sortByDistance(infrastructures, ref);
+
+		assertEquals(unshuffledCopy, infrastructures);
+	}
+
+	private SolarSystemPopulation getPopulation(int x, int y, int z)
+	{
+		SolarSystemPopulation pop = new SolarSystemPopulation();
+		pop.setInfrastructure(getInfrastructure(x, y, z));
+		return pop;
+	}
+
+	private SolarSystemInfrastructure getInfrastructure(int x, int y, int z)
+	{
+		SolarSystemInfrastructure inf = new SolarSystemInfrastructure();
+		inf.setId((long) x * y * z);
+		inf.setSolarSystem(new SolarSystem());
+		inf.getSolarSystem().setId((long) x * y * z);
+		inf.getSolarSystem().setCoords(new Vector.Integer(x, y, z));
+		return inf;
+	}
+
+	private SolarSystemInfrastructure getRandomInfrastructure()
+	{
+		int x = random.nextGaussian(-1000, 1000);
+		int y = random.nextGaussian(-1000, 1000);
+		int z = random.nextGaussian(-1000, 1000);
+		int s = random.nextGaussian(0, 1000);
+		int h = random.nextGaussian(0, 1000);
+		int i = Math.abs(random.nextGaussian(-s * h * 1000, s * h * 1000));
+
+		SolarSystemInfrastructure inf = getInfrastructure(x, y, z);
+		inf.setHabitability(h);
+		inf.setInfrastructure(i);
+		inf.setSize(s);
+
+		return inf;
 	}
 
 	private class ParticipantManagerMockImpl extends ParticipantManagerImpl
@@ -736,9 +1055,9 @@ public class ParticipantManagerImplTest extends GenericManagerImplTestCase<Parti
 		private int	removeParticipantCalled	= 0;
 
 		public ParticipantManagerMockImpl(ParticipantDao participantDao, EmpireManager empireManager,
-				SolarSystemPopulationManager solarSystemPopulationManager)
+				SolarSystemPopulationManager solarSystemPopulationManager, SolarSystemInfrastructureManager solarSystemInfrastructureManager)
 		{
-			super(participantDao, empireManager, solarSystemPopulationManager);
+			super(participantDao, empireManager, solarSystemPopulationManager, solarSystemInfrastructureManager);
 		}
 
 		@Override
@@ -763,9 +1082,9 @@ public class ParticipantManagerImplTest extends GenericManagerImplTestCase<Parti
 		private Date				destructionDate;
 
 		public ParticipantManagerMockImpl2(ParticipantDao participantDao, EmpireManager empireManager,
-				SolarSystemPopulationManager solarSystemPopulationManager)
+				SolarSystemPopulationManager solarSystemPopulationManager, SolarSystemInfrastructureManager solarSystemInfrastructureManager)
 		{
-			super(participantDao, empireManager, solarSystemPopulationManager);
+			super(participantDao, empireManager, solarSystemPopulationManager, solarSystemInfrastructureManager);
 		}
 
 		@Override
