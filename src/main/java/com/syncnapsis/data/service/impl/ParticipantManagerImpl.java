@@ -365,7 +365,10 @@ public class ParticipantManagerImpl extends GenericManagerImpl<Participant, Long
 		for(SolarSystemPopulation population : participant.getPopulations())
 		{
 			if(population.isActivated())
+			{
 				solarSystemPopulationManager.destroy(population, destructionType, destructionDate);
+				solarSystemPopulationManager.save(population);
+			}
 		}
 
 		participant.setDestructionType(destructionType);
