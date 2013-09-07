@@ -673,6 +673,12 @@ public class ParticipantManagerImplTest extends GenericManagerImplTestCase<Parti
 		});
 		mockContext.checking(new Expectations() {
 			{
+				exactly(participant.getPopulations().size() - 1).of(mockSolarSystemPopulationManager).save(with(any(SolarSystemPopulation.class)));
+				will(returnValue(new SolarSystemPopulation()));
+			}
+		});
+		mockContext.checking(new Expectations() {
+			{
 				oneOf(mockDao).save(participant);
 				will(returnValue(participant));
 			}
@@ -749,7 +755,7 @@ public class ParticipantManagerImplTest extends GenericManagerImplTestCase<Parti
 		ParticipantManagerImpl mockManager = new ParticipantManagerImpl(mockDao, empireManager, mockSolarSystemPopulationManager,
 				solarSystemInfrastructureManager);
 		mockManager.setSecurityManager(securityManager);
-		
+
 		securityManager.getSessionProvider().set(new MockHttpSession());
 
 		// prepare empires/participants
@@ -834,7 +840,7 @@ public class ParticipantManagerImplTest extends GenericManagerImplTestCase<Parti
 		final Participant participant = new Participant();
 		participant.setId(participantId);
 		participant.setMatch(match);
-		participant.setPopulations(new ArrayList<SolarSystemPopulation>(startSystemCount*2));
+		participant.setPopulations(new ArrayList<SolarSystemPopulation>(startSystemCount * 2));
 
 		List<SolarSystemPopulation> result;
 		long populationAssigned;
@@ -888,12 +894,12 @@ public class ParticipantManagerImplTest extends GenericManagerImplTestCase<Parti
 		assertEquals(startSystemCount, result.size());
 		assertEquals(startSystemCount, participant.getStartSystemsSelected());
 		populationAssigned = 0;
-		for(SolarSystemPopulation pop: result)
+		for(SolarSystemPopulation pop : result)
 		{
 			populationAssigned += pop.getPopulation();
 		}
 		assertEquals(startPopulation, populationAssigned);
-		
+
 		// check with preselected populations
 		final int systemSelected = 3;
 		participant.setStartSystemsSelected(systemSelected);
@@ -903,11 +909,11 @@ public class ParticipantManagerImplTest extends GenericManagerImplTestCase<Parti
 			population = new SolarSystemPopulation();
 			population.setParticipant(participant);
 			population.setInfrastructure(random.nextEntry(infrastructures));
-			population.setPopulation((i+1)*1000000);
-			
+			population.setPopulation((i + 1) * 1000000);
+
 			participant.getPopulations().add(population);
 		}
-		
+
 		mockContext.checking(new Expectations() {
 			{
 				oneOf(mockSolarSystemInfrastructureManager).getByMatch(matchId);
@@ -916,7 +922,7 @@ public class ParticipantManagerImplTest extends GenericManagerImplTestCase<Parti
 		});
 		mockContext.checking(new Expectations() {
 			{
-				exactly(startSystemCount-systemSelected).of(mockSolarSystemPopulationManager).selectStartSystem(with(same(participant)),
+				exactly(startSystemCount - systemSelected).of(mockSolarSystemPopulationManager).selectStartSystem(with(same(participant)),
 						with(any(SolarSystemInfrastructure.class)), with(any(long.class)));
 				will(new CustomAction("return startsystem") {
 					@Override
@@ -954,7 +960,7 @@ public class ParticipantManagerImplTest extends GenericManagerImplTestCase<Parti
 		assertEquals(startSystemCount, result.size());
 		assertEquals(startSystemCount, participant.getStartSystemsSelected());
 		populationAssigned = 0;
-		for(SolarSystemPopulation pop: result)
+		for(SolarSystemPopulation pop : result)
 		{
 			populationAssigned += pop.getPopulation();
 		}

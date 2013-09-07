@@ -425,12 +425,13 @@ public class SolarSystemPopulationManagerImplTest extends
 		out.setDestructionType(destructionType);
 		out.setLastUpdateDate(destructionDate);
 
-		mockContext.checking(new Expectations() {
-			{
-				oneOf(mockDao).save(out);
-				will(returnValue(out));
-			}
-		});
+		// no save
+		// mockContext.checking(new Expectations() {
+		// {
+		// oneOf(mockDao).save(out);
+		// will(returnValue(out));
+		// }
+		// });
 		SolarSystemPopulation result = mockManager.destroy(in, destructionType, destructionDate);
 		mockContext.assertIsSatisfied();
 		assertEquals(out, result);
