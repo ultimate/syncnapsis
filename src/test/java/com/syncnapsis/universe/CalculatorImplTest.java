@@ -75,6 +75,18 @@ public class CalculatorImplTest extends LoggerTestCase
 				will(returnValue(20.0));
 			}
 		});
+		mockContext.checking(new Expectations() {
+			{
+				allowing(parameterManager).getDouble(UniverseConquestConstants.PARAM_FACTOR_ATTACK);
+				will(returnValue(100.0));
+			}
+		});
+		mockContext.checking(new Expectations() {
+			{
+				allowing(parameterManager).getDouble(UniverseConquestConstants.PARAM_FACTOR_BUILD);
+				will(returnValue(1000.0));
+			}
+		});
 
 		calculator = new CalculatorImpl(parameterManager);
 	}
@@ -179,18 +191,18 @@ public class CalculatorImplTest extends LoggerTestCase
 	{
 		fail("unimplemented");
 	}
-	
+
 	public void testGetMaxPopulation() throws Exception
 	{
 		assertEquals(1000000000000L, calculator.getMaxPopulation());
-		
+
 		int hab = 234;
 		int size = 567;
 		SolarSystemInfrastructure infrastructure = new SolarSystemInfrastructure();
 		infrastructure.setHabitability(hab);
 		infrastructure.setSize(size);
-		
-		assertEquals(hab*size*1000000L, calculator.getMaxPopulation(infrastructure));
+
+		assertEquals(hab * size * 1000000L, calculator.getMaxPopulation(infrastructure));
 	}
 
 	public void testGetMaxPopulationExponent() throws Exception
@@ -257,5 +269,55 @@ public class CalculatorImplTest extends LoggerTestCase
 		coords.add(new Vector.Integer(-100, 0, 100));
 
 		assertEquals(200, calculator.calculateAvgGap(coords));
+	}
+
+	public void testGetSpeedFactor() throws Exception
+	{
+		assertEquals(0.1, calculator.getSpeedFactor(-1));
+		assertEquals(1.0, calculator.getSpeedFactor(0));
+		assertEquals(10.0, calculator.getSpeedFactor(1));
+		assertEquals(100.0, calculator.getSpeedFactor(2));
+		assertEquals(1000.0, calculator.getSpeedFactor(3));
+	}
+
+	public void testCalculateAttackStrength()
+	{
+		assertEquals(0.0, calculator.calculateAttackStrength(10, 0));
+
+		assertEquals(100000.0, calculator.calculateAttackStrength(10, 1000000));
+		assertEquals(1000000.0, calculator.calculateAttackStrength(100, 1000000));
+		assertEquals(10000000.0, calculator.calculateAttackStrength(1000, 1000000));
+
+		assertEquals(2000.0, calculator.calculateAttackStrength(100, 2000));
+		assertEquals(20000.0, calculator.calculateAttackStrength(100, 20000));
+		assertEquals(200000.0, calculator.calculateAttackStrength(100, 200000));
+	}
+
+	public void testCalculateBuildStrength()
+	{
+		long maxPop = 25000000;
+		assertEquals(0.0, calculator.calculateBuildStrength(1000, 0, maxPop));
+		assertEquals(0.0, calculator.calculateBuildStrength(1000, maxPop, maxPop));
+		assertEquals(maxPop / 4.0, calculator.calculateBuildStrength(1000, maxPop / 2, maxPop));
+		assertEquals(calculator.calculateBuildStrength(1000, maxPop / 2 + 1, maxPop), calculator.calculateBuildStrength(1000, maxPop / 2 - 1, maxPop));
+		assertTrue(calculator.calculateBuildStrength(1000, maxPop / 2 - 1, maxPop) < calculator.calculateBuildStrength(1000, maxPop / 2, maxPop));
+
+		assertEquals(maxPop / 40.0, calculator.calculateBuildStrength(100, maxPop / 2, maxPop));
+		assertEquals(maxPop / 0.4, calculator.calculateBuildStrength(10000, maxPop / 2, maxPop));
+	}
+
+	public void testCalculateInfrastructureBuildInfluence()
+	{
+		long maxPop = 25000000;
+		assertEquals(1.5, calculator.calculateInfrastructureBuildInfluence(0, maxPop));
+
+		assertEquals(1.25, calculator.calculateInfrastructureBuildInfluence((long) (maxPop / 1e6), maxPop));
+		
+		assertEquals(1.0, calculator.calculateInfrastructureBuildInfluence(maxPop, maxPop));
+		assertEquals(1.0, calculator.calculateInfrastructureBuildInfluence(maxPop/2, maxPop/2));
+		
+		assertEquals(0.75, calculator.calculateInfrastructureBuildInfluence(maxPop, (long) (maxPop / 1e6)));
+
+		assertEquals(0.5, calculator.calculateInfrastructureBuildInfluence(maxPop, 0));
 	}
 }
