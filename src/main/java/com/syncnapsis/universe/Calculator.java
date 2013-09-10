@@ -130,5 +130,40 @@ public interface Calculator
 	 * @return the time needed for traveling the whole distance with the given speed in ms
 	 */
 	public long calculateTravelTime(SolarSystemInfrastructure origin, SolarSystemInfrastructure target, int travelSpeed);
+	
+	/**
+	 * Calculate the attack strength for the given amount of population
+	 * 
+	 * @param speedFactor - the speed factor to scale with
+	 * @param population - the population
+	 * @return the attack strength
+	 */
+	public double calculateAttackStrength(double speedFactor, long population);
 
+	/**
+	 * Calculate the build strength for the given amount of population
+	 * 
+	 * @param speedFactor - the speed factor to scale with
+	 * @param population - the population
+	 * @param maxPopulation - the maximum population
+	 * @return the build strength
+	 */
+	public double calculateBuildStrength(double speedFactor, long population, long maxPopulation);
+
+	/**
+	 * Calculate the influence of the infrastructure onto the build strength of the home population
+	 * 
+	 * @param population - the population
+	 * @param infrastructure - the infrastructure
+	 * @return the influence
+	 */
+	public double calculateInfrastructureBuildInfluence(long population, long infrastructure);
+
+	/**
+	 * Get the calculation factor for the given speed
+	 * 
+	 * @param speed - the match's speed
+	 * @return the speed factor
+	 */
+	public double getSpeedFactor(int speed);
 }

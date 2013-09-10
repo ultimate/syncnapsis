@@ -350,4 +350,52 @@ public class CalculatorImpl implements Calculator
 	{
 		return Math.log10(getMaxPopulation());
 	}
+
+	/**
+	 * Get the calculation factor for the given speed
+	 * 
+	 * @param speed - the match's speed
+	 * @return the speed factor
+	 */
+	public double getSpeedFactor(int speed)
+	{
+		return Math.pow(10, speed);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see com.syncnapsis.universe.Calculator#calculateAttackStrength(int, long)
+	 */
+	@Override
+	public double calculateAttackStrength(double speedFactor, long population)
+	{
+		double fac = parameterManager.getDouble(UniverseConquestConstants.PARAM_FACTOR_ATTACK);
+		return (speedFactor / fac) * population;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see com.syncnapsis.universe.Calculator#calculateBuildStrength(int, long, long)
+	 */
+	@Override
+	public double calculateBuildStrength(double speedFactor, long population, long maxPopulation)
+	{
+		double fac = parameterManager.getDouble(UniverseConquestConstants.PARAM_FACTOR_BUILD);
+		return (speedFactor / fac) * (maxPopulation - population) * population / maxPopulation;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see com.syncnapsis.universe.Calculator#calculateInfrastructureBuildInfluence(long, long)
+	 */
+	@Override
+	public double calculateInfrastructureBuildInfluence(long population, long infrastructure)
+	{
+		if(infrastructure == 0)
+			return 0.5;
+		else if(population == 0)
+			return 1.5;
+		else
+			return (Math.log10((double) infrastructure/population) / getMaxPopulationExponent())/ 2 + 1;
+	}
 }
