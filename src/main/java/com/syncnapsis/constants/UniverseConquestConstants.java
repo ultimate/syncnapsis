@@ -75,4 +75,58 @@ public class UniverseConquestConstants
 	 * The exact values may be used to control the selectable step-size.
 	 */
 	public static final String	PARAM_TRAVEL_SPEED_MIN					= "travel.speed.min";
+	/**
+	 * The factor for calculating population build
+	 */
+	public static final String	PARAM_FACTOR_BUILD						= "factor.build";
+	/**
+	 * The factor for calculating population attack
+	 */
+	public static final String	PARAM_FACTOR_ATTACK						= "factor.attack";
+	/**
+	 * The range for randomizing build strength calculation<br>
+	 * <ul>
+	 * <li>0.0 = no randomizatation</li>
+	 * <li>x = randomization by "+/- x" (relative) resulting in the range [(1-x)*value;(1+x)*value]</li>
+	 * <li>e.g. 0.1 = randomization from [0.9*value;1.1*value]</li>
+	 * <li>e.g. 0.5 = randomization from [0.5*value;1.5*value]</li>
+	 * <li>e.g. 1.5 = randomization from [-0.5*value;2.5*value]</li>
+	 * </ul>
+	 */
+	public static final String	PARAM_FACTOR_BUILD_RANDOMIZE = "factor.build.randomize";
+	/**
+	 * The range for randomizing attack strength calculation<br>
+	 * <ul>
+	 * <li>0.0 = no randomizatation</li>
+	 * <li>x = randomization by "+/- x" (relative) resulting in the range [(1-x)*value;(1+x)*value]</li>
+	 * <li>e.g. 0.1 = randomization from [0.9*value;1.1*value]</li>
+	 * <li>e.g. 0.5 = randomization from [0.5*value;1.5*value]</li>
+	 * <li>e.g. 1.5 = randomization from [-0.5*value;2.5*value]</li>
+	 * </ul>
+	 */
+	public static final String	PARAM_FACTOR_ATTACK_RANDOMIZE = "factor.attack.randomize";
+	/**
+	 * The length of a norm tick
+	 */
+	public static final String	PARAM_NORM_TICK_LENGTH					= "norm.tick.length";
+	/**
+	 * The factor for full priority
+	 */
+	public static final String	PARAM_PRIORITY_FULL						= "priority.full";
+	/**
+	 * The factor for high priority
+	 */
+	public static final String	PARAM_PRIORITY_HIGH						= "priority.high";
+	/**
+	 * The factor for medium priority
+	 */
+	public static final String	PARAM_PRIORITY_MEDIUM					= "priority.medium";
+	/**
+	 * The factor for low priority
+	 */
+	public static final String	PARAM_PRIORITY_LOW						= "priority.low";
+	/**
+	 * The factor for no priority
+	 */
+	public static final String	PARAM_PRIORITY_NONE						= "priority.none";
 }

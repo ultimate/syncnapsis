@@ -1,18 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
- - Syncnapsis Framework - Copyright (c) 2012 ultimate
- - 
- - This program is free software; you can redistribute it and/or modify it under the terms of
- - the GNU General Public License as published by the Free Software Foundation; either version
- - 3 of the License, or any later version.
- - 
- - This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
- - without even the implied warranty of MECHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
- - See the GNU General Public License for more details.
- - 
- - You should have received a copy of the GNU General Plublic License along with this program;
- - if not, see <http://www.gnu.org/licenses/>.
--->
+<!-- - Syncnapsis Framework - Copyright (c) 2012 ultimate - - This program 
+	is free software; you can redistribute it and/or modify it under the terms 
+	of - the GNU General Public License as published by the Free Software Foundation; 
+	either version - 3 of the License, or any later version. - - This program 
+	is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; 
+	- without even the implied warranty of MECHANTABILITY or FITNESS FOR A PARTICULAR 
+	PURPOSE. - See the GNU General Public License for more details. - - You should 
+	have received a copy of the GNU General Plublic License along with this program; 
+	- if not, see <http://www.gnu.org/licenses/>. -->
 <!DOCTYPE dataset SYSTEM "dataset.dtd">
 <dataset>
 
@@ -72,13 +67,73 @@
 		<row>
 			<value description="id">109</value>
 			<value description="name">match.speed.min</value>
-			<value description="value">100</value> <!-- TODO -->
+			<value description="value">0</value>
 			<value description="version">1</value>
 		</row>
 		<row>
 			<value description="id">110</value>
 			<value description="name">match.speed.max</value>
-			<value description="value">100</value> <!-- TODO -->
+			<value description="value">5</value>
+			<value description="version">1</value>
+		</row>
+		<row>
+			<value description="id">111</value>
+			<value description="name">factor.build</value>
+			<value description="value">1000</value>
+			<value description="version">1</value>
+		</row>
+		<row>
+			<value description="id">112</value>
+			<value description="name">factor.attack</value>
+			<value description="value">100</value>
+			<value description="version">1</value>
+		</row>
+		<row>
+			<value description="id">113</value>
+			<value description="name">factor.build.randomize</value>
+			<value description="value">1.1</value>
+			<value description="version">1</value>
+		</row>
+		<row>
+			<value description="id">114</value>
+			<value description="name">factor.attack.randomize</value>
+			<value description="value">0.25</value>
+			<value description="version">1</value>
+		</row>
+		<row>
+			<value description="id">115</value>
+			<value description="name">norm.tick.length</value>
+			<value description="value">100</value>
+			<value description="version">1</value>
+		</row>
+		<row>
+			<value description="id">121</value>
+			<value description="name">priority.full</value>
+			<value description="value">1.0</value>
+			<value description="version">1</value>
+		</row>
+		<row>
+			<value description="id">122</value>
+			<value description="name">priority.high</value>
+			<value description="value">0.75</value>
+			<value description="version">1</value>
+		</row>
+		<row>
+			<value description="id">123</value>
+			<value description="name">priority.medium</value>
+			<value description="value">0.5</value>
+			<value description="version">1</value>
+		</row>
+		<row>
+			<value description="id">124</value>
+			<value description="name">priority.low</value>
+			<value description="value">0.25</value>
+			<value description="version">1</value>
+		</row>
+		<row>
+			<value description="id">125</value>
+			<value description="name">priority.none</value>
+			<value description="value">0.0</value>
 			<value description="version">1</value>
 		</row>
 	</table>
@@ -462,7 +517,7 @@
 			<value description="creationDate">2012-01-01</value>
 			<value description="startDate">2012-01-01</value>
 			<value description="finishedDate">2012-02-01</value>
-			<null/>
+			<null />
 			<value description="state">finished</value>
 			<value description="speed">1</value>
 			<value description="seed">0</value>
@@ -637,7 +692,7 @@
 			<value description="creationDate">2012-01-01</value>
 			<value description="startDate">2012-01-01</value>
 			<value description="finishedDate">2012-02-01</value>
-			<null/>
+			<null />
 			<value description="state">finished</value>
 			<value description="speed">1</value>
 			<value description="seed">0</value>
