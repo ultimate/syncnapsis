@@ -22,6 +22,7 @@ import java.util.List;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.util.Assert;
 
+import com.syncnapsis.constants.UniverseConquestConstants;
 import com.syncnapsis.data.dao.SolarSystemPopulationDao;
 import com.syncnapsis.data.model.Participant;
 import com.syncnapsis.data.model.SolarSystemInfrastructure;
@@ -36,6 +37,7 @@ import com.syncnapsis.security.accesscontrol.SolarSystemPopulationAccessControll
 import com.syncnapsis.universe.Calculator;
 import com.syncnapsis.utils.MathUtil;
 import com.syncnapsis.utils.StringUtil;
+import com.syncnapsis.utils.data.ExtendedRandom;
 
 /**
  * Manager-Implementation for access to SolarSystemPopulation.
@@ -262,9 +264,8 @@ public class SolarSystemPopulationManagerImpl extends GenericManagerImpl<SolarSy
 		origin.setPopulation(origin.getPopulation() - population);
 		logger.debug("origin to be saved = " + StringUtil.toString(origin, 0));
 		if(origin.getPopulation() <= 0)
-			destroy(origin, EnumDestructionType.givenUp, now); // will perform save
-		else
-			save(origin);
+			destroy(origin, EnumDestructionType.givenUp, now);
+		save(origin);
 
 		return updateTravelSpeed(spinoff, travelSpeed, now); // will perform save
 	}
@@ -283,7 +284,8 @@ public class SolarSystemPopulationManagerImpl extends GenericManagerImpl<SolarSy
 		population.setDestructionType(destructionType);
 		population.setLastUpdateDate(destructionDate);
 
-		return save(population);
+		return population;
+		// return save(population);
 	}
 
 	/*
@@ -338,20 +340,21 @@ public class SolarSystemPopulationManagerImpl extends GenericManagerImpl<SolarSy
 
 				// remove the newer population
 				newerPop.setPopulation(0);
-				// save using destroy
+				// destroy (no save)
 				destroy(newerPop, EnumDestructionType.merged, newerPop.getColonizationDate());
 			}
-			else
-			{
-				newerPop.setLastUpdateDate(now);
-				// save newerPop only, olderPop will be saved later during iteration
-				// save even if no changes have been made in this iteration, since changes may have
-				// been made before.
-				save(newerPop);
-			}
+			// else
+			// {
+			// newerPop.setLastUpdateDate(now);
+			// }
+
+			// save newerPop only, olderPop will be saved later during iteration
+			// save even if no changes have been made in this iteration, since changes may have
+			// been made before.
+			save(newerPop);
 		}
 
-		infrastructure.setLastUpdateDate(now);
+		// infrastructure.setLastUpdateDate(now);
 		infrastructure = solarSystemInfrastructureManager.save(infrastructure);
 
 		return infrastructure.getPopulations();
@@ -485,5 +488,139 @@ public class SolarSystemPopulationManagerImpl extends GenericManagerImpl<SolarSy
 		}
 		pop.setPopulation(population);
 		return save(pop);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see
+	 * com.syncnapsis.data.service.SolarSystemPopulationManager#simulate(com.syncnapsis.data.model
+	 * .SolarSystemInfrastructure, com.syncnapsis.utils.data.ExtendedRandom)
+	 */
+	@Override
+	public List<SolarSystemPopulation> simulate(SolarSystemInfrastructure infrastructure, ExtendedRandom random)
+	{
+		SolarSystemPopulation homePopulation = getHomePopulation(infrastructure);
+
+		long now = securityManager.getTimeProvider().get();
+
+		double speedFactor = calculator.getSpeedFactor(infrastructure.getMatch().getSpeed());
+		long maxPopulation = calculator.getMaxPopulation(infrastructure);
+
+		double prio_full = parameterManager.getDouble(UniverseConquestConstants.PARAM_PRIORITY_FULL);
+		double prio_high = parameterManager.getDouble(UniverseConquestConstants.PARAM_PRIORITY_HIGH);
+		double prio_medium = parameterManager.getDouble(UniverseConquestConstants.PARAM_PRIORITY_MEDIUM);
+		double prio_low = parameterManager.getDouble(UniverseConquestConstants.PARAM_PRIORITY_LOW);
+		double prio_none = parameterManager.getDouble(UniverseConquestConstants.PARAM_PRIORITY_NONE);
+		double randomization_attack = parameterManager.getDouble(UniverseConquestConstants.PARAM_FACTOR_ATTACK_RANDOMIZE);
+		double randomization_build = parameterManager.getDouble(UniverseConquestConstants.PARAM_FACTOR_BUILD_RANDOMIZE);
+		long norm_tick = parameterManager.getLong(UniverseConquestConstants.PARAM_NORM_TICK_LENGTH);
+
+		double[] deltaPop = new double[infrastructure.getPopulations().size()];
+		double deltaInf = 0;
+		long totalPopulation = 0;
+		long otherPopulation;
+		double b, a, aPop;
+		long tick, tick2;
+		SolarSystemPopulation pop, pop2;
+
+		// first loop
+		// - determine total population
+		for(int i = 0; i < infrastructure.getPopulations().size(); i++)
+		{
+			pop = infrastructure.getPopulations().get(i);
+			totalPopulation += pop.getPopulation();
+		}
+		// second loop
+		// - determine build and attack strengths
+		// - calculate anti attack (current pop is attacker; attack strength is splitted)
+		for(int i = 0; i < infrastructure.getPopulations().size(); i++)
+		{
+			pop = infrastructure.getPopulations().get(i);
+			tick = now - pop.getLastUpdateDate().getTime();
+			if(pop.getPopulation() > 0 && pop.getColonizationDate().getTime() <= now)
+			{
+				b = calculator.calculateBuildStrength(speedFactor, pop.getPopulation(), maxPopulation);
+				b *= tick / norm_tick; // weight strength by tick-length
+				if(randomization_build > 0) // add random variation
+					b *= random.nextGaussian(1 - randomization_build, 1 + randomization_build);
+				a = calculator.calculateAttackStrength(speedFactor, pop.getPopulation());
+				a *= tick / norm_tick; // weight strength by tick-length
+				if(randomization_attack > 0) // add random variation
+					a *= random.nextGaussian(1 - randomization_attack, 1 + randomization_attack);
+				if(pop == homePopulation)
+				{
+					b *= calculator.calculateInfrastructureBuildInfluence(pop.getPopulation(), infrastructure.getInfrastructure());
+					// split build strength by priority
+					switch(pop.getBuildPriority())
+					{
+						case infrastructure:
+							deltaPop[i] += b * prio_low;
+							deltaInf += b * prio_high;
+							break;
+						case population:
+							deltaPop[i] += b * prio_high;
+							deltaInf += b * prio_low;
+							break;
+						case balanced:
+						default:
+							deltaPop[i] += b * prio_medium;
+							deltaInf += b * prio_medium;
+							break;
+
+					}
+					// split attack strength by priority (pop only if home)
+					aPop = a * prio_full;
+					deltaInf += a * prio_none;
+				}
+				else
+				{
+					// no build if not home
+					deltaPop[i] += b * prio_none;
+					deltaInf += b * prio_none;
+					// split attack strength by priority
+					switch(pop.getAttackPriority())
+					{
+						case infrastructure:
+							aPop = b * prio_low;
+							deltaInf += b * prio_high;
+							break;
+						case population:
+							aPop = b * prio_high;
+							deltaInf += b * prio_low;
+							break;
+						case balanced:
+						default:
+							aPop = b * prio_medium;
+							deltaInf += b * prio_medium;
+							break;
+					}
+				}
+				// distribute attack strength on other populations
+				// (weighted by their amount of population)
+				otherPopulation = totalPopulation - pop.getPopulation();
+				for(int j = 0; j < infrastructure.getPopulations().size(); j++)
+				{
+					if(j != i)
+					{
+						pop2 = infrastructure.getPopulations().get(j);
+						tick2 = now - pop2.getLastUpdateDate().getTime();
+						deltaPop[j] -= ((double) pop2.getPopulation() / otherPopulation) * aPop * Math.min(tick, tick2) / norm_tick;
+					}
+				}
+			}
+		}
+		// third loop
+		// - apply delta
+		for(int i = 0; i < infrastructure.getPopulations().size(); i++)
+		{
+			pop = infrastructure.getPopulations().get(i);
+			logger.debug("population " + pop.getId() + " delta = " + deltaPop[i]);
+			pop.setPopulation(pop.getPopulation() + Math.round(deltaPop[i]));
+		}
+		// infrastructure update
+		infrastructure.setInfrastructure(infrastructure.getInfrastructure() + Math.round(deltaInf));
+
+		// return modified list
+		return infrastructure.getPopulations();
 	}
 }

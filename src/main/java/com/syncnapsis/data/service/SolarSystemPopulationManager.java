@@ -22,6 +22,7 @@ import com.syncnapsis.data.model.SolarSystemInfrastructure;
 import com.syncnapsis.data.model.SolarSystemPopulation;
 import com.syncnapsis.enums.EnumDestructionType;
 import com.syncnapsis.enums.EnumPopulationPriority;
+import com.syncnapsis.utils.data.ExtendedRandom;
 
 /**
  * Manager-Interface for access to SolarSystemPopulation.
@@ -83,7 +84,8 @@ public interface SolarSystemPopulationManager extends GenericManager<SolarSystem
 
 	/**
 	 * Destroy the given population and clean up by setting several properties.<br>
-	 * This method may be used for give ups (and resettles) as well as for attack results.
+	 * This method may be used for give ups (and resettles) as well as for attack results.<br>
+	 * <b>Note: population <u>won't be saved</u> during this process!</b>
 	 * 
 	 * @param population - the population to destroy
 	 * @param destructionType - the destruction type
@@ -96,7 +98,8 @@ public interface SolarSystemPopulationManager extends GenericManager<SolarSystem
 	 * Merge the populations for this infrastructe if possible.<br>
 	 * Populations of the same participant (already arrived at the infrastructure) will be merged to
 	 * single entities by adding population values and preserving the oldest colonization date.<br>
-	 * Single popuations newly arrived may be updated during this process as well.
+	 * Single popuations newly arrived may be updated during this process as well.<br>
+	 * <b>Note: populations and infrastructure <u>won't be saved</u> during this process!</b>
 	 * 
 	 * @param infrastructure - the infrastructure which's populations to merge
 	 * @return the list of merged populations
@@ -139,4 +142,13 @@ public interface SolarSystemPopulationManager extends GenericManager<SolarSystem
 	 */
 	public SolarSystemPopulation selectStartSystem(Participant participant, SolarSystemInfrastructure infrastructure, long population);
 
+	/**
+	 * Simulate population changes due to building, population growths and attacks.<br>
+	 * <b>Note: assure to merge populations before simulating to ensure correct calculation!</b>
+	 * 
+	 * @param infrastructure - the infrastructure which's populations to merge
+	 * @param random - the random number generator used for randomization
+	 * @return the list of simulated populations
+	 */
+	public List<SolarSystemPopulation> simulate(SolarSystemInfrastructure infrastructure, ExtendedRandom random);
 }
