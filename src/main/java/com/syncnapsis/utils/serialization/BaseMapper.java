@@ -273,17 +273,15 @@ public class BaseMapper implements Mapper, InitializingBean
 			cls = (Class<? extends T>) entity.getClass();
 		else if(type != null && type instanceof ParameterizedType)
 			cls = (Class<? extends T>) ((ParameterizedType) type).getRawType();
-//		else if(type != null && type instanceof TypeVariable)
-//			cls = ((TypeVariable) type).
+		// else if(type != null && type instanceof TypeVariable)
+		// cls = ((TypeVariable) type).
 		else
 			cls = (Class<? extends T>) type;
 
-		// logger.trace("type:     " + type);
-		// logger.trace("cls:      " + cls);
-		// logger.trace("entity:   " + entity + (entity != null ? " (" + entity.getClass() + ")" :
-		// ""));
-		// logger.trace("prepared: " + prepared + (prepared != null ? " (" + prepared.getClass() +
-		// ")" : ""));
+		logger.debug("type:     " + type);
+		logger.debug("cls:      " + cls);
+		logger.debug("entity:   " + entity + (entity != null ? " (" + entity.getClass() + ")" : ""));
+		logger.debug("prepared: " + prepared + (prepared != null ? " (" + prepared.getClass() + ")" : ""));
 
 		if(prepared == null)
 		{
@@ -385,6 +383,26 @@ public class BaseMapper implements Mapper, InitializingBean
 		{
 			return (T) prepared;
 		}
+		if(Date.class.isAssignableFrom(cls) && prepared instanceof Number)
+		{
+			if(entity == null)
+			{
+				try
+				{
+					entity = cls.newInstance();
+				}
+				catch(InstantiationException e)
+				{
+					logger.error("Could not instantiate type " + type, e);
+				}
+				catch(IllegalAccessException e)
+				{
+					logger.error("Could not instantiate type " + type, e);
+				}
+			}
+			((Date) entity).setTime(((Number) prepared).longValue());
+			return entity;
+		}
 		// logger.trace("Class? " + (cls == Class.class && prepared instanceof String));
 		if(cls == Class.class && prepared instanceof String)
 		{
@@ -397,7 +415,7 @@ public class BaseMapper implements Mapper, InitializingBean
 				// fallback to the original given entity
 				return entity;
 			}
-		}		
+		}
 		// logger.trace("nothing suitable found...!");
 		return entity;
 	}

@@ -62,6 +62,9 @@ public class BaseMapperTest extends LoggerTestCase
 
 		assertEquals(1, (int) mapper.merge((Integer) null, 1, (Object[]) null));
 
+		assertEquals(new Date(1), mapper.merge(new Date(), 1, (Object[]) null));
+		assertEquals(new Date(1), mapper.merge(Date.class, 1, (Object[]) null));
+		
 		assertEquals(EnumLocale.DE, mapper.merge(EnumLocale.class, EnumLocale.DE, (Object[]) null));
 		assertEquals(EnumLocale.DE, mapper.merge(EnumLocale.class, "DE", (Object[]) null));
 	}
