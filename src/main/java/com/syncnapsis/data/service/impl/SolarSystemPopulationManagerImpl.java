@@ -528,7 +528,8 @@ public class SolarSystemPopulationManagerImpl extends GenericManagerImpl<SolarSy
 		for(int i = 0; i < infrastructure.getPopulations().size(); i++)
 		{
 			pop = infrastructure.getPopulations().get(i);
-			totalPopulation += pop.getPopulation();
+			if(pop.getColonizationDate().getTime() <= now)
+				totalPopulation += pop.getPopulation();
 		}
 		// second loop
 		// - determine build and attack strengths
