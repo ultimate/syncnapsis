@@ -130,14 +130,10 @@ public class GenericDaoMock<T extends Identifiable<PK>, PK extends Serializable>
 	@Override
 	public List<T> getByIdList(List<PK> idList)
 	{
-		List<T> results = getAll(this.persistentClass);
-		if(results == null)
-			return new LinkedList<T>();
-		List<T> copy = new ArrayList<T>(results);
-		for(T t : copy)
+		List<T> results = new ArrayList<T>(idList.size());
+		for(PK id : idList)
 		{
-			if(!idList.contains(t.getId()))
-				results.remove(t);
+			results.add(get(id));
 		}
 		return results;
 	}

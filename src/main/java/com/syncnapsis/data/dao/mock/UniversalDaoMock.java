@@ -81,7 +81,11 @@ public class UniversalDaoMock implements UniversalDao
 			throw new IllegalArgumentException("entity must not be null!");
 		if(!db.containsKey(o.getClass()))
 			db.put(o.getClass(), new HashMap<Serializable, T>());
-		long id = nextId();
+		Serializable id = null;
+		if(o instanceof Identifiable)
+			id = ((Identifiable<Serializable>) o).getId();
+		if(id == null)
+			id = nextId();
 		((Map<Serializable, T>) db.get(o.getClass())).put(id, o);
 		if(o instanceof Identifiable)
 			((Identifiable<Serializable>) o).setId(id);

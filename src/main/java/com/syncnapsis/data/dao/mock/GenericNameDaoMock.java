@@ -15,12 +15,18 @@
 package com.syncnapsis.data.dao.mock;
 
 import java.io.Serializable;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 
 import com.syncnapsis.data.dao.GenericNameDao;
 import com.syncnapsis.data.dao.hibernate.GenericDaoHibernate;
 import com.syncnapsis.data.model.base.ActivatableInstance;
 import com.syncnapsis.data.model.base.Identifiable;
+import com.syncnapsis.utils.ReflectionsUtil;
+import com.syncnapsis.utils.reflections.MethodComparator;
 
 /**
  * @author ultimate
@@ -66,8 +72,10 @@ public class GenericNameDaoMock<T extends Identifiable<PK>, PK extends Serializa
 	@Override
 	public List<T> getOrderedByName(boolean returnOnlyActivated)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		List<T> results = getAll(returnOnlyActivated);
+		Method getter = ReflectionsUtil.getGetter(persistentClass, nameField, String.class);
+		Collections.sort(results, new MethodComparator<T>(getter.getName(), 1));
+		return results;
 	}
 
 	/*
@@ -77,8 +85,18 @@ public class GenericNameDaoMock<T extends Identifiable<PK>, PK extends Serializa
 	@Override
 	public List<T> getByPrefix(String prefix, int nRows, boolean returnOnlyActivated)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		List<T> results = getAll(returnOnlyActivated);
+		if(results == null)
+			return new LinkedList<T>();
+		List<T> copy = new ArrayList<T>(results);
+		for(T t : copy)
+		{
+			if(!getName(t).startsWith(prefix))
+				results.remove(t);
+		}
+		if(nRows < results.size())
+			return results.subList(0, nRows);
+		return results;
 	}
 
 	/*
@@ -88,7 +106,10 @@ public class GenericNameDaoMock<T extends Identifiable<PK>, PK extends Serializa
 	@Override
 	public T getByName(String name)
 	{
-		// TODO Auto-generated method stub
+		List<T> all = getAll();
+		for(T t : all)
+			if(name.equals(getName(t)))
+				return t;
 		return null;
 	}
 
@@ -99,8 +120,23 @@ public class GenericNameDaoMock<T extends Identifiable<PK>, PK extends Serializa
 	@Override
 	public boolean isNameAvailable(String name)
 	{
-		// TODO Auto-generated method stub
-		return false;
+		return getByName(name) == null;
 	}
 
+	protected String getName(T t)
+	{
+		try
+		{
+			return ReflectionsUtil.getField(t, nameField, String.class);
+		}
+		catch(IllegalAccessException e)
+		{
+			logger.error("cannot access field '" + nameField + "'", e);
+		}
+		catch(NoSuchFieldException e)
+		{
+			logger.error("no such field '" + nameField + "'", e);
+		}
+		return null;
+	}
 }

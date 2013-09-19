@@ -29,7 +29,8 @@ public class DataCoverageTest extends CoverageTestCase
 	@Override
 	protected String ignoreSpecialClass(Class<?> c)
 	{
-		if(c.getName().startsWith("com.syncnapsis.data"))
+		String dataPackage = "com.syncnapsis.data";
+		if(c.getName().startsWith(dataPackage) && !c.getName().startsWith(dataPackage + ".dao.mock"))
 			return "Data-Class --> Test in specific implementation!";
 		if(c.equals(ObjectNotFoundException.class))
 			return "Exception-Super-Type --> Test in specific implementation!";
