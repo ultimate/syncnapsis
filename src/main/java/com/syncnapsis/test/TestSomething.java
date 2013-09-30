@@ -16,7 +16,6 @@ package com.syncnapsis.test;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -36,12 +35,16 @@ import com.syncnapsis.data.model.SolarSystemInfrastructure;
 import com.syncnapsis.data.model.SolarSystemPopulation;
 import com.syncnapsis.data.model.help.Vector;
 import com.syncnapsis.data.service.ParameterManager;
+import com.syncnapsis.security.annotations.Accessible;
 import com.syncnapsis.tests.annotations.Untested;
 import com.syncnapsis.universe.Calculator;
 import com.syncnapsis.universe.CalculatorImpl;
 import com.syncnapsis.utils.FileUtil;
 import com.syncnapsis.utils.IconUtil;
 import com.syncnapsis.utils.MathUtil;
+import com.syncnapsis.utils.serialization.BaseMapper;
+import com.syncnapsis.utils.serialization.JacksonStringSerializer;
+import com.syncnapsis.utils.serialization.Mapper;
 
 @Untested
 @SuppressWarnings("unused")
@@ -49,6 +52,30 @@ public class TestSomething
 {
 	public static void main(String[] args) throws Exception
 	{
+		Mapper mapper = new BaseMapper();
+		JacksonStringSerializer serializer = new JacksonStringSerializer();
+		serializer.setMapper(mapper);
+		
+		Entity e = new Entity();
+		e.setDate(new Date(1234));
+		System.out.println("entity = " + e);
+		
+		String s;
+		
+		s = serializer.serialize(e, new Object[0]);
+		System.out.println("entity serialized = " + s);
+		
+		Entity e2 = serializer.deserialize(s, Entity.class, new Object[0]);
+		System.out.println("entity2 = " + e2);
+
+		Entity e3 = new Entity();
+		serializer.deserialize(s, e3, new Object[0]);
+		System.out.println("entity3 = " + e3);
+		
+		
+		System.exit(0);
+		
+
 		MockParameterManager mockParameterManager = new MockParameterManager();
 		mockParameterManager.values.put(UniverseConquestConstants.PARAM_SOLARSYSTEM_HABITABILITY_MAX, 1000);
 		mockParameterManager.values.put(UniverseConquestConstants.PARAM_SOLARSYSTEM_SIZE_MAX, 1000);
@@ -75,20 +102,20 @@ public class TestSomething
 
 				start = System.currentTimeMillis();
 				sectors = loadSectors(f);
-				
+
 				sortSectors(sectors);
-//				getStats(calculator, sectors, output);
+				// getStats(calculator, sectors, output);
 
 				output.append("\t(" + (System.currentTimeMillis() - start) + "ms)\n");
 				System.out.print("\t(" + (System.currentTimeMillis() - start) + "ms)\n");
 			}
 		}
 
-//		FileUtil.writeFile(new File(folder.getAbsolutePath() + "/sector-stats.txt"), output.toString());
+		// FileUtil.writeFile(new File(folder.getAbsolutePath() + "/sector-stats.txt"),
+		// output.toString());
 
-		
-		// icon experiment...		
-		
+		// icon experiment...
+
 		// createIconFile("ultimate");
 		// createIconFile("moronicjoker");
 		// createIconFile("X");
@@ -484,5 +511,27 @@ public class TestSomething
 			return (Date) values.get(name);
 		}
 
+	}
+
+	public static class Entity
+	{
+		private Date	date;
+
+		@Accessible(defaultAccessible = true)
+		public Date getDate()
+		{
+			return date;
+		}
+
+		@Accessible(defaultAccessible = true)
+		public void setDate(Date date)
+		{
+			this.date = date;
+		}
+
+		public String toString()
+		{
+			return "Entity(date=" + date + ")";
+		}
 	}
 }
