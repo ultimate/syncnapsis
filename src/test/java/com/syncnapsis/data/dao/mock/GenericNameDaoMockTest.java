@@ -104,17 +104,28 @@ public class GenericNameDaoMockTest extends LoggerTestCase
 
 	public void testGetByName() throws Exception
 	{
-
+		assertNotNull(genericNameDao.getByName("one"));
+		assertNotNull(genericNameDao.getByName("ONE"));
+		assertNotNull(genericNameDao.getByName("oNe"));
+		assertNotNull(genericNameDao.getByName("two"));
+		assertNull(genericNameDao.getByName("zero"));
 	}
 
 	public void testIsNameAvailable() throws Exception
 	{
-
+		assertFalse(genericNameDao.isNameAvailable("one"));
+		assertFalse(genericNameDao.isNameAvailable("ONE"));
+		assertFalse(genericNameDao.isNameAvailable("oNe"));
+		assertFalse(genericNameDao.isNameAvailable("two"));
+		assertTrue(genericNameDao.isNameAvailable("zero"));
 	}
 
 	public void testGetName() throws Exception
 	{
-
+		Entity e = new Entity();
+		e.setName("a name");
+		
+		assertSame(e.getName(), genericNameDao.getName(e));
 	}
 
 	public static class Entity extends ActivatableInstance<Long>

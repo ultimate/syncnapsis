@@ -108,7 +108,7 @@ public class GenericNameDaoMock<T extends Identifiable<PK>, PK extends Serializa
 	{
 		List<T> all = getAll();
 		for(T t : all)
-			if(name.equals(getName(t)))
+			if(name.equalsIgnoreCase(getName(t)))
 				return t;
 		return null;
 	}
