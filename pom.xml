@@ -20,13 +20,13 @@
     <groupId>com.syncnapsis.syncnapsis-modules</groupId>
     <artifactId>syncnapsis-modules-politics-api</artifactId>
     <packaging>jar</packaging>
-    <version>0.8.2</version>
+    <version>0.8.3</version>
 	<name>syncnapsis-modules-politics-api</name>
 	
 	<parent>
 		<groupId>com.syncnapsis</groupId>
 		<artifactId>syncnapsis-modules</artifactId>
-		<version>0.8.2</version>
+		<version>0.8.3</version>
 	</parent>
     
     <build>
@@ -47,7 +47,7 @@
         <dependency>
             <groupId>com.syncnapsis.syncnapsis-modules</groupId>
             <artifactId>syncnapsis-modules-authority-api</artifactId>
-            <version>0.8.2</version>
+            <version>0.8.3</version>
         </dependency>
     </dependencies>
 
