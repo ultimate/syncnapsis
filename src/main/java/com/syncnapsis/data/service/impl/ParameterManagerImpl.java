@@ -14,11 +14,13 @@
  */
 package com.syncnapsis.data.service.impl;
 
+import java.text.ParseException;
 import java.util.Date;
 
 import com.syncnapsis.data.dao.ParameterDao;
 import com.syncnapsis.data.model.Parameter;
 import com.syncnapsis.data.service.ParameterManager;
+import com.syncnapsis.enums.EnumDateFormat;
 
 /**
  * Manager-Implementierung für den Zugriff auf Parameter.
@@ -45,91 +47,146 @@ public class ParameterManagerImpl extends GenericNameManagerImpl<Parameter, Long
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.syncnapsis.service.ParameterManager#getString(java.lang.String)
+	 * @see com.syncnapsis.dao.ParameterDao#getString(java.lang.String)
 	 */
 	@Override
 	public String getString(String name)
 	{
-		return parameterDao.getString(name);
+		Parameter parameter = getByName(name);
+		if(parameter != null)
+			return parameter.getValue();
+		return null;
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.syncnapsis.service.ParameterManager#getBoolean(java.lang.String)
+	 * @see com.syncnapsis.dao.ParameterDao#getBoolean(java.lang.String)
 	 */
 	@Override
 	public Boolean getBoolean(String name)
 	{
-		return parameterDao.getBoolean(name);
+		String parameterString = getString(name);
+		if(parameterString != null)
+			return Boolean.valueOf(parameterString);
+		return false;
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.syncnapsis.service.ParameterManager#getByte(java.lang.String)
+	 * @see com.syncnapsis.dao.ParameterDao#getByte(java.lang.String)
 	 */
 	@Override
 	public Byte getByte(String name)
 	{
-		return parameterDao.getByte(name);
+		String parameterString = getString(name);
+		if(parameterString != null)
+			return Byte.parseByte(parameterString);
+		return null;
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.syncnapsis.service.ParameterManager#getDate(java.lang.String)
+	 * @see com.syncnapsis.dao.ParameterDao#getDate(java.lang.String)
 	 */
 	@Override
 	public Date getDate(String name)
 	{
-		return parameterDao.getDate(name);
+		String parameterString = getString(name);
+		if(parameterString != null)
+		{
+			try
+			{
+				return EnumDateFormat.getDefault().getDateFormat().parse(parameterString);
+			}
+			catch(ParseException e)
+			{
+				logger.error(e.getMessage(), e);
+			}
+		}
+		return null;
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.syncnapsis.service.ParameterManager#getDouble(java.lang.String)
+	 * @see com.syncnapsis.dao.ParameterDao#getDouble(java.lang.String)
 	 */
 	@Override
 	public Double getDouble(String name)
 	{
-		return parameterDao.getDouble(name);
+		String parameterString = getString(name);
+		if(parameterString != null)
+			return Double.parseDouble(parameterString);
+		return null;
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.syncnapsis.service.ParameterManager#getFloat(java.lang.String)
+	 * @see com.syncnapsis.dao.ParameterDao#getFloat(java.lang.String)
 	 */
 	@Override
 	public Float getFloat(String name)
 	{
-		return parameterDao.getFloat(name);
+		String parameterString = getString(name);
+		if(parameterString != null)
+			return Float.parseFloat(parameterString);
+		return null;
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.syncnapsis.service.ParameterManager#getInteger(java.lang.String)
+	 * @see com.syncnapsis.dao.ParameterDao#getInteger(java.lang.String)
 	 */
 	@Override
 	public Integer getInteger(String name)
 	{
-		return parameterDao.getInteger(name);
+		String parameterString = getString(name);
+		if(parameterString != null)
+			return Integer.parseInt(parameterString);
+		return null;
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.syncnapsis.service.ParameterManager#getLong(java.lang.String)
+	 * @see com.syncnapsis.dao.ParameterDao#getLong(java.lang.String)
 	 */
 	@Override
 	public Long getLong(String name)
 	{
-		return parameterDao.getLong(name);
+		String parameterString = getString(name);
+		if(parameterString != null)
+			return Long.parseLong(parameterString);
+		return null;
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.syncnapsis.service.ParameterManager#getShort(java.lang.String)
+	 * @see com.syncnapsis.dao.ParameterDao#getShort(java.lang.String)
 	 */
 	@Override
 	public Short getShort(String name)
 	{
-		return parameterDao.getShort(name);
+		String parameterString = getString(name);
+		if(parameterString != null)
+			return Short.parseShort(parameterString);
+		return null;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see com.syncnapsis.data.service.ParameterManager#setString(java.lang.String,
+	 * java.lang.String)
+	 */
+	@Override
+	public long setString(String name, String value)
+	{
+		Parameter p = getByName(name);
+		if(p == null)
+		{
+			p = new Parameter();
+			p.setName(name);
+		}
+		p.setValue(value);
+		p = save(p);
+		return p.getId();
 	}
 }

@@ -96,4 +96,14 @@ public interface ParameterManager extends GenericNameManager<Parameter, Long>
 	 * @return der Parameter als Date
 	 */
 	public Date getDate(String name);
+
+	/**
+	 * Set the value for a parameter. If no parameter exists for the given name a new one will be
+	 * created.
+	 * 
+	 * @param name - the parameter name
+	 * @param value - the parameter value
+	 * @return the parameter id
+	 */
+	public long setString(String name, String value);
 }
