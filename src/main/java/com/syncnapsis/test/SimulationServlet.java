@@ -17,7 +17,6 @@ package com.syncnapsis.test;
 import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.servlet.ServletException;
@@ -29,12 +28,16 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.util.Assert;
 
 import com.syncnapsis.constants.UniverseConquestConstants;
+import com.syncnapsis.data.dao.ParameterDao;
 import com.syncnapsis.data.dao.SolarSystemPopulationDao;
+import com.syncnapsis.data.dao.mock.ParameterDaoMock;
+import com.syncnapsis.data.model.Parameter;
 import com.syncnapsis.data.model.SolarSystemInfrastructure;
 import com.syncnapsis.data.model.SolarSystemPopulation;
 import com.syncnapsis.data.service.ParameterManager;
 import com.syncnapsis.data.service.SolarSystemInfrastructureManager;
 import com.syncnapsis.data.service.SolarSystemPopulationManager;
+import com.syncnapsis.data.service.impl.ParameterManagerImpl;
 import com.syncnapsis.data.service.impl.SolarSystemPopulationManagerImpl;
 import com.syncnapsis.exceptions.DeserializationException;
 import com.syncnapsis.exceptions.SerializationException;
@@ -69,6 +72,7 @@ public class SimulationServlet extends ServletEngine
 	protected SolarSystemInfrastructureManager	solarSystemInfrastructureManager;
 	protected ParameterManager					parameterManager;
 
+	protected ParameterDao						mockParameterDao;
 	protected ParameterManager					mockParameterManager;
 	protected Calculator						calculator;
 	protected SolarSystemPopulationManager		solarSystemPopulationManager;
@@ -119,7 +123,15 @@ public class SimulationServlet extends ServletEngine
 		timeProvider = new MockTimeProvider();
 		securityManager = new BaseGameManager();
 		securityManager.setTimeProvider(timeProvider);
-		mockParameterManager = new MockParameterManager();
+		mockParameterDao = new ParameterDaoMock();
+		mockParameterManager = new ParameterManagerImpl(mockParameterDao);
+		
+		// copy default parameters from db
+		for(Parameter p: parameterManager.getAll())
+		{
+			mockParameterManager.save(p);
+		}
+		
 		calculator = new CalculatorImpl(mockParameterManager);
 		solarSystemPopulationManager = new SolarSystemPopulationManagerImpl(solarSystemPopulationDao, solarSystemInfrastructureManager,
 				mockParameterManager);
