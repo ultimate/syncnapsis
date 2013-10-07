@@ -842,5 +842,45 @@ public class SolarSystemPopulationManagerImplTest extends
 		{
 			return 1000000L * infrastructure.getHabitability() * infrastructure.getSize();
 		}
+
+		/* (non-Javadoc)
+		 * @see com.syncnapsis.universe.Calculator#calculateAttackStrength(double, long)
+		 */
+		@Override
+		public double calculateAttackStrength(double speedFactor, long population)
+		{
+			// TODO Auto-generated method stub
+			return 0;
+		}
+
+		/* (non-Javadoc)
+		 * @see com.syncnapsis.universe.Calculator#calculateBuildStrength(double, long, long)
+		 */
+		@Override
+		public double calculateBuildStrength(double speedFactor, long population, long maxPopulation)
+		{
+			// TODO Auto-generated method stub
+			return 0;
+		}
+
+		/* (non-Javadoc)
+		 * @see com.syncnapsis.universe.Calculator#calculateInfrastructureBuildInfluence(long, long)
+		 */
+		@Override
+		public double calculateInfrastructureBuildInfluence(long population, long infrastructure)
+		{
+			// TODO Auto-generated method stub
+			return 0;
+		}
+
+		/* (non-Javadoc)
+		 * @see com.syncnapsis.universe.Calculator#getSpeedFactor(int)
+		 */
+		@Override
+		public double getSpeedFactor(int speed)
+		{
+			// TODO Auto-generated method stub
+			return 0;
+		}
 	}
 }
