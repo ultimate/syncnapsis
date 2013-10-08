@@ -21,6 +21,7 @@ import org.hibernate.ObjectNotFoundException;
 
 import com.syncnapsis.data.dao.hibernate.NewsDaoHibernate;
 import com.syncnapsis.data.model.News;
+import com.syncnapsis.data.service.ParameterManager;
 import com.syncnapsis.enums.EnumLocale;
 import com.syncnapsis.enums.EnumNewsAge;
 import com.syncnapsis.enums.EnumNewsType;
@@ -31,7 +32,7 @@ import com.syncnapsis.tests.annotations.TestCoversClasses;
 public class NewsDaoTest extends BaseDaoTestCase
 {
 	private NewsDao			newsDao;
-	private ParameterDao	parameterDao;
+	private ParameterManager	parameterManager;
 	private UserDao			userDao;
 
 	public void testGetNewsInvalid() throws Exception
@@ -144,7 +145,7 @@ public class NewsDaoTest extends BaseDaoTestCase
 		flush();
 
 		EnumNewsAge maxAge = EnumNewsAge.length1;
-		long maxAgeValue = parameterDao.getLong(maxAge.getParameterKey()) * 1000;
+		long maxAgeValue = parameterManager.getLong(maxAge.getParameterKey()) * 1000;
 
 		List<String> newsIds = newsDao.getIdsByMaxAge(maxAge, maxAgeValue, new Date(timeProvider.get()));
 		assertNotNull(newsIds);
