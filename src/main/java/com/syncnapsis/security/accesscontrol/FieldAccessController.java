@@ -14,6 +14,8 @@
  */
 package com.syncnapsis.security.accesscontrol;
 
+import java.lang.reflect.Modifier;
+
 import com.syncnapsis.security.annotations.Accessible;
 import com.syncnapsis.utils.ReflectionsUtil;
 import com.syncnapsis.utils.reflections.Field;
@@ -95,7 +97,10 @@ public class FieldAccessController extends AnnotationAccessController<Field>
 		}
 		else if(operation == WRITE)
 		{
-			a = isWritable(target, authorities);
+			if(Modifier.isFinal(target.getField().getModifiers()))
+				a = false;
+			else
+				a = isWritable(target, authorities);
 			logger.debug("write@" + target + ": " + a);
 		}
 		return a;

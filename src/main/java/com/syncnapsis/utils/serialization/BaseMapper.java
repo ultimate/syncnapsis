@@ -624,6 +624,9 @@ public class BaseMapper implements Mapper, InitializingBean
 		@Override
 		public boolean isValidField(java.lang.reflect.Field field, Method getter, Method setter)
 		{
+			// ignore static fields for serialization
+			if(Modifier.isStatic(field.getModifiers()))
+				return false;
 			// either field must be public
 			if(field != null && Modifier.isPublic(field.getModifiers()))
 				return true;

@@ -334,8 +334,7 @@ public class ReflectionsUtil
 
 	/**
 	 * Retrieve all Fields of a Class as {@link com.syncnapsis.utils.reflections.Field} matching the
-	 * given
-	 * criterions.<br>
+	 * given criterions.<br>
 	 * The given criterions are applied to all Fields found to check wehter they are valid according
 	 * to the criterion (e.g. if getter and setter are present).
 	 * 
@@ -356,6 +355,8 @@ public class ReflectionsUtil
 			for(Field field : clsFields)
 			{
 				if(field.isSynthetic())
+					continue;
+				if(Modifier.isStatic(field.getModifiers()))
 					continue;
 
 				getter = getGetter(cls, field);
