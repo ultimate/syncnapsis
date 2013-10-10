@@ -283,7 +283,7 @@ public class BaseMapper implements Mapper, InitializingBean
 		logger.debug("entity:   " + entity + (entity != null ? " (" + entity.getClass() + ")" : ""));
 		logger.debug("prepared: " + prepared + (prepared != null ? " (" + prepared.getClass() + ")" : ""));
 
-		if(prepared == null)
+		if(prepared == null && !cls.isPrimitive())
 		{
 			return null;
 		}

@@ -207,7 +207,7 @@ public class Field
 			}
 			catch(IllegalArgumentException e)
 			{
-				logger.error("this should not occur", e);
+				logger.error("illegal argument: got " + (value == null ? null : value.getClass()) + " expected " + field.getType(), e);
 			}
 			catch(InvocationTargetException e)
 			{
