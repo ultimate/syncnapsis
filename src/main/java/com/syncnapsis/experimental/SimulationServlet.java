@@ -12,7 +12,7 @@
  * You should have received a copy of the GNU General Plublic License along with this program;
  * if not, see <http://www.gnu.org/licenses/>.
  */
-package com.syncnapsis.test;
+package com.syncnapsis.experimental;
 
 import java.io.IOException;
 import java.util.Date;
@@ -31,6 +31,7 @@ import com.syncnapsis.constants.UniverseConquestConstants;
 import com.syncnapsis.data.dao.ParameterDao;
 import com.syncnapsis.data.dao.SolarSystemPopulationDao;
 import com.syncnapsis.data.dao.mock.ParameterDaoMock;
+import com.syncnapsis.data.model.Match;
 import com.syncnapsis.data.model.Parameter;
 import com.syncnapsis.data.model.SolarSystemInfrastructure;
 import com.syncnapsis.data.model.SolarSystemPopulation;
@@ -39,6 +40,7 @@ import com.syncnapsis.data.service.SolarSystemInfrastructureManager;
 import com.syncnapsis.data.service.SolarSystemPopulationManager;
 import com.syncnapsis.data.service.impl.ParameterManagerImpl;
 import com.syncnapsis.data.service.impl.SolarSystemPopulationManagerImpl;
+import com.syncnapsis.enums.EnumPopulationPriority;
 import com.syncnapsis.exceptions.DeserializationException;
 import com.syncnapsis.exceptions.SerializationException;
 import com.syncnapsis.mock.MockTimeProvider;
@@ -63,19 +65,22 @@ public class SimulationServlet extends ServletEngine
 	public static final String					P_TICKLENGTH			= "ticklength";
 	public static final String					P_RANDOMIZE_ATTACK		= "randomizeAttack";
 	public static final String					P_RANDOMIZE_BUILD		= "randomizeBuild";
+	public static final String					P_SPEED					= "speed";
 	public static final String					RESULT_TIME				= "time";
 	public static final String					RESULT_INFRASTRUCTURE	= "infrastructure";
 	public static final String					RESULT_PARTICIPANT_I	= "participant_";
 
-	protected Serializer<String>				serializer;
 	protected SolarSystemPopulationDao			solarSystemPopulationDao;
 	protected SolarSystemInfrastructureManager	solarSystemInfrastructureManager;
 	protected ParameterManager					parameterManager;
 
+	protected Serializer<String>				serializer;
+	// protected Mapper mapper;
+
 	protected ParameterDao						mockParameterDao;
 	protected ParameterManager					mockParameterManager;
+	protected SolarSystemPopulationManager		mockSolarSystemPopulationManager;
 	protected Calculator						calculator;
-	protected SolarSystemPopulationManager		solarSystemPopulationManager;
 	protected BaseGameManager					securityManager;
 	protected TimeProvider						timeProvider;
 
@@ -87,6 +92,16 @@ public class SimulationServlet extends ServletEngine
 	public void setSerializer(Serializer<String> serializer)
 	{
 		this.serializer = serializer;
+	}
+
+	public ParameterManager getParameterManager()
+	{
+		return parameterManager;
+	}
+
+	public void setParameterManager(ParameterManager parameterManager)
+	{
+		this.parameterManager = parameterManager;
 	}
 
 	public SolarSystemPopulationDao getSolarSystemPopulationDao()
@@ -117,6 +132,7 @@ public class SimulationServlet extends ServletEngine
 	public void afterPropertiesSet() throws Exception
 	{
 		Assert.notNull(serializer, "serializer must not be null!");
+		Assert.notNull(parameterManager, "parameterManager must not be null!");
 		Assert.notNull(solarSystemPopulationDao, "solarSystemPopulationDao must not be null!");
 		Assert.notNull(solarSystemInfrastructureManager, "solarSystemInfrastructureManager must not be null!");
 
@@ -125,17 +141,22 @@ public class SimulationServlet extends ServletEngine
 		securityManager.setTimeProvider(timeProvider);
 		mockParameterDao = new ParameterDaoMock();
 		mockParameterManager = new ParameterManagerImpl(mockParameterDao);
-		
+
 		// copy default parameters from db
-		for(Parameter p: parameterManager.getAll())
+		for(Parameter p : parameterManager.getAll())
 		{
 			mockParameterManager.save(p);
 		}
-		
+
 		calculator = new CalculatorImpl(mockParameterManager);
-		solarSystemPopulationManager = new SolarSystemPopulationManagerImpl(solarSystemPopulationDao, solarSystemInfrastructureManager,
+		mockSolarSystemPopulationManager = new SolarSystemPopulationManagerImpl(solarSystemPopulationDao, solarSystemInfrastructureManager,
 				mockParameterManager);
-		((SolarSystemPopulationManagerImpl) solarSystemPopulationManager).setSecurityManager(securityManager);
+		((SolarSystemPopulationManagerImpl) mockSolarSystemPopulationManager).setCalculator(calculator);
+		((SolarSystemPopulationManagerImpl) mockSolarSystemPopulationManager).setSecurityManager(securityManager);
+
+		// this.mapper = new BaseMapper();
+		// this.serializer = new JacksonStringSerializer();
+		// ((JacksonStringSerializer) this.serializer).setMapper(this.mapper);
 	}
 
 	/*
@@ -153,7 +174,6 @@ public class SimulationServlet extends ServletEngine
 
 		HttpServletRequest request = (HttpServletRequest) req;
 		HttpServletResponse response = (HttpServletResponse) res;
-		// TODO Auto-generated method stub
 
 		try
 		{
@@ -170,48 +190,19 @@ public class SimulationServlet extends ServletEngine
 
 			ExtendedRandom random = new ExtendedRandom(seed);
 
-			long duration = (Long) parameters.get(P_DURATION);
-			long tickLength = (Long) parameters.get(P_TICKLENGTH);
-			double randomizeAttack = (Double) parameters.get(P_RANDOMIZE_ATTACK);
-			double randomizeBuild = (Double) parameters.get(P_RANDOMIZE_BUILD);
+			int speed = Integer.parseInt((String) parameters.get(P_SPEED));
+			long duration = Long.parseLong((String) parameters.get(P_DURATION));
+			long tickLength = Long.parseLong((String) parameters.get(P_TICKLENGTH));
+			double randomizeAttack = Double.parseDouble((String) parameters.get(P_RANDOMIZE_ATTACK));
+			double randomizeBuild = Double.parseDouble((String) parameters.get(P_RANDOMIZE_BUILD));
+
+			scenario.setMatch(new Match());
+			scenario.getMatch().setSpeed(speed);
 
 			mockParameterManager.setString(UniverseConquestConstants.PARAM_FACTOR_ATTACK_RANDOMIZE, "" + randomizeAttack);
 			mockParameterManager.setString(UniverseConquestConstants.PARAM_FACTOR_BUILD_RANDOMIZE, "" + randomizeBuild);
 
-			Map<String, long[]> result = new HashMap<String, long[]>();
-			long tick = 0;
-			Date tickDate = new Date(tick);
-			int ticks = (int) (duration / tickLength + 1);
-
-			result.put(RESULT_TIME, new long[ticks]);
-			result.put(RESULT_INFRASTRUCTURE, new long[ticks]);
-
-			// prepare populations
-			for(SolarSystemPopulation pop : scenario.getPopulations())
-			{
-				pop.setLastUpdateDate(new Date(tick));
-				// set others ?
-			}
-
-			// simulate
-			for(int i = 0; i < ticks; i++)
-			{
-				tickDate.setTime(tick);
-
-				result.get(RESULT_TIME)[i] = tick;
-				result.get(RESULT_INFRASTRUCTURE)[i] = scenario.getInfrastructure();
-				for(SolarSystemPopulation pop : scenario.getPopulations())
-				{
-					if(!result.containsKey(RESULT_PARTICIPANT_I + pop.getParticipant().getId()))
-						result.put(RESULT_PARTICIPANT_I + pop.getParticipant().getId(), new long[ticks]);
-					if(pop.getColonizationDate().getTime() <= tick)
-						result.get(RESULT_PARTICIPANT_I + pop.getParticipant().getId())[i] += pop.getPopulation();
-				}
-
-				solarSystemPopulationManager.merge(scenario);
-				solarSystemPopulationManager.simulate(scenario, random);
-				tick += tickLength;
-			}
+			Map<String, Long[]> result = simulate(duration, tickLength, scenario, random);
 
 			String resultString = serializer.serialize(result, new Object[0]);
 			logger.debug("simulation complete...");
@@ -228,5 +219,67 @@ public class SimulationServlet extends ServletEngine
 		{
 			throw new IOException(e);
 		}
+	}
+
+	public Map<String, Long[]> simulate(long duration, long tickLength, SolarSystemInfrastructure scenario, ExtendedRandom random)
+	{
+		Map<String, Long[]> result = new HashMap<String, Long[]>();
+		long tick = 0;
+		int ticks = (int) (duration / tickLength + 1);
+
+		result.put(RESULT_TIME, new Long[ticks]);
+		result.put(RESULT_INFRASTRUCTURE, new Long[ticks]);
+
+		Map<Long, Integer> populationCount = new HashMap<Long, Integer>();
+
+		// prepare populations
+		for(SolarSystemPopulation pop : scenario.getPopulations())
+		{
+			if(!populationCount.containsKey(pop.getParticipant().getId()))
+				populationCount.put(pop.getParticipant().getId(), 1);
+			else
+				populationCount.put(pop.getParticipant().getId(), populationCount.get(pop.getParticipant().getId()) + 1);
+			pop.setId(pop.getParticipant().getId() * 100 + populationCount.get(pop.getParticipant().getId()));
+			pop.setActivated(true);
+			pop.setLastUpdateDate(new Date(tick));
+			if(pop.getAttackPriority() == null)
+				pop.setAttackPriority(EnumPopulationPriority.balanced);
+			if(pop.getBuildPriority() == null)
+				pop.setBuildPriority(EnumPopulationPriority.balanced);
+			// set others ?
+		}
+
+		// simulate
+		String partKey;
+		for(int i = 0; i < ticks; i++)
+		{
+			timeProvider.set(tick);
+
+			result.get(RESULT_TIME)[i] = tick;
+			result.get(RESULT_INFRASTRUCTURE)[i] = scenario.getInfrastructure();
+			for(SolarSystemPopulation pop : scenario.getPopulations())
+			{
+				partKey = RESULT_PARTICIPANT_I + pop.getParticipant().getId();
+
+				if(!result.containsKey(partKey))
+				{
+					result.put(partKey, new Long[ticks]);
+					for(int j = 0; j < ticks; j++)
+					{
+						result.get(partKey)[j] = 0L;
+					}
+				}
+				if(pop.getColonizationDate().getTime() <= tick)
+				{
+					result.get(partKey)[i] += pop.getPopulation();
+				}
+			}
+
+			mockSolarSystemPopulationManager.merge(scenario);
+			mockSolarSystemPopulationManager.simulate(scenario, random);
+			tick += tickLength;
+		}
+
+		return result;
 	}
 }
