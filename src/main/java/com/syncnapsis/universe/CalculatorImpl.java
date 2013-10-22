@@ -48,11 +48,16 @@ public class CalculatorImpl implements Calculator
 	private static final int			SIZE_DIGITS	= 2;
 
 	protected Long						maxPopulation;
+	protected Double					maxPopulationExponent;
 
 	/**
 	 * The ParameterManager
 	 */
 	protected ParameterManager			parameterManager;
+
+	private int							HABITABILITY_MAX;
+	private int							SIZE_MAX;
+	private int							MAX_POPULATION_FACTOR;
 
 	/**
 	 * Standard Constructor
@@ -63,6 +68,19 @@ public class CalculatorImpl implements Calculator
 	{
 		super();
 		this.parameterManager = parameterManager;
+
+		initConstants();
+	}
+
+	public void initConstants()
+	{
+		HABITABILITY_MAX = parameterManager.getInteger(UniverseConquestConstants.PARAM_SOLARSYSTEM_HABITABILITY_MAX);
+		SIZE_MAX = parameterManager.getInteger(UniverseConquestConstants.PARAM_SOLARSYSTEM_SIZE_MAX);
+		MAX_POPULATION_FACTOR = parameterManager.getInteger(UniverseConquestConstants.PARAM_SOLARSYSTEM_MAX_POPULATION_FACTOR);
+
+		double travelMaxFactor = parameterManager.getDouble(UniverseConquestConstants.PARAM_TRAVEL_MAX_FACTOR);
+		double travelExodusFactor = parameterManager.getDouble(UniverseConquestConstants.PARAM_TRAVEL_EXODUS_FACTOR);
+
 	}
 
 	/*
@@ -247,11 +265,15 @@ public class CalculatorImpl implements Calculator
 	{
 		if(maxPopulation == null)
 		{
-			int maxHab = parameterManager.getInteger(UniverseConquestConstants.PARAM_SOLARSYSTEM_HABITABILITY_MAX);
-			int maxSize = parameterManager.getInteger(UniverseConquestConstants.PARAM_SOLARSYSTEM_SIZE_MAX);
-			int popFactor = parameterManager.getInteger(UniverseConquestConstants.PARAM_SOLARSYSTEM_MAX_POPULATION_FACTOR);
+			// @formatter:off
+//			int maxHab = parameterManager.getInteger(UniverseConquestConstants.PARAM_SOLARSYSTEM_HABITABILITY_MAX);
+//			int maxSize = parameterManager.getInteger(UniverseConquestConstants.PARAM_SOLARSYSTEM_SIZE_MAX);
+//			int popFactor = parameterManager.getInteger(UniverseConquestConstants.PARAM_SOLARSYSTEM_MAX_POPULATION_FACTOR);
+//
+//			maxPopulation = (long) maxHab * maxSize * popFactor;
+			// @formatter:on
 
-			maxPopulation = (long) maxHab * maxSize * popFactor;
+			maxPopulation = (long) HABITABILITY_MAX * SIZE_MAX * MAX_POPULATION_FACTOR;
 		}
 		return maxPopulation;
 	}
@@ -264,9 +286,10 @@ public class CalculatorImpl implements Calculator
 	@Override
 	public long getMaxPopulation(SolarSystemInfrastructure infrastructure)
 	{
-		int popFactor = parameterManager.getInteger(UniverseConquestConstants.PARAM_SOLARSYSTEM_MAX_POPULATION_FACTOR);
-
-		return (long) infrastructure.getHabitability() * infrastructure.getSize() * popFactor;
+		// int popFactor =
+		// parameterManager.getInteger(UniverseConquestConstants.PARAM_SOLARSYSTEM_MAX_POPULATION_FACTOR);
+		// return (long) infrastructure.getHabitability() * infrastructure.getSize() * popFactor;
+		return (long) infrastructure.getHabitability() * infrastructure.getSize() * MAX_POPULATION_FACTOR;
 	}
 
 	/**
@@ -348,7 +371,11 @@ public class CalculatorImpl implements Calculator
 	 */
 	protected double getMaxPopulationExponent()
 	{
-		return Math.log10(getMaxPopulation());
+		if(maxPopulationExponent == null) // TODO
+		{
+			maxPopulationExponent = Math.log10(getMaxPopulation());
+		}
+		return maxPopulationExponent;
 	}
 
 	/**
@@ -370,7 +397,7 @@ public class CalculatorImpl implements Calculator
 	public double calculateAttackStrength(double speedFactor, long population)
 	{
 		double fac = parameterManager.getDouble(UniverseConquestConstants.PARAM_FACTOR_ATTACK);
-		return (speedFactor / fac) * population;
+		return speedFactor * fac * population;
 	}
 
 	/*
@@ -381,7 +408,17 @@ public class CalculatorImpl implements Calculator
 	public double calculateBuildStrength(double speedFactor, long population, long maxPopulation)
 	{
 		double fac = parameterManager.getDouble(UniverseConquestConstants.PARAM_FACTOR_BUILD);
-		return (speedFactor / fac) * (maxPopulation - population) * population / maxPopulation;
+		long maxMaxPopulation = getMaxPopulation();
+		int popFactor = parameterManager.getInteger(UniverseConquestConstants.PARAM_SOLARSYSTEM_MAX_POPULATION_FACTOR);
+		double strength;
+		// logger.debug("pop = " + population + " maxPop = " + maxPopulation + " | < half ? " +
+		// (population < maxPopulation / 2));
+		if(population < maxPopulation / 2)
+			strength = (double) (maxMaxPopulation - population) * population;
+		else
+			strength = (double) (maxMaxPopulation - (maxPopulation - population)) * (maxPopulation - population);
+		// logger.debug("strength = " + strength);
+		return speedFactor * fac * strength / maxMaxPopulation / popFactor;
 	}
 
 	/*
@@ -396,6 +433,6 @@ public class CalculatorImpl implements Calculator
 		else if(population == 0)
 			return 1.5;
 		else
-			return (Math.log10((double) infrastructure/population) / getMaxPopulationExponent())/ 2 + 1;
+			return (Math.log10((double) infrastructure / population) / getMaxPopulationExponent()) / 2 + 1;
 	}
 }

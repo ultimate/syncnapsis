@@ -78,13 +78,13 @@ public class CalculatorImplTest extends LoggerTestCase
 		mockContext.checking(new Expectations() {
 			{
 				allowing(parameterManager).getDouble(UniverseConquestConstants.PARAM_FACTOR_ATTACK);
-				will(returnValue(100.0));
+				will(returnValue(0.01));
 			}
 		});
 		mockContext.checking(new Expectations() {
 			{
 				allowing(parameterManager).getDouble(UniverseConquestConstants.PARAM_FACTOR_BUILD);
-				will(returnValue(1000.0));
+				will(returnValue(5.0));
 			}
 		});
 
@@ -306,16 +306,97 @@ public class CalculatorImplTest extends LoggerTestCase
 		assertEquals(maxPop / 0.4, calculator.calculateBuildStrength(10000, maxPop / 2, maxPop));
 	}
 
+	public void testCalculateBuildStrength2()
+	{
+		long maxMaxPopulation = calculator.getMaxPopulation();
+		for(int i = 0; i <= 5; i++)
+		{
+			simulateBuildStrength(i, maxMaxPopulation);
+			simulateBuildStrength(i, maxMaxPopulation / 2);
+			simulateBuildStrength(i, maxMaxPopulation / 4);
+		}
+	}
+
+	private void simulateBuildStrength(int speed, long maxPop)
+	{
+		logger.debug("simulating build strength - speed " + speed + " - maxPop = " + maxPop);
+		long pop = 10000000;
+		double speedFactor = calculator.getSpeedFactor(speed);
+		long start = System.currentTimeMillis();
+
+		long minute = 10L * 60;
+		long hour = minute * 60;
+		long year = hour * 24 * 365;
+
+		int tick = 0;
+		boolean reached01 = false;
+		boolean reached10 = false;
+		boolean reached25 = false;
+		boolean reached50 = false;
+		boolean reached75 = false;
+		boolean reached90 = false;
+		boolean reached99 = false;
+		while(!reached99)
+		{
+			// if(tick % minute == 0)
+			// logger.debug(tick + " : " + pop);
+
+			pop += calculator.calculateBuildStrength(speedFactor, pop, maxPop);
+			tick++;
+
+			if(!reached01 && pop >= maxPop * 0.01)
+			{
+				reached01 = true;
+				logger.info("01% reached @ tick " + tick);
+			}
+			else if(!reached10 && pop >= maxPop * 0.10)
+			{
+				reached10 = true;
+				logger.info("10% reached @ tick " + tick);
+			}
+			else if(!reached25 && pop >= maxPop * 0.25)
+			{
+				reached25 = true;
+				logger.info("25% reached @ tick " + tick);
+			}
+			else if(!reached50 && pop >= maxPop * 0.50)
+			{
+				reached50 = true;
+				logger.info("50% reached @ tick " + tick);
+			}
+			else if(!reached75 && pop >= maxPop * 0.75)
+			{
+				reached75 = true;
+				logger.info("75% reached @ tick " + tick);
+			}
+			else if(!reached90 && pop >= maxPop * 0.90)
+			{
+				reached90 = true;
+				logger.info("90% reached @ tick " + tick);
+			}
+			else if(!reached99 && pop >= maxPop * 0.99)
+			{
+				reached99 = true;
+				logger.info("99% reached @ tick " + tick);
+			}
+			if(tick > year)
+				break;
+		}
+		long end = System.currentTimeMillis();
+		logger.debug("time needed: " + (end - start));
+		logger.debug("speed: " + ((double) tick * 1000 / (end-start)) + " ticks/second");
+	}
+
 	public void testCalculateInfrastructureBuildInfluence()
 	{
 		long maxPop = 25000000;
 		assertEquals(1.5, calculator.calculateInfrastructureBuildInfluence(0, maxPop));
 
 		assertEquals(1.25, calculator.calculateInfrastructureBuildInfluence((long) (maxPop / 1e6), maxPop));
-		
+
 		assertEquals(1.0, calculator.calculateInfrastructureBuildInfluence(maxPop, maxPop));
-		assertEquals(1.0, calculator.calculateInfrastructureBuildInfluence(maxPop/2, maxPop/2));
-		
+		assertEquals(1.0, calculator.calculateInfrastructureBuildInfluence(maxPop / 2, maxPop / 2));
+
 		assertEquals(0.75, calculator.calculateInfrastructureBuildInfluence(maxPop, (long) (maxPop / 1e6)));
 
 		assertEquals(0.5, calculator.calculateInfrastructureBuildInfluence(maxPop, 0));
