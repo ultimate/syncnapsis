@@ -16,6 +16,7 @@ package com.syncnapsis.utils.reflections;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 
 import javax.persistence.Column;
 import javax.persistence.Id;
@@ -64,7 +65,8 @@ public abstract class FieldCriterion
 													/*
 													 * (non-Javadoc)
 													 * @see
-													 * com.syncnapsis.utils.reflections.FieldCriterion#
+													 * com.syncnapsis.utils.reflections.FieldCriterion
+													 * #
 													 * isValidField(java.lang.reflect.Field,
 													 * java.lang.reflect.Method,
 													 * java.lang.reflect.Method)
@@ -72,6 +74,8 @@ public abstract class FieldCriterion
 													@Override
 													public boolean isValidField(Field field, Method getter, Method setter)
 													{
+														if(Modifier.isStatic(field.getModifiers()))
+															return false;
 														return getter != null && setter != null;
 													}
 												};
@@ -89,7 +93,8 @@ public abstract class FieldCriterion
 													/*
 													 * (non-Javadoc)
 													 * @see
-													 * com.syncnapsis.utils.reflections.FieldCriterion#
+													 * com.syncnapsis.utils.reflections.FieldCriterion
+													 * #
 													 * isValidField(java.lang.reflect.Field,
 													 * java.lang.reflect.Method,
 													 * java.lang.reflect.Method)
@@ -107,4 +112,42 @@ public abstract class FieldCriterion
 													}
 												};
 
+	/**
+	 * Default FieldCriterion, checking if the field is static
+	 */
+	public static final FieldCriterion	STATIC	= new FieldCriterion() {
+													/*
+													 * (non-Javadoc)
+													 * @see
+													 * com.syncnapsis.utils.reflections.FieldCriterion
+													 * #
+													 * isValidField(java.lang.reflect.Field,
+													 * java.lang.reflect.Method,
+													 * java.lang.reflect.Method)
+													 */
+													@Override
+													public boolean isValidField(Field field, Method getter, Method setter)
+													{
+														return Modifier.isStatic(field.getModifiers());
+													}
+												};
+	/**
+	 * Default FieldCriterion, checking if the field is final
+	 */
+	public static final FieldCriterion	FINAL	= new FieldCriterion() {
+													/*
+													 * (non-Javadoc)
+													 * @see
+													 * com.syncnapsis.utils.reflections.FieldCriterion
+													 * #
+													 * isValidField(java.lang.reflect.Field,
+													 * java.lang.reflect.Method,
+													 * java.lang.reflect.Method)
+													 */
+													@Override
+													public boolean isValidField(Field field, Method getter, Method setter)
+													{
+														return Modifier.isFinal(field.getModifiers());
+													}
+												};
 }

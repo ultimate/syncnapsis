@@ -183,7 +183,22 @@ public class ReflectionsUtil
 	 */
 	public static Object getField(Object o, String fieldName) throws IllegalAccessException, NoSuchFieldException
 	{
-		Field field = findField(o.getClass(), fieldName);
+		return getField(o, findField(o.getClass(), fieldName));
+	}
+
+	/**
+	 * Get the value of a Field of a specified Object via Reflections.<br>
+	 * If the Field is not accessible for this action (not public) it will be made temporarily
+	 * accessible.<br>
+	 * 
+	 * @see ReflectionsUtil#setAccessible(AccessibleObject, boolean)
+	 * @param o - the Object whichs Field to get
+	 * @param field- the Field to get
+	 * @return the value of the Field
+	 * @throws IllegalAccessException - if the Field could not be set
+	 */
+	public static Object getField(Object o, Field field) throws IllegalAccessException
+	{
 		boolean oldAccessible = field.isAccessible();
 		if(!Modifier.isPublic(field.getModifiers()) && !oldAccessible)
 			setAccessible(field, true);
@@ -292,7 +307,7 @@ public class ReflectionsUtil
 		if(dotIndex == -1)
 		{
 			if(o instanceof Map)
-				return ((Map<?,?>) o).get(key);
+				return ((Map<?, ?>) o).get(key);
 			else
 				return getField(o, key);
 		}
@@ -356,8 +371,8 @@ public class ReflectionsUtil
 			{
 				if(field.isSynthetic())
 					continue;
-				if(Modifier.isStatic(field.getModifiers()))
-					continue;
+				// if(Modifier.isStatic(field.getModifiers()))
+				// continue;
 
 				getter = getGetter(cls, field);
 				setter = getSetter(cls, field);
