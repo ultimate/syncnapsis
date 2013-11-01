@@ -14,6 +14,9 @@
  */
 package com.syncnapsis.constants;
 
+import com.syncnapsis.utils.constants.Constant;
+import com.syncnapsis.utils.constants.StringConstant;
+
 /**
  * Klasse für das Festhalten von Konstanten, die für die gesamte Applikation
  * gültig sind.<br/>
@@ -27,30 +30,30 @@ public class ApplicationBaseConstants
 	/**
 	 * Application configuration via DB: key for "length for generated action codes"
 	 */
-	public static final String	PARAM_ACTION_CODE_LENGTH = "action.code.length";
+	public static final Constant<String>	PARAM_ACTION_CODE_LENGTH			= new StringConstant("action.code.length");
 	/**
 	 * Application configuration via DB: key for "default session timeout"
 	 */
-	public static final String	PARAM_SESSION_TIMEOUT_DEFAULT		= "session.timeout.default";
+	public static final Constant<String>	PARAM_SESSION_TIMEOUT_DEFAULT		= new StringConstant("session.timeout.default");
 	/**
 	 * Application configuration via DB: key for "default status on registration"
 	 */
-	public static final String	PARAM_REGISTRATION_STATUS_DEFAULT	= "registration.status.default";
+	public static final Constant<String>	PARAM_REGISTRATION_STATUS_DEFAULT	= new StringConstant("registration.status.default");
 	/**
 	 * Application configuration via DB: key for "time to verfiy e-mail after registration"
 	 */
-	public static final String	PARAM_REGISTRATION_TIME_TO_VERIFY	= "registration.timeToVerify";
+	public static final Constant<String>	PARAM_REGISTRATION_TIME_TO_VERIFY	= new StringConstant("registration.timeToVerify");
 	/**
 	 * Namen der Spielparameter: Maximale Anzahl angezeigter News
 	 */
 	@Deprecated
-	public static final String	PARAM_NEWS_MAXITEMS					= "news.maxItems";
+	public static final Constant<String>	PARAM_NEWS_MAXITEMS					= new StringConstant("news.maxItems");
 	/**
 	 * Namen der Spielparameter: Maximales Alter der News mit Platzhalter für
 	 * Abstufungen
 	 */
 	@Deprecated
-	public static final String	PARAM_NEWS_MAXAGE					= "news.%L.maxAge";
+	public static final Constant<String>	PARAM_NEWS_MAXAGE					= new StringConstant("news.%L.maxAge");
 
 	/**
 	 * Rollennamen: Administrator
@@ -102,30 +105,30 @@ public class ApplicationBaseConstants
 	 * Maximale Anzahl der Relogin-Versuche. Nach dieser Anzahl von Versuchen
 	 * wird der Benutzer automatisch ausgeloggt.
 	 */
-	public static final int		LOGIN_MAXFAILS						= 3;
+	public static final int					LOGIN_MAXFAILS						= 3;
 
 	/**
 	 * Error-Key for "invalid username"
 	 */
-	public static final String	ERROR_USERNAME_INVALID				= "error.invalid_username";
+	public static final String				ERROR_USERNAME_INVALID				= "error.invalid_username";
 	/**
 	 * Error-Key for "invalid username"
 	 */
-	public static final String	ERROR_EMAIL_INVALID					= "error.invalid_email";
+	public static final String				ERROR_EMAIL_INVALID					= "error.invalid_email";
 	/**
 	 * Error-Key for "no password"
 	 */
-	public static final String	ERROR_NO_PASSWORD					= "error.password_mismatch";
+	public static final String				ERROR_NO_PASSWORD					= "error.password_mismatch";
 	/**
 	 * Error-Key for "password mismatch"
 	 */
-	public static final String	ERROR_PASSWORD_MISMATCH				= "error.password_mismatch";
+	public static final String				ERROR_PASSWORD_MISMATCH				= "error.password_mismatch";
 	/**
 	 * Error-Key for "email exists"
 	 */
-	public static final String	ERROR_EMAIL_EXISTS					= "error.email_exists";
+	public static final String				ERROR_EMAIL_EXISTS					= "error.email_exists";
 	/**
 	 * Error-Key for "username exists"
 	 */
-	public static final String	ERROR_USERNAME_EXISTS				= "error.username_exists";
+	public static final String				ERROR_USERNAME_EXISTS				= "error.username_exists";
 }

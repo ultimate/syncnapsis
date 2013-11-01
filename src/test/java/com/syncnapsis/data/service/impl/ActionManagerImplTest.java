@@ -131,7 +131,7 @@ public class ActionManagerImplTest extends GenericNameManagerImplTestCase<Action
 		mockContext.assertIsSatisfied();
 
 		assertNotNull(code);
-		assertEquals((int) parameterManager.getInteger(ApplicationBaseConstants.PARAM_ACTION_CODE_LENGTH), code.length());
+		assertEquals(ApplicationBaseConstants.PARAM_ACTION_CODE_LENGTH.asInt(), code.length());
 
 		mockContext.checking(new Expectations() {
 			{
@@ -150,7 +150,7 @@ public class ActionManagerImplTest extends GenericNameManagerImplTestCase<Action
 		mockContext.assertIsSatisfied();
 
 		assertNotNull(code);
-		assertEquals((int) parameterManager.getInteger(ApplicationBaseConstants.PARAM_ACTION_CODE_LENGTH), code.length());
+		assertEquals(ApplicationBaseConstants.PARAM_ACTION_CODE_LENGTH.asInt(), code.length());
 	}
 
 	public void testCreateAction() throws Exception

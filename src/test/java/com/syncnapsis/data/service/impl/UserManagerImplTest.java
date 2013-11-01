@@ -62,7 +62,7 @@ public class UserManagerImplTest extends GenericNameManagerImplTestCase<User, Lo
 	{
 		super.setUp();
 		setEntity(new User());
-		
+
 		setDaoClass(UserDao.class);
 		setMockDao(mockContext.mock(UserDao.class));
 		setMockManager(new UserManagerImpl(mockDao, userRoleManager, actionManager, parameterManager) {
@@ -125,12 +125,12 @@ public class UserManagerImplTest extends GenericNameManagerImplTestCase<User, Lo
 		String username = "a_new_user";
 		String email = "new@syncnapsis.com";
 		String password = "a_password";
-		
+
 		MockHttpSession session = new MockHttpSession();
 		session.setAttribute(ServletUtil.ATTRIBUTE_REMOTE_ADDR, "localhost");
 		session.setAttribute(ServletUtil.ATTRIBUTE_USER_AGENT, "testcase");
 		sessionProvider.set(session);
-		
+
 		Wiser w = new Wiser();
 		try
 		{
@@ -145,11 +145,11 @@ public class UserManagerImplTest extends GenericNameManagerImplTestCase<User, Lo
 			assertTrue(securityManager.validatePassword(password, newUser.getPassword()));
 			assertNotNull(newUser.getAccountStatusExpireDate());
 			assertTrue(newUser.getAccountStatusExpireDate().after(new Date(securityManager.getTimeProvider().get())));
-			
+
 			HibernateUtil.currentSession().flush();
 
 			assertNotNull(userManager.getByName(username));
-			
+
 			assertEquals(1, w.getMessages().size());
 
 			MimeMessage m = w.getMessages().get(0).getMimeMessage();
@@ -158,7 +158,7 @@ public class UserManagerImplTest extends GenericNameManagerImplTestCase<User, Lo
 
 			String message = (String) m.getContent();
 			int codeIndex = message.indexOf("/activate/") + "/activate/".length();
-			String code = message.substring(codeIndex, codeIndex + parameterManager.getInteger(ApplicationBaseConstants.PARAM_ACTION_CODE_LENGTH));
+			String code = message.substring(codeIndex, codeIndex + ApplicationBaseConstants.PARAM_ACTION_CODE_LENGTH.asInt());
 			logger.debug("'" + code + "'");
 			assertNotNull(actionManager.getByCode(code));
 			RPCCall rpcCall = actionManager.getRPCCall(code);
@@ -247,24 +247,24 @@ public class UserManagerImplTest extends GenericNameManagerImplTestCase<User, Lo
 	public void testUpdateMailAddress() throws Exception
 	{
 		User user = userManager.getByName("admin");
-		
+
 		String email = "mynewmailaddress@example.com";
-		
+
 		MockHttpSession session = new MockHttpSession();
 		session.setAttribute(ServletUtil.ATTRIBUTE_REMOTE_ADDR, "localhost");
 		session.setAttribute(ServletUtil.ATTRIBUTE_USER_AGENT, "testcase");
 		sessionProvider.set(session);
-		
+
 		userProvider.set(user);
-		
+
 		Wiser w = new Wiser();
 		try
 		{
 			w.start();
-			
+
 			String oldemail = user.getEmail();
 			assertFalse(oldemail.equals(email));
-			
+
 			assertTrue(userManager.updateMailAddress(email));
 			assertEquals(oldemail, user.getEmail());
 
@@ -275,24 +275,24 @@ public class UserManagerImplTest extends GenericNameManagerImplTestCase<User, Lo
 			MimeMessage m = w.getMessages().get(0).getMimeMessage();
 			assertEquals(1, m.getRecipients(RecipientType.TO).length);
 			assertEquals(email, m.getRecipients(RecipientType.TO)[0].toString());
-			
+
 			String message = (String) m.getContent();
 			int codeIndex = message.indexOf("/activate/") + "/activate/".length();
-			String code = message.substring(codeIndex, codeIndex + parameterManager.getInteger(ApplicationBaseConstants.PARAM_ACTION_CODE_LENGTH));
+			String code = message.substring(codeIndex, codeIndex + ApplicationBaseConstants.PARAM_ACTION_CODE_LENGTH.asInt());
 			logger.debug("'" + code + "'");
 			assertNotNull(actionManager.getByCode(code));
 			RPCCall rpcCall = actionManager.getRPCCall(code);
 			assertNotNull(rpcCall);
-			
+
 			logger.debug(rpcCall.getObject());
 			logger.debug(rpcCall.getMethod());
 			logger.debug("" + rpcCall.getArgs()[0]);
 			logger.debug("" + rpcCall.getArgs()[1]);
-			
+
 			String result = (String) rpcHandler.doRPC(rpcCall, new Object[] {});
 			assertEquals("ok", result);
-			
-//			HibernateUtil.currentSession().flush();
+
+			// HibernateUtil.currentSession().flush();
 
 			user = userManager.get(user.getId());
 			assertEquals(email, user.getEmail());

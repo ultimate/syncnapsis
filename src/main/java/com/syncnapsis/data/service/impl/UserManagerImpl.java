@@ -163,9 +163,9 @@ public class UserManagerImpl extends GenericNameManagerImpl<User, Long> implemen
 			throw new UserRegistrationFailedException(ApplicationBaseConstants.ERROR_PASSWORD_MISMATCH);
 
 		User user = new User();
-		user.setAccountStatus(EnumAccountStatus.valueOf(parameterManager.getString(ApplicationBaseConstants.PARAM_REGISTRATION_STATUS_DEFAULT)));
+		user.setAccountStatus(EnumAccountStatus.valueOf(ApplicationBaseConstants.PARAM_REGISTRATION_STATUS_DEFAULT.asString()));
 		user.setAccountStatusExpireDate(new Date(securityManager.getTimeProvider().get()
-				+ parameterManager.getLong(ApplicationBaseConstants.PARAM_REGISTRATION_TIME_TO_VERIFY)));
+				+ ApplicationBaseConstants.PARAM_REGISTRATION_TIME_TO_VERIFY.asLong()));
 		user.setActivated(true);
 		// user.setBirthday(birthday);
 		// user.setCity(city);
@@ -181,7 +181,7 @@ public class UserManagerImpl extends GenericNameManagerImpl<User, Long> implemen
 		user.setRegistrationDate(new Date(securityManager.getTimeProvider().get()));
 		user.setRole(userRoleManager.getByName(ApplicationBaseConstants.ROLE_NORMAL_USER));
 		user.setRoleExpireDate(null);
-		user.setSessionTimeout(parameterManager.getInteger(ApplicationBaseConstants.PARAM_SESSION_TIMEOUT_DEFAULT));
+		user.setSessionTimeout(ApplicationBaseConstants.PARAM_SESSION_TIMEOUT_DEFAULT.asInt());
 		user.setGender(EnumGender.unknown);
 		user.setShowEmail(false);
 		user.setTimeZoneID(TimeZoneUtil.getDefaultID()); // TODO get from session?

@@ -186,7 +186,7 @@ public class ActionManagerImpl extends GenericNameManagerImpl<Action, Long> impl
 
 		do
 		{
-			code = random.nextString(parameterManager.getInteger(ApplicationBaseConstants.PARAM_ACTION_CODE_LENGTH), CODE_SOURCE);
+			code = random.nextString(ApplicationBaseConstants.PARAM_ACTION_CODE_LENGTH.asInt(), CODE_SOURCE);
 			action = getByCode(code);
 		} while(action != null);
 

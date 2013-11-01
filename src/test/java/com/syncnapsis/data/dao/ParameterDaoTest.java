@@ -29,7 +29,7 @@ public class ParameterDaoTest extends GenericNameDaoTestCase<Parameter, Long>
 	{
 		super.setUp();
 
-		String existingName = ApplicationBaseConstants.PARAM_REGISTRATION_STATUS_DEFAULT;
+		String existingName = ApplicationBaseConstants.PARAM_REGISTRATION_STATUS_DEFAULT.getName();
 		Long existingId = parameterDao.getByName(existingName).getId();
 
 		Parameter parameter = new Parameter();

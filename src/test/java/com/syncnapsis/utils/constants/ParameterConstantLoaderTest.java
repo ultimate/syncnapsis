@@ -19,7 +19,6 @@ import java.util.Arrays;
 import org.jmock.Expectations;
 
 import com.syncnapsis.data.service.ParameterManager;
-import com.syncnapsis.tests.BaseSpringContextTestCase;
 import com.syncnapsis.tests.LoggerTestCase;
 
 /**
