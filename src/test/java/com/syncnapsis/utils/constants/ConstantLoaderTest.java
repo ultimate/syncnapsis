@@ -19,27 +19,22 @@ import java.util.List;
 
 import com.syncnapsis.tests.LoggerTestCase;
 import com.syncnapsis.tests.annotations.TestCoversClasses;
-import com.syncnapsis.tests.annotations.TestExcludesMethods;
-import com.syncnapsis.utils.data.ConstantLoader;
-import com.syncnapsis.utils.data.constants.Constant;
-import com.syncnapsis.utils.data.constants.NumberConstant;
-import com.syncnapsis.utils.data.constants.StringConstant;
+import com.syncnapsis.tests.annotations.TestCoversMethods;
 
 /**
  * @author ultimate
  * 
  */
-@TestCoversClasses({ ConstantLoader.class, Constant.class, StringConstant.class, NumberConstant.class })
-@TestExcludesMethods({ "load", "set*", "get*" })
+@TestCoversClasses({ ConstantLoader.class })
 public class ConstantLoaderTest extends LoggerTestCase
 {
 	public void testScanClasses() throws Exception
 	{
-		List<Class<?>> classes = Arrays.asList(new Class<?>[] {A.class, B.class});
-		
+		List<Class<?>> classes = Arrays.asList(new Class<?>[] { A.class, B.class });
+
 		List<Constant<String>> stringConstants;
 		List<Constant<Number>> numberConstants;
-		
+
 		stringConstants = ConstantLoader.scanClasses(classes, String.class);
 		assertEquals(4, stringConstants.size());
 		assertTrue(stringConstants.contains(A.A_string_public));
@@ -54,20 +49,54 @@ public class ConstantLoaderTest extends LoggerTestCase
 		assertTrue(numberConstants.contains(B.B_number_public));
 		assertTrue(numberConstants.contains(B.B_number_private));
 	}
-	
+
+	@TestCoversMethods({ "load", "*etConstantClasses", "getConstantRawType", "getConstants", "afterPropertiesSet" })
+	public void testInit() throws Exception
+	{
+		ConstantLoader<String> cl = new ConstantLoader<String>(String.class) {
+			@Override
+			public void load(Constant<String> constant)
+			{
+				constant.define("123");
+			}
+		};
+
+		assertEquals(String.class, cl.getConstantRawType());
+		assertNull(cl.getConstantClasses());
+		assertNull(cl.getConstants());
+
+		cl.setConstantClasses(new String[] { A.class.getName(), B.class.getName() });
+		cl.afterPropertiesSet();
+		assertNotNull(cl.getConstantClasses());
+		assertEquals(2, cl.getConstantClasses().size());
+		assertEquals(A.class, cl.getConstantClasses().get(0));
+		assertEquals(B.class, cl.getConstantClasses().get(1));
+		assertNotNull(cl.getConstants());
+		assertEquals(4, cl.getConstants().size());
+
+		cl.setConstantClasses(Arrays.asList(new Class<?>[] { A.class, B.class }));
+		cl.afterPropertiesSet();
+		assertNotNull(cl.getConstantClasses());
+		assertEquals(2, cl.getConstantClasses().size());
+		assertEquals(A.class, cl.getConstantClasses().get(0));
+		assertEquals(B.class, cl.getConstantClasses().get(1));
+		assertNotNull(cl.getConstants());
+		assertEquals(4, cl.getConstants().size());
+	}
+
 	public static class A
 	{
-		public static final StringConstant A_string_public = new StringConstant("A_string_public");
-		private static final StringConstant A_string_private = new StringConstant("A_string_private");
-		public static final NumberConstant A_number_public = new NumberConstant("A_number_public");
-		private static final NumberConstant A_number_private = new NumberConstant("A_number_private");
+		public static final StringConstant	A_string_public		= new StringConstant("A_string_public");
+		private static final StringConstant	A_string_private	= new StringConstant("A_string_private");
+		public static final NumberConstant	A_number_public		= new NumberConstant("A_number_public");
+		private static final NumberConstant	A_number_private	= new NumberConstant("A_number_private");
 	}
-	
+
 	public static class B
 	{
-		public static final Constant<String> B_string_public = new StringConstant("B_string_public");
-		private static final Constant<String> B_string_private = new StringConstant("B_string_private");
-		public static final Constant<Number> B_number_public = new NumberConstant("B_number_public");
-		private static final Constant<Number> B_number_private = new NumberConstant("B_number_private");
+		public static final Constant<String>	B_string_public		= new StringConstant("B_string_public");
+		private static final Constant<String>	B_string_private	= new StringConstant("B_string_private");
+		public static final Constant<Number>	B_number_public		= new NumberConstant("B_number_public");
+		private static final Constant<Number>	B_number_private	= new NumberConstant("B_number_private");
 	}
 }

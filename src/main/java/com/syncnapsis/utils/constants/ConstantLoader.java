@@ -12,7 +12,7 @@
  * You should have received a copy of the GNU General Plublic License along with this program;
  * if not, see <http://www.gnu.org/licenses/>.
  */
-package com.syncnapsis.utils.data;
+package com.syncnapsis.utils.constants;
 
 import java.lang.reflect.ParameterizedType;
 import java.util.ArrayList;
@@ -24,7 +24,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 
 import com.syncnapsis.utils.ReflectionsUtil;
-import com.syncnapsis.utils.data.constants.Constant;
 import com.syncnapsis.utils.reflections.Field;
 import com.syncnapsis.utils.reflections.FieldCriterion;
 import com.syncnapsis.utils.spring.Bean;

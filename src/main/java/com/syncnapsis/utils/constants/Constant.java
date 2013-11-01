@@ -12,9 +12,8 @@
  * You should have received a copy of the GNU General Plublic License along with this program;
  * if not, see <http://www.gnu.org/licenses/>.
  */
-package com.syncnapsis.utils.data.constants;
+package com.syncnapsis.utils.constants;
 
-import com.syncnapsis.utils.data.ConstantLoader;
 
 
 /**
