@@ -19,6 +19,8 @@ import java.util.List;
 import com.syncnapsis.data.dao.PersonDao;
 import com.syncnapsis.data.model.Person;
 import com.syncnapsis.data.dao.hibernate.GenericNameDaoHibernate;
+
+import org.hibernate.SessionFactory;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
@@ -32,9 +34,20 @@ public class PersonDaoHibernate extends GenericNameDaoHibernate<Person, Long> im
 	/**
 	 * Default Constructor
 	 */
+	@Deprecated
 	public PersonDaoHibernate()
 	{
 		super(Person.class, "lastName");
+	}
+
+	/**
+	 * Constructor with SessionFactory
+	 * 
+	 * @param sessionFactory - the SessionFactory to use
+	 */
+	public PersonDaoHibernate(SessionFactory sessionFactory)
+	{
+		super(sessionFactory, Person.class, "lastName");
 	}
 
 	/*
