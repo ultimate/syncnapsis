@@ -73,6 +73,6 @@ public enum EnumNewsAge
 	 */
 	public String getParameterKey()
 	{
-		return ApplicationBaseConstants.PARAM_NEWS_MAXAGE.replace("%L", this.toString());
+		return ApplicationBaseConstants.PARAM_NEWS_MAXAGE.getName().replace("%L", this.toString());
 	}
 }

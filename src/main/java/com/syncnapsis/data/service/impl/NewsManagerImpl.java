@@ -104,7 +104,7 @@ public class NewsManagerImpl extends GenericManagerImpl<News, Long> implements N
 			else
 				newsList.add(news);
 		}
-		int maxItems = parameterManager.getInteger(ApplicationBaseConstants.PARAM_NEWS_MAXITEMS);
+		int maxItems = ApplicationBaseConstants.PARAM_NEWS_MAXITEMS.asInt();
 		maxItems = maxItems - newsListHP.size();
 		SortUtil.sortListDescending(newsList, "getDate");
 		if(newsList.size() > maxItems)
