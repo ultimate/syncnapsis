@@ -14,6 +14,7 @@
  */
 package com.syncnapsis.data.dao.hibernate;
 
+import org.hibernate.SessionFactory;
 import org.hibernate.exception.ConstraintViolationException;
 
 import com.syncnapsis.data.dao.UserDao;
@@ -32,9 +33,21 @@ public class UserDaoHibernate extends GenericNameDaoHibernate<User, Long> implem
 	 * Erzeugt eine neue DAO-Instanz durch die Super-Klasse GenericDaoHibernate
 	 * mit der Modell-Klasse User
 	 */
+	@Deprecated
 	public UserDaoHibernate()
 	{
 		super(User.class, "username");
+	}
+
+	/**
+	 * Erzeugt eine neue DAO-Instanz durch die Super-Klasse GenericDaoHibernate
+	 * mit der Modell-Klasse User and the given SessionFactory
+	 * 
+	 * @param sessionFactory - the SessionFactory to use
+	 */
+	public UserDaoHibernate(SessionFactory sessionFactory)
+	{
+		super(sessionFactory, User.class, "username");
 	}
 
 	/*

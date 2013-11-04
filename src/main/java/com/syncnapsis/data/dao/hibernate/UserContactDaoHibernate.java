@@ -16,6 +16,8 @@ package com.syncnapsis.data.dao.hibernate;
 
 import java.util.List;
 
+import org.hibernate.SessionFactory;
+
 import com.syncnapsis.data.dao.UserContactDao;
 import com.syncnapsis.data.model.UserContact;
 
@@ -30,9 +32,21 @@ public class UserContactDaoHibernate extends GenericDaoHibernate<UserContact, Lo
 	 * Erzeugt eine neue DAO-Instanz durch die Super-Klasse GenericDaoHibernate
 	 * mit der Modell-Klasse UserContact
 	 */
+	@Deprecated
 	public UserContactDaoHibernate()
 	{
 		super(UserContact.class);
+	}
+
+	/**
+	 * Erzeugt eine neue DAO-Instanz durch die Super-Klasse GenericDaoHibernate
+	 * mit der Modell-Klasse UserContact and the given SessionFactory
+	 * 
+	 * @param sessionFactory - the SessionFactory to use
+	 */
+	public UserContactDaoHibernate(SessionFactory sessionFactory)
+	{
+		super(sessionFactory, UserContact.class);
 	}
 
 	/*
@@ -53,6 +67,7 @@ public class UserContactDaoHibernate extends GenericDaoHibernate<UserContact, Lo
 	@Override
 	public UserContact getUserContact(Long userId1, Long userId2)
 	{
-		return (UserContact) createQuery("from UserContact where (user1.id = ? and user2.id = ?) or (user2.id = ? and user1.id = ?)" , userId1, userId2, userId1, userId2).uniqueResult();
+		return (UserContact) createQuery("from UserContact where (user1.id = ? and user2.id = ?) or (user2.id = ? and user1.id = ?)", userId1,
+				userId2, userId1, userId2).uniqueResult();
 	}
 }

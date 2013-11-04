@@ -14,6 +14,8 @@
  */
 package com.syncnapsis.data.dao.hibernate;
 
+import org.hibernate.SessionFactory;
+
 import com.syncnapsis.data.dao.ActionDao;
 import com.syncnapsis.data.model.Action;
 
@@ -28,8 +30,20 @@ public class ActionDaoHibernate extends GenericNameDaoHibernate<Action, Long> im
 	 * Create a new DAO-Instance using the super-class GenericNameDaoHibernate
 	 * with the model-Class Action
 	 */
+	@Deprecated
 	public ActionDaoHibernate()
 	{
 		super(Action.class, "code");
+	}
+
+	/**
+	 * Create a new DAO-Instance using the super-class GenericNameDaoHibernate
+	 * with the model-Class Action and the given SessionFactory
+	 *
+	 * @param sessionFactory - the SessionFactory to use
+	 */
+	public ActionDaoHibernate(SessionFactory sessionFactory)
+	{
+		super(sessionFactory, Action.class, "code");
 	}
 }

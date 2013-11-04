@@ -14,6 +14,8 @@
  */
 package com.syncnapsis.data.dao.hibernate;
 
+import org.hibernate.SessionFactory;
+
 import com.syncnapsis.data.dao.MessengerDao;
 import com.syncnapsis.data.model.Messenger;
 
@@ -28,8 +30,20 @@ public class MessengerDaoHibernate extends GenericNameDaoHibernate<Messenger, Lo
 	 * Erzeugt eine neue DAO-Instanz durch die Super-Klasse GenericDaoHibernate
 	 * mit der Modell-Klasse Messenger
 	 */
+	@Deprecated
 	public MessengerDaoHibernate()
 	{
 		super(Messenger.class, "name");
+	}
+
+	/**
+	 * Erzeugt eine neue DAO-Instanz durch die Super-Klasse GenericDaoHibernate
+	 * mit der Modell-Klasse Messenger and the given SessionFactory
+	 * 
+	 * @param sessionFactory - the SessionFactory to use
+	 */
+	public MessengerDaoHibernate(SessionFactory sessionFactory)
+	{
+		super(sessionFactory, Messenger.class, "name");
 	}
 }

@@ -17,6 +17,7 @@ package com.syncnapsis.data.dao.hibernate;
 import java.util.List;
 
 import org.hibernate.Query;
+import org.hibernate.SessionFactory;
 
 import com.syncnapsis.data.dao.PinboardMessageDao;
 import com.syncnapsis.data.model.PinboardMessage;
@@ -32,9 +33,21 @@ public class PinboardMessageDaoHibernate extends GenericDaoHibernate<PinboardMes
 	 * Create a new DAO-Instance using the super-class GenericDaoHibernate
 	 * with the model-Class PinboardMessage
 	 */
+	@Deprecated
 	public PinboardMessageDaoHibernate()
 	{
 		super(PinboardMessage.class);
+	}
+
+	/**
+	 * Create a new DAO-Instance using the super-class GenericDaoHibernate
+	 * with the model-Class PinboardMessage and the given SessionFactory
+	 * 
+	 * @param sessionFactory - the SessionFactory to use
+	 */
+	public PinboardMessageDaoHibernate(SessionFactory sessionFactory)
+	{
+		super(sessionFactory, PinboardMessage.class);
 	}
 
 	/*

@@ -14,6 +14,7 @@
  */
 package com.syncnapsis.data.dao.hibernate;
 
+import org.hibernate.SessionFactory;
 import org.hibernate.exception.ConstraintViolationException;
 import com.syncnapsis.data.dao.UserRoleDao;
 import com.syncnapsis.data.model.UserRole;
@@ -30,14 +31,28 @@ public class UserRoleDaoHibernate extends GenericNameDaoHibernate<UserRole, Long
 	 * Erzeugt eine neue DAO-Instanz durch die Super-Klasse GenericDaoHibernate
 	 * mit der Modell-Klasse UserRole
 	 */
+	@Deprecated
 	public UserRoleDaoHibernate()
 	{
 		super(UserRole.class, "rolename");
 	}
 
+	/**
+	 * Erzeugt eine neue DAO-Instanz durch die Super-Klasse GenericDaoHibernate
+	 * mit der Modell-Klasse UserRole and the given SessionFactory
+	 * 
+	 * @param sessionFactory - the SessionFactory to use
+	 */
+	public UserRoleDaoHibernate(SessionFactory sessionFactory)
+	{
+		super(sessionFactory, UserRole.class, "rolename");
+	}
+
 	/*
 	 * (non-Javadoc)
-	 * @see com.syncnapsis.data.dao.hibernate.GenericDaoHibernate#save(com.syncnapsis.data.model.base.BaseObject)
+	 * @see
+	 * com.syncnapsis.data.dao.hibernate.GenericDaoHibernate#save(com.syncnapsis.data.model.base
+	 * .BaseObject)
 	 */
 	@Override
 	public UserRole save(UserRole userRole)

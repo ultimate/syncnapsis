@@ -16,6 +16,8 @@ package com.syncnapsis.data.dao.hibernate;
 
 import java.util.List;
 
+import org.hibernate.SessionFactory;
+
 import com.syncnapsis.data.dao.BlackListEntryDao;
 import com.syncnapsis.data.model.BlackListEntry;
 
@@ -30,9 +32,21 @@ public class BlackListEntryDaoHibernate extends GenericDaoHibernate<BlackListEnt
 	 * Create a new DAO-Instance using the super-class GenericDaoHibernate
 	 * with the model-Class BlackListEntry
 	 */
+	@Deprecated
 	public BlackListEntryDaoHibernate()
 	{
 		super(BlackListEntry.class);
+	}
+
+	/**
+	 * Create a new DAO-Instance using the super-class GenericDaoHibernate
+	 * with the model-Class BlackListEntry and the given SessionFactory
+	 * 
+	 * @param sessionFactory - the SessionFactory to use
+	 */
+	public BlackListEntryDaoHibernate(SessionFactory sessionFactory)
+	{
+		super(sessionFactory, BlackListEntry.class);
 	}
 
 	/*

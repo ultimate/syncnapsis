@@ -14,6 +14,8 @@
  */
 package com.syncnapsis.data.dao.hibernate;
 
+import org.hibernate.SessionFactory;
+
 import com.syncnapsis.data.dao.ParameterDao;
 import com.syncnapsis.data.model.Parameter;
 
@@ -28,8 +30,21 @@ public class ParameterDaoHibernate extends GenericNameDaoHibernate<Parameter, Lo
 	 * Erzeugt eine neue DAO-Instanz durch die Super-Klasse GenericDaoHibernate
 	 * mit der Modell-Klasse Parameter und der Option idOverwrite = true
 	 */
+	@Deprecated
 	public ParameterDaoHibernate()
 	{
 		super(Parameter.class, "name");
+	}
+
+	/**
+	 * Erzeugt eine neue DAO-Instanz durch die Super-Klasse GenericDaoHibernate
+	 * mit der Modell-Klasse Parameter und der Option idOverwrite = true and the given
+	 * SessionFactory
+	 * 
+	 * @param sessionFactory - the SessionFactory to use
+	 */
+	public ParameterDaoHibernate(SessionFactory sessionFactory)
+	{
+		super(sessionFactory, Parameter.class, "name");
 	}
 }

@@ -14,6 +14,8 @@
  */
 package com.syncnapsis.data.dao.hibernate;
 
+import org.hibernate.SessionFactory;
+
 import com.syncnapsis.data.dao.PinboardDao;
 import com.syncnapsis.data.model.Pinboard;
 
@@ -28,8 +30,20 @@ public class PinboardDaoHibernate extends GenericNameDaoHibernate<Pinboard, Long
 	 * Create a new DAO-Instance using the super-class GenericNameDaoHibernate
 	 * with the model-Class Pinboard and the specified name-property
 	 */
+	@Deprecated
 	public PinboardDaoHibernate()
 	{
 		super(Pinboard.class, "name");
+	}
+
+	/**
+	 * Create a new DAO-Instance using the super-class GenericNameDaoHibernate
+	 * with the model-Class Pinboard and the specified name-property and the given SessionFactory
+	 * 
+	 * @param sessionFactory - the SessionFactory to use
+	 */
+	public PinboardDaoHibernate(SessionFactory sessionFactory)
+	{
+		super(sessionFactory, Pinboard.class, "name");
 	}
 }

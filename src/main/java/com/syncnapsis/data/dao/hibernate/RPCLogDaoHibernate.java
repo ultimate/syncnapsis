@@ -14,6 +14,8 @@
  */
 package com.syncnapsis.data.dao.hibernate;
 
+import org.hibernate.SessionFactory;
+
 import com.syncnapsis.data.dao.RPCLogDao;
 import com.syncnapsis.data.model.RPCLog;
 
@@ -28,8 +30,20 @@ public class RPCLogDaoHibernate extends GenericDaoHibernate<RPCLog, Long> implem
 	 * Create a new DAO-Instance using the super-class GenericDaoHibernate
 	 * with the model-Class RPCLog
 	 */
+	@Deprecated
 	public RPCLogDaoHibernate()
 	{
 		super(RPCLog.class);
+	}
+
+	/**
+	 * Create a new DAO-Instance using the super-class GenericDaoHibernate
+	 * with the model-Class RPCLog and the given SessionFactory
+	 * 
+	 * @param sessionFactory - the SessionFactory to use
+	 */
+	public RPCLogDaoHibernate(SessionFactory sessionFactory)
+	{
+		super(sessionFactory, RPCLog.class);
 	}
 }

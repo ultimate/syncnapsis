@@ -23,29 +23,53 @@
     <!-- DAO						                                         -->
     <!-- =================================================================== -->
     
-	<bean id="actionDao" class="com.syncnapsis.data.dao.hibernate.ActionDaoHibernate" />
+	<bean id="actionDao" class="com.syncnapsis.data.dao.hibernate.ActionDaoHibernate">
+	    <constructor-arg ref="sessionFactory"/>
+	</bean>
 
-	<bean id="blackListDao" class="com.syncnapsis.data.dao.hibernate.BlackListDaoHibernate" />
+	<bean id="blackListDao" class="com.syncnapsis.data.dao.hibernate.BlackListDaoHibernate">
+	    <constructor-arg ref="sessionFactory"/>
+	</bean>
 
-	<bean id="blackListEntryDao" class="com.syncnapsis.data.dao.hibernate.BlackListEntryDaoHibernate" />
+	<bean id="blackListEntryDao" class="com.syncnapsis.data.dao.hibernate.BlackListEntryDaoHibernate">
+	    <constructor-arg ref="sessionFactory"/>
+	</bean>
 
-	<bean id="messengerContactDao" class="com.syncnapsis.data.dao.hibernate.MessengerContactDaoHibernate" />
+	<bean id="messengerContactDao" class="com.syncnapsis.data.dao.hibernate.MessengerContactDaoHibernate">
+	    <constructor-arg ref="sessionFactory"/>
+	</bean>
 	
-	<bean id="messengerDao" class="com.syncnapsis.data.dao.hibernate.MessengerDaoHibernate" />
+	<bean id="messengerDao" class="com.syncnapsis.data.dao.hibernate.MessengerDaoHibernate">
+	    <constructor-arg ref="sessionFactory"/>
+	</bean>
 
-	<bean id="parameterDao" class="com.syncnapsis.data.dao.hibernate.ParameterDaoHibernate" />
+	<bean id="parameterDao" class="com.syncnapsis.data.dao.hibernate.ParameterDaoHibernate">
+	    <constructor-arg ref="sessionFactory"/>
+	</bean>
 
-	<bean id="pinboardDao" class="com.syncnapsis.data.dao.hibernate.PinboardDaoHibernate" />
+	<bean id="pinboardDao" class="com.syncnapsis.data.dao.hibernate.PinboardDaoHibernate">
+	    <constructor-arg ref="sessionFactory"/>
+	</bean>
 
-	<bean id="pinboardMessageDao" class="com.syncnapsis.data.dao.hibernate.PinboardMessageDaoHibernate" />
+	<bean id="pinboardMessageDao" class="com.syncnapsis.data.dao.hibernate.PinboardMessageDaoHibernate">
+	    <constructor-arg ref="sessionFactory"/>
+	</bean>
 	
-	<bean id="rpcLogDao" class="com.syncnapsis.data.dao.hibernate.RPCLogDaoHibernate" />
+	<bean id="rpcLogDao" class="com.syncnapsis.data.dao.hibernate.RPCLogDaoHibernate">
+	    <constructor-arg ref="sessionFactory"/>
+	</bean>
 	
-	<bean id="userContactDao" class="com.syncnapsis.data.dao.hibernate.UserContactDaoHibernate" />
+	<bean id="userContactDao" class="com.syncnapsis.data.dao.hibernate.UserContactDaoHibernate">
+	    <constructor-arg ref="sessionFactory"/>
+	</bean>
 	
-	<bean id="userDao" class="com.syncnapsis.data.dao.hibernate.UserDaoHibernate" />
+	<bean id="userDao" class="com.syncnapsis.data.dao.hibernate.UserDaoHibernate">
+	    <constructor-arg ref="sessionFactory"/>
+	</bean>
 	
-	<bean id="userRoleDao" class="com.syncnapsis.data.dao.hibernate.UserRoleDaoHibernate" />
+	<bean id="userRoleDao" class="com.syncnapsis.data.dao.hibernate.UserRoleDaoHibernate">
+	    <constructor-arg ref="sessionFactory"/>
+	</bean>
 	
     <!-- =================================================================== -->
     <!-- Service					                                         -->
