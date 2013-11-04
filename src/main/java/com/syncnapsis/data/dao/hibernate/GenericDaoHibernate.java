@@ -21,10 +21,12 @@ import java.util.List;
 
 import org.hibernate.ObjectNotFoundException;
 import org.hibernate.Query;
+import org.hibernate.SessionFactory;
 
 import com.syncnapsis.data.dao.GenericDao;
 import com.syncnapsis.data.model.base.ActivatableInstance;
 import com.syncnapsis.data.model.base.Identifiable;
+import com.syncnapsis.utils.HibernateUtil;
 
 /**
  * Dao-Implementierung für Hibernate für den generischen Zugriff auf beliebige
@@ -59,9 +61,22 @@ public class GenericDaoHibernate<T extends Identifiable<PK>, PK extends Serializ
 	 * 
 	 * @param persistentClass - Die Modell-Klasse
 	 */
+	@Deprecated
 	public GenericDaoHibernate(final Class<? extends T> persistentClass)
 	{
-		this(persistentClass, false, false);
+		this(HibernateUtil.getInstance().getSessionFactory(), persistentClass);
+	}
+
+	/**
+	 * Erzeugt eine neue DAO-Instanz der gegeben Modell-Klasse und idOverwrite =
+	 * false
+	 * 
+	 * @param sessionFactory - the SessionFactory to use
+	 * @param persistentClass - Die Modell-Klasse
+	 */
+	public GenericDaoHibernate(SessionFactory sessionFactory, final Class<? extends T> persistentClass)
+	{
+		this(sessionFactory, persistentClass, false, false);
 	}
 
 	/**
@@ -75,8 +90,28 @@ public class GenericDaoHibernate<T extends Identifiable<PK>, PK extends Serializ
 	 *            autmatisch vergebene ID durch eine Vorgabe überschrieben
 	 *            werden?
 	 */
+	@Deprecated
 	public GenericDaoHibernate(final Class<? extends T> persistentClass, boolean deleteEnabled, boolean idOverwrite)
 	{
+		this(HibernateUtil.getInstance().getSessionFactory(), persistentClass, deleteEnabled, idOverwrite);
+	}
+
+	/**
+	 * Erzeugt eine neue DAO-Instanz der gegeben Modell-Klasse und gegebenen
+	 * idOverwrite
+	 * 
+	 * @param sessionFactory - the SessionFactory to use
+	 * @param persistentClass - Die Modell-Klasse
+	 * @param deleteEnabled - enable true DELETE for {@link ActivatableInstance}s via
+	 *            {@link GenericDaoHibernate#delete(Object)}
+	 * @param idOverwrite - Soll beim initialen Speichern eines Objektes die
+	 *            autmatisch vergebene ID durch eine Vorgabe überschrieben
+	 *            werden?
+	 */
+	public GenericDaoHibernate(SessionFactory sessionFactory, final Class<? extends T> persistentClass, boolean deleteEnabled, boolean idOverwrite)
+	{
+		super(sessionFactory);
+		
 		this.persistentClass = persistentClass;
 		this.deleteEnabled = deleteEnabled;
 		this.idOverwrite = idOverwrite;

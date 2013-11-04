@@ -17,6 +17,8 @@ package com.syncnapsis.data.dao.hibernate;
 import java.io.Serializable;
 import java.util.List;
 
+import org.hibernate.SessionFactory;
+
 import com.syncnapsis.data.dao.GenericNameDao;
 import com.syncnapsis.data.model.base.ActivatableInstance;
 import com.syncnapsis.data.model.base.Identifiable;
@@ -43,9 +45,23 @@ public class GenericNameDaoHibernate<T extends Identifiable<PK>, PK extends Seri
 	 * @param persistentClass - Die Modell-Klasse
 	 * @param nameField - Das Feld nach dem gesucht/sortiert werden soll
 	 */
+	@Deprecated
 	public GenericNameDaoHibernate(final Class<T> persistentClass, String nameField)
 	{
 		super(persistentClass);
+		this.nameField = nameField;
+	}
+	
+	/**
+	 * Erzeugt eine neue DAO-Instanz der gegeben Modell-Klasse und idOverwrite =
+	 * false
+	 * 
+	 * @param persistentClass - Die Modell-Klasse
+	 * @param nameField - Das Feld nach dem gesucht/sortiert werden soll
+	 */
+	public GenericNameDaoHibernate(SessionFactory sessionFactory, final Class<T> persistentClass, String nameField)
+	{
+		super(sessionFactory, persistentClass);
 		this.nameField = nameField;
 	}
 
@@ -60,9 +76,27 @@ public class GenericNameDaoHibernate<T extends Identifiable<PK>, PK extends Seri
 	 *            autmatisch vergebene ID durch eine Vorgabe überschrieben
 	 *            werden?
 	 */
+	@Deprecated
 	public GenericNameDaoHibernate(final Class<T> persistentClass, String nameField, boolean deleteEnabled, boolean idOverwrite)
 	{
 		super(persistentClass, deleteEnabled, idOverwrite);
+		this.nameField = nameField;
+	}
+	
+	/**
+	 * Erzeugt eine neue DAO-Instanz der gegeben Modell-Klasse und gegebenen
+	 * idOverwrite
+	 * 
+	 * @param persistentClass - Die Modell-Klasse
+	 * @param nameField - Das Feld nach dem gesucht/sortiert werden soll
+	 * @param deleteEnabled - enable true DELETE for {@link ActivatableInstance}s via {@link GenericDaoHibernate#delete(Object)}
+	 * @param idOverwrite - Soll beim initialen Speichern eines Objektes die
+	 *            autmatisch vergebene ID durch eine Vorgabe überschrieben
+	 *            werden?
+	 */
+	public GenericNameDaoHibernate(SessionFactory sessionFactory, final Class<T> persistentClass, String nameField, boolean deleteEnabled, boolean idOverwrite)
+	{
+		super(sessionFactory, persistentClass, deleteEnabled, idOverwrite);
 		this.nameField = nameField;
 	}
 

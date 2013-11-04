@@ -20,6 +20,7 @@ import java.util.List;
 import org.hibernate.ObjectNotFoundException;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -28,11 +29,9 @@ import com.syncnapsis.utils.HibernateUtil;
 import com.syncnapsis.utils.spring.Bean;
 
 /**
- * Dao-Implementierung für Hibernate für den universellen Zugriff auf die
- * Datenbank.<br/>
- * Die Klasse stellt grundlegende Funktionen zur Verfügung, welche durch die
- * GenericDaoHibernate oder andere Daos durch Verwendung und Angabe einer
- * Modell-Klasse genutzt werden können.
+ * Dao-Implementation for hibernate providing universal access to the database.<br/>
+ * This class provides basic operations which may be used by {@link GenericDaoHibernate} or other
+ * DAOs by passing the model class.
  * 
  * @author ultimate
  */
@@ -40,18 +39,43 @@ import com.syncnapsis.utils.spring.Bean;
 public class UniversalDaoHibernate extends Bean implements UniversalDao
 {
 	/**
-	 * Logger-Instanz zur Verwendung in allen Subklassen
+	 * Logger-Instance for usage in all subclasses
 	 */
 	protected transient final Logger	logger	= LoggerFactory.getLogger(getClass());
 
 	/**
-	 * Holt die aktuelle Session aus dem ZK-HibernateUtil
+	 * The underlying SessionFactory
+	 */
+	protected SessionFactory			sessionFactory;
+
+	/**
+	 * Default constructor getting SessionFactory from HibernateUteil
+	 */
+	@Deprecated
+	public UniversalDaoHibernate()
+	{
+		this.sessionFactory = HibernateUtil.getInstance().getSessionFactory();
+	}
+
+	/**
+	 * Recommended constructor defining a SessionFactory
 	 * 
-	 * @return die aktuelle Hibernate-Session
+	 * @param sessionFactory - the SessionFactory to use
+	 */
+	public UniversalDaoHibernate(SessionFactory sessionFactory)
+	{
+		super();
+		this.sessionFactory = sessionFactory;
+	}
+
+	/**
+	 * Get the current session from the SessionFactory
+	 * 
+	 * @return the current session
 	 */
 	protected Session currentSession()
 	{
-		return HibernateUtil.currentSession();
+		return sessionFactory.getCurrentSession();
 	}
 
 	/*
