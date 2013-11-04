@@ -14,6 +14,8 @@
  */
 package com.syncnapsis.data.dao.hibernate;
 
+import org.hibernate.SessionFactory;
+
 import com.syncnapsis.data.dao.PlayerDao;
 import com.syncnapsis.data.model.Player;
 import com.syncnapsis.exceptions.UserNotFoundException;
@@ -29,9 +31,21 @@ public class PlayerDaoHibernate extends GenericDaoHibernate<Player, Long> implem
 	 * Erzeugt eine neue DAO-Instanz durch die Super-Klasse GenericDaoHibernate
 	 * mit der Modell-Klasse Player
 	 */
+	@Deprecated
 	public PlayerDaoHibernate()
 	{
 		super(Player.class);
+	}
+
+	/**
+	 * Erzeugt eine neue DAO-Instanz durch die Super-Klasse GenericDaoHibernate
+	 * mit der Modell-Klasse Player and the given SessionFactory
+	 * 
+	 * @param sessionFactory - the SessionFactory to use
+	 */
+	public PlayerDaoHibernate(SessionFactory sessionFactory)
+	{
+		super(sessionFactory, Player.class);
 	}
 
 	/*

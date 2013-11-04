@@ -14,6 +14,7 @@
  */
 package com.syncnapsis.data.dao.hibernate;
 
+import org.hibernate.SessionFactory;
 import org.hibernate.exception.ConstraintViolationException;
 import com.syncnapsis.data.dao.PlayerRoleDao;
 import com.syncnapsis.data.model.PlayerRole;
@@ -30,14 +31,28 @@ public class PlayerRoleDaoHibernate extends GenericNameDaoHibernate<PlayerRole, 
 	 * Erzeugt eine neue DAO-Instanz durch die Super-Klasse GenericDaoHibernate
 	 * mit der Modell-Klasse UserRole
 	 */
+	@Deprecated
 	public PlayerRoleDaoHibernate()
 	{
 		super(PlayerRole.class, "rolename");
 	}
 
+	/**
+	 * Erzeugt eine neue DAO-Instanz durch die Super-Klasse GenericDaoHibernate
+	 * mit der Modell-Klasse UserRole and the given SessionFactory
+	 * 
+	 * @param sessionFactory - the SessionFactory to use
+	 */
+	public PlayerRoleDaoHibernate(SessionFactory sessionFactory)
+	{
+		super(sessionFactory, PlayerRole.class, "rolename");
+	}
+
 	/*
 	 * (non-Javadoc)
-	 * @see com.syncnapsis.data.dao.hibernate.GenericDaoHibernate#save(com.syncnapsis.data.model.base.BaseObject)
+	 * @see
+	 * com.syncnapsis.data.dao.hibernate.GenericDaoHibernate#save(com.syncnapsis.data.model.base
+	 * .BaseObject)
 	 */
 	@Override
 	public PlayerRole save(PlayerRole userRole)

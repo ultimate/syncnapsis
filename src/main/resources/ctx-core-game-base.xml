@@ -23,11 +23,17 @@
     <!-- DAO						                                         -->
     <!-- =================================================================== -->
 
-	<bean id="empireDao" class="com.syncnapsis.data.dao.hibernate.EmpireDaoHibernate" />
+	<bean id="empireDao" class="com.syncnapsis.data.dao.hibernate.EmpireDaoHibernate">
+	    <constructor-arg ref="sessionFactory"/>
+	</bean>
 
-	<bean id="playerDao" class="com.syncnapsis.data.dao.hibernate.PlayerDaoHibernate" />
+	<bean id="playerDao" class="com.syncnapsis.data.dao.hibernate.PlayerDaoHibernate">
+	    <constructor-arg ref="sessionFactory"/>
+	</bean>
 
-	<bean id="playerRoleDao" class="com.syncnapsis.data.dao.hibernate.PlayerRoleDaoHibernate" />
+	<bean id="playerRoleDao" class="com.syncnapsis.data.dao.hibernate.PlayerRoleDaoHibernate">
+	    <constructor-arg ref="sessionFactory"/>
+	</bean>
 	
     <!-- =================================================================== -->
     <!-- Service					                                         -->

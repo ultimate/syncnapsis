@@ -16,6 +16,8 @@ package com.syncnapsis.data.dao.hibernate;
 
 import java.util.List;
 
+import org.hibernate.SessionFactory;
+
 import com.syncnapsis.data.dao.EmpireDao;
 import com.syncnapsis.data.model.Empire;
 
@@ -30,9 +32,21 @@ public class EmpireDaoHibernate extends GenericNameDaoHibernate<Empire, Long> im
 	 * Erzeugt eine neue DAO-Instanz durch die Super-Klasse GenericDaoHibernate
 	 * mit der Modell-Klasse Empire
 	 */
+	@Deprecated
 	public EmpireDaoHibernate()
 	{
 		super(Empire.class, "shortName");
+	}
+
+	/**
+	 * Erzeugt eine neue DAO-Instanz durch die Super-Klasse GenericDaoHibernate
+	 * mit der Modell-Klasse Empire and the given SessionFactory
+	 * 
+	 * @param sessionFactory - the SessionFactory to use
+	 */
+	public EmpireDaoHibernate(SessionFactory sessionFactory)
+	{
+		super(sessionFactory, Empire.class, "shortName");
 	}
 
 	/*
