@@ -14,6 +14,8 @@
  */
 package com.syncnapsis.data.dao.hibernate;
 
+import org.hibernate.SessionFactory;
+
 import com.syncnapsis.data.dao.WindowDao;
 import com.syncnapsis.data.model.Window;
 import com.syncnapsis.data.dao.hibernate.GenericDaoHibernate;
@@ -28,9 +30,20 @@ public class WindowDaoHibernate extends GenericDaoHibernate<Window, Long> implem
 	/**
 	 * Default Constructor
 	 */
+	@Deprecated
 	public WindowDaoHibernate()
 	{
 		super(Window.class);
+	}
+
+	/**
+	 * Constructor with SessionFactory
+	 * 
+	 * @param sessionFactory - the SessionFactory to use
+	 */
+	public WindowDaoHibernate(SessionFactory sessionFactory)
+	{
+		super(sessionFactory, Window.class);
 	}
 
 	// nothing here yet
