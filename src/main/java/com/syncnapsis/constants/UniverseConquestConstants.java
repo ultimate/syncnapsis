@@ -15,6 +15,8 @@
 package com.syncnapsis.constants;
 
 import com.syncnapsis.data.model.SolarSystemInfrastructure;
+import com.syncnapsis.utils.constants.Constant;
+import com.syncnapsis.utils.constants.StringConstant;
 
 /**
  * Class defining constants within universe-conquest
@@ -26,63 +28,63 @@ public class UniverseConquestConstants
 	/**
 	 * The name for the parameter containing the default percentage for rivals in vendetta mode
 	 */
-	public static final String	PARAM_MATCH_VENDETTA_PARAM_DEFAULT		= "match.vendetta.param.default";
+	public static final Constant<String>	PARAM_MATCH_VENDETTA_PARAM_DEFAULT		= new StringConstant("match.vendetta.param.default");
 	/**
 	 * The minimum value for the speed of a match
 	 */
-	public static final String	PARAM_MATCH_SPEED_MIN					= "match.speed.min";
+	public static final Constant<String>	PARAM_MATCH_SPEED_MIN					= new StringConstant("match.speed.min");
 	/**
 	 * The maximum value for the speed of a match
 	 */
-	public static final String	PARAM_MATCH_SPEED_MAX					= "match.speed.max";
+	public static final Constant<String>	PARAM_MATCH_SPEED_MAX					= new StringConstant("match.speed.max");
 
 	/**
 	 * The maximum value for the habitability of a SolarSystem
 	 * 
 	 * @see SolarSystemInfrastructure#getHabitability()
 	 */
-	public static final String	PARAM_SOLARSYSTEM_HABITABILITY_MAX		= "solarsystem.habitability.max";
+	public static final Constant<String>	PARAM_SOLARSYSTEM_HABITABILITY_MAX		= new StringConstant("solarsystem.habitability.max");
 	/**
 	 * The maximum value for the size of a SolarSystem
 	 * 
 	 * @see SolarSystemInfrastructure#getSize()
 	 */
-	public static final String	PARAM_SOLARSYSTEM_SIZE_MAX				= "solarsystem.size.max";
+	public static final Constant<String>	PARAM_SOLARSYSTEM_SIZE_MAX				= new StringConstant("solarsystem.size.max");
 	/**
 	 * The factor for calculating the maximum population of a SolarSystem from the habitability and
 	 * the size in the way <code>habitability*size*factor</code>
 	 */
-	public static final String	PARAM_SOLARSYSTEM_MAX_POPULATION_FACTOR	= "solarsystem.population.factor";
+	public static final Constant<String>	PARAM_SOLARSYSTEM_MAX_POPULATION_FACTOR	= new StringConstant("solarsystem.population.factor");
 
 	/**
 	 * The factor for calculating the maximum travel distance from the standard travel distance.
 	 */
-	public static final String	PARAM_TRAVEL_MAX_FACTOR					= "travel.max.factor";
+	public static final Constant<String>	PARAM_TRAVEL_MAX_FACTOR					= new StringConstant("travel.max.factor");
 	/**
 	 * The factor for calculating the maximum <b>exodus</b> travel distance from the standard travel
 	 * distance.
 	 */
-	public static final String	PARAM_TRAVEL_EXODUS_FACTOR				= "travel.exodus.factor";
+	public static final Constant<String>	PARAM_TRAVEL_EXODUS_FACTOR				= new StringConstant("travel.exodus.factor");
 	/**
 	 * The maximum speed for populations traveling.<br>
 	 * For calculations the ratio between min and max is most relevant.<br>
 	 * The exact values may be used to control the selectable step-size.
 	 */
-	public static final String	PARAM_TRAVEL_SPEED_MAX					= "travel.speed.max";
+	public static final Constant<String>	PARAM_TRAVEL_SPEED_MAX					= new StringConstant("travel.speed.max");
 	/**
 	 * The minimum speed for populations traveling.<br>
 	 * For calculations the ratio between min and max is most relevant.<br>
 	 * The exact values may be used to control the selectable step-size.
 	 */
-	public static final String	PARAM_TRAVEL_SPEED_MIN					= "travel.speed.min";
+	public static final Constant<String>	PARAM_TRAVEL_SPEED_MIN					= new StringConstant("travel.speed.min");
 	/**
 	 * The factor for calculating population build
 	 */
-	public static final String	PARAM_FACTOR_BUILD						= "factor.build";
+	public static final Constant<String>	PARAM_FACTOR_BUILD						= new StringConstant("factor.build");
 	/**
 	 * The factor for calculating population attack
 	 */
-	public static final String	PARAM_FACTOR_ATTACK						= "factor.attack";
+	public static final Constant<String>	PARAM_FACTOR_ATTACK						= new StringConstant("factor.attack");
 	/**
 	 * The range for randomizing build strength calculation<br>
 	 * <ul>
@@ -93,7 +95,7 @@ public class UniverseConquestConstants
 	 * <li>e.g. 1.5 = randomization from [-0.5*value;2.5*value]</li>
 	 * </ul>
 	 */
-	public static final String	PARAM_FACTOR_BUILD_RANDOMIZE = "factor.build.randomize";
+	public static final Constant<String>	PARAM_FACTOR_BUILD_RANDOMIZE = new StringConstant("factor.build.randomize");
 	/**
 	 * The range for randomizing attack strength calculation<br>
 	 * <ul>
@@ -104,29 +106,29 @@ public class UniverseConquestConstants
 	 * <li>e.g. 1.5 = randomization from [-0.5*value;2.5*value]</li>
 	 * </ul>
 	 */
-	public static final String	PARAM_FACTOR_ATTACK_RANDOMIZE = "factor.attack.randomize";
+	public static final Constant<String>	PARAM_FACTOR_ATTACK_RANDOMIZE = new StringConstant("factor.attack.randomize");
 	/**
 	 * The length of a norm tick
 	 */
-	public static final String	PARAM_NORM_TICK_LENGTH					= "norm.tick.length";
+	public static final Constant<String>	PARAM_NORM_TICK_LENGTH					= new StringConstant("norm.tick.length");
 	/**
 	 * The factor for full priority
 	 */
-	public static final String	PARAM_PRIORITY_FULL						= "priority.full";
+	public static final Constant<String>	PARAM_PRIORITY_FULL						= new StringConstant("priority.full");
 	/**
 	 * The factor for high priority
 	 */
-	public static final String	PARAM_PRIORITY_HIGH						= "priority.high";
+	public static final Constant<String>	PARAM_PRIORITY_HIGH						= new StringConstant("priority.high");
 	/**
 	 * The factor for medium priority
 	 */
-	public static final String	PARAM_PRIORITY_MEDIUM					= "priority.medium";
+	public static final Constant<String>	PARAM_PRIORITY_MEDIUM					= new StringConstant("priority.medium");
 	/**
 	 * The factor for low priority
 	 */
-	public static final String	PARAM_PRIORITY_LOW						= "priority.low";
+	public static final Constant<String>	PARAM_PRIORITY_LOW						= new StringConstant("priority.low");
 	/**
 	 * The factor for no priority
 	 */
-	public static final String	PARAM_PRIORITY_NONE						= "priority.none";
+	public static final Constant<String>	PARAM_PRIORITY_NONE						= new StringConstant("priority.none");
 }
