@@ -14,6 +14,8 @@
  */
 package com.syncnapsis.data.dao.hibernate;
 
+import org.hibernate.SessionFactory;
+
 import com.syncnapsis.data.dao.EmpireAllianceContactDao;
 import com.syncnapsis.data.model.contacts.EmpireAllianceContact;
 
@@ -28,8 +30,20 @@ public class EmpireAllianceContactDaoHibernate extends GenericDaoHibernate<Empir
 	 * Erzeugt eine neue DAO-Instanz durch die Super-Klasse GenericDaoHibernate
 	 * mit der Modell-Klasse EmpireAllianceContact
 	 */
+	@Deprecated
 	public EmpireAllianceContactDaoHibernate()
 	{
 		super(EmpireAllianceContact.class);
+	}
+
+	/**
+	 * Erzeugt eine neue DAO-Instanz durch die Super-Klasse GenericDaoHibernate
+	 * mit der Modell-Klasse EmpireAllianceContact and the given SessionFactory
+	 * 
+	 * @param sessionFactory - the SessionFactory to use
+	 */
+	public EmpireAllianceContactDaoHibernate(SessionFactory sessionFactory)
+	{
+		super(sessionFactory, EmpireAllianceContact.class);
 	}
 }

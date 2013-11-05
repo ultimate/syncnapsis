@@ -16,6 +16,8 @@ package com.syncnapsis.data.dao.hibernate;
 
 import java.util.List;
 
+import org.hibernate.SessionFactory;
+
 import com.syncnapsis.data.dao.ContactGroupDao;
 import com.syncnapsis.data.model.ContactGroup;
 
@@ -30,9 +32,21 @@ public class ContactGroupDaoHibernate extends GenericDaoHibernate<ContactGroup, 
 	 * Erzeugt eine neue DAO-Instanz durch die Super-Klasse GenericDaoHibernate
 	 * mit der Modell-Klasse ContactGroup
 	 */
+	@Deprecated
 	public ContactGroupDaoHibernate()
 	{
 		super(ContactGroup.class);
+	}
+
+	/**
+	 * Erzeugt eine neue DAO-Instanz durch die Super-Klasse GenericDaoHibernate
+	 * mit der Modell-Klasse ContactGroup and the given SessionFactory
+	 * 
+	 * @param sessionFactory - the SessionFactory to use
+	 */
+	public ContactGroupDaoHibernate(SessionFactory sessionFactory)
+	{
+		super(sessionFactory, ContactGroup.class);
 	}
 
 	/*

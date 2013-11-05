@@ -16,6 +16,8 @@ package com.syncnapsis.data.dao.hibernate;
 
 import java.util.List;
 
+import org.hibernate.SessionFactory;
+
 import com.syncnapsis.data.dao.AllianceDao;
 import com.syncnapsis.data.model.Alliance;
 
@@ -30,9 +32,21 @@ public class AllianceDaoHibernate extends GenericNameDaoHibernate<Alliance, Long
 	 * Erzeugt eine neue DAO-Instanz durch die Super-Klasse GenericDaoHibernate
 	 * mit der Modell-Klasse Alliance
 	 */
+	@Deprecated
 	public AllianceDaoHibernate()
 	{
 		super(Alliance.class, "shortName");
+	}
+
+	/**
+	 * Erzeugt eine neue DAO-Instanz durch die Super-Klasse GenericDaoHibernate
+	 * mit der Modell-Klasse Alliance and the given SessionFactory
+	 * 
+	 * @param sessionFactory - the SessionFactory to use
+	 */
+	public AllianceDaoHibernate(SessionFactory sessionFactory)
+	{
+		super(sessionFactory, Alliance.class, "shortName");
 	}
 
 	/*

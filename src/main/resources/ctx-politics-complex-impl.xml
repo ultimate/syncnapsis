@@ -23,19 +23,33 @@
     <!-- DAO						                                         -->
     <!-- =================================================================== -->
 
-	<bean id="allianceAllianceContactDao" class="com.syncnapsis.data.dao.hibernate.AllianceAllianceContactDaoHibernate" />
+	<bean id="allianceAllianceContactDao" class="com.syncnapsis.data.dao.hibernate.AllianceAllianceContactDaoHibernate">
+	    <constructor-arg ref="sessionFactory"/>
+	</bean>
 
-	<bean id="allianceDao" class="com.syncnapsis.data.dao.hibernate.AllianceDaoHibernate" />
+	<bean id="allianceDao" class="com.syncnapsis.data.dao.hibernate.AllianceDaoHibernate">
+	    <constructor-arg ref="sessionFactory"/>
+	</bean>
 
-	<bean id="allianceMemberRankDao" class="com.syncnapsis.data.dao.hibernate.AllianceMemberRankDaoHibernate" />
+	<bean id="allianceMemberRankDao" class="com.syncnapsis.data.dao.hibernate.AllianceMemberRankDaoHibernate">
+	    <constructor-arg ref="sessionFactory"/>
+	</bean>
 	
-	<bean id="allianceRankDao" class="com.syncnapsis.data.dao.hibernate.AllianceRankDaoHibernate" />
+	<bean id="allianceRankDao" class="com.syncnapsis.data.dao.hibernate.AllianceRankDaoHibernate">
+	    <constructor-arg ref="sessionFactory"/>
+	</bean>
 
-	<bean id="contactGroupDao" class="com.syncnapsis.data.dao.hibernate.ContactGroupDaoHibernate" />
+	<bean id="contactGroupDao" class="com.syncnapsis.data.dao.hibernate.ContactGroupDaoHibernate">
+	    <constructor-arg ref="sessionFactory"/>
+	</bean>
 
-	<bean id="empireAllianceContactDao" class="com.syncnapsis.data.dao.hibernate.EmpireAllianceContactDaoHibernate" />
+	<bean id="empireAllianceContactDao" class="com.syncnapsis.data.dao.hibernate.EmpireAllianceContactDaoHibernate">
+	    <constructor-arg ref="sessionFactory"/>
+	</bean>
 
-	<bean id="empireEmpireContactDao" class="com.syncnapsis.data.dao.hibernate.EmpireEmpireContactDaoHibernate" />
+	<bean id="empireEmpireContactDao" class="com.syncnapsis.data.dao.hibernate.EmpireEmpireContactDaoHibernate">
+	    <constructor-arg ref="sessionFactory"/>
+	</bean>
 	
     <!-- =================================================================== -->
     <!-- Service					                                         -->

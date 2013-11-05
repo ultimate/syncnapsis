@@ -14,6 +14,8 @@
  */
 package com.syncnapsis.data.dao.hibernate;
 
+import org.hibernate.SessionFactory;
+
 import com.syncnapsis.data.dao.AllianceRankDao;
 import com.syncnapsis.data.model.Alliance;
 import com.syncnapsis.data.model.AllianceRank;
@@ -24,8 +26,20 @@ public class AllianceRankDaoHibernate extends GenericRankDaoHibernate<AllianceRa
 	 * Erzeugt eine neue DAO-Instanz durch die Super-Klasse GenericDaoHibernate
 	 * mit der Modell-Klasse AllianceRank
 	 */
+	@Deprecated
 	public AllianceRankDaoHibernate()
 	{
 		super(AllianceRank.class, ", entity.shortName asc");
+	}
+
+	/**
+	 * Erzeugt eine neue DAO-Instanz durch die Super-Klasse GenericDaoHibernate
+	 * mit der Modell-Klasse AllianceRank and the given SessionFactory
+	 * 
+	 * @param sessionFactory - the SessionFactory to use
+	 */
+	public AllianceRankDaoHibernate(SessionFactory sessionFactory)
+	{
+		super(sessionFactory, AllianceRank.class, ", entity.shortName asc");
 	}
 }
