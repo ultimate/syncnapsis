@@ -23,9 +23,13 @@
     <!-- DAO						                                         -->
     <!-- =================================================================== -->
 
-	<bean id="empireRankDao" class="com.syncnapsis.data.dao.hibernate.EmpireRankDaoHibernate" />
+	<bean id="empireRankDao" class="com.syncnapsis.data.dao.hibernate.EmpireRankDaoHibernate">
+	    <constructor-arg ref="sessionFactory"/>
+	</bean>
 
-	<bean id="playerRankDao" class="com.syncnapsis.data.dao.hibernate.PlayerRankDaoHibernate" />
+	<bean id="playerRankDao" class="com.syncnapsis.data.dao.hibernate.PlayerRankDaoHibernate">
+	    <constructor-arg ref="sessionFactory"/>
+	</bean>
 	
     <!-- =================================================================== -->
     <!-- Service					                                         -->
