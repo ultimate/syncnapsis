@@ -16,6 +16,8 @@ package com.syncnapsis.data.dao.hibernate;
 
 import java.util.List;
 
+import org.hibernate.SessionFactory;
+
 import com.syncnapsis.data.dao.SolarSystemDao;
 import com.syncnapsis.data.model.SolarSystem;
 
@@ -30,9 +32,21 @@ public class SolarSystemDaoHibernate extends GenericDaoHibernate<SolarSystem, Lo
 	 * Create a new DAO-Instance using the super-class GenericNameDaoHibernate
 	 * with the model-Class SolarSystem and the specified name-property
 	 */
+	@Deprecated
 	public SolarSystemDaoHibernate()
 	{
 		super(SolarSystem.class);
+	}
+
+	/**
+	 * Create a new DAO-Instance using the super-class GenericNameDaoHibernate
+	 * with the model-Class SolarSystem and the specified name-property and the given SessionFactory
+	 * 
+	 * @param sessionFactory - the SessionFactory to use
+	 */
+	public SolarSystemDaoHibernate(SessionFactory sessionFactory)
+	{
+		super(sessionFactory, SolarSystem.class);
 	}
 
 	/*

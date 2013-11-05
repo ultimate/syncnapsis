@@ -16,6 +16,8 @@ package com.syncnapsis.data.dao.hibernate;
 
 import java.util.List;
 
+import org.hibernate.SessionFactory;
+
 import com.syncnapsis.data.dao.ParticipantDao;
 import com.syncnapsis.data.model.Participant;
 
@@ -30,9 +32,21 @@ public class ParticipantDaoHibernate extends GenericDaoHibernate<Participant, Lo
 	 * Create a new DAO-Instance using the super-class GenericDaoHibernate
 	 * with the model-Class Participant
 	 */
+	@Deprecated
 	public ParticipantDaoHibernate()
 	{
 		super(Participant.class);
+	}
+
+	/**
+	 * Create a new DAO-Instance using the super-class GenericDaoHibernate
+	 * with the model-Class Participant and the given SessionFactory
+	 * 
+	 * @param sessionFactory - the SessionFactory to use
+	 */
+	public ParticipantDaoHibernate(SessionFactory sessionFactory)
+	{
+		super(sessionFactory, Participant.class);
 	}
 
 	/*
@@ -53,6 +67,7 @@ public class ParticipantDaoHibernate extends GenericDaoHibernate<Participant, Lo
 	@Override
 	public Participant getByMatchAndEmpire(long matchId, long empireId)
 	{
-		return (Participant) createQuery("from Participant p where p.match.id=? and p.empire.id=? and p.activated=true", matchId, empireId).uniqueResult();
+		return (Participant) createQuery("from Participant p where p.match.id=? and p.empire.id=? and p.activated=true", matchId, empireId)
+				.uniqueResult();
 	}
 }

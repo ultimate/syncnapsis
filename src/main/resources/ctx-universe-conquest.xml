@@ -20,21 +20,29 @@
 	<!-- DAO -->
 	<!-- =================================================================== -->
 
-	<bean id="galaxyDao" class="com.syncnapsis.data.dao.hibernate.GalaxyDaoHibernate" />
+	<bean id="galaxyDao" class="com.syncnapsis.data.dao.hibernate.GalaxyDaoHibernate">
+	    <constructor-arg ref="sessionFactory"/>
+	</bean>
 
-	<bean id="matchDao" class="com.syncnapsis.data.dao.hibernate.MatchDaoHibernate" />
+	<bean id="matchDao" class="com.syncnapsis.data.dao.hibernate.MatchDaoHibernate">
+	    <constructor-arg ref="sessionFactory"/>
+	</bean>
 
-	<bean id="participantDao"
-		class="com.syncnapsis.data.dao.hibernate.ParticipantDaoHibernate" />
+	<bean id="participantDao" class="com.syncnapsis.data.dao.hibernate.ParticipantDaoHibernate">
+	    <constructor-arg ref="sessionFactory"/>
+	</bean>
 
-	<bean id="solarSystemDao"
-		class="com.syncnapsis.data.dao.hibernate.SolarSystemDaoHibernate" />
+	<bean id="solarSystemDao" class="com.syncnapsis.data.dao.hibernate.SolarSystemDaoHibernate">
+	    <constructor-arg ref="sessionFactory"/>
+	</bean>
 
-	<bean id="solarSystemInfrastructureDao"
-		class="com.syncnapsis.data.dao.hibernate.SolarSystemInfrastructureDaoHibernate" />
+	<bean id="solarSystemInfrastructureDao"	class="com.syncnapsis.data.dao.hibernate.SolarSystemInfrastructureDaoHibernate">
+	    <constructor-arg ref="sessionFactory"/>
+	</bean>
 
-	<bean id="solarSystemPopulationDao"
-		class="com.syncnapsis.data.dao.hibernate.SolarSystemPopulationDaoHibernate" />
+	<bean id="solarSystemPopulationDao"	class="com.syncnapsis.data.dao.hibernate.SolarSystemPopulationDaoHibernate">
+	    <constructor-arg ref="sessionFactory"/>
+	</bean>
 
 	<!-- =================================================================== -->
 	<!-- Service -->
