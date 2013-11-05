@@ -14,8 +14,6 @@
  */
 package com.syncnapsis.utils.constants;
 
-
-
 /**
  * Class representing a simple constant usable in applications.<br>
  * Constants will only be editable using {@link ConstantLoader}s which provide a function to load
@@ -108,11 +106,11 @@ public abstract class Constant<R>
 	{
 		return name;
 	}
-	
+
 	/**
 	 * Set the raw value (and all type specific values) for this constant to null
 	 */
-	/*package*/ void defineNull()
+	protected void defineNull()
 	{
 		this.value_Raw = null;
 		this.value_String = null;
@@ -131,7 +129,7 @@ public abstract class Constant<R>
 	 * 
 	 * @param value
 	 */
-	/* package */abstract void define(R raw);
+	protected abstract void define(R raw);
 
 	public R raw()
 	{

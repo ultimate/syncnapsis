@@ -45,7 +45,7 @@ public final class StringConstant extends Constant<String>
 		super(name, defaultValue);
 	}
 
-	/* package */void define(String raw)
+	protected void define(String raw)
 	{
 		defineNull(); // reset
 		if(raw == null)

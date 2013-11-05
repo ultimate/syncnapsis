@@ -50,7 +50,7 @@ public class NumberConstant extends Constant<Number>
 	 * @see com.syncnapsis.utils.data.Constant#define(java.lang.Object)
 	 */
 	@Override
-	void define(Number raw)
+	protected void define(Number raw)
 	{
 		defineNull(); // reset
 		if(raw == null)
