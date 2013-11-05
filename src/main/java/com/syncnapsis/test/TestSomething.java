@@ -42,40 +42,13 @@ import com.syncnapsis.universe.CalculatorImpl;
 import com.syncnapsis.utils.FileUtil;
 import com.syncnapsis.utils.IconUtil;
 import com.syncnapsis.utils.MathUtil;
-import com.syncnapsis.utils.serialization.BaseMapper;
-import com.syncnapsis.utils.serialization.JacksonStringSerializer;
-import com.syncnapsis.utils.serialization.Mapper;
 
 @Untested
 @SuppressWarnings("unused")
 public class TestSomething
 {
 	public static void main(String[] args) throws Exception
-	{
-		Mapper mapper = new BaseMapper();
-		JacksonStringSerializer serializer = new JacksonStringSerializer();
-		serializer.setMapper(mapper);
-		
-		Entity e = new Entity();
-		e.setDate(new Date(1234));
-		System.out.println("entity = " + e);
-		
-		String s;
-		
-		s = serializer.serialize(e, new Object[0]);
-		System.out.println("entity serialized = " + s);
-		
-		Entity e2 = serializer.deserialize(s, Entity.class, new Object[0]);
-		System.out.println("entity2 = " + e2);
-
-		Entity e3 = new Entity();
-		serializer.deserialize(s, e3, new Object[0]);
-		System.out.println("entity3 = " + e3);
-		
-		
-		System.exit(0);
-		
-
+	{	
 		MockParameterManager mockParameterManager = new MockParameterManager();
 		mockParameterManager.values.put(UniverseConquestConstants.PARAM_SOLARSYSTEM_HABITABILITY_MAX, 1000);
 		mockParameterManager.values.put(UniverseConquestConstants.PARAM_SOLARSYSTEM_SIZE_MAX, 1000);
@@ -511,6 +484,18 @@ public class TestSomething
 			return (Date) values.get(name);
 		}
 
+		/*
+		 * (non-Javadoc)
+		 * @see com.syncnapsis.data.service.ParameterManager#setString(java.lang.String,
+		 * java.lang.String)
+		 */
+		@Override
+		public long setString(String name, String value)
+		{
+			// TODO Auto-generated method stub
+			return 0;
+		}
+
 	}
 
 	public static class Entity
@@ -533,5 +518,62 @@ public class TestSomething
 		{
 			return "Entity(date=" + date + ")";
 		}
+	}
+
+	private static void mapSpeedTest_toDouble(Map<String, ?> map)
+	{
+		String aKey = map.keySet().iterator().next();
+
+		long start = System.currentTimeMillis();
+		int count = 0;
+		Object value;
+		double d;
+		while(count < 1000000)
+		{
+			value = map.get(aKey);
+			if(value != null)
+			{
+				d = -1;
+				if(value instanceof String)
+					d = Double.parseDouble((String) value);
+				else if(value instanceof Double)
+					d = (Double) value;
+				if(d > 0)
+					count++;
+			}
+		}
+		long end = System.currentTimeMillis();
+		System.out.println("time needed: " + (end - start));
+		System.out.println("speed: " + ((double) count * 1000 / (end - start)) + " ticks/second");
+	}
+
+	private static void mapSpeedTest_toInteger(Map<String, ?> map)
+	{
+		String aKey = map.keySet().iterator().next();
+
+		long start = System.currentTimeMillis();
+		int count = 0;
+		Object value;
+		int i;
+		while(count < 1000000)
+		{
+			value = map.get(aKey);
+			if(value != null)
+			{
+				if(value != null)
+				{
+					i = -1;
+					if(value instanceof String)
+						i = Integer.parseInt((String) value);
+					else if(value instanceof Integer)
+						i = (Integer) value;
+					if(i > 0)
+						count++;
+				}
+			}
+		}
+		long end = System.currentTimeMillis();
+		System.out.println("time needed: " + (end - start));
+		System.out.println("speed: " + ((double) count * 1000 / (end - start)) + " ticks/second");
 	}
 }
