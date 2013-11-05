@@ -23,11 +23,17 @@
     <!-- DAO						                                         -->
     <!-- =================================================================== -->
 
-	<bean id="authoritiesDao" class="com.syncnapsis.data.dao.hibernate.AuthoritiesGenericImplDaoHibernate" />
+	<bean id="authoritiesDao" class="com.syncnapsis.data.dao.hibernate.AuthoritiesGenericImplDaoHibernate">
+	    <constructor-arg ref="sessionFactory"/>
+	</bean>
 
-	<bean id="authorityGroupDao" class="com.syncnapsis.data.dao.hibernate.AuthorityGroupDaoHibernate" />
+	<bean id="authorityGroupDao" class="com.syncnapsis.data.dao.hibernate.AuthorityGroupDaoHibernate">
+	    <constructor-arg ref="sessionFactory"/>
+	</bean>
 
-	<bean id="authorityDao" class="com.syncnapsis.data.dao.hibernate.AuthorityDaoHibernate" />
+	<bean id="authorityDao" class="com.syncnapsis.data.dao.hibernate.AuthorityDaoHibernate">
+	    <constructor-arg ref="sessionFactory"/>
+	</bean>
 	
     <!-- =================================================================== -->
     <!-- Service					                                         -->

@@ -14,6 +14,8 @@
  */
 package com.syncnapsis.data.dao.hibernate;
 
+import org.hibernate.SessionFactory;
+
 import com.syncnapsis.data.dao.AuthorityGroupDao;
 import com.syncnapsis.data.model.AuthorityGroup;
 
@@ -28,9 +30,20 @@ public class AuthorityGroupDaoHibernate extends GenericNameDaoHibernate<Authorit
 	 * Erzeugt eine neue DAO-Instanz durch die Super-Klasse GenericDaoHibernate
 	 * mit der Modell-Klasse AuthorityGroup
 	 */
+	@Deprecated
 	public AuthorityGroupDaoHibernate()
 	{
 		super(AuthorityGroup.class, "name");
 	}
 
+	/**
+	 * Erzeugt eine neue DAO-Instanz durch die Super-Klasse GenericDaoHibernate
+	 * mit der Modell-Klasse AuthorityGroup and the given SessionFactory
+	 * 
+	 * @param sessionFactory - the SessionFactory to use
+	 */
+	public AuthorityGroupDaoHibernate(SessionFactory sessionFactory)
+	{
+		super(sessionFactory, AuthorityGroup.class, "name");
+	}
 }

@@ -14,6 +14,8 @@
  */
 package com.syncnapsis.data.dao.hibernate;
 
+import org.hibernate.SessionFactory;
+
 import com.syncnapsis.data.dao.AuthoritiesGenericImplDao;
 import com.syncnapsis.data.model.AuthoritiesGenericImpl;
 
@@ -28,9 +30,20 @@ public class AuthoritiesGenericImplDaoHibernate extends GenericDaoHibernate<Auth
 	 * Erzeugt eine neue DAO-Instanz durch die Super-Klasse GenericDaoHibernate
 	 * mit der Modell-Klasse AuthoritiesGenericImpl
 	 */
+	@Deprecated
 	public AuthoritiesGenericImplDaoHibernate()
 	{
 		super(AuthoritiesGenericImpl.class);
 	}
 
+	/**
+	 * Erzeugt eine neue DAO-Instanz durch die Super-Klasse GenericDaoHibernate
+	 * mit der Modell-Klasse AuthoritiesGenericImpl and the given SessionFactory
+	 * 
+	 * @param sessionFactory - the SessionFactory to use
+	 */
+	public AuthoritiesGenericImplDaoHibernate(SessionFactory sessionFactory)
+	{
+		super(sessionFactory, AuthoritiesGenericImpl.class);
+	}
 }
