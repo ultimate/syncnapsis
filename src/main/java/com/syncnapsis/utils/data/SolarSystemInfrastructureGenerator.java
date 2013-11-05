@@ -100,8 +100,8 @@ public class SolarSystemInfrastructureGenerator extends Generator<SolarSystemInf
 		Match match = (Match) args[0];
 		SolarSystem system = (SolarSystem) args[1];
 
-		int hab = random.nextGaussian(0, parameterManager.getInteger(UniverseConquestConstants.PARAM_SOLARSYSTEM_HABITABILITY_MAX));
-		int size = random.nextGaussian(0, parameterManager.getInteger(UniverseConquestConstants.PARAM_SOLARSYSTEM_SIZE_MAX));
+		int hab = random.nextGaussian(0, UniverseConquestConstants.PARAM_SOLARSYSTEM_HABITABILITY_MAX.asInt());
+		int size = random.nextGaussian(0, UniverseConquestConstants.PARAM_SOLARSYSTEM_SIZE_MAX.asInt());
 
 		SolarSystemInfrastructure infrastructure = new SolarSystemInfrastructure();
 		infrastructure.setActivated(true);

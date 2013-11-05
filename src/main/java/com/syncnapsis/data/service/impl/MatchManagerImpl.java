@@ -321,7 +321,7 @@ public class MatchManagerImpl extends GenericNameManagerImpl<Match, Long> implem
 				break;
 			case vendetta:
 				// TODO make vendetta percentage selectable?
-				match.setVictoryParameter(parameterManager.getInteger(UniverseConquestConstants.PARAM_MATCH_VENDETTA_PARAM_DEFAULT));
+				match.setVictoryParameter(UniverseConquestConstants.PARAM_MATCH_VENDETTA_PARAM_DEFAULT.asInt());
 				break;
 		}
 

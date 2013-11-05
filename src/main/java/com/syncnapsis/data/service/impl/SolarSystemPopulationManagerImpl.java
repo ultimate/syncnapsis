@@ -27,7 +27,6 @@ import com.syncnapsis.data.dao.SolarSystemPopulationDao;
 import com.syncnapsis.data.model.Participant;
 import com.syncnapsis.data.model.SolarSystemInfrastructure;
 import com.syncnapsis.data.model.SolarSystemPopulation;
-import com.syncnapsis.data.service.ParameterManager;
 import com.syncnapsis.data.service.SolarSystemInfrastructureManager;
 import com.syncnapsis.data.service.SolarSystemPopulationManager;
 import com.syncnapsis.enums.EnumDestructionType;
@@ -58,11 +57,6 @@ public class SolarSystemPopulationManagerImpl extends GenericManagerImpl<SolarSy
 	protected SolarSystemInfrastructureManager	solarSystemInfrastructureManager;
 
 	/**
-	 * The ParameterManager
-	 */
-	protected ParameterManager					parameterManager;
-
-	/**
 	 * The universe conquenst {@link Calculator}
 	 */
 	protected Calculator						calculator;
@@ -77,15 +71,13 @@ public class SolarSystemPopulationManagerImpl extends GenericManagerImpl<SolarSy
 	 * 
 	 * @param solarSystemPopulationDao - SolarSystemPopulationDao for database access
 	 * @param solarSystemInfrastructureManager - the SolarSystemInfrastructureManager
-	 * @param parameterManager - the ParameterManager
 	 */
 	public SolarSystemPopulationManagerImpl(SolarSystemPopulationDao solarSystemPopulationDao,
-			SolarSystemInfrastructureManager solarSystemInfrastructureManager, ParameterManager parameterManager)
+			SolarSystemInfrastructureManager solarSystemInfrastructureManager)
 	{
 		super(solarSystemPopulationDao);
 		this.solarSystemPopulationDao = solarSystemPopulationDao;
 		this.solarSystemInfrastructureManager = solarSystemInfrastructureManager;
-		this.parameterManager = parameterManager;
 	}
 
 	/*
@@ -506,14 +498,14 @@ public class SolarSystemPopulationManagerImpl extends GenericManagerImpl<SolarSy
 		double speedFactor = calculator.getSpeedFactor(infrastructure.getMatch().getSpeed());
 		long maxPopulation = calculator.getMaxPopulation(infrastructure);
 
-		double prio_full = parameterManager.getDouble(UniverseConquestConstants.PARAM_PRIORITY_FULL);
-		double prio_high = parameterManager.getDouble(UniverseConquestConstants.PARAM_PRIORITY_HIGH);
-		double prio_medium = parameterManager.getDouble(UniverseConquestConstants.PARAM_PRIORITY_MEDIUM);
-		double prio_low = parameterManager.getDouble(UniverseConquestConstants.PARAM_PRIORITY_LOW);
-		double prio_none = parameterManager.getDouble(UniverseConquestConstants.PARAM_PRIORITY_NONE);
-		double randomization_attack = parameterManager.getDouble(UniverseConquestConstants.PARAM_FACTOR_ATTACK_RANDOMIZE);
-		double randomization_build = parameterManager.getDouble(UniverseConquestConstants.PARAM_FACTOR_BUILD_RANDOMIZE);
-		long norm_tick = parameterManager.getLong(UniverseConquestConstants.PARAM_NORM_TICK_LENGTH);
+		double prio_full = UniverseConquestConstants.PARAM_PRIORITY_FULL.asDouble();
+		double prio_high = UniverseConquestConstants.PARAM_PRIORITY_HIGH.asDouble();
+		double prio_medium = UniverseConquestConstants.PARAM_PRIORITY_MEDIUM.asDouble();
+		double prio_low = UniverseConquestConstants.PARAM_PRIORITY_LOW.asDouble();
+		double prio_none = UniverseConquestConstants.PARAM_PRIORITY_NONE.asDouble();
+		double randomization_attack = UniverseConquestConstants.PARAM_FACTOR_ATTACK_RANDOMIZE.asDouble();
+		double randomization_build = UniverseConquestConstants.PARAM_FACTOR_BUILD_RANDOMIZE.asDouble();
+		long norm_tick = UniverseConquestConstants.PARAM_NORM_TICK_LENGTH.asLong();
 
 		double[] deltaPop = new double[infrastructure.getPopulations().size()];
 		double deltaInf = 0;
@@ -547,25 +539,29 @@ public class SolarSystemPopulationManagerImpl extends GenericManagerImpl<SolarSy
 				b = calculator.calculateBuildStrength(speedFactor, pop.getPopulation(), maxPopulation);
 				a = calculator.calculateAttackStrength(speedFactor, pop.getPopulation());
 
-				logger.debug("cycle " + i + " population " + pop.getId() + " a = " + a + " b = " + b + " delta = " + deltaPop[i] + " deltaInf = " + deltaInf);
+				logger.debug("cycle " + i + " population " + pop.getId() + " a = " + a + " b = " + b + " delta = " + deltaPop[i] + " deltaInf = "
+						+ deltaInf);
 
 				b *= tick / norm_tick; // weight strength by tick-length
 				a *= tick / norm_tick; // weight strength by tick-length
-				
-				logger.debug("cycle " + i + " population " + pop.getId() + " a = " + a + " b = " + b + " delta = " + deltaPop[i] + " deltaInf = " + deltaInf);
+
+				logger.debug("cycle " + i + " population " + pop.getId() + " a = " + a + " b = " + b + " delta = " + deltaPop[i] + " deltaInf = "
+						+ deltaInf);
 
 				if(randomization_build > 0) // add random variation
 					b *= random.nextGaussian(1 - randomization_build, 1 + randomization_build);
 				if(randomization_attack > 0) // add random variation
 					a *= random.nextGaussian(1 - randomization_attack, 1 + randomization_attack);
 
-				logger.debug("cycle " + i + " population " + pop.getId() + " a = " + a + " b = " + b + " delta = " + deltaPop[i] + " deltaInf = " + deltaInf);
+				logger.debug("cycle " + i + " population " + pop.getId() + " a = " + a + " b = " + b + " delta = " + deltaPop[i] + " deltaInf = "
+						+ deltaInf);
 
 				if(pop == homePopulation)
 				{
 					logger.debug("cycle " + i + " population " + pop.getId() + " is home...");
 					b *= calculator.calculateInfrastructureBuildInfluence(pop.getPopulation(), infrastructure.getInfrastructure());
-					logger.debug("cycle " + i + " population " + pop.getId() + " a = " + a + " b = " + b + " delta = " + deltaPop[i] + " deltaInf = " + deltaInf);
+					logger.debug("cycle " + i + " population " + pop.getId() + " a = " + a + " b = " + b + " delta = " + deltaPop[i] + " deltaInf = "
+							+ deltaInf);
 					// split build strength by priority
 					switch(pop.getBuildPriority())
 					{
@@ -611,7 +607,8 @@ public class SolarSystemPopulationManagerImpl extends GenericManagerImpl<SolarSy
 							break;
 					}
 				}
-				logger.debug("cycle " + i + " population " + pop.getId() + " a = " + a + " b = " + b + " delta = " + deltaPop[i] + " deltaInf = " + deltaInf);
+				logger.debug("cycle " + i + " population " + pop.getId() + " a = " + a + " b = " + b + " delta = " + deltaPop[i] + " deltaInf = "
+						+ deltaInf);
 				// distribute attack strength on other populations
 				// (weighted by their amount of population)
 				otherPopulation = totalPopulation - pop.getPopulation();
