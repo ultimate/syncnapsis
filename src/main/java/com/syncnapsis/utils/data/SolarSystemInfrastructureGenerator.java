@@ -19,7 +19,6 @@ import com.syncnapsis.data.model.Match;
 import com.syncnapsis.data.model.Parameter;
 import com.syncnapsis.data.model.SolarSystem;
 import com.syncnapsis.data.model.SolarSystemInfrastructure;
-import com.syncnapsis.data.service.ParameterManager;
 import com.syncnapsis.universe.Calculator;
 
 /**
@@ -37,11 +36,6 @@ import com.syncnapsis.universe.Calculator;
 public class SolarSystemInfrastructureGenerator extends Generator<SolarSystemInfrastructure>
 {
 	/**
-	 * The ParameterManager
-	 */
-	protected ParameterManager	parameterManager;
-
-	/**
 	 * The Calculator
 	 */
 	protected Calculator		calculator;
@@ -49,41 +43,35 @@ public class SolarSystemInfrastructureGenerator extends Generator<SolarSystemInf
 	/**
 	 * Construct a new SolarSystemInfrastructureGenerator with the given referenced managers
 	 * 
-	 * @param parameterManager - the ParameterManager
 	 * @param calculator - the Calculator
 	 */
-	public SolarSystemInfrastructureGenerator(ParameterManager parameterManager, Calculator calculator)
+	public SolarSystemInfrastructureGenerator(Calculator calculator)
 	{
 		super();
-		this.parameterManager = parameterManager;
 		this.calculator = calculator;
 	}
 
 	/**
 	 * Construct a new SolarSystemInfrastructureGenerator with the given referenced managers
 	 * 
-	 * @param parameterManager - the ParameterManager
 	 * @param calculator - the Calculator
 	 * @param random - the extended random number generator
 	 */
-	public SolarSystemInfrastructureGenerator(ParameterManager parameterManager, Calculator calculator, ExtendedRandom random)
+	public SolarSystemInfrastructureGenerator(Calculator calculator, ExtendedRandom random)
 	{
 		super(random);
-		this.parameterManager = parameterManager;
 		this.calculator = calculator;
 	}
 
 	/**
 	 * Construct a new SolarSystemInfrastructureGenerator with the given referenced managers
 	 * 
-	 * @param parameterManager - the ParameterManager
 	 * @param calculator - the Calculator
 	 * @param seed - the seed for the Random
 	 */
-	public SolarSystemInfrastructureGenerator(ParameterManager parameterManager, Calculator calculator, long seed)
+	public SolarSystemInfrastructureGenerator(Calculator calculator, long seed)
 	{
 		super(seed);
-		this.parameterManager = parameterManager;
 		this.calculator = calculator;
 	}
 
