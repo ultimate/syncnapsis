@@ -17,6 +17,8 @@ package com.syncnapsis.data.dao.hibernate;
 import java.io.Serializable;
 import java.util.List;
 
+import org.hibernate.SessionFactory;
+
 import com.syncnapsis.data.dao.RankDao;
 import com.syncnapsis.data.model.annotations.RankCriterion;
 import com.syncnapsis.data.model.base.BaseObject;
@@ -44,9 +46,24 @@ public abstract class GenericRankDaoHibernate<R extends Rank<T>, T extends BaseO
 	 * @param persistentClass - the Rank-Model-Class
 	 * @param secondarySortString - The column to sort by if two ranks have equal points.
 	 */
+	@Deprecated
 	public GenericRankDaoHibernate(final Class<R> persistentClass, String secondarySortString)
 	{
 		super(persistentClass);
+		this.secondarySortString = secondarySortString;
+	}
+
+	/**
+	 * Create a new DAO-Instance (subtype of GenericDaoHiberate) with the given Rank-Model-Class and
+	 * the given SessionFactory
+	 * 
+	 * @param sessionFactory - the SessionFactory to use
+	 * @param persistentClass - the Rank-Model-Class
+	 * @param secondarySortString - The column to sort by if two ranks have equal points.
+	 */
+	public GenericRankDaoHibernate(SessionFactory sessionFactory, final Class<R> persistentClass, String secondarySortString)
+	{
+		super(sessionFactory, persistentClass);
 		this.secondarySortString = secondarySortString;
 	}
 
