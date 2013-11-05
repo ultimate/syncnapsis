@@ -32,7 +32,6 @@ import com.syncnapsis.data.model.SolarSystem;
 import com.syncnapsis.data.model.SolarSystemPopulation;
 import com.syncnapsis.data.service.GalaxyManager;
 import com.syncnapsis.data.service.MatchManager;
-import com.syncnapsis.data.service.ParameterManager;
 import com.syncnapsis.data.service.ParticipantManager;
 import com.syncnapsis.data.service.SolarSystemInfrastructureManager;
 import com.syncnapsis.data.service.SolarSystemPopulationManager;
@@ -74,10 +73,6 @@ public class MatchManagerImpl extends GenericNameManagerImpl<Match, Long> implem
 	 * The SolarSystemInfrastructureManager
 	 */
 	protected SolarSystemInfrastructureManager	solarSystemInfrastructureManager;
-	/**
-	 * The ParameterManager
-	 */
-	protected ParameterManager					parameterManager;
 
 	/**
 	 * The SecurityManager
@@ -92,11 +87,9 @@ public class MatchManagerImpl extends GenericNameManagerImpl<Match, Long> implem
 	 * @param participantManager - the ParticipantManager
 	 * @param solarSystemPopulationManager - the SolarSystemPopulationManager
 	 * @param solarSystemInfrastructureManager - the PolarSystemInfrastructureManager
-	 * @param parameterManager - the ParameterManager
 	 */
 	public MatchManagerImpl(MatchDao matchDao, GalaxyManager galaxyManager, ParticipantManager participantManager,
-			SolarSystemPopulationManager solarSystemPopulationManager, SolarSystemInfrastructureManager solarSystemInfrastructureManager,
-			ParameterManager parameterManager)
+			SolarSystemPopulationManager solarSystemPopulationManager, SolarSystemInfrastructureManager solarSystemInfrastructureManager)
 	{
 		super(matchDao);
 		this.matchDao = matchDao;
@@ -104,7 +97,6 @@ public class MatchManagerImpl extends GenericNameManagerImpl<Match, Long> implem
 		this.participantManager = participantManager;
 		this.solarSystemPopulationManager = solarSystemPopulationManager;
 		this.solarSystemInfrastructureManager = solarSystemInfrastructureManager;
-		this.parameterManager = parameterManager;
 	}
 
 	/*
