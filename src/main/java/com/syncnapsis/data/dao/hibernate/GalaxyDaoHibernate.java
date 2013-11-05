@@ -16,6 +16,8 @@ package com.syncnapsis.data.dao.hibernate;
 
 import java.util.List;
 
+import org.hibernate.SessionFactory;
+
 import com.syncnapsis.data.dao.GalaxyDao;
 import com.syncnapsis.data.model.Galaxy;
 
@@ -30,9 +32,21 @@ public class GalaxyDaoHibernate extends GenericNameDaoHibernate<Galaxy, Long> im
 	 * Create a new DAO-Instance using the super-class GenericNameDaoHibernate
 	 * with the model-Class Galaxy and the specified name-property
 	 */
+	@Deprecated
 	public GalaxyDaoHibernate()
 	{
 		super(Galaxy.class, "name");
+	}
+
+	/**
+	 * Create a new DAO-Instance using the super-class GenericNameDaoHibernate
+	 * with the model-Class Galaxy and the specified name-property and the given SessionFactory
+	 * 
+	 * @param sessionFactory - the SessionFactory to use
+	 */
+	public GalaxyDaoHibernate(SessionFactory sessionFactory)
+	{
+		super(sessionFactory, Galaxy.class, "name");
 	}
 
 	/*

@@ -18,6 +18,8 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.hibernate.SessionFactory;
+
 import com.syncnapsis.data.dao.MatchDao;
 import com.syncnapsis.data.model.Match;
 
@@ -37,9 +39,21 @@ public class MatchDaoHibernate extends GenericNameDaoHibernate<Match, Long> impl
 	 * Create a new DAO-Instance using the super-class GenericNameDaoHibernate
 	 * with the model-Class Match and the specified name-property
 	 */
+	@Deprecated
 	public MatchDaoHibernate()
 	{
 		super(Match.class, "title");
+	}
+
+	/**
+	 * Create a new DAO-Instance using the super-class GenericNameDaoHibernate
+	 * with the model-Class Match and the specified name-property and the given SessionFactory
+	 * 
+	 * @param sessionFactory - the SessionFactory to use
+	 */
+	public MatchDaoHibernate(SessionFactory sessionFactory)
+	{
+		super(sessionFactory, Match.class, "title");
 	}
 
 	/*
@@ -95,7 +109,8 @@ public class MatchDaoHibernate extends GenericNameDaoHibernate<Match, Long> impl
 		if(planned)
 			matches.addAll(createQuery("select m from Match m " + where + " AND " + GET_ONLY_PLANNED, id, referenceDate, referenceDate).list());
 		if(active)
-			matches.addAll(createQuery("select m from Match m " + where + " AND " + GET_ONLY_ACTIVE, id, referenceDate, referenceDate, referenceDate).list());
+			matches.addAll(createQuery("select m from Match m " + where + " AND " + GET_ONLY_ACTIVE, id, referenceDate, referenceDate, referenceDate)
+					.list());
 		if(finished)
 			matches.addAll(createQuery("select m from Match m " + where + " AND " + GET_ONLY_FINISHED, id, referenceDate).list());
 		if(canceled)
