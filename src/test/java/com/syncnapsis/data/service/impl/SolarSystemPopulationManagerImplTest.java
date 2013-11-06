@@ -30,7 +30,6 @@ import com.syncnapsis.data.model.SolarSystemInfrastructure;
 import com.syncnapsis.data.model.SolarSystemPopulation;
 import com.syncnapsis.data.model.help.Vector;
 import com.syncnapsis.data.model.help.Vector.Integer;
-import com.syncnapsis.data.service.ParameterManager;
 import com.syncnapsis.data.service.SolarSystemInfrastructureManager;
 import com.syncnapsis.data.service.SolarSystemPopulationManager;
 import com.syncnapsis.enums.EnumDestructionType;
@@ -51,7 +50,6 @@ public class SolarSystemPopulationManagerImplTest extends
 		GenericManagerImplTestCase<SolarSystemPopulation, Long, SolarSystemPopulationManager, SolarSystemPopulationDao>
 {
 	private SolarSystemInfrastructureManager	solarSystemInfrastructureManager;
-	private ParameterManager					parameterManager;
 	private BaseGameManager						securityManager;
 	private final long							referenceTime	= 1234;
 
@@ -64,7 +62,7 @@ public class SolarSystemPopulationManagerImplTest extends
 		setEntity(new SolarSystemPopulation());
 		setDaoClass(SolarSystemPopulationDao.class);
 		setMockDao(mockContext.mock(SolarSystemPopulationDao.class));
-		setMockManager(new SolarSystemPopulationManagerImpl(mockDao, solarSystemInfrastructureManager, parameterManager));
+		setMockManager(new SolarSystemPopulationManagerImpl(mockDao, solarSystemInfrastructureManager));
 
 		BaseGameManager securityManager = new BaseGameManager(this.securityManager);
 		securityManager.setTimeProvider(new MockTimeProvider(referenceTime));
@@ -88,8 +86,7 @@ public class SolarSystemPopulationManagerImplTest extends
 	public void testSpinoff() throws Exception
 	{
 		final SolarSystemInfrastructureManager mockSolarSystemInfrastructureManager = mockContext.mock(SolarSystemInfrastructureManager.class);
-		SolarSystemPopulationManagerImpl mockManager = new SolarSystemPopulationManagerImpl(mockDao, mockSolarSystemInfrastructureManager,
-				parameterManager);
+		SolarSystemPopulationManagerImpl mockManager = new SolarSystemPopulationManagerImpl(mockDao, mockSolarSystemInfrastructureManager);
 		mockManager.setSecurityManager(((SolarSystemPopulationManagerImpl) this.mockManager).getSecurityManager());
 		MockCalculator mockCalculator = new MockCalculator();
 		((SolarSystemPopulationManagerImpl) mockManager).setCalculator(mockCalculator);
@@ -222,8 +219,7 @@ public class SolarSystemPopulationManagerImplTest extends
 	public void testResettle() throws Exception
 	{
 		final SolarSystemInfrastructureManager mockSolarSystemInfrastructureManager = mockContext.mock(SolarSystemInfrastructureManager.class);
-		SolarSystemPopulationManagerImpl mockManager = new SolarSystemPopulationManagerImpl(mockDao, mockSolarSystemInfrastructureManager,
-				parameterManager);
+		SolarSystemPopulationManagerImpl mockManager = new SolarSystemPopulationManagerImpl(mockDao, mockSolarSystemInfrastructureManager);
 		mockManager.setSecurityManager(((SolarSystemPopulationManagerImpl) this.mockManager).getSecurityManager());
 		MockCalculator mockCalculator = new MockCalculator();
 		((SolarSystemPopulationManagerImpl) mockManager).setCalculator(mockCalculator);

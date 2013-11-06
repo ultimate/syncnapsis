@@ -31,12 +31,12 @@ import com.syncnapsis.data.model.Match;
 import com.syncnapsis.data.model.Participant;
 import com.syncnapsis.data.model.SolarSystemInfrastructure;
 import com.syncnapsis.data.model.SolarSystemPopulation;
-import com.syncnapsis.data.service.ParameterManager;
 import com.syncnapsis.data.service.SolarSystemInfrastructureManager;
 import com.syncnapsis.data.service.impl.SolarSystemInfrastructureManagerImpl;
 import com.syncnapsis.mock.util.ReturnArgAction;
 import com.syncnapsis.tests.BaseSpringContextTestCase;
 import com.syncnapsis.tests.annotations.TestExcludesMethods;
+import com.syncnapsis.universe.Calculator;
 import com.syncnapsis.utils.MathUtil;
 import com.syncnapsis.utils.data.ExtendedRandom;
 import com.syncnapsis.utils.serialization.Serializer;
@@ -50,7 +50,7 @@ public class SimulationServletTest extends BaseSpringContextTestCase
 {
 	private SolarSystemInfrastructureManager		solarSystemInfrastructureManager;
 	private SolarSystemPopulationDao				solarSystemPopulationDao;
-	private ParameterManager						parameterManager;
+	private Calculator								calculator;
 	private Serializer<String>						serializer;
 
 	private SolarSystemInfrastructureDao			mockSolarSystemInfrastructureDao;
@@ -69,7 +69,7 @@ public class SimulationServletTest extends BaseSpringContextTestCase
 		super.setUp();
 
 		mockServlet1 = new MockServlet();
-		mockServlet1.setParameterManager(parameterManager);
+		mockServlet1.setCalculator(calculator);
 		mockServlet1.setSolarSystemInfrastructureManager(solarSystemInfrastructureManager);
 		mockServlet1.setSolarSystemPopulationDao(solarSystemPopulationDao);
 		mockServlet1.setSerializer(serializer);
@@ -80,7 +80,7 @@ public class SimulationServletTest extends BaseSpringContextTestCase
 		mockSolarSystemInfrastructureManager = new SolarSystemInfrastructureManagerImpl(mockSolarSystemInfrastructureDao);
 
 		mockServlet2 = new SimulationServlet();
-		mockServlet2.setParameterManager(parameterManager);
+		mockServlet2.setCalculator(calculator);
 		mockServlet2.setSolarSystemInfrastructureManager(mockSolarSystemInfrastructureManager);
 		mockServlet2.setSolarSystemPopulationDao(mockSolarSystemPopulationDao);
 		mockServlet2.setSerializer(serializer);
@@ -100,13 +100,10 @@ public class SimulationServletTest extends BaseSpringContextTestCase
 		double randomizeAttack = 0.12;
 		double randomizeBuild = 0.34;
 		logger.debug("mockServlet1:" + mockServlet1);
-		logger.debug("mockServlet1.mockParameterManager: " + mockServlet1.mockParameterManager);
-		logger.debug("PARAM_FACTOR_ATTACK_RANDOMIZE = "
-				+ mockServlet1.mockParameterManager.getDouble(UniverseConquestConstants.PARAM_FACTOR_ATTACK_RANDOMIZE));
-		logger.debug("PARAM_FACTOR_BUILD_RANDOMIZE = "
-				+ mockServlet1.mockParameterManager.getDouble(UniverseConquestConstants.PARAM_FACTOR_BUILD_RANDOMIZE));
-		assertTrue(randomizeAttack != mockServlet1.mockParameterManager.getDouble(UniverseConquestConstants.PARAM_FACTOR_ATTACK_RANDOMIZE));
-		assertTrue(randomizeBuild != mockServlet1.mockParameterManager.getDouble(UniverseConquestConstants.PARAM_FACTOR_BUILD_RANDOMIZE));
+		logger.debug("PARAM_FACTOR_ATTACK_RANDOMIZE = " + UniverseConquestConstants.PARAM_FACTOR_ATTACK_RANDOMIZE.asDouble());
+		logger.debug("PARAM_FACTOR_BUILD_RANDOMIZE = " + UniverseConquestConstants.PARAM_FACTOR_BUILD_RANDOMIZE);
+		assertTrue(randomizeAttack != UniverseConquestConstants.PARAM_FACTOR_ATTACK_RANDOMIZE.asDouble());
+		assertTrue(randomizeBuild != UniverseConquestConstants.PARAM_FACTOR_BUILD_RANDOMIZE.asDouble());
 
 		parameters.put(SimulationServlet.P_SPEED, "" + speed);
 		parameters.put(SimulationServlet.P_DURATION, "" + duration);
@@ -136,8 +133,8 @@ public class SimulationServletTest extends BaseSpringContextTestCase
 		mockServlet1.scenario.setMatch(null); // clear match for next equals (prevent nullpointer)
 		assertEquals(scenario, mockServlet1.scenario);
 
-		assertTrue(randomizeAttack == mockServlet1.mockParameterManager.getDouble(UniverseConquestConstants.PARAM_FACTOR_ATTACK_RANDOMIZE));
-		assertTrue(randomizeBuild == mockServlet1.mockParameterManager.getDouble(UniverseConquestConstants.PARAM_FACTOR_BUILD_RANDOMIZE));
+		assertTrue(randomizeAttack == UniverseConquestConstants.PARAM_FACTOR_ATTACK_RANDOMIZE.asDouble());
+		assertTrue(randomizeBuild == UniverseConquestConstants.PARAM_FACTOR_BUILD_RANDOMIZE.asDouble());
 	}
 
 	public void testSimulate() throws Exception
@@ -201,7 +198,7 @@ public class SimulationServletTest extends BaseSpringContextTestCase
 		for(int i = 0; i < pops; i++)
 		{
 			pop = new SolarSystemPopulation();
-//			pop.setId(i * 100L);
+			// pop.setId(i * 100L);
 			pop.setParticipant(new Participant());
 			pop.getParticipant().setId((i % parts + 1) * 100L);
 			pop.setColonizationDate(new Date(i * 10000));

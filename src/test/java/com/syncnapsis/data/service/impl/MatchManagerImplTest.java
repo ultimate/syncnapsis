@@ -43,7 +43,6 @@ import com.syncnapsis.data.model.User;
 import com.syncnapsis.data.model.UserRole;
 import com.syncnapsis.data.service.GalaxyManager;
 import com.syncnapsis.data.service.MatchManager;
-import com.syncnapsis.data.service.ParameterManager;
 import com.syncnapsis.data.service.ParticipantManager;
 import com.syncnapsis.data.service.PlayerManager;
 import com.syncnapsis.data.service.SolarSystemInfrastructureManager;
@@ -68,7 +67,6 @@ public class MatchManagerImplTest extends GenericNameManagerImplTestCase<Match, 
 	private ParticipantManager					participantManager;
 	private SolarSystemPopulationManager		solarSystemPopulationManager;
 	private SolarSystemInfrastructureManager	solarSystemInfrastructureManager;
-	private ParameterManager					parameterManager;
 	private PlayerManager						playerManager;
 
 	private BaseGameManager						securityManager;
@@ -83,7 +81,7 @@ public class MatchManagerImplTest extends GenericNameManagerImplTestCase<Match, 
 		setDaoClass(MatchDao.class);
 		setMockDao(mockContext.mock(MatchDao.class));
 		setMockManager(new MatchManagerImpl(mockDao, galaxyManager, participantManager, solarSystemPopulationManager,
-				solarSystemInfrastructureManager, parameterManager));
+				solarSystemInfrastructureManager));
 
 		BaseGameManager securityManager = new BaseGameManager(this.securityManager);
 		securityManager.setTimeProvider(new MockTimeProvider(referenceTime));
@@ -169,7 +167,7 @@ public class MatchManagerImplTest extends GenericNameManagerImplTestCase<Match, 
 		final SolarSystemInfrastructureManager mockInfrastructureManager = mockContext.mock(SolarSystemInfrastructureManager.class);
 		final ParticipantManager mockParticipantManager = mockContext.mock(ParticipantManager.class);
 		MatchManagerImpl mockManager = new MatchManagerImpl(mockDao, galaxyManager, mockParticipantManager, solarSystemPopulationManager,
-				mockInfrastructureManager, parameterManager);
+				mockInfrastructureManager);
 		mockManager.setSecurityManager(((MatchManagerImpl) this.mockManager).getSecurityManager());
 
 		// expectatins are a bit more complicated here...
@@ -254,7 +252,7 @@ public class MatchManagerImplTest extends GenericNameManagerImplTestCase<Match, 
 		final ThreadLocal<Boolean> performed = new ThreadLocal<Boolean>();
 
 		MatchManagerImpl matchManager = new MatchManagerImpl(mockDao, galaxyManager, participantManager, solarSystemPopulationManager,
-				solarSystemInfrastructureManager, parameterManager) {
+				solarSystemInfrastructureManager) {
 			@Override
 			protected Match performStartMatch(Match match)
 			{
@@ -317,7 +315,7 @@ public class MatchManagerImplTest extends GenericNameManagerImplTestCase<Match, 
 		final ThreadLocal<Boolean> performed = new ThreadLocal<Boolean>();
 
 		MatchManagerImpl matchManager = new MatchManagerImpl(mockDao, galaxyManager, participantManager, solarSystemPopulationManager,
-				solarSystemInfrastructureManager, parameterManager) {
+				solarSystemInfrastructureManager) {
 			@Override
 			protected Match performStartMatch(Match match)
 			{
@@ -382,7 +380,7 @@ public class MatchManagerImplTest extends GenericNameManagerImplTestCase<Match, 
 		final SolarSystemPopulationManager mockSolarSystemPopulationManager = mockContext.mock(SolarSystemPopulationManager.class);
 		final ParticipantManager mockParticipantManager = mockContext.mock(ParticipantManager.class);
 		MatchManagerImpl mockManager = new MatchManagerImpl(mockDao, galaxyManager, mockParticipantManager, mockSolarSystemPopulationManager,
-				solarSystemInfrastructureManager, parameterManager);
+				solarSystemInfrastructureManager);
 		mockManager.setSecurityManager(((MatchManagerImpl) this.mockManager).getSecurityManager());
 
 		int participants = 5;
@@ -528,7 +526,7 @@ public class MatchManagerImplTest extends GenericNameManagerImplTestCase<Match, 
 		assertNotNull(match);
 		assertNotNull(match.getStartDate());
 		assertEquals(aStartDate, match.getStartDate());
-		assertEquals((int) parameterManager.getInteger(UniverseConquestConstants.PARAM_MATCH_VENDETTA_PARAM_DEFAULT), match.getVictoryParameter());
+		assertEquals(UniverseConquestConstants.PARAM_MATCH_VENDETTA_PARAM_DEFAULT.asInt(), match.getVictoryParameter());
 		int rivals = mockManager.getNumberOfRivals(match);
 		for(Participant p1 : match.getParticipants())
 		{

@@ -18,27 +18,23 @@ import com.syncnapsis.constants.UniverseConquestConstants;
 import com.syncnapsis.data.model.Match;
 import com.syncnapsis.data.model.SolarSystem;
 import com.syncnapsis.data.model.SolarSystemInfrastructure;
-import com.syncnapsis.data.service.ParameterManager;
 import com.syncnapsis.tests.BaseSpringContextTestCase;
 import com.syncnapsis.universe.Calculator;
-import com.syncnapsis.universe.CalculatorImpl;
 
 /**
  * @author ultimate
  */
 public class SolarSystemInfrastructureGeneratorTest extends BaseSpringContextTestCase
 {
-	private ParameterManager	parameterManager;
+	private Calculator			calculator;
 
 	public void testGenerate() throws Exception
 	{
-		Calculator calculator = new CalculatorImpl(parameterManager);
-		SolarSystemInfrastructureGenerator generator = new SolarSystemInfrastructureGenerator(parameterManager, calculator);
+		SolarSystemInfrastructureGenerator generator = new SolarSystemInfrastructureGenerator(calculator);
 
-		int habitabilityMax = parameterManager.getInteger(UniverseConquestConstants.PARAM_SOLARSYSTEM_HABITABILITY_MAX);
-		int sizeMax = parameterManager.getInteger(UniverseConquestConstants.PARAM_SOLARSYSTEM_SIZE_MAX);
-		long infrastructureMax = habitabilityMax * sizeMax
-				* parameterManager.getInteger(UniverseConquestConstants.PARAM_SOLARSYSTEM_MAX_POPULATION_FACTOR);
+		int habitabilityMax = UniverseConquestConstants.PARAM_SOLARSYSTEM_HABITABILITY_MAX.asInt();
+		int sizeMax = UniverseConquestConstants.PARAM_SOLARSYSTEM_SIZE_MAX.asInt();
+		long infrastructureMax = habitabilityMax * sizeMax * UniverseConquestConstants.PARAM_SOLARSYSTEM_MAX_POPULATION_FACTOR.asInt();
 
 		ExtendedRandom random11 = new ExtendedRandom(1234);
 		ExtendedRandom random12 = new ExtendedRandom(1234);
@@ -66,7 +62,7 @@ public class SolarSystemInfrastructureGeneratorTest extends BaseSpringContextTes
 			assertTrue(infrastructure.getSize() >= 0);
 			assertTrue(infrastructure.getSize() <= sizeMax);
 			infrastructureMax = (long) infrastructure.getHabitability() * infrastructure.getSize()
-					* parameterManager.getInteger(UniverseConquestConstants.PARAM_SOLARSYSTEM_MAX_POPULATION_FACTOR);
+					* UniverseConquestConstants.PARAM_SOLARSYSTEM_MAX_POPULATION_FACTOR.asInt();
 
 			// logger.debug("hab=" + infrastructure.getHabitability() + " size=" +
 			// infrastructure.getSize() + " inf-max=" + infrastructureMax + " inf="
@@ -92,8 +88,7 @@ public class SolarSystemInfrastructureGeneratorTest extends BaseSpringContextTes
 
 	public void testGenerate_invalid()
 	{
-		Calculator calculator = new CalculatorImpl(parameterManager);
-		SolarSystemInfrastructureGenerator generator = new SolarSystemInfrastructureGenerator(parameterManager, calculator);
+		SolarSystemInfrastructureGenerator generator = new SolarSystemInfrastructureGenerator(calculator);
 
 		ExtendedRandom random = new ExtendedRandom();
 
