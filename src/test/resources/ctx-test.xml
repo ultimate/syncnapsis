@@ -34,4 +34,15 @@
 		<constructor-arg value="mail.properties"/>
 	</bean>
 
+	<!-- define the "parameterConstantLoader" -->
+	<bean id="constantLoader" class="com.syncnapsis.utils.constants.ParameterConstantLoader" lazy-init="false">
+		<constructor-arg ref="parameterManager" />
+		<property name="constantClasses">
+			<list>
+				<value>com.syncnapsis.constants.ApplicationBaseConstants</value>
+				<value>com.syncnapsis.constants.GameBaseConstants</value>
+			</list>
+		</property>
+	</bean>
+
 </beans>
