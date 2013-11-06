@@ -45,7 +45,7 @@ public final class StringConstant extends Constant<String>
 		super(name, defaultValue);
 	}
 
-	protected void define(String raw)
+	public void define(String raw)
 	{
 		defineNull(); // reset
 		if(raw == null)

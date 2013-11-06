@@ -102,7 +102,7 @@ public abstract class Constant<R>
 	 * 
 	 * @return name
 	 */
-	public String getName()
+	public final String getName()
 	{
 		return name;
 	}
@@ -110,7 +110,7 @@ public abstract class Constant<R>
 	/**
 	 * Set the raw value (and all type specific values) for this constant to null
 	 */
-	protected void defineNull()
+	public final void defineNull()
 	{
 		this.value_Raw = null;
 		this.value_String = null;
@@ -129,9 +129,14 @@ public abstract class Constant<R>
 	 * 
 	 * @param value
 	 */
-	protected abstract void define(R raw);
+	public abstract void define(R raw);
 
-	public R raw()
+	/**
+	 * Get the raw value
+	 * 
+	 * @return value
+	 */
+	public final R raw()
 	{
 		return value_Raw;
 	}
@@ -141,7 +146,7 @@ public abstract class Constant<R>
 	 * 
 	 * @return value
 	 */
-	public String asString()
+	public final String asString()
 	{
 		return value_String;
 	}
@@ -151,7 +156,7 @@ public abstract class Constant<R>
 	 * 
 	 * @return value
 	 */
-	public int asInt()
+	public final int asInt()
 	{
 		return value_Integer;
 	}
@@ -161,7 +166,7 @@ public abstract class Constant<R>
 	 * 
 	 * @return value
 	 */
-	public long asLong()
+	public final long asLong()
 	{
 		return value_Long;
 	}
@@ -171,7 +176,7 @@ public abstract class Constant<R>
 	 * 
 	 * @return value
 	 */
-	public double asDouble()
+	public final double asDouble()
 	{
 		return value_Double;
 	}
@@ -181,7 +186,7 @@ public abstract class Constant<R>
 	 * 
 	 * @return value
 	 */
-	public float asFloat()
+	public final float asFloat()
 	{
 		return value_Float;
 	}
@@ -191,7 +196,7 @@ public abstract class Constant<R>
 	 * 
 	 * @return value
 	 */
-	public short asShort()
+	public final short asShort()
 	{
 		return value_Short;
 	}
@@ -201,7 +206,7 @@ public abstract class Constant<R>
 	 * 
 	 * @return value
 	 */
-	public byte asByte()
+	public final byte asByte()
 	{
 		return value_Byte;
 	}
@@ -211,7 +216,7 @@ public abstract class Constant<R>
 	 * 
 	 * @return value
 	 */
-	public boolean asBoolean()
+	public final boolean asBoolean()
 	{
 		return value_Boolean;
 	}
@@ -221,7 +226,7 @@ public abstract class Constant<R>
 	 * 
 	 * @return value
 	 */
-	public char asChar()
+	public final char asChar()
 	{
 		return value_Character;
 	}
