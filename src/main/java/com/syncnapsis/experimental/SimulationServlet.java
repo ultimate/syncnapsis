@@ -28,17 +28,12 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.util.Assert;
 
 import com.syncnapsis.constants.UniverseConquestConstants;
-import com.syncnapsis.data.dao.ParameterDao;
 import com.syncnapsis.data.dao.SolarSystemPopulationDao;
-import com.syncnapsis.data.dao.mock.ParameterDaoMock;
 import com.syncnapsis.data.model.Match;
-import com.syncnapsis.data.model.Parameter;
 import com.syncnapsis.data.model.SolarSystemInfrastructure;
 import com.syncnapsis.data.model.SolarSystemPopulation;
-import com.syncnapsis.data.service.ParameterManager;
 import com.syncnapsis.data.service.SolarSystemInfrastructureManager;
 import com.syncnapsis.data.service.SolarSystemPopulationManager;
-import com.syncnapsis.data.service.impl.ParameterManagerImpl;
 import com.syncnapsis.data.service.impl.SolarSystemPopulationManagerImpl;
 import com.syncnapsis.enums.EnumPopulationPriority;
 import com.syncnapsis.exceptions.DeserializationException;
@@ -47,7 +42,6 @@ import com.syncnapsis.mock.MockTimeProvider;
 import com.syncnapsis.providers.TimeProvider;
 import com.syncnapsis.security.BaseGameManager;
 import com.syncnapsis.universe.Calculator;
-import com.syncnapsis.universe.CalculatorImpl;
 import com.syncnapsis.utils.data.ExtendedRandom;
 import com.syncnapsis.utils.serialization.Serializer;
 import com.syncnapsis.websockets.engine.ServletEngine;
@@ -72,15 +66,12 @@ public class SimulationServlet extends ServletEngine
 
 	protected SolarSystemPopulationDao			solarSystemPopulationDao;
 	protected SolarSystemInfrastructureManager	solarSystemInfrastructureManager;
-	protected ParameterManager					parameterManager;
+	protected Calculator						calculator;
 
 	protected Serializer<String>				serializer;
 	// protected Mapper mapper;
 
-	protected ParameterDao						mockParameterDao;
-	protected ParameterManager					mockParameterManager;
 	protected SolarSystemPopulationManager		mockSolarSystemPopulationManager;
-	protected Calculator						calculator;
 	protected BaseGameManager					securityManager;
 	protected TimeProvider						timeProvider;
 
@@ -94,14 +85,14 @@ public class SimulationServlet extends ServletEngine
 		this.serializer = serializer;
 	}
 
-	public ParameterManager getParameterManager()
+	public Calculator getCalculator()
 	{
-		return parameterManager;
+		return calculator;
 	}
 
-	public void setParameterManager(ParameterManager parameterManager)
+	public void setCalculator(Calculator calculator)
 	{
-		this.parameterManager = parameterManager;
+		this.calculator = calculator;
 	}
 
 	public SolarSystemPopulationDao getSolarSystemPopulationDao()
@@ -132,31 +123,17 @@ public class SimulationServlet extends ServletEngine
 	public void afterPropertiesSet() throws Exception
 	{
 		Assert.notNull(serializer, "serializer must not be null!");
-		Assert.notNull(parameterManager, "parameterManager must not be null!");
+		Assert.notNull(calculator, "calculator must not be null!");
 		Assert.notNull(solarSystemPopulationDao, "solarSystemPopulationDao must not be null!");
 		Assert.notNull(solarSystemInfrastructureManager, "solarSystemInfrastructureManager must not be null!");
 
 		timeProvider = new MockTimeProvider();
 		securityManager = new BaseGameManager();
 		securityManager.setTimeProvider(timeProvider);
-		mockParameterDao = new ParameterDaoMock();
-		mockParameterManager = new ParameterManagerImpl(mockParameterDao);
 
-		// copy default parameters from db
-		for(Parameter p : parameterManager.getAll())
-		{
-			mockParameterManager.save(p);
-		}
-
-		calculator = new CalculatorImpl(mockParameterManager);
-		mockSolarSystemPopulationManager = new SolarSystemPopulationManagerImpl(solarSystemPopulationDao, solarSystemInfrastructureManager,
-				mockParameterManager);
+		mockSolarSystemPopulationManager = new SolarSystemPopulationManagerImpl(solarSystemPopulationDao, solarSystemInfrastructureManager);
 		((SolarSystemPopulationManagerImpl) mockSolarSystemPopulationManager).setCalculator(calculator);
 		((SolarSystemPopulationManagerImpl) mockSolarSystemPopulationManager).setSecurityManager(securityManager);
-
-		// this.mapper = new BaseMapper();
-		// this.serializer = new JacksonStringSerializer();
-		// ((JacksonStringSerializer) this.serializer).setMapper(this.mapper);
 	}
 
 	/*
@@ -199,8 +176,8 @@ public class SimulationServlet extends ServletEngine
 			scenario.setMatch(new Match());
 			scenario.getMatch().setSpeed(speed);
 
-			mockParameterManager.setString(UniverseConquestConstants.PARAM_FACTOR_ATTACK_RANDOMIZE, "" + randomizeAttack);
-			mockParameterManager.setString(UniverseConquestConstants.PARAM_FACTOR_BUILD_RANDOMIZE, "" + randomizeBuild);
+			UniverseConquestConstants.PARAM_FACTOR_ATTACK_RANDOMIZE.define("" + randomizeAttack);
+			UniverseConquestConstants.PARAM_FACTOR_BUILD_RANDOMIZE.define("" + randomizeBuild);
 
 			Map<String, Long[]> result = simulate(duration, tickLength, scenario, random);
 
