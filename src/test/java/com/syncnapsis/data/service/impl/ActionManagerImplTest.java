@@ -19,7 +19,6 @@ import com.syncnapsis.constants.ApplicationBaseConstants;
 import com.syncnapsis.data.dao.ActionDao;
 import com.syncnapsis.data.model.Action;
 import com.syncnapsis.data.service.ActionManager;
-import com.syncnapsis.data.service.ParameterManager;
 import com.syncnapsis.tests.GenericNameManagerImplTestCase;
 import com.syncnapsis.tests.annotations.TestCoversClasses;
 import com.syncnapsis.tests.annotations.TestExcludesMethods;
@@ -31,8 +30,6 @@ import com.syncnapsis.websockets.service.rpc.RPCCall;
 @TestExcludesMethods({ "*etSerializer", "afterPropertiesSet" })
 public class ActionManagerImplTest extends GenericNameManagerImplTestCase<Action, Long, ActionManager, ActionDao>
 {
-	private ParameterManager	parameterManager;
-
 	private Serializer<String>	serializer	= new JacksonStringSerializer();
 
 	@Override
@@ -42,7 +39,7 @@ public class ActionManagerImplTest extends GenericNameManagerImplTestCase<Action
 		setEntity(new Action());
 		setDaoClass(ActionDao.class);
 		setMockDao(mockContext.mock(ActionDao.class));
-		setMockManager(new ActionManagerImpl(mockDao, parameterManager));
+		setMockManager(new ActionManagerImpl(mockDao));
 
 		((ActionManagerImpl) mockManager).setSerializer(serializer);
 	}

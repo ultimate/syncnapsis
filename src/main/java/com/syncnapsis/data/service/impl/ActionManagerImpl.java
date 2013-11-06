@@ -18,7 +18,6 @@ import com.syncnapsis.constants.ApplicationBaseConstants;
 import com.syncnapsis.data.dao.ActionDao;
 import com.syncnapsis.data.model.Action;
 import com.syncnapsis.data.service.ActionManager;
-import com.syncnapsis.data.service.ParameterManager;
 import com.syncnapsis.exceptions.DeserializationException;
 import com.syncnapsis.exceptions.SerializationException;
 import com.syncnapsis.utils.data.DefaultData;
@@ -43,11 +42,6 @@ public class ActionManagerImpl extends GenericNameManagerImpl<Action, Long> impl
 	protected ActionDao				actionDao;
 
 	/**
-	 * The ParameterManager
-	 */
-	protected ParameterManager		parameterManager;
-
-	/**
 	 * The Serializer used to deserialize the stored RPC arguments
 	 */
 	protected Serializer<String>	serializer;
@@ -61,13 +55,11 @@ public class ActionManagerImpl extends GenericNameManagerImpl<Action, Long> impl
 	 * Standard Constructor
 	 * 
 	 * @param actionDao - ActionDao for database access
-	 * @param parameterManager - The ParameterManager
 	 */
-	public ActionManagerImpl(ActionDao actionDao, ParameterManager parameterManager)
+	public ActionManagerImpl(ActionDao actionDao)
 	{
 		super(actionDao);
 		this.actionDao = actionDao;
-		this.parameterManager = parameterManager;
 	}
 
 	/**

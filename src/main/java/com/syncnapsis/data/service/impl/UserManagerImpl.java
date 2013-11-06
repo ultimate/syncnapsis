@@ -24,7 +24,6 @@ import com.syncnapsis.data.dao.UserDao;
 import com.syncnapsis.data.model.Action;
 import com.syncnapsis.data.model.User;
 import com.syncnapsis.data.service.ActionManager;
-import com.syncnapsis.data.service.ParameterManager;
 import com.syncnapsis.data.service.UserManager;
 import com.syncnapsis.data.service.UserRoleManager;
 import com.syncnapsis.enums.EnumAccountStatus;
@@ -56,10 +55,6 @@ public class UserManagerImpl extends GenericNameManagerImpl<User, Long> implemen
 	 */
 	protected ActionManager				actionManager;
 	/**
-	 * The ParameterManager
-	 */
-	protected ParameterManager			parameterManager;
-	/**
 	 * The SecurityManager (BaseApplicationManager)
 	 */
 	protected BaseApplicationManager	securityManager;
@@ -70,15 +65,13 @@ public class UserManagerImpl extends GenericNameManagerImpl<User, Long> implemen
 	 * @param userDao - UserDao für den Datenbankzugriff
 	 * @param userRoleManager - the UserRoleManager
 	 * @param actionManager - the ActionManager
-	 * @param parameterManager - the ParameterManager
 	 */
-	public UserManagerImpl(UserDao userDao, UserRoleManager userRoleManager, ActionManager actionManager, ParameterManager parameterManager)
+	public UserManagerImpl(UserDao userDao, UserRoleManager userRoleManager, ActionManager actionManager)
 	{
 		super(userDao);
 		this.userDao = userDao;
 		this.userRoleManager = userRoleManager;
 		this.actionManager = actionManager;
-		this.parameterManager = parameterManager;
 	}
 
 	/*

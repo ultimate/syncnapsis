@@ -77,7 +77,6 @@
 
 	<bean id="actionManager" class="com.syncnapsis.data.service.impl.ActionManagerImpl">
 		<constructor-arg ref="actionDao" />
-		<constructor-arg ref="parameterManager" />
 		<property name="serializer" ref="serializer" />
 	</bean>
 
@@ -121,7 +120,6 @@
 		<constructor-arg ref="userDao" />
 		<constructor-arg ref="userRoleManager" />
 		<constructor-arg ref="actionManager" />
-		<constructor-arg ref="parameterManager" />
 		<property name="securityManager" ref="securityManager" />
 	</bean>
 

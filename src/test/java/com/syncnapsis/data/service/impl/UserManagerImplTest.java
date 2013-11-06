@@ -26,7 +26,6 @@ import com.syncnapsis.constants.ApplicationBaseConstants;
 import com.syncnapsis.data.dao.UserDao;
 import com.syncnapsis.data.model.User;
 import com.syncnapsis.data.service.ActionManager;
-import com.syncnapsis.data.service.ParameterManager;
 import com.syncnapsis.data.service.UserManager;
 import com.syncnapsis.data.service.UserRoleManager;
 import com.syncnapsis.exceptions.UserNotFoundException;
@@ -53,7 +52,6 @@ public class UserManagerImplTest extends GenericNameManagerImplTestCase<User, Lo
 	private UserManager				userManager;
 	private UserRoleManager			userRoleManager;
 	private ActionManager			actionManager;
-	private ParameterManager		parameterManager;
 
 	private RPCHandler				rpcHandler;
 
@@ -65,7 +63,7 @@ public class UserManagerImplTest extends GenericNameManagerImplTestCase<User, Lo
 
 		setDaoClass(UserDao.class);
 		setMockDao(mockContext.mock(UserDao.class));
-		setMockManager(new UserManagerImpl(mockDao, userRoleManager, actionManager, parameterManager) {
+		setMockManager(new UserManagerImpl(mockDao, userRoleManager, actionManager) {
 			public String getBeanName()
 			{
 				return "mockManager";
