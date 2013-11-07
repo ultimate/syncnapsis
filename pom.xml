@@ -20,13 +20,13 @@
     <groupId>com.syncnapsis.syncnapsis-modules</groupId>
     <artifactId>syncnapsis-modules-authority-generic-impl</artifactId>
     <packaging>jar</packaging>
-    <version>0.8.3</version>
+    <version>0.8.4</version>
 	<name>syncnapsis-modules-authority-generic-impl</name>
 	
 	<parent>
 		<groupId>com.syncnapsis</groupId>
 		<artifactId>syncnapsis-modules</artifactId>
-		<version>0.8.3</version>
+		<version>0.8.4</version>
 	</parent>
     
     <build>
@@ -37,12 +37,12 @@
         <dependency>
             <groupId>com.syncnapsis.syncnapsis-modules</groupId>
             <artifactId>syncnapsis-modules-authority-api</artifactId>
-            <version>0.8.3</version>
+            <version>0.8.4</version>
         </dependency>
         <dependency>
             <groupId>com.syncnapsis.syncnapsis-core</groupId>
             <artifactId>syncnapsis-core-utils</artifactId>
-            <version>0.8.0</version>
+            <version>0.8.4</version>
         </dependency>
     </dependencies>
 
