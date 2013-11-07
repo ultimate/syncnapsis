@@ -20,13 +20,13 @@
     <groupId>com.syncnapsis</groupId>
     <artifactId>syncnapsis-universe</artifactId>
     <packaging>pom</packaging>
-    <version>0.8.3</version>
+    <version>0.8.4</version>
 	<name>syncnapsis-universe</name>
 	
 	<parent>
 		<groupId>com</groupId>
 		<artifactId>syncnapsis</artifactId>
-		<version>0.8.3</version>
+		<version>0.8.4</version>
 	</parent>
 	
 	<modules>
