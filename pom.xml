@@ -20,13 +20,13 @@
     <groupId>com.syncnapsis.syncnapsis-dev</groupId>
     <artifactId>syncnapsis-dev-archive</artifactId>
     <packaging>jar</packaging>
-    <version>0.8.3</version>
+    <version>0.8.4</version>
 	<name>syncnapsis-dev-archive</name>
 	
 	<parent>
 		<groupId>com.syncnapsis</groupId>
 		<artifactId>syncnapsis-dev</artifactId>
-		<version>0.8.3</version>
+		<version>0.8.4</version>
 	</parent>
     
     <build>
@@ -37,7 +37,7 @@
         <dependency>
             <groupId>com.syncnapsis.syncnapsis-core</groupId>
             <artifactId>syncnapsis-core-game-base</artifactId>
-            <version>0.8.3</version>
+            <version>0.8.4</version>
         </dependency>
     </dependencies>
 
