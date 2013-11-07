@@ -61,7 +61,6 @@
 		<constructor-arg ref="participantManager" />
 		<constructor-arg ref="solarSystemPopulationManager" />
 		<constructor-arg ref="solarSystemInfrastructureManager" />
-		<constructor-arg ref="parameterManager" />
 	</bean>
 
 	<bean id="participantManager" class="com.syncnapsis.data.service.impl.ParticipantManagerImpl">
@@ -153,12 +152,21 @@
 
 	<bean id="infrastructureGenerator"
 		class="com.syncnapsis.utils.data.SolarSystemInfrastructureGenerator">
-		<constructor-arg ref="parameterManager" />
 		<constructor-arg ref="calculator" />
 	</bean>
 
 	<bean id="calculator" class="com.syncnapsis.universe.CalculatorImpl">
+	</bean>
+
+	<bean id="constantLoader" class="com.syncnapsis.utils.constants.ParameterConstantLoader" lazy-init="false">
 		<constructor-arg ref="parameterManager" />
+		<property name="constantClasses">
+			<list>
+				<value>com.syncnapsis.constants.ApplicationBaseConstants</value>
+				<value>com.syncnapsis.constants.GameBaseConstants</value>
+				<value>com.syncnapsis.constants.UniverseConquestConstants</value>
+			</list>
+		</property>
 	</bean>
 
 	<!-- =================================================================== -->
