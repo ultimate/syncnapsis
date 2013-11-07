@@ -20,13 +20,13 @@
 	<groupId>com.syncnapsis.syncnapsis-universe</groupId>
 	<artifactId>syncnapsis-universe-evolution</artifactId>
 	<packaging>jar</packaging>
-	<version>0.8.3</version>
+	<version>0.8.4</version>
 	<name>syncnapsis-universe-evolution</name>
 
 	<parent>
 		<groupId>com.syncnapsis</groupId>
 		<artifactId>syncnapsis-universe</artifactId>
-		<version>0.8.3</version>
+		<version>0.8.4</version>
 	</parent>
 
 	<build>
@@ -48,27 +48,27 @@
 		<dependency>
 			<groupId>com.syncnapsis.syncnapsis-core</groupId>
 			<artifactId>syncnapsis-core-websockets</artifactId>
-			<version>0.8.3</version>
+			<version>0.8.4</version>
 		</dependency>
 		<dependency>
 			<groupId>com.syncnapsis.syncnapsis-modules</groupId>
 			<artifactId>syncnapsis-modules-politics-complex-impl</artifactId>
-			<version>0.8.3</version>
+			<version>0.8.4</version>
 		</dependency>
 		<dependency>
 			<groupId>com.syncnapsis.syncnapsis-modules</groupId>
 			<artifactId>syncnapsis-modules-stats-base-impl</artifactId>
-			<version>0.8.3</version>
+			<version>0.8.4</version>
 		</dependency>
 		<dependency>
 			<groupId>com.syncnapsis.syncnapsis-universe</groupId>
 			<artifactId>syncnapsis-universe-utils</artifactId>
-			<version>0.8.3</version>
+			<version>0.8.4</version>
 		</dependency>
 		<dependency>
 			<groupId>com.syncnapsis.syncnapsis-core</groupId>
 			<artifactId>syncnapsis-core-game-base</artifactId>
-			<version>0.8.3</version>
+			<version>0.8.4</version>
 		</dependency>
 		<!-- BASE - START -->
 		<dependency>
