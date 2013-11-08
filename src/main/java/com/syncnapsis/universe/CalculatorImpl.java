@@ -25,7 +25,6 @@ import com.syncnapsis.data.model.Parameter;
 import com.syncnapsis.data.model.SolarSystemInfrastructure;
 import com.syncnapsis.data.model.SolarSystemPopulation;
 import com.syncnapsis.data.model.help.Vector;
-import com.syncnapsis.data.service.ParameterManager;
 import com.syncnapsis.utils.MathUtil;
 
 /**
@@ -51,36 +50,11 @@ public class CalculatorImpl implements Calculator
 	protected Double					maxPopulationExponent;
 
 	/**
-	 * The ParameterManager
-	 */
-	protected ParameterManager			parameterManager;
-
-	private int							HABITABILITY_MAX;
-	private int							SIZE_MAX;
-	private int							MAX_POPULATION_FACTOR;
-
-	/**
 	 * Standard Constructor
-	 * 
-	 * @param parameterManager - the ParameterManager
 	 */
-	public CalculatorImpl(ParameterManager parameterManager)
+	public CalculatorImpl()
 	{
 		super();
-		this.parameterManager = parameterManager;
-
-		initConstants();
-	}
-
-	public void initConstants()
-	{
-		HABITABILITY_MAX = parameterManager.getInteger(UniverseConquestConstants.PARAM_SOLARSYSTEM_HABITABILITY_MAX);
-		SIZE_MAX = parameterManager.getInteger(UniverseConquestConstants.PARAM_SOLARSYSTEM_SIZE_MAX);
-		MAX_POPULATION_FACTOR = parameterManager.getInteger(UniverseConquestConstants.PARAM_SOLARSYSTEM_MAX_POPULATION_FACTOR);
-
-		double travelMaxFactor = parameterManager.getDouble(UniverseConquestConstants.PARAM_TRAVEL_MAX_FACTOR);
-		double travelExodusFactor = parameterManager.getDouble(UniverseConquestConstants.PARAM_TRAVEL_EXODUS_FACTOR);
-
 	}
 
 	/*
@@ -266,14 +240,16 @@ public class CalculatorImpl implements Calculator
 		if(maxPopulation == null)
 		{
 			// @formatter:off
-//			int maxHab = parameterManager.getInteger(UniverseConquestConstants.PARAM_SOLARSYSTEM_HABITABILITY_MAX);
-//			int maxSize = parameterManager.getInteger(UniverseConquestConstants.PARAM_SOLARSYSTEM_SIZE_MAX);
-//			int popFactor = parameterManager.getInteger(UniverseConquestConstants.PARAM_SOLARSYSTEM_MAX_POPULATION_FACTOR);
+//			int maxHab = UniverseConquestConstants.PARAM_SOLARSYSTEM_HABITABILITY_MAX);
+//			int maxSize = UniverseConquestConstants.PARAM_SOLARSYSTEM_SIZE_MAX);
+//			int popFactor = UniverseConquestConstants.PARAM_SOLARSYSTEM_MAX_POPULATION_FACTOR);
 //
 //			maxPopulation = (long) maxHab * maxSize * popFactor;
 			// @formatter:on
 
-			maxPopulation = (long) HABITABILITY_MAX * SIZE_MAX * MAX_POPULATION_FACTOR;
+			maxPopulation = UniverseConquestConstants.PARAM_SOLARSYSTEM_HABITABILITY_MAX.asLong()
+					* UniverseConquestConstants.PARAM_SOLARSYSTEM_SIZE_MAX.asLong()
+					* UniverseConquestConstants.PARAM_SOLARSYSTEM_MAX_POPULATION_FACTOR.asLong();
 		}
 		return maxPopulation;
 	}
@@ -287,9 +263,10 @@ public class CalculatorImpl implements Calculator
 	public long getMaxPopulation(SolarSystemInfrastructure infrastructure)
 	{
 		// int popFactor =
-		// parameterManager.getInteger(UniverseConquestConstants.PARAM_SOLARSYSTEM_MAX_POPULATION_FACTOR);
+		// UniverseConquestConstants.PARAM_SOLARSYSTEM_MAX_POPULATION_FACTOR);
 		// return (long) infrastructure.getHabitability() * infrastructure.getSize() * popFactor;
-		return (long) infrastructure.getHabitability() * infrastructure.getSize() * MAX_POPULATION_FACTOR;
+		return (long) infrastructure.getHabitability() * infrastructure.getSize()
+				* UniverseConquestConstants.PARAM_SOLARSYSTEM_MAX_POPULATION_FACTOR.asLong();
 	}
 
 	/**
@@ -303,8 +280,8 @@ public class CalculatorImpl implements Calculator
 	@Override
 	public double calculateMaxTravelDistance(SolarSystemPopulation origin, long movedPopulation, boolean exodus)
 	{
-		double travelMaxFactor = parameterManager.getDouble(UniverseConquestConstants.PARAM_TRAVEL_MAX_FACTOR);
-		double travelExodusFactor = parameterManager.getDouble(UniverseConquestConstants.PARAM_TRAVEL_EXODUS_FACTOR);
+		double travelMaxFactor = UniverseConquestConstants.PARAM_TRAVEL_MAX_FACTOR.asDouble();
+		double travelExodusFactor = UniverseConquestConstants.PARAM_TRAVEL_EXODUS_FACTOR.asDouble();
 
 		double infrastructure = origin.getInfrastructure().getInfrastructure();
 		if(infrastructure == 0)
@@ -331,7 +308,7 @@ public class CalculatorImpl implements Calculator
 	@Override
 	public long calculateMaxMovablePopulation(SolarSystemPopulation origin, double travelDistance)
 	{
-		double travelMaxFactor = parameterManager.getDouble(UniverseConquestConstants.PARAM_TRAVEL_MAX_FACTOR);
+		double travelMaxFactor = UniverseConquestConstants.PARAM_TRAVEL_MAX_FACTOR.asDouble();
 
 		double pop = (travelDistance / getStandardTravelDistance(origin.getInfrastructure().getSolarSystem().getGalaxy())) * 2 / travelMaxFactor - 1;
 		pop = origin.getInfrastructure().getInfrastructure() / Math.pow(10, pop * getMaxPopulationExponent());
@@ -350,8 +327,9 @@ public class CalculatorImpl implements Calculator
 	@Override
 	public long calculateTravelTime(SolarSystemInfrastructure origin, SolarSystemInfrastructure target, int travelSpeed)
 	{
-		int minSpeed = parameterManager.getInteger(UniverseConquestConstants.PARAM_TRAVEL_SPEED_MIN);
-		int maxSpeed = parameterManager.getInteger(UniverseConquestConstants.PARAM_TRAVEL_SPEED_MAX);
+		int minSpeed = UniverseConquestConstants.PARAM_TRAVEL_SPEED_MIN.asInt();
+		int maxSpeed = UniverseConquestConstants.PARAM_TRAVEL_SPEED_MAX.asInt();
+
 		if(travelSpeed < minSpeed || travelSpeed > maxSpeed)
 			throw new IllegalArgumentException("travelSpeed out of bounds: [" + minSpeed + ", " + maxSpeed + "]");
 
@@ -371,7 +349,7 @@ public class CalculatorImpl implements Calculator
 	 */
 	protected double getMaxPopulationExponent()
 	{
-		if(maxPopulationExponent == null) // TODO
+		if(maxPopulationExponent == null)
 		{
 			maxPopulationExponent = Math.log10(getMaxPopulation());
 		}
@@ -396,7 +374,7 @@ public class CalculatorImpl implements Calculator
 	@Override
 	public double calculateAttackStrength(double speedFactor, long population)
 	{
-		double fac = parameterManager.getDouble(UniverseConquestConstants.PARAM_FACTOR_ATTACK);
+		double fac = UniverseConquestConstants.PARAM_FACTOR_ATTACK.asDouble();
 		return speedFactor * fac * population;
 	}
 
@@ -407,9 +385,9 @@ public class CalculatorImpl implements Calculator
 	@Override
 	public double calculateBuildStrength(double speedFactor, long population, long maxPopulation)
 	{
-		double fac = parameterManager.getDouble(UniverseConquestConstants.PARAM_FACTOR_BUILD);
+		double fac = UniverseConquestConstants.PARAM_FACTOR_BUILD.asDouble();
 		long maxMaxPopulation = getMaxPopulation();
-		int popFactor = parameterManager.getInteger(UniverseConquestConstants.PARAM_SOLARSYSTEM_MAX_POPULATION_FACTOR);
+		double popFactor = UniverseConquestConstants.PARAM_SOLARSYSTEM_MAX_POPULATION_FACTOR.asDouble();
 		double strength;
 		// logger.debug("pop = " + population + " maxPop = " + maxPopulation + " | < half ? " +
 		// (population < maxPopulation / 2));
@@ -417,8 +395,12 @@ public class CalculatorImpl implements Calculator
 			strength = (double) (maxMaxPopulation - population) * population;
 		else
 			strength = (double) (maxMaxPopulation - (maxPopulation - population)) * (maxPopulation - population);
-		// logger.debug("strength = " + strength);
-		return speedFactor * fac * strength / maxMaxPopulation / popFactor;
+//		logger.debug("strength = " + strength);
+		strength = speedFactor * fac * strength / maxMaxPopulation / popFactor;
+//		logger.debug("strength = " + strength);
+		if(Math.abs(strength) < 1.0)
+			strength = Math.signum(strength);
+		return strength;
 	}
 
 	/*
