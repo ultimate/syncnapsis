@@ -15,6 +15,7 @@
 package com.syncnapsis.utils.data;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -270,6 +271,7 @@ public class PoliticsComplexImplDataGenerator extends PoliticsDataGenerator
 		Alliance alliance = new Alliance();
 		alliance.setActivated(true);
 		alliance.setDescription(random.nextString(random.nextInt(20, 2000), DefaultData.STRING_ASCII_COMPLETE_NO_CONTROLCHARS));
+		alliance.setFoundationDate(new Date(timeProvider.get()));
 		alliance.setFullName("full_" + name);
 		alliance.setImageURL(null);
 		alliance.setPrimaryColor("#FF0000");
