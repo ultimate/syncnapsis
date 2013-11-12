@@ -34,6 +34,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.util.Assert;
 
+import com.syncnapsis.providers.TimeProvider;
 import com.syncnapsis.utils.HibernateUtil;
 import com.syncnapsis.utils.PropertiesUtil;
 
@@ -47,6 +48,8 @@ public abstract class DataGenerator implements InitializingBean
 	 * The extended random number generator used to generate random values
 	 */
 	protected final ExtendedRandom		random	= new ExtendedRandom("syncnapsis".hashCode());
+
+	protected TimeProvider				timeProvider;
 
 	protected String					projectDirectory;
 	protected String[]					excludeTableList;
@@ -64,6 +67,16 @@ public abstract class DataGenerator implements InitializingBean
 	// "news"
 	// "authority"
 	// "authoritygroup"
+
+	public TimeProvider getTimeProvider()
+	{
+		return timeProvider;
+	}
+
+	public void setTimeProvider(TimeProvider timeProvider)
+	{
+		this.timeProvider = timeProvider;
+	}
 
 	public String getProjectDirectory()
 	{
@@ -88,6 +101,7 @@ public abstract class DataGenerator implements InitializingBean
 	@Override
 	public void afterPropertiesSet() throws Exception
 	{
+		Assert.notNull(timeProvider, "projectDirectory must not be null!");
 		Assert.notNull(projectDirectory, "projectDirectory must not be null!");
 		Assert.notNull(excludeTableList, "excludeTableList must not be null!");
 	}
@@ -99,7 +113,7 @@ public abstract class DataGenerator implements InitializingBean
 		try
 		{
 			// Files
-			tmp = new File("tmp" + System.currentTimeMillis() + ".xml");
+			tmp = new File("tmp" + timeProvider.get() + ".xml");
 			File tables = new File(projectDirectory + "src/test/resources/data-tables.xml");
 			File dummy = new File(projectDirectory + "src/test/resources/data-dummy.xml");
 			File generated = new File(projectDirectory + "src/test/resources/data-generated.xml");
