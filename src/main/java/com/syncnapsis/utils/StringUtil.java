@@ -57,6 +57,27 @@ public abstract class StringUtil
 	public static String					REGEXP_BINARY_8	= "([0-1]{8})*";
 
 	/**
+	 * Length of a second in ms
+	 */
+	public static final long				TIME_SECOND		= 1000;
+	/**
+	 * Length of a minute in ms
+	 */
+	public static final long				TIME_MINUTE		= TIME_SECOND * 60;
+	/**
+	 * Length of an hourin ms
+	 */
+	public static final long				TIME_HOUR		= TIME_MINUTE * 60;
+	/**
+	 * Length of a day in ms
+	 */
+	public static final long				TIME_DAY		= TIME_HOUR * 24;
+	/**
+	 * Length of a year in ms
+	 */
+	public static final long				TIME_YEAR		= TIME_DAY * 365;
+
+	/**
 	 * Encode a string with the given algorithm using MessageDigest
 	 * 
 	 * @see MessageDigest#getInstance(String)
@@ -422,5 +443,24 @@ public abstract class StringUtil
 		}
 		sb.append("]");
 		return sb.toString();
+	}
+
+	/**
+	 * Convert a time period to a string in the form<br>
+	 * <code>1y 2d 3h 4m 5s 7ms</code>
+	 * 
+	 * @param period - the time period
+	 * @return the string
+	 */
+	public static String toString(long period)
+	{
+		long y = period / TIME_YEAR;
+		long d = (period % TIME_YEAR) / TIME_DAY;
+		long h = (period % TIME_YEAR % TIME_DAY) / TIME_HOUR;
+		long m = (period % TIME_YEAR % TIME_DAY % TIME_HOUR) / TIME_MINUTE;
+		long s = (period % TIME_YEAR % TIME_DAY % TIME_HOUR % TIME_MINUTE) / TIME_SECOND;
+		long ms = (period % TIME_YEAR % TIME_DAY % TIME_HOUR % TIME_MINUTE % TIME_SECOND);
+
+		return y + "y " + d + "d " + h + "h " + m + "m " + s + "s " + ms + "ms";
 	}
 }

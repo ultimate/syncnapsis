@@ -117,14 +117,14 @@ public class StringUtilTest extends LoggerTestCase
 
 	public void testFillupNumber()
 	{
-		for(int i = 1; i <= 10000000; i=i*10)
+		for(int i = 1; i <= 10000000; i = i * 10)
 		{
 			assertTrue(StringUtil.fillupNumber(i, 6).endsWith("" + i));
 			assertTrue(StringUtil.fillupNumber(-i, 6).endsWith("" + (-i)));
 			if(i < 1000000)
 				assertEquals(6, StringUtil.fillupNumber(i, 6).length());
 			else
-				assertEquals((""+i).length(), StringUtil.fillupNumber(i, 6).length());
+				assertEquals(("" + i).length(), StringUtil.fillupNumber(i, 6).length());
 		}
 
 	}
@@ -148,13 +148,13 @@ public class StringUtilTest extends LoggerTestCase
 	public void testHexStringConversion()
 	{
 		Random r = new Random();
-		
+
 		byte[] bytes;
 		for(int i = 0; i < 100; i++)
 		{
 			bytes = new byte[r.nextInt(10)];
 			r.nextBytes(bytes);
-			
+
 			assertTrue(Arrays.equals(bytes, StringUtil.fromHexString(StringUtil.toHexString(bytes))));
 		}
 	}
@@ -163,13 +163,13 @@ public class StringUtilTest extends LoggerTestCase
 	public void testBinaryStringConversion()
 	{
 		Random r = new Random();
-		
+
 		byte[] bytes;
 		for(int i = 0; i < 100; i++)
 		{
 			bytes = new byte[r.nextInt(10)];
 			r.nextBytes(bytes);
-			
+
 			assertTrue(Arrays.equals(bytes, StringUtil.fromBinaryString(StringUtil.toBinaryString(bytes))));
 		}
 	}
@@ -181,11 +181,11 @@ public class StringUtilTest extends LoggerTestCase
 		assertFalse(s.equals(StringUtil.encodeBase64(s)));
 		assertEquals(s, StringUtil.decodeBase64(StringUtil.encodeBase64(s)));
 	}
-	
+
 	public void testCountOccurrences() throws Exception
 	{
 		String s = "abcdefabcdeababa";
-		
+
 		assertEquals(1, StringUtil.countOccurrences(s, "f", true));
 		assertEquals(1, StringUtil.countOccurrences(s, "f", false));
 
@@ -194,25 +194,26 @@ public class StringUtilTest extends LoggerTestCase
 
 		assertEquals(2, StringUtil.countOccurrences(s, "de", true));
 		assertEquals(2, StringUtil.countOccurrences(s, "de", false));
-		
+
 		assertEquals(5, StringUtil.countOccurrences(s, "a", true));
 		assertEquals(5, StringUtil.countOccurrences(s, "a", false));
-		
+
 		assertEquals(4, StringUtil.countOccurrences(s, "ab", true));
 		assertEquals(4, StringUtil.countOccurrences(s, "ab", false));
-		
+
 		assertEquals(2, StringUtil.countOccurrences(s, "aba", true));
 		assertEquals(1, StringUtil.countOccurrences(s, "aba", false));
 	}
-	
+
 	@SuppressWarnings("unused")
-	public void testToString() throws Exception
+	@TestCoversMethods("toString")
+	public void testToString_Object() throws Exception
 	{
 		Object o = new Object() {
-			private int x = 5;
-			private Object member = new Object() {
-				private String s = "foo";
-			};
+			private int		x		= 5;
+			private Object	member	= new Object() {
+										private String	s	= "foo";
+									};
 		};
 
 		String oS_0 = StringUtil.toString(o, 0);
@@ -221,17 +222,53 @@ public class StringUtilTest extends LoggerTestCase
 
 		String oS = o.toString();
 		String memberS = ReflectionsUtil.getField(o, "member").toString();
-		
+
 		logger.debug(oS);
 		logger.debug(memberS);
 		logger.debug(oS_0);
 		logger.debug(oS_1);
 		logger.debug(oS_2);
-		
+
 		String cls = StringUtilTest.class.getName();
-		
+
 		assertEquals(oS + "[x=5, member=" + memberS + "]", oS_0);
 		assertEquals(oS + "[x=5, member=" + memberS + "[s=\"foo\"]]", oS_1);
 		assertEquals(oS_1, oS_2);
+	}
+
+	@TestCoversMethods("toString")
+	public void testToString_Period() throws Exception
+	{
+		String expected;
+		int y, d, h, m, s, ms;
+		long period;
+
+		for(int i = 0; i < 24; i++)
+		{
+			y = i;
+			d = 2 * i;
+			h = (i + 2) % 24;
+			m = (3 * i + 5) % 60;
+			s = (5 * i + 3) % 60;
+			ms = 111 * i % 1000;
+
+			expected = y + "y " + d + "d " + h + "h " + m + "m " + s + "s " + ms + "ms";
+
+			period = y * StringUtil.TIME_YEAR;
+			period += d * StringUtil.TIME_DAY;
+			period += h * StringUtil.TIME_HOUR;
+			period += m * StringUtil.TIME_MINUTE;
+			period += s * StringUtil.TIME_SECOND;
+			period += ms;
+
+			assertEquals(expected, StringUtil.toString(period));
+		}
+
+		assertEquals("0y 0d 0h 0m 0s 10ms", StringUtil.toString(10L));
+		assertEquals("0y 0d 0h 0m 10s 0ms", StringUtil.toString(10L * 1000));
+		assertEquals("0y 0d 0h 10m 0s 0ms", StringUtil.toString(10L * 60 * 1000));
+		assertEquals("0y 0d 10h 0m 0s 0ms", StringUtil.toString(10L * 60 * 60 * 1000));
+		assertEquals("0y 10d 0h 0m 0s 0ms", StringUtil.toString(10L * 24 * 60 * 60 * 1000));
+		assertEquals("10y 0d 0h 0m 0s 0ms", StringUtil.toString(10L * 365 * 24 * 60 * 60 * 1000));
 	}
 }
