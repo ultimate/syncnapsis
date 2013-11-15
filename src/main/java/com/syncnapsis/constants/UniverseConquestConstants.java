@@ -78,6 +78,10 @@ public class UniverseConquestConstants
 	 */
 	public static final Constant<String>	PARAM_TRAVEL_SPEED_MIN					= new StringConstant("travel.speed.min");
 	/**
+	 * The factor for fine-tuning the time need to travel the standard distance
+	 */
+	public static final Constant<String>	PARAM_TRAVEL_TIME_FACTOR				= new StringConstant("travel.time.factor");
+	/**
 	 * The factor for calculating population build
 	 */
 	public static final Constant<String>	PARAM_FACTOR_BUILD						= new StringConstant("factor.build");
@@ -95,7 +99,7 @@ public class UniverseConquestConstants
 	 * <li>e.g. 1.5 = randomization from [-0.5*value;2.5*value]</li>
 	 * </ul>
 	 */
-	public static final Constant<String>	PARAM_FACTOR_BUILD_RANDOMIZE = new StringConstant("factor.build.randomize");
+	public static final Constant<String>	PARAM_FACTOR_BUILD_RANDOMIZE			= new StringConstant("factor.build.randomize");
 	/**
 	 * The range for randomizing attack strength calculation<br>
 	 * <ul>
@@ -106,7 +110,7 @@ public class UniverseConquestConstants
 	 * <li>e.g. 1.5 = randomization from [-0.5*value;2.5*value]</li>
 	 * </ul>
 	 */
-	public static final Constant<String>	PARAM_FACTOR_ATTACK_RANDOMIZE = new StringConstant("factor.attack.randomize");
+	public static final Constant<String>	PARAM_FACTOR_ATTACK_RANDOMIZE			= new StringConstant("factor.attack.randomize");
 	/**
 	 * The length of a norm tick
 	 */
