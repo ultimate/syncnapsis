@@ -216,11 +216,9 @@ public class CalculatorImplTest extends LoggerTestCase
 				travelTime = calculator.calculateTravelTime(origin, target, travelSpeed);
 				logger.debug("dist = " + dist + " speed = " + travelSpeed + " travel time = " + travelTime + " (" + StringUtil.toString(travelTime)
 						+ ") expected = " + expected);
-				// compare with delta even for long since different order in double calc may result in some errors
-				assertEquals(expected, travelTime, 100);
+				assertTrue(Math.abs(expected - travelTime) <= 1);
 			}
 		}
-		fail("unimplemented");
 	}
 
 	public void testGetMaxPopulation() throws Exception
