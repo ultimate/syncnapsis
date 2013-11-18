@@ -79,13 +79,13 @@
 		<row>
 			<value description="id">111</value>
 			<value description="name">factor.build</value>
-			<value description="value">0.001</value>
+			<value description="value">0.08</value>
 			<value description="version">1</value>
 		</row>
 		<row>
 			<value description="id">112</value>
 			<value description="name">factor.attack</value>
-			<value description="value">0.01</value>
+			<value description="value">0.06</value>
 			<value description="version">1</value>
 		</row>
 		<row>
@@ -104,6 +104,12 @@
 			<value description="id">115</value>
 			<value description="name">norm.tick.length</value>
 			<value description="value">100</value>
+			<value description="version">1</value>
+		</row>
+		<row>
+			<value description="id">116</value>
+			<value description="name">travel.time.factor</value>
+			<value description="value">0.7</value>
 			<value description="version">1</value>
 		</row>
 		<row>

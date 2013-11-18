@@ -14,27 +14,28 @@
  */
 package com.syncnapsis.universe;
 
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.jmock.Expectations;
-
 import com.syncnapsis.constants.UniverseConquestConstants;
 import com.syncnapsis.data.model.Galaxy;
+import com.syncnapsis.data.model.Match;
 import com.syncnapsis.data.model.SolarSystem;
 import com.syncnapsis.data.model.SolarSystemInfrastructure;
 import com.syncnapsis.data.model.SolarSystemPopulation;
 import com.syncnapsis.data.model.help.Vector;
-import com.syncnapsis.data.service.ParameterManager;
 import com.syncnapsis.tests.LoggerTestCase;
 import com.syncnapsis.tests.annotations.TestCoversMethods;
+import com.syncnapsis.utils.StringUtil;
+import com.syncnapsis.utils.constants.Constant;
+import com.syncnapsis.utils.constants.ConstantLoader;
 
 /**
  * @author ultimate
  */
 public class CalculatorImplTest extends LoggerTestCase
 {
-	private ParameterManager	parameterManager;
 	private CalculatorImpl		calculator;
 
 	private static final long	popMax	= 1000000000000L;
@@ -44,51 +45,37 @@ public class CalculatorImplTest extends LoggerTestCase
 	{
 		super.setUp();
 
-		parameterManager = mockContext.mock(ParameterManager.class);
-		mockContext.checking(new Expectations() {
+		ConstantLoader<String> constantLoader = new ConstantLoader<String>(String.class) {
+			@Override
+			public void load(Constant<String> constant)
 			{
-				allowing(parameterManager).getInteger(UniverseConquestConstants.PARAM_SOLARSYSTEM_HABITABILITY_MAX);
-				will(returnValue(1000));
+				if(constant == UniverseConquestConstants.PARAM_SOLARSYSTEM_HABITABILITY_MAX)
+					constant.define("1000");
+				else if(constant == UniverseConquestConstants.PARAM_SOLARSYSTEM_SIZE_MAX)
+					constant.define("1000");
+				else if(constant == UniverseConquestConstants.PARAM_SOLARSYSTEM_MAX_POPULATION_FACTOR)
+					constant.define("1000000");
+				else if(constant == UniverseConquestConstants.PARAM_TRAVEL_MAX_FACTOR)
+					constant.define("10.0");
+				else if(constant == UniverseConquestConstants.PARAM_TRAVEL_EXODUS_FACTOR)
+					constant.define("20.0");
+				else if(constant == UniverseConquestConstants.PARAM_FACTOR_ATTACK)
+					constant.define("0.06");
+				else if(constant == UniverseConquestConstants.PARAM_FACTOR_BUILD)
+					constant.define("0.08");
+				else if(constant == UniverseConquestConstants.PARAM_TRAVEL_SPEED_MAX)
+					constant.define("1000");
+				else if(constant == UniverseConquestConstants.PARAM_TRAVEL_SPEED_MIN)
+					constant.define("100");
+				else if(constant == UniverseConquestConstants.PARAM_TRAVEL_TIME_FACTOR)
+					constant.define("0.7");
 			}
-		});
-		mockContext.checking(new Expectations() {
-			{
-				allowing(parameterManager).getInteger(UniverseConquestConstants.PARAM_SOLARSYSTEM_SIZE_MAX);
-				will(returnValue(1000));
-			}
-		});
-		mockContext.checking(new Expectations() {
-			{
-				allowing(parameterManager).getInteger(UniverseConquestConstants.PARAM_SOLARSYSTEM_MAX_POPULATION_FACTOR);
-				will(returnValue(1000000));
-			}
-		});
-		mockContext.checking(new Expectations() {
-			{
-				allowing(parameterManager).getDouble(UniverseConquestConstants.PARAM_TRAVEL_MAX_FACTOR);
-				will(returnValue(10.0));
-			}
-		});
-		mockContext.checking(new Expectations() {
-			{
-				allowing(parameterManager).getDouble(UniverseConquestConstants.PARAM_TRAVEL_EXODUS_FACTOR);
-				will(returnValue(20.0));
-			}
-		});
-		mockContext.checking(new Expectations() {
-			{
-				allowing(parameterManager).getDouble(UniverseConquestConstants.PARAM_FACTOR_ATTACK);
-				will(returnValue(0.01));
-			}
-		});
-		mockContext.checking(new Expectations() {
-			{
-				allowing(parameterManager).getDouble(UniverseConquestConstants.PARAM_FACTOR_BUILD);
-				will(returnValue(5.0));
-			}
-		});
+		};
 
-		calculator = new CalculatorImpl(parameterManager);
+		constantLoader.setConstantClasses(Arrays.asList(new Class<?>[] { UniverseConquestConstants.class }));
+		constantLoader.afterPropertiesSet();
+
+		calculator = new CalculatorImpl();
 	}
 
 	public void testGetStandardTravelDistance() throws Exception
@@ -189,6 +176,50 @@ public class CalculatorImplTest extends LoggerTestCase
 
 	public void testCalculateTravelTime() throws Exception
 	{
+		int minSpeed = UniverseConquestConstants.PARAM_TRAVEL_SPEED_MIN.asInt();
+		int maxSpeed = UniverseConquestConstants.PARAM_TRAVEL_SPEED_MAX.asInt();
+
+		int maxGap = 50;
+		int stepSize = maxGap / 2;
+
+		Galaxy galaxy = new Galaxy();
+		galaxy.setMaxGap(maxGap);
+
+		Match match = new Match();
+		match.setSpeed(0);
+
+		SolarSystem system1 = new SolarSystem();
+		system1.setGalaxy(galaxy);
+		SolarSystem system2 = new SolarSystem();
+		system2.setGalaxy(galaxy);
+
+		SolarSystemInfrastructure origin = new SolarSystemInfrastructure();
+		origin.setSolarSystem(system1);
+		origin.setMatch(match);
+		SolarSystemInfrastructure target = new SolarSystemInfrastructure();
+		target.setSolarSystem(system2);
+		target.setMatch(match);
+
+		system1.setCoords(new Vector.Integer(0, 0, 0));
+
+		long stdTime = (long) (125000000L * UniverseConquestConstants.PARAM_TRAVEL_TIME_FACTOR.asDouble());
+
+		long travelTime;
+		long expected;
+		for(int travelSpeed = minSpeed; travelSpeed <= maxSpeed; travelSpeed += minSpeed)
+		{
+			for(int dist = stepSize; dist <= maxGap * 10; dist += stepSize)
+			{
+				system2.setCoords(new Vector.Integer(dist, 0, 0));
+
+				expected = (long) (stdTime / ((double) travelSpeed / maxSpeed) * ((double) dist / maxGap));
+				travelTime = calculator.calculateTravelTime(origin, target, travelSpeed);
+				logger.debug("dist = " + dist + " speed = " + travelSpeed + " travel time = " + travelTime + " (" + StringUtil.toString(travelTime)
+						+ ") expected = " + expected);
+				// compare with delta even for long since different order in double calc may result in some errors
+				assertEquals(expected, travelTime, 100);
+			}
+		}
 		fail("unimplemented");
 	}
 
@@ -282,28 +313,69 @@ public class CalculatorImplTest extends LoggerTestCase
 
 	public void testCalculateAttackStrength()
 	{
+		double fac_attack = UniverseConquestConstants.PARAM_FACTOR_ATTACK.asDouble();
+		long fac_pop = UniverseConquestConstants.PARAM_SOLARSYSTEM_MAX_POPULATION_FACTOR.asLong();
+
 		assertEquals(0.0, calculator.calculateAttackStrength(10, 0));
 
-		assertEquals(100000.0, calculator.calculateAttackStrength(10, 1000000));
-		assertEquals(1000000.0, calculator.calculateAttackStrength(100, 1000000));
-		assertEquals(10000000.0, calculator.calculateAttackStrength(1000, 1000000));
+		long pop = fac_pop;
 
-		assertEquals(2000.0, calculator.calculateAttackStrength(100, 2000));
-		assertEquals(20000.0, calculator.calculateAttackStrength(100, 20000));
-		assertEquals(200000.0, calculator.calculateAttackStrength(100, 200000));
+		assertEquals(fac_attack / 2 * pop / fac_pop * 10, calculator.calculateAttackStrength(10, pop), 0.01);
+		assertEquals(fac_attack / 2 * pop / fac_pop * 100, calculator.calculateAttackStrength(100, pop), 0.01);
+		assertEquals(fac_attack / 2 * pop / fac_pop * 1000, calculator.calculateAttackStrength(1000, pop), 0.01);
+
+		pop = 2000;
+
+		assertEquals(fac_attack / 2 * pop / fac_pop * 10, calculator.calculateAttackStrength(10, pop), 0.01);
+		assertEquals(fac_attack / 2 * pop / fac_pop * 100, calculator.calculateAttackStrength(100, pop), 0.01);
+		assertEquals(fac_attack / 2 * pop / fac_pop * 1000, calculator.calculateAttackStrength(1000, pop), 0.01);
+	}
+
+	public void testCalculateAttackStrength2()
+	{
+		long maxPop = popMax;
+		double speedFactor = 100;
+
+		double build = calculator.calculateBuildStrength(speedFactor, maxPop / 2, maxPop);
+		double attack = calculator.calculateAttackStrength(speedFactor, maxPop / 2);
+
+		double ratio = UniverseConquestConstants.PARAM_FACTOR_ATTACK.asDouble() / UniverseConquestConstants.PARAM_FACTOR_BUILD.asDouble();
+
+		logger.debug("build = " + build);
+		logger.debug("attack = " + attack);
+		logger.debug("expected ratio = " + ratio);
+		assertEquals(build * ratio, attack, 0.01);
 	}
 
 	public void testCalculateBuildStrength()
 	{
-		long maxPop = 25000000;
-		assertEquals(0.0, calculator.calculateBuildStrength(1000, 0, maxPop));
-		assertEquals(0.0, calculator.calculateBuildStrength(1000, maxPop, maxPop));
-		assertEquals(maxPop / 4.0, calculator.calculateBuildStrength(1000, maxPop / 2, maxPop));
-		assertEquals(calculator.calculateBuildStrength(1000, maxPop / 2 + 1, maxPop), calculator.calculateBuildStrength(1000, maxPop / 2 - 1, maxPop));
-		assertTrue(calculator.calculateBuildStrength(1000, maxPop / 2 - 1, maxPop) < calculator.calculateBuildStrength(1000, maxPop / 2, maxPop));
+		double fac = UniverseConquestConstants.PARAM_FACTOR_BUILD.asDouble();
+		long popFac = UniverseConquestConstants.PARAM_SOLARSYSTEM_MAX_POPULATION_FACTOR.asLong();
 
-		assertEquals(maxPop / 40.0, calculator.calculateBuildStrength(100, maxPop / 2, maxPop));
-		assertEquals(maxPop / 0.4, calculator.calculateBuildStrength(10000, maxPop / 2, maxPop));
+		int speedFac = 1000;
+		long maxPop = popMax;
+		double expectedGrowthAt50 = maxPop / 4.0 * fac * speedFac / popFac;
+		assertEquals(0.0, calculator.calculateBuildStrength(speedFac, 0, maxPop));
+		assertEquals(0.0, calculator.calculateBuildStrength(speedFac, maxPop, maxPop));
+		assertEquals(expectedGrowthAt50, calculator.calculateBuildStrength(speedFac, maxPop / 2, maxPop), 0.01);
+
+		int deviation = 1000000;
+		logger.debug("maxPop/2+1000000 -> " + calculator.calculateBuildStrength(1000, maxPop / 2 + deviation, maxPop));
+		logger.debug("maxPop/2     -> " + calculator.calculateBuildStrength(1000, maxPop / 2, maxPop));
+		logger.debug("maxPop/2-1000000 -> " + calculator.calculateBuildStrength(1000, maxPop / 2 - deviation, maxPop));
+
+		assertEquals(calculator.calculateBuildStrength(1000, maxPop / 2 + deviation, maxPop),
+				calculator.calculateBuildStrength(1000, maxPop / 2 - deviation, maxPop));
+		assertTrue(calculator.calculateBuildStrength(1000, maxPop / 2 - deviation, maxPop) < calculator.calculateBuildStrength(1000, maxPop / 2,
+				maxPop));
+
+		long pop = 100000000;
+		assertEquals(calculator.calculateBuildStrength(100, pop, maxPop), calculator.calculateBuildStrength(100, pop, maxPop / 2));
+		assertEquals(calculator.calculateBuildStrength(100, maxPop - pop, maxPop),
+				calculator.calculateBuildStrength(100, maxPop / 2 - pop, maxPop / 2));
+
+		assertEquals(expectedGrowthAt50 / 10, calculator.calculateBuildStrength(100, maxPop / 2, maxPop), 0.01);
+		assertEquals(expectedGrowthAt50 * 10, calculator.calculateBuildStrength(10000, maxPop / 2, maxPop), 0.01);
 	}
 
 	public void testCalculateBuildStrength2()
@@ -323,12 +395,15 @@ public class CalculatorImplTest extends LoggerTestCase
 		long pop = 10000000;
 		double speedFactor = calculator.getSpeedFactor(speed);
 		long start = System.currentTimeMillis();
+		long start2 = System.nanoTime();
 
-		long minute = 10L * 60;
+		long ticksPerSecond = 10L;
+		long minute = ticksPerSecond * 60;
 		long hour = minute * 60;
-		long year = hour * 24 * 365;
+		long day = hour * 24;
+		long year = day * 365;
 
-		int tick = 0;
+		long tick = 0;
 		boolean reached01 = false;
 		boolean reached10 = false;
 		boolean reached25 = false;
@@ -344,47 +419,52 @@ public class CalculatorImplTest extends LoggerTestCase
 			pop += calculator.calculateBuildStrength(speedFactor, pop, maxPop);
 			tick++;
 
+			//@formatter:off
 			if(!reached01 && pop >= maxPop * 0.01)
 			{
 				reached01 = true;
-				logger.info("01% reached @ tick " + tick);
+				logger.info("01% reached @ tick " + tick + " (" + StringUtil.toString(tick*1000/ticksPerSecond) + ")");
 			}
 			else if(!reached10 && pop >= maxPop * 0.10)
 			{
 				reached10 = true;
-				logger.info("10% reached @ tick " + tick);
+				logger.info("10% reached @ tick " + tick + " (" + StringUtil.toString(tick*1000/ticksPerSecond) + ")");
 			}
 			else if(!reached25 && pop >= maxPop * 0.25)
 			{
 				reached25 = true;
-				logger.info("25% reached @ tick " + tick);
+				logger.info("25% reached @ tick " + tick + " (" + StringUtil.toString(tick*1000/ticksPerSecond) + ")");
 			}
 			else if(!reached50 && pop >= maxPop * 0.50)
 			{
 				reached50 = true;
-				logger.info("50% reached @ tick " + tick);
+				logger.info("50% reached @ tick " + tick + " (" + StringUtil.toString(tick*1000/ticksPerSecond) + ")");
 			}
 			else if(!reached75 && pop >= maxPop * 0.75)
 			{
 				reached75 = true;
-				logger.info("75% reached @ tick " + tick);
+				logger.info("75% reached @ tick " + tick + " (" + StringUtil.toString(tick*1000/ticksPerSecond) + ")");
 			}
 			else if(!reached90 && pop >= maxPop * 0.90)
 			{
 				reached90 = true;
-				logger.info("90% reached @ tick " + tick);
+				logger.info("90% reached @ tick " + tick + " (" + StringUtil.toString(tick*1000/ticksPerSecond) + ")");
 			}
 			else if(!reached99 && pop >= maxPop * 0.99)
 			{
 				reached99 = true;
-				logger.info("99% reached @ tick " + tick);
+				logger.info("99% reached @ tick " + tick + " (" + StringUtil.toString(tick*1000/ticksPerSecond) + ")");
 			}
+			//@formatter:on
 			if(tick > year)
 				break;
 		}
+		long end2 = System.nanoTime();
 		long end = System.currentTimeMillis();
-		logger.debug("time needed: " + (end - start));
-		logger.debug("speed: " + ((double) tick * 1000 / (end-start)) + " ticks/second");
+		logger.debug("time needed: " + (end - start) + "ms");
+		logger.debug("time needed: " + (end2 - start2) + "ns");
+		logger.debug("speed: " + ((double) tick * 1000 / (end - start)) + " ticks/second");
+		logger.debug("speed: " + ((double) tick * 1000000000 / (end2 - start2)) + " ticks/second");
 	}
 
 	public void testCalculateInfrastructureBuildInfluence()

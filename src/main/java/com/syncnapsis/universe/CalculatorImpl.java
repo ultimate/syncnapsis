@@ -37,16 +37,37 @@ public class CalculatorImpl implements Calculator
 	/**
 	 * Logger-Instance
 	 */
-	protected transient final Logger	logger		= LoggerFactory.getLogger(getClass());
+	protected transient final Logger	logger						= LoggerFactory.getLogger(getClass());
 
 	/**
 	 * The number of digits to ceil the size to.
 	 * 
 	 * @see MathUtil#ceil2(int, int)
 	 */
-	private static final int			SIZE_DIGITS	= 2;
+	private static final int			SIZE_DIGITS					= 2;
 
+	/**
+	 * The correction to apply to the travel time.<br>
+	 * Since standard travel time is dependent of max population and build factor the correction is
+	 * applied to shift the resulting standard travel time to the right scale (approx. 1/100 of the
+	 * time needed for full growth).
+	 */
+	private static final int			CORRECTION_TRAVEL_TIME		= 100000;
+	/**
+	 * The correction to apply to the calculation of the attack strength.<br>
+	 * Correction is required to achieve<br>
+	 * <code>attack(maxPop/2) / build(maxPop/2) = fac_attack / fac_build</code>
+	 */
+	private static final int			CORRECTION_ATTACK_STRENGTH	= 2;
+
+	/**
+	 * The max population for a solar system.<br>
+	 * Calculated and cached from max habitability, max size and population factor
+	 */
 	protected Long						maxPopulation;
+	/**
+	 * The exponent for base 10 for the max population (calculated and cached).
+	 */
 	protected Double					maxPopulationExponent;
 
 	/**
@@ -327,16 +348,25 @@ public class CalculatorImpl implements Calculator
 	@Override
 	public long calculateTravelTime(SolarSystemInfrastructure origin, SolarSystemInfrastructure target, int travelSpeed)
 	{
-		int minSpeed = UniverseConquestConstants.PARAM_TRAVEL_SPEED_MIN.asInt();
-		int maxSpeed = UniverseConquestConstants.PARAM_TRAVEL_SPEED_MAX.asInt();
+		double minSpeed = UniverseConquestConstants.PARAM_TRAVEL_SPEED_MIN.asDouble();
+		double maxSpeed = UniverseConquestConstants.PARAM_TRAVEL_SPEED_MAX.asDouble();
+		double facBuild = UniverseConquestConstants.PARAM_FACTOR_BUILD.asDouble();
+		double travelTimeFactor = UniverseConquestConstants.PARAM_TRAVEL_TIME_FACTOR.asDouble();
 
 		if(travelSpeed < minSpeed || travelSpeed > maxSpeed)
 			throw new IllegalArgumentException("travelSpeed out of bounds: [" + minSpeed + ", " + maxSpeed + "]");
 
-		int matchSpeed = origin.getMatch().getSpeed();
+		double speedFac = getSpeedFactor(origin.getMatch().getSpeed());
+		double dist = MathUtil.distance(origin.getSolarSystem().getCoords(), target.getSolarSystem().getCoords());
+		int stdDist = getStandardTravelDistance(origin.getSolarSystem().getGalaxy());
 
-		// TODO Auto-generated method stub
-		return 0;
+		double timeBase = getMaxPopulation() / facBuild;
+		double travelTime = travelTimeFactor * timeBase / CORRECTION_TRAVEL_TIME;
+		travelTime *= (dist / stdDist); // ratio of dist to std. dist
+		travelTime /= (travelSpeed / maxSpeed); // speed in percent
+		travelTime /= speedFac; // match sped
+
+		return (long) travelTime;
 	}
 
 	/**
@@ -375,7 +405,10 @@ public class CalculatorImpl implements Calculator
 	public double calculateAttackStrength(double speedFactor, long population)
 	{
 		double fac = UniverseConquestConstants.PARAM_FACTOR_ATTACK.asDouble();
-		return speedFactor * fac * population;
+		double popFactor = UniverseConquestConstants.PARAM_SOLARSYSTEM_MAX_POPULATION_FACTOR.asDouble();
+		// correction is required to achieve
+		// attack(maxPop/2) / build(maxPop/2) = fac_attack / fac_build
+		return speedFactor * fac * population / popFactor / CORRECTION_ATTACK_STRENGTH;
 	}
 
 	/*
@@ -395,9 +428,10 @@ public class CalculatorImpl implements Calculator
 			strength = (double) (maxMaxPopulation - population) * population;
 		else
 			strength = (double) (maxMaxPopulation - (maxPopulation - population)) * (maxPopulation - population);
-//		logger.debug("strength = " + strength);
+		// logger.debug("strength = " + strength);
 		strength = speedFactor * fac * strength / maxMaxPopulation / popFactor;
-//		logger.debug("strength = " + strength);
+		// logger.debug("strength = " + strength);
+		// TODO really?
 		if(Math.abs(strength) < 1.0)
 			strength = Math.signum(strength);
 		return strength;

@@ -120,8 +120,8 @@ public interface Calculator
 	public long calculateMaxMovablePopulation(SolarSystemPopulation origin, double travelDistance);
 
 	/**
-	 * Calculate the minimum time needed to travel from one SolarSystem to another. SolarSystems are
-	 * therefore represented by their infrastructure to be able to determine
+	 * Calculate the time needed to travel from one SolarSystem to another with the given speed.
+	 * SolarSystems are therefore represented by their infrastructure to be able to determine
 	 * additional information if necessary.
 	 * 
 	 * @param origin - the origin infrastructure
@@ -130,7 +130,7 @@ public interface Calculator
 	 * @return the time needed for traveling the whole distance with the given speed in ms
 	 */
 	public long calculateTravelTime(SolarSystemInfrastructure origin, SolarSystemInfrastructure target, int travelSpeed);
-	
+
 	/**
 	 * Calculate the attack strength for the given amount of population
 	 * 
