@@ -31,7 +31,9 @@
     <!-- DAO						                                         -->
     <!-- =================================================================== -->
 	
-	<bean id="universalDao" class="com.syncnapsis.data.dao.hibernate.UniversalDaoHibernate" />
+	<bean id="universalDao" class="com.syncnapsis.data.dao.hibernate.UniversalDaoHibernate">
+		<constructor-arg ref="sessionFactory" />
+	</bean>
     
     <!-- =================================================================== -->
     <!-- Service					                                         -->
