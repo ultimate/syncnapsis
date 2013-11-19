@@ -13,19 +13,32 @@ import com.syncnapsis.providers.ConnectionProvider;
 import com.syncnapsis.providers.SessionProvider;
 import com.syncnapsis.security.BaseGameManager;
 import com.syncnapsis.tests.BaseSpringContextTestCase;
+import com.syncnapsis.tests.annotations.TestCoversMethods;
 import com.syncnapsis.tests.annotations.TestExcludesMethods;
 import com.syncnapsis.websockets.Connection;
 import com.syncnapsis.websockets.engine.http.HttpConnection;
 import com.syncnapsis.websockets.service.rpc.RPCService;
 
-@TestExcludesMethods({ "get*", "set*" })
+@TestExcludesMethods({ "afterPropertiesSet" })
 public class MessageManagerImplTest extends BaseSpringContextTestCase
 {
-	private SessionProvider		sessionProvider;
-	private BaseGameManager		securityManager;
-	private ConnectionProvider	connectionProvider;
-	
-	private static final String beanName = "messageManager";
+	private SessionProvider			sessionProvider;
+	private BaseGameManager			securityManager;
+	private ConnectionProvider		connectionProvider;
+
+	private PinboardManager			pinboardManager;
+	private PinboardMessageManager	pinboardMessageManager;
+
+	private static final String		beanName	= "messageManager";
+
+	@TestCoversMethods({ "get*", "set*" })
+	public void testGetAndSet() throws Exception
+	{
+		MessageManagerImpl manager = new MessageManagerImpl();
+
+		getAndSetTest(manager, "pinboardManager", PinboardManager.class, pinboardManager);
+		getAndSetTest(manager, "pinboardMessageManager", PinboardMessageManager.class, pinboardMessageManager);
+	}
 
 	public void testPostPinboardMessage()
 	{
@@ -45,7 +58,7 @@ public class MessageManagerImplTest extends BaseSpringContextTestCase
 		messages.add(pinboardMessage);
 
 		final Connection connection = new HttpConnection("test");
-		
+
 		final int connectionCount = 5;
 		final List<Connection> connections = new ArrayList<Connection>(connectionCount);
 		for(int i = 0; i < connectionCount; i++)
@@ -53,7 +66,7 @@ public class MessageManagerImplTest extends BaseSpringContextTestCase
 
 		final RPCService mockRPCService = mockContext.mock(RPCService.class);
 		messageManager.setRpcService(mockRPCService);
-		
+
 		final PinboardManager mockPinboardManager = mockContext.mock(PinboardManager.class);
 		messageManager.setPinboardManager(mockPinboardManager);
 
@@ -84,9 +97,9 @@ public class MessageManagerImplTest extends BaseSpringContextTestCase
 				exactly(connectionCount).of(clientMessageManager).updatePinboard(pinboardId, messages);
 			}
 		});
-		
+
 		messageManager.postPinboardMessage(pinboardId, title, content);
-		
+
 		mockContext.assertIsSatisfied();
 	}
 
@@ -107,7 +120,7 @@ public class MessageManagerImplTest extends BaseSpringContextTestCase
 		final Long pinboardId = 1L;
 		final List<PinboardMessage> messages = new ArrayList<PinboardMessage>();
 		final int messageCount = 10;
-		
+
 		final Connection connection = new HttpConnection("test");
 		connectionProvider.set(connection);
 

@@ -11,10 +11,12 @@ import com.syncnapsis.providers.impl.ThreadLocalConnectionProvider;
 import com.syncnapsis.security.BaseGameManager;
 import com.syncnapsis.tests.BaseSpringContextTestCase;
 import com.syncnapsis.tests.annotations.TestCoversMethods;
+import com.syncnapsis.tests.annotations.TestExcludesMethods;
 import com.syncnapsis.websockets.Connection;
 import com.syncnapsis.websockets.engine.http.HttpConnection;
 import com.syncnapsis.websockets.service.rpc.RPCService;
 
+@TestExcludesMethods({"afterPropertiesSet"})
 public class BaseClientManagerTest extends BaseSpringContextTestCase
 {
 	@TestCoversMethods({"get*", "set*"})

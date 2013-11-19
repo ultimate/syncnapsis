@@ -716,6 +716,12 @@ public class SolarSystemPopulationManagerImplTest extends
 
 		assertEquals(5L, (long) mockManager.getHomePopulation(infrastructure).getId());
 	}
+	
+	public void testSimulate() throws Exception
+	{
+		// TODO
+		fail("unimplemented");
+	}
 
 	private class MockCalculator implements Calculator
 	{
@@ -845,7 +851,6 @@ public class SolarSystemPopulationManagerImplTest extends
 		@Override
 		public double calculateAttackStrength(double speedFactor, long population)
 		{
-			// TODO Auto-generated method stub
 			return 0;
 		}
 
@@ -855,7 +860,6 @@ public class SolarSystemPopulationManagerImplTest extends
 		@Override
 		public double calculateBuildStrength(double speedFactor, long population, long maxPopulation)
 		{
-			// TODO Auto-generated method stub
 			return 0;
 		}
 
@@ -865,7 +869,6 @@ public class SolarSystemPopulationManagerImplTest extends
 		@Override
 		public double calculateInfrastructureBuildInfluence(long population, long infrastructure)
 		{
-			// TODO Auto-generated method stub
 			return 0;
 		}
 
@@ -875,7 +878,6 @@ public class SolarSystemPopulationManagerImplTest extends
 		@Override
 		public double getSpeedFactor(int speed)
 		{
-			// TODO Auto-generated method stub
 			return 0;
 		}
 	}

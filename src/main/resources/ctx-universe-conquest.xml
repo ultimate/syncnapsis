@@ -185,25 +185,28 @@
 		<!-- <property name="defaultAutoCommit" value="true"/> -->
 	</bean>
 
-	<bean id="sessionFactory"
-		class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+	<bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
 		<property name="dataSource" ref="dataSource" />
 		<property name="configLocation" value="classpath:hibernate.cfg.xml" />
 		<property name="hibernateProperties">
 			<props>
 				<prop key="hibernate.dialect">${hibernate.dialect}</prop>
-				<!-- <prop key="hibernate.jdbc.batch_size">0</prop> <prop key="hibernate.show_sql">false</prop> 
-					<prop key="hibernate.format_sql">true</prop> <prop key="hibernate.use_sql_comments">true</prop> 
-					<prop key="hibernate.query.substitutions">true 1, false 0</prop> <prop key="hibernate.max_fetch_depth">6</prop> 
-					<prop key="hibernate.hbm2ddl.auto">${hibernate.hbm2ddlauto}</prop> <prop 
-					key="hibernate.cache.use_second_level_cache">${hibernate.use_second_level_cache}</prop> 
-					<prop key="hibernate.cache.provider_class">org.hibernate.cache.EhCacheProvider</prop> -->
+				<!--
+				<prop key="hibernate.jdbc.batch_size">0</prop>
+				<prop key="hibernate.show_sql">false</prop> 
+				<prop key="hibernate.format_sql">true</prop>
+				<prop key="hibernate.use_sql_comments">true</prop> 
+				<prop key="hibernate.query.substitutions">true 1, false 0</prop>
+				<prop key="hibernate.max_fetch_depth">6</prop> 
+				<prop key="hibernate.hbm2ddl.auto">${hibernate.hbm2ddlauto}</prop>
+				<prop key="hibernate.cache.use_second_level_cache">${hibernate.use_second_level_cache}</prop> 
+				<prop key="hibernate.cache.provider_class">org.hibernate.cache.EhCacheProvider</prop>
+				-->
 			</props>
 		</property>
 	</bean>
 
-	<bean id="transactionManager"
-		class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+	<bean id="transactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">
 		<property name="sessionFactory" ref="sessionFactory" />
 	</bean>
 
