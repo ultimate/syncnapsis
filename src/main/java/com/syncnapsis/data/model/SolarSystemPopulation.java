@@ -29,6 +29,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 
 import com.syncnapsis.data.model.base.ActivatableInstance;
 import com.syncnapsis.enums.EnumDestructionType;
@@ -134,6 +135,17 @@ public class SolarSystemPopulation extends ActivatableInstance<Long>
 	 * The spin-offs that orginated from this population
 	 */
 	protected List<SolarSystemPopulation>	spinoffs;
+
+	// transient properties
+
+	/**
+	 * The delta to apply to this population
+	 */
+	protected double						delta;
+	/**
+	 * Has this population been modified?
+	 */
+	protected boolean						modified;
 
 	/**
 	 * The solar system this population "lives" in.<br>
@@ -266,7 +278,7 @@ public class SolarSystemPopulation extends ActivatableInstance<Long>
 	{
 		return lastUpdateDate;
 	}
-	
+
 	/**
 	 * The current amount/value of population
 	 * 
@@ -329,6 +341,28 @@ public class SolarSystemPopulation extends ActivatableInstance<Long>
 	public List<SolarSystemPopulation> getSpinoffs()
 	{
 		return spinoffs;
+	}
+
+	/**
+	 * The delta to apply to this population
+	 * 
+	 * @return delta
+	 */
+	@Transient
+	public double getDelta()
+	{
+		return delta;
+	}
+
+	/**
+	 * Has this population been modified?
+	 * 
+	 * @return modified
+	 */
+	@Transient
+	public boolean isModified()
+	{
+		return modified;
 	}
 
 	/**
@@ -444,7 +478,6 @@ public class SolarSystemPopulation extends ActivatableInstance<Long>
 		this.lastUpdateDate = lastUpdateDate;
 	}
 
-
 	/**
 	 * The current amount/value of population
 	 * 
@@ -500,6 +533,26 @@ public class SolarSystemPopulation extends ActivatableInstance<Long>
 	public void setSpinoffs(List<SolarSystemPopulation> spinoffs)
 	{
 		this.spinoffs = spinoffs;
+	}
+
+	/**
+	 * The delta to apply to this population
+	 * 
+	 * @param delta - the delta
+	 */
+	public void setDelta(double delta)
+	{
+		this.delta = delta;
+	}
+
+	/**
+	 * Has this population been modified?
+	 * 
+	 * @param modified - true or false
+	 */
+	public void setModified(boolean modified)
+	{
+		this.modified = modified;
 	}
 
 	/*

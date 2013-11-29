@@ -22,22 +22,25 @@ import java.util.List;
 
 import org.jmock.Expectations;
 
+import com.syncnapsis.constants.UniverseConquestConstants;
 import com.syncnapsis.data.dao.SolarSystemPopulationDao;
 import com.syncnapsis.data.model.Galaxy;
+import com.syncnapsis.data.model.Match;
 import com.syncnapsis.data.model.Participant;
 import com.syncnapsis.data.model.SolarSystem;
 import com.syncnapsis.data.model.SolarSystemInfrastructure;
 import com.syncnapsis.data.model.SolarSystemPopulation;
 import com.syncnapsis.data.model.help.Vector;
-import com.syncnapsis.data.model.help.Vector.Integer;
 import com.syncnapsis.data.service.SolarSystemInfrastructureManager;
 import com.syncnapsis.data.service.SolarSystemPopulationManager;
 import com.syncnapsis.enums.EnumDestructionType;
 import com.syncnapsis.enums.EnumPopulationPriority;
 import com.syncnapsis.mock.MockTimeProvider;
+import com.syncnapsis.mock.util.ReturnArgAction;
 import com.syncnapsis.security.BaseGameManager;
 import com.syncnapsis.tests.GenericManagerImplTestCase;
 import com.syncnapsis.tests.annotations.TestCoversClasses;
+import com.syncnapsis.tests.annotations.TestCoversMethods;
 import com.syncnapsis.tests.annotations.TestExcludesMethods;
 import com.syncnapsis.universe.Calculator;
 import com.syncnapsis.utils.MathUtil;
@@ -51,6 +54,7 @@ public class SolarSystemPopulationManagerImplTest extends
 {
 	private SolarSystemInfrastructureManager	solarSystemInfrastructureManager;
 	private BaseGameManager						securityManager;
+	private Calculator							calculator;
 	private final long							referenceTime	= 1234;
 
 	private ExtendedRandom						random			= new ExtendedRandom();
@@ -67,6 +71,7 @@ public class SolarSystemPopulationManagerImplTest extends
 		BaseGameManager securityManager = new BaseGameManager(this.securityManager);
 		securityManager.setTimeProvider(new MockTimeProvider(referenceTime));
 		((SolarSystemPopulationManagerImpl) mockManager).setSecurityManager(securityManager);
+		((SolarSystemPopulationManagerImpl) mockManager).setCalculator(calculator);
 	}
 
 	public void testGetByMatch() throws Exception
@@ -462,22 +467,6 @@ public class SolarSystemPopulationManagerImplTest extends
 		infrastructure.getPopulations().add(getPopulation(5L, pop22, 0, 1150, p2, false));
 		infrastructure.getPopulations().add(getPopulation(6L, pop23, 0, 1600, p2, true));
 
-		int populationsToBeSaved = 0;
-		for(final SolarSystemPopulation p : infrastructure.getPopulations())
-		{
-			if(p.isActivated() && p.getColonizationDate().before(new Date(referenceTime)))
-			{
-				populationsToBeSaved++;
-				mockContext.checking(new Expectations() {
-					{
-						oneOf(mockDao).save(p);
-						will(returnValue(p));
-					}
-				});
-			}
-		}
-		assertEquals(3, populationsToBeSaved);
-
 		Collections.shuffle(infrastructure.getPopulations());
 
 		mockManager.merge(infrastructure);
@@ -521,6 +510,14 @@ public class SolarSystemPopulationManagerImplTest extends
 		assertEquals(pop21, infrastructure.getPopulations().get(3).getPopulation());
 		assertEquals(pop22, infrastructure.getPopulations().get(4).getPopulation());
 		assertEquals(pop23, infrastructure.getPopulations().get(5).getPopulation());
+
+		// check for modified-flag
+		assertTrue(infrastructure.getPopulations().get(0).isModified());
+		assertTrue(infrastructure.getPopulations().get(1).isModified());
+		assertFalse(infrastructure.getPopulations().get(2).isModified());
+		assertFalse(infrastructure.getPopulations().get(3).isModified());
+		assertFalse(infrastructure.getPopulations().get(4).isModified());
+		assertFalse(infrastructure.getPopulations().get(5).isModified());
 	}
 
 	public void testUpdateTravelSpeed() throws Exception
@@ -589,7 +586,7 @@ public class SolarSystemPopulationManagerImplTest extends
 		mockContext.assertIsSatisfied();
 		assertSame(pop1, changed);
 		assertEquals(population, changed.getPopulation());
-		
+
 		// remove present population
 		mockContext.checking(new Expectations() {
 			{
@@ -599,10 +596,10 @@ public class SolarSystemPopulationManagerImplTest extends
 		changed = mockManager.selectStartSystem(p1, infrastructure, 0);
 		mockContext.assertIsSatisfied();
 		assertNull(changed);
-		
+
 		// no population present
 		infrastructure.getPopulations().clear();
-		
+
 		mockContext.checking(new Expectations() {
 			{
 				oneOf(mockDao).save(pop1);
@@ -716,11 +713,229 @@ public class SolarSystemPopulationManagerImplTest extends
 
 		assertEquals(5L, (long) mockManager.getHomePopulation(infrastructure).getId());
 	}
-	
+
+	@TestCoversMethods("simulate")
 	public void testSimulate() throws Exception
 	{
-		// TODO
+		final ExtendedRandom random = new ExtendedRandom(1234);
+		final int habitability = 500;
+		final int size = 500;
+		final long tick = 100;
+
+		for(int speed = UniverseConquestConstants.PARAM_MATCH_SPEED_MIN.asInt(); speed <= UniverseConquestConstants.PARAM_MATCH_SPEED_MAX.asInt(); speed++)
+		{
+			logger.debug("testing with speed = " + speed);
+
+			final long startInfrastructure = 0L;
+
+			final Galaxy galaxy = new Galaxy();
+
+			final SolarSystem solarSystem = new SolarSystem();
+			solarSystem.setActivated(true);
+			solarSystem.setCoords(new Vector.Integer(123, 456, 789));
+			solarSystem.setGalaxy(galaxy);
+
+			final Match match = new Match();
+			match.setGalaxy(galaxy);
+			match.setSpeed(speed);
+
+			final SolarSystemInfrastructure infrastructure = new SolarSystemInfrastructure();
+			infrastructure.setActivated(true);
+			infrastructure.setHabitability(habitability);
+			infrastructure.setInfrastructure(startInfrastructure);
+			infrastructure.setMatch(match);
+			infrastructure.setSize(size);
+			infrastructure.setPopulations(new ArrayList<SolarSystemPopulation>());
+
+			final Participant participant1 = new Participant();
+			participant1.setId(1L);
+			participant1.setMatch(match);
+			final Participant participant2 = new Participant();
+			participant2.setId(2L);
+			participant2.setMatch(match);
+			final Participant participant3 = new Participant();
+			participant3.setId(3L);
+			participant3.setMatch(match);
+
+			int tX = -100;
+			int t0 = 0;
+			int t1 = 10;
+			int t2 = 20;
+			int t3 = 30;
+
+			long pop10_ = 50000000000L;
+			long pop12_ = pop10_ * 2;
+			long pop21_ = (long) (pop12_ * 0.8);
+			long pop33_ = pop12_ * 2;
+
+			// populations by participant (1st index) and order of arrival (2nd index; x=destroyed)
+			final SolarSystemPopulation population10 = getPopulation(10L, pop10_, pop10_ * 2, tick * t0, participant1, true);
+			final SolarSystemPopulation population12 = getPopulation(12L, pop12_, 0, tick * t2, participant1, true);
+			final SolarSystemPopulation population21 = getPopulation(21L, pop21_, 0, tick * t1, participant2, true);
+			final SolarSystemPopulation population33 = getPopulation(33L, pop33_, 0, tick * t3, participant3, true);
+			final SolarSystemPopulation population3X = getPopulation(39L, 0, 0, tick * tX, participant3, false);
+
+			infrastructure.getPopulations().add(population10);
+			infrastructure.getPopulations().add(population12);
+			infrastructure.getPopulations().add(population21);
+			infrastructure.getPopulations().add(population33);
+			infrastructure.getPopulations().add(population3X);
+
+			for(SolarSystemPopulation pop : infrastructure.getPopulations())
+			{
+				pop.setLastUpdateDate(new Date(0));
+				pop.setAttackPriority(EnumPopulationPriority.balanced);
+				pop.setBuildPriority(EnumPopulationPriority.balanced);
+			}
+
+			// set expectations
+			mockContext.checking(new Expectations() {
+				{
+					allowing(mockDao).save(with(any(SolarSystemPopulation.class)));
+					will(new ReturnArgAction());
+				}
+			});
+
+			// simulate 50 ticks
+			int ticks = 50;
+			long[] inf = new long[ticks];
+			long[] pop10 = new long[ticks];
+			long[] pop12 = new long[ticks];
+			long[] pop21 = new long[ticks];
+			long[] pop33 = new long[ticks];
+			long[] pop3X = new long[ticks];
+
+			long t;
+			for(int i = 0; i < ticks; i++)
+			{
+				t = i * tick;
+				((SolarSystemPopulationManagerImpl) mockManager).getSecurityManager().getTimeProvider().set(t);
+
+				inf[i] = infrastructure.getInfrastructure();
+				pop10[i] = population10.getPopulation();
+				pop12[i] = population12.getPopulation();
+				pop21[i] = population21.getPopulation();
+				pop33[i] = population33.getPopulation();
+				pop3X[i] = population3X.getPopulation();
+
+				mockManager.merge(infrastructure);
+				mockManager.simulate(infrastructure, random);
+
+				// TODO set last updated date
+			}
+
+			// check result for plausibility
+			// (but do NOT check for exact values due to randomization)
+			logger.debug("speed: " + speed);
+			logger.debug("inf: " + arrayPrint(inf));
+			logger.debug("pop10: " + arrayPrint(pop10));
+			logger.debug("pop12: " + arrayPrint(pop12));
+			logger.debug("pop21: " + arrayPrint(pop21));
+			logger.debug("pop33: " + arrayPrint(pop33));
+			logger.debug("pop3X: " + arrayPrint(pop3X));
+
+			double delta_s = 0.05 * Math.pow(10, speed);
+			double delta_m = 0.10 * Math.pow(10, speed);
+			double delta_l = 0.25 * Math.pow(10, speed);
+
+			// check pop3X [0 ... 0]
+			logger.debug("pop3X change: " + pop3X[0] + " ... " + pop3X[ticks - 1]);
+			assertEquals(0, pop3X[0]);
+			assertEquals(0, pop3X[ticks - 1]);
+			assertDelta(pop3X, t0, ticks, false, false, true);
+
+			// check pop12 [1e11 ... 1e11 , 0 ... 0]
+			logger.debug("pop12 change: " + pop12[t2 - 1] + ", " + pop12[t2] + ", " + pop12[t2 + 1] + ", " + pop12[t2 + 2]);
+			assertEquals(pop12_, pop12[0]);
+			assertEquals(pop12_, pop12[t2]);
+			assertEquals(0, pop12[t2 + 1]);
+			assertEquals(0, pop12[ticks - 1]);
+			assertDelta(pop12, t0, t2 + 1, 0, 0);
+			assertDelta(pop12, t2 + 1, ticks, 0, 0);
+
+			// check pop10 [5e10 ... growing ... support ... growing ... attacked]
+			logger.debug("pop10 change: " + pop10[t2 - 1] + ", " + pop10[t2] + ", " + pop10[t2 + 1] + ", " + pop10[t2 + 2]);
+			assertEquals(pop10_, pop10[t0]);
+			assertTrue(pop10[t2 + 1] > (pop10_ + pop12_));
+			assertDelta(pop10, t0, t2, delta_m, -delta_s); // max 10% growth, max 5% decrease
+			assertDelta(pop10, t2 + 1, t3, delta_m, -delta_s); // max 10% growth, max 5% decrease
+			assertDelta(pop10, t3, ticks, delta_s, -delta_l); // max 5% growth, max 25% decrease
+
+			// check pop21
+
+			// check pop33
+			// TODO
+		}
+
 		fail("unimplemented");
+	}
+
+	public void testAssertDelta()
+	{
+		long[] values = new long[] { 0, 0, 0, 1, 2, 3, 3, 3, 2, 2, 2, 1, 0 };
+
+		assertDelta(values, 0, values.length, true, true, true);
+		assertDelta(values, 0, 8, true, false, true);
+		assertDelta(values, 5, values.length, false, true, true);
+		assertDelta(values, 0, 3, false, false, true);
+		assertDelta(values, 2, 6, true, false, false);
+		assertDelta(values, values.length - 3, values.length, false, true, false);
+	}
+
+	private void assertDelta(long[] values, int start, int end, boolean allowUp, boolean allowDown, boolean allowEquals)
+	{
+		for(int i = start + 1; i < end; i++)
+		{
+			if(!allowUp)
+				assertTrue("@ pos " + i + " : " + values[i] + " NOT <= " + values[i - 1], values[i] <= values[i - 1]);
+			if(!allowDown)
+				assertTrue("@ pos " + i + " : " + values[i] + " NOT >= " + values[i - 1], values[i] >= values[i - 1]);
+			if(!allowEquals)
+				assertTrue("@ pos " + i + " : " + values[i] + " NOT != " + values[i - 1], values[i] != values[i - 1]);
+		}
+	}
+
+	private void assertDelta(long[] values, int start, int end, long maxDelta, long minDelta)
+	{
+		if(maxDelta < minDelta)
+		{
+			long tmp = maxDelta;
+			maxDelta = minDelta;
+			minDelta = tmp;
+		}
+		long delta;
+		for(int i = start + 1; i < end; i++)
+		{
+			delta = values[i] - values[i - 1];
+			assertTrue("@ pos " + i + " : " + delta + " NOT <= " + maxDelta, delta <= maxDelta);
+			assertTrue("@ pos " + i + " : " + delta + " NOT >= " + minDelta, delta >= minDelta);
+		}
+	}
+
+	private void assertDelta(long[] values, int start, int end, double maxDeltaPerc, double minDeltaPerc)
+	{
+		if(maxDeltaPerc < minDeltaPerc)
+		{
+			double tmp = maxDeltaPerc;
+			maxDeltaPerc = minDeltaPerc;
+			minDeltaPerc = tmp;
+		}
+		long delta;
+		double deltaPerc;
+		for(int i = start + 1; i < end; i++)
+		{
+			delta = values[i] - values[i - 1];
+			if(values[i] != 0)
+				deltaPerc = delta / (double) values[i];
+			else
+				deltaPerc = 0;
+			assertTrue("@ pos " + i + " : " + delta + " (" + deltaPerc * 100 + "%) NOT <= " + maxDeltaPerc * values[i] + " (" + maxDeltaPerc * 100
+					+ "%)", deltaPerc <= maxDeltaPerc);
+			assertTrue("@ pos " + i + " : " + delta + " (" + deltaPerc * 100 + "%) NOT >= " + minDeltaPerc * values[i] + " (" + minDeltaPerc * 100
+					+ "%)", deltaPerc >= minDeltaPerc);
+			// assertTrue("@ pos " + i + " : " + delta + " NOT <= " + maxDelta, delta <= maxDelta);
+			// assertTrue("@ pos " + i + " : " + delta + " NOT >= " + minDelta, delta >= minDelta);
+		}
 	}
 
 	private class MockCalculator implements Calculator
@@ -758,7 +973,7 @@ public class SolarSystemPopulationManagerImplTest extends
 		 * @see com.syncnapsis.universe.Calculator#calculateMinGap(java.util.List)
 		 */
 		@Override
-		public int calculateMinGap(List<Integer> coords)
+		public int calculateMinGap(List<Vector.Integer> coords)
 		{
 			return minGap;
 		}
@@ -845,7 +1060,8 @@ public class SolarSystemPopulationManagerImplTest extends
 			return 1000000L * infrastructure.getHabitability() * infrastructure.getSize();
 		}
 
-		/* (non-Javadoc)
+		/*
+		 * (non-Javadoc)
 		 * @see com.syncnapsis.universe.Calculator#calculateAttackStrength(double, long)
 		 */
 		@Override
@@ -854,7 +1070,8 @@ public class SolarSystemPopulationManagerImplTest extends
 			return 0;
 		}
 
-		/* (non-Javadoc)
+		/*
+		 * (non-Javadoc)
 		 * @see com.syncnapsis.universe.Calculator#calculateBuildStrength(double, long, long)
 		 */
 		@Override
@@ -863,7 +1080,8 @@ public class SolarSystemPopulationManagerImplTest extends
 			return 0;
 		}
 
-		/* (non-Javadoc)
+		/*
+		 * (non-Javadoc)
 		 * @see com.syncnapsis.universe.Calculator#calculateInfrastructureBuildInfluence(long, long)
 		 */
 		@Override
@@ -872,7 +1090,8 @@ public class SolarSystemPopulationManagerImplTest extends
 			return 0;
 		}
 
-		/* (non-Javadoc)
+		/*
+		 * (non-Javadoc)
 		 * @see com.syncnapsis.universe.Calculator#getSpeedFactor(int)
 		 */
 		@Override
