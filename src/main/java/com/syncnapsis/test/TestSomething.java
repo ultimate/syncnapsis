@@ -27,8 +27,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
 
-import com.syncnapsis.constants.UniverseConquestConstants;
-import com.syncnapsis.data.dao.mock.ParameterDaoMock;
 import com.syncnapsis.data.model.Galaxy;
 import com.syncnapsis.data.model.SolarSystem;
 import com.syncnapsis.data.model.SolarSystemInfrastructure;
