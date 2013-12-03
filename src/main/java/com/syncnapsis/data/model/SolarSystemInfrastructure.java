@@ -25,6 +25,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 
 import com.syncnapsis.data.model.base.ActivatableInstance;
 
@@ -80,6 +81,21 @@ public class SolarSystemInfrastructure extends ActivatableInstance<Long>
 	 * The populations present in this solar system (includes old populations as well)
 	 */
 	protected List<SolarSystemPopulation>	populations;
+
+	// transient properties
+
+	/**
+	 * The delta to apply to this infrastructure
+	 */
+	protected double						delta;
+	/**
+	 * Has this infrastructure been modified?
+	 */
+	protected boolean						modified;
+	/**
+	 * The temporal storage of the home population (not guaranteed to be set!)
+	 */
+	protected SolarSystemPopulation			homePopulation;
 
 	/**
 	 * The solar system this infrastructure is for
@@ -175,6 +191,39 @@ public class SolarSystemInfrastructure extends ActivatableInstance<Long>
 	}
 
 	/**
+	 * The delta to apply to this population
+	 * 
+	 * @return delta
+	 */
+	@Transient
+	public double getDelta()
+	{
+		return delta;
+	}
+
+	/**
+	 * Has this population been modified?
+	 * 
+	 * @return modified
+	 */
+	@Transient
+	public boolean isModified()
+	{
+		return modified;
+	}
+
+	/**
+	 * The temporal storage of the home population (not guaranteed to be set!)
+	 * 
+	 * @return homePopulation
+	 */
+	@Transient
+	public SolarSystemPopulation getHomePopulation()
+	{
+		return homePopulation;
+	}
+
+	/**
 	 * The solar system this infrastructure is for
 	 * 
 	 * @param solarSystem - the solar system
@@ -254,6 +303,36 @@ public class SolarSystemInfrastructure extends ActivatableInstance<Long>
 	public void setPopulations(List<SolarSystemPopulation> populations)
 	{
 		this.populations = populations;
+	}
+
+	/**
+	 * The delta to apply to this population
+	 * 
+	 * @param delta - the delta
+	 */
+	public void setDelta(double delta)
+	{
+		this.delta = delta;
+	}
+
+	/**
+	 * Has this population been modified?
+	 * 
+	 * @param modified - true or false
+	 */
+	public void setModified(boolean modified)
+	{
+		this.modified = modified;
+	}
+
+	/**
+	 * The temporal storage of the home population (not guaranteed to be set!)
+	 * 
+	 * @param homePopulation - the home population
+	 */
+	public void setHomePopulation(SolarSystemPopulation homePopulation)
+	{
+		this.homePopulation = homePopulation;
 	}
 
 	/*
