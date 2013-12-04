@@ -14,6 +14,7 @@
  */
 package com.syncnapsis.universe;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -25,7 +26,9 @@ import com.syncnapsis.data.model.Parameter;
 import com.syncnapsis.data.model.SolarSystemInfrastructure;
 import com.syncnapsis.data.model.SolarSystemPopulation;
 import com.syncnapsis.data.model.help.Vector;
+import com.syncnapsis.providers.TimeProvider;
 import com.syncnapsis.utils.MathUtil;
+import com.syncnapsis.utils.data.ExtendedRandom;
 
 /**
  * Universe conquest {@link Calculator} implementation
@@ -38,6 +41,8 @@ public class CalculatorImpl implements Calculator
 	 * Logger-Instance
 	 */
 	protected transient final Logger	logger						= LoggerFactory.getLogger(getClass());
+
+	protected TimeProvider				timeProvider;
 
 	/**
 	 * The number of digits to ceil the size to.
@@ -444,11 +449,220 @@ public class CalculatorImpl implements Calculator
 	@Override
 	public double calculateInfrastructureBuildInfluence(long population, long infrastructure)
 	{
+		if(population < 0)
+			logger.warn("population " + population + " < 0");
+		if(infrastructure < 0)
+			logger.warn("infrastructure " + infrastructure + " < 0");
+
 		if(infrastructure == 0)
 			return 0.5;
 		else if(population == 0)
 			return 1.5;
 		else
 			return (Math.log10((double) infrastructure / population) / getMaxPopulationExponent()) / 2 + 1;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see com.syncnapsis.universe.Calculator#calculateDeltas(com.syncnapsis.data.model.
+	 * SolarSystemInfrastructure, com.syncnapsis.utils.data.ExtendedRandom, long)
+	 */
+	@Override
+	public List<SolarSystemPopulation> calculateDeltas(SolarSystemInfrastructure infrastructure, ExtendedRandom random, long time)
+	{
+		double speedFactor = getSpeedFactor(infrastructure.getMatch().getSpeed());
+		long maxPopulation = getMaxPopulation(infrastructure);
+	
+		double prio_full = UniverseConquestConstants.PARAM_PRIORITY_FULL.asDouble();
+		double prio_high = UniverseConquestConstants.PARAM_PRIORITY_HIGH.asDouble();
+		double prio_medium = UniverseConquestConstants.PARAM_PRIORITY_MEDIUM.asDouble();
+		double prio_low = UniverseConquestConstants.PARAM_PRIORITY_LOW.asDouble();
+		double prio_none = UniverseConquestConstants.PARAM_PRIORITY_NONE.asDouble();
+		double randomization_attack = UniverseConquestConstants.PARAM_FACTOR_ATTACK_RANDOMIZE.asDouble();
+		double randomization_build = UniverseConquestConstants.PARAM_FACTOR_BUILD_RANDOMIZE.asDouble();
+		long norm_tick = UniverseConquestConstants.PARAM_NORM_TICK_LENGTH.asLong();
+	
+		List<SolarSystemPopulation> presentPopulations = new ArrayList<SolarSystemPopulation>(infrastructure.getPopulations().size());
+		// double[] deltaPop = new double[infrastructure.getPopulations().size()];
+		// double deltaInf = 0;
+		long totalPopulation = 0;
+		long otherPopulation;
+		double b, a, aPop;
+		long tick, tick2;
+		SolarSystemPopulation pop, pop2;
+	
+		// first loop
+		// - determine total present population
+		for(int i = 0; i < infrastructure.getPopulations().size(); i++)
+		{
+			pop = infrastructure.getPopulations().get(i);
+			if(pop.getPopulation() > 0 && pop.getColonizationDate().getTime() <= time)
+			{
+				totalPopulation += pop.getPopulation();
+				presentPopulations.add(pop);
+			}
+		}
+		logger.debug("time: " + time);
+		logger.debug("infrastructure: " + infrastructure.getInfrastructure());
+		logger.debug("total population: " + totalPopulation);
+		logger.debug("max population: " + getMaxPopulation(infrastructure));
+		logger.debug("home population: " + infrastructure.getHomePopulation().getId());
+		// second loop
+		// - determine build and attack strengths
+		// - calculate anti attack (current pop is attacker; attack strength is splitted)
+		for(int i = 0; i < presentPopulations.size(); i++)
+		{
+			pop = presentPopulations.get(i);
+			tick = time - pop.getLastUpdateDate().getTime();
+	
+			b = calculateBuildStrength(speedFactor, pop.getPopulation(), maxPopulation);
+			a = calculateAttackStrength(speedFactor, pop.getPopulation());
+	
+			logger.debug("cycle " + i + " population " + pop.getId() + " a = " + a + " b = " + b + " delta = " + pop.getDelta() + " deltaInf = "
+					+ infrastructure.getDelta());
+	
+			if(tick < norm_tick)
+			{
+				b *= tick / (double) norm_tick; // weight strength by tick-length
+				a *= tick / (double) norm_tick; // weight strength by tick-length
+			}
+			else if(tick > norm_tick)
+			{
+				logger.warn("cycle " + i + " population " + pop.getId() + " has not been updated since " + tick);
+			}
+			else
+			{
+				// tick = norm_tick
+			}
+	
+			logger.debug("cycle " + i + " population " + pop.getId() + " a = " + a + " b = " + b + " delta = " + pop.getDelta() + " deltaInf = "
+					+ infrastructure.getDelta());
+	
+			if(randomization_build > 0) // add random variation
+				b *= random.nextGaussian(1 - randomization_build, 1 + randomization_build);
+			if(randomization_attack > 0) // add random variation
+				a *= random.nextGaussian(1 - randomization_attack, 1 + randomization_attack);
+	
+			logger.debug("cycle " + i + " population " + pop.getId() + " a = " + a + " b = " + b + " delta = " + pop.getDelta() + " deltaInf = "
+					+ infrastructure.getDelta());
+	
+			if(pop == infrastructure.getHomePopulation())
+			{
+				logger.debug("cycle " + i + " population " + pop.getId() + " is home...");
+				b *= calculateInfrastructureBuildInfluence(pop.getPopulation(), infrastructure.getInfrastructure());
+				logger.debug("cycle " + i + " population " + pop.getId() + " a = " + a + " b = " + b + " delta = " + pop.getDelta() + " deltaInf = "
+						+ infrastructure.getDelta());
+				// split build strength by priority
+				switch(pop.getBuildPriority())
+				{
+					case infrastructure:
+						pop.setDelta(pop.getDelta() + b * prio_low);
+						infrastructure.setDelta(infrastructure.getDelta() + b * prio_high);
+						break;
+					case population:
+						pop.setDelta(pop.getDelta() + b * prio_high);
+						infrastructure.setDelta(infrastructure.getDelta() + b * prio_low);
+						break;
+					case balanced:
+					default:
+						pop.setDelta(pop.getDelta() + b * prio_medium);
+						infrastructure.setDelta(infrastructure.getDelta() + b * prio_medium);
+						break;
+	
+				}
+				// split attack strength by priority (pop only if home)
+				aPop = a * prio_full;
+				infrastructure.setDelta(infrastructure.getDelta() - a * prio_none);
+			}
+			else
+			{
+				// no build if not home
+				pop.setDelta(pop.getDelta() + b * prio_none);
+				infrastructure.setDelta(infrastructure.getDelta() + b * prio_none);
+	
+				// split attack strength by priority
+				switch(pop.getAttackPriority())
+				{
+					case infrastructure:
+						aPop = a * prio_low;
+						infrastructure.setDelta(infrastructure.getDelta() - a * prio_high);
+						break;
+					case population:
+						aPop = a * prio_high;
+						infrastructure.setDelta(infrastructure.getDelta() - a * prio_low);
+						break;
+					case balanced:
+					default:
+						aPop = a * prio_medium;
+						infrastructure.setDelta(infrastructure.getDelta() - a * prio_medium);
+						break;
+				}
+			}
+			logger.debug("cycle " + i + " population " + pop.getId() + " a = " + a + " b = " + b + " delta = " + pop.getDelta() + " deltaInf = "
+					+ infrastructure.getDelta());
+			// distribute attack strength on other populations
+			// (weighted by their amount of population)
+			otherPopulation = totalPopulation - pop.getPopulation();
+			if(otherPopulation > 0)
+			{
+				double delta2;
+				for(int j = 0; j < presentPopulations.size(); j++)
+				{
+					pop2 = presentPopulations.get(j);
+	
+					if(j != i)
+					{
+						tick2 = time - pop2.getLastUpdateDate().getTime();
+						tick2 = Math.min(tick, tick2);
+						delta2 = ((double) pop2.getPopulation() / otherPopulation) * aPop;
+						if(tick2 < norm_tick)
+						{
+							delta2 = tick2 / (double) norm_tick; // weight attack by tick length
+						}
+						else if(tick2 > norm_tick)
+						{
+							logger.warn("cycle " + i + " population " + pop.getId() + " has not been updated since " + tick2);
+						}
+						else
+						{
+							// tick2 = norm_tick
+						}
+						pop2.setDelta(pop2.getDelta() - delta2);
+					}
+	
+					logger.debug("cycle " + i + " population " + infrastructure.getPopulations().get(j).getId() + ": delta = " + pop2.getDelta());
+				}
+			}
+			else
+			{
+				logger.debug("cycle " + i + " population " + pop.getId() + " all alone: delta = " + pop.getDelta());
+			}
+		}
+		// third loop
+		// - apply delta
+		long delta;
+		for(int i = 0; i < presentPopulations.size(); i++)
+		{
+			pop = presentPopulations.get(i);
+			// round and trim to current population if necessary
+			delta = Math.round(pop.getDelta());
+			if(pop.getPopulation() + delta < 0)
+				delta = -pop.getPopulation();
+			logger.debug("population " + pop.getId() + " value = " + pop.getPopulation() + " delta = " + delta + " (" + pop.getDelta() + ")");
+			pop.setPopulation(pop.getPopulation() + delta);
+			pop.setModified(true);
+			pop.setDelta(0.0);
+		}
+	
+		// infrastructure update
+		delta = Math.round(infrastructure.getDelta());
+		if(infrastructure.getInfrastructure() + infrastructure.getDelta() < 0)
+			delta = -infrastructure.getInfrastructure();
+		infrastructure.setInfrastructure(infrastructure.getInfrastructure() + delta);
+		infrastructure.setModified(true);
+		infrastructure.setDelta(0.0);
+	
+		// return modified list
+		return infrastructure.getPopulations();
 	}
 }

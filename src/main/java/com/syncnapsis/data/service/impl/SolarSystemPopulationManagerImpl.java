@@ -22,7 +22,6 @@ import java.util.List;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.util.Assert;
 
-import com.syncnapsis.constants.UniverseConquestConstants;
 import com.syncnapsis.data.dao.SolarSystemPopulationDao;
 import com.syncnapsis.data.model.Participant;
 import com.syncnapsis.data.model.SolarSystemInfrastructure;
@@ -218,7 +217,7 @@ public class SolarSystemPopulationManagerImpl extends GenericManagerImpl<SolarSy
 				throw new IllegalArgumentException("exodus requires all population to be moved away!");
 
 			// check if exodus is allowed (only if home population)
-			SolarSystemPopulation homePopulation = getHomePopulation(origin.getInfrastructure());
+			SolarSystemPopulation homePopulation = getHomePopulation(origin.getInfrastructure(), now);
 			if(!origin.getId().equals(homePopulation.getId()))
 				throw new IllegalArgumentException("exodus only allowed for home population!");
 		}
@@ -412,19 +411,19 @@ public class SolarSystemPopulationManagerImpl extends GenericManagerImpl<SolarSy
 	 * (non-Javadoc)
 	 * @see
 	 * com.syncnapsis.data.service.SolarSystemPopulationManager#getHomePopulation(com.syncnapsis
-	 * .data.model.SolarSystemInfrastructure)
+	 * .data.model.SolarSystemInfrastructure, java.util.Date)
 	 */
 	@Override
-	public SolarSystemPopulation getHomePopulation(SolarSystemInfrastructure infrastructure)
+	public SolarSystemPopulation getHomePopulation(SolarSystemInfrastructure infrastructure, Date time)
 	{
-		Date now = new Date(securityManager.getTimeProvider().get());
-
 		SolarSystemPopulation homePop = null;
 		for(SolarSystemPopulation p : infrastructure.getPopulations())
 		{
 			if(!p.isActivated())
 				continue;
-			if(p.getColonizationDate().after(now))
+			if(p.getColonizationDate().after(time))
+				continue;
+			if(p.getDestructionDate() != null && !p.getDestructionDate().after(time))
 				continue;
 			if(homePop == null || p.getColonizationDate().before(homePop.getColonizationDate()))
 				homePop = p;
@@ -493,169 +492,30 @@ public class SolarSystemPopulationManagerImpl extends GenericManagerImpl<SolarSy
 	@Override
 	public List<SolarSystemPopulation> simulate(SolarSystemInfrastructure infrastructure, ExtendedRandom random)
 	{
-		SolarSystemPopulation homePopulation = getHomePopulation(infrastructure);
-
-		long now = securityManager.getTimeProvider().get();
-
-		double speedFactor = calculator.getSpeedFactor(infrastructure.getMatch().getSpeed());
-		long maxPopulation = calculator.getMaxPopulation(infrastructure);
-
-		double prio_full = UniverseConquestConstants.PARAM_PRIORITY_FULL.asDouble();
-		double prio_high = UniverseConquestConstants.PARAM_PRIORITY_HIGH.asDouble();
-		double prio_medium = UniverseConquestConstants.PARAM_PRIORITY_MEDIUM.asDouble();
-		double prio_low = UniverseConquestConstants.PARAM_PRIORITY_LOW.asDouble();
-		double prio_none = UniverseConquestConstants.PARAM_PRIORITY_NONE.asDouble();
-		double randomization_attack = UniverseConquestConstants.PARAM_FACTOR_ATTACK_RANDOMIZE.asDouble();
-		double randomization_build = UniverseConquestConstants.PARAM_FACTOR_BUILD_RANDOMIZE.asDouble();
-		long norm_tick = UniverseConquestConstants.PARAM_NORM_TICK_LENGTH.asLong();
-
-		List<SolarSystemPopulation> presentPopulations = new ArrayList<SolarSystemPopulation>(infrastructure.getPopulations().size());
-		double[] deltaPop = new double[infrastructure.getPopulations().size()];
-		double deltaInf = 0;
-		long totalPopulation = 0;
-		long otherPopulation;
-		double b, a, aPop;
-		long tick, tick2;
-		SolarSystemPopulation pop, pop2;
-
-
-		// first loop
-		// - determine total present population
-		for(int i = 0; i < infrastructure.getPopulations().size(); i++)
+		// merge populations before calculating deltas
+		merge(infrastructure);
+		// get the current time
+		Date now = new Date(securityManager.getTimeProvider().get());
+		// determine the home population and set it temporarily for the infrastructure
+		infrastructure.setHomePopulation(getHomePopulation(infrastructure, now));
+		// calculate the deltas
+		List<SolarSystemPopulation> populationsPresent = calculator.calculateDeltas(infrastructure, random, now.getTime());
+		// save updated populations
+		for(SolarSystemPopulation pop : populationsPresent)
 		{
-			pop = infrastructure.getPopulations().get(i);
-			if(pop.getPopulation() > 0 && pop.getColonizationDate().getTime() <= now)
+			if(pop.isModified())
 			{
-				totalPopulation += pop.getPopulation();
-				presentPopulations.add(pop);
+				pop = save(pop);
+				pop.setDelta(0.0);
+				pop.setModified(false);
 			}
 		}
-		logger.debug("time: " + now);
-		logger.debug("total population: " + totalPopulation);
-		logger.debug("max population: " + calculator.getMaxPopulation(infrastructure));
-		logger.debug("home population: " + homePopulation.getId());
-		// second loop
-		// - determine build and attack strengths
-		// - calculate anti attack (current pop is attacker; attack strength is splitted)
-		for(int i = 0; i < presentPopulations.size(); i++)
-		{
-			pop = presentPopulations.get(i);
-			tick = now - pop.getLastUpdateDate().getTime();
-
-			b = calculator.calculateBuildStrength(speedFactor, pop.getPopulation(), maxPopulation);
-			a = calculator.calculateAttackStrength(speedFactor, pop.getPopulation());
-
-			logger.debug("cycle " + i + " population " + pop.getId() + " a = " + a + " b = " + b + " delta = " + deltaPop[i] + " deltaInf = "
-					+ deltaInf);
-
-			b *= tick / (double) norm_tick; // weight strength by tick-length
-			a *= tick / (double) norm_tick; // weight strength by tick-length
-
-			logger.debug("cycle " + i + " population " + pop.getId() + " a = " + a + " b = " + b + " delta = " + deltaPop[i] + " deltaInf = "
-					+ deltaInf);
-
-			if(randomization_build > 0) // add random variation
-				b *= random.nextGaussian(1 - randomization_build, 1 + randomization_build);
-			if(randomization_attack > 0) // add random variation
-				a *= random.nextGaussian(1 - randomization_attack, 1 + randomization_attack);
-
-			logger.debug("cycle " + i + " population " + pop.getId() + " a = " + a + " b = " + b + " delta = " + deltaPop[i] + " deltaInf = "
-					+ deltaInf);
-
-			if(pop == homePopulation)
-			{
-				logger.debug("cycle " + i + " population " + pop.getId() + " is home...");
-				b *= calculator.calculateInfrastructureBuildInfluence(pop.getPopulation(), infrastructure.getInfrastructure());
-				logger.debug("cycle " + i + " population " + pop.getId() + " a = " + a + " b = " + b + " delta = " + deltaPop[i] + " deltaInf = "
-						+ deltaInf);
-				// split build strength by priority
-				switch(pop.getBuildPriority())
-				{
-					case infrastructure:
-						deltaPop[i] += b * prio_low;
-						deltaInf += b * prio_high;
-						break;
-					case population:
-						deltaPop[i] += b * prio_high;
-						deltaInf += b * prio_low;
-						break;
-					case balanced:
-					default:
-						deltaPop[i] += b * prio_medium;
-						deltaInf += b * prio_medium;
-						break;
-
-				}
-				// split attack strength by priority (pop only if home)
-				aPop = a * prio_full;
-				deltaInf -= a * prio_none;
-			}
-			else
-			{
-				// no build if not home
-				deltaPop[i] += b * prio_none;
-				deltaInf += b * prio_none;
-				// split attack strength by priority
-				switch(pop.getAttackPriority())
-				{
-					case infrastructure:
-						aPop = a * prio_low;
-						deltaInf -= a * prio_high;
-						break;
-					case population:
-						aPop = a * prio_high;
-						deltaInf -= a * prio_low;
-						break;
-					case balanced:
-					default:
-						aPop = a * prio_medium;
-						deltaInf -= a * prio_medium;
-						break;
-				}
-			}
-			logger.debug("cycle " + i + " population " + pop.getId() + " a = " + a + " b = " + b + " delta = " + deltaPop[i] + " deltaInf = "
-					+ deltaInf);
-			// distribute attack strength on other populations
-			// (weighted by their amount of population)
-			otherPopulation = totalPopulation - pop.getPopulation();
-			if(otherPopulation > 0)
-			{
-				for(int j = 0; j < presentPopulations.size(); j++)
-				{
-
-					if(j != i)
-					{
-						pop2 = presentPopulations.get(j);
-						tick2 = now - pop2.getLastUpdateDate().getTime();
-						deltaPop[j] -= ((double) pop2.getPopulation() / otherPopulation) * aPop * Math.min(tick, tick2) / norm_tick;
-					}
-
-					logger.debug("cycle " + i + " population " + infrastructure.getPopulations().get(j).getId() + ": delta = " + deltaPop[j]);
-				}
-			}
-			else
-			{
-				logger.debug("cycle " + i + " population " + pop.getId() + " all alone: delta = " + deltaPop[i]);
-			}
-		}
-		// third loop
-		// - apply delta
-		long delta;
-		for(int i = 0; i < presentPopulations.size(); i++)
-		{
-			pop = presentPopulations.get(i);
-			// round and trim to current population if necessary
-			delta = Math.round(deltaPop[i]);
-			if(pop.getPopulation() + delta < 0)
-				delta = -pop.getPopulation();
-			logger.debug("population " + pop.getId() + " value = " + pop.getPopulation() + " delta = " + delta + " (" + deltaPop[i] + ")");
-			pop.setPopulation(pop.getPopulation() + delta);
-			pop.setModified(true);
-		}
-		// infrastructure update
-		infrastructure.setInfrastructure(infrastructure.getInfrastructure() + Math.round(deltaInf));
-
-		// return modified list
+		// save infrastructure
+		infrastructure = solarSystemInfrastructureManager.save(infrastructure);
+		infrastructure.setDelta(0.0);
+		infrastructure.setModified(false);
+		
+		// return populations
 		return infrastructure.getPopulations();
 	}
 }

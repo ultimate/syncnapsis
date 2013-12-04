@@ -117,13 +117,15 @@ public interface SolarSystemPopulationManager extends GenericManager<SolarSystem
 
 	/**
 	 * Get the population with the earliest arrival/colonization date that is still present at the
-	 * given {@link SolarSystemInfrastructure} and therefore has the "home-bonus"
+	 * given {@link SolarSystemInfrastructure} and therefore has the "home-bonus" for the give point
+	 * in time.
 	 * 
 	 * @param infrastructure - the infrastructure to scan
+	 * @param time - the time to calculate the home population for
 	 * @return the "oldest" population for this system or null if there are currently no populations
 	 *         present
 	 */
-	public SolarSystemPopulation getHomePopulation(SolarSystemInfrastructure infrastructure);
+	public SolarSystemPopulation getHomePopulation(SolarSystemInfrastructure infrastructure, Date time);
 
 	/**
 	 * Create a new SolarSystemPopulation for a start system selected for the given participant (and
@@ -144,9 +146,14 @@ public interface SolarSystemPopulationManager extends GenericManager<SolarSystem
 
 	/**
 	 * Simulate population changes due to building, population growths and attacks.<br>
-	 * <b>Note: assure to merge populations before simulating to ensure correct calculation!</b>
+	 * This method includes all operations necessary to be performed for a tick, in special:
+	 * <ul>
+	 * <li>{@link SolarSystemPopulationManager#merge(SolarSystemInfrastructure)}</li>
+	 * <li>{@link Calculator#simulate(SolarSystemInfrastructure, ExtendedRandom)}</li>
+	 * <li>saving all updated entities</li>
+	 * </ul>
 	 * 
-	 * @param infrastructure - the infrastructure which's populations to merge
+	 * @param infrastructure - the infrastructure which's populations to merge and simulate
 	 * @param random - the random number generator used for randomization
 	 * @return the list of simulated populations
 	 */

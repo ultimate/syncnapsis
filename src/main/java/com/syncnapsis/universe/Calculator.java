@@ -20,6 +20,7 @@ import com.syncnapsis.data.model.Galaxy;
 import com.syncnapsis.data.model.SolarSystemInfrastructure;
 import com.syncnapsis.data.model.SolarSystemPopulation;
 import com.syncnapsis.data.model.help.Vector;
+import com.syncnapsis.utils.data.ExtendedRandom;
 
 /**
  * Interface for the calculator service containing the mathematical game logic.
@@ -166,4 +167,15 @@ public interface Calculator
 	 * @return the speed factor
 	 */
 	public double getSpeedFactor(int speed);
+
+	/**
+	 * Calculate population changes due to building, population growths and attacks.<br>
+	 * <b>Note: assure to merge populations before simulating to ensure correct calculation!</b>
+	 * 
+	 * @param infrastructure - the infrastructure which's populations to simulate
+	 * @param random - the random number generator used for randomization
+	 * @param time - the current time to calculate the deltas for
+	 * @return the list of populations currently present in the solar system
+	 */
+	public List<SolarSystemPopulation> calculateDeltas(SolarSystemInfrastructure infrastructure, ExtendedRandom random, long time);
 }

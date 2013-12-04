@@ -711,7 +711,7 @@ public class SolarSystemPopulationManagerImplTest extends
 
 		Collections.shuffle(infrastructure.getPopulations());
 
-		assertEquals(5L, (long) mockManager.getHomePopulation(infrastructure).getId());
+		assertEquals(5L, (long) mockManager.getHomePopulation(infrastructure, new Date(1005)).getId());
 	}
 
 	@TestCoversMethods("simulate")
@@ -818,10 +818,7 @@ public class SolarSystemPopulationManagerImplTest extends
 				pop33[i] = population33.getPopulation();
 				pop3X[i] = population3X.getPopulation();
 
-				mockManager.merge(infrastructure);
 				mockManager.simulate(infrastructure, random);
-
-				// TODO set last updated date
 			}
 
 			// check result for plausibility
@@ -1098,6 +1095,17 @@ public class SolarSystemPopulationManagerImplTest extends
 		public double getSpeedFactor(int speed)
 		{
 			return 0;
+		}
+
+		/*
+		 * (non-Javadoc)
+		 * @see com.syncnapsis.universe.Calculator#calculateDeltas(com.syncnapsis.data.model.
+		 * SolarSystemInfrastructure, com.syncnapsis.utils.data.ExtendedRandom, long)
+		 */
+		@Override
+		public List<SolarSystemPopulation> calculateDeltas(SolarSystemInfrastructure infrastructure, ExtendedRandom random, long time)
+		{
+			return infrastructure.getPopulations();
 		}
 	}
 }

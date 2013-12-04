@@ -479,4 +479,9 @@ public class CalculatorImplTest extends LoggerTestCase
 
 		assertEquals(0.5, calculator.calculateInfrastructureBuildInfluence(maxPop, 0));
 	}
+	
+	public void testCalculateDeltas() throws Exception
+	{
+		
+	}
 }
