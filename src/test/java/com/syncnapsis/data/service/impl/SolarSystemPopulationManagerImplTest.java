@@ -52,7 +52,7 @@ import com.syncnapsis.utils.data.ExtendedRandom;
 public class SolarSystemPopulationManagerImplTest extends
 		GenericManagerImplTestCase<SolarSystemPopulation, Long, SolarSystemPopulationManager, SolarSystemPopulationDao>
 {
-	private SolarSystemInfrastructureManager	solarSystemInfrastructureManager;
+	private SolarSystemInfrastructureManager	mockSolarSystemInfrastructureManager;
 	private BaseGameManager						securityManager;
 	private Calculator							calculator;
 	private final long							referenceTime	= 1234;
@@ -66,7 +66,10 @@ public class SolarSystemPopulationManagerImplTest extends
 		setEntity(new SolarSystemPopulation());
 		setDaoClass(SolarSystemPopulationDao.class);
 		setMockDao(mockContext.mock(SolarSystemPopulationDao.class));
-		setMockManager(new SolarSystemPopulationManagerImpl(mockDao, solarSystemInfrastructureManager));
+
+		mockSolarSystemInfrastructureManager = mockContext.mock(SolarSystemInfrastructureManager.class);
+
+		setMockManager(new SolarSystemPopulationManagerImpl(mockDao, mockSolarSystemInfrastructureManager));
 
 		BaseGameManager securityManager = new BaseGameManager(this.securityManager);
 		securityManager.setTimeProvider(new MockTimeProvider(referenceTime));
@@ -90,7 +93,8 @@ public class SolarSystemPopulationManagerImplTest extends
 
 	public void testSpinoff() throws Exception
 	{
-		final SolarSystemInfrastructureManager mockSolarSystemInfrastructureManager = mockContext.mock(SolarSystemInfrastructureManager.class);
+		// final SolarSystemInfrastructureManager mockSolarSystemInfrastructureManager =
+		// mockContext.mock(SolarSystemInfrastructureManager.class);
 		SolarSystemPopulationManagerImpl mockManager = new SolarSystemPopulationManagerImpl(mockDao, mockSolarSystemInfrastructureManager);
 		mockManager.setSecurityManager(((SolarSystemPopulationManagerImpl) this.mockManager).getSecurityManager());
 		MockCalculator mockCalculator = new MockCalculator();
@@ -223,7 +227,8 @@ public class SolarSystemPopulationManagerImplTest extends
 
 	public void testResettle() throws Exception
 	{
-		final SolarSystemInfrastructureManager mockSolarSystemInfrastructureManager = mockContext.mock(SolarSystemInfrastructureManager.class);
+		// final SolarSystemInfrastructureManager mockSolarSystemInfrastructureManager =
+		// mockContext.mock(SolarSystemInfrastructureManager.class);
 		SolarSystemPopulationManagerImpl mockManager = new SolarSystemPopulationManagerImpl(mockDao, mockSolarSystemInfrastructureManager);
 		mockManager.setSecurityManager(((SolarSystemPopulationManagerImpl) this.mockManager).getSecurityManager());
 		MockCalculator mockCalculator = new MockCalculator();
@@ -469,7 +474,7 @@ public class SolarSystemPopulationManagerImplTest extends
 
 		Collections.shuffle(infrastructure.getPopulations());
 
-		mockManager.merge(infrastructure);
+		mockManager.merge(infrastructure, new Date(timeProvider.get()));
 		mockContext.assertIsSatisfied();
 
 		Collections.sort(infrastructure.getPopulations(), new Comparator<SolarSystemPopulation>() {
@@ -795,6 +800,12 @@ public class SolarSystemPopulationManagerImplTest extends
 					will(new ReturnArgAction());
 				}
 			});
+			mockContext.checking(new Expectations() {
+				{
+					allowing(mockSolarSystemInfrastructureManager).save(with(any(SolarSystemInfrastructure.class)));
+					will(new ReturnArgAction());
+				}
+			});
 
 			// simulate 50 ticks
 			int ticks = 50;
@@ -1100,10 +1111,10 @@ public class SolarSystemPopulationManagerImplTest extends
 		/*
 		 * (non-Javadoc)
 		 * @see com.syncnapsis.universe.Calculator#calculateDeltas(com.syncnapsis.data.model.
-		 * SolarSystemInfrastructure, com.syncnapsis.utils.data.ExtendedRandom, long)
+		 * SolarSystemInfrastructure, com.syncnapsis.utils.data.ExtendedRandom, java.util.Date)
 		 */
 		@Override
-		public List<SolarSystemPopulation> calculateDeltas(SolarSystemInfrastructure infrastructure, ExtendedRandom random, long time)
+		public List<SolarSystemPopulation> calculateDeltas(SolarSystemInfrastructure infrastructure, ExtendedRandom random, Date time)
 		{
 			return infrastructure.getPopulations();
 		}

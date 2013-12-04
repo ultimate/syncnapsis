@@ -14,6 +14,7 @@
  */
 package com.syncnapsis.universe;
 
+import java.util.Date;
 import java.util.List;
 
 import com.syncnapsis.data.model.Galaxy;
@@ -177,5 +178,5 @@ public interface Calculator
 	 * @param time - the current time to calculate the deltas for
 	 * @return the list of populations currently present in the solar system
 	 */
-	public List<SolarSystemPopulation> calculateDeltas(SolarSystemInfrastructure infrastructure, ExtendedRandom random, long time);
+	public List<SolarSystemPopulation> calculateDeltas(SolarSystemInfrastructure infrastructure, ExtendedRandom random, Date time);
 }

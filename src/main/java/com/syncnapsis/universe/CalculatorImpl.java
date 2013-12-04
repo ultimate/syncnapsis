@@ -15,6 +15,7 @@
 package com.syncnapsis.universe;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -465,14 +466,14 @@ public class CalculatorImpl implements Calculator
 	/*
 	 * (non-Javadoc)
 	 * @see com.syncnapsis.universe.Calculator#calculateDeltas(com.syncnapsis.data.model.
-	 * SolarSystemInfrastructure, com.syncnapsis.utils.data.ExtendedRandom, long)
+	 * SolarSystemInfrastructure, com.syncnapsis.utils.data.ExtendedRandom, java.util.Date)
 	 */
 	@Override
-	public List<SolarSystemPopulation> calculateDeltas(SolarSystemInfrastructure infrastructure, ExtendedRandom random, long time)
+	public List<SolarSystemPopulation> calculateDeltas(SolarSystemInfrastructure infrastructure, ExtendedRandom random, Date time)
 	{
 		double speedFactor = getSpeedFactor(infrastructure.getMatch().getSpeed());
 		long maxPopulation = getMaxPopulation(infrastructure);
-	
+
 		double prio_full = UniverseConquestConstants.PARAM_PRIORITY_FULL.asDouble();
 		double prio_high = UniverseConquestConstants.PARAM_PRIORITY_HIGH.asDouble();
 		double prio_medium = UniverseConquestConstants.PARAM_PRIORITY_MEDIUM.asDouble();
@@ -481,7 +482,7 @@ public class CalculatorImpl implements Calculator
 		double randomization_attack = UniverseConquestConstants.PARAM_FACTOR_ATTACK_RANDOMIZE.asDouble();
 		double randomization_build = UniverseConquestConstants.PARAM_FACTOR_BUILD_RANDOMIZE.asDouble();
 		long norm_tick = UniverseConquestConstants.PARAM_NORM_TICK_LENGTH.asLong();
-	
+
 		List<SolarSystemPopulation> presentPopulations = new ArrayList<SolarSystemPopulation>(infrastructure.getPopulations().size());
 		// double[] deltaPop = new double[infrastructure.getPopulations().size()];
 		// double deltaInf = 0;
@@ -490,13 +491,13 @@ public class CalculatorImpl implements Calculator
 		double b, a, aPop;
 		long tick, tick2;
 		SolarSystemPopulation pop, pop2;
-	
+
 		// first loop
 		// - determine total present population
 		for(int i = 0; i < infrastructure.getPopulations().size(); i++)
 		{
 			pop = infrastructure.getPopulations().get(i);
-			if(pop.getPopulation() > 0 && pop.getColonizationDate().getTime() <= time)
+			if(pop.getPopulation() > 0 && pop.isPresent(time))
 			{
 				totalPopulation += pop.getPopulation();
 				presentPopulations.add(pop);
@@ -513,14 +514,14 @@ public class CalculatorImpl implements Calculator
 		for(int i = 0; i < presentPopulations.size(); i++)
 		{
 			pop = presentPopulations.get(i);
-			tick = time - pop.getLastUpdateDate().getTime();
-	
+			tick = time.getTime() - pop.getLastUpdateDate().getTime();
+
 			b = calculateBuildStrength(speedFactor, pop.getPopulation(), maxPopulation);
 			a = calculateAttackStrength(speedFactor, pop.getPopulation());
-	
+
 			logger.debug("cycle " + i + " population " + pop.getId() + " a = " + a + " b = " + b + " delta = " + pop.getDelta() + " deltaInf = "
 					+ infrastructure.getDelta());
-	
+
 			if(tick < norm_tick)
 			{
 				b *= tick / (double) norm_tick; // weight strength by tick-length
@@ -534,18 +535,21 @@ public class CalculatorImpl implements Calculator
 			{
 				// tick = norm_tick
 			}
-	
+
 			logger.debug("cycle " + i + " population " + pop.getId() + " a = " + a + " b = " + b + " delta = " + pop.getDelta() + " deltaInf = "
 					+ infrastructure.getDelta());
-	
-			if(randomization_build > 0) // add random variation
-				b *= random.nextGaussian(1 - randomization_build, 1 + randomization_build);
-			if(randomization_attack > 0) // add random variation
-				a *= random.nextGaussian(1 - randomization_attack, 1 + randomization_attack);
-	
+
+			if(random != null)
+			{
+				if(randomization_build > 0) // add random variation
+					b *= random.nextGaussian(1 - randomization_build, 1 + randomization_build);
+				if(randomization_attack > 0) // add random variation
+					a *= random.nextGaussian(1 - randomization_attack, 1 + randomization_attack);
+			}
+
 			logger.debug("cycle " + i + " population " + pop.getId() + " a = " + a + " b = " + b + " delta = " + pop.getDelta() + " deltaInf = "
 					+ infrastructure.getDelta());
-	
+
 			if(pop == infrastructure.getHomePopulation())
 			{
 				logger.debug("cycle " + i + " population " + pop.getId() + " is home...");
@@ -568,7 +572,7 @@ public class CalculatorImpl implements Calculator
 						pop.setDelta(pop.getDelta() + b * prio_medium);
 						infrastructure.setDelta(infrastructure.getDelta() + b * prio_medium);
 						break;
-	
+
 				}
 				// split attack strength by priority (pop only if home)
 				aPop = a * prio_full;
@@ -579,7 +583,7 @@ public class CalculatorImpl implements Calculator
 				// no build if not home
 				pop.setDelta(pop.getDelta() + b * prio_none);
 				infrastructure.setDelta(infrastructure.getDelta() + b * prio_none);
-	
+
 				// split attack strength by priority
 				switch(pop.getAttackPriority())
 				{
@@ -609,10 +613,10 @@ public class CalculatorImpl implements Calculator
 				for(int j = 0; j < presentPopulations.size(); j++)
 				{
 					pop2 = presentPopulations.get(j);
-	
+
 					if(j != i)
 					{
-						tick2 = time - pop2.getLastUpdateDate().getTime();
+						tick2 = time.getTime() - pop2.getLastUpdateDate().getTime();
 						tick2 = Math.min(tick, tick2);
 						delta2 = ((double) pop2.getPopulation() / otherPopulation) * aPop;
 						if(tick2 < norm_tick)
@@ -629,7 +633,7 @@ public class CalculatorImpl implements Calculator
 						}
 						pop2.setDelta(pop2.getDelta() - delta2);
 					}
-	
+
 					logger.debug("cycle " + i + " population " + infrastructure.getPopulations().get(j).getId() + ": delta = " + pop2.getDelta());
 				}
 			}
@@ -653,7 +657,7 @@ public class CalculatorImpl implements Calculator
 			pop.setModified(true);
 			pop.setDelta(0.0);
 		}
-	
+
 		// infrastructure update
 		delta = Math.round(infrastructure.getDelta());
 		if(infrastructure.getInfrastructure() + infrastructure.getDelta() < 0)
@@ -661,7 +665,7 @@ public class CalculatorImpl implements Calculator
 		infrastructure.setInfrastructure(infrastructure.getInfrastructure() + delta);
 		infrastructure.setModified(true);
 		infrastructure.setDelta(0.0);
-	
+
 		// return modified list
 		return infrastructure.getPopulations();
 	}

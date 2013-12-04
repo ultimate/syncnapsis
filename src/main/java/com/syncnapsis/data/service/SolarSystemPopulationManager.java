@@ -22,6 +22,7 @@ import com.syncnapsis.data.model.SolarSystemInfrastructure;
 import com.syncnapsis.data.model.SolarSystemPopulation;
 import com.syncnapsis.enums.EnumDestructionType;
 import com.syncnapsis.enums.EnumPopulationPriority;
+import com.syncnapsis.universe.Calculator;
 import com.syncnapsis.utils.data.ExtendedRandom;
 
 /**
@@ -102,9 +103,10 @@ public interface SolarSystemPopulationManager extends GenericManager<SolarSystem
 	 * <b>Note: populations and infrastructure <u>won't be saved</u> during this process!</b>
 	 * 
 	 * @param infrastructure - the infrastructure which's populations to merge
+	 * @param time - the current time
 	 * @return the list of merged populations
 	 */
-	public List<SolarSystemPopulation> merge(SolarSystemInfrastructure infrastructure);
+	public List<SolarSystemPopulation> merge(SolarSystemInfrastructure infrastructure, Date time);
 
 	/**
 	 * Update the travel speed of a population

@@ -283,18 +283,17 @@ public class SolarSystemPopulationManagerImpl extends GenericManagerImpl<SolarSy
 	 * (non-Javadoc)
 	 * @see
 	 * com.syncnapsis.data.service.SolarSystemPopulationManager#merge(com.syncnapsis.data.model.
-	 * SolarSystemInfrastructure)
+	 * SolarSystemInfrastructure, java.util.Date)
 	 */
 	@Override
-	public List<SolarSystemPopulation> merge(SolarSystemInfrastructure infrastructure)
+	public List<SolarSystemPopulation> merge(SolarSystemInfrastructure infrastructure, Date time)
 	{
-		long now = securityManager.getTimeProvider().get();
-
 		List<SolarSystemPopulation> populations = new ArrayList<SolarSystemPopulation>(infrastructure.getPopulations().size());
 		for(SolarSystemPopulation p : infrastructure.getPopulations())
 		{
-			if(p.isActivated() && p.getColonizationDate().getTime() <= now)
-				populations.add(p);
+			if(!p.isPresent(time))
+				continue;
+			populations.add(p);
 		}
 
 		// sort by colonization date
@@ -347,8 +346,9 @@ public class SolarSystemPopulationManagerImpl extends GenericManagerImpl<SolarSy
 			// save(newerPop);
 		}
 
+		// infrastructure has not been changed
 		// infrastructure.setLastUpdateDate(now);
-		infrastructure = solarSystemInfrastructureManager.save(infrastructure);
+		// infrastructure = solarSystemInfrastructureManager.save(infrastructure);
 
 		return infrastructure.getPopulations();
 	}
@@ -419,11 +419,7 @@ public class SolarSystemPopulationManagerImpl extends GenericManagerImpl<SolarSy
 		SolarSystemPopulation homePop = null;
 		for(SolarSystemPopulation p : infrastructure.getPopulations())
 		{
-			if(!p.isActivated())
-				continue;
-			if(p.getColonizationDate().after(time))
-				continue;
-			if(p.getDestructionDate() != null && !p.getDestructionDate().after(time))
+			if(!p.isPresent(time))
 				continue;
 			if(homePop == null || p.getColonizationDate().before(homePop.getColonizationDate()))
 				homePop = p;
@@ -492,19 +488,21 @@ public class SolarSystemPopulationManagerImpl extends GenericManagerImpl<SolarSy
 	@Override
 	public List<SolarSystemPopulation> simulate(SolarSystemInfrastructure infrastructure, ExtendedRandom random)
 	{
-		// merge populations before calculating deltas
-		merge(infrastructure);
 		// get the current time
 		Date now = new Date(securityManager.getTimeProvider().get());
+		// merge populations before calculating deltas
+		merge(infrastructure, now);
 		// determine the home population and set it temporarily for the infrastructure
 		infrastructure.setHomePopulation(getHomePopulation(infrastructure, now));
 		// calculate the deltas
-		List<SolarSystemPopulation> populationsPresent = calculator.calculateDeltas(infrastructure, random, now.getTime());
+		List<SolarSystemPopulation> populationsPresent = calculator.calculateDeltas(infrastructure, random, now);
 		// save updated populations
 		for(SolarSystemPopulation pop : populationsPresent)
 		{
 			if(pop.isModified())
 			{
+				if(pop.getPopulation() == 0)
+					destroy(pop, EnumDestructionType.destroyed, now);
 				pop = save(pop);
 				pop.setDelta(0.0);
 				pop.setModified(false);
@@ -514,7 +512,7 @@ public class SolarSystemPopulationManagerImpl extends GenericManagerImpl<SolarSy
 		infrastructure = solarSystemInfrastructureManager.save(infrastructure);
 		infrastructure.setDelta(0.0);
 		infrastructure.setModified(false);
-		
+
 		// return populations
 		return infrastructure.getPopulations();
 	}

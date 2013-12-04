@@ -202,6 +202,7 @@ public class SimulationServlet extends ServletEngine
 	{
 		Map<String, Long[]> result = new HashMap<String, Long[]>();
 		long tick = 0;
+		Date tickDate;
 		int ticks = (int) (duration / tickLength + 1);
 
 		result.put(RESULT_TIME, new Long[ticks]);
@@ -252,8 +253,13 @@ public class SimulationServlet extends ServletEngine
 				}
 			}
 
-			mockSolarSystemPopulationManager.merge(scenario);
-			mockSolarSystemPopulationManager.simulate(scenario, random);
+			// do the operations contained in SolarSystemPopulationManager#simulate
+			// but without the save
+			tickDate = new Date(tick);
+			mockSolarSystemPopulationManager.merge(scenario, tickDate);
+			scenario.setHomePopulation(mockSolarSystemPopulationManager.getHomePopulation(scenario, tickDate));
+			calculator.calculateDeltas(scenario, random, tickDate);
+			
 			tick += tickLength;
 		}
 
