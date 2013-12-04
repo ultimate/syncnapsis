@@ -366,6 +366,24 @@ public class SolarSystemPopulation extends ActivatableInstance<Long>
 	}
 
 	/**
+	 * Check wether a population is present at the given point in time.<br>
+	 * 
+	 * @param time - the point in time
+	 * @return true or false
+	 */
+	@Transient
+	public boolean isPresent(Date time)
+	{
+		if(!isActivated())
+			return false;
+		if(getColonizationDate().after(time))
+			return false;
+		if(getDestructionDate() != null && !getDestructionDate().after(time))
+			return false;
+		return true;
+	}
+
+	/**
 	 * The solar system this population "lives" in.<br>
 	 * The solar system is associated via it's match-specific infrastructure-representation.
 	 * 

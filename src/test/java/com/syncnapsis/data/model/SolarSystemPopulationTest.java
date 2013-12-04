@@ -49,4 +49,30 @@ public class SolarSystemPopulationTest extends LoggerTestCase
 		assertSame(p2, list.get(1));
 		assertSame(p3, list.get(2));
 	}
+
+	public void testIsPresent() throws Exception
+	{
+		long timeDelta = 1000;
+		SolarSystemPopulation p = new SolarSystemPopulation();
+		p.setColonizationDate(new Date(-timeDelta));
+		p.setDestructionDate(new Date(+timeDelta));
+
+		assertFalse(p.isPresent(new Date(-2 * timeDelta)));
+		assertFalse(p.isPresent(new Date(-1 * timeDelta-1)));
+		assertFalse(p.isPresent(new Date(-1 * timeDelta)));
+		assertFalse(p.isPresent(new Date(0 * timeDelta)));
+		assertFalse(p.isPresent(new Date(+1 * timeDelta-1)));
+		assertFalse(p.isPresent(new Date(+1 * timeDelta)));
+		assertFalse(p.isPresent(new Date(+2 * timeDelta)));
+
+		p.setActivated(true);
+
+		assertFalse(p.isPresent(new Date(-2 * timeDelta)));
+		assertFalse(p.isPresent(new Date(-1 * timeDelta-1)));
+		assertTrue(p.isPresent(new Date(-1 * timeDelta)));
+		assertTrue(p.isPresent(new Date(0 * timeDelta)));
+		assertTrue(p.isPresent(new Date(+1 * timeDelta-1)));
+		assertFalse(p.isPresent(new Date(+1 * timeDelta)));
+		assertFalse(p.isPresent(new Date(+2 * timeDelta)));
+	}
 }
