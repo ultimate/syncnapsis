@@ -56,6 +56,7 @@ public class SolarSystemPopulationManagerImplTest extends
 	private BaseGameManager						securityManager;
 	private Calculator							calculator;
 	private final long							referenceTime	= 1234;
+	private MockTimeProvider					mockTimeProvider;
 
 	private ExtendedRandom						random			= new ExtendedRandom();
 
@@ -70,9 +71,11 @@ public class SolarSystemPopulationManagerImplTest extends
 		mockSolarSystemInfrastructureManager = mockContext.mock(SolarSystemInfrastructureManager.class);
 
 		setMockManager(new SolarSystemPopulationManagerImpl(mockDao, mockSolarSystemInfrastructureManager));
+		
+		mockTimeProvider = new MockTimeProvider(referenceTime);
 
 		BaseGameManager securityManager = new BaseGameManager(this.securityManager);
-		securityManager.setTimeProvider(new MockTimeProvider(referenceTime));
+		securityManager.setTimeProvider(mockTimeProvider);
 		((SolarSystemPopulationManagerImpl) mockManager).setSecurityManager(securityManager);
 		((SolarSystemPopulationManagerImpl) mockManager).setCalculator(calculator);
 	}
@@ -474,7 +477,7 @@ public class SolarSystemPopulationManagerImplTest extends
 
 		Collections.shuffle(infrastructure.getPopulations());
 
-		mockManager.merge(infrastructure, new Date(timeProvider.get()));
+		mockManager.merge(infrastructure, new Date(mockTimeProvider.get()));
 		mockContext.assertIsSatisfied();
 
 		Collections.sort(infrastructure.getPopulations(), new Comparator<SolarSystemPopulation>() {

@@ -391,6 +391,13 @@ public class CalculatorImplTest extends LoggerTestCase
 	{
 		logger.debug("simulating build strength - speed " + speed + " - maxPop = " + maxPop);
 		long pop = 10000000;
+		long delta;
+		long deltaMax = Long.MIN_VALUE;
+		long deltaMin = Long.MAX_VALUE;
+		long deltaMaxTick = -1;
+		long deltaMinTick = -1;
+		long deltaMaxPop = -1;
+		long deltaMinPop = -1;
 		double speedFactor = calculator.getSpeedFactor(speed);
 		long start = System.currentTimeMillis();
 		long start2 = System.nanoTime();
@@ -414,7 +421,22 @@ public class CalculatorImplTest extends LoggerTestCase
 			// if(tick % minute == 0)
 			// logger.debug(tick + " : " + pop);
 
-			pop += calculator.calculateBuildStrength(speedFactor, pop, maxPop);
+			delta = (long) calculator.calculateBuildStrength(speedFactor, pop, maxPop);
+			if(delta > deltaMax)
+			{
+				deltaMax = delta;
+				deltaMaxTick = tick;
+				deltaMaxPop = pop;
+			}
+			if(delta < deltaMin)
+			{
+				deltaMin = delta;
+				deltaMinTick = tick;
+				deltaMinPop = pop;
+			}
+			
+			pop += delta;
+			
 			tick++;
 
 			//@formatter:off
@@ -463,6 +485,9 @@ public class CalculatorImplTest extends LoggerTestCase
 		logger.debug("time needed: " + (end2 - start2) + "ns");
 		logger.debug("speed: " + ((double) tick * 1000 / (end - start)) + " ticks/second");
 		logger.debug("speed: " + ((double) tick * 1000000000 / (end2 - start2)) + " ticks/second");
+		
+		logger.debug("deltaMax = " + deltaMax + " @ tick " + deltaMaxTick + " with pop = " + deltaMaxPop);
+		logger.debug("deltaMin = " + deltaMin + " @ tick " + deltaMinTick + " with pop = " + deltaMinPop);
 	}
 
 	public void testCalculateInfrastructureBuildInfluence()

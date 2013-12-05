@@ -494,25 +494,31 @@ public class SolarSystemPopulationManagerImpl extends GenericManagerImpl<SolarSy
 		merge(infrastructure, now);
 		// determine the home population and set it temporarily for the infrastructure
 		infrastructure.setHomePopulation(getHomePopulation(infrastructure, now));
-		// calculate the deltas
-		List<SolarSystemPopulation> populationsPresent = calculator.calculateDeltas(infrastructure, random, now);
-		// save updated populations
-		for(SolarSystemPopulation pop : populationsPresent)
+		if(infrastructure.getHomePopulation() != null)
 		{
-			if(pop.isModified())
+			// calculate the deltas
+			List<SolarSystemPopulation> populationsPresent = calculator.calculateDeltas(infrastructure, random, now);
+			// save updated populations
+			for(SolarSystemPopulation pop : populationsPresent)
 			{
-				if(pop.getPopulation() == 0)
-					destroy(pop, EnumDestructionType.destroyed, now);
-				pop = save(pop);
-				pop.setDelta(0.0);
-				pop.setModified(false);
+				if(pop.isModified())
+				{
+					if(pop.getPopulation() == 0)
+						destroy(pop, EnumDestructionType.destroyed, now);
+					pop = save(pop);
+					pop.setDelta(0.0);
+					pop.setModified(false);
+				}
 			}
+			// save infrastructure
+			infrastructure = solarSystemInfrastructureManager.save(infrastructure);
+			infrastructure.setDelta(0.0);
+			infrastructure.setModified(false);
 		}
-		// save infrastructure
-		infrastructure = solarSystemInfrastructureManager.save(infrastructure);
-		infrastructure.setDelta(0.0);
-		infrastructure.setModified(false);
-
+		else
+		{
+			logger.debug("no home population @ infrastructure " + infrastructure.getId() + " @ time " + now.getTime());
+		}
 		// return populations
 		return infrastructure.getPopulations();
 	}

@@ -503,10 +503,11 @@ public class CalculatorImpl implements Calculator
 				presentPopulations.add(pop);
 			}
 		}
-		logger.debug("time: " + time);
+		logger.debug("time: " + time.getTime());
+		logger.debug("speed: " + infrastructure.getMatch().getSpeed() + " (" + speedFactor + "x)");
 		logger.debug("infrastructure: " + infrastructure.getInfrastructure());
 		logger.debug("total population: " + totalPopulation);
-		logger.debug("max population: " + getMaxPopulation(infrastructure));
+		logger.debug("max population: " + maxPopulation);
 		logger.debug("home population: " + infrastructure.getHomePopulation().getId());
 		// second loop
 		// - determine build and attack strengths
@@ -661,8 +662,11 @@ public class CalculatorImpl implements Calculator
 		// infrastructure update
 		delta = Math.round(infrastructure.getDelta());
 		if(infrastructure.getInfrastructure() + infrastructure.getDelta() < 0)
-			delta = -infrastructure.getInfrastructure();
-		infrastructure.setInfrastructure(infrastructure.getInfrastructure() + delta);
+			infrastructure.setInfrastructure(0);
+		else if(infrastructure.getInfrastructure() + infrastructure.getDelta() > maxPopulation)
+			infrastructure.setInfrastructure(maxPopulation);
+		else
+			infrastructure.setInfrastructure(infrastructure.getInfrastructure() + delta);
 		infrastructure.setModified(true);
 		infrastructure.setDelta(0.0);
 
