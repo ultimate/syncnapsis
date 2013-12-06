@@ -391,9 +391,9 @@ public class CalculatorImplTest extends LoggerTestCase
 	{
 		logger.debug("simulating build strength - speed " + speed + " - maxPop = " + maxPop);
 		long pop = 10000000;
-		long delta;
-		long deltaMax = Long.MIN_VALUE;
-		long deltaMin = Long.MAX_VALUE;
+		double delta;
+		double deltaMax = Double.MIN_VALUE;
+		double deltaMin = Double.MAX_VALUE;
 		long deltaMaxTick = -1;
 		long deltaMinTick = -1;
 		long deltaMaxPop = -1;
@@ -486,8 +486,8 @@ public class CalculatorImplTest extends LoggerTestCase
 		logger.debug("speed: " + ((double) tick * 1000 / (end - start)) + " ticks/second");
 		logger.debug("speed: " + ((double) tick * 1000000000 / (end2 - start2)) + " ticks/second");
 		
-		logger.debug("deltaMax = " + deltaMax + " @ tick " + deltaMaxTick + " with pop = " + deltaMaxPop);
-		logger.debug("deltaMin = " + deltaMin + " @ tick " + deltaMinTick + " with pop = " + deltaMinPop);
+		logger.debug("deltaMax = " + deltaMax + " (" + ((long) deltaMax) + ") @ tick " + deltaMaxTick + " with pop = " + deltaMaxPop);
+		logger.debug("deltaMin = " + deltaMin + " (" + ((long) deltaMin) + ") @ tick " + deltaMinTick + " with pop = " + deltaMinPop);
 	}
 
 	public void testCalculateInfrastructureBuildInfluence()

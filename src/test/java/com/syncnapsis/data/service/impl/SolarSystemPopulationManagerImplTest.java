@@ -849,11 +849,21 @@ public class SolarSystemPopulationManagerImplTest extends
 			double delta_m = 0.10 * Math.pow(10, speed);
 			double delta_l = 0.25 * Math.pow(10, speed);
 
-			// check pop3X [0 ... 0]
-			logger.debug("pop3X change: " + pop3X[0] + " ... " + pop3X[ticks - 1]);
-			assertEquals(0, pop3X[0]);
-			assertEquals(0, pop3X[ticks - 1]);
-			assertDelta(pop3X, t0, ticks, false, false, true);
+			// check pop10 [5e10 ... growing ... support ... growing ... attacked]
+			logger.debug("pop10 change: " + pop10[t2 - 1] + ", " + pop10[t2] + ", " + pop10[t2 + 1] + ", " + pop10[t2 + 2]);
+			assertEquals(pop10_, pop10[t0]);
+			assertTrue(pop10[t2 + 1] > (pop10_ + pop12_));
+			assertDelta(pop10, t0, t2, delta_m, -delta_s); // max 10% growth, max 5% decrease
+			assertDelta(pop10, t2 + 1, t3, delta_m, -delta_s); // max 10% growth, max 5% decrease
+			assertDelta(pop10, t3, ticks, delta_s, -delta_l); // max 5% growth, max 25% decrease
+			
+			// check pop21 [8e10 ... 8e10 ... attacked]
+			logger.debug("pop21 change: " + pop21[t1 - 1] + ", " + pop21[t1] + ", " + pop21[t1 + 1]);
+			assertEquals(pop21_, pop21[t0]);
+			assertEquals(pop21_, pop21[t1]);
+			assertTrue(pop21[t1+1] < pop21_);
+			assertDelta(pop21, t0, t1, 0, 0);
+			assertDelta(pop21, t1, ticks, 0, -delta_s);
 
 			// check pop12 [1e11 ... 1e11 , 0 ... 0]
 			logger.debug("pop12 change: " + pop12[t2 - 1] + ", " + pop12[t2] + ", " + pop12[t2 + 1] + ", " + pop12[t2 + 2]);
@@ -863,22 +873,21 @@ public class SolarSystemPopulationManagerImplTest extends
 			assertEquals(0, pop12[ticks - 1]);
 			assertDelta(pop12, t0, t2 + 1, 0, 0);
 			assertDelta(pop12, t2 + 1, ticks, 0, 0);
-
-			// check pop10 [5e10 ... growing ... support ... growing ... attacked]
-			logger.debug("pop10 change: " + pop10[t2 - 1] + ", " + pop10[t2] + ", " + pop10[t2 + 1] + ", " + pop10[t2 + 2]);
-			assertEquals(pop10_, pop10[t0]);
-			assertTrue(pop10[t2 + 1] > (pop10_ + pop12_));
-			assertDelta(pop10, t0, t2, delta_m, -delta_s); // max 10% growth, max 5% decrease
-			assertDelta(pop10, t2 + 1, t3, delta_m, -delta_s); // max 10% growth, max 5% decrease
-			assertDelta(pop10, t3, ticks, delta_s, -delta_l); // max 5% growth, max 25% decrease
-
-			// check pop21
-
+			
 			// check pop33
-			// TODO
-		}
+			logger.debug("pop33 change: " + pop33[t3 - 1] + ", " + pop33[t3] + ", " + pop33[t3 + 1]);
+			assertEquals(pop33_, pop33[t0]);
+			assertEquals(pop33_, pop33[t3]);
+			assertTrue(pop33[t3+1] < pop33_);
+			assertDelta(pop33, t0, t3, 0, 0);
+			assertDelta(pop33, t3, ticks, 0, -delta_s);
 
-		fail("unimplemented");
+			// check pop3X [0 ... 0]
+			logger.debug("pop3X change: " + pop3X[0] + " ... " + pop3X[ticks - 1]);
+			assertEquals(0, pop3X[0]);
+			assertEquals(0, pop3X[ticks - 1]);
+			assertDelta(pop3X, t0, ticks, false, false, true);
+		}
 	}
 
 	public void testAssertDelta()
