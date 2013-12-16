@@ -14,22 +14,27 @@
  */
 package com.syncnapsis.universe;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
 import com.syncnapsis.constants.UniverseConquestConstants;
 import com.syncnapsis.data.model.Galaxy;
 import com.syncnapsis.data.model.Match;
+import com.syncnapsis.data.model.Participant;
 import com.syncnapsis.data.model.SolarSystem;
 import com.syncnapsis.data.model.SolarSystemInfrastructure;
 import com.syncnapsis.data.model.SolarSystemPopulation;
 import com.syncnapsis.data.model.help.Vector;
+import com.syncnapsis.enums.EnumPopulationPriority;
 import com.syncnapsis.tests.LoggerTestCase;
 import com.syncnapsis.tests.annotations.TestCoversMethods;
 import com.syncnapsis.utils.StringUtil;
 import com.syncnapsis.utils.constants.Constant;
 import com.syncnapsis.utils.constants.ConstantLoader;
+import com.syncnapsis.utils.data.ExtendedRandom;
 
 /**
  * @author ultimate
@@ -38,7 +43,9 @@ public class CalculatorImplTest extends LoggerTestCase
 {
 	private CalculatorImpl		calculator;
 
-	private static final long	popMax	= 1000000000000L;
+	private boolean				testCalculateBuildStrength2	= false;
+
+	private static final long	popMax						= 1000000000000L;
 
 	@Override
 	protected void setUp() throws Exception
@@ -69,6 +76,22 @@ public class CalculatorImplTest extends LoggerTestCase
 					constant.define("100");
 				else if(constant == UniverseConquestConstants.PARAM_TRAVEL_TIME_FACTOR)
 					constant.define("0.7");
+				else if(constant == UniverseConquestConstants.PARAM_FACTOR_ATTACK_RANDOMIZE)
+					constant.define("0.25");
+				else if(constant == UniverseConquestConstants.PARAM_FACTOR_BUILD_RANDOMIZE)
+					constant.define("1.1");
+				else if(constant == UniverseConquestConstants.PARAM_NORM_TICK_LENGTH)
+					constant.define("100");
+				else if(constant == UniverseConquestConstants.PARAM_PRIORITY_FULL)
+					constant.define("1.0");
+				else if(constant == UniverseConquestConstants.PARAM_PRIORITY_HIGH)
+					constant.define("0.75");
+				else if(constant == UniverseConquestConstants.PARAM_PRIORITY_MEDIUM)
+					constant.define("0.5");
+				else if(constant == UniverseConquestConstants.PARAM_PRIORITY_LOW)
+					constant.define("0.25");
+				else if(constant == UniverseConquestConstants.PARAM_PRIORITY_NONE)
+					constant.define("0.0");
 			}
 		};
 
@@ -378,12 +401,19 @@ public class CalculatorImplTest extends LoggerTestCase
 
 	public void testCalculateBuildStrength2()
 	{
-		long maxMaxPopulation = calculator.getMaxPopulation();
-		for(int i = 0; i <= 5; i++)
+		if(testCalculateBuildStrength2)
 		{
-			simulateBuildStrength(i, maxMaxPopulation);
-			simulateBuildStrength(i, maxMaxPopulation / 2);
-			simulateBuildStrength(i, maxMaxPopulation / 4);
+			long maxMaxPopulation = calculator.getMaxPopulation();
+			for(int i = 0; i <= 5; i++)
+			{
+				simulateBuildStrength(i, maxMaxPopulation);
+				simulateBuildStrength(i, maxMaxPopulation / 2);
+				simulateBuildStrength(i, maxMaxPopulation / 4);
+			}
+		}
+		else
+		{
+			logger.warn("test skipped!");
 		}
 	}
 
@@ -434,9 +464,9 @@ public class CalculatorImplTest extends LoggerTestCase
 				deltaMinTick = tick;
 				deltaMinPop = pop;
 			}
-			
+
 			pop += delta;
-			
+
 			tick++;
 
 			//@formatter:off
@@ -485,7 +515,7 @@ public class CalculatorImplTest extends LoggerTestCase
 		logger.debug("time needed: " + (end2 - start2) + "ns");
 		logger.debug("speed: " + ((double) tick * 1000 / (end - start)) + " ticks/second");
 		logger.debug("speed: " + ((double) tick * 1000000000 / (end2 - start2)) + " ticks/second");
-		
+
 		logger.debug("deltaMax = " + deltaMax + " (" + ((long) deltaMax) + ") @ tick " + deltaMaxTick + " with pop = " + deltaMaxPop);
 		logger.debug("deltaMin = " + deltaMin + " (" + ((long) deltaMin) + ") @ tick " + deltaMinTick + " with pop = " + deltaMinPop);
 	}
@@ -504,10 +534,294 @@ public class CalculatorImplTest extends LoggerTestCase
 
 		assertEquals(0.5, calculator.calculateInfrastructureBuildInfluence(maxPop, 0));
 	}
-	
+
 	public void testCalculateDeltas() throws Exception
 	{
-		fail("unimplemented");
-		
+		final ExtendedRandom random = new ExtendedRandom(1234);
+		final int habitability = 500;
+		final int size = 500;
+		final long tick = 100;
+		final int speed = 0;
+		final long popValue = 1000000000L;
+
+		final Galaxy galaxy = new Galaxy();
+
+		final SolarSystem solarSystem = new SolarSystem();
+		solarSystem.setActivated(true);
+		solarSystem.setCoords(new Vector.Integer(123, 456, 789));
+		solarSystem.setGalaxy(galaxy);
+
+		final Match match = new Match();
+		match.setGalaxy(galaxy);
+		match.setSpeed(speed);
+
+		final SolarSystemInfrastructure infrastructure = new SolarSystemInfrastructure();
+		infrastructure.setActivated(true);
+		infrastructure.setHabitability(habitability);
+		infrastructure.setInfrastructure(0);
+		infrastructure.setMatch(match);
+		infrastructure.setSize(size);
+		infrastructure.setPopulations(new ArrayList<SolarSystemPopulation>());
+
+		final Participant participant1 = new Participant();
+		participant1.setId(1L);
+		participant1.setMatch(match);
+		final Participant participant2 = new Participant();
+		participant2.setId(2L);
+		participant2.setMatch(match);
+		final Participant participant3 = new Participant();
+		participant3.setId(3L);
+		participant3.setMatch(match);
+
+		SolarSystemPopulation pop1 = getPopulation(participant1, 0);
+		SolarSystemPopulation pop2 = getPopulation(participant2, 1);
+		SolarSystemPopulation pop3 = getPopulation(participant3, 2);
+
+		long avg1, avg2, avg3, last_avg1, last_avg2, last_avg3;
+		int cycles = 1000;
+
+		// just 1 pop
+		infrastructure.getPopulations().clear();
+		infrastructure.getPopulations().add(pop1);
+		infrastructure.setHomePopulation(pop1);
+		for(int fac = 1; fac <= 1000; fac += (fac < 100 ? 10 : 100))
+		{
+			avg1 = 0;
+			for(int i = 0; i < cycles; i++)
+			{
+				pop1.setPopulation(popValue * fac);
+				calculator.calculateDeltas(infrastructure, random, new Date(tick));
+				avg1 += (pop1.getPopulation() - popValue * fac);
+			}
+			avg1 /= cycles;
+			logger.debug("pop1 all alone - fac=" + StringUtil.fillup("" + fac, 4, ' ', true) + ":        pop1 avg delta = " + avg1);
+			if(fac < infrastructure.getHabitability() * infrastructure.getSize() / 1000)
+				assertTrue(avg1 > 0);
+			else
+				assertTrue(avg1 < 0);
+		}
+
+		// pop1 + pop2
+		infrastructure.getPopulations().clear();
+		infrastructure.getPopulations().add(pop1);
+		infrastructure.getPopulations().add(pop2);
+		infrastructure.setHomePopulation(pop1);
+		int facAtWhich2IsStronger = 3;
+		for(int fac = 1; fac <= 10; fac++)
+		{
+			// pop1 >= pop2
+			avg1 = 0;
+			avg2 = 0;
+			for(int i = 0; i < cycles; i++)
+			{
+				pop1.setPopulation(popValue * fac);
+				pop2.setPopulation(popValue);
+				calculator.calculateDeltas(infrastructure, random, new Date(tick));
+				avg1 += (pop1.getPopulation() - popValue * fac);
+				avg2 += (pop2.getPopulation() - popValue);
+			}
+			avg1 /= cycles;
+			avg2 /= cycles;
+			logger.debug("pop1&pop2 ; pop1>pop2 ; fac=" + fac + ":    pop1 avg delta = " + avg1 + "     pop2 avg delta = " + avg2);
+			assertTrue(avg1 > 0);
+			assertTrue(avg2 < 0);
+
+			last_avg1 = avg1 + 1; // 1 tolerance
+			last_avg2 = avg2;
+
+			// pop1 <= pop2
+			avg1 = 0;
+			avg2 = 0;
+			for(int i = 0; i < cycles; i++)
+			{
+				pop1.setPopulation(popValue);
+				pop2.setPopulation(popValue * fac);
+				calculator.calculateDeltas(infrastructure, random, new Date(tick));
+				avg1 += (pop1.getPopulation() - popValue);
+				avg2 += (pop2.getPopulation() - popValue * fac);
+			}
+			avg1 /= cycles;
+			avg2 /= cycles;
+			logger.debug("pop1&pop2 ; pop1<pop2 ; fac=" + fac + ":    pop1 avg delta = " + avg1 + "     pop2 avg delta = " + avg2);
+			assertTrue(avg1 <= last_avg1);
+			assertTrue(avg2 >= last_avg2);
+			if(fac >= facAtWhich2IsStronger)
+				assertTrue(avg1 < 0);
+			assertTrue(avg2 < 0);
+		}
+		// pop1 + pop2 + pop3
+		infrastructure.getPopulations().clear();
+		infrastructure.getPopulations().add(pop1);
+		infrastructure.getPopulations().add(pop2);
+		infrastructure.getPopulations().add(pop3);
+		infrastructure.setHomePopulation(pop1);
+		for(int fac = 1; fac <= 10; fac++)
+		{
+			// pop1 >= pop2, pop3
+			avg1 = 0;
+			avg2 = 0;
+			avg3 = 0;
+			for(int i = 0; i < cycles; i++)
+			{
+				pop1.setPopulation(popValue * fac);
+				pop2.setPopulation(popValue);
+				pop3.setPopulation(popValue);
+				calculator.calculateDeltas(infrastructure, random, new Date(tick));
+				avg1 += (pop1.getPopulation() - popValue * fac);
+				avg2 += (pop2.getPopulation() - popValue);
+				avg3 += (pop3.getPopulation() - popValue);
+			}
+			avg1 /= cycles;
+			avg2 /= cycles;
+			avg3 /= cycles;
+			logger.debug("pop1&pop2&pop3 ; pop1>pop2,pop3 ; fac=" + fac + ":    pop1 avg delta = " + avg1 + "     pop2 avg delta = " + avg2
+					+ "     pop3 avg delta = " + avg3);
+			assertTrue(avg1 > 0);
+			assertTrue(avg2 < 0);
+			assertTrue(avg3 < 0);
+
+			last_avg1 = avg1;
+			last_avg2 = avg2;
+			last_avg3 = avg3;
+
+			// pop1 >= pop2 >= pop3
+			avg1 = 0;
+			avg2 = 0;
+			avg3 = 0;
+			for(int i = 0; i < cycles; i++)
+			{
+				pop1.setPopulation(popValue * fac);
+				pop2.setPopulation(popValue);
+				pop3.setPopulation(popValue / fac);
+				calculator.calculateDeltas(infrastructure, random, new Date(tick));
+				avg1 += (pop1.getPopulation() - popValue * fac);
+				avg2 += (pop2.getPopulation() - popValue);
+				avg3 += (pop3.getPopulation() - popValue / fac);
+			}
+			avg1 /= cycles;
+			avg2 /= cycles;
+			avg3 /= cycles;
+			logger.debug("pop1&pop2&pop3 ; pop1>pop2>pop3 ; fac=" + fac + ":    pop1 avg delta = " + avg1 + "     pop2 avg delta = " + avg2
+					+ "     pop3 avg delta = " + avg3);
+			assertTrue(avg1 > 0);
+			assertTrue(avg2 < 0);
+			assertTrue(avg3 < 0);
+			if(fac >= 2)
+			{
+				assertTrue(avg1 > last_avg1);
+				assertTrue(avg2 < last_avg2);
+				assertTrue(avg3 > last_avg3);
+			}
+			assertTrue(avg3 >= avg2);
+
+			last_avg1 = avg1;
+			last_avg2 = avg2;
+			last_avg3 = avg3;
+			
+			// pop2 >= pop1 >= pop3 
+			avg1 = 0;
+			avg2 = 0;
+			avg3 = 0;
+			for(int i = 0; i < cycles; i++)
+			{
+				pop1.setPopulation(popValue * fac);
+				pop2.setPopulation(popValue);
+				pop3.setPopulation(popValue / fac);
+				calculator.calculateDeltas(infrastructure, random, new Date(tick));
+				avg1 += (pop1.getPopulation() - popValue * fac);
+				avg2 += (pop2.getPopulation() - popValue);
+				avg3 += (pop3.getPopulation() - popValue / fac);
+			}
+			avg1 /= cycles;
+			avg2 /= cycles;
+			avg3 /= cycles;
+			logger.debug("pop1&pop2&pop3 ; pop2,pop3>pop1 ; fac=" + fac + ":    pop1 avg delta = " + avg1 + "     pop2 avg delta = " + avg2
+					+ "     pop3 avg delta = " + avg3);
+			assertTrue(avg1 > 0);
+			assertTrue(avg2 < 0);
+			assertTrue(avg3 < 0);
+			
+			last_avg1 = avg1;
+			last_avg2 = avg2;
+			last_avg3 = avg3;
+
+			// pop2, pop3 >= pop1
+			avg1 = 0;
+			avg2 = 0;
+			avg3 = 0;
+			for(int i = 0; i < cycles; i++)
+			{
+				pop1.setPopulation(popValue);
+				pop2.setPopulation(popValue * fac);
+				pop3.setPopulation(popValue * fac);
+				calculator.calculateDeltas(infrastructure, random, new Date(tick));
+				avg1 += (pop1.getPopulation() - popValue);
+				avg2 += (pop2.getPopulation() - popValue * fac);
+				avg3 += (pop3.getPopulation() - popValue * fac);
+			}
+			avg1 /= cycles;
+			avg2 /= cycles;
+			avg3 /= cycles;
+			logger.debug("pop1&pop2&pop3 ; pop2,pop3>pop1 ; fac=" + fac + ":    pop1 avg delta = " + avg1 + "     pop2 avg delta = " + avg2
+					+ "     pop3 avg delta = " + avg3);
+			assertTrue(avg1 > 0);
+			assertTrue(avg2 < 0);
+			assertTrue(avg3 < 0);
+			
+			last_avg1 = avg1;
+			last_avg2 = avg2;
+			last_avg3 = avg3;
+			
+			// pop2 >= pop3 >= pop1
+			avg1 = 0;
+			avg2 = 0;
+			avg3 = 0;
+			for(int i = 0; i < cycles; i++)
+			{
+				pop1.setPopulation(popValue / fac);
+				pop2.setPopulation(popValue * fac);
+				pop3.setPopulation(popValue);
+				calculator.calculateDeltas(infrastructure, random, new Date(tick));
+				avg1 += (pop1.getPopulation() - popValue / fac);
+				avg2 += (pop2.getPopulation() - popValue * fac);
+				avg3 += (pop3.getPopulation() - popValue);
+			}
+			avg1 /= cycles;
+			avg2 /= cycles;
+			avg3 /= cycles;
+			logger.debug("pop1&pop2&pop3 ; pop2>pop3>pop1 ; fac=" + fac + ":    pop1 avg delta = " + avg1 + "     pop2 avg delta = " + avg2
+					+ "     pop3 avg delta = " + avg3);
+			if(fac <= 3)
+				assertTrue(avg1 >= 0);
+			else
+				assertTrue(avg1 < 0);
+			assertTrue(avg2 < 0);
+			assertTrue(avg3 < 0);
+			if(fac >= 2)
+			{
+				assertTrue(avg1 < last_avg1);
+				assertTrue(avg2 > last_avg2);
+				assertTrue(avg3 > last_avg3);
+				assertTrue(avg3 < avg2);
+			}
+			
+			last_avg1 = avg1;
+			last_avg2 = avg2;
+			last_avg3 = avg3;
+
+		}
+	}
+
+	private SolarSystemPopulation getPopulation(Participant participant, long date)
+	{
+		SolarSystemPopulation pop = new SolarSystemPopulation();
+		pop.setId(participant.getId());
+		pop.setActivated(true);
+		pop.setColonizationDate(new Date(date));
+		pop.setLastUpdateDate(new Date(date));
+		pop.setParticipant(participant);
+		pop.setBuildPriority(EnumPopulationPriority.balanced);
+		pop.setAttackPriority(EnumPopulationPriority.balanced);
+		return pop;
 	}
 }

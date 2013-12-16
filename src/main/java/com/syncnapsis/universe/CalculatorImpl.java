@@ -428,15 +428,11 @@ public class CalculatorImpl implements Calculator
 		long maxMaxPopulation = getMaxPopulation();
 		double popFactor = UniverseConquestConstants.PARAM_SOLARSYSTEM_MAX_POPULATION_FACTOR.asDouble();
 		double strength;
-		// logger.debug("pop = " + population + " maxPop = " + maxPopulation + " | < half ? " +
-		// (population < maxPopulation / 2));
 		if(population < maxPopulation / 2)
 			strength = (double) (maxMaxPopulation - population) * population;
 		else
 			strength = (double) (maxMaxPopulation - (maxPopulation - population)) * (maxPopulation - population);
-		// logger.debug("strength = " + strength);
 		strength = speedFactor * fac * strength / maxMaxPopulation / popFactor;
-		// logger.debug("strength = " + strength);
 		// TODO really?
 		if(Math.abs(strength) < 1.0)
 			strength = Math.signum(strength);
@@ -503,12 +499,14 @@ public class CalculatorImpl implements Calculator
 				presentPopulations.add(pop);
 			}
 		}
-		logger.debug("time: " + time.getTime());
-		logger.debug("speed: " + infrastructure.getMatch().getSpeed() + " (" + speedFactor + "x)");
-		logger.debug("infrastructure: " + infrastructure.getInfrastructure());
-		logger.debug("total population: " + totalPopulation);
-		logger.debug("max population: " + maxPopulation);
-		logger.debug("home population: " + infrastructure.getHomePopulation().getId());
+		// logger.debug("time: " + time.getTime());
+		// logger.debug("speed: " + infrastructure.getMatch().getSpeed() + " (" + speedFactor +
+		// "x)");
+		// logger.debug("infrastructure: " + infrastructure.getInfrastructure());
+		// logger.debug("total population: " + totalPopulation);
+		// logger.debug("max population: " + maxPopulation);
+		// logger.debug("home population: " + infrastructure.getHomePopulation().getId());
+		
 		// second loop
 		// - determine build and attack strengths
 		// - calculate anti attack (current pop is attacker; attack strength is splitted)
@@ -520,8 +518,8 @@ public class CalculatorImpl implements Calculator
 			b = calculateBuildStrength(speedFactor, pop.getPopulation(), maxPopulation);
 			a = calculateAttackStrength(speedFactor, pop.getPopulation());
 
-			logger.debug("cycle " + i + " population " + pop.getId() + " a = " + a + " b = " + b + " delta = " + pop.getDelta() + " deltaInf = "
-					+ infrastructure.getDelta());
+//			logger.debug("cycle " + i + " population " + pop.getId() + " a = " + a + " b = " + b + " delta = " + pop.getDelta() + " deltaInf = "
+//					+ infrastructure.getDelta());
 
 			if(tick < norm_tick)
 			{
@@ -537,8 +535,8 @@ public class CalculatorImpl implements Calculator
 				// tick = norm_tick
 			}
 
-			logger.debug("cycle " + i + " population " + pop.getId() + " a = " + a + " b = " + b + " delta = " + pop.getDelta() + " deltaInf = "
-					+ infrastructure.getDelta());
+//			logger.debug("cycle " + i + " population " + pop.getId() + " a = " + a + " b = " + b + " delta = " + pop.getDelta() + " deltaInf = "
+//					+ infrastructure.getDelta());
 
 			if(random != null)
 			{
@@ -548,15 +546,15 @@ public class CalculatorImpl implements Calculator
 					a *= random.nextGaussian(1 - randomization_attack, 1 + randomization_attack);
 			}
 
-			logger.debug("cycle " + i + " population " + pop.getId() + " a = " + a + " b = " + b + " delta = " + pop.getDelta() + " deltaInf = "
-					+ infrastructure.getDelta());
+//			logger.debug("cycle " + i + " population " + pop.getId() + " a = " + a + " b = " + b + " delta = " + pop.getDelta() + " deltaInf = "
+//					+ infrastructure.getDelta());
 
 			if(pop == infrastructure.getHomePopulation())
 			{
-				logger.debug("cycle " + i + " population " + pop.getId() + " is home...");
+//				logger.debug("cycle " + i + " population " + pop.getId() + " is home...");
 				b *= calculateInfrastructureBuildInfluence(pop.getPopulation(), infrastructure.getInfrastructure());
-				logger.debug("cycle " + i + " population " + pop.getId() + " a = " + a + " b = " + b + " delta = " + pop.getDelta() + " deltaInf = "
-						+ infrastructure.getDelta());
+//				logger.debug("cycle " + i + " population " + pop.getId() + " a = " + a + " b = " + b + " delta = " + pop.getDelta() + " deltaInf = "
+//						+ infrastructure.getDelta());
 				// split build strength by priority
 				switch(pop.getBuildPriority())
 				{
@@ -603,8 +601,8 @@ public class CalculatorImpl implements Calculator
 						break;
 				}
 			}
-			logger.debug("cycle " + i + " population " + pop.getId() + " a = " + a + " b = " + b + " delta = " + pop.getDelta() + " deltaInf = "
-					+ infrastructure.getDelta());
+//			logger.debug("cycle " + i + " population " + pop.getId() + " a = " + a + " b = " + b + " delta = " + pop.getDelta() + " deltaInf = "
+//					+ infrastructure.getDelta());
 			// distribute attack strength on other populations
 			// (weighted by their amount of population)
 			otherPopulation = totalPopulation - pop.getPopulation();
@@ -622,7 +620,7 @@ public class CalculatorImpl implements Calculator
 						delta2 = ((double) pop2.getPopulation() / otherPopulation) * aPop;
 						if(tick2 < norm_tick)
 						{
-							delta2 = tick2 / (double) norm_tick; // weight attack by tick length
+							delta2 *= tick2 / (double) norm_tick; // weight attack by tick length
 						}
 						else if(tick2 > norm_tick)
 						{
@@ -635,12 +633,13 @@ public class CalculatorImpl implements Calculator
 						pop2.setDelta(pop2.getDelta() - delta2);
 					}
 
-					logger.debug("cycle " + i + " population " + infrastructure.getPopulations().get(j).getId() + ": delta = " + pop2.getDelta());
+//					logger.debug("cycle " + i + " population " + infrastructure.getPopulations().get(j).getId() + ": delta = " + pop2.getDelta());
 				}
 			}
 			else
 			{
-				logger.debug("cycle " + i + " population " + pop.getId() + " all alone: delta = " + pop.getDelta());
+				// no attack to handle - pop all alone
+//				logger.debug("cycle " + i + " population " + pop.getId() + " all alone: delta = " + pop.getDelta());
 			}
 		}
 		// third loop
@@ -653,7 +652,7 @@ public class CalculatorImpl implements Calculator
 			delta = Math.round(pop.getDelta());
 			if(pop.getPopulation() + delta < 0)
 				delta = -pop.getPopulation();
-			logger.debug("population " + pop.getId() + " value = " + pop.getPopulation() + " delta = " + delta + " (" + pop.getDelta() + ")");
+//			logger.debug("population " + pop.getId() + " value = " + pop.getPopulation() + " delta = " + delta + " (" + pop.getDelta() + ")");
 			pop.setPopulation(pop.getPopulation() + delta);
 			pop.setModified(true);
 			pop.setDelta(0.0);
