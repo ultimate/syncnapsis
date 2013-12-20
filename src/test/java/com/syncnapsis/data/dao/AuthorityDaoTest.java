@@ -30,7 +30,7 @@ public class AuthorityDaoTest extends GenericNameDaoTestCase<Authority, Long>
 	{
 		super.setUp();
 		
-		String existingName = "allowedToSeeTroops";
+		String existingName = "auth102";
 		Long existingId = authorityDao.getByName(existingName).getId();
 		
 		Authority authority = new Authority();

@@ -29,7 +29,7 @@ public class AuthorityGroupDaoTest extends GenericNameDaoTestCase<AuthorityGroup
 	{
 		super.setUp();
 
-		String existingName = "contactauthorities";
+		String existingName = "auth1";
 		Long existingId = authorityGroupDao.getByName(existingName).getId();
 
 		AuthorityGroup authorityGroup = new AuthorityGroup();

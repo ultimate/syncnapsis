@@ -21,14 +21,14 @@
 		<column>version</column>
 		<column>name</column>
 		<row>
-			<value description="id">1</value>
+			<value description="id">91</value>
 			<value description="version">1</value>
-			<value description="name">contactauthorities</value>
+			<value description="name">auth1</value>
 		</row>
 		<row>
-			<value description="id">2</value>
+			<value description="id">92</value>
 			<value description="version">1</value>
-			<value description="name">allianceauthorities</value>
+			<value description="name">auth2</value>
 		</row>
 	</table>
 	
@@ -38,118 +38,34 @@
 		<column>name</column>
 		<column>fkAuthorityGroup</column>
 		<row>
-			<value description="id">101</value>
+			<value description="id">9101</value>
 			<value description="version">1</value>
-			<value description="name">allowedToFlyIntoTerritory</value>
-			<value description="fkAuthorityGroup">1</value>
+			<value description="name">auth101</value>
+			<value description="fkAuthorityGroup">91</value>
 		</row>
 		<row>
-			<value description="id">102</value>
+			<value description="id">9102</value>
 			<value description="version">1</value>
-			<value description="name">allowedToSeeEconomy</value>
-			<value description="fkAuthorityGroup">1</value>
+			<value description="name">auth102</value>
+			<value description="fkAuthorityGroup">91</value>
 		</row>
 		<row>
-			<value description="id">103</value>
+			<value description="id">9103</value>
 			<value description="version">1</value>
-			<value description="name">allowedToSeeOnlineStatus</value>
-			<value description="fkAuthorityGroup">1</value>
+			<value description="name">auth103</value>
+			<value description="fkAuthorityGroup">91</value>
 		</row>
 		<row>
-			<value description="id">104</value>
+			<value description="id">9201</value>
 			<value description="version">1</value>
-			<value description="name">allowedToSeeReports</value>
-			<value description="fkAuthorityGroup">1</value>
+			<value description="name">auth201</value>
+			<value description="fkAuthorityGroup">92</value>
 		</row>
 		<row>
-			<value description="id">105</value>
+			<value description="id">9202</value>
 			<value description="version">1</value>
-			<value description="name">allowedToSeeSpecialOffersInMarketPlace</value>
-			<value description="fkAuthorityGroup">1</value>
-		</row>
-		<row>
-			<value description="id">106</value>
-			<value description="version">1</value>
-			<value description="name">allowedToSeeTroops</value>
-			<value description="fkAuthorityGroup">1</value>
-		</row>
-		<row>
-			<value description="id">107</value>
-			<value description="version">1</value>
-			<value description="name">allowedToUseScanners</value>
-			<value description="fkAuthorityGroup">1</value>
-		</row>
-		<row>
-			<value description="id">108</value>
-			<value description="version">1</value>
-			<value description="name">allowedToUseStargates</value>
-			<value description="fkAuthorityGroup">1</value>
-		</row>
-		<row>
-			<value description="id">109</value>
-			<value description="version">1</value>
-			<value description="name">notAllowedToAttack</value>
-			<value description="fkAuthorityGroup">1</value>
-		</row>
-		<row>
-			<value description="id">201</value>
-			<value description="version">1</value>
-			<value description="name">allowedToChangeAllianceDescription</value>
-			<value description="fkAuthorityGroup">2</value>
-		</row>
-		<row>
-			<value description="id">202</value>
-			<value description="version">1</value>
-			<value description="name">allowedToChangeDiplomacy</value>
-			<value description="fkAuthorityGroup">2</value>
-		</row>
-		<row>
-			<value description="id">203</value>
-			<value description="version">1</value>
-			<value description="name">allowedToCommandAllianceFleet</value>
-			<value description="fkAuthorityGroup">2</value>
-		</row>
-		<row>
-			<value description="id">204</value>
-			<value description="version">1</value>
-			<value description="name">allowedToDecruitMembers</value>
-			<value description="fkAuthorityGroup">2</value>
-		</row>
-		<row>
-			<value description="id">205</value>
-			<value description="version">1</value>
-			<value description="name">allowedToDefineDiplomacy</value>
-			<value description="fkAuthorityGroup">2</value>
-		</row>
-		<row>
-			<value description="id">206</value>
-			<value description="version">1</value>
-			<value description="name">allowedToDefinePosts</value>
-			<value description="fkAuthorityGroup">2</value>
-		</row>
-		<row>
-			<value description="id">207</value>
-			<value description="version">1</value>
-			<value description="name">allowedToManageForum</value>
-			<value description="fkAuthorityGroup">2</value>
-		</row>
-		<row>
-			<value description="id">208</value>
-			<value description="version">1</value>
-			<value description="name">allowedToPromoteMembers</value>
-			<value description="fkAuthorityGroup">2</value>
-		</row>
-		<row>
-			<value description="id">209</value>
-			<value description="version">1</value>
-			<value description="name">allowedToRecruitMembers</value>
-			<value description="fkAuthorityGroup">2</value>
-		</row>
-		<row>
-			<value description="id">210</value>
-			<value description="version">1</value>
-			<value description="name">allowedToSendAllianceMail</value>
-			<value description="fkAuthorityGroup">2</value>
+			<value description="name">auth202</value>
+			<value description="fkAuthorityGroup">92</value>
 		</row>
 	</table>
 	
