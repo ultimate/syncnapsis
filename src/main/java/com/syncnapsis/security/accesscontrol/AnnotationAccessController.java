@@ -14,20 +14,19 @@
  */
 package com.syncnapsis.security.accesscontrol;
 
-import com.syncnapsis.data.model.base.Identifiable;
-import com.syncnapsis.security.AccessController;
-import com.syncnapsis.security.annotations.Accessible;
-import com.syncnapsis.security.annotations.Authority;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.syncnapsis.security.AccessController;
+import com.syncnapsis.security.annotations.Accessible;
 
 /**
  * Abstract base for AccessControllers using the {@link Accessible} annotation.
  * 
  * @author ultimate
- * @param <T> - the Type of Object to access
+ * @param <T> - the Type of the Target class accessed
  */
-public abstract class AnnotationAccessController<T> implements AccessController<T>
+public abstract class AnnotationAccessController<T> extends AccessController<T>
 {
 	/**
 	 * Logger-Instance
@@ -35,89 +34,30 @@ public abstract class AnnotationAccessController<T> implements AccessController<
 	protected final Logger	logger	= LoggerFactory.getLogger(getClass());
 
 	/**
-	 * Check an annotation for accessibility considering the give authorities
+	 * Check an accessible annotation for accessibility
 	 * 
-	 * @param a - the annotation to consider
-	 * @param globalDefault - the global default value for accessile
-	 * @param authorities - the authorities to check for accessibility
+	 * @param entity - the entity to check to accessibility for
+	 * @param a - the accessible annotation to check
+	 * @param defaultAccessible - the default value for accessibility
+	 * @param authorities - the authorities to check for
 	 * @return true or false
 	 */
-	public boolean isAccessible(Accessible a, boolean globalDefault, Object... authorities)
+	public boolean isAccessible(Object entity, Accessible a, int defaultAccessible, Object... authorities)
 	{
-		if(a != null)
-		{
-			boolean accessible = containsAuthority(a.accessible(), authorities);
-			boolean notAccessible = containsAuthority(a.notAccessible(), authorities);
-			boolean defaultAccessible = a.defaultAccessible();
+		int accessible = (a != null ? a.value() : defaultAccessible);
 
-			if(accessible || defaultAccessible && !notAccessible)
-				return true;
-			else
-				return false;
-		}
-		return globalDefault;
-	}
-
-	/**
-	 * Check wether a authority given for (de)-serialization is included in a list of authority
-	 * defined by an
-	 * Annotation.
-	 * 
-	 * @param annotationAuthorities - the Annotation authorities to scan for the access authorities
-	 * @param accessAuthorities - the access authorities to check for
-	 * @return true or false
-	 */
-	public boolean containsAuthority(Authority[] annotationAuthorities, Object... accessAuthorities)
-	{
-		Object id;
-		if(accessAuthorities != null && accessAuthorities.length > 0)
-		{
-			for(Object authority : accessAuthorities)
-			{
-				if(authority == null)
-					continue;
-				else if(authority instanceof Identifiable)
-				{
-					if(((Identifiable<?>) authority).getId() instanceof Number)
-						id = ((Identifiable<?>) authority).getId();
-					else if(((Identifiable<?>) authority).getId() instanceof String)
-						id = ((Identifiable<?>) authority).getId();
-					else if(((Identifiable<?>) authority).getId() != null)
-						id = ((Identifiable<?>) authority).getId().toString();
-					else
-						continue;
-				}
-				else if(authority instanceof Number)
-					id = authority;
-				else if(authority instanceof String)
-					id = authority;
-				else
-					id = authority.toString();
-
-				if(id == null)
-					continue;
-				else if(id instanceof Number)
-				{
-					for(Authority aAuthority : annotationAuthorities)
-					{
-						if(aAuthority.id() == ((Number) id).longValue())
-							return true;
-						else if(aAuthority.name().equals(id.toString()))
-							return true;
-					}
-				}
-				else if(id instanceof String)
-				{
-					for(Authority aAuthority : annotationAuthorities)
-					{
-						if(aAuthority.name().equals(id))
-							return true;
-						else if(Long.toString(aAuthority.id()).equals(id))
-							return true;
-					}
-				}
-			}
-		}
+		if(accessible == Accessible.NOBODY)
+			return false;
+		if(accessible == Accessible.ANYBODY)
+			return true;
+		if((accessible & Accessible.OWNER) != 0 && isOwner(entity, authorities))
+			return true;
+		if((accessible & Accessible.FRIEND) != 0 && isFriend(entity, authorities))
+			return true;
+		if((accessible & Accessible.ENEMY) != 0 && isEnemy(entity, authorities))
+			return true;
+		if((accessible & Accessible.ALLY) != 0 && isAlly(entity, authorities))
+			return true;
 		return false;
 	}
 }

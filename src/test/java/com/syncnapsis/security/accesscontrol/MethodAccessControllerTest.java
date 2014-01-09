@@ -14,234 +14,122 @@
  */
 package com.syncnapsis.security.accesscontrol;
 
-import java.io.Serializable;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
 
-import com.syncnapsis.data.model.base.Identifiable;
+import com.syncnapsis.security.AccessController;
+import com.syncnapsis.security.AccessControllerTest;
 import com.syncnapsis.security.annotations.Accessible;
-import com.syncnapsis.security.annotations.Authority;
 import com.syncnapsis.tests.LoggerTestCase;
 import com.syncnapsis.tests.annotations.TestCoversClasses;
 import com.syncnapsis.tests.annotations.TestExcludesMethods;
 
-@TestCoversClasses({MethodAccessController.class, AnnotationAccessController.class})
-@TestExcludesMethods({"*DefaultAccessible", "getTargetClass"})
+@TestCoversClasses({ MethodAccessController.class, AnnotationAccessController.class })
+@TestExcludesMethods({ "*DefaultAccessible", "getTargetClass" })
 public class MethodAccessControllerTest extends LoggerTestCase
 {
-	public void testContainsAuthority() throws Exception
-	{
-		AnnotationAccessController<Object> controller = new AnnotationAccessController<Object>() {
-			@Override
-			public Class<Object> getTargetClass()
-			{
-				return Object.class;
-			}
-
-			@Override
-			public boolean isAccessible(Object target, int operation, Object... authorities)
-			{
-				return false;
-			}
-		};
-
-		Authority[] annotationAuthorities = POJO1.class.getMethod("getX").getAnnotation(Accessible.class).accessible();
-
-		// valid values only (single argument)
-		assertTrue(controller.containsAuthority(annotationAuthorities, "v1"));
-		assertTrue(controller.containsAuthority(annotationAuthorities, 2));
-		assertTrue(controller.containsAuthority(annotationAuthorities, "3"));
-		assertTrue(controller.containsAuthority(annotationAuthorities, new Role<String>("v1")));
-		assertTrue(controller.containsAuthority(annotationAuthorities, new Role<Long>(2L)));
-		assertTrue(controller.containsAuthority(annotationAuthorities, new Role<String>("3")));
-		assertTrue(controller.containsAuthority(annotationAuthorities, new Role<Long>(3L)));
-
-		// valid values only (multiple arguments)
-		assertTrue(controller.containsAuthority(annotationAuthorities, "v1", new Role<String>("v1")));
-		assertTrue(controller.containsAuthority(annotationAuthorities, 2, new Role<Long>(2L)));
-		assertTrue(controller.containsAuthority(annotationAuthorities, "3", new Role<String>("3"), new Role<Long>(3L)));
-		
-		// valid and invalid arguments (mixed)
-		assertTrue(controller.containsAuthority(annotationAuthorities, 4, "v1"));
-		assertTrue(controller.containsAuthority(annotationAuthorities, "4", 2));
-		assertTrue(controller.containsAuthority(annotationAuthorities, new Role<String>("4"), "3"));
-		assertTrue(controller.containsAuthority(annotationAuthorities, new Role<Long>(4L), new Role<String>("v1")));
-		assertTrue(controller.containsAuthority(annotationAuthorities, 4, new Role<Long>(2L)));
-		assertTrue(controller.containsAuthority(annotationAuthorities, "4", new Role<String>("3")));
-		assertTrue(controller.containsAuthority(annotationAuthorities, 4L, new Role<Long>(3L)));
-
-		// invalid values only (single argument)
-		assertFalse(controller.containsAuthority(annotationAuthorities, 4));
-		assertFalse(controller.containsAuthority(annotationAuthorities, "4"));
-		assertFalse(controller.containsAuthority(annotationAuthorities, new Role<String>("4")));
-		assertFalse(controller.containsAuthority(annotationAuthorities, new Role<Long>(4L)));
-
-		// invalid values only (multiple arguments)
-		assertFalse(controller.containsAuthority(annotationAuthorities, "4", new Role<String>("4"), new Role<Long>(4L)));
-		
-		// null arguments 
-		assertFalse(controller.containsAuthority(annotationAuthorities, (Object[]) null));
-		assertFalse(controller.containsAuthority(annotationAuthorities, new Object[] {}));
-	}
-	
 	public void testIsAccessible() throws Exception
 	{
 		MethodAccessController controller = new MethodAccessController();
 		
-		Method method = POJO1.class.getMethod("getY");
-		// valid values only (single argument)
-		assertTrue(controller.isAccessible(method, "v1"));
-		assertTrue(controller.isAccessible(method, new Object[]{2}));
-		assertTrue(controller.isAccessible(method, "3"));
-		assertTrue(controller.isAccessible(method, new Role<String>("v1")));
-		assertTrue(controller.isAccessible(method, new Role<Long>(2L)));
-		assertTrue(controller.isAccessible(method, new Role<String>("3")));
-		assertTrue(controller.isAccessible(method, new Role<Long>(3L)));
+		Object owner = new Object();
+		Object other = new Object();
 
-		// valid values only (multiple arguments)
-		assertTrue(controller.isAccessible(method, "v1", new Role<String>("v1")));
-		assertTrue(controller.isAccessible(method, new Role<Long>(2L), 2));
-		assertTrue(controller.isAccessible(method, "3", new Role<String>("3"), new Role<Long>(3L)));
-		
-		// valid and invalid arguments (mixed)
-		assertTrue(controller.isAccessible(method, "v1", 4));
-		assertTrue(controller.isAccessible(method, "4", 2));
-		assertTrue(controller.isAccessible(method, new Role<String>("4"), "3"));
-		assertTrue(controller.isAccessible(method, new Role<Long>(4L), new Role<String>("v1")));
-		assertTrue(controller.isAccessible(method, new Role<Long>(2L), 4));
-		assertTrue(controller.isAccessible(method, "4", new Role<String>("3")));
-		assertTrue(controller.isAccessible(method, 4L, new Role<Long>(3L)));
+		AnnotatedMethods target = new AnnotatedMethods(owner);
 
-		// invalid values only (single argument)
-		assertFalse(controller.isAccessible(method, new Object[]{4}));
-		assertFalse(controller.isAccessible(method, "4"));
-		assertFalse(controller.isAccessible(method, new Role<String>("4")));
-		assertFalse(controller.isAccessible(method, new Role<Long>(4L)));
+		controller.setDefaultAccessible(Accessible.ANYBODY);
+		accessibleTest(controller, target, owner, "doAsOwner", "doAsAnybody", "doAsDefault");
+		accessibleTest(controller, target, other, "doAsAnybody", "doAsDefault");
 
-		// invalid values only (multiple arguments)
-		assertFalse(controller.isAccessible(method, "4", new Role<String>("4"), new Role<Long>(4L)));
-		
-		// null arguments 
-		assertFalse(controller.isAccessible(method, (Object[]) null));
-		assertFalse(controller.isAccessible(method, new Object[] {}));
+		controller.setDefaultAccessible(Accessible.OWNER);
+		accessibleTest(controller, target, owner, "doAsOwner", "doAsAnybody", "doAsDefault");
+		accessibleTest(controller, target, other, "doAsAnybody");
+
+		controller.setDefaultAccessible(Accessible.NOBODY);
+		accessibleTest(controller, target, owner, "doAsOwner", "doAsAnybody");
+		accessibleTest(controller, target, other, "doAsAnybody");
 	}
-	
+
+	private void accessibleTest(MethodAccessController ac, Object target, Object authority, String... expectedAccessibleMethods)
+	{
+		List<String> accessibleMethods = new ArrayList<String>();
+		for(Method m: target.getClass().getMethods())
+		{
+			if(ac.isAccessible(target, m, AccessController.INVOKE, authority))
+				accessibleMethods.add(m.getName());
+		}
+		for(String expectedMethod : expectedAccessibleMethods)
+		{
+			assertTrue(expectedMethod + " is not accessible", accessibleMethods.contains(expectedMethod));
+		}
+	}
+
 	public void testGetAccessibleAnnotation() throws Exception
 	{
+		final int onMethod = 123;
+
 		Object annotated = new Object() {
-			@Accessible(accessible = { @Authority(name = "onMethod") })
+			@Accessible(onMethod)
 			public int method()
 			{
 				return 0;
 			}
 		};
-		
+
 		Method method = annotated.getClass().getMethod("method");
 
 		MethodAccessController controller = new MethodAccessController();
-		
+
 		assertNotNull(controller.getAccessibleAnnotation(method));
-		assertEquals("onMethod", controller.getAccessibleAnnotation(method).accessible()[0].name());
+		assertEquals(onMethod, controller.getAccessibleAnnotation(method).value());
 	}
-
-	public static class POJO1
+	
+	public static class AnnotatedMethods extends AccessControllerTest.Target
 	{
-		private int		x;
-
-		private String	y;
-
-		public POJO1()
+		public AnnotatedMethods(List<Object> owners)
 		{
-
+			super(owners);
 		}
 
-		public POJO1(int x, String y)
+		public AnnotatedMethods(Object owner)
 		{
-			super();
-			this.x = x;
-			this.y = y;
+			super(owner);
 		}
 
-		@Accessible(accessible = { @Authority(name = "v1"), @Authority(id = 2L), @Authority(name = "3") })
-		public int getX()
+		@Accessible(Accessible.NOBODY)
+		public void doAsNobody()
 		{
-			return x;
 		}
 
-		@Accessible(accessible = { @Authority(name = "v1"), @Authority(id = 2L), @Authority(name = "3") }, defaultAccessible = false)
-		public String getY()
+		@Accessible(Accessible.OWNER)
+		public void doAsOwner()
 		{
-			return y;
 		}
 
-		@Accessible(accessible = { @Authority(name = "v1"), @Authority(id = 2L), @Authority(name = "3") })
-		public void setX(int x)
+		@Accessible(Accessible.ALLY)
+		public void doAsAlly()
 		{
-			this.x = x;
 		}
 
-		@Accessible(accessible = { @Authority(name = "v1"), @Authority(id = 2L), @Authority(name = "3") }, defaultAccessible = false)
-		public void setY(String y)
+		@Accessible(Accessible.FRIEND)
+		public void doAsFriend()
 		{
-			this.y = y;
 		}
 
-		@Override
-		public String toString()
+		@Accessible(Accessible.ENEMY)
+		public void doAsEnemy()
 		{
-			return "POJO1 [x=" + x + ", y=" + y + "]";
 		}
 
-		@Override
-		public int hashCode()
+		@Accessible(Accessible.ANYBODY)
+		public void doAsAnybody()
 		{
-			final int prime = 31;
-			int result = 1;
-			result = prime * result + x;
-			result = prime * result + ((y == null) ? 0 : y.hashCode());
-			return result;
 		}
 
-		@Override
-		public boolean equals(Object obj)
+		// no annotation
+		public void doAsDefault()
 		{
-			if(this == obj)
-				return true;
-			if(obj == null)
-				return false;
-			if(getClass() != obj.getClass())
-				return false;
-			POJO1 other = (POJO1) obj;
-			if(x != other.x)
-				return false;
-			if(y == null)
-			{
-				if(other.y != null)
-					return false;
-			}
-			else if(!y.equals(other.y))
-				return false;
-			return true;
-		}
-	}
-
-	public static class Role<PK extends Serializable> implements Identifiable<PK>
-	{
-		private PK	id;
-
-		public Role(PK id)
-		{
-			super();
-			this.id = id;
-		}
-
-		public PK getId()
-		{
-			return id;
-		}
-
-		public void setId(PK id)
-		{
-			this.id = id;
 		}
 	}
 }

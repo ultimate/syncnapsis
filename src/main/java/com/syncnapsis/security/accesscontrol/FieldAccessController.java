@@ -20,54 +20,59 @@ import com.syncnapsis.security.annotations.Accessible;
 import com.syncnapsis.utils.ReflectionsUtil;
 import com.syncnapsis.utils.reflections.Field;
 
+/**
+ * AccessController for {@link Field}s.
+ * This access controller uses {@link Accessible}-annotation to determine read and write permissions
+ * 
+ * @author ultimate
+ */
 public class FieldAccessController extends AnnotationAccessController<Field>
 {
 	/**
-	 * Are properties readable by default if no {@link Accessible}-Annotation is found?
+	 * The default value for valid accessor for reading fields
 	 */
-	protected boolean		defaultReadable	= true;
+	private int	defaultReadable	= Accessible.ANYBODY;
+	/**
+	 * The default value for valid accessor for writing fields
+	 */
+	private int	defaultWritable	= Accessible.ANYBODY;
 
 	/**
-	 * Are properties writable by default if no {@link Accessible}-Annotation is found?
-	 */
-	protected boolean		defaultWritable	= true;
-
-	/**
-	 * Are properties readable by default if no {@link Accessible}-Annotation is found?
+	 * The default value for valid accessor for reading fields
 	 * 
-	 * @return true or false
+	 * @return defaultReadable
 	 */
-	public boolean isDefaultReadable()
+	public int getDefaultReadable()
 	{
 		return defaultReadable;
 	}
 
 	/**
-	 * Are properties readable by default if no {@link Accessible}-Annotation is found?
+	 * The default value for valid accessor for reading fields
 	 * 
-	 * @param defaultReadable - true or false
+	 * @param defaultReadable - the default value
 	 */
-	public void setDefaultReadable(boolean defaultReadable)
+	public void setDefaultReadable(int defaultReadable)
 	{
 		this.defaultReadable = defaultReadable;
 	}
 
 	/**
-	 * Are properties readable by default if no {@link Accessible}-Annotation is found?
+	 * The default value for valid accessor for writing fields
 	 * 
-	 * @return true or false
+	 * @return defaultWritable
 	 */
-	public boolean isDefaultWritable()
+	public int getDefaultWritable()
 	{
 		return defaultWritable;
 	}
 
 	/**
-	 * Are properties readable by default if no {@link Accessible}-Annotation is found?
+	 * The default value for valid accessor for writing fields
 	 * 
-	 * @param defaultWritable - true or false
+	 * @param defaultWritable - the default value
 	 */
-	public void setDefaultWritable(boolean defaultWritable)
+	public void setDefaultWritable(int defaultWritable)
 	{
 		this.defaultWritable = defaultWritable;
 	}
@@ -84,15 +89,16 @@ public class FieldAccessController extends AnnotationAccessController<Field>
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.syncnapsis.security.AccessController#isAccessible(java.lang.Object, int, java.lang.Object[])
+	 * @see com.syncnapsis.security.AccessController#isAccessible(java.lang.Object,
+	 * java.lang.Object, int, java.lang.Object[])
 	 */
 	@Override
-	public boolean isAccessible(Field target, int operation, Object... authorities)
+	public boolean isAccessible(Object entity, Field target, int operation, Object... authorities)
 	{
 		boolean a = false;
 		if(operation == READ)
 		{
-			a = isReadable(target, authorities);
+			a = isAccessible(entity, getReadableAnnotation(target), defaultReadable, authorities);
 			logger.debug("read@" + target + ": " + a);
 		}
 		else if(operation == WRITE)
@@ -100,34 +106,10 @@ public class FieldAccessController extends AnnotationAccessController<Field>
 			if(Modifier.isFinal(target.getField().getModifiers()))
 				a = false;
 			else
-				a = isWritable(target, authorities);
+				a = isAccessible(entity, getWritableAnnotation(target), defaultWritable, authorities);
 			logger.debug("write@" + target + ": " + a);
 		}
 		return a;
-	}
-
-	/**
-	 * Is a Field readable by the given authorities?
-	 * 
-	 * @param field - the Field
-	 * @param authorities - the authorities to check for accessibility
-	 * @return true or false
-	 */
-	public boolean isReadable(Field field, Object... authorities)
-	{
-		return isAccessible(getReadableAnnotation(field), defaultReadable, authorities);
-	}
-
-	/**
-	 * Is a Field writable by the given authorities?
-	 * 
-	 * @param fiedld - the Field
-	 * @param authorities - the authorities to check for accessibility
-	 * @return true or false
-	 */
-	public boolean isWritable(Field field, Object... authorities)
-	{
-		return isAccessible(getWritableAnnotation(field), defaultWritable, authorities);
 	}
 
 	/**

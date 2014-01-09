@@ -43,9 +43,12 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Accessible
 {
-	Authority[] accessible() default {};
+	public static final int	NOBODY	= 0x00;
+	public static final int	OWNER	= 0x01;
+	public static final int	FRIEND	= 0x02;
+	public static final int	ALLY	= 0x04;
+	public static final int	ENEMY	= 0x08;
+	public static final int	ANYBODY	= 0xFF;
 
-	Authority[] notAccessible() default {};
-
-	boolean defaultAccessible() default true;
+	int value() default NOBODY;
 }

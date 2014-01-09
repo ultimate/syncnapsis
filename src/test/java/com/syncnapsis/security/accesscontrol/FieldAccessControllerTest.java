@@ -14,204 +14,82 @@
  */
 package com.syncnapsis.security.accesscontrol;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.syncnapsis.security.AccessController;
+import com.syncnapsis.security.AccessControllerTest;
 import com.syncnapsis.security.annotations.Accessible;
-import com.syncnapsis.security.annotations.Authority;
 import com.syncnapsis.tests.LoggerTestCase;
 import com.syncnapsis.tests.annotations.TestCoversMethods;
 import com.syncnapsis.tests.annotations.TestExcludesMethods;
 import com.syncnapsis.utils.ReflectionsUtil;
+import com.syncnapsis.utils.reflections.Field;
 
 @TestExcludesMethods({ "*DefaultReadable", "*DefaultWritable", "getTargetClass" })
 public class FieldAccessControllerTest extends LoggerTestCase
 {
-	public void testIsReadable() throws Exception
+	public void testIsAccessible() throws Exception
 	{
 		FieldAccessController controller = new FieldAccessController();
 
-		List<com.syncnapsis.utils.reflections.Field> fields = ReflectionsUtil.findFields(POJO1.class);
-		assertEquals(2, fields.size());
+		Object owner = new Object();
+		Object other = new Object();
 
-		com.syncnapsis.utils.reflections.Field xField = fields.get(0);
-		assertEquals("x", xField.getName());
-		com.syncnapsis.utils.reflections.Field yField = fields.get(1);
-		assertEquals("y", yField.getName());
+		AnnotatedByField targetF = new AnnotatedByField(owner);
+		AnnotatedByMethod targetM = new AnnotatedByMethod(owner);
 
-		// defaultReadable = true
+		controller.setDefaultReadable(Accessible.ANYBODY);
+		controller.setDefaultWritable(Accessible.ANYBODY);
+		accessibleTest(controller, targetF, owner, "byOwner", "byAnybody", "byDefault");
+		accessibleTest(controller, targetM, owner, "byOwner", "byAnybody", "byDefault");
+		accessibleTest(controller, targetF, other, "byAnybody", "byDefault");
+		accessibleTest(controller, targetM, other, "byAnybody", "byDefault");
 
-		assertTrue(controller.isReadable(xField, "v1"));
-		assertTrue(controller.isReadable(xField, 2));
-		assertTrue(controller.isReadable(xField, "v1", 2));
+		controller.setDefaultReadable(Accessible.OWNER);
+		controller.setDefaultWritable(Accessible.OWNER);
+		accessibleTest(controller, targetF, owner, "byOwner", "byAnybody", "byDefault");
+		accessibleTest(controller, targetM, owner, "byOwner", "byAnybody", "byDefault");
+		accessibleTest(controller, targetF, other, "byAnybody");
+		accessibleTest(controller, targetM, other, "byAnybody");
 
-		assertTrue(controller.isReadable(xField, "v1", 1));
-		assertTrue(controller.isReadable(xField, 2, "v2"));
-
-		assertTrue(controller.isReadable(xField, 1));
-		assertTrue(controller.isReadable(xField, "v2"));
-		assertTrue(controller.isReadable(xField, 1, "v2"));
-
-		assertTrue(controller.isReadable(xField, (Object[]) null));
-		assertTrue(controller.isReadable(xField, new Object[] {}));
-
-		// defaultReadable = false
-
-		assertTrue(controller.isReadable(yField, "v1"));
-		assertTrue(controller.isReadable(yField, 2));
-		assertTrue(controller.isReadable(yField, "v1", 2));
-
-		assertTrue(controller.isReadable(yField, "v1", 1));
-		assertTrue(controller.isReadable(yField, 2, "v2"));
-
-		assertFalse(controller.isReadable(yField, 1));
-		assertFalse(controller.isReadable(yField, "v2"));
-		assertFalse(controller.isReadable(yField, 1, "v2"));
-
-		assertFalse(controller.isReadable(yField, (Object[]) null));
-		assertFalse(controller.isReadable(yField, new Object[] {}));
+		controller.setDefaultReadable(Accessible.NOBODY);
+		controller.setDefaultWritable(Accessible.NOBODY);
+		accessibleTest(controller, targetF, owner, "byOwner", "byAnybody");
+		accessibleTest(controller, targetM, owner, "byOwner", "byAnybody");
+		accessibleTest(controller, targetF, other, "byAnybody");
+		accessibleTest(controller, targetM, other, "byAnybody");
 	}
 
-	public void testIsWritable() throws Exception
+	private void accessibleTest(FieldAccessController ac, Object target, Object authority, String... expectedAccessibleFields)
 	{
-		FieldAccessController controller = new FieldAccessController();
-
-		List<com.syncnapsis.utils.reflections.Field> fields = ReflectionsUtil.findFields(POJO1.class);
-		assertEquals(2, fields.size());
-
-		com.syncnapsis.utils.reflections.Field xField = fields.get(0);
-		assertEquals("x", xField.getName());
-		com.syncnapsis.utils.reflections.Field yField = fields.get(1);
-		assertEquals("y", yField.getName());
-
-		// defaultWritable = true
-
-		assertTrue(controller.isWritable(xField, "v1"));
-		assertTrue(controller.isWritable(xField, 2));
-		assertTrue(controller.isWritable(xField, "v1", 2));
-
-		assertTrue(controller.isWritable(xField, "v1", 1));
-		assertTrue(controller.isWritable(xField, 2, "v2"));
-
-		assertTrue(controller.isWritable(xField, 1));
-		assertTrue(controller.isWritable(xField, "v2"));
-		assertTrue(controller.isWritable(xField, 1, "v2"));
-
-		assertTrue(controller.isWritable(xField, (Object[]) null));
-		assertTrue(controller.isWritable(xField, new Object[] {}));
-
-		// defaultWritable = false
-
-		assertTrue(controller.isWritable(yField, "v1"));
-		assertTrue(controller.isWritable(yField, 2));
-		assertTrue(controller.isWritable(yField, "v1", 2));
-
-		assertTrue(controller.isWritable(yField, "v1", 1));
-		assertTrue(controller.isWritable(yField, 2, "v2"));
-
-		assertFalse(controller.isWritable(yField, 1));
-		assertFalse(controller.isWritable(yField, "v2"));
-		assertFalse(controller.isWritable(yField, 1, "v2"));
-
-		assertFalse(controller.isWritable(yField, (Object[]) null));
-		assertFalse(controller.isWritable(yField, new Object[] {}));
-	}
-	public void testIsAccessible_read() throws Exception
-	{
-		FieldAccessController controller = new FieldAccessController();
-		
-		List<com.syncnapsis.utils.reflections.Field> fields = ReflectionsUtil.findFields(POJO1.class);
-		assertEquals(2, fields.size());
-		
-		com.syncnapsis.utils.reflections.Field xField = fields.get(0);
-		assertEquals("x", xField.getName());
-		com.syncnapsis.utils.reflections.Field yField = fields.get(1);
-		assertEquals("y", yField.getName());
-		
-		// defaultReadable = true
-		
-		assertTrue(controller.isAccessible(xField, AccessController.READ, "v1"));
-		assertTrue(controller.isAccessible(xField, AccessController.READ, 2));
-		assertTrue(controller.isAccessible(xField, AccessController.READ, "v1", 2));
-		
-		assertTrue(controller.isAccessible(xField, AccessController.READ, "v1", 1));
-		assertTrue(controller.isAccessible(xField, AccessController.READ, 2, "v2"));
-		
-		assertTrue(controller.isAccessible(xField, AccessController.READ, 1));
-		assertTrue(controller.isAccessible(xField, AccessController.READ, "v2"));
-		assertTrue(controller.isAccessible(xField, AccessController.READ, 1, "v2"));
-		
-		assertTrue(controller.isAccessible(xField, AccessController.READ, (Object[]) null));
-		assertTrue(controller.isAccessible(xField, AccessController.READ, new Object[] {}));
-		
-		// defaultReadable = false
-		
-		assertTrue(controller.isAccessible(yField, AccessController.READ, "v1"));
-		assertTrue(controller.isAccessible(yField, AccessController.READ, 2));
-		assertTrue(controller.isAccessible(yField, AccessController.READ, "v1", 2));
-		
-		assertTrue(controller.isAccessible(yField, AccessController.READ, "v1", 1));
-		assertTrue(controller.isAccessible(yField, AccessController.READ, 2, "v2"));
-		
-		assertFalse(controller.isAccessible(yField, AccessController.READ, 1));
-		assertFalse(controller.isAccessible(yField, AccessController.READ, "v2"));
-		assertFalse(controller.isAccessible(yField, AccessController.READ, 1, "v2"));
-		
-		assertFalse(controller.isAccessible(yField, AccessController.READ, (Object[]) null));
-		assertFalse(controller.isAccessible(yField, AccessController.READ, new Object[] {}));
-	}
-	
-	public void testIsAccessible_write() throws Exception
-	{
-		FieldAccessController controller = new FieldAccessController();
-		
-		List<com.syncnapsis.utils.reflections.Field> fields = ReflectionsUtil.findFields(POJO1.class);
-		assertEquals(2, fields.size());
-		
-		com.syncnapsis.utils.reflections.Field xField = fields.get(0);
-		assertEquals("x", xField.getName());
-		com.syncnapsis.utils.reflections.Field yField = fields.get(1);
-		assertEquals("y", yField.getName());
-		
-		// defaultWritable = true
-		
-		assertTrue(controller.isAccessible(xField, AccessController.WRITE, "v1"));
-		assertTrue(controller.isAccessible(xField, AccessController.WRITE, 2));
-		assertTrue(controller.isAccessible(xField, AccessController.WRITE, "v1", 2));
-		
-		assertTrue(controller.isAccessible(xField, AccessController.WRITE, "v1", 1));
-		assertTrue(controller.isAccessible(xField, AccessController.WRITE, 2, "v2"));
-		
-		assertTrue(controller.isAccessible(xField, AccessController.WRITE, 1));
-		assertTrue(controller.isAccessible(xField, AccessController.WRITE, "v2"));
-		assertTrue(controller.isAccessible(xField, AccessController.WRITE, 1, "v2"));
-		
-		assertTrue(controller.isAccessible(xField, AccessController.WRITE, (Object[]) null));
-		assertTrue(controller.isAccessible(xField, AccessController.WRITE, new Object[] {}));
-		
-		// defaultWritable = false
-		
-		assertTrue(controller.isAccessible(yField, AccessController.WRITE, "v1"));
-		assertTrue(controller.isAccessible(yField, AccessController.WRITE, 2));
-		assertTrue(controller.isAccessible(yField, AccessController.WRITE, "v1", 2));
-		
-		assertTrue(controller.isAccessible(yField, AccessController.WRITE, "v1", 1));
-		assertTrue(controller.isAccessible(yField, AccessController.WRITE, 2, "v2"));
-		
-		assertFalse(controller.isAccessible(yField, AccessController.WRITE, 1));
-		assertFalse(controller.isAccessible(yField, AccessController.WRITE, "v2"));
-		assertFalse(controller.isAccessible(yField, AccessController.WRITE, 1, "v2"));
-		
-		assertFalse(controller.isAccessible(yField, AccessController.WRITE, (Object[]) null));
-		assertFalse(controller.isAccessible(yField, AccessController.WRITE, new Object[] {}));
+		List<String> readableFields = new ArrayList<String>();
+		List<String> writableFields = new ArrayList<String>();
+		List<Field> fields = ReflectionsUtil.findDefaultFields(target.getClass());
+		for(Field f : fields)
+		{
+			if(ac.isAccessible(target, f, AccessController.READ, authority))
+				readableFields.add(f.getName());
+			if(ac.isAccessible(target, f, AccessController.WRITE, authority))
+				writableFields.add(f.getName());
+		}
+		for(String expectedField : expectedAccessibleFields)
+		{
+			assertTrue(expectedField + " is not readable", readableFields.contains(expectedField));
+			assertTrue(expectedField + " is not writable", writableFields.contains(expectedField));
+		}
 	}
 
 	@SuppressWarnings("unused")
 	@TestCoversMethods({ "getReadableAnnotation", "getWritableAnnotation" })
 	public void testGetAccessibleAnnotation() throws Exception
 	{
+		final int onField = 123;
+		final int onGetter = 456;
+		final int onSetter = 789;
+
 		Object oField = new Object() {
-			@Accessible(accessible = { @Authority(name = "onField") })
+			@Accessible(onField)
 			private int	x;
 
 			public int getX()
@@ -227,7 +105,7 @@ public class FieldAccessControllerTest extends LoggerTestCase
 		Object oGetter = new Object() {
 			private int	x;
 
-			@Accessible(accessible = { @Authority(name = "onGetter") })
+			@Accessible(onGetter)
 			public int getX()
 			{
 				return x;
@@ -246,7 +124,7 @@ public class FieldAccessControllerTest extends LoggerTestCase
 				return x;
 			}
 
-			@Accessible(accessible = { @Authority(name = "onSetter") })
+			@Accessible(onSetter)
 			public void setX(int x)
 			{
 				this.x = x;
@@ -264,10 +142,10 @@ public class FieldAccessControllerTest extends LoggerTestCase
 		controller = new FieldAccessController();
 
 		assertNotNull(controller.getReadableAnnotation(oFieldField));
-		assertEquals("onField", controller.getReadableAnnotation(oFieldField).accessible()[0].name());
+		assertEquals(onField, controller.getReadableAnnotation(oFieldField).value());
 
 		assertNotNull(controller.getReadableAnnotation(oGetterField));
-		assertEquals("onGetter", controller.getReadableAnnotation(oGetterField).accessible()[0].name());
+		assertEquals(onGetter, controller.getReadableAnnotation(oGetterField).value());
 
 		assertNull(controller.getReadableAnnotation(oSetterField));
 
@@ -276,98 +154,214 @@ public class FieldAccessControllerTest extends LoggerTestCase
 		controller = new FieldAccessController();
 
 		assertNotNull(controller.getWritableAnnotation(oFieldField));
-		assertEquals("onField", controller.getWritableAnnotation(oFieldField).accessible()[0].name());
+		assertEquals(onField, controller.getWritableAnnotation(oFieldField).value());
 
 		assertNull(controller.getWritableAnnotation(oGetterField));
 
 		assertNotNull(controller.getWritableAnnotation(oSetterField));
-		assertEquals("onSetter", controller.getWritableAnnotation(oSetterField).accessible()[0].name());
+		assertEquals(onSetter, controller.getWritableAnnotation(oSetterField).value());
 	}
-	
-	public void testIsAccessible() throws Exception
+
+	public static class AnnotatedByMethod extends AccessControllerTest.Target
 	{
+		private int	byNobody;
+		private int	byOwner;
+		private int	byAlly;
+		private int	byFriend;
+		private int	byEnemy;
+		private int	byAnybody;
+		private int	byDefault;
 
+		public AnnotatedByMethod(List<Object> owners)
+		{
+			super(owners);
+		}
+
+		public AnnotatedByMethod(Object owner)
+		{
+			super(owner);
+		}
+
+		@Accessible(Accessible.NOBODY)
+		public int getByNobody()
+		{
+			return byNobody;
+		}
+
+		@Accessible(Accessible.NOBODY)
+		public void setByNobody(int byNobody)
+		{
+			this.byNobody = byNobody;
+		}
+
+		@Accessible(Accessible.OWNER)
+		public int getByOwner()
+		{
+			return byOwner;
+		}
+
+		@Accessible(Accessible.OWNER)
+		public void setByOwner(int byOwner)
+		{
+			this.byOwner = byOwner;
+		}
+
+		@Accessible(Accessible.ALLY)
+		public int getByAlly()
+		{
+			return byAlly;
+		}
+
+		@Accessible(Accessible.ALLY)
+		public void setByAlly(int byAlly)
+		{
+			this.byAlly = byAlly;
+		}
+
+		@Accessible(Accessible.FRIEND)
+		public int getByFriend()
+		{
+			return byFriend;
+		}
+
+		@Accessible(Accessible.FRIEND)
+		public void setByFriend(int byFriend)
+		{
+			this.byFriend = byFriend;
+		}
+
+		@Accessible(Accessible.ENEMY)
+		public int getByEnemy()
+		{
+			return byEnemy;
+		}
+
+		@Accessible(Accessible.ENEMY)
+		public void setByEnemy(int byEnemy)
+		{
+			this.byEnemy = byEnemy;
+		}
+
+		@Accessible(Accessible.ANYBODY)
+		public int getByAnybody()
+		{
+			return byAnybody;
+		}
+
+		@Accessible(Accessible.ANYBODY)
+		public void setByAnybody(int byAnybody)
+		{
+			this.byAnybody = byAnybody;
+		}
+
+		// no annotation
+		public int getByDefault()
+		{
+			return byDefault;
+		}
+
+		// no annotation
+		public void setByDefault(int byDefault)
+		{
+			this.byDefault = byDefault;
+		}
 	}
 
-	public static class POJO1
+	public static class AnnotatedByField extends AccessControllerTest.Target
 	{
-		private int		x;
+		@Accessible(Accessible.NOBODY)
+		private int	byNobody;
+		@Accessible(Accessible.OWNER)
+		private int	byOwner;
+		@Accessible(Accessible.ALLY)
+		private int	byAlly;
+		@Accessible(Accessible.NOBODY)
+		private int	byFriend;
+		@Accessible(Accessible.ENEMY)
+		private int	byEnemy;
+		@Accessible(Accessible.ANYBODY)
+		private int	byAnybody;
+		// no annotation
+		private int	byDefault;
 
-		private String	y;
-
-		public POJO1()
+		public AnnotatedByField(List<Object> owners)
 		{
-
+			super(owners);
 		}
 
-		public POJO1(int x, String y)
+		public AnnotatedByField(Object owner)
 		{
-			super();
-			this.x = x;
-			this.y = y;
+			super(owner);
 		}
 
-		@Accessible(accessible = { @Authority(name = "v1"), @Authority(id = 2L) })
-		public int getX()
+		public int getByNobody()
 		{
-			return x;
+			return byNobody;
 		}
 
-		@Accessible(accessible = { @Authority(name = "v1"), @Authority(id = 2L) }, defaultAccessible = false)
-		public String getY()
+		public void setByNobody(int byNobody)
 		{
-			return y;
+			this.byNobody = byNobody;
 		}
 
-		@Accessible(accessible = { @Authority(name = "v1"), @Authority(id = 2L) })
-		public void setX(int x)
+		public int getByOwner()
 		{
-			this.x = x;
+			return byOwner;
 		}
 
-		@Accessible(accessible = { @Authority(name = "v1"), @Authority(id = 2L) }, defaultAccessible = false)
-		public void setY(String y)
+		public void setByOwner(int byOwner)
 		{
-			this.y = y;
+			this.byOwner = byOwner;
 		}
 
-		@Override
-		public String toString()
+		public int getByAlly()
 		{
-			return "POJO1 [x=" + x + ", y=" + y + "]";
+			return byAlly;
 		}
 
-		@Override
-		public int hashCode()
+		public void setByAlly(int byAlly)
 		{
-			final int prime = 31;
-			int result = 1;
-			result = prime * result + x;
-			result = prime * result + ((y == null) ? 0 : y.hashCode());
-			return result;
+			this.byAlly = byAlly;
 		}
 
-		@Override
-		public boolean equals(Object obj)
+		public int getByFriend()
 		{
-			if(this == obj)
-				return true;
-			if(obj == null)
-				return false;
-			if(getClass() != obj.getClass())
-				return false;
-			POJO1 other = (POJO1) obj;
-			if(x != other.x)
-				return false;
-			if(y == null)
-			{
-				if(other.y != null)
-					return false;
-			}
-			else if(!y.equals(other.y))
-				return false;
-			return true;
+			return byFriend;
+		}
+
+		public void setByFriend(int byFriend)
+		{
+			this.byFriend = byFriend;
+		}
+
+		public int getByEnemy()
+		{
+			return byEnemy;
+		}
+
+		public void setByEnemy(int byEnemy)
+		{
+			this.byEnemy = byEnemy;
+		}
+
+		public int getByAnybody()
+		{
+			return byAnybody;
+		}
+
+		public void setByAnybody(int byAnybody)
+		{
+			this.byAnybody = byAnybody;
+		}
+
+		public int getByDefault()
+		{
+			return byDefault;
+		}
+
+		public void setByDefault(int byDefault)
+		{
+			this.byDefault = byDefault;
 		}
 	}
-
 }

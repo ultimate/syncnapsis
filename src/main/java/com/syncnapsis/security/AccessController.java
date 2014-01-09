@@ -14,6 +14,8 @@
  */
 package com.syncnapsis.security;
 
+import java.util.List;
+
 /**
  * General Interface for Instances controlling the access to other Objects.
  * AccessControllers can be registered for their Object-Type at the SecurityManager
@@ -22,7 +24,7 @@ package com.syncnapsis.security;
  * @author ultimate
  * @param <T> - the Type of Object to access
  */
-public interface AccessController<T>
+public abstract class AccessController<T>
 {
 	// Operations to be checked - START
 
@@ -48,6 +50,14 @@ public interface AccessController<T>
 	 * @see AccessController#INVOKE
 	 */
 	public static final int	CALL		= INVOKE;
+	/**
+	 * Modify an entity
+	 */
+	public static final int	MODIFY		= 0x04;
+	/**
+	 * Manage an entity
+	 */
+	public static final int	MANAGE		= 0x05;
 
 	// Operations to be checked - END
 
@@ -56,15 +66,85 @@ public interface AccessController<T>
 	 * 
 	 * @return the target Class
 	 */
-	public Class<T> getTargetClass();
+	public abstract Class<T> getTargetClass();
 
 	/**
 	 * Check the accessibility of a target and the given operation for the defined authorities.
 	 * 
+	 * @param entity - the entity the target belongs to
 	 * @param target - the target to access
 	 * @param operation - the operation to perform
 	 * @param authorities - the authorities to check
 	 * @return true or false
 	 */
-	public boolean isAccessible(T target, int operation, Object... authorities);
+	public abstract boolean isAccessible(Object entity, T target, int operation, Object... authorities);
+
+	/**
+	 * Check whether a given entity is owned by the given authorities.
+	 * 
+	 * @param entity - the entity to check the owner for
+	 * @param authorities - the authorities to check against
+	 * @return true or false
+	 */
+	public static boolean isOwner(Object entity, Object... authorities)
+	{
+		if(entity instanceof Ownable<?>)
+		{
+			List<?> owners = ((Ownable<?>) entity).getOwners();
+			if(owners != null && authorities != null)
+			{
+				for(Object authority : authorities)
+				{
+					if(owners.contains(authority))
+						return true;
+				}
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * Check whether a the given authorities are friend for the entities owner.
+	 * 
+	 * @param entity - the entity to check the friend for
+	 * @param authorities - the authorities to check against
+	 * @return true or false
+	 */
+	public static boolean isFriend(Object entity, Object... authorities)
+	{
+		// TODO create HasFriends-Interface?
+		// Maybe owner should implement HasFriends?
+		// then we could call entity.getOwners().get(i).getFriends();
+		return false;
+	}
+
+	/**
+	 * Check whether a the given authorities are enemy for the entities owner.
+	 * 
+	 * @param entity - the entity to check the enemy for
+	 * @param authorities - the authorities to check against
+	 * @return true or false
+	 */
+	public static boolean isEnemy(Object entity, Object... authorities)
+	{
+		// TODO create HasEnemies-Interface?
+		// Maybe owner should implement HasEnemies?
+		// then we could call entity.getOwners().get(i).getEnemies();
+		return false;
+	}
+	
+	/**
+	 * Check whether a the given authorities are enemy for the entities owner.
+	 * 
+	 * @param entity - the entity to check the enemy for
+	 * @param authorities - the authorities to check against
+	 * @return true or false
+	 */
+	public static boolean isAlly(Object entity, Object... authorities)
+	{
+		// TODO create HasAllies-Interface?
+		// Maybe owner should implement HasAllies?
+		// then we could call entity.getOwners().get(i).getEnemies();
+		return false;
+	}
 }

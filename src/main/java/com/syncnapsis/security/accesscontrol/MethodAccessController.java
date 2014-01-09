@@ -19,29 +19,35 @@ import java.lang.reflect.Method;
 import com.syncnapsis.security.annotations.Accessible;
 import com.syncnapsis.utils.ReflectionsUtil;
 
+/**
+ * AccessController for {@link Method}s.
+ * This access controller uses {@link Accessible}-annotation to determine invocation permissions
+ * 
+ * @author ultimate
+ */
 public class MethodAccessController extends AnnotationAccessController<Method>
 {
 	/**
-	 * Are Methods accessible by default if no {@link Accessible}-Annotation is found?
+	 * The default value for valid accessor for reading fields
 	 */
-	protected boolean	defaultAccessible	= true;
+	private int	defaultAccessible	= Accessible.ANYBODY;
 
 	/**
-	 * Are Methods accessible by default if no {@link Accessible}-Annotation is found?
+	 * The default value for valid accessor for reading fields
 	 * 
-	 * @return true or false
+	 * @return defaultAccessible
 	 */
-	public boolean isDefaultAccessible()
+	public int getDefaultAccessible()
 	{
 		return defaultAccessible;
 	}
 
 	/**
-	 * Are Methods accessible by default if no {@link Accessible}-Annotation is found?
+	 * The default value for valid accessor for reading fields
 	 * 
-	 * @param defaultWritable - true or false
+	 * @param defaultAccessible - the default value
 	 */
-	public void setDefaultAccessible(boolean defaultAccessible)
+	public void setDefaultAccessible(int defaultAccessible)
 	{
 		this.defaultAccessible = defaultAccessible;
 	}
@@ -58,30 +64,19 @@ public class MethodAccessController extends AnnotationAccessController<Method>
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.syncnapsis.security.AccessController#isAccessible(java.lang.Object, int, java.lang.Object[])
+	 * @see com.syncnapsis.security.AccessController#isAccessible(java.lang.Object,
+	 * java.lang.Object, int, java.lang.Object[])
 	 */
 	@Override
-	public boolean isAccessible(Method target, int operation, Object... authorities)
+	public boolean isAccessible(Object entity, Method target, int operation, Object... authorities)
 	{
 		boolean a = false;
 		if(operation == INVOKE)
 		{
-			a = isAccessible(target, authorities);
+			a = isAccessible(entity, getAccessibleAnnotation(target), defaultAccessible, authorities);
 			logger.debug("invoke@" + target + ": " + a);
 		}
 		return a;
-	}
-
-	/**
-	 * Is a Method accessible by the given authorities?
-	 * 
-	 * @param method - the Method
-	 * @param authorities - the authorities to check for accessibility
-	 * @return true or false
-	 */
-	public boolean isAccessible(Method method, Object... authorities)
-	{
-		return isAccessible(getAccessibleAnnotation(method), defaultAccessible, authorities);
 	}
 
 	/**
