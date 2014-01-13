@@ -27,10 +27,11 @@ import java.util.Queue;
 import java.util.Set;
 
 import com.syncnapsis.enums.EnumLocale;
+import com.syncnapsis.security.AccessController;
+import com.syncnapsis.security.AccessControllerTest;
 import com.syncnapsis.security.SecurityManager;
 import com.syncnapsis.security.accesscontrol.FieldAccessController;
 import com.syncnapsis.security.annotations.Accessible;
-import com.syncnapsis.security.annotations.Authority;
 import com.syncnapsis.tests.LoggerTestCase;
 import com.syncnapsis.tests.annotations.TestCoversClasses;
 import com.syncnapsis.tests.annotations.TestCoversMethods;
@@ -64,16 +65,16 @@ public class BaseMapperTest extends LoggerTestCase
 
 		assertEquals(new Date(1), mapper.merge(new Date(), 1, (Object[]) null));
 		assertEquals(new Date(1), mapper.merge(Date.class, 1, (Object[]) null));
-		
+
 		assertEquals(EnumLocale.DE, mapper.merge(EnumLocale.class, EnumLocale.DE, (Object[]) null));
 		assertEquals(EnumLocale.DE, mapper.merge(EnumLocale.class, "DE", (Object[]) null));
 	}
 
 	public void testMergeToArray() throws Exception
 	{
-		POJO1 p1 = new POJO1(1, "one");
-		POJO1 p2 = new POJO1(2, "two");
-		POJO1 p3 = new POJO1(3, "three");
+		POJO1 p1 = new POJO1(null, 1, "one");
+		POJO1 p2 = new POJO1(null, 2, "two");
+		POJO1 p3 = new POJO1(null, 3, "three");
 
 		Map<String, Object> m1 = mapper.toMap(p1);
 		Map<String, Object> m2 = mapper.toMap(p2);
@@ -97,9 +98,9 @@ public class BaseMapperTest extends LoggerTestCase
 	@SuppressWarnings("unchecked")
 	public void testMergeToCollection() throws Exception
 	{
-		POJO1 p1 = new POJO1(1, "one");
-		POJO1 p2 = new POJO1(2, "two");
-		POJO1 p3 = new POJO1(3, "three");
+		POJO1 p1 = new POJO1(null, 1, "one");
+		POJO1 p2 = new POJO1(null, 2, "two");
+		POJO1 p3 = new POJO1(null, 3, "three");
 
 		Map<String, Object> m1 = mapper.toMap(p1);
 		Map<String, Object> m2 = mapper.toMap(p2);
@@ -217,25 +218,20 @@ public class BaseMapperTest extends LoggerTestCase
 		securityManager.addAccessController(new FieldAccessController());
 		mapper.setSecurityManager(securityManager);
 
-		POJO1 p = new POJO1(1, "one");
+		Object owner = new Object();
+		Object other = new Object();
 
-		// roles with permission
-		checkMap(mapper.toMap(p, "v1"), "x", p.getX(), "y", p.getY());
-		checkMap(mapper.toMap(p, 2), "x", p.getX(), "y", p.getY());
-		checkMap(mapper.toMap(p, "v1", 2), "x", p.getX(), "y", p.getY());
+		POJO1 p = new POJO1(owner, 1, "one");
 
-		// roles with permission mixed with others roles without
-		checkMap(mapper.toMap(p, "v1", 1), "x", p.getX(), "y", p.getY());
-		checkMap(mapper.toMap(p, 2, "v2"), "x", p.getX(), "y", p.getY());
+		// with owner
+		checkMap(mapper.toMap(p, owner), "x", p.getX(), "y", p.getY());
 
-		// roles without permission
-		checkMap(mapper.toMap(p, 1), "x", p.getX());
-		checkMap(mapper.toMap(p, "v2"), "x", p.getX());
-		checkMap(mapper.toMap(p, 1, "v2"), "x", p.getX());
+		// with other
+		checkMap(mapper.toMap(p, other), "y", p.getY());
 
-		// no role
-		checkMap(mapper.toMap(p, (Object[]) null), "x", p.getX());
-		checkMap(mapper.toMap(p, new Object[] {}), "x", p.getX());
+		// noone
+		checkMap(mapper.toMap(p, (Object[]) null), "y", p.getY());
+		checkMap(mapper.toMap(p, new Object[] {}), "y", p.getY());
 
 		mapper.setSecurityManager(null);
 	}
@@ -247,34 +243,27 @@ public class BaseMapperTest extends LoggerTestCase
 		securityManager.addAccessController(new FieldAccessController());
 		mapper.setSecurityManager(securityManager);
 
-		POJO1 p = new POJO1(1, "one");
-		Map<String, Object> m = mapper.toMap(p, "v1");
+		Object owner = new Object();
+		Object other = new Object();
+
+		POJO1 p = new POJO1(owner, 1, "one");
+		Map<String, Object> m = mapper.toMap(p, owner);
 		assertTrue(m.containsKey("x"));
 		assertTrue(m.containsKey("y"));
 
 		POJO1 expected;
 
-		// roles with permission
-		expected = new POJO1(p.getX(), p.getY());
-		assertEquals(expected, mapper.fromMap(new POJO1(), m, "v1"));
-		assertEquals(expected, mapper.fromMap(new POJO1(), m, 2));
-		assertEquals(expected, mapper.fromMap(new POJO1(), m, "v1", 2));
+		// with owner
+		expected = new POJO1(null, p.getX(), p.getY());
+		assertEquals(expected, mapper.fromMap(new POJO1(owner), m, owner));
 
-		// roles with permission mixed with others roles without
-		// same expected
-		assertEquals(expected, mapper.fromMap(new POJO1(), m, "v1", 1));
-		assertEquals(expected, mapper.fromMap(new POJO1(), m, 2, "v2"));
+		// with other
+		expected = new POJO1(null, 0, p.getY());
+		assertEquals(expected, mapper.fromMap(new POJO1(owner), m, other));
 
-		// roles without permission
-		expected = new POJO1(p.getX(), null);
-		assertEquals(expected, mapper.fromMap(new POJO1(), m, 1));
-		assertEquals(expected, mapper.fromMap(new POJO1(), m, "v2"));
-		assertEquals(expected, mapper.fromMap(new POJO1(), m, 1, "v2"));
-
-		// no role
-		// same expected
-		assertEquals(expected, mapper.fromMap(new POJO1(), m, (Object[]) null));
-		assertEquals(expected, mapper.fromMap(new POJO1(), m, new Object[] {}));
+		// noone
+		assertEquals(expected, mapper.fromMap(new POJO1(owner), m, (Object[]) null));
+		assertEquals(expected, mapper.fromMap(new POJO1(owner), m, new Object[] {}));
 
 		mapper.setSecurityManager(null);
 	}
@@ -346,12 +335,12 @@ public class BaseMapperTest extends LoggerTestCase
 			assertEquals(entries[i + 1], map.get(entries[i]));
 		}
 	}
-	
+
 	@TestCoversMethods("prepare")
 	public void testPrepare_Enum() throws Exception
 	{
 		EnumLocale e = EnumLocale.DE;
-		
+
 		assertEquals(e, mapper.prepare(e, (Object[]) null));
 	}
 
@@ -363,25 +352,27 @@ public class BaseMapperTest extends LoggerTestCase
 		securityManager.addAccessController(controller);
 		mapper.setSecurityManager(securityManager);
 
+		Object owner = new Object();
+		Object other = new Object();
+
+		POJO1 entity = new POJO1(owner);
+
 		List<com.syncnapsis.utils.reflections.Field> fields = ReflectionsUtil.findFields(POJO1.class);
-		assertEquals(2, fields.size());
+		assertEquals(3, fields.size());
 
 		com.syncnapsis.utils.reflections.Field xField = fields.get(0);
 		assertEquals("x", xField.getName());
 		com.syncnapsis.utils.reflections.Field yField = fields.get(1);
 		assertEquals("y", yField.getName());
+		com.syncnapsis.utils.reflections.Field ownersField = fields.get(2);
+		assertEquals("owners", ownersField.getName());
 
 		// READABLE
 		// @formatter:off
 		Object[][] authorities = new Object[][] { 
-				new Object[] { "v1" },
-				new Object[] { 2 },
-				new Object[] { "v1", 2 },
-				new Object[] { "v1", 1 },
-				new Object[] { 2, "v2" },
-				new Object[] { 1 },
-				new Object[] { "v2" },
-				new Object[] { 1, "v2" },
+				new Object[] { owner },
+				new Object[] { other },
+				new Object[] { owner, other },
 				null,
 				new Object[] { },
 		};
@@ -389,10 +380,14 @@ public class BaseMapperTest extends LoggerTestCase
 
 		for(int i = 0; i < authorities.length; i++)
 		{
-			assertEquals(controller.isReadable(xField, authorities[i]), mapper.isReadable(xField, authorities[i]));			
-			assertEquals(controller.isWritable(xField, authorities[i]), mapper.isWritable(xField, authorities[i]));			
-			assertEquals(controller.isReadable(yField, authorities[i]), mapper.isReadable(yField, authorities[i]));			
-			assertEquals(controller.isWritable(yField, authorities[i]), mapper.isWritable(yField, authorities[i]));			
+			assertEquals(controller.isAccessible(entity, xField, AccessController.READ, authorities[i]),
+					mapper.isReadable(entity, xField, authorities[i]));
+			assertEquals(controller.isAccessible(entity, xField, AccessController.WRITE, authorities[i]),
+					mapper.isWritable(entity, xField, authorities[i]));
+			assertEquals(controller.isAccessible(entity, yField, AccessController.READ, authorities[i]),
+					mapper.isReadable(entity, yField, authorities[i]));
+			assertEquals(controller.isAccessible(entity, yField, AccessController.WRITE, authorities[i]),
+					mapper.isWritable(entity, yField, authorities[i]));
 		}
 	}
 
@@ -417,7 +412,7 @@ public class BaseMapperTest extends LoggerTestCase
 		assertEquals(POJO1[].class, array.getClass());
 		assertEquals(5, array.length);
 	}
-	
+
 	public void testIsInvariant() throws Exception
 	{
 		assertTrue(mapper.isInvariant(null));
@@ -426,11 +421,11 @@ public class BaseMapperTest extends LoggerTestCase
 		assertTrue(mapper.isInvariant("a"));
 		assertTrue(mapper.isInvariant(EnumLocale.DE));
 		assertTrue(mapper.isInvariant(new Date()));
-		
+
 		assertFalse(mapper.isInvariant(new Object()));
 	}
 
-	public static class POJO1
+	public static class POJO1 extends AccessControllerTest.Target
 	{
 		private int		x;
 
@@ -438,35 +433,40 @@ public class BaseMapperTest extends LoggerTestCase
 
 		public POJO1()
 		{
-
+			super(null);
 		}
 
-		public POJO1(int x, String y)
+		public POJO1(Object owner)
 		{
-			super();
+			super(owner);
+		}
+
+		public POJO1(Object owner, int x, String y)
+		{
+			super(owner);
 			this.x = x;
 			this.y = y;
 		}
 
-		@Accessible(accessible = { @Authority(name = "v1"), @Authority(id = 2L) })
+		@Accessible(Accessible.OWNER)
 		public int getX()
 		{
 			return x;
 		}
 
-		@Accessible(accessible = { @Authority(name = "v1"), @Authority(id = 2L) }, defaultAccessible = false)
+		@Accessible(Accessible.ANYBODY)
 		public String getY()
 		{
 			return y;
 		}
 
-		@Accessible(accessible = { @Authority(name = "v1"), @Authority(id = 2L) })
+		@Accessible(Accessible.OWNER)
 		public void setX(int x)
 		{
 			this.x = x;
 		}
 
-		@Accessible(accessible = { @Authority(name = "v1"), @Authority(id = 2L) }, defaultAccessible = false)
+		@Accessible(Accessible.ANYBODY)
 		public void setY(String y)
 		{
 			this.y = y;

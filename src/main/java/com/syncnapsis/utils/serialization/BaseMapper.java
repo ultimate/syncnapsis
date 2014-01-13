@@ -206,7 +206,7 @@ public class BaseMapper implements Mapper, InitializingBean
 			List<Field> fields = ReflectionsUtil.findFields(entity.getClass(), SERIALIZABLE);
 			for(Field field : fields)
 			{
-				if(isReadable(field, authorities))
+				if(isReadable(entity, field, authorities))
 				{
 					try
 					{
@@ -537,7 +537,7 @@ public class BaseMapper implements Mapper, InitializingBean
 			Object oldValue, newValue;
 			for(Field field : fields)
 			{
-				if(isWritable(field, authorities))
+				if(isWritable(entity, field, authorities))
 				{
 					try
 					{
@@ -595,20 +595,20 @@ public class BaseMapper implements Mapper, InitializingBean
 		return false;
 	}
 
-	protected boolean isReadable(Field field, Object... authorities)
+	protected boolean isReadable(Object entity, Field field, Object... authorities)
 	{
 		if(this.securityManager == null)
 			return true;
 		else
-			return this.securityManager.getAccessController(Field.class).isAccessible(field, AccessController.READ, authorities);
+			return this.securityManager.getAccessController(Field.class).isAccessible(entity, field, AccessController.READ, authorities);
 	}
 
-	protected boolean isWritable(Field field, Object... authorities)
+	protected boolean isWritable(Object entity, Field field, Object... authorities)
 	{
 		if(this.securityManager == null)
 			return true;
 		else
-			return this.securityManager.getAccessController(Field.class).isAccessible(field, AccessController.WRITE, authorities);
+			return this.securityManager.getAccessController(Field.class).isAccessible(entity, field, AccessController.WRITE, authorities);
 	}
 
 	// @formatter:off

@@ -23,7 +23,7 @@ import com.syncnapsis.tests.annotations.TestExcludesMethods;
 /**
  * @author ultimate
  */
-@TestExcludesMethods({ "getTarget", "isAccessible" })
+@TestExcludesMethods({ "getTargetClass", "isAccessible" })
 public class AccessControllerTest extends LoggerTestCase
 {
 	public void testIsOwner() throws Exception

@@ -33,7 +33,6 @@ import org.jmock.Expectations;
 import com.syncnapsis.exceptions.ConversionException;
 import com.syncnapsis.mock.MockSetAndGetEntity;
 import com.syncnapsis.security.annotations.Accessible;
-import com.syncnapsis.security.annotations.Authority;
 import com.syncnapsis.tests.LoggerTestCase;
 import com.syncnapsis.tests.annotations.TestCoversClasses;
 import com.syncnapsis.tests.annotations.TestCoversMethods;
@@ -593,19 +592,19 @@ public class ReflectionsUtilTest extends LoggerTestCase
 		assertTrue(ReflectionsUtil.isAnnotationPresent(annotated, Accessible.class));
 		accessible = ReflectionsUtil.getAnnotation(annotated, Accessible.class);
 		assertNotNull(accessible);
-		assertEquals("onAnnotated1", accessible.accessible()[0].name());
+		assertEquals(annotated1, accessible.value());
 
 		annotated = Annotated2.class.getMethod("method");
 		assertTrue(ReflectionsUtil.isAnnotationPresent(annotated, Accessible.class));
 		accessible = ReflectionsUtil.getAnnotation(annotated, Accessible.class);
 		assertNotNull(accessible);
-		assertEquals("onAnnotated2", accessible.accessible()[0].name());
+		assertEquals(annotated2, accessible.value());
 
 		annotated = Annotated3.class.getMethod("method");
 		assertTrue(ReflectionsUtil.isAnnotationPresent(annotated, Accessible.class));
 		accessible = ReflectionsUtil.getAnnotation(annotated, Accessible.class);
 		assertNotNull(accessible);
-		assertEquals("onAnnotated2", accessible.accessible()[0].name());
+		assertEquals(annotated2, accessible.value());
 
 		// class
 
@@ -639,21 +638,21 @@ public class ReflectionsUtilTest extends LoggerTestCase
 		annotations = ReflectionsUtil.getAnnotations(annotated);
 		assertNotNull(annotations);
 		assertEquals(1, annotations.length);
-		assertEquals("onAnnotated1", ((Accessible) annotations[0]).accessible()[0].name());
+		assertEquals(annotated1, ((Accessible) annotations[0]).value());
 
 		annotated = Annotated2.class.getMethod("method");
 		annotations = ReflectionsUtil.getAnnotations(annotated);
 		assertNotNull(annotations);
 		assertEquals(2, annotations.length);
-		assertEquals("onAnnotated2", ((Accessible) annotations[0]).accessible()[0].name());
-		assertEquals("onAnnotated1", ((Accessible) annotations[1]).accessible()[0].name());
+		assertEquals(annotated2, ((Accessible) annotations[0]).value());
+		assertEquals(annotated1, ((Accessible) annotations[1]).value());
 
 		annotated = Annotated3.class.getMethod("method");
 		annotations = ReflectionsUtil.getAnnotations(annotated);
 		assertNotNull(annotations);
 		assertEquals(2, annotations.length);
-		assertEquals("onAnnotated2", ((Accessible) annotations[0]).accessible()[0].name());
-		assertEquals("onAnnotated1", ((Accessible) annotations[1]).accessible()[0].name());
+		assertEquals(annotated2, ((Accessible) annotations[0]).value());
+		assertEquals(annotated1, ((Accessible) annotations[1]).value());
 
 		// method
 
@@ -821,11 +820,14 @@ public class ReflectionsUtilTest extends LoggerTestCase
 	}
 
 	// fomatter:on
+	
+	private static final int annotated1 = 123;
+	private static final int annotated2 = 456;
 
 	@TestExcludesMethods("annotated1")
 	public static class Annotated1
 	{
-		@Accessible(accessible = @Authority(name = "onAnnotated1"))
+		@Accessible(annotated1)
 		public void method()
 		{
 
@@ -835,7 +837,7 @@ public class ReflectionsUtilTest extends LoggerTestCase
 	@TestExcludesMethods("annotated2")
 	public static class Annotated2 extends Annotated1
 	{
-		@Accessible(accessible = @Authority(name = "onAnnotated2"))
+		@Accessible(annotated2)
 		@Override
 		public void method()
 		{
