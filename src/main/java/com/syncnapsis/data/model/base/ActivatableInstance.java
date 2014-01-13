@@ -47,7 +47,7 @@ public abstract class ActivatableInstance<PK extends Serializable> extends BaseO
 	 * @return activated
 	 */
 	@Column(nullable = false)
-	@Accessible(defaultAccessible = false)
+	@Accessible(Accessible.NOBODY)
 	public boolean isActivated()
 	{
 		return activated;
@@ -58,7 +58,7 @@ public abstract class ActivatableInstance<PK extends Serializable> extends BaseO
 	 * 
 	 * @param activated - true oder false
 	 */
-	@Accessible(defaultAccessible = false)
+	@Accessible(Accessible.NOBODY)
 	public void setActivated(boolean activated)
 	{
 		this.activated = activated;

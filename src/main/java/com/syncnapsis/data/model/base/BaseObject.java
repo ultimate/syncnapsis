@@ -76,7 +76,7 @@ public abstract class BaseObject<PK extends Serializable> implements Model, Iden
 	@Column(length = LENGTH_ID)
 	@SequenceGenerator(name = "HIBERNATE_SEQ")
 	@GeneratedValue(strategy = GenerationType.AUTO, generator = "HIBERNATE_SEQ")
-	@Accessible(defaultAccessible = true)
+	@Accessible(Accessible.ANYBODY)
 	public PK getId()
 	{
 		return id;
@@ -88,7 +88,7 @@ public abstract class BaseObject<PK extends Serializable> implements Model, Iden
 	 * @return version
 	 */
 	@Version
-	@Accessible(defaultAccessible = false)
+	@Accessible(Accessible.NOBODY)
 	public Integer getVersion()
 	{
 		return version;
@@ -99,7 +99,7 @@ public abstract class BaseObject<PK extends Serializable> implements Model, Iden
 	 * 
 	 * @param id - der Primärschlüssel
 	 */
-	@Accessible(defaultAccessible = false)
+	@Accessible(Accessible.NOBODY)
 	public void setId(PK id)
 	{
 		this.id = id;
@@ -110,7 +110,7 @@ public abstract class BaseObject<PK extends Serializable> implements Model, Iden
 	 * 
 	 * @param version - die Version
 	 */
-	@Accessible(defaultAccessible = false)
+	@Accessible(Accessible.NOBODY)
 	public void setVersion(Integer version)
 	{
 		this.version = version;
