@@ -19,6 +19,8 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import com.syncnapsis.security.AccessRule;
+
 /**
  * Annotation indicating the accessibility of a Field or Method.<br>
  * Used for (De)-Serialization or Method Invocation there are different ways to annotate Elements:<br>
@@ -43,12 +45,6 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Accessible
 {
-	public static final int	NOBODY	= 0x00;
-	public static final int	OWNER	= 0x01;
-	public static final int	FRIEND	= 0x02;
-	public static final int	ALLY	= 0x04;
-	public static final int	ENEMY	= 0x08;
-	public static final int	ANYBODY	= 0xFF;
-
-	int value() default NOBODY;
+	int by() default AccessRule.NOBODY;
+	int of() default AccessRule.ANYROLE;
 }
