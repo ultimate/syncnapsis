@@ -14,50 +14,85 @@
  */
 package com.syncnapsis.security.accesscontrol;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.syncnapsis.security.AccessController;
+import com.syncnapsis.security.AccessRule;
 import com.syncnapsis.security.annotations.Accessible;
 
 /**
  * Abstract base for AccessControllers using the {@link Accessible} annotation.
  * 
  * @author ultimate
- * @param <T> - the Type of the Target class accessed
+ * @param <T> - the Target-Type to access
  */
 public abstract class AnnotationAccessController<T> extends AccessController<T>
 {
 	/**
-	 * Logger-Instance
+	 * Create a new AccessController with the given rule
+	 * 
+	 * @param targetClass - the target Class this AccessController is associated with
+	 * @param rule - the AccessRule to use
 	 */
-	protected final Logger	logger	= LoggerFactory.getLogger(getClass());
+	public AnnotationAccessController(Class<T> targetClass, AccessRule rule)
+	{
+		super(targetClass, rule);
+	}
 
 	/**
 	 * Check an accessible annotation for accessibility
 	 * 
 	 * @param entity - the entity to check to accessibility for
 	 * @param a - the accessible annotation to check
-	 * @param defaultAccessible - the default value for accessibility
+	 * @param defaultAccessibleBy - the default value for <code>@Accessible.by()</code>
+	 * @param defaultAccessibleOf - the default value for <code>@Accessible.of()</code>
 	 * @param authorities - the authorities to check for
 	 * @return true or false
 	 */
-	public boolean isAccessible(Object entity, Accessible a, int defaultAccessible, Object... authorities)
+	public boolean isAccessible(Object entity, Accessible a, int defaultAccessibleBy, int defaultAccessibleOf, Object... authorities)
 	{
-		int accessible = (a != null ? a.value() : defaultAccessible);
+		int accessibleBy = (a != null ? a.by() : defaultAccessibleBy);
+		int accessibleOf = (a != null ? a.of() : defaultAccessibleOf);
 
-		if(accessible == Accessible.NOBODY)
+		if(accessibleBy == AccessRule.NOBODY)
 			return false;
-		if(accessible == Accessible.ANYBODY)
-			return true;
-		if((accessible & Accessible.OWNER) != 0 && isOwner(entity, authorities))
-			return true;
-		if((accessible & Accessible.FRIEND) != 0 && isFriend(entity, authorities))
-			return true;
-		if((accessible & Accessible.ENEMY) != 0 && isEnemy(entity, authorities))
-			return true;
-		if((accessible & Accessible.ALLY) != 0 && isAlly(entity, authorities))
-			return true;
-		return false;
+		return rule.is(accessibleBy, entity, authorities) && rule.isOf(accessibleOf, authorities);
 	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see com.syncnapsis.security.AccessController#isAccessible(java.lang.Object, int,
+	 * java.lang.Object, java.lang.Object[])
+	 */
+	@Override
+	public boolean isAccessible(T target, int operation, Object context, Object... authorities)
+	{
+		Accessible a = getAnnotation(target, operation);
+		int defaultAccessibleBy = getDefaultAccessibleBy(operation);
+		int defaultAccessibleOf = getDefaultAccessibleOf(operation);
+		return isAccessible(context, a, defaultAccessibleBy, defaultAccessibleOf, authorities);
+	}
+
+	/**
+	 * Get the <code>@Accessible</code> annotation for the target
+	 * 
+	 * @param target - the target to be accessed
+	 * @param operation - the operation to perform
+	 * @return the annotation
+	 */
+	public abstract Accessible getAnnotation(T target, int operation);
+
+	/**
+	 * Get the default value for <code>@Accessible.by()</code> for the given operation
+	 * 
+	 * @param operation - the operation to perform
+	 * @return the default value
+	 */
+	public abstract int getDefaultAccessibleBy(int operation);
+
+	/**
+	 * Get the default value for <code>@Accessible.of()</code> for the given operation
+	 * 
+	 * @param operation - the operation to perform
+	 * @return the default value
+	 */
+	public abstract int getDefaultAccessibleOf(int operation);
 }
