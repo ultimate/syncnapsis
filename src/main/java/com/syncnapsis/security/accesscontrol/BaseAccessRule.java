@@ -76,7 +76,7 @@ public class BaseAccessRule implements AccessRule
 	 * @param authorities - the authorities to check against
 	 * @return true or false
 	 */
-	public static boolean isOwner(Object entity, Object... authorities)
+	public boolean isOwner(Object entity, Object... authorities)
 	{
 		if(entity instanceof Ownable<?>)
 		{
@@ -102,7 +102,7 @@ public class BaseAccessRule implements AccessRule
 	 * @param authorities - the authorities to check against
 	 * @return true or false
 	 */
-	public static boolean isFriend(Object entity, Object... authorities)
+	public boolean isFriend(Object entity, Object... authorities)
 	{
 		// TODO create HasFriends-Interface?
 		// Maybe owner should implement HasFriends?
@@ -117,7 +117,7 @@ public class BaseAccessRule implements AccessRule
 	 * @param authorities - the authorities to check against
 	 * @return true or false
 	 */
-	public static boolean isEnemy(Object entity, Object... authorities)
+	public boolean isEnemy(Object entity, Object... authorities)
 	{
 		// TODO create HasEnemies-Interface?
 		// Maybe owner should implement HasEnemies?
@@ -132,7 +132,7 @@ public class BaseAccessRule implements AccessRule
 	 * @param authorities - the authorities to check against
 	 * @return true or false
 	 */
-	public static boolean isAlly(Object entity, Object... authorities)
+	public boolean isAlly(Object entity, Object... authorities)
 	{
 		// TODO create HasAllies-Interface?
 		// Maybe owner should implement HasAllies?
