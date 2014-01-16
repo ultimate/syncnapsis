@@ -16,6 +16,7 @@ package com.syncnapsis.security.accesscontrol;
 
 import java.lang.reflect.Modifier;
 
+import com.syncnapsis.security.AccessRule;
 import com.syncnapsis.security.annotations.Accessible;
 import com.syncnapsis.utils.ReflectionsUtil;
 import com.syncnapsis.utils.reflections.Field;
@@ -29,120 +30,170 @@ import com.syncnapsis.utils.reflections.Field;
 public class FieldAccessController extends AnnotationAccessController<Field>
 {
 	/**
-	 * The default value for valid accessor for reading fields
+	 * The default value for <code>@Accessible.by()</code> for read operations
 	 */
-	private int	defaultReadable	= Accessible.ANYBODY;
+	private int	defaultReadableBy	= AccessRule.ANYBODY;
 	/**
-	 * The default value for valid accessor for writing fields
+	 * The default value for <code>@Accessible.by()</code> for write operations
 	 */
-	private int	defaultWritable	= Accessible.ANYBODY;
+	private int	defaultWritableBy	= AccessRule.ANYBODY;
+	/**
+	 * The default value for <code>@Accessible.of()</code> for read operations
+	 */
+	private int	defaultReadableOf	= AccessRule.ANYBODY;
+	/**
+	 * The default value for <code>@Accessible.of()</code> for write operations
+	 */
+	private int	defaultWritableOf	= AccessRule.ANYBODY;
 
 	/**
-	 * The default value for valid accessor for reading fields
+	 * Construct a new FieldAccessController with the given rule
 	 * 
-	 * @return defaultReadable
+	 * @param rule - the AccessRule to use
 	 */
-	public int getDefaultReadable()
+	public FieldAccessController(AccessRule rule)
 	{
-		return defaultReadable;
+		super(Field.class, rule);
 	}
 
 	/**
-	 * The default value for valid accessor for reading fields
+	 * The default value for <code>@Accessible.by()</code> for read operations
 	 * 
-	 * @param defaultReadable - the default value
+	 * @return defaultReadableBy
 	 */
-	public void setDefaultReadable(int defaultReadable)
+	public int getDefaultReadableBy()
 	{
-		this.defaultReadable = defaultReadable;
+		return defaultReadableBy;
 	}
 
 	/**
-	 * The default value for valid accessor for writing fields
+	 * The default value for <code>@Accessible.by()</code> for read operations
 	 * 
-	 * @return defaultWritable
+	 * @param defaultReadableBy - the default value
 	 */
-	public int getDefaultWritable()
+	public void setDefaultReadableBy(int defaultReadableBy)
 	{
-		return defaultWritable;
+		this.defaultReadableBy = defaultReadableBy;
 	}
 
 	/**
-	 * The default value for valid accessor for writing fields
+	 * The default value for <code>@Accessible.by()</code> for write operations
 	 * 
-	 * @param defaultWritable - the default value
+	 * @return defaultWritableBy
 	 */
-	public void setDefaultWritable(int defaultWritable)
+	public int getDefaultWritableBy()
 	{
-		this.defaultWritable = defaultWritable;
+		return defaultWritableBy;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * @see com.syncnapsis.security.AccessController#getTargetClass()
+	/**
+	 * The default value for <code>@Accessible.by()</code> for write operations
+	 * 
+	 * @param defaultWritableBy - the default value
 	 */
+	public void setDefaultWritableBy(int defaultWritableBy)
+	{
+		this.defaultWritableBy = defaultWritableBy;
+	}
+
+	/**
+	 * The default value for <code>@Accessible.of()</code> for read operations
+	 * 
+	 * @return defaultReadableOf
+	 */
+	public int getDefaultReadableOf()
+	{
+		return defaultReadableOf;
+	}
+
+	/**
+	 * The default value for <code>@Accessible.of()</code> for read operations
+	 * 
+	 * @param defaultReadableOf - the default value
+	 */
+	public void setDefaultReadableOf(int defaultReadableOf)
+	{
+		this.defaultReadableOf = defaultReadableOf;
+	}
+
+	/**
+	 * The default value for <code>@Accessible.of()</code> for write operations
+	 * 
+	 * @return defaultWritableOf
+	 */
+	public int getDefaultWritableOf()
+	{
+		return defaultWritableOf;
+	}
+
+	/**
+	 * The default value for <code>@Accessible.of()</code> for write operations
+	 * 
+	 * @param defaultWritableOf - the default value
+	 */
+	public void setDefaultWritableOf(int defaultWritableOf)
+	{
+		this.defaultWritableOf = defaultWritableOf;
+	}
+
 	@Override
-	public Class<Field> getTargetClass()
+	public boolean isAccessible(Field target, int operation, Object context, Object... authorities)
 	{
-		return Field.class;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * @see com.syncnapsis.security.AccessController#isAccessible(java.lang.Object,
-	 * java.lang.Object, int, java.lang.Object[])
-	 */
-	@Override
-	public boolean isAccessible(Object entity, Field target, int operation, Object... authorities)
-	{
-		boolean a = false;
-		if(operation == READ)
-		{
-			a = isAccessible(entity, getReadableAnnotation(target), defaultReadable, authorities);
-			logger.debug("read@" + target + ": " + a);
-		}
-		else if(operation == WRITE)
-		{
-			if(Modifier.isFinal(target.getField().getModifiers()))
-				a = false;
-			else
-				a = isAccessible(entity, getWritableAnnotation(target), defaultWritable, authorities);
-			logger.debug("write@" + target + ": " + a);
-		}
+		if(operation == WRITE && Modifier.isFinal(target.getField().getModifiers()))
+			return false;
+		boolean a = super.isAccessible(target, operation, context, authorities);
+		logger.debug((operation == READ ? "read" : "write") + "@" + target + ": " + a);
 		return a;
 	}
 
-	/**
-	 * Get the Accessible Annotation for Read-Access. This means the Accessible Annotation at the
-	 * Getter and the Field is considerd (Getter is preferred.)
-	 * 
-	 * @param field - the field to scan for the annotation
-	 * @return the Accessible Annotation
+	/*
+	 * (non-Javadoc)
+	 * @see
+	 * com.syncnapsis.security.accesscontrol.AnnotationAccessController#getAnnotation(java.lang.
+	 * Object, int)
 	 */
-	protected Accessible getReadableAnnotation(Field field)
+	@Override
+	public Accessible getAnnotation(Field target, int operation)
 	{
 		Accessible a = null;
-		if(field.getGetter() != null && ((a = ReflectionsUtil.getAnnotation(field.getGetter(), Accessible.class)) != null))
-			return a;
-		if(field.getField() != null && ((a = ReflectionsUtil.getAnnotation(field.getField(), Accessible.class)) != null))
-			return a;
-		return null;
+		if(operation == READ && target.getGetter() != null)
+			a = ReflectionsUtil.getAnnotation(target.getGetter(), Accessible.class);
+		if(operation == WRITE && target.getSetter() != null)
+			a = ReflectionsUtil.getAnnotation(target.getSetter(), Accessible.class);
+		if(a == null && target.getField() != null)
+			a = ReflectionsUtil.getAnnotation(target.getField(), Accessible.class);
+		return a;
 	}
 
-	/**
-	 * Get the Accessible Annotation for Write-Access. This means the Accessible Annotation at the
-	 * Setter and the Field is considerd (Setter is preferred.)
-	 * 
-	 * @param field - the field to scan for the annotation
-	 * @return the Accessible Annotation
+	/*
+	 * (non-Javadoc)
+	 * @see
+	 * com.syncnapsis.security.accesscontrol.AnnotationAccessController#getDefaultAccessibleBy(int)
 	 */
-	protected Accessible getWritableAnnotation(Field field)
+	@Override
+	public int getDefaultAccessibleBy(int operation)
 	{
-		Accessible a = null;
-		if(field.getSetter() != null && ((a = ReflectionsUtil.getAnnotation(field.getSetter(), Accessible.class)) != null))
-			return a;
-		if(field.getField() != null && ((a = ReflectionsUtil.getAnnotation(field.getField(), Accessible.class)) != null))
-			return a;
-		return null;
+		if(operation == READ)
+			return getDefaultReadableBy();
+		else if(operation == WRITE)
+			return getDefaultWritableBy();
+		else
+			return AccessRule.NOBODY;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see
+	 * com.syncnapsis.security.accesscontrol.AnnotationAccessController#getDefaultAccessibleOf(int)
+	 */
+	@Override
+	public int getDefaultAccessibleOf(int operation)
+	{
+		if(operation == READ)
+			return getDefaultReadableBy();
+		else if(operation == WRITE)
+			return getDefaultWritableBy();
+		else
+			return AccessRule.NOROLE;
 	}
 }
