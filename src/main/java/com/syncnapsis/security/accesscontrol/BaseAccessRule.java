@@ -58,12 +58,15 @@ public class BaseAccessRule implements AccessRule
 	@Override
 	public boolean isOf(int roles, Object... authorities)
 	{
-		for(Object authority: authorities)
+		if(authorities != null)
 		{
-			if(authority instanceof BitMask)
+			for(Object authority : authorities)
 			{
-				if((((BitMask) authority).getMask() & roles) != 0)
-					return true;
+				if(authority instanceof BitMask)
+				{
+					if((((BitMask) authority).getMask() & roles) != 0)
+						return true;
+				}
 			}
 		}
 		return false;
@@ -83,7 +86,7 @@ public class BaseAccessRule implements AccessRule
 			List<?> owners = ((Ownable<?>) entity).getOwners();
 			if(owners != null && authorities != null)
 			{
-				for(Object owner: owners)
+				for(Object owner : owners)
 				{
 					if(ArrayUtils.indexOf(authorities, owner) != -1)
 						return true;
