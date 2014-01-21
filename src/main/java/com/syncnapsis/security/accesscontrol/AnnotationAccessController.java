@@ -52,7 +52,7 @@ public abstract class AnnotationAccessController<T> extends AccessController<T>
 		int accessibleBy = (a != null ? a.by() : defaultAccessibleBy);
 		int accessibleOf = (a != null ? a.of() : defaultAccessibleOf);
 
-		if(accessibleBy == AccessRule.NOBODY)
+		if(accessibleBy == AccessRule.NOBODY || accessibleOf == AccessRule.NOROLE)
 			return false;
 		return rule.is(accessibleBy, entity, authorities) && rule.isOf(accessibleOf, authorities);
 	}
@@ -66,8 +66,11 @@ public abstract class AnnotationAccessController<T> extends AccessController<T>
 	public boolean isAccessible(T target, int operation, Object context, Object... authorities)
 	{
 		Accessible a = getAnnotation(target, operation);
+		logger.debug("a=" + a);
 		int defaultAccessibleBy = getDefaultAccessibleBy(operation);
 		int defaultAccessibleOf = getDefaultAccessibleOf(operation);
+		logger.debug("defaultBy=" + Integer.toHexString(defaultAccessibleBy));
+		logger.debug("defaultOf=" + Integer.toHexString(defaultAccessibleOf));
 		return isAccessible(context, a, defaultAccessibleBy, defaultAccessibleOf, authorities);
 	}
 

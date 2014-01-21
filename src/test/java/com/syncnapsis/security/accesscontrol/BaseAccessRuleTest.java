@@ -71,10 +71,12 @@ public class BaseAccessRuleTest extends LoggerTestCase
 		assertTrue(rule.isOf(AccessRule.ANYROLE, roleA));
 		assertTrue(rule.isOf(AccessRule.ANYROLE, roleB));
 		assertTrue(rule.isOf(AccessRule.ANYROLE, roleC));
+		assertTrue(rule.isOf(AccessRule.ANYROLE));
 		
 		assertFalse(rule.isOf(AccessRule.NOROLE, roleA));
 		assertFalse(rule.isOf(AccessRule.NOROLE, roleB));
 		assertFalse(rule.isOf(AccessRule.NOROLE, roleC));
+		assertFalse(rule.isOf(AccessRule.NOROLE));
 		
 		assertTrue(rule.isOf(roleA.getMask(), roleA));
 		assertFalse(rule.isOf(roleB.getMask(), roleA));

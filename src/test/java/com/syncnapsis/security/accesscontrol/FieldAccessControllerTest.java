@@ -18,20 +18,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.syncnapsis.security.AccessController;
-import com.syncnapsis.security.AccessControllerTest;
+import com.syncnapsis.security.AnnotationAccessControllerTest;
+import com.syncnapsis.security.AccessRule;
 import com.syncnapsis.security.annotations.Accessible;
 import com.syncnapsis.tests.LoggerTestCase;
-import com.syncnapsis.tests.annotations.TestCoversMethods;
 import com.syncnapsis.tests.annotations.TestExcludesMethods;
 import com.syncnapsis.utils.ReflectionsUtil;
 import com.syncnapsis.utils.reflections.Field;
 
-@TestExcludesMethods({ "*DefaultReadable", "*DefaultWritable", "getTargetClass" })
+@TestExcludesMethods({ "setDefaultReadable*", "getDefaultWritable*", "getTargetClass" })
 public class FieldAccessControllerTest extends LoggerTestCase
 {
 	public void testIsAccessible() throws Exception
 	{
-		FieldAccessController controller = new FieldAccessController();
+		FieldAccessController controller = new FieldAccessController(new BaseAccessRule());
 
 		Object owner = new Object();
 		Object other = new Object();
@@ -39,22 +39,28 @@ public class FieldAccessControllerTest extends LoggerTestCase
 		AnnotatedByField targetF = new AnnotatedByField(owner);
 		AnnotatedByMethod targetM = new AnnotatedByMethod(owner);
 
-		controller.setDefaultReadable(Accessible.ANYBODY);
-		controller.setDefaultWritable(Accessible.ANYBODY);
+		controller.setDefaultReadableOf(AccessRule.ANYROLE);
+		controller.setDefaultWritableOf(AccessRule.ANYROLE);
+
+		controller.setDefaultReadableBy(AccessRule.ANYBODY);
+		controller.setDefaultWritableBy(AccessRule.ANYBODY);
+		logger.debug("---default set to ANYBODY---");
 		accessibleTest(controller, targetF, owner, "byOwner", "byAnybody", "byDefault");
 		accessibleTest(controller, targetM, owner, "byOwner", "byAnybody", "byDefault");
 		accessibleTest(controller, targetF, other, "byAnybody", "byDefault");
 		accessibleTest(controller, targetM, other, "byAnybody", "byDefault");
 
-		controller.setDefaultReadable(Accessible.OWNER);
-		controller.setDefaultWritable(Accessible.OWNER);
+		controller.setDefaultReadableBy(AccessRule.OWNER);
+		controller.setDefaultWritableBy(AccessRule.OWNER);
+		logger.debug("---default set to OWNER---");
 		accessibleTest(controller, targetF, owner, "byOwner", "byAnybody", "byDefault");
 		accessibleTest(controller, targetM, owner, "byOwner", "byAnybody", "byDefault");
 		accessibleTest(controller, targetF, other, "byAnybody");
 		accessibleTest(controller, targetM, other, "byAnybody");
 
-		controller.setDefaultReadable(Accessible.NOBODY);
-		controller.setDefaultWritable(Accessible.NOBODY);
+		controller.setDefaultReadableBy(AccessRule.NOBODY);
+		controller.setDefaultWritableBy(AccessRule.NOBODY);
+		logger.debug("---default set to NOBODY---");
 		accessibleTest(controller, targetF, owner, "byOwner", "byAnybody");
 		accessibleTest(controller, targetM, owner, "byOwner", "byAnybody");
 		accessibleTest(controller, targetF, other, "byAnybody");
@@ -68,11 +74,13 @@ public class FieldAccessControllerTest extends LoggerTestCase
 		List<Field> fields = ReflectionsUtil.findDefaultFields(target.getClass());
 		for(Field f : fields)
 		{
-			if(ac.isAccessible(target, f, AccessController.READ, authority))
+			if(ac.isAccessible(f, AccessController.READ, target, authority))
 				readableFields.add(f.getName());
-			if(ac.isAccessible(target, f, AccessController.WRITE, authority))
+			if(ac.isAccessible(f, AccessController.WRITE, target, authority))
 				writableFields.add(f.getName());
 		}
+		logger.debug("readable fields: " + readableFields);
+		logger.debug("writable fields: " + writableFields);
 		for(String expectedField : expectedAccessibleFields)
 		{
 			assertTrue(expectedField + " is not readable", readableFields.contains(expectedField));
@@ -81,15 +89,14 @@ public class FieldAccessControllerTest extends LoggerTestCase
 	}
 
 	@SuppressWarnings("unused")
-	@TestCoversMethods({ "getReadableAnnotation", "getWritableAnnotation" })
-	public void testGetAccessibleAnnotation() throws Exception
+	public void testGetAnnotation() throws Exception
 	{
 		final int onField = 123;
 		final int onGetter = 456;
 		final int onSetter = 789;
 
 		Object oField = new Object() {
-			@Accessible(onField)
+			@Accessible(by = onField)
 			private int	x;
 
 			public int getX()
@@ -105,7 +112,7 @@ public class FieldAccessControllerTest extends LoggerTestCase
 		Object oGetter = new Object() {
 			private int	x;
 
-			@Accessible(onGetter)
+			@Accessible(by = onGetter)
 			public int getX()
 			{
 				return x;
@@ -124,7 +131,7 @@ public class FieldAccessControllerTest extends LoggerTestCase
 				return x;
 			}
 
-			@Accessible(onSetter)
+			@Accessible(by = onSetter)
 			public void setX(int x)
 			{
 				this.x = x;
@@ -137,32 +144,60 @@ public class FieldAccessControllerTest extends LoggerTestCase
 
 		FieldAccessController controller;
 
-		// getReadableAnnotation
+		// getAnnotation (READ)
 
-		controller = new FieldAccessController();
+		controller = new FieldAccessController(new BaseAccessRule());
 
-		assertNotNull(controller.getReadableAnnotation(oFieldField));
-		assertEquals(onField, controller.getReadableAnnotation(oFieldField).value());
+		assertNotNull(controller.getAnnotation(oFieldField, AccessController.READ));
+		assertEquals(onField, controller.getAnnotation(oFieldField, AccessController.READ).by());
 
-		assertNotNull(controller.getReadableAnnotation(oGetterField));
-		assertEquals(onGetter, controller.getReadableAnnotation(oGetterField).value());
+		assertNotNull(controller.getAnnotation(oGetterField, AccessController.READ));
+		assertEquals(onGetter, controller.getAnnotation(oGetterField, AccessController.READ).by());
 
-		assertNull(controller.getReadableAnnotation(oSetterField));
+		assertNull(controller.getAnnotation(oSetterField, AccessController.READ));
 
-		// getWritableAnnotation
+		// getAnnotation (WRITE)
 
-		controller = new FieldAccessController();
+		controller = new FieldAccessController(new BaseAccessRule());
 
-		assertNotNull(controller.getWritableAnnotation(oFieldField));
-		assertEquals(onField, controller.getWritableAnnotation(oFieldField).value());
+		assertNotNull(controller.getAnnotation(oFieldField, AccessController.WRITE));
+		assertEquals(onField, controller.getAnnotation(oFieldField, AccessController.WRITE).by());
 
-		assertNull(controller.getWritableAnnotation(oGetterField));
+		assertNull(controller.getAnnotation(oGetterField, AccessController.WRITE));
 
-		assertNotNull(controller.getWritableAnnotation(oSetterField));
-		assertEquals(onSetter, controller.getWritableAnnotation(oSetterField).value());
+		assertNotNull(controller.getAnnotation(oSetterField, AccessController.WRITE));
+		assertEquals(onSetter, controller.getAnnotation(oSetterField, AccessController.WRITE).by());
+
+		// getAnnotation (INVALID)
+		
+		assertNotNull(controller.getAnnotation(oFieldField, 999));
+		assertNull(controller.getAnnotation(oGetterField, 999));
+		assertNull(controller.getAnnotation(oSetterField, 999));
 	}
 
-	public static class AnnotatedByMethod extends AccessControllerTest.Target
+	public void testGetDefaultAccessibleBy() throws Exception
+	{
+		FieldAccessController controller = new FieldAccessController(new BaseAccessRule());
+		controller.setDefaultReadableBy(123);
+		controller.setDefaultWritableBy(456);
+
+		assertEquals(123, controller.getDefaultAccessibleBy(AccessController.READ));
+		assertEquals(456, controller.getDefaultAccessibleBy(AccessController.WRITE));
+		assertEquals(0, controller.getDefaultAccessibleBy(999));
+	}
+
+	public void testGetDefaultAccessibleOf() throws Exception
+	{
+		FieldAccessController controller = new FieldAccessController(new BaseAccessRule());
+		controller.setDefaultReadableOf(123);
+		controller.setDefaultWritableOf(456);
+
+		assertEquals(123, controller.getDefaultAccessibleOf(AccessController.READ));
+		assertEquals(456, controller.getDefaultAccessibleOf(AccessController.WRITE));
+		assertEquals(0, controller.getDefaultAccessibleOf(999));
+	}
+
+	public static class AnnotatedByMethod extends AnnotationAccessControllerTest.Target
 	{
 		private int	byNobody;
 		private int	byOwner;
@@ -182,73 +217,73 @@ public class FieldAccessControllerTest extends LoggerTestCase
 			super(owner);
 		}
 
-		@Accessible(Accessible.NOBODY)
+		@Accessible(by = AccessRule.NOBODY)
 		public int getByNobody()
 		{
 			return byNobody;
 		}
 
-		@Accessible(Accessible.NOBODY)
+		@Accessible(by = AccessRule.NOBODY)
 		public void setByNobody(int byNobody)
 		{
 			this.byNobody = byNobody;
 		}
 
-		@Accessible(Accessible.OWNER)
+		@Accessible(by = AccessRule.OWNER)
 		public int getByOwner()
 		{
 			return byOwner;
 		}
 
-		@Accessible(Accessible.OWNER)
+		@Accessible(by = AccessRule.OWNER)
 		public void setByOwner(int byOwner)
 		{
 			this.byOwner = byOwner;
 		}
 
-		@Accessible(Accessible.ALLY)
+		@Accessible(by = AccessRule.ALLY)
 		public int getByAlly()
 		{
 			return byAlly;
 		}
 
-		@Accessible(Accessible.ALLY)
+		@Accessible(by = AccessRule.ALLY)
 		public void setByAlly(int byAlly)
 		{
 			this.byAlly = byAlly;
 		}
 
-		@Accessible(Accessible.FRIEND)
+		@Accessible(by = AccessRule.FRIEND)
 		public int getByFriend()
 		{
 			return byFriend;
 		}
 
-		@Accessible(Accessible.FRIEND)
+		@Accessible(by = AccessRule.FRIEND)
 		public void setByFriend(int byFriend)
 		{
 			this.byFriend = byFriend;
 		}
 
-		@Accessible(Accessible.ENEMY)
+		@Accessible(by = AccessRule.ENEMY)
 		public int getByEnemy()
 		{
 			return byEnemy;
 		}
 
-		@Accessible(Accessible.ENEMY)
+		@Accessible(by = AccessRule.ENEMY)
 		public void setByEnemy(int byEnemy)
 		{
 			this.byEnemy = byEnemy;
 		}
 
-		@Accessible(Accessible.ANYBODY)
+		@Accessible(by = AccessRule.ANYBODY)
 		public int getByAnybody()
 		{
 			return byAnybody;
 		}
 
-		@Accessible(Accessible.ANYBODY)
+		@Accessible(by = AccessRule.ANYBODY)
 		public void setByAnybody(int byAnybody)
 		{
 			this.byAnybody = byAnybody;
@@ -267,19 +302,19 @@ public class FieldAccessControllerTest extends LoggerTestCase
 		}
 	}
 
-	public static class AnnotatedByField extends AccessControllerTest.Target
+	public static class AnnotatedByField extends AnnotationAccessControllerTest.Target
 	{
-		@Accessible(Accessible.NOBODY)
+		@Accessible(by = AccessRule.NOBODY)
 		private int	byNobody;
-		@Accessible(Accessible.OWNER)
+		@Accessible(by = AccessRule.OWNER)
 		private int	byOwner;
-		@Accessible(Accessible.ALLY)
+		@Accessible(by = AccessRule.ALLY)
 		private int	byAlly;
-		@Accessible(Accessible.NOBODY)
+		@Accessible(by = AccessRule.NOBODY)
 		private int	byFriend;
-		@Accessible(Accessible.ENEMY)
+		@Accessible(by = AccessRule.ENEMY)
 		private int	byEnemy;
-		@Accessible(Accessible.ANYBODY)
+		@Accessible(by = AccessRule.ANYBODY)
 		private int	byAnybody;
 		// no annotation
 		private int	byDefault;

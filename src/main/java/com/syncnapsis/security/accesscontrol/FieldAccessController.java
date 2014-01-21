@@ -174,9 +174,9 @@ public class FieldAccessController extends AnnotationAccessController<Field>
 	public int getDefaultAccessibleBy(int operation)
 	{
 		if(operation == READ)
-			return getDefaultReadableBy();
+			return defaultReadableBy;
 		else if(operation == WRITE)
-			return getDefaultWritableBy();
+			return defaultWritableBy;
 		else
 			return AccessRule.NOBODY;
 	}
@@ -190,9 +190,9 @@ public class FieldAccessController extends AnnotationAccessController<Field>
 	public int getDefaultAccessibleOf(int operation)
 	{
 		if(operation == READ)
-			return getDefaultReadableBy();
+			return defaultReadableOf;
 		else if(operation == WRITE)
-			return getDefaultWritableBy();
+			return defaultWritableOf;
 		else
 			return AccessRule.NOROLE;
 	}

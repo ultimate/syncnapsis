@@ -58,6 +58,10 @@ public class BaseAccessRule implements AccessRule
 	@Override
 	public boolean isOf(int roles, Object... authorities)
 	{
+		if(roles == AccessRule.NOROLE)
+			return false;
+		if(roles == AccessRule.ANYROLE)
+			return true;
 		if(authorities != null)
 		{
 			for(Object authority : authorities)
