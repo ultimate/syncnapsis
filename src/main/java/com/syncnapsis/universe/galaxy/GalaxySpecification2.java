@@ -42,7 +42,7 @@ public class GalaxySpecification2 extends GalaxySpecification
 		for(type = 0; type < params.length; type++)
 		{
 			weightSum += params[type][weight];
-			logger.debug("type=" + type + " weightSum=" + weightSum);
+//			logger.debug("type=" + type + " weightSum=" + weightSum);
 		}
 
 		Array3D m = new Array3D(this.xSize, this.ySize, this.zSize);

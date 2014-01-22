@@ -90,6 +90,7 @@ public abstract class UniverseGenerator
 
 		GalaxySpecification2 gs2 = new GalaxySpecification2(100, 100, 50, 20000, 6);
 		gs2.addTypeEx(1, 0.5);
+		gs2.generateCoordinates(); // warm up
 		// gs2.addTypeSx(3, 1.5, -1, 0);
 		long start3 = System.currentTimeMillis();
 		List<int[]> coords3 = gs2.generateCoordinates();
