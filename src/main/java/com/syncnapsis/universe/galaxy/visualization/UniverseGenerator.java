@@ -20,17 +20,21 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 
-import com.syncnapsis.enums.EnumGalaxyViewMode;
-import com.syncnapsis.universe.galaxy.GalaxySpecification;
-import com.syncnapsis.universe.galaxy.visualization.GalaxyViewFrame;
-import com.syncnapsis.universe.galaxy.visualization.GalaxyViewImages;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.syncnapsis.enums.EnumGalaxyViewMode;
+import com.syncnapsis.universe.galaxy.GalaxySpecification;
+import com.syncnapsis.universe.galaxy.GalaxySpecification2;
+import com.syncnapsis.utils.data.ExtendedRandom;
+import com.syncnapsis.utils.math.Array3D;
+import com.syncnapsis.utils.math.Functions;
 
 /**
  * Generiert ein Universum oder eine Galaxy.
@@ -54,24 +58,24 @@ public abstract class UniverseGenerator
 		logger.debug("Generating Universe...");
 		logger.debug("----------------------");
 
-//		GalaxySpecification gs = new GalaxySpecification(200, 200, 100, 0.025, 10);
-//		 GalaxySpecification gs = new GalaxySpecification(100, 100, 50, 0.1, 10);
-		 GalaxySpecification gs = new GalaxySpecification(100, 100, 50, 20000, 6);
-//		 GalaxySpecification gs = new GalaxySpecification(100, 100, 50, 1000, 6);
-		 gs.addTypeEx();
+		// GalaxySpecification gs = new GalaxySpecification(200, 200, 100, 0.025, 10);
+		// GalaxySpecification gs = new GalaxySpecification(100, 100, 50, 0.1, 10);
+		GalaxySpecification gs = new GalaxySpecification(100, 100, 50, 20000, 6);
+		// GalaxySpecification gs = new GalaxySpecification(100, 100, 50, 1000, 6);
+		gs.addTypeEx();
 		// gs.addTypeEx(1.0, 0.5);
 		// gs.addTypeS0(1.0, 0.2, 1);
 		// gs.addTypeSB0(1.0, 0.2, 0.5, 0);
-//		gs.addTypeSx(5, 2, 1.5, 1, 0);
+		// gs.addTypeSx(5, 2, 1.5, 1, 0);
 		// gs.addTypeSx(3, 1.5, -1, 0);
 		// gs.addTypeSBx(1, 1, 0);
 		// gs.addTypeRx(5);
-//		gs.addTypeAx(0.5, 1, 4);
-//		gs.addTypeAx(0.7, 3, 5);
-//		gs.addTypeAx(0.3, 4, 8);
-//		gs.addTypeAx(0.2, 7, 12);
-//		gs.addTypeAx(0.6, 5, 9);
-//		gs.addTypeAx(0.4, 3, 8);
+		// gs.addTypeAx(0.5, 1, 4);
+		// gs.addTypeAx(0.7, 3, 5);
+		// gs.addTypeAx(0.3, 4, 8);
+		// gs.addTypeAx(0.2, 7, 12);
+		// gs.addTypeAx(0.6, 5, 9);
+		// gs.addTypeAx(0.4, 3, 8);
 
 		List<int[]> coords = gs.generateCoordinates();
 		gs.generateCoordinates2(); // warm up
@@ -84,8 +88,16 @@ public abstract class UniverseGenerator
 		List<int[]> coords2 = gs.generateCoordinates2();
 		long duration2 = System.currentTimeMillis() - start2;
 
+		GalaxySpecification2 gs2 = new GalaxySpecification2(100, 100, 50, 20000, 6);
+		gs2.addTypeEx(1, 0.5);
+		// gs2.addTypeSx(3, 1.5, -1, 0);
+		long start3 = System.currentTimeMillis();
+		List<int[]> coords3 = gs2.generateCoordinates();
+		long duration3 = System.currentTimeMillis() - start3;
+
 		logger.debug("1: coords=" + coords1.size() + " time=" + duration1);
 		logger.debug("2: coords=" + coords2.size() + " time=" + duration2);
+		logger.debug("3: coords=" + coords3.size() + " time=" + duration3);
 
 		long time = System.currentTimeMillis();
 		if(paint)
@@ -96,6 +108,7 @@ public abstract class UniverseGenerator
 			paint(gs, coords, "" + time);
 			paint(gs, coords1, "coords1");
 			paint(gs, coords2, "coords2");
+			paint(gs, coords3, "coords3");
 			logger.debug("Painting is done!");
 		}
 
@@ -117,7 +130,7 @@ public abstract class UniverseGenerator
 		}
 		logger.debug("----------------------");
 	}
-	
+
 	private static void paint(GalaxySpecification gs, List<int[]> coords, String filename)
 	{
 		JFrame view = new GalaxyViewFrame(gs, coords);
