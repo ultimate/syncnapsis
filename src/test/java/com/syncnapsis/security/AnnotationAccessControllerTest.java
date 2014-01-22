@@ -30,7 +30,7 @@ import com.syncnapsis.tests.annotations.TestExcludesMethods;
  * @author ultimate
  */
 @TestCoversClasses({ AnnotationAccessController.class, AccessController.class })
-@TestExcludesMethods({ "getTargetClass", "getRule" })
+@TestExcludesMethods({ "getTargetClass", "getRule", "getAnnotation", "getDefault*" })
 public class AnnotationAccessControllerTest extends LoggerTestCase
 {
 	@TestCoversMethods("isAccessible")

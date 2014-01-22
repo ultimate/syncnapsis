@@ -24,6 +24,7 @@ import com.syncnapsis.security.AnnotationAccessControllerTest;
 import com.syncnapsis.security.annotations.Accessible;
 import com.syncnapsis.tests.LoggerTestCase;
 import com.syncnapsis.tests.annotations.TestCoversClasses;
+import com.syncnapsis.tests.annotations.TestCoversMethods;
 import com.syncnapsis.tests.annotations.TestExcludesMethods;
 
 @TestCoversClasses({ MethodAccessController.class, AnnotationAccessController.class })
@@ -93,6 +94,7 @@ public class MethodAccessControllerTest extends LoggerTestCase
 		assertNull(controller.getAnnotation(method, 999));
 	}
 
+	@TestCoversMethods({"*etDefaultAccessibleBy"})
 	public void testGetDefaultAccessibleBy() throws Exception
 	{
 		MethodAccessController controller = new MethodAccessController(new BaseAccessRule());
@@ -102,6 +104,7 @@ public class MethodAccessControllerTest extends LoggerTestCase
 		assertEquals(0, controller.getDefaultAccessibleBy(999));
 	}
 
+	@TestCoversMethods({"*etDefaultAccessibleOf"})
 	public void testGetDefaultAccessibleOf() throws Exception
 	{
 		MethodAccessController controller = new MethodAccessController(new BaseAccessRule());

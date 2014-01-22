@@ -22,11 +22,12 @@ import com.syncnapsis.security.AnnotationAccessControllerTest;
 import com.syncnapsis.security.AccessRule;
 import com.syncnapsis.security.annotations.Accessible;
 import com.syncnapsis.tests.LoggerTestCase;
+import com.syncnapsis.tests.annotations.TestCoversMethods;
 import com.syncnapsis.tests.annotations.TestExcludesMethods;
 import com.syncnapsis.utils.ReflectionsUtil;
 import com.syncnapsis.utils.reflections.Field;
 
-@TestExcludesMethods({ "setDefaultReadable*", "getDefaultWritable*", "getTargetClass" })
+@TestExcludesMethods({ "getTargetClass" })
 public class FieldAccessControllerTest extends LoggerTestCase
 {
 	public void testIsAccessible() throws Exception
@@ -169,28 +170,36 @@ public class FieldAccessControllerTest extends LoggerTestCase
 		assertEquals(onSetter, controller.getAnnotation(oSetterField, AccessController.WRITE).by());
 
 		// getAnnotation (INVALID)
-		
+
 		assertNotNull(controller.getAnnotation(oFieldField, 999));
 		assertNull(controller.getAnnotation(oGetterField, 999));
 		assertNull(controller.getAnnotation(oSetterField, 999));
 	}
 
+	@TestCoversMethods({"*etDefaultReadableBy", "*etDefaultWritableBy", "getDefaultAccessibleBy"})
 	public void testGetDefaultAccessibleBy() throws Exception
 	{
 		FieldAccessController controller = new FieldAccessController(new BaseAccessRule());
 		controller.setDefaultReadableBy(123);
 		controller.setDefaultWritableBy(456);
 
+		assertEquals(123, controller.getDefaultReadableBy());
+		assertEquals(456, controller.getDefaultWritableBy());
+
 		assertEquals(123, controller.getDefaultAccessibleBy(AccessController.READ));
 		assertEquals(456, controller.getDefaultAccessibleBy(AccessController.WRITE));
 		assertEquals(0, controller.getDefaultAccessibleBy(999));
 	}
 
+	@TestCoversMethods({"*etDefaultReadableOf", "*etDefaultWritableOf", "getDefaultAccessibleOf"})
 	public void testGetDefaultAccessibleOf() throws Exception
 	{
 		FieldAccessController controller = new FieldAccessController(new BaseAccessRule());
 		controller.setDefaultReadableOf(123);
 		controller.setDefaultWritableOf(456);
+
+		assertEquals(123, controller.getDefaultReadableOf());
+		assertEquals(456, controller.getDefaultWritableOf());
 
 		assertEquals(123, controller.getDefaultAccessibleOf(AccessController.READ));
 		assertEquals(456, controller.getDefaultAccessibleOf(AccessController.WRITE));
