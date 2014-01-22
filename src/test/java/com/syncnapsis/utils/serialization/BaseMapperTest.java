@@ -28,8 +28,10 @@ import java.util.Set;
 
 import com.syncnapsis.enums.EnumLocale;
 import com.syncnapsis.security.AccessController;
-import com.syncnapsis.security.AccessControllerTest;
+import com.syncnapsis.security.AccessRule;
+import com.syncnapsis.security.AnnotationAccessControllerTest;
 import com.syncnapsis.security.SecurityManager;
+import com.syncnapsis.security.accesscontrol.BaseAccessRule;
 import com.syncnapsis.security.accesscontrol.FieldAccessController;
 import com.syncnapsis.security.annotations.Accessible;
 import com.syncnapsis.tests.LoggerTestCase;
@@ -215,7 +217,7 @@ public class BaseMapperTest extends LoggerTestCase
 	public void testToMap_POJO() throws Exception
 	{
 		SecurityManager securityManager = new SecurityManager();
-		securityManager.addAccessController(new FieldAccessController());
+		securityManager.addAccessController(new FieldAccessController(new BaseAccessRule()));
 		mapper.setSecurityManager(securityManager);
 
 		Object owner = new Object();
@@ -240,7 +242,7 @@ public class BaseMapperTest extends LoggerTestCase
 	public void testFromMap_POJO() throws Exception
 	{
 		SecurityManager securityManager = new SecurityManager();
-		securityManager.addAccessController(new FieldAccessController());
+		securityManager.addAccessController(new FieldAccessController(new BaseAccessRule()));
 		mapper.setSecurityManager(securityManager);
 
 		Object owner = new Object();
@@ -348,7 +350,7 @@ public class BaseMapperTest extends LoggerTestCase
 	public void testIsAccessible() throws Exception
 	{
 		SecurityManager securityManager = new SecurityManager();
-		FieldAccessController controller = new FieldAccessController();
+		FieldAccessController controller = new FieldAccessController(new BaseAccessRule());
 		securityManager.addAccessController(controller);
 		mapper.setSecurityManager(securityManager);
 
@@ -380,13 +382,13 @@ public class BaseMapperTest extends LoggerTestCase
 
 		for(int i = 0; i < authorities.length; i++)
 		{
-			assertEquals(controller.isAccessible(entity, xField, AccessController.READ, authorities[i]),
+			assertEquals(controller.isAccessible(xField, AccessController.READ, entity, authorities[i]),
 					mapper.isReadable(entity, xField, authorities[i]));
-			assertEquals(controller.isAccessible(entity, xField, AccessController.WRITE, authorities[i]),
+			assertEquals(controller.isAccessible(xField, AccessController.WRITE, entity, authorities[i]),
 					mapper.isWritable(entity, xField, authorities[i]));
-			assertEquals(controller.isAccessible(entity, yField, AccessController.READ, authorities[i]),
+			assertEquals(controller.isAccessible(yField, AccessController.READ, entity, authorities[i]),
 					mapper.isReadable(entity, yField, authorities[i]));
-			assertEquals(controller.isAccessible(entity, yField, AccessController.WRITE, authorities[i]),
+			assertEquals(controller.isAccessible(yField, AccessController.WRITE, entity, authorities[i]),
 					mapper.isWritable(entity, yField, authorities[i]));
 		}
 	}
@@ -425,7 +427,7 @@ public class BaseMapperTest extends LoggerTestCase
 		assertFalse(mapper.isInvariant(new Object()));
 	}
 
-	public static class POJO1 extends AccessControllerTest.Target
+	public static class POJO1 extends AnnotationAccessControllerTest.Target
 	{
 		private int		x;
 
@@ -448,25 +450,25 @@ public class BaseMapperTest extends LoggerTestCase
 			this.y = y;
 		}
 
-		@Accessible(Accessible.OWNER)
+		@Accessible(by = AccessRule.OWNER)
 		public int getX()
 		{
 			return x;
 		}
 
-		@Accessible(Accessible.ANYBODY)
+		@Accessible(by = AccessRule.ANYBODY)
 		public String getY()
 		{
 			return y;
 		}
 
-		@Accessible(Accessible.OWNER)
+		@Accessible(by = AccessRule.OWNER)
 		public void setX(int x)
 		{
 			this.x = x;
 		}
 
-		@Accessible(Accessible.ANYBODY)
+		@Accessible(by = AccessRule.ANYBODY)
 		public void setY(String y)
 		{
 			this.y = y;
