@@ -14,10 +14,16 @@
  */
 package com.syncnapsis.data.model.base;
 
+import java.util.Arrays;
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.MappedSuperclass;
+import javax.persistence.Transient;
+
+import com.syncnapsis.security.Ownable;
 
 /**
  * Abstrakte Klasse als generische Grundlage für die Beziehungen zwischen:
@@ -36,7 +42,8 @@ import javax.persistence.MappedSuperclass;
  * @param <R> - die Klasse für die Rechte, die vergeben werden
  */
 @MappedSuperclass
-public abstract class Contact<C1 extends BaseObject<?>, C2 extends BaseObject<?>, A extends Authorities> extends BaseObject<Long>
+public abstract class Contact<C1 extends BaseObject<?>, C2 extends BaseObject<?>, A extends Authorities> extends BaseObject<Long> implements
+		Ownable<BaseObject<?>>
 {
 	/**
 	 * Ist diese Kontaktzuordnung grundsätzlich gleichberechtigt für beide
@@ -249,6 +256,17 @@ public abstract class Contact<C1 extends BaseObject<?>, C2 extends BaseObject<?>
 	public boolean isDefaultVisible2()
 	{
 		return defaultVisible2;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see com.syncnapsis.security.Ownable#getOwners()
+	 */
+	@Transient
+	@Override
+	public List<BaseObject<?>> getOwners()
+	{
+		return Arrays.asList(getContact1(), getContact2());
 	}
 
 	/**
