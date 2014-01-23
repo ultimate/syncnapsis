@@ -11,6 +11,7 @@
  */
 package com.syncnapsis.data.model;
 
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -22,10 +23,12 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 
 import com.syncnapsis.data.model.base.ActivatableInstance;
+import com.syncnapsis.security.Ownable;
 
 /**
  * Pinboard entity for posting messages related to the topic of this pinboard.
@@ -34,7 +37,7 @@ import com.syncnapsis.data.model.base.ActivatableInstance;
  */
 @Entity
 @Table(name="pinboard")
-public class Pinboard extends ActivatableInstance<Long>
+public class Pinboard extends ActivatableInstance<Long> implements Ownable<User>
 {
 	/**
 	 * The name of this pinboard
@@ -192,6 +195,17 @@ public class Pinboard extends ActivatableInstance<Long>
 	public void setMessages(List<PinboardMessage> messages)
 	{
 		this.messages = messages;
+	}
+	
+	/*
+	 * (non-Javadoc)
+	 * @see com.syncnapsis.security.Ownable#getOwners()
+	 */
+	@Transient
+	@Override
+	public List<User> getOwners()
+	{
+		return Collections.nCopies(1, getCreator());
 	}
 
 	/*

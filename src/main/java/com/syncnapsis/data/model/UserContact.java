@@ -14,6 +14,9 @@
  */
 package com.syncnapsis.data.model;
 
+import java.util.Arrays;
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
@@ -22,7 +25,9 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
+
 import com.syncnapsis.data.model.base.BaseObject;
+import com.syncnapsis.security.Ownable;
 
 /**
  * Model-Klasse "Kontakt-/Freundschaftszuordnung"
@@ -34,7 +39,7 @@ import com.syncnapsis.data.model.base.BaseObject;
  */
 @Entity
 @Table(name = "usercontact")
-public class UserContact extends BaseObject<Long>
+public class UserContact extends BaseObject<Long> implements Ownable<User>
 {
 	/**
 	 * Der 1. Benutzer für die Kontakt-/Freundschaftszuordnung
@@ -194,6 +199,17 @@ public class UserContact extends BaseObject<Long>
 	public void setApprovedByUser2(boolean approvedByUser2)
 	{
 		this.approvedByUser2 = approvedByUser2;
+	}
+	
+	/*
+	 * (non-Javadoc)
+	 * @see com.syncnapsis.security.Ownable#getOwners()
+	 */
+	@Transient
+	@Override
+	public List<User> getOwners()
+	{
+		return Arrays.asList(user1, user2);
 	}
 
 	/*

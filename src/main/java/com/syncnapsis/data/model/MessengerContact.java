@@ -14,14 +14,20 @@
  */
 package com.syncnapsis.data.model;
 
+import java.util.Collections;
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
+
 import com.syncnapsis.data.model.base.BaseObject;
+import com.syncnapsis.security.Ownable;
 
 /**
  * Model-Klasse "Messenger-Kontakt/Adresse"
@@ -31,7 +37,7 @@ import com.syncnapsis.data.model.base.BaseObject;
  */
 @Entity
 @Table(name = "messengercontact")
-public class MessengerContact extends BaseObject<Long>
+public class MessengerContact extends BaseObject<Long> implements Ownable<User>
 {
 	/**
 	 * Die Adresse/ID
@@ -117,6 +123,17 @@ public class MessengerContact extends BaseObject<Long>
 	public void setMessenger(Messenger messenger)
 	{
 		this.messenger = messenger;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see com.syncnapsis.security.Ownable#getOwners()
+	 */
+	@Transient
+	@Override
+	public List<User> getOwners()
+	{
+		return Collections.nCopies(1, getUser());
 	}
 
 	/*
