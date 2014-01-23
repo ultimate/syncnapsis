@@ -26,6 +26,9 @@
 		class="com.syncnapsis.websockets.service.rpc.DelegatingRPCHandler">
 		<property name="delegate" ref="logRPCHandler" />
 	</bean>
+	
+	<!-- define a base accessRule -->
+	<bean id="accessRule" class="com.syncnapsis.security.accesscontrol.BaseAccessRule" />
 
 	<!-- define a mailer -->
 	<bean id="mailer" class="com.syncnapsis.utils.mail.BaseApplicationMailer">

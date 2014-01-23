@@ -150,9 +150,13 @@
 		<constructor-arg ref="userProvider" />
 	</bean>
 	
-	<bean id="fieldAccessController" class="com.syncnapsis.security.accesscontrol.FieldAccessController" />
+	<bean id="fieldAccessController" class="com.syncnapsis.security.accesscontrol.FieldAccessController">
+		<constructor-arg ref="accessRule"/>
+	</bean>
 
-	<bean id="methodAccessController" class="com.syncnapsis.security.accesscontrol.MethodAccessController" />
+	<bean id="methodAccessController" class="com.syncnapsis.security.accesscontrol.MethodAccessController">
+		<constructor-arg ref="accessRule"/>
+	</bean>
 	
 	<bean id="baseApplicationManager" class="com.syncnapsis.security.BaseApplicationManager">
 		<property name="accessControllers">
