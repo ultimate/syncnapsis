@@ -27,6 +27,7 @@ import javax.persistence.Version;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.syncnapsis.security.AccessRule;
 import com.syncnapsis.security.annotations.Accessible;
 
 /**
@@ -76,7 +77,7 @@ public abstract class BaseObject<PK extends Serializable> implements Model, Iden
 	@Column(length = LENGTH_ID)
 	@SequenceGenerator(name = "HIBERNATE_SEQ")
 	@GeneratedValue(strategy = GenerationType.AUTO, generator = "HIBERNATE_SEQ")
-	@Accessible(Accessible.ANYBODY)
+	@Accessible(by = AccessRule.ANYBODY)
 	public PK getId()
 	{
 		return id;
@@ -88,7 +89,7 @@ public abstract class BaseObject<PK extends Serializable> implements Model, Iden
 	 * @return version
 	 */
 	@Version
-	@Accessible(Accessible.NOBODY)
+	@Accessible(by = AccessRule.NOBODY)
 	public Integer getVersion()
 	{
 		return version;
@@ -99,7 +100,7 @@ public abstract class BaseObject<PK extends Serializable> implements Model, Iden
 	 * 
 	 * @param id - der Primärschlüssel
 	 */
-	@Accessible(Accessible.NOBODY)
+	@Accessible(by = AccessRule.NOBODY)
 	public void setId(PK id)
 	{
 		this.id = id;
@@ -110,7 +111,7 @@ public abstract class BaseObject<PK extends Serializable> implements Model, Iden
 	 * 
 	 * @param version - die Version
 	 */
-	@Accessible(Accessible.NOBODY)
+	@Accessible(by = AccessRule.NOBODY)
 	public void setVersion(Integer version)
 	{
 		this.version = version;

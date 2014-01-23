@@ -19,6 +19,7 @@ import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
 
+import com.syncnapsis.security.AccessRule;
 import com.syncnapsis.security.annotations.Accessible;
 
 /**
@@ -47,7 +48,7 @@ public abstract class ActivatableInstance<PK extends Serializable> extends BaseO
 	 * @return activated
 	 */
 	@Column(nullable = false)
-	@Accessible(Accessible.NOBODY)
+	@Accessible(by = AccessRule.NOBODY)
 	public boolean isActivated()
 	{
 		return activated;
@@ -58,7 +59,7 @@ public abstract class ActivatableInstance<PK extends Serializable> extends BaseO
 	 * 
 	 * @param activated - true oder false
 	 */
-	@Accessible(Accessible.NOBODY)
+	@Accessible(by = AccessRule.NOBODY)
 	public void setActivated(boolean activated)
 	{
 		this.activated = activated;
