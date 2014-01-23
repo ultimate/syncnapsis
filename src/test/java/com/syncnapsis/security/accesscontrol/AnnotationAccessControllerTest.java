@@ -12,12 +12,15 @@
  * You should have received a copy of the GNU General Plublic License along with this program;
  * if not, see <http://www.gnu.org/licenses/>.
  */
-package com.syncnapsis.security;
+package com.syncnapsis.security.accesscontrol;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.syncnapsis.security.AccessController;
+import com.syncnapsis.security.AccessRule;
+import com.syncnapsis.security.Ownable;
 import com.syncnapsis.security.accesscontrol.AnnotationAccessController;
 import com.syncnapsis.security.accesscontrol.BaseAccessRule;
 import com.syncnapsis.security.annotations.Accessible;
