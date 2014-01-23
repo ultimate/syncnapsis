@@ -63,25 +63,25 @@ public class BaseAccessRuleTest extends LoggerTestCase
 	public void testIsOf() throws Exception
 	{
 		BaseAccessRule rule = new BaseAccessRule();
-		
-		Role roleA = new Role(1<<0); 
-		Role roleB = new Role(1<<2); 
-		Role roleC = new Role(1<<3); 
-		
+
+		Role roleA = new Role(1 << 0);
+		Role roleB = new Role(1 << 2);
+		Role roleC = new Role(1 << 3);
+
 		assertTrue(rule.isOf(AccessRule.ANYROLE, roleA));
 		assertTrue(rule.isOf(AccessRule.ANYROLE, roleB));
 		assertTrue(rule.isOf(AccessRule.ANYROLE, roleC));
 		assertTrue(rule.isOf(AccessRule.ANYROLE));
-		
+
 		assertFalse(rule.isOf(AccessRule.NOROLE, roleA));
 		assertFalse(rule.isOf(AccessRule.NOROLE, roleB));
 		assertFalse(rule.isOf(AccessRule.NOROLE, roleC));
 		assertFalse(rule.isOf(AccessRule.NOROLE));
-		
+
 		assertTrue(rule.isOf(roleA.getMask(), roleA));
 		assertFalse(rule.isOf(roleB.getMask(), roleA));
 		assertFalse(rule.isOf(roleB.getMask(), roleA));
-		
+
 		assertTrue(rule.isOf(roleA.getMask() | roleB.getMask(), roleA));
 		assertTrue(rule.isOf(roleA.getMask() | roleB.getMask(), roleB));
 		assertFalse(rule.isOf(roleA.getMask() | roleB.getMask(), roleC));
@@ -101,6 +101,16 @@ public class BaseAccessRuleTest extends LoggerTestCase
 		assertFalse(rule.isOwner(t, new Object[] { other }));
 		assertFalse(rule.isOwner(t, new Object[] {}));
 		assertFalse(rule.isOwner(t));
+		
+		// test recursive
+		
+		Target t2 = new Target(t);
+
+		assertTrue(rule.isOwner(t2, new Object[] { owner }));
+		assertTrue(rule.isOwner(t2, new Object[] { owner, other }));
+		assertFalse(rule.isOwner(t2, new Object[] { other }));
+		assertFalse(rule.isOwner(t2, new Object[] {}));
+		assertFalse(rule.isOwner(t2));
 	}
 
 	public void testIsFriend() throws Exception
