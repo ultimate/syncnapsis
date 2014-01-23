@@ -14,13 +14,19 @@
  */
 package com.syncnapsis.data.model;
 
+import java.util.Collections;
+import java.util.List;
+
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
+
 import com.syncnapsis.data.model.base.Institution;
+import com.syncnapsis.security.Ownable;
 
 /**
  * Model-Klasse "Imperium"
@@ -34,12 +40,12 @@ import com.syncnapsis.data.model.base.Institution;
  */
 @Entity
 @Table(name = "empire")
-public class Empire extends Institution<Long>
+public class Empire extends Institution<Long> implements Ownable<Player>
 {
 	/**
 	 * Der Benutzer dem dieses Imperium gehört
 	 */
-	protected Player			player;
+	protected Player	player;
 
 	/**
 	 * Leerer Standard Constructor
@@ -70,6 +76,16 @@ public class Empire extends Institution<Long>
 		this.player = player;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see com.syncnapsis.security.Ownable#getOwners()
+	 */
+	@Transient
+	@Override
+	public List<Player> getOwners()
+	{
+		return Collections.nCopies(1, getPlayer());
+	}
 
 	/*
 	 * (non-Javadoc)
@@ -83,7 +99,6 @@ public class Empire extends Institution<Long>
 		result = prime * result + ((player == null) ? 0 : player.hashCode());
 		return result;
 	}
-
 
 	/*
 	 * (non-Javadoc)

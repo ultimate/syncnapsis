@@ -14,6 +14,7 @@
  */
 package com.syncnapsis.data.model;
 
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -30,10 +31,13 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
+
 import com.syncnapsis.data.model.base.ActivatableInstance;
 import com.syncnapsis.enums.EnumAccountStatus;
+import com.syncnapsis.security.Ownable;
 
 /**
  * Model-Klasse "Benutzer/Spieler"
@@ -45,7 +49,7 @@ import com.syncnapsis.enums.EnumAccountStatus;
  */
 @Entity
 @Table(name = "player")
-public class Player extends ActivatableInstance<Long>
+public class Player extends ActivatableInstance<Long> implements Ownable<User>
 {
 	/**
 	 * The user that belongs to this player
@@ -72,12 +76,12 @@ public class Player extends ActivatableInstance<Long>
 	 * 'active' gesetzt.
 	 */
 	protected Date				accountStatusExpireDate;
-	
+
 	/**
 	 * Is this player played by a bot?
 	 */
 	protected boolean			bot;
-	
+
 	/**
 	 * Liste der Sitter
 	 */
@@ -170,6 +174,7 @@ public class Player extends ActivatableInstance<Long>
 	/**
 	 * 
 	 * Is this player played by a bot?
+	 * 
 	 * @return bot
 	 */
 	@Column(nullable = false)
@@ -281,6 +286,7 @@ public class Player extends ActivatableInstance<Long>
 	/**
 	 * 
 	 * Is this player played by a bot?
+	 * 
 	 * @param bot - true or false
 	 */
 	public void setBot(boolean bot)
@@ -326,6 +332,17 @@ public class Player extends ActivatableInstance<Long>
 	public void setCurrentEmpire(Empire currentEmpire)
 	{
 		this.currentEmpire = currentEmpire;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see com.syncnapsis.security.Ownable#getOwners()
+	 */
+	@Transient
+	@Override
+	public List<User> getOwners()
+	{
+		return Collections.nCopies(1, getUser());
 	}
 
 	/*
