@@ -48,13 +48,9 @@ public class UserRoleBasedAuthorityProvider implements AuthorityProvider
 	{
 		User user = userProvider.get();
 		if(user != null)
-		{
-			return new Object[] { user, user.getRole(), user.getRole().getRolename() };
-		}
+			return new Object[] { user, user.getRole() };
 		else
-		{
 			return new Object[] {};
-		}
 	}
 
 	/**

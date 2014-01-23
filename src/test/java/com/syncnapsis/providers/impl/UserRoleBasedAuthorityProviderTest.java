@@ -42,10 +42,9 @@ public class UserRoleBasedAuthorityProviderTest extends LoggerTestCase
 
 		Object[] authorities = ap.get();
 
-		assertEquals(3, authorities.length);
+		assertEquals(2, authorities.length);
 		assertEquals(user, authorities[0]);
 		assertEquals(role, authorities[1]);
-		assertEquals(role.getRolename(), authorities[2]);
 	}
 	
 	public void testSet() throws Exception
