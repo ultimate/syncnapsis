@@ -24,7 +24,6 @@ import com.syncnapsis.mock.MockService;
 import com.syncnapsis.tests.LoggerTestCase;
 import com.syncnapsis.tests.annotations.TestCoversMethods;
 import com.syncnapsis.utils.ServletUtil;
-import com.syncnapsis.websockets.Connection;
 import com.syncnapsis.websockets.Protocol;
 import com.syncnapsis.websockets.Service;
 import com.syncnapsis.websockets.WebSocketManager;

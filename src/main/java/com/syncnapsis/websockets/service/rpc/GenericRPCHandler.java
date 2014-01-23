@@ -104,7 +104,7 @@ public abstract class GenericRPCHandler implements RPCHandler, InitializingBean
 			logger.debug("                 " + arg + (arg != null ? " (" + arg.getClass() + ")" : ""));
 		logger.debug("Method found: " + method);
 
-		if(isAccessible(method, authorities))
+		if(isAccessible(target, method, authorities))
 		{
 			Object result = method.invoke(target, call.getArgs());
 			if(method.getReturnType().equals(void.class))
@@ -168,17 +168,19 @@ public abstract class GenericRPCHandler implements RPCHandler, InitializingBean
 	 * 
 	 * @see AccessController#isAccessible(Object, int, Object...)
 	 * @see GenericRPCHandler#getAccessController()
+	 * @param target - the target to access
 	 * @param method - the method to check
 	 * @param authorities - the authorities
 	 * @return true or false
 	 */
-	public boolean isAccessible(Method method, Object... authorities)
+	public boolean isAccessible(Object target, Method method, Object... authorities)
 	{
+		// TODO ownable!?
 		AccessController<Method> controller = getAccessController();
 		if(controller == null)
 			return true;
 		else
-			return controller.isAccessible(method, AccessController.INVOKE, authorities);
+			return controller.isAccessible(method, AccessController.INVOKE, target, authorities);
 
 	}
 
