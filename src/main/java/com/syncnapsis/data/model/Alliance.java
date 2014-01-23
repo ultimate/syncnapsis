@@ -14,14 +14,18 @@
  */
 package com.syncnapsis.data.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
+
 import com.syncnapsis.data.model.base.Institution;
+import com.syncnapsis.security.Ownable;
 
 /**
  * Model-Klasse "Allianz"
@@ -34,8 +38,8 @@ import com.syncnapsis.data.model.base.Institution;
  */
 @Entity
 @Table(name = "alliance")
-public class Alliance extends Institution<Long>
-{	
+public class Alliance extends Institution<Long> implements Ownable<Empire>
+{
 	/**
 	 * Liste aller Allianz-Ränge, über die der Allianz Mitglieder zugeordnet
 	 * werden.
@@ -70,6 +74,21 @@ public class Alliance extends Institution<Long>
 	public void setAllianceMemberRanks(List<AllianceMemberRank> allianceMemberRanks)
 	{
 		this.allianceMemberRanks = allianceMemberRanks;
+	}
+
+	/**
+	 * Return ALL members as owners. Access rights must be handled via AllianceAuthorities instead.
+	 */
+	@Transient
+	@Override
+	public List<Empire> getOwners()
+	{
+		List<Empire> owners = new ArrayList<Empire>();
+		for(AllianceMemberRank rank : getAllianceMemberRanks())
+		{
+			owners.addAll(rank.getEmpires());
+		}
+		return owners;
 	}
 
 	/*
