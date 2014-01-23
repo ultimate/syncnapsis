@@ -20,7 +20,6 @@ import java.util.List;
 
 import com.syncnapsis.security.AccessController;
 import com.syncnapsis.security.AccessRule;
-import com.syncnapsis.security.AnnotationAccessControllerTest;
 import com.syncnapsis.security.annotations.Accessible;
 import com.syncnapsis.tests.LoggerTestCase;
 import com.syncnapsis.tests.annotations.TestCoversClasses;
