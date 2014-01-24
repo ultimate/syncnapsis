@@ -209,11 +209,8 @@ public abstract class Functions
 	 */
 	public static double gauss(double param, double sigma, boolean normalize)
 	{
-		double ret = 0;
+		double ret = Statistics.gaussian(param, 0, sigma);
 
-		double mu = 0;
-
-		ret = 1.0 / Math.sqrt(2 * Math.PI) / sigma * Math.exp(-(param - mu) * (param - mu) / 2.0 / sigma / sigma);
 		if(normalize)
 		{
 			ret = ret - gauss(1, sigma, false);
@@ -256,10 +253,12 @@ public abstract class Functions
 	 */
 	public static double gaussModified(double param, double bound, double gradient, double sigma)
 	{
-		double ret = gauss(param, sigma, false);
+		double ret;
 
-		if(param < bound)
+		if(Math.abs(param) < bound)
 		{
+			ret = gauss(param, sigma, false);
+
 			double retBound = gauss(bound, sigma, false);
 			double retZero = gauss(0, sigma, false);
 
@@ -269,7 +268,7 @@ public abstract class Functions
 		}
 		else
 		{
-			ret = gradient - gradient * param;
+			ret = gradient - gradient * Math.abs(param);
 		}
 
 		return ret;
