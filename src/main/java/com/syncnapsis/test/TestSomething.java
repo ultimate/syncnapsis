@@ -233,28 +233,6 @@ public class TestSomething
 		}
 	}
 
-	public static class Entity
-	{
-		private Date	date;
-
-		@Accessible(defaultAccessible = true)
-		public Date getDate()
-		{
-			return date;
-		}
-
-		@Accessible(defaultAccessible = true)
-		public void setDate(Date date)
-		{
-			this.date = date;
-		}
-
-		public String toString()
-		{
-			return "Entity(date=" + date + ")";
-		}
-	}
-
 	private static void mapSpeedTest_toDouble(Map<String, ?> map)
 	{
 		String aKey = map.keySet().iterator().next();
