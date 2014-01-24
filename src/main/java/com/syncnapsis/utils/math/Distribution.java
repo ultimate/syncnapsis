@@ -235,19 +235,23 @@ public abstract class Distribution
 	// inverted modes
 
 	/**
-	 * A square distribution (increasing, inverted)
+	 * A square distribution (increasing, inverted)<br>
+	 * <b>*** buggy ***</b>
 	 */
 	public static final Distribution	SQUARE_INCREASING_INVERTED	= new Polynomial(2, PolynomialMode.INCREASING_INVERTED);
 	/**
-	 * A square distribution (decreasing, inverted)
+	 * A square distribution (decreasing, inverted)<br>
+	 * <b>*** buggy ***</b>
 	 */
 	public static final Distribution	SQUARE_DECREASING_INVERTED	= new Polynomial(2, PolynomialMode.DECREASING_INVERTED);
 	/**
-	 * A cubic distribution (increasing, inverted)
+	 * A cubic distribution (increasing, inverted)<br>
+	 * <b>*** buggy ***</b>
 	 */
 	public static final Distribution	CUBIC_INCREASING_INVERTED	= new Polynomial(3, PolynomialMode.INCREASING_INVERTED);
 	/**
-	 * A cubic distribution (decreasing, inverted)
+	 * A cubic distribution (decreasing, inverted)<br>
+	 * <b>*** buggy ***</b>
 	 */
 	public static final Distribution	CUBIC_DECREASING_INVERTED	= new Polynomial(3, PolynomialMode.DECREASING_INVERTED);
 }
