@@ -188,19 +188,15 @@ public abstract class Distribution
 			}
 			else if(mode == PolynomialMode.INCREASING_INVERTED)
 			{
-				ret = Math.signum(d) * (Math.abs(d) + Math.pow(Math.abs(d), 1 / (exponent + 4))) / 2;
+				ret = Math.signum(d) * (Math.abs(d) + Math.pow(Math.abs(d), 1 / (exponent + 1))) / 2;
 			}
 			else if(mode == PolynomialMode.DECREASING_INVERTED)
 			{
-				ret = Math.signum(d) * (1 - (Math.abs(d) + Math.pow(Math.abs(d), 1 / (exponent + 4))) / 2);
+				ret = Math.signum(d) * (1 - (Math.abs(d) + Math.pow(Math.abs(d), 1 / (exponent + 1))) / 2);
 			}
 			else
 			{
 				ret = 0;
-			}
-			if(Math.abs(ret) > 1)
-			{
-				// System.out.println("d=" + d + ", ret=" + ret);
 			}
 			return ret;
 		}
