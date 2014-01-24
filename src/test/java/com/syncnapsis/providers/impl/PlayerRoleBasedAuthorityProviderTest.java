@@ -16,6 +16,7 @@ package com.syncnapsis.providers.impl;
 
 import org.springframework.mock.web.MockHttpSession;
 
+import com.syncnapsis.data.model.Empire;
 import com.syncnapsis.data.model.Player;
 import com.syncnapsis.data.model.PlayerRole;
 import com.syncnapsis.data.model.User;
@@ -29,53 +30,64 @@ public class PlayerRoleBasedAuthorityProviderTest extends BaseSpringContextTestC
 	{
 		SessionProvider sp = new ThreadLocalSessionProvider();
 		SessionBasedPlayerProvider pp = new SessionBasedPlayerProvider();
-		PlayerRoleBasedAuthorityProvider ap = new PlayerRoleBasedAuthorityProvider(pp);
+		SessionBasedEmpireProvider ep = new SessionBasedEmpireProvider();
+		PlayerRoleBasedAuthorityProvider ap = new PlayerRoleBasedAuthorityProvider(pp, ep);
+		ep.setSessionProvider(sp);
 		pp.setSessionProvider(sp);
 		sp.set(new MockHttpSession());
-		
-		UserRole userRole = new UserRole();
-		userRole.setRolename("userrole1");
-		
-		User user = new User();
-		user.setRole(userRole);
 
-		PlayerRole role = new PlayerRole();
-		role.setRolename("role1");
+		Empire e1 = getEmpire(1);
+		Empire e2 = getEmpire(2);
 
-		Player player = new Player();
-		player.setRole(role);
-		player.setUser(user);
-
-		pp.set(player);
+		pp.set(e1.getPlayer());
+		ep.set(e2); // set different empire
 
 		Object[] authorities = ap.get();
 
-		assertEquals(6, authorities.length);
-		assertEquals(player, authorities[0]);
-		assertEquals(role, authorities[1]);
-		assertEquals(role.getRolename(), authorities[2]);
-		assertEquals(user, authorities[3]);
-		assertEquals(userRole, authorities[4]);
-		assertEquals(userRole.getRolename(), authorities[5]);
+		assertEquals(5, authorities.length);
+		assertSame(e2, authorities[0]);
+		assertSame(e1.getPlayer(), authorities[1]);
+		assertSame(e1.getPlayer().getRole(), authorities[2]);
+		assertSame(e1.getPlayer().getUser(), authorities[3]);
+		assertSame(e1.getPlayer().getUser().getRole(), authorities[4]);
 	}
-	
+
+	public Empire getEmpire(long id)
+	{
+		UserRole userRole = new UserRole();
+		userRole.setId(id);
+		userRole.setRolename("userrole" + id);
+
+		User user = new User();
+		user.setId(id);
+		user.setRole(userRole);
+
+		PlayerRole role = new PlayerRole();
+		role.setId(id);
+		role.setRolename("role" + id);
+
+		Player player = new Player();
+		player.setId(id);
+		player.setRole(role);
+		player.setUser(user);
+
+		Empire empire = new Empire();
+		empire.setId(id);
+		empire.setPlayer(player);
+
+		return empire;
+	}
+
 	public void testSet() throws Exception
 	{
 
 		SessionProvider sp = new ThreadLocalSessionProvider();
-		SessionBasedPlayerProvider up = new SessionBasedPlayerProvider();
-		PlayerRoleBasedAuthorityProvider ap = new PlayerRoleBasedAuthorityProvider(up);
-		up.setSessionProvider(sp);
+		SessionBasedPlayerProvider pp = new SessionBasedPlayerProvider();
+		SessionBasedEmpireProvider ep = new SessionBasedEmpireProvider();
+		PlayerRoleBasedAuthorityProvider ap = new PlayerRoleBasedAuthorityProvider(pp, ep);
+		pp.setSessionProvider(sp);
 		sp.set(new MockHttpSession());
 
-		PlayerRole role = new PlayerRole();
-		role.setRolename("role1");
-
-		Player player = new Player();
-		player.setRole(role);
-
-		up.set(player);
-		
 		try
 		{
 			ap.set(new Object[0]);

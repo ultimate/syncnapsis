@@ -14,30 +14,48 @@
  */
 package com.syncnapsis.providers.impl;
 
+import org.springframework.util.Assert;
+
 import com.syncnapsis.constants.ApplicationBaseConstants;
+import com.syncnapsis.data.model.Empire;
 import com.syncnapsis.data.model.Player;
 import com.syncnapsis.data.model.User;
 import com.syncnapsis.providers.AuthorityProvider;
+import com.syncnapsis.providers.EmpireProvider;
 import com.syncnapsis.providers.PlayerProvider;
-import org.springframework.util.Assert;
 
 /**
  * Basic application AuthorityProvider gathering the authority-information from the current player
+ * and the current empire.<br>
+ * In order to support sitting in future versions the current player ist NOT obtained from the
+ * current empire but from a separated {@link PlayerProvider}.
  * 
  * @author ultimate
  */
 public class PlayerRoleBasedAuthorityProvider implements AuthorityProvider
 {
+	/**
+	 * The PlayerProvider
+	 */
 	private PlayerProvider	playerProvider;
+	/**
+	 * The EmpireProvider
+	 */
+	private EmpireProvider	empireProvider;
 
 	/**
 	 * Default-Constructor configuring SessionBasedProvider with
 	 * {@link ApplicationBaseConstants#SESSION_USER_KEY}.
+	 * 
+	 * @param playerProvider - the PlayerProvider
+	 * @param empireProvider - the EmpireProvider
 	 */
-	public PlayerRoleBasedAuthorityProvider(PlayerProvider playerProvider)
+	public PlayerRoleBasedAuthorityProvider(PlayerProvider playerProvider, EmpireProvider empireProvider)
 	{
 		Assert.notNull(playerProvider, "playerProvider must not be null!");
+		Assert.notNull(playerProvider, "empireProvider must not be null!");
 		this.playerProvider = playerProvider;
+		this.empireProvider = empireProvider;
 	}
 
 	/*
@@ -47,11 +65,12 @@ public class PlayerRoleBasedAuthorityProvider implements AuthorityProvider
 	@Override
 	public Object[] get()
 	{
+		Empire empire = empireProvider.get();
 		Player player = playerProvider.get();
 		if(player != null)
 		{
 			User user = player.getUser();
-			return new Object[] { player, player.getRole(), player.getRole().getRolename(), user, user.getRole(), user.getRole().getRolename() };
+			return new Object[] { empire, player, player.getRole(), user, user.getRole() };
 		}
 		else
 		{
