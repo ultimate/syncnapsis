@@ -141,6 +141,9 @@
 	<bean id="solarSystemPopulationAccessController"
 		class="com.syncnapsis.security.accesscontrol.SolarSystemPopulationAccessController">
 	</bean>
+	
+	<!-- define a base accessRule -->
+	<bean id="accessRule" class="com.syncnapsis.security.accesscontrol.BaseAccessRule" />
 
 	<!-- =================================================================== -->
 	<!-- Utilities -->
