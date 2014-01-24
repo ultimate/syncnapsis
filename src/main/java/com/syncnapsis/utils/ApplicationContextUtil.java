@@ -381,7 +381,7 @@ public class ApplicationContextUtil implements ApplicationContextAware
 			}
 			catch(BeanDefinitionStoreException e)
 			{
-				logger.error("could not load bean definition: '" + location + "'");
+				logger.error("could not load bean definition: '" + location + "'", e);
 			}
 		}
 		context.refresh();
