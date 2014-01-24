@@ -18,5 +18,7 @@ public class ApplicationBaseContextTest extends BaseSpringContextTestCase
 		assertNotNull(timeProvider);
 		
 		assertNotNull(ApplicationContextUtil.getBean("timeProvider"));
+		
+		assertNotNull(ApplicationContextUtil.getBean("constantLoader"));
 	}
 }
