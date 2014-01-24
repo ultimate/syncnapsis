@@ -13,7 +13,8 @@
  - You should have received a copy of the GNU General Plublic License along with this program;
  - if not, see <http://www.gnu.org/licenses/>.
 -->
-<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
             http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd
             http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.0.xsd"
@@ -24,36 +25,36 @@
     <!-- =================================================================== -->
 
 	<bean id="empireDao" class="com.syncnapsis.data.dao.hibernate.EmpireDaoHibernate">
-	    <constructor-arg ref="sessionFactory"/>
+		<constructor-arg ref="sessionFactory" />
 	</bean>
 
 	<bean id="playerDao" class="com.syncnapsis.data.dao.hibernate.PlayerDaoHibernate">
-	    <constructor-arg ref="sessionFactory"/>
+		<constructor-arg ref="sessionFactory" />
 	</bean>
 
 	<bean id="playerRoleDao" class="com.syncnapsis.data.dao.hibernate.PlayerRoleDaoHibernate">
-	    <constructor-arg ref="sessionFactory"/>
+		<constructor-arg ref="sessionFactory" />
 	</bean>
 	
     <!-- =================================================================== -->
     <!-- Service					                                         -->
     <!-- =================================================================== -->
-    
-    <bean id="empireManager" class="com.syncnapsis.data.service.impl.EmpireManagerImpl">
-        <constructor-arg ref="empireDao"/>
-        <property name="securityManager" ref="securityManager" />
-    </bean>  
-    
-    <bean id="playerManager" class="com.syncnapsis.data.service.impl.PlayerManagerImpl">
-        <constructor-arg ref="playerDao"/>
-        <constructor-arg ref="playerRoleManager"/>
-        <constructor-arg ref="userManager"/>
-        <property name="securityManager" ref="securityManager" />
-    </bean>
-    
-    <bean id="playerRoleManager" class="com.syncnapsis.data.service.impl.PlayerRoleManagerImpl">
-        <constructor-arg ref="playerRoleDao"/>
-    </bean>  
+
+	<bean id="empireManager" class="com.syncnapsis.data.service.impl.EmpireManagerImpl">
+		<constructor-arg ref="empireDao" />
+		<property name="securityManager" ref="securityManager" />
+	</bean>
+
+	<bean id="playerManager" class="com.syncnapsis.data.service.impl.PlayerManagerImpl">
+		<constructor-arg ref="playerDao" />
+		<constructor-arg ref="playerRoleManager" />
+		<constructor-arg ref="userManager" />
+		<property name="securityManager" ref="securityManager" />
+	</bean>
+
+	<bean id="playerRoleManager" class="com.syncnapsis.data.service.impl.PlayerRoleManagerImpl">
+		<constructor-arg ref="playerRoleDao" />
+	</bean>  
 	
     <!-- =================================================================== -->
     <!-- Security					                                         -->
@@ -71,8 +72,9 @@
 
 	<bean id="playerRoleBasedAuthorityProvider" class="com.syncnapsis.providers.impl.PlayerRoleBasedAuthorityProvider">
 		<constructor-arg ref="playerProvider" />
+		<constructor-arg ref="empireProvider" />
 	</bean>
-	
+
 	<bean id="baseGameManager" class="com.syncnapsis.security.BaseGameManager">
 		<property name="accessControllers">
 			<list>
@@ -91,5 +93,5 @@
 		<property name="emailValidator" ref="emailValidator" />
 		<property name="mailer" ref="mailer" />
 	</bean>
-	
+
 </beans>

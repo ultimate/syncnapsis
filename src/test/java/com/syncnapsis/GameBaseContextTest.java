@@ -18,5 +18,7 @@ public class GameBaseContextTest extends BaseSpringContextTestCase
 		assertNotNull(timeProvider);
 		
 		assertNotNull(ApplicationContextUtil.getBean("timeProvider"));
+		
+		assertNotNull(ApplicationContextUtil.getBean("constantLoader"));
 	}
 }
