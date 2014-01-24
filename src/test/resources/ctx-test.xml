@@ -18,6 +18,9 @@
 		<property name="delegate" ref="logRPCHandler" />
 	</bean>
 	
+	<!-- define a base accessRule -->
+	<bean id="accessRule" class="com.syncnapsis.security.accesscontrol.BaseAccessRule" />
+	
 	<!-- define a mailer -->
 	<bean id="mailer" class="com.syncnapsis.utils.mail.BaseGameMailer">
 		<constructor-arg value="mail.properties"/>
