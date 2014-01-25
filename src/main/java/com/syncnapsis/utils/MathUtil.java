@@ -833,29 +833,4 @@ public abstract class MathUtil
 				return count;
 		}
 	}
-
-	/**
-	 * Calculate the binomial coefficient for<br>
-	 * <code>
-	 * /n\        n!<br>
-	 * | | = -----------<br>
-	 * \k/   k! * (n-k)!<br>
-	 * </code>
-	 * 
-	 * @param n
-	 * @param k
-	 * @return the binomial coefficient
-	 */
-	public static int binomial(int n, int k)
-	{
-		if(k > n || k < 0)
-			throw new IllegalArgumentException("k out of range of n");
-		long result = 1;
-		int nk = n-k;
-		while(n > k)
-			result *= n--;
-		while(nk > 0)
-			result /= nk--;
-		return (int) result;
-	}
 }
