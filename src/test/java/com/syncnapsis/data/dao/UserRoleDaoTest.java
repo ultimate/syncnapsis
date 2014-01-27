@@ -22,34 +22,34 @@ import com.syncnapsis.tests.GenericNameDaoTestCase;
 import com.syncnapsis.tests.annotations.TestCoversClasses;
 import com.syncnapsis.tests.annotations.TestCoversMethods;
 
-@TestCoversClasses({UserRoleDao.class, UserRoleDaoHibernate.class})
+@TestCoversClasses({ UserRoleDao.class, UserRoleDaoHibernate.class })
 public class UserRoleDaoTest extends GenericNameDaoTestCase<UserRole, Long>
 {
-	private UserRoleDao userRoleDao;
-	
+	private UserRoleDao	userRoleDao;
+
 	@Override
 	protected void setUp() throws Exception
 	{
 		super.setUp();
-		
-		String existingName = ApplicationBaseConstants.ROLE_DEMO_USER;
+
+		String existingName = "DEMO_USER";
 		Long existingId = userRoleDao.getByName(existingName).getId();
-		
+
 		UserRole userRole = new UserRole();
 		userRole.setRolename("any name");
-		
+
 		setEntity(userRole);
-		
+
 		setEntityProperty("rolename");
 		setEntityPropertyValue("any name2");
-		
+
 		setExistingEntityId(existingId);
 		setBadEntityId(-1L);
 		setExistingEntityName(existingName);
-		
+
 		setGenericNameDao(userRoleDao);
 	}
-	
+
 	@TestCoversMethods("save")
 	public void testSaveInvalid() throws Exception
 	{
@@ -63,5 +63,21 @@ public class UserRoleDaoTest extends GenericNameDaoTestCase<UserRole, Long>
 		{
 			assertNotNull(e);
 		}
+	}
+
+	public void testGetByMask() throws Exception
+	{
+		maskTest(ApplicationBaseConstants.ROLE_ADMIN, "ADMIN");
+		maskTest(ApplicationBaseConstants.ROLE_MODERATOR, "MODERATOR");
+		maskTest(ApplicationBaseConstants.ROLE_NORMAL_USER, "NORMAL_USER");
+		maskTest(ApplicationBaseConstants.ROLE_DEMO_USER, "DEMO_USER");
+	}
+
+	private void maskTest(int mask, String name)
+	{
+		UserRole role = userRoleDao.getByMask(mask);
+		assertNotNull(role);
+		assertEquals(mask, role.getMask());
+		assertEquals(name, role.getRolename());
 	}
 }

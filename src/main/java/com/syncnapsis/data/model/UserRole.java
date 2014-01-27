@@ -23,6 +23,7 @@ import javax.persistence.Table;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 import com.syncnapsis.data.model.base.BaseObject;
+import com.syncnapsis.data.model.base.BitMask;
 
 /**
  * Model-Klasse "Benutzerrolle"
@@ -34,7 +35,7 @@ import com.syncnapsis.data.model.base.BaseObject;
  */
 @Entity
 @Table(name = "app_userrole")
-public class UserRole extends BaseObject<Long>
+public class UserRole extends BaseObject<Long> implements BitMask
 {
 	/**
 	 * Der Name der Benutzerrolle
@@ -48,6 +49,10 @@ public class UserRole extends BaseObject<Long>
 	 * Darf dieser Benutzer nur aktivierte Einträge sehen?
 	 */
 	protected boolean	onlyAllowedToSeeActivated;
+	/**
+	 * The unique bitmask for this role
+	 */
+	protected int		mask;
 
 	/**
 	 * Leerer Standard Constructor
@@ -91,6 +96,17 @@ public class UserRole extends BaseObject<Long>
 	}
 
 	/**
+	 * The unique bitmask for this role
+	 * @return mask
+	 */
+	@Column(nullable = false, unique = true)
+	@Override
+	public int getMask()
+	{
+		return mask;
+	}
+
+	/**
 	 * Der Name der Benutzerrolle
 	 * 
 	 * @param rolename - der Name
@@ -118,6 +134,16 @@ public class UserRole extends BaseObject<Long>
 	public void setOnlyAllowedToSeeActivated(boolean onlyAllowedToSeeActivated)
 	{
 		this.onlyAllowedToSeeActivated = onlyAllowedToSeeActivated;
+	}
+
+	/**
+	 * The unique bitmask for this role
+	 * 
+	 * @param mask - the bitmask
+	 */
+	public void setMask(int mask)
+	{
+		this.mask = mask;
 	}
 
 	/*

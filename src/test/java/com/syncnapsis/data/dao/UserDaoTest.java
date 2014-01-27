@@ -47,7 +47,7 @@ public class UserDaoTest extends GenericNameDaoTestCase<User, Long>
 		user.setLocale(EnumLocale.getDefault());
 		user.setPassword("pw");
 		user.setRegistrationDate(new Date(timeProvider.get()));
-		user.setRole(userRoleDao.getByName(ApplicationBaseConstants.ROLE_DEMO_USER));
+		user.setRole(userRoleDao.getByMask(ApplicationBaseConstants.ROLE_DEMO_USER));
 		user.setTimeZoneID("tzid");
 
 		setEntity(user);

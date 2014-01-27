@@ -40,4 +40,13 @@ public class UserRoleManagerImpl extends GenericNameManagerImpl<UserRole, Long> 
 		super(userRoleDao);
 		this.userRoleDao = userRoleDao;
 	}
+
+	/* (non-Javadoc)
+	 * @see com.syncnapsis.data.service.UserRoleManager#getByMask(int)
+	 */
+	@Override
+	public UserRole getByMask(int mask)
+	{
+		return userRoleDao.getByMask(mask);
+	}
 }

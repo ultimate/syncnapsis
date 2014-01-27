@@ -56,50 +56,50 @@ public class ApplicationBaseConstants
 	public static final Constant<String>	PARAM_NEWS_MAXAGE					= new StringConstant("news.%L.maxAge");
 
 	/**
-	 * Rollennamen: Administrator
+	 * bitmask: Administrator
 	 */
-	public static final String	ROLE_ADMIN							= "ADMIN";
+	public static final int					ROLE_ADMIN							= 1;
 	/**
-	 * Rollennamen: Moderator
+	 * bitmask: Moderator
 	 */
-	public static final String	ROLE_MODERATOR						= "MODERATOR";
+	public static final int					ROLE_MODERATOR						= 2;
 	/**
-	 * Rollennamen: Normaler User
+	 * bitmask: Normaler User
 	 */
-	public static final String	ROLE_NORMAL_USER					= "NORMAL_USER";
+	public static final int					ROLE_NORMAL_USER					= 4;
 	/**
-	 * Rollennamen: Demo-User
+	 * bitmask: Demo-User
 	 */
-	public static final String	ROLE_DEMO_USER						= "DEMO_USER";
+	public static final int					ROLE_DEMO_USER						= 8;
 
 	/**
 	 * Schlüssel für die User-ID in der Session
 	 */
-	public static final String	SESSION_USER_KEY					= "j_user";
+	public static final String				SESSION_USER_KEY					= "j_user";
 	/**
 	 * Schlüssel für den Infinite-Status in der Session. Dieser gibt an, ob die
 	 * Session des Benutzers niemals abläuft.
 	 */
-	public static final String	SESSION_INFINITE_KEY				= "j_infinite";
+	public static final String				SESSION_INFINITE_KEY				= "j_infinite";
 	/**
 	 * Schlüssel für den Timeout der Session. Dieser gibt an, wann ein Relogin fällig ist, falls die
 	 * Session nicht "infinite" ist.
 	 */
-	public static final String	SESSION_TIMEOUT_KEY					= "j_timeout";
+	public static final String				SESSION_TIMEOUT_KEY					= "j_timeout";
 	/**
 	 * Schlüssel für die Queue der letzten Logins.
 	 */
-	public static final String	SESSION_LAST_LOGINS_KEY				= "j_last_logins";
+	public static final String				SESSION_LAST_LOGINS_KEY				= "j_last_logins";
 	/**
 	 * Schlüssel für die Locale in der Session
 	 */
-	public static final String	SESSION_LOCALE_KEY					= "j_locale";
+	public static final String				SESSION_LOCALE_KEY					= "j_locale";
 	/**
 	 * Schlüssel für die Refresh-Status in der Session. Der Refresh-Status gibt
 	 * an, ob derzeit das Passwort neu eigegeben werden muss, weil die Session
 	 * des Benutzers abgelaufen ist.
 	 */
-	public static final String	SESSION_REFRESH_KEY					= "j_refresh";
+	public static final String				SESSION_REFRESH_KEY					= "j_refresh";
 
 	/**
 	 * Maximale Anzahl der Relogin-Versuche. Nach dieser Anzahl von Versuchen

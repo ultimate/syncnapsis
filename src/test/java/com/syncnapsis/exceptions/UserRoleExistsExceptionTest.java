@@ -29,7 +29,7 @@ public class UserRoleExistsExceptionTest extends BaseDaoTestCase
 		logger.debug("testing add existing userRole...");
 		assertNotNull(userRoleManager);
 
-		UserRole userRole = userRoleManager.getByName(ApplicationBaseConstants.ROLE_DEMO_USER);
+		UserRole userRole = userRoleManager.getByMask(ApplicationBaseConstants.ROLE_DEMO_USER);
 
 		// create new object with null id - Hibernate doesn't like setId(null)
 		UserRole userRole2 = new UserRole();

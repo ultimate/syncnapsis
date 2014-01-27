@@ -172,7 +172,7 @@ public class UserManagerImpl extends GenericNameManagerImpl<User, Long> implemen
 		// user.setNickname(nickname);
 		user.setPassword(securityManager.hashPassword(password));
 		user.setRegistrationDate(new Date(securityManager.getTimeProvider().get()));
-		user.setRole(userRoleManager.getByName(ApplicationBaseConstants.ROLE_NORMAL_USER));
+		user.setRole(userRoleManager.getByMask(ApplicationBaseConstants.ROLE_NORMAL_USER));
 		user.setRoleExpireDate(null);
 		user.setSessionTimeout(ApplicationBaseConstants.PARAM_SESSION_TIMEOUT_DEFAULT.asInt());
 		user.setGender(EnumGender.unknown);

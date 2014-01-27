@@ -24,4 +24,11 @@ import com.syncnapsis.data.model.UserRole;
  */
 public interface UserRoleManager  extends GenericNameManager<UserRole, Long>
 {
+	/**
+	 * Get the user role for the given unique bit mask.
+	 * 
+	 * @param mask - the bit mask
+	 * @return the user role found
+	 */
+	public UserRole getByMask(int mask);
 }

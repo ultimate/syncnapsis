@@ -194,13 +194,13 @@ public class ApplicationBaseDataGenerator extends DataGenerator implements Initi
 	 * @param rolename
 	 * @return
 	 */
-	public User createUser(String name, String rolename)
+	public User createUser(String name, int roleMask)
 	{
 		if(name == null)
 			name = random.nextString(random.nextInt(3, 10), DefaultData.STRING_ASCII_COMPLETE_NO_CONTROLCHARS);
 
-		if(rolename == null)
-			rolename = ApplicationBaseConstants.ROLE_NORMAL_USER;
+		if(roleMask == 0)
+			roleMask = ApplicationBaseConstants.ROLE_NORMAL_USER;
 
 		User user = new User();
 		user.setAccountStatus(EnumAccountStatus.active);
@@ -220,7 +220,7 @@ public class ApplicationBaseDataGenerator extends DataGenerator implements Initi
 		user.setNickname("nick_" + name);
 		user.setPassword(securityManager.hashPassword(name));
 		user.setRegistrationDate(new Date(timeProvider.get() - 3600000L));
-		user.setRole(userRoleManager.getByName(rolename));
+		user.setRole(userRoleManager.getByMask(roleMask));
 		user.setRoleExpireDate(null);
 		user.setSessionTimeout(random.nextInt(30, 120 * 60));
 		user.setGender(random.nextEnum(EnumGender.class));
@@ -270,10 +270,10 @@ public class ApplicationBaseDataGenerator extends DataGenerator implements Initi
 		return userContactManager.save(userContact);
 	}
 
-	public User getOrCreateUser(String name, String rolename)
+	public User getOrCreateUser(String name, int roleMask)
 	{
 		if(!users.containsKey(name))
-			users.put(name, createUser(name, rolename));
+			users.put(name, createUser(name, roleMask));
 		return users.get(name);
 	}
 }

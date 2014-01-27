@@ -16,6 +16,7 @@ package com.syncnapsis.data.dao.hibernate;
 
 import org.hibernate.SessionFactory;
 import org.hibernate.exception.ConstraintViolationException;
+
 import com.syncnapsis.data.dao.UserRoleDao;
 import com.syncnapsis.data.model.UserRole;
 import com.syncnapsis.exceptions.UserRoleExistsException;
@@ -68,5 +69,15 @@ public class UserRoleDaoHibernate extends GenericNameDaoHibernate<UserRole, Long
 			throw new UserRoleExistsException("UserRole already exists by rolename: " + e.getMessage());
 		}
 		return userRole;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see com.syncnapsis.data.dao.UserRoleDao#getByMask(int)
+	 */
+	@Override
+	public UserRole getByMask(int mask)
+	{
+		return (UserRole) createQuery("from UserRole where mask=?", mask).uniqueResult();
 	}
 }

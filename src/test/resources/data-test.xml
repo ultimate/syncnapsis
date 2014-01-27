@@ -176,29 +176,34 @@
 		<column>version</column>
 		<column>rolename</column>
 		<column>onlyAllowedToSeeActivated</column>
+		<column>mask</column>
 		<row>
 			<value description="id">1</value>
 			<value description="version">1</value>
 			<value description="rolename">ADMIN</value>
 			<value description="onlyAllowedToSeeActivated">0</value>
+			<value description="mask">1</value>
 		</row>
 		<row>
 			<value description="id">2</value>
 			<value description="version">1</value>
 			<value description="rolename">MODERATOR</value>
 			<value description="onlyAllowedToSeeActivated">1</value>
+			<value description="mask">2</value>
 		</row>
 		<row>
 			<value description="id">3</value>
 			<value description="version">1</value>
 			<value description="rolename">NORMAL_USER</value>
 			<value description="onlyAllowedToSeeActivated">1</value>
+			<value description="mask">4</value>
 		</row>
 		<row>
 			<value description="id">4</value>
 			<value description="version">1</value>
 			<value description="rolename">DEMO_USER</value>
 			<value description="onlyAllowedToSeeActivated">1</value>
+			<value description="mask">8</value>
 		</row>
 	</table>
 

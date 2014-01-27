@@ -43,15 +43,15 @@ public class ApplicationBaseDataGeneratorTest extends BaseDaoTestCase
 	public void testCreateUser()
 	{
 		String name = "a new user";
-		String rolename = ApplicationBaseConstants.ROLE_NORMAL_USER;
+		int roleMask = ApplicationBaseConstants.ROLE_NORMAL_USER;
 
-		User user = gen.createUser(name, rolename);
+		User user = gen.createUser(name, roleMask);
 
 		assertNotNull(user);
 		assertNotNull(user.getId());
 		assertEquals(name, user.getUsername());
 		assertNotNull(user.getRole());
-		assertEquals(rolename, user.getRole().getRolename());
+		assertEquals(roleMask, user.getRole().getMask());
 		assertNotNull(user.getMessengerContacts());
 	}
 
