@@ -600,7 +600,7 @@ public class BaseMapper implements Mapper, InitializingBean
 		if(this.securityManager == null)
 			return true;
 		else
-			return this.securityManager.getAccessController(Field.class).isAccessible(entity, field, AccessController.READ, authorities);
+			return this.securityManager.getAccessController(Field.class).isAccessible(field, AccessController.READ, entity, authorities);
 	}
 
 	protected boolean isWritable(Object entity, Field field, Object... authorities)
@@ -608,7 +608,7 @@ public class BaseMapper implements Mapper, InitializingBean
 		if(this.securityManager == null)
 			return true;
 		else
-			return this.securityManager.getAccessController(Field.class).isAccessible(entity, field, AccessController.WRITE, authorities);
+			return this.securityManager.getAccessController(Field.class).isAccessible(field, AccessController.WRITE, entity, authorities);
 	}
 
 	// @formatter:off

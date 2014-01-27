@@ -24,6 +24,7 @@ import com.syncnapsis.exceptions.PasswordEncryptionException;
 import com.syncnapsis.providers.AuthorityProvider;
 import com.syncnapsis.providers.impl.SystemTimeProvider;
 import com.syncnapsis.providers.impl.ThreadLocalSessionProvider;
+import com.syncnapsis.security.accesscontrol.BaseAccessRule;
 import com.syncnapsis.security.accesscontrol.FieldAccessController;
 import com.syncnapsis.security.accesscontrol.MethodAccessController;
 import com.syncnapsis.tests.LoggerTestCase;
@@ -65,8 +66,9 @@ public class SecurityManagerTest extends LoggerTestCase
 	public void testAccessControllerManagement() throws Exception
 	{
 		SecurityManager securityManager = new SecurityManager();
+		AccessRule rule = new BaseAccessRule();
 
-		AccessController<?>[] controllers = new AccessController<?>[] { new FieldAccessController(), new MethodAccessController() };
+		AccessController<?>[] controllers = new AccessController<?>[] { new FieldAccessController(rule), new MethodAccessController(rule) };
 
 		securityManager.setAccessControllers(Arrays.asList(controllers));
 

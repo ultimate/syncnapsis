@@ -14,7 +14,8 @@
  */
 package com.syncnapsis.security;
 
-import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * General Interface for Instances controlling the access to other Objects.
@@ -22,7 +23,7 @@ import java.util.List;
  * 
  * @see com.syncnapsis.security.SecurityManager
  * @author ultimate
- * @param <T> - the Type of Object to access
+ * @param <T> - the Target-Type to access
  */
 public abstract class AccessController<T>
 {
@@ -62,89 +63,61 @@ public abstract class AccessController<T>
 	// Operations to be checked - END
 
 	/**
+	 * Logger-Instance
+	 */
+	protected transient final Logger	logger	= LoggerFactory.getLogger(getClass());
+	
+	/**
+	 * The target Class this AccessController is associated with.
+	 */
+	protected Class<T>		targetClass;
+
+	/**
+	 * The AccessRule to use
+	 */
+	protected AccessRule	rule;
+
+	/**
+	 * Create a new AccessController with the given rule
+	 * 
+	 * @param targetClass - the target Class this AccessController is associated with
+	 * @param rule - the AccessRule to use
+	 */
+	public AccessController(Class<T> targetClass, AccessRule rule)
+	{
+		super();
+		this.targetClass = targetClass;
+		this.rule = rule;
+	}
+
+	/**
+	 * The AccessRule to use
+	 * 
+	 * @return the rule
+	 */
+	public AccessRule getRule()
+	{
+		return rule;
+	}
+
+	/**
 	 * Get the target Class this AccessController is associated with.
 	 * 
 	 * @return the target Class
 	 */
-	public abstract Class<T> getTargetClass();
+	public Class<T> getTargetClass()
+	{
+		return targetClass;
+	}
 
 	/**
 	 * Check the accessibility of a target and the given operation for the defined authorities.
 	 * 
-	 * @param entity - the entity the target belongs to
+	 * @param context - the context to access the target in (e.g. the respective entity to access)
 	 * @param target - the target to access
 	 * @param operation - the operation to perform
 	 * @param authorities - the authorities to check
 	 * @return true or false
 	 */
-	public abstract boolean isAccessible(Object entity, T target, int operation, Object... authorities);
-
-	/**
-	 * Check whether a given entity is owned by the given authorities.
-	 * 
-	 * @param entity - the entity to check the owner for
-	 * @param authorities - the authorities to check against
-	 * @return true or false
-	 */
-	public static boolean isOwner(Object entity, Object... authorities)
-	{
-		if(entity instanceof Ownable<?>)
-		{
-			List<?> owners = ((Ownable<?>) entity).getOwners();
-			if(owners != null && authorities != null)
-			{
-				for(Object authority : authorities)
-				{
-					if(owners.contains(authority))
-						return true;
-				}
-			}
-		}
-		return false;
-	}
-
-	/**
-	 * Check whether a the given authorities are friend for the entities owner.
-	 * 
-	 * @param entity - the entity to check the friend for
-	 * @param authorities - the authorities to check against
-	 * @return true or false
-	 */
-	public static boolean isFriend(Object entity, Object... authorities)
-	{
-		// TODO create HasFriends-Interface?
-		// Maybe owner should implement HasFriends?
-		// then we could call entity.getOwners().get(i).getFriends();
-		return false;
-	}
-
-	/**
-	 * Check whether a the given authorities are enemy for the entities owner.
-	 * 
-	 * @param entity - the entity to check the enemy for
-	 * @param authorities - the authorities to check against
-	 * @return true or false
-	 */
-	public static boolean isEnemy(Object entity, Object... authorities)
-	{
-		// TODO create HasEnemies-Interface?
-		// Maybe owner should implement HasEnemies?
-		// then we could call entity.getOwners().get(i).getEnemies();
-		return false;
-	}
-	
-	/**
-	 * Check whether a the given authorities are enemy for the entities owner.
-	 * 
-	 * @param entity - the entity to check the enemy for
-	 * @param authorities - the authorities to check against
-	 * @return true or false
-	 */
-	public static boolean isAlly(Object entity, Object... authorities)
-	{
-		// TODO create HasAllies-Interface?
-		// Maybe owner should implement HasAllies?
-		// then we could call entity.getOwners().get(i).getEnemies();
-		return false;
-	}
+	public abstract boolean isAccessible(T target, int operation, Object context, Object... authorities);
 }

@@ -82,35 +82,34 @@ public class ReflectionsUtilTest extends LoggerTestCase
 		p2.name = "p2";
 		POJO3 p3 = new POJO3();
 		p3.name = "p3";
-		
+
 		p1.child = p2;
 		p2.child = p3;
 
-		
 		assertEquals(p1.name, ReflectionsUtil.getFieldByKey(p1, "name"));
 		assertEquals(p1.child, ReflectionsUtil.getFieldByKey(p1, "child"));
-		
+
 		assertEquals(p2.name, ReflectionsUtil.getFieldByKey(p1, "child.name"));
 		assertEquals(p2.child, ReflectionsUtil.getFieldByKey(p1, "child.child"));
-		
+
 		assertEquals(p3.name, ReflectionsUtil.getFieldByKey(p1, "child.child.name"));
-		
+
 		Map<String, Object> m1 = new HashMap<String, Object>();
 		m1.put("name", "m1");
 		Map<String, Object> m2 = new HashMap<String, Object>();
 		m2.put("id", "m2");
 		Map<String, Object> m3 = new HashMap<String, Object>();
 		m3.put("desc", "m1");
-		
+
 		m1.put("sub", m2);
 		m2.put("child", m3);
 
 		assertEquals(m1.get("name"), ReflectionsUtil.getFieldByKey(m1, "name"));
 		assertEquals(m1.get("sub"), ReflectionsUtil.getFieldByKey(m1, "sub"));
-		
+
 		assertEquals(m2.get("id"), ReflectionsUtil.getFieldByKey(m1, "sub.id"));
 		assertEquals(m2.get("child"), ReflectionsUtil.getFieldByKey(m1, "sub.child"));
-		
+
 		assertEquals(m3.get("desc"), ReflectionsUtil.getFieldByKey(m1, "sub.child.desc"));
 	}
 
@@ -592,19 +591,19 @@ public class ReflectionsUtilTest extends LoggerTestCase
 		assertTrue(ReflectionsUtil.isAnnotationPresent(annotated, Accessible.class));
 		accessible = ReflectionsUtil.getAnnotation(annotated, Accessible.class);
 		assertNotNull(accessible);
-		assertEquals(annotated1, accessible.value());
+		assertEquals(annotated1, accessible.by());
 
 		annotated = Annotated2.class.getMethod("method");
 		assertTrue(ReflectionsUtil.isAnnotationPresent(annotated, Accessible.class));
 		accessible = ReflectionsUtil.getAnnotation(annotated, Accessible.class);
 		assertNotNull(accessible);
-		assertEquals(annotated2, accessible.value());
+		assertEquals(annotated2, accessible.by());
 
 		annotated = Annotated3.class.getMethod("method");
 		assertTrue(ReflectionsUtil.isAnnotationPresent(annotated, Accessible.class));
 		accessible = ReflectionsUtil.getAnnotation(annotated, Accessible.class);
 		assertNotNull(accessible);
-		assertEquals(annotated2, accessible.value());
+		assertEquals(annotated2, accessible.by());
 
 		// class
 
@@ -638,21 +637,21 @@ public class ReflectionsUtilTest extends LoggerTestCase
 		annotations = ReflectionsUtil.getAnnotations(annotated);
 		assertNotNull(annotations);
 		assertEquals(1, annotations.length);
-		assertEquals(annotated1, ((Accessible) annotations[0]).value());
+		assertEquals(annotated1, ((Accessible) annotations[0]).by());
 
 		annotated = Annotated2.class.getMethod("method");
 		annotations = ReflectionsUtil.getAnnotations(annotated);
 		assertNotNull(annotations);
 		assertEquals(2, annotations.length);
-		assertEquals(annotated2, ((Accessible) annotations[0]).value());
-		assertEquals(annotated1, ((Accessible) annotations[1]).value());
+		assertEquals(annotated2, ((Accessible) annotations[0]).by());
+		assertEquals(annotated1, ((Accessible) annotations[1]).by());
 
 		annotated = Annotated3.class.getMethod("method");
 		annotations = ReflectionsUtil.getAnnotations(annotated);
 		assertNotNull(annotations);
 		assertEquals(2, annotations.length);
-		assertEquals(annotated2, ((Accessible) annotations[0]).value());
-		assertEquals(annotated1, ((Accessible) annotations[1]).value());
+		assertEquals(annotated2, ((Accessible) annotations[0]).by());
+		assertEquals(annotated1, ((Accessible) annotations[1]).by());
 
 		// method
 
@@ -820,14 +819,14 @@ public class ReflectionsUtilTest extends LoggerTestCase
 	}
 
 	// fomatter:on
-	
-	private static final int annotated1 = 123;
-	private static final int annotated2 = 456;
+
+	private static final int	annotated1	= 123;
+	private static final int	annotated2	= 456;
 
 	@TestExcludesMethods("annotated1")
 	public static class Annotated1
 	{
-		@Accessible(annotated1)
+		@Accessible(by = annotated1)
 		public void method()
 		{
 
@@ -837,7 +836,7 @@ public class ReflectionsUtilTest extends LoggerTestCase
 	@TestExcludesMethods("annotated2")
 	public static class Annotated2 extends Annotated1
 	{
-		@Accessible(annotated2)
+		@Accessible(by = annotated2)
 		@Override
 		public void method()
 		{

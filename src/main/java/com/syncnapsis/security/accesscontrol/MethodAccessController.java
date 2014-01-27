@@ -16,6 +16,7 @@ package com.syncnapsis.security.accesscontrol;
 
 import java.lang.reflect.Method;
 
+import com.syncnapsis.security.AccessRule;
 import com.syncnapsis.security.annotations.Accessible;
 import com.syncnapsis.utils.ReflectionsUtil;
 
@@ -28,65 +29,104 @@ import com.syncnapsis.utils.ReflectionsUtil;
 public class MethodAccessController extends AnnotationAccessController<Method>
 {
 	/**
-	 * The default value for valid accessor for reading fields
+	 * The default value for <code>@Accessible.by()</code> for method invokation
 	 */
-	private int	defaultAccessible	= Accessible.ANYBODY;
+	private int	defaultAccessibleBy	= AccessRule.ANYBODY;
+	/**
+	 * The default value for <code>@Accessible.of()</code> for method invokation
+	 */
+	private int	defaultAccessibleOf	= AccessRule.ANYROLE;
 
 	/**
-	 * The default value for valid accessor for reading fields
+	 * Construct a new MethodAccessController with the given rule
 	 * 
-	 * @return defaultAccessible
+	 * @param rule - the AccessRule to use
 	 */
-	public int getDefaultAccessible()
+	public MethodAccessController(AccessRule rule)
 	{
-		return defaultAccessible;
+		super(Method.class, rule);
 	}
 
 	/**
-	 * The default value for valid accessor for reading fields
+	 * The default value for <code>@Accessible.by()</code> for method invokation
 	 * 
-	 * @param defaultAccessible - the default value
+	 * @return defaultAccessibleBy
 	 */
-	public void setDefaultAccessible(int defaultAccessible)
+	public int getDefaultAccessibleBy()
 	{
-		this.defaultAccessible = defaultAccessible;
+		return defaultAccessibleBy;
+	}
+
+	/**
+	 * The default value for <code>@Accessible.by()</code> for method invokation
+	 * 
+	 * @param defaultAccessibleBy - the default value
+	 */
+	public void setDefaultAccessibleBy(int defaultAccessibleBy)
+	{
+		this.defaultAccessibleBy = defaultAccessibleBy;
+	}
+
+	/**
+	 * The default value for <code>@Accessible.of()</code> for method invokation
+	 * 
+	 * @return defaultAccessibleOf
+	 */
+	public int getDefaultAccessibleOf()
+	{
+		return defaultAccessibleOf;
+	}
+
+	/**
+	 * The default value for <code>@Accessible.of()</code> for method invokation
+	 * 
+	 * @param defaultAccessibleOf - the default value
+	 */
+	public void setDefaultAccessibleOf(int defaultAccessibleOf)
+	{
+		this.defaultAccessibleOf = defaultAccessibleOf;
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.syncnapsis.security.AccessController#getTargetClass()
+	 * @see
+	 * com.syncnapsis.security.accesscontrol.AnnotationAccessController#getAnnotation(java.lang.
+	 * Object, int)
 	 */
 	@Override
-	public Class<Method> getTargetClass()
+	public Accessible getAnnotation(Method method, int operation)
 	{
-		return Method.class;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * @see com.syncnapsis.security.AccessController#isAccessible(java.lang.Object,
-	 * java.lang.Object, int, java.lang.Object[])
-	 */
-	@Override
-	public boolean isAccessible(Object entity, Method target, int operation, Object... authorities)
-	{
-		boolean a = false;
 		if(operation == INVOKE)
-		{
-			a = isAccessible(entity, getAccessibleAnnotation(target), defaultAccessible, authorities);
-			logger.debug("invoke@" + target + ": " + a);
-		}
-		return a;
+			return ReflectionsUtil.getAnnotation(method, Accessible.class);
+		else
+			return null;
 	}
 
-	/**
-	 * Get the Accessible Annotation for a Method.
-	 * 
-	 * @param method - the method to scan for the annotation
-	 * @return the Accessible Annotation
+	/*
+	 * (non-Javadoc)
+	 * @see
+	 * com.syncnapsis.security.accesscontrol.AnnotationAccessController#getDefaultAccessibleBy(int)
 	 */
-	protected Accessible getAccessibleAnnotation(Method method)
+	@Override
+	public int getDefaultAccessibleBy(int operation)
 	{
-		return ReflectionsUtil.getAnnotation(method, Accessible.class);
+		if(operation == INVOKE)
+			return defaultAccessibleBy;
+		else
+			return AccessRule.NOBODY;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see
+	 * com.syncnapsis.security.accesscontrol.AnnotationAccessController#getDefaultAccessibleOf(int)
+	 */
+	@Override
+	public int getDefaultAccessibleOf(int operation)
+	{
+		if(operation == INVOKE)
+			return defaultAccessibleOf;
+		else
+			return AccessRule.NOROLE;
 	}
 }
