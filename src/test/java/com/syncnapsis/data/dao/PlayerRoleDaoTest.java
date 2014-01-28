@@ -32,7 +32,7 @@ public class PlayerRoleDaoTest extends GenericNameDaoTestCase<PlayerRole, Long>
 	{
 		super.setUp();
 		
-		String existingName = GameBaseConstants.ROLE_DEMO_PLAYER;
+		String existingName = "DEMO_PLAYER";
 		Long existingId = playerRoleDao.getByName(existingName).getId();
 		
 		PlayerRole playerRole = new PlayerRole();
@@ -63,5 +63,20 @@ public class PlayerRoleDaoTest extends GenericNameDaoTestCase<PlayerRole, Long>
 		{
 			assertNotNull(e);
 		}
+	}
+
+	public void testGetByMask() throws Exception
+	{
+		maskTest(GameBaseConstants.ROLE_PREMIUM_PLAYER, "PREMIUM_PLAYER");
+		maskTest(GameBaseConstants.ROLE_NORMAL_PLAYER, "NORMAL_PLAYER");
+		maskTest(GameBaseConstants.ROLE_DEMO_PLAYER, "DEMO_PLAYER");
+	}
+
+	private void maskTest(int mask, String name)
+	{
+		PlayerRole role = playerRoleDao.getByMask(mask);
+		assertNotNull(role);
+		assertEquals(mask, role.getMask());
+		assertEquals(name, role.getRolename());
 	}
 }

@@ -22,7 +22,9 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
+
 import com.syncnapsis.data.model.base.BaseObject;
+import com.syncnapsis.data.model.base.BitMask;
 
 /**
  * Model-Klasse "Benutzerrolle"
@@ -34,7 +36,7 @@ import com.syncnapsis.data.model.base.BaseObject;
  */
 @Entity
 @Table(name = "playerrole")
-public class PlayerRole extends BaseObject<Long>
+public class PlayerRole extends BaseObject<Long> implements BitMask
 {
 	/**
 	 * Der Name der Benutzerrolle
@@ -58,6 +60,10 @@ public class PlayerRole extends BaseObject<Long>
 	 * Wie viele Spieler darf ein Spieler dieser Rolle maximal sitten?
 	 */
 	protected int			maxSitted;
+	/**
+	 * The unique bitmask for this role
+	 */
+	protected int		mask;
 
 	/**
 	 * Leerer Standard Constructor
@@ -123,6 +129,17 @@ public class PlayerRole extends BaseObject<Long>
 	}
 
 	/**
+	 * The unique bitmask for this role
+	 * @return mask
+	 */
+	@Column(nullable = false, unique = true)
+	@Override
+	public int getMask()
+	{
+		return mask;
+	}
+
+	/**
 	 * Der Name der Benutzerrolle
 	 * 
 	 * @param rolename - der Name
@@ -170,6 +187,16 @@ public class PlayerRole extends BaseObject<Long>
 	public void setMaxSitted(int maxSitted)
 	{
 		this.maxSitted = maxSitted;
+	}
+
+	/**
+	 * The unique bitmask for this role
+	 * 
+	 * @param mask - the bitmask
+	 */
+	public void setMask(int mask)
+	{
+		this.mask = mask;
 	}
 
 	/*

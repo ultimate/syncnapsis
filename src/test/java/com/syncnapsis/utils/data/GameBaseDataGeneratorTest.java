@@ -43,16 +43,16 @@ public class GameBaseDataGeneratorTest extends BaseDaoTestCase
 
 	public void testCreatePlayer() throws Exception
 	{
-		String userrolename = ApplicationBaseConstants.ROLE_NORMAL_USER;
-		String playerrolename = GameBaseConstants.ROLE_NORMAL_PLAYER;
+		int userrolemask = ApplicationBaseConstants.ROLE_NORMAL_USER;
+		int playerrolemask = GameBaseConstants.ROLE_NORMAL_PLAYER;
 		String name = "new user";
 		
-		Player player = gen.createPlayer(name, userrolename, playerrolename);
+		Player player = gen.createPlayer(name, userrolemask, playerrolemask);
 		
 		assertNotNull(player);
 		assertNotNull(player.getId());
 		assertNotNull(player.getRole());
-		assertEquals(playerrolename, player.getRole().getRolename());
+		assertEquals(playerrolemask, player.getRole().getMask());
 		
 		User user = player.getUser();
 
@@ -60,7 +60,7 @@ public class GameBaseDataGeneratorTest extends BaseDaoTestCase
 		assertNotNull(user.getId());
 		assertEquals(name, user.getUsername());
 		assertNotNull(user.getRole());
-		assertEquals(userrolename, user.getRole().getRolename());
+		assertEquals(userrolemask, user.getRole().getMask());
 		assertNotNull(user.getMessengerContacts());
 	}
 

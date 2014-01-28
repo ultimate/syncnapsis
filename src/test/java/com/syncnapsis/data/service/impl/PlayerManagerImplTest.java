@@ -161,7 +161,7 @@ public class PlayerManagerImplTest extends GenericManagerImplTestCase<Player, Lo
 		// checkSitted betrifft liste der Sitter!!!
 
 		// case 1 limited role
-		player.setRole(playerRoleManager.getByName(GameBaseConstants.ROLE_NORMAL_PLAYER));
+		player.setRole(playerRoleManager.getByMask(GameBaseConstants.ROLE_NORMAL_PLAYER));
 		// 1a 0/2 sitters
 		assertTrue(playerManager.checkSitted(player));
 		// 1b 1/2 sitters
@@ -177,7 +177,7 @@ public class PlayerManagerImplTest extends GenericManagerImplTestCase<Player, Lo
 		player.getSitters().clear();
 
 		// case 2 unlimited role
-		player.setRole(playerRoleManager.getByName(GameBaseConstants.ROLE_PREMIUM_PLAYER));
+		player.setRole(playerRoleManager.getByMask(GameBaseConstants.ROLE_PREMIUM_PLAYER));
 		// 1a 0/-1 sitters
 		assertTrue(playerManager.checkSitted(player));
 		// 2b 1/-1 sitters
@@ -195,7 +195,7 @@ public class PlayerManagerImplTest extends GenericManagerImplTestCase<Player, Lo
 		// checkSitter betrifft liste der Sitted!!!
 
 		// case 1 limited role
-		player.setRole(playerRoleManager.getByName(GameBaseConstants.ROLE_NORMAL_PLAYER));
+		player.setRole(playerRoleManager.getByMask(GameBaseConstants.ROLE_NORMAL_PLAYER));
 		// 1a 0/2 sitted
 		assertTrue(playerManager.checkSitter(player));
 		// 1b 1/2 sitted
@@ -211,7 +211,7 @@ public class PlayerManagerImplTest extends GenericManagerImplTestCase<Player, Lo
 		player.getSitted().clear();
 
 		// case 2 unlimited role
-		player.setRole(playerRoleManager.getByName(GameBaseConstants.ROLE_PREMIUM_PLAYER));
+		player.setRole(playerRoleManager.getByMask(GameBaseConstants.ROLE_PREMIUM_PLAYER));
 		// 2a 0/-1 sitted
 		assertTrue(playerManager.checkSitter(player));
 		// 2b 1/-1 sitted

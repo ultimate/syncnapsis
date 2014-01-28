@@ -23,4 +23,11 @@ import com.syncnapsis.data.model.PlayerRole;
  */
 public interface PlayerRoleDao extends GenericNameDao<PlayerRole, Long>
 {
+	/**
+	 * Get the player role for the given unique bit mask.
+	 * 
+	 * @param mask - the bit mask
+	 * @return the player role found
+	 */
+	public PlayerRole getByMask(int mask);
 }

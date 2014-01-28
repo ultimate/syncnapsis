@@ -23,6 +23,7 @@
 		<column>maxEmpires</column>
 		<column>maxSitters</column>
 		<column>maxSitted</column>
+		<column>mask</column>
 		<row>
 			<value description="id">1</value>
 			<value description="version">1</value>
@@ -30,6 +31,7 @@
 			<value description="maxEmpires">5</value>
 			<value description="maxSitters">5</value>
 			<value description="maxSitted">5</value>
+			<value description="mask">512</value>
 		</row>
 		<row>
 			<value description="id">2</value>
@@ -38,6 +40,7 @@
 			<value description="maxEmpires">2</value>
 			<value description="maxSitters">2</value>
 			<value description="maxSitted">2</value>
+			<value description="mask">1024</value>
 		</row>
 		<row>
 			<value description="id">3</value>
@@ -46,6 +49,7 @@
 			<value description="maxEmpires">1</value>
 			<value description="maxSitters">0</value>
 			<value description="maxSitted">0</value>
+			<value description="mask">2048</value>
 		</row>
 	</table>
 

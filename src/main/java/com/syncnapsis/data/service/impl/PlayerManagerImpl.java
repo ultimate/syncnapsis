@@ -14,6 +14,9 @@
  */
 package com.syncnapsis.data.service.impl;
 
+import org.springframework.beans.factory.InitializingBean;
+import org.springframework.util.Assert;
+
 import com.syncnapsis.constants.GameBaseConstants;
 import com.syncnapsis.data.dao.PlayerDao;
 import com.syncnapsis.data.model.Player;
@@ -27,8 +30,6 @@ import com.syncnapsis.exceptions.PlayerSittingExistsException;
 import com.syncnapsis.exceptions.PlayerSittingNotPossibleException;
 import com.syncnapsis.exceptions.UserRegistrationFailedException;
 import com.syncnapsis.security.BaseGameManager;
-import org.springframework.beans.factory.InitializingBean;
-import org.springframework.util.Assert;
 
 /**
  * Manager-Implementierung für den Zugriff auf Player.
@@ -157,7 +158,7 @@ public class PlayerManagerImpl extends GenericManagerImpl<Player, Long> implemen
 		player.setAccountStatusExpireDate(user.getAccountStatusExpireDate());
 		player.setActivated(true);
 		// player.setCurrentEmpire(null);
-		player.setRole(playerRoleManager.getByName(GameBaseConstants.ROLE_NORMAL_PLAYER));
+		player.setRole(playerRoleManager.getByMask(GameBaseConstants.ROLE_NORMAL_PLAYER));
 		player.setRoleExpireDate(user.getRoleExpireDate());
 		player.setUser(user);
 

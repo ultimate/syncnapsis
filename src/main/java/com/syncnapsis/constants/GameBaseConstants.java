@@ -25,17 +25,17 @@ package com.syncnapsis.constants;
 public class GameBaseConstants
 {
 	/**
-	 * Rollennamen: Premium-User
+	 * Unique bit mask: Premium-User
 	 */
-	public static final String	ROLE_PREMIUM_PLAYER			= "PREMIUM_PLAYER";
+	public static final int	ROLE_PREMIUM_PLAYER			= 512;
 	/**
-	 * Rollennamen: Normaler User
+	 * Unique bit mask: Normaler User
 	 */
-	public static final String	ROLE_NORMAL_PLAYER			= "NORMAL_PLAYER";
+	public static final int ROLE_NORMAL_PLAYER			= 1024;
 	/**
-	 * Rollennamen: Demo-User
+	 * Unique bit mask: Demo-User
 	 */
-	public static final String	ROLE_DEMO_PLAYER			= "DEMO_PLAYER";
+	public static final int ROLE_DEMO_PLAYER			= 2048;
 	/**
 	 * Schlüssel für die Spieler-ID in der Session
 	 */

@@ -32,4 +32,11 @@ public class PlayerRoleManagerImplTest extends GenericNameManagerImplTestCase<Pl
 		setMockDao(mockContext.mock(PlayerRoleDao.class));
 		setMockManager(new PlayerRoleManagerImpl(mockDao));
 	}
+
+	public void testGetByMask() throws Exception
+	{
+		MethodCall managerCall = new MethodCall("getByMask", new PlayerRole(), 64);
+		MethodCall daoCall = managerCall;
+		simpleGenericTest(managerCall, daoCall);
+	}
 }

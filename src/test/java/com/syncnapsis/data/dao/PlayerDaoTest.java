@@ -42,7 +42,7 @@ public class PlayerDaoTest extends GenericDaoTestCase<Player, Long>
 		Long existingId = playerDao.getByUsername(existingName).getId();
 
 		Player player = new Player();
-		player.setRole(playerRoleDao.getByName(GameBaseConstants.ROLE_DEMO_PLAYER));
+		player.setRole(playerRoleDao.getByMask(GameBaseConstants.ROLE_DEMO_PLAYER));
 
 		setEntity(player);
 

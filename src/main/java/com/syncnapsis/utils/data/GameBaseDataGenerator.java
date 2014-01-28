@@ -121,19 +121,19 @@ public class GameBaseDataGenerator extends ApplicationBaseDataGenerator implemen
 		generateDummyData(dummyUsers);
 	}
 
-	public Player createPlayer(String name, String userrolename, String playerrolename)
+	public Player createPlayer(String name, int userrolemask, int playerrolemask)
 	{
-		User user = getOrCreateUser(name, userrolename);
+		User user = getOrCreateUser(name, userrolemask);
 
-		if(playerrolename == null)
-			playerrolename = GameBaseConstants.ROLE_NORMAL_PLAYER;
+		if(playerrolemask == 0)
+			playerrolemask = GameBaseConstants.ROLE_NORMAL_PLAYER;
 
 		Player player = new Player();
 		player.setAccountStatus(EnumAccountStatus.active);
 		player.setAccountStatusExpireDate(null);
 		player.setCurrentEmpire(null);
 		player.setEmpires(new ArrayList<Empire>());
-		player.setRole(playerRoleManager.getByName(playerrolename));
+		player.setRole(playerRoleManager.getByMask(playerrolemask));
 		player.setRoleExpireDate(null);
 		player.setSitted(new ArrayList<Player>());
 		player.setSitters(new ArrayList<Player>());
@@ -163,7 +163,7 @@ public class GameBaseDataGenerator extends ApplicationBaseDataGenerator implemen
 		return empire;
 	}
 
-	public Player getOrCreatePlayer(String playername, String playerrole, String userrole)
+	public Player getOrCreatePlayer(String playername, int playerrole, int userrole)
 	{
 		if(!players.containsKey(playername))
 			players.put(playername, createPlayer(playername, playerrole, userrole));

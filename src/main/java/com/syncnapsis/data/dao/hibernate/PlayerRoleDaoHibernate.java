@@ -16,6 +16,7 @@ package com.syncnapsis.data.dao.hibernate;
 
 import org.hibernate.SessionFactory;
 import org.hibernate.exception.ConstraintViolationException;
+
 import com.syncnapsis.data.dao.PlayerRoleDao;
 import com.syncnapsis.data.model.PlayerRole;
 import com.syncnapsis.exceptions.PlayerRoleExistsException;
@@ -68,5 +69,15 @@ public class PlayerRoleDaoHibernate extends GenericNameDaoHibernate<PlayerRole, 
 			throw new PlayerRoleExistsException("UserRole already exists by rolename: " + e.getMessage());
 		}
 		return userRole;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see com.syncnapsis.data.dao.PlayerRoleDao#getByMask(int)
+	 */
+	@Override
+	public PlayerRole getByMask(int mask)
+	{
+		return (PlayerRole) createQuery("from PlayerRole where mask=?", mask).uniqueResult();
 	}
 }

@@ -28,8 +28,7 @@ public class PlayerRoleManagerImpl extends GenericNameManagerImpl<PlayerRole, Lo
 	/**
 	 * UserRoleDao für den Datenbankzugriff
 	 */
-	@SuppressWarnings("unused")
-	private PlayerRoleDao			playerRoleDao;
+	private PlayerRoleDao	playerRoleDao;
 
 	/**
 	 * Standard Constructor
@@ -40,5 +39,15 @@ public class PlayerRoleManagerImpl extends GenericNameManagerImpl<PlayerRole, Lo
 	{
 		super(playerRoleDao);
 		this.playerRoleDao = playerRoleDao;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see com.syncnapsis.data.service.PlayerRoleManager#getByMask(int)
+	 */
+	@Override
+	public PlayerRole getByMask(int mask)
+	{
+		return playerRoleDao.getByMask(mask);
 	}
 }

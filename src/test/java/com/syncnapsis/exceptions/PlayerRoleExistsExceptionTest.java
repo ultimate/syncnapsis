@@ -29,7 +29,7 @@ public class PlayerRoleExistsExceptionTest extends BaseDaoTestCase
 		logger.debug("testing add existing playerRole...");
 		assertNotNull(playerRoleManager);
 
-		PlayerRole playerRole = playerRoleManager.getByName(GameBaseConstants.ROLE_DEMO_PLAYER);
+		PlayerRole playerRole = playerRoleManager.getByMask(GameBaseConstants.ROLE_DEMO_PLAYER);
 
 		// create new object with null id - Hibernate doesn't like setId(null)
 		PlayerRole playerRole2 = new PlayerRole();
