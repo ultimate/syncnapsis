@@ -14,6 +14,7 @@
  */
 package com.syncnapsis.data.model;
 
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
@@ -34,6 +35,7 @@ import javax.persistence.Transient;
 import com.syncnapsis.data.model.base.ActivatableInstance;
 import com.syncnapsis.enums.EnumDestructionType;
 import com.syncnapsis.enums.EnumPopulationPriority;
+import com.syncnapsis.security.Ownable;
 
 /**
  * Entity representation of an empires/players population for a specific {@link SolarSystem} within
@@ -47,7 +49,7 @@ import com.syncnapsis.enums.EnumPopulationPriority;
  */
 @Entity
 @Table(name = "solarsystempopulation")
-public class SolarSystemPopulation extends ActivatableInstance<Long>
+public class SolarSystemPopulation extends ActivatableInstance<Long> implements Ownable<Participant>
 {
 	/**
 	 * The solar system this population "lives" in.<br>
@@ -381,6 +383,17 @@ public class SolarSystemPopulation extends ActivatableInstance<Long>
 		if(getDestructionDate() != null && !getDestructionDate().after(time))
 			return false;
 		return true;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see com.syncnapsis.security.Ownable#getOwners()
+	 */
+	@Transient
+	@Override
+	public List<Participant> getOwners()
+	{
+		return Collections.nCopies(1, getParticipant());
 	}
 
 	/**

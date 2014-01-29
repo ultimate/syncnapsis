@@ -14,6 +14,7 @@
  */
 package com.syncnapsis.data.model;
 
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
@@ -30,10 +31,12 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 
 import com.syncnapsis.data.model.base.ActivatableInstance;
 import com.syncnapsis.enums.EnumDestructionType;
 import com.syncnapsis.enums.EnumVictoryCondition;
+import com.syncnapsis.security.Ownable;
 
 /**
  * Entity representing participants of a match.<br>
@@ -44,7 +47,7 @@ import com.syncnapsis.enums.EnumVictoryCondition;
  */
 @Entity
 @Table(name = "participant")
-public class Participant extends ActivatableInstance<Long>
+public class Participant extends ActivatableInstance<Long> implements Ownable<Empire>
 {
 	/**
 	 * The match the associated empire is participating
@@ -186,6 +189,17 @@ public class Participant extends ActivatableInstance<Long>
 	public boolean isRankFinal()
 	{
 		return rankFinal;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see com.syncnapsis.security.Ownable#getOwners()
+	 */
+	@Transient
+	@Override
+	public List<Empire> getOwners()
+	{
+		return Collections.nCopies(1, getEmpire());
 	}
 
 	/**

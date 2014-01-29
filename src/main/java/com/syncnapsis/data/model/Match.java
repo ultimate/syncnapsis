@@ -14,6 +14,7 @@
  */
 package com.syncnapsis.data.model;
 
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -27,12 +28,14 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 
 import com.syncnapsis.data.model.base.ActivatableInstance;
 import com.syncnapsis.enums.EnumJoinType;
 import com.syncnapsis.enums.EnumMatchState;
 import com.syncnapsis.enums.EnumStartCondition;
 import com.syncnapsis.enums.EnumVictoryCondition;
+import com.syncnapsis.security.Ownable;
 
 /**
  * Entity representing a single match (or game) within the global game of universe-conquest.<br>
@@ -49,7 +52,7 @@ import com.syncnapsis.enums.EnumVictoryCondition;
  */
 @Entity
 @Table(name = "match")
-public class Match extends ActivatableInstance<Long>
+public class Match extends ActivatableInstance<Long> implements Ownable<Player>
 {
 	/**
 	 * The title of this match
@@ -397,6 +400,17 @@ public class Match extends ActivatableInstance<Long>
 	public List<Participant> getParticipants()
 	{
 		return participants;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see com.syncnapsis.security.Ownable#getOwners()
+	 */
+	@Transient
+	@Override
+	public List<Player> getOwners()
+	{
+		return Collections.nCopies(1, getCreator());
 	}
 
 	/**
