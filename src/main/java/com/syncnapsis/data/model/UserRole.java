@@ -97,6 +97,7 @@ public class UserRole extends BaseObject<Long> implements BitMask
 
 	/**
 	 * The unique bitmask for this role
+	 * 
 	 * @return mask
 	 */
 	@Column(nullable = false, unique = true)
@@ -160,14 +161,16 @@ public class UserRole extends BaseObject<Long> implements BitMask
 		if(getClass() != obj.getClass())
 			return false;
 		UserRole other = (UserRole) obj;
-		if(onlyAllowedToSeeActivated != other.onlyAllowedToSeeActivated)
-			return false;
 		if(fallbackRole == null)
 		{
 			if(other.fallbackRole != null)
 				return false;
 		}
-		else if(!fallbackRole.equals(other.fallbackRole))
+		else if(!fallbackRole.getId().equals(other.fallbackRole == null ? null : other.fallbackRole.getId()))
+			return false;
+		if(mask != other.mask)
+			return false;
+		if(onlyAllowedToSeeActivated != other.onlyAllowedToSeeActivated)
 			return false;
 		if(rolename == null)
 		{
@@ -188,8 +191,9 @@ public class UserRole extends BaseObject<Long> implements BitMask
 	{
 		final int prime = 31;
 		int result = super.hashCode();
+		result = prime * result + ((fallbackRole == null) ? 0 : fallbackRole.getId().hashCode());
+		result = prime * result + mask;
 		result = prime * result + (onlyAllowedToSeeActivated ? 1231 : 1237);
-		result = prime * result + ((fallbackRole == null) ? 0 : fallbackRole.hashCode());
 		result = prime * result + ((rolename == null) ? 0 : rolename.hashCode());
 		return result;
 	}
@@ -202,7 +206,7 @@ public class UserRole extends BaseObject<Long> implements BitMask
 	public String toString()
 	{
 		ToStringBuilder builder = new ToStringBuilder(this);
-		builder.append("id", id).append("version", version).append("rolename", rolename)
+		builder.append("id", id).append("rolename", rolename).append("mask", mask).append("fallbackRole", fallbackRole.getId())
 				.append("onlyAllowedToSeeActivated", onlyAllowedToSeeActivated);
 		return builder.toString();
 	}
