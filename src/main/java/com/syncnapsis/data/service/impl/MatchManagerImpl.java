@@ -138,7 +138,8 @@ public class MatchManagerImpl extends GenericNameManagerImpl<Match, Long> implem
 	 */
 	protected boolean isAccessible(Match match, int operation)
 	{
-		return securityManager.getAccessController(Match.class).isAccessible(match, operation, securityManager.getPlayerProvider().get());
+		Object context = null;
+		return securityManager.getAccessController(Match.class).isAccessible(match, operation, context, securityManager.getAuthorityProvider().get());
 	}
 
 	/*

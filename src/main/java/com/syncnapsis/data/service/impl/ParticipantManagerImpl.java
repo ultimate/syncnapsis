@@ -154,8 +154,8 @@ public class ParticipantManagerImpl extends GenericManagerImpl<Participant, Long
 	 */
 	protected boolean isAccessible(Match match, int operation)
 	{
-		return securityManager.getAccessController(Match.class).isAccessible(match, operation, securityManager.getPlayerProvider().get(),
-				securityManager.getEmpireProvider().get());
+		Object context = null;
+		return securityManager.getAccessController(Match.class).isAccessible(match, operation, context, securityManager.getAuthorityProvider().get());
 	}
 
 	/*
@@ -467,7 +467,7 @@ public class ParticipantManagerImpl extends GenericManagerImpl<Participant, Long
 
 		// calculate center of current selection and total selected population
 		Vector.Integer centerOfSelection = getCenter(participant.getPopulations());
-		if(centerOfSelection == null) 
+		if(centerOfSelection == null)
 		{
 			// select a random center
 			centerOfSelection = random.nextEntry(infrastructures).getSolarSystem().getCoords();

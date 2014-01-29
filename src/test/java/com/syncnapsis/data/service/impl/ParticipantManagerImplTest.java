@@ -26,11 +26,13 @@ import org.jmock.lib.action.CustomAction;
 import org.springframework.mock.web.MockHttpSession;
 
 import com.syncnapsis.constants.ApplicationBaseConstants;
+import com.syncnapsis.constants.GameBaseConstants;
 import com.syncnapsis.data.dao.ParticipantDao;
 import com.syncnapsis.data.model.Empire;
 import com.syncnapsis.data.model.Match;
 import com.syncnapsis.data.model.Participant;
 import com.syncnapsis.data.model.Player;
+import com.syncnapsis.data.model.PlayerRole;
 import com.syncnapsis.data.model.SolarSystem;
 import com.syncnapsis.data.model.SolarSystemInfrastructure;
 import com.syncnapsis.data.model.SolarSystemPopulation;
@@ -353,6 +355,11 @@ public class ParticipantManagerImplTest extends GenericManagerImplTestCase<Parti
 
 		Player creator = new Player();
 		creator.setId(-1L);
+		creator.setRole(new PlayerRole());
+		creator.getRole().setMask(GameBaseConstants.ROLE_NORMAL_PLAYER);
+		creator.setUser(new User());
+		creator.getUser().setRole(new UserRole());
+		creator.getUser().getRole().setMask(ApplicationBaseConstants.ROLE_NORMAL_USER);
 		securityManager.getPlayerProvider().set(creator);
 
 		final Match match = new Match();
