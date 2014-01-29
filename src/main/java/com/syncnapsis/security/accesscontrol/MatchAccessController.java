@@ -16,16 +16,16 @@ package com.syncnapsis.security.accesscontrol;
 
 import com.syncnapsis.constants.ApplicationBaseConstants;
 import com.syncnapsis.data.model.Match;
-import com.syncnapsis.data.model.Player;
 import com.syncnapsis.enums.EnumMatchState;
 import com.syncnapsis.security.AccessController;
+import com.syncnapsis.security.AccessRule;
 
 /**
  * AccessController for {@link Match}
  * 
  * @author ultimate
  */
-public class MatchAccessController implements AccessController<Match>
+public class MatchAccessController extends AccessController<Match>
 {
 	/**
 	 * The operation "create"
@@ -56,57 +56,36 @@ public class MatchAccessController implements AccessController<Match>
 	 */
 	public static final int	OPERATION_LEAVE					= 7;
 
-	/*
-	 * (non-Javadoc)
-	 * @see com.syncnapsis.security.AccessController#getTargetClass()
+	/**
+	 * Create a new AccessController with the given rule
+	 * 
+	 * @param rule - the AccessRule to use
 	 */
-	@Override
-	public Class<Match> getTargetClass()
+	public MatchAccessController(AccessRule rule)
 	{
-		return Match.class;
+		super(Match.class, rule);
 	}
 
 	/*
 	 * (non-Javadoc)
 	 * @see com.syncnapsis.security.AccessController#isAccessible(java.lang.Object, int,
-	 * java.lang.Object[])
+	 * java.lang.Object, java.lang.Object[])
 	 */
 	@Override
-	public boolean isAccessible(Match target, int operation, Object... authorities)
+	public boolean isAccessible(Match target, int operation, Object context, Object... authorities)
 	{
-		Player player = (Player) authorities[0];
-
 		if(operation == OPERATION_CREATE)
 			return true; // everybody
 		if(operation == OPERATION_JOIN)
 			return true; // everybody
 		if(operation == OPERATION_LEAVE)
 			return true; // everybody
+		
+		// when not planned anymore only moderator and admin
 		if(target.getState() != EnumMatchState.planned)
-			return isModerator(player) || isAdmin(player);
+			return rule.isOf(ApplicationBaseConstants.ROLE_MODERATOR | ApplicationBaseConstants.ROLE_ADMIN, authorities);
 
-		return target.getCreator().equals(player) || isModerator(player) || isAdmin(player);
-	}
-
-	/**
-	 * Is the given player a moderator?
-	 * 
-	 * @param player - the player to check
-	 * @return true or false
-	 */
-	protected boolean isModerator(Player player)
-	{
-		return player.getUser().getRole().getRolename().equals(ApplicationBaseConstants.ROLE_MODERATOR);
-	}
-
-	/**
-	 * Is the given player an admin?
-	 * 
-	 * @param player - the player to check
-	 * @return true or false
-	 */
-	protected boolean isAdmin(Player player)
-	{
-		return player.getUser().getRole().getRolename().equals(ApplicationBaseConstants.ROLE_ADMIN);
+		return rule.is(AccessRule.OWNER, target, authorities)
+				|| rule.isOf(ApplicationBaseConstants.ROLE_MODERATOR | ApplicationBaseConstants.ROLE_ADMIN, authorities);
 	}
 }

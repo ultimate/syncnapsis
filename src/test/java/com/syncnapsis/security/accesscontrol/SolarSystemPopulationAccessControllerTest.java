@@ -30,12 +30,12 @@ public class SolarSystemPopulationAccessControllerTest extends LoggerTestCase
 {
 	public void testGetTargetClass() throws Exception
 	{
-		assertEquals(SolarSystemPopulation.class, new SolarSystemPopulationAccessController().getTargetClass());
+		assertEquals(SolarSystemPopulation.class, new SolarSystemPopulationAccessController(new BaseAccessRule()).getTargetClass());
 	}
 
 	public void testIsAccessible() throws Exception
 	{
-		SolarSystemPopulationAccessController controller = new SolarSystemPopulationAccessController();
+		SolarSystemPopulationAccessController controller = new SolarSystemPopulationAccessController(new BaseAccessRule());
 
 		Player owner = getPlayer(ApplicationBaseConstants.ROLE_NORMAL_USER);
 		Player other = getPlayer(ApplicationBaseConstants.ROLE_NORMAL_USER);
@@ -45,16 +45,18 @@ public class SolarSystemPopulationAccessControllerTest extends LoggerTestCase
 		population.getParticipant().setEmpire(new Empire());
 		population.getParticipant().getEmpire().setPlayer(owner);
 
+		Object context = null; 
+		
 		// owner
-		assertTrue(controller.isAccessible(population, 0, owner));
+		assertTrue(controller.isAccessible(population, 0, context, getAuthorities(owner)));
 
 		// other
-		assertFalse(controller.isAccessible(population, 0, other));
+		assertFalse(controller.isAccessible(population, 0, context, getAuthorities(other)));
 	}
 
 	private long	playerId	= 0;
 
-	private Player getPlayer(String role)
+	private Player getPlayer(int role)
 	{
 		Player player = new Player();
 		player.setId(--playerId);
@@ -62,7 +64,12 @@ public class SolarSystemPopulationAccessControllerTest extends LoggerTestCase
 		player.getUser().setId(playerId);
 		player.getUser().setRole(new UserRole());
 		player.getUser().getRole().setId(playerId);
-		player.getUser().getRole().setRolename(role);
+		player.getUser().getRole().setMask(role);
 		return player;
+	}
+
+	private Object[] getAuthorities(Player player)
+	{
+		return new Object[] { player, player.getRole(), player.getUser(), player.getUser().getRole() };
 	}
 }

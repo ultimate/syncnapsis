@@ -244,7 +244,7 @@ public class ParticipantManagerImplTest extends GenericManagerImplTestCase<Parti
 		creator.setId(-1L);
 		creator.setUser(new User());
 		creator.getUser().setRole(new UserRole());
-		creator.getUser().getRole().setRolename(ApplicationBaseConstants.ROLE_MODERATOR);
+		creator.getUser().getRole().setMask(ApplicationBaseConstants.ROLE_MODERATOR);
 		securityManager.getPlayerProvider().set(creator);
 
 		final Match match = new Match();

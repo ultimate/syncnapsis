@@ -14,42 +14,45 @@
  */
 package com.syncnapsis.security.accesscontrol;
 
-import com.syncnapsis.data.model.Player;
 import com.syncnapsis.data.model.SolarSystemPopulation;
 import com.syncnapsis.security.AccessController;
+import com.syncnapsis.security.AccessRule;
 
 /**
  * AccessController for {@link SolarSystemPopulation}
  * 
  * @author ultimate
  */
-public class SolarSystemPopulationAccessController implements AccessController<SolarSystemPopulation>
+public class SolarSystemPopulationAccessController extends AccessController<SolarSystemPopulation>
 {
+	/**
+	 * The operation for "resettle"
+	 */
 	public static final int	OPERATION_RESETTLE	= 1;
+	/**
+	 * The operation for "spinoff"
+	 */
 	public static final int	OPERATION_SPINOFF	= 2;
 
-	/*
-	 * (non-Javadoc)
-	 * @see com.syncnapsis.security.AccessController#getTargetClass()
+	/**
+	 * Create a new AccessController with the given rule
+	 * 
+	 * @param rule - the AccessRule to use
 	 */
-	@Override
-	public Class<SolarSystemPopulation> getTargetClass()
+	public SolarSystemPopulationAccessController(AccessRule rule)
 	{
-		return SolarSystemPopulation.class;
+		super(SolarSystemPopulation.class, rule);
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.syncnapsis.security.AccessController#isAccessible(java.lang.Object, int,
-	 * java.lang.Object[])
+	 * @see com.syncnapsis.security.AccessController#isAccessible(java.lang.Object, int, java.lang.Object, java.lang.Object[])
 	 */
 	@Override
-	public boolean isAccessible(SolarSystemPopulation target, int operation, Object... authorities)
+	public boolean isAccessible(SolarSystemPopulation target, int operation, Object context, Object... authorities)
 	{
-		Player player = (Player) authorities[0];
-		
+		// context will be ignored (should be same as target)
 		// operation does not have any influence
-
-		return target.getParticipant().getEmpire().getPlayer().equals(player);
+		return rule.is(AccessRule.OWNER, target, authorities);
 	}
 }

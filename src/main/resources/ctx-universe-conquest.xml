@@ -134,15 +134,14 @@
 		</property>
 	</bean>
 
-	<bean id="matchAccessController"
-		class="com.syncnapsis.security.accesscontrol.MatchAccessController">
+	<bean id="matchAccessController" class="com.syncnapsis.security.accesscontrol.MatchAccessController">
+		<constructor-arg ref="accessRule"/>
 	</bean>
 
-	<bean id="solarSystemPopulationAccessController"
-		class="com.syncnapsis.security.accesscontrol.SolarSystemPopulationAccessController">
+	<bean id="solarSystemPopulationAccessController" class="com.syncnapsis.security.accesscontrol.SolarSystemPopulationAccessController">
+		<constructor-arg ref="accessRule"/>
 	</bean>
 	
-	<!-- define a base accessRule -->
 	<bean id="accessRule" class="com.syncnapsis.security.accesscontrol.BaseAccessRule" />
 
 	<!-- =================================================================== -->

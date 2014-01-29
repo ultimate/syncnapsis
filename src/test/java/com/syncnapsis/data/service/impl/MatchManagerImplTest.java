@@ -267,19 +267,19 @@ public class MatchManagerImplTest extends GenericNameManagerImplTestCase<Match, 
 		admin.setUser(new User());
 		admin.getUser().setId(1L);
 		admin.getUser().setRole(new UserRole());
-		admin.getUser().getRole().setRolename(ApplicationBaseConstants.ROLE_ADMIN);
+		admin.getUser().getRole().setMask(ApplicationBaseConstants.ROLE_ADMIN);
 
 		Player creator = new Player();
 		creator.setUser(new User());
 		creator.getUser().setId(2L);
 		creator.getUser().setRole(new UserRole());
-		creator.getUser().getRole().setRolename(ApplicationBaseConstants.ROLE_NORMAL_USER);
+		creator.getUser().getRole().setMask(ApplicationBaseConstants.ROLE_NORMAL_USER);
 
 		Player other = new Player();
 		other.setUser(new User());
 		other.getUser().setId(3L);
 		other.getUser().setRole(new UserRole());
-		other.getUser().getRole().setRolename(ApplicationBaseConstants.ROLE_NORMAL_USER);
+		other.getUser().getRole().setMask(ApplicationBaseConstants.ROLE_NORMAL_USER);
 
 		Match match = new Match();
 		match.setCreator(creator);
