@@ -63,7 +63,7 @@ public class PlayerRole extends BaseObject<Long> implements BitMask
 	/**
 	 * The unique bitmask for this role
 	 */
-	protected int		mask;
+	protected int			mask;
 
 	/**
 	 * Leerer Standard Constructor
@@ -130,6 +130,7 @@ public class PlayerRole extends BaseObject<Long> implements BitMask
 
 	/**
 	 * The unique bitmask for this role
+	 * 
 	 * @return mask
 	 */
 	@Column(nullable = false, unique = true)
@@ -218,7 +219,9 @@ public class PlayerRole extends BaseObject<Long> implements BitMask
 			if(other.fallbackRole != null)
 				return false;
 		}
-		else if(!fallbackRole.equals(other.fallbackRole))
+		else if(!fallbackRole.getId().equals(other.fallbackRole == null ? null : other.fallbackRole.getId()))
+			return false;
+		if(mask != other.mask)
 			return false;
 		if(maxEmpires != other.maxEmpires)
 			return false;
@@ -245,7 +248,8 @@ public class PlayerRole extends BaseObject<Long> implements BitMask
 	{
 		final int prime = 31;
 		int result = super.hashCode();
-		result = prime * result + ((fallbackRole == null) ? 0 : fallbackRole.hashCode());
+		result = prime * result + ((fallbackRole == null) ? 0 : fallbackRole.getId().hashCode());
+		result = prime * result + mask;
 		result = prime * result + maxEmpires;
 		result = prime * result + maxSitted;
 		result = prime * result + maxSitters;
@@ -261,8 +265,8 @@ public class PlayerRole extends BaseObject<Long> implements BitMask
 	public String toString()
 	{
 		ToStringBuilder builder = new ToStringBuilder(this);
-		builder.append("id", id).append("version", version).append("rolename", rolename).append("maxEmpires", maxEmpires)
-				.append("maxSitted", maxSitted).append("maxSitters", maxSitters);
+		builder.append("id", id).append("mask", mask).append("rolename", rolename).append("fallbackRole", fallbackRole.getId())
+				.append("maxEmpires", maxEmpires).append("maxSitters", maxSitters).append("maxSitted", maxSitted);
 		return builder.toString();
 	}
 }
