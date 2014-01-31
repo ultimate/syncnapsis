@@ -11,10 +11,14 @@
  */
 package com.syncnapsis.data.model;
 
+import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import com.syncnapsis.data.model.base.BaseObject;
 import com.syncnapsis.data.model.help.RPCCall;
@@ -45,6 +49,14 @@ public class Action extends BaseObject<Long>
 	 * The number of times this action may be used
 	 */
 	protected int		maxUses;
+	/**
+	 * The date from which this action is valid
+	 */
+	protected Date		validFrom;
+	/**
+	 * THe date until this action is valid
+	 */
+	protected Date		validUntil;
 
 	/**
 	 * The RPCCall to perform
@@ -82,6 +94,30 @@ public class Action extends BaseObject<Long>
 	public int getMaxUses()
 	{
 		return maxUses;
+	}
+
+	/**
+	 * The date from which this action is valid
+	 * 
+	 * @return validFrom
+	 */
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(nullable = true)
+	public Date getValidFrom()
+	{
+		return validFrom;
+	}
+
+	/**
+	 * The date until this action is valid
+	 * 
+	 * @return validUntil
+	 */
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(nullable = true)
+	public Date getValidUntil()
+	{
+		return validUntil;
 	}
 
 	/**
@@ -124,7 +160,27 @@ public class Action extends BaseObject<Long>
 	{
 		this.maxUses = maxUses;
 	}
-	
+
+	/**
+	 * The date from which this action is valid
+	 * 
+	 * @param validFrom - the date
+	 */
+	public void setValidFrom(Date validFrom)
+	{
+		this.validFrom = validFrom;
+	}
+
+	/**
+	 * The date until this action is valid
+	 * 
+	 * @param validUntil - the date
+	 */
+	public void setValidUntil(Date validUntil)
+	{
+		this.validUntil = validUntil;
+	}
+
 	/**
 	 * The RPCCall to perform
 	 * 
@@ -134,7 +190,7 @@ public class Action extends BaseObject<Long>
 	{
 		this.rpcCall = rpcCall;
 	}
-	
+
 	/*
 	 * (non-Javadoc)
 	 * @see com.syncnapsis.data.model.base.BaseObject#hashCode()
@@ -148,9 +204,11 @@ public class Action extends BaseObject<Long>
 		result = prime * result + maxUses;
 		result = prime * result + ((rpcCall == null) ? 0 : rpcCall.hashCode());
 		result = prime * result + uses;
+		result = prime * result + ((validFrom == null) ? 0 : validFrom.hashCode());
+		result = prime * result + ((validUntil == null) ? 0 : validUntil.hashCode());
 		return result;
 	}
-	
+
 	/*
 	 * (non-Javadoc)
 	 * @see com.syncnapsis.data.model.base.BaseObject#equals(java.lang.Object)
@@ -182,6 +240,20 @@ public class Action extends BaseObject<Long>
 		else if(!rpcCall.equals(other.rpcCall))
 			return false;
 		if(uses != other.uses)
+			return false;
+		if(validFrom == null)
+		{
+			if(other.validFrom != null)
+				return false;
+		}
+		else if(!validFrom.equals(other.validFrom))
+			return false;
+		if(validUntil == null)
+		{
+			if(other.validUntil != null)
+				return false;
+		}
+		else if(!validUntil.equals(other.validUntil))
 			return false;
 		return true;
 	}

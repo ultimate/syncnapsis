@@ -154,11 +154,13 @@ public class UserManagerImpl extends GenericNameManagerImpl<User, Long> implemen
 			throw new UserRegistrationFailedException(ApplicationBaseConstants.ERROR_NO_PASSWORD);
 		if(!password.equals(passwordConfirm))
 			throw new UserRegistrationFailedException(ApplicationBaseConstants.ERROR_PASSWORD_MISMATCH);
+		
+		Date validDate = new Date(securityManager.getTimeProvider().get()
+				+ ApplicationBaseConstants.PARAM_REGISTRATION_TIME_TO_VERIFY.asLong());
 
 		User user = new User();
 		user.setAccountStatus(EnumAccountStatus.valueOf(ApplicationBaseConstants.PARAM_REGISTRATION_STATUS_DEFAULT.asString()));
-		user.setAccountStatusExpireDate(new Date(securityManager.getTimeProvider().get()
-				+ ApplicationBaseConstants.PARAM_REGISTRATION_TIME_TO_VERIFY.asLong()));
+		user.setAccountStatusExpireDate(validDate);
 		user.setActivated(true);
 		// user.setBirthday(birthday);
 		// user.setCity(city);
@@ -190,7 +192,7 @@ public class UserManagerImpl extends GenericNameManagerImpl<User, Long> implemen
 		{
 			// email verification
 			RPCCall rpcCall = new RPCCall(getBeanName(), RPC_VERIFY_REGISTRATION, new Object[] { user.getId() });
-			Action action = actionManager.createAction(rpcCall, 1);
+			Action action = actionManager.createAction(rpcCall, 1, null, validDate);
 			securityManager.getMailer().sendVerifyRegistration(user, action);
 		}
 
@@ -262,7 +264,11 @@ public class UserManagerImpl extends GenericNameManagerImpl<User, Long> implemen
 			logger.debug("mail address update requested for user " + user.getId() + ": " + email);
 
 			RPCCall rpcCall = new RPCCall(getBeanName(), RPC_VERIFY_MAIL_ADDRESS, new Object[] { user.getId(), email });
-			Action action = actionManager.createAction(rpcCall, 1);
+
+			Date validDate = new Date(securityManager.getTimeProvider().get()
+					+ ApplicationBaseConstants.PARAM_EMAIL_CHANGE_TIME_TO_VERIFY.asLong());
+			
+			Action action = actionManager.createAction(rpcCall, 1, null, validDate);
 
 			securityManager.getMailer().sendVerifyMailAddress(user, email, action);
 			

@@ -44,6 +44,10 @@ public class ApplicationBaseConstants
 	 */
 	public static final Constant<String>	PARAM_REGISTRATION_TIME_TO_VERIFY	= new StringConstant("registration.timeToVerify");
 	/**
+	 * Application configuration via DB: key for "time to verfiy e-mail after change"
+	 */
+	public static final Constant<String>	PARAM_EMAIL_CHANGE_TIME_TO_VERIFY	= new StringConstant("email.change.timeToVerify");
+	/**
 	 * Namen der Spielparameter: Maximale Anzahl angezeigter News
 	 */
 	@Deprecated

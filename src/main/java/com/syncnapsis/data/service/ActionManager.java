@@ -14,6 +14,8 @@
  */
 package com.syncnapsis.data.service;
 
+import java.util.Date;
+
 import com.syncnapsis.data.model.Action;
 import com.syncnapsis.websockets.service.rpc.RPCCall;
 
@@ -45,9 +47,11 @@ public interface ActionManager extends GenericNameManager<Action, Long>
 	 * 
 	 * @param rpcCall - the RPCCall for the Action
 	 * @param maxUses - the max number of uses for the Action
+	 * @param validFrom - the date from which the Action will be valid
+	 * @param validUntil - the date until the Action will be valid
 	 * @return the newly created Action
 	 */
-	public Action createAction(RPCCall rpcCall, int maxUses);
+	public Action createAction(RPCCall rpcCall, int maxUses, Date validFrom, Date validUntil);
 
 	/**
 	 * Generate a new code guaranteed not be be present in the database
@@ -55,4 +59,13 @@ public interface ActionManager extends GenericNameManager<Action, Long>
 	 * @return the new code
 	 */
 	public String generateCode();
+
+	/**
+	 * Is the action valid for the given date according to its valid dates.
+	 * 
+	 * @param action - the action to check
+	 * @param refDate - the reference date to check the valid dates against
+	 * @return true or false
+	 */
+	public boolean isValid(Action action, Date refDate);
 }

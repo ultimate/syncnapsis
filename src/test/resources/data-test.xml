@@ -40,6 +40,12 @@
 		</row>
 		<row>
 			<value description="id">4</value>
+			<value description="name">email.change.timeToVerify</value>
+			<value description="value">86400000</value><!-- 1 day -->
+			<value description="version">1</value>
+		</row>
+		<row>
+			<value description="id">5</value>
 			<value description="name">action.code.length</value>
 			<value description="value">50</value>
 			<value description="version">1</value>
@@ -115,6 +121,8 @@
 		<column>args</column>
 		<column>uses</column>
 		<column>maxUses</column>
+		<column>validFrom</column>
+		<column>validUntil</column>
 		<row>
 			<value description="id">1</value>
 			<value description="version">1</value>
@@ -124,6 +132,8 @@
 			<value description="args"><![CDATA[[]]]></value>
 			<value description="uses">1</value>
 			<value description="maxUses">10</value>
+			<null/>
+			<null/>
 		</row>
 	</table>
 

@@ -11,6 +11,8 @@
  */
 package com.syncnapsis.data.service.impl;
 
+import java.util.Date;
+
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.util.Assert;
 
@@ -20,6 +22,7 @@ import com.syncnapsis.data.model.Action;
 import com.syncnapsis.data.service.ActionManager;
 import com.syncnapsis.exceptions.DeserializationException;
 import com.syncnapsis.exceptions.SerializationException;
+import com.syncnapsis.security.BaseApplicationManager;
 import com.syncnapsis.utils.data.DefaultData;
 import com.syncnapsis.utils.data.ExtendedRandom;
 import com.syncnapsis.utils.serialization.Serializer;
@@ -45,9 +48,12 @@ public class ActionManagerImpl extends GenericNameManagerImpl<Action, Long> impl
 	 * The Serializer used to deserialize the stored RPC arguments
 	 */
 	protected Serializer<String>	serializer;
-
 	/**
-	 * The extended random number generator for creating codes 
+	 * The BaseApplicationManager
+	 */
+	protected BaseApplicationManager		securityManager;
+	/**
+	 * The extended random number generator for creating codes
 	 */
 	protected final ExtendedRandom	random		= new ExtendedRandom();
 
@@ -82,6 +88,26 @@ public class ActionManagerImpl extends GenericNameManagerImpl<Action, Long> impl
 		this.serializer = serializer;
 	}
 
+	/**
+	 * The BaseApplicationManager
+	 * 
+	 * @return securityManager
+	 */
+	public BaseApplicationManager getSecurityManager()
+	{
+		return securityManager;
+	}
+
+	/**
+	 * The BaseApplicationManager
+	 * 
+	 * @param securityManager - the SecurityManager
+	 */
+	public void setSecurityManager(BaseApplicationManager securityManager)
+	{
+		this.securityManager = securityManager;
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * @see org.springframework.beans.factory.InitializingBean#afterPropertiesSet()
@@ -90,6 +116,7 @@ public class ActionManagerImpl extends GenericNameManagerImpl<Action, Long> impl
 	public void afterPropertiesSet() throws Exception
 	{
 		Assert.notNull(serializer, "serializer must not be null!");
+		Assert.notNull(securityManager, "securityManager must not be null!");
 	}
 
 	/*
@@ -110,27 +137,36 @@ public class ActionManagerImpl extends GenericNameManagerImpl<Action, Long> impl
 	public RPCCall getRPCCall(String code)
 	{
 		Action action = this.getByCode(code);
-		if(action != null && action.getUses() < action.getMaxUses())
+		Date now = new Date(securityManager.getTimeProvider().get());
+		if(action != null)
 		{
-			action.setUses(action.getUses() + 1);
-			if(action.getUses() == action.getMaxUses())
-				this.remove(action);
-			else
-				action = this.save(action);
+			if(action.getUses() < action.getMaxUses() && isValid(action, now))
 
-			String object = action.getRPCCall().getObject();
-			String method = action.getRPCCall().getMethod();
-			Object[] args = null;
-			try
 			{
-				args = serializer.deserialize(action.getRPCCall().getArgs(), new Object[0], (Object[]) null);
+				action.setUses(action.getUses() + 1);
+				if(action.getUses() == action.getMaxUses())
+					this.remove(action);
+				else
+					action = this.save(action);
+
+				String object = action.getRPCCall().getObject();
+				String method = action.getRPCCall().getMethod();
+				Object[] args = null;
+				try
+				{
+					args = serializer.deserialize(action.getRPCCall().getArgs(), new Object[0], (Object[]) null);
+				}
+				catch(DeserializationException e)
+				{
+					logger.error("could not deserialize RPCCall arguments: " + e.getMessage());
+					e.printStackTrace();
+				}
+				return new RPCCall(object, method, args);
 			}
-			catch(DeserializationException e)
+			else
 			{
-				logger.error("could not deserialize RPCCall arguments: " + e.getMessage());
-				e.printStackTrace();
+				this.remove(action);
 			}
-			return new RPCCall(object, method, args);
 		}
 		return null;
 	}
@@ -139,10 +175,10 @@ public class ActionManagerImpl extends GenericNameManagerImpl<Action, Long> impl
 	 * (non-Javadoc)
 	 * @see
 	 * com.syncnapsis.data.service.ActionManager#createAction(com.syncnapsis.websockets.service.
-	 * rpc.RPCCall, int)
+	 * rpc.RPCCall, int, java.util.Date, java.util.Date)
 	 */
 	@Override
-	public Action createAction(RPCCall rpcCall, int maxUses)
+	public Action createAction(RPCCall rpcCall, int maxUses, Date validFrom, Date validUntil)
 	{
 		com.syncnapsis.data.model.help.RPCCall rpcCall2 = new com.syncnapsis.data.model.help.RPCCall();
 		rpcCall2.setObject(rpcCall.getObject());
@@ -162,6 +198,8 @@ public class ActionManagerImpl extends GenericNameManagerImpl<Action, Long> impl
 		action.setMaxUses(maxUses);
 		action.setUses(0);
 		action.setCode(generateCode());
+		action.setValidFrom(validFrom);
+		action.setValidUntil(validUntil);
 
 		return save(action);
 	}
@@ -184,4 +222,20 @@ public class ActionManagerImpl extends GenericNameManagerImpl<Action, Long> impl
 
 		return code;
 	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see com.syncnapsis.data.service.ActionManager#isValid(com.syncnapsis.data.model.Action,
+	 * java.util.Date)
+	 */
+	@Override
+	public boolean isValid(Action action, Date refDate)
+	{
+		if(action.getValidFrom() != null && action.getValidFrom().after(refDate))
+			return false;
+		if(action.getValidUntil() != null && action.getValidUntil().before(refDate))
+			return false;
+		return true;
+	}
+
 }

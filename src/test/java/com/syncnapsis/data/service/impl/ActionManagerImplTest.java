@@ -11,6 +11,8 @@
  */
 package com.syncnapsis.data.service.impl;
 
+import java.util.Date;
+
 import org.hamcrest.BaseMatcher;
 import org.hamcrest.Description;
 import org.jmock.Expectations;
@@ -19,6 +21,8 @@ import com.syncnapsis.constants.ApplicationBaseConstants;
 import com.syncnapsis.data.dao.ActionDao;
 import com.syncnapsis.data.model.Action;
 import com.syncnapsis.data.service.ActionManager;
+import com.syncnapsis.mock.MockTimeProvider;
+import com.syncnapsis.security.BaseApplicationManager;
 import com.syncnapsis.tests.GenericNameManagerImplTestCase;
 import com.syncnapsis.tests.annotations.TestCoversClasses;
 import com.syncnapsis.tests.annotations.TestExcludesMethods;
@@ -30,7 +34,11 @@ import com.syncnapsis.websockets.service.rpc.RPCCall;
 @TestExcludesMethods({ "*etSerializer", "afterPropertiesSet" })
 public class ActionManagerImplTest extends GenericNameManagerImplTestCase<Action, Long, ActionManager, ActionDao>
 {
-	private Serializer<String>	serializer	= new JacksonStringSerializer();
+	private BaseApplicationManager	securityManager;
+	private Serializer<String>		serializer			= new JacksonStringSerializer();
+
+	private long					referenceTime		= 1234;
+	private MockTimeProvider		mockTimeProvider	= new MockTimeProvider(referenceTime);
 
 	@Override
 	protected void setUp() throws Exception
@@ -41,7 +49,11 @@ public class ActionManagerImplTest extends GenericNameManagerImplTestCase<Action
 		setMockDao(mockContext.mock(ActionDao.class));
 		setMockManager(new ActionManagerImpl(mockDao));
 
+		BaseApplicationManager mockSecurityManager = new BaseApplicationManager(securityManager);
+		mockSecurityManager.setTimeProvider(mockTimeProvider);
+
 		((ActionManagerImpl) mockManager).setSerializer(serializer);
+		((ActionManagerImpl) mockManager).setSecurityManager(mockSecurityManager);
 	}
 
 	public void testGetByCode() throws Exception
@@ -58,16 +70,21 @@ public class ActionManagerImplTest extends GenericNameManagerImplTestCase<Action
 		final String code = "a1b2c3";
 		final Object[] args = new Object[] { "0", 1 };
 
+		int interval = 200; // valid interval
+		mockTimeProvider.set(referenceTime);
+
 		action.setCode(code);
 		action.setRPCCall(new com.syncnapsis.data.model.help.RPCCall());
 		action.getRPCCall().setObject("mybean");
 		action.getRPCCall().setMethod("mymethod");
 		action.getRPCCall().setArgs(serializer.serialize(args, (Object[]) null));
 		action.setMaxUses(10);
+		action.setValidFrom(new Date(referenceTime - interval / 2));
+		action.setValidUntil(new Date(referenceTime + interval / 2));
 
 		final RPCCall rpcCall = new RPCCall(action.getRPCCall().getObject(), action.getRPCCall().getMethod(), args);
 
-		// test with uses < maxUses-1
+		// test with uses < maxUses-1 && valid
 		action.setUses(action.getMaxUses() - 2);
 		mockContext.checking(new Expectations() {
 			{
@@ -84,7 +101,7 @@ public class ActionManagerImplTest extends GenericNameManagerImplTestCase<Action
 		assertEquals(rpcCall, mockManager.getRPCCall(code));
 		mockContext.assertIsSatisfied();
 
-		// test with uses = maxUses-1
+		// test with uses = maxUses-1 && valid
 		action.setUses(action.getMaxUses() - 1);
 		mockContext.checking(new Expectations() {
 			{
@@ -101,12 +118,36 @@ public class ActionManagerImplTest extends GenericNameManagerImplTestCase<Action
 		assertEquals(rpcCall, mockManager.getRPCCall(code));
 		mockContext.assertIsSatisfied();
 
-		// test with uses = maxUses
+		// test with uses = maxUses && valid
 		action.setUses(action.getMaxUses());
 		mockContext.checking(new Expectations() {
 			{
 				oneOf(mockDao).getByName(code);
 				will(returnValue(action));
+			}
+		});
+		mockContext.checking(new Expectations() {
+			{
+				oneOf(mockDao).remove(action);
+				will(returnValue("deleted"));
+			}
+		});
+		assertNull(mockManager.getRPCCall(code));
+		mockContext.assertIsSatisfied();
+
+		// test with invalid
+		action.setUses(0);
+		mockTimeProvider.set(referenceTime + interval);
+		mockContext.checking(new Expectations() {
+			{
+				oneOf(mockDao).getByName(code);
+				will(returnValue(action));
+			}
+		});
+		mockContext.checking(new Expectations() {
+			{
+				oneOf(mockDao).remove(action);
+				will(returnValue("deleted"));
 			}
 		});
 		assertNull(mockManager.getRPCCall(code));
@@ -154,16 +195,20 @@ public class ActionManagerImplTest extends GenericNameManagerImplTestCase<Action
 	{
 		Object[] args = new Object[] { 1L, "blub", true };
 		final RPCCall rpcCall = new RPCCall("aBean", "aMethod", args);
-		
+
 		int maxUses = 1;
-		
+		Date validFrom = new Date(1);
+		Date validUntil = new Date(2);
+
 		final Action action = new Action();
 		action.setMaxUses(maxUses);
 		action.setRPCCall(new com.syncnapsis.data.model.help.RPCCall());
 		action.getRPCCall().setObject(rpcCall.getObject());
 		action.getRPCCall().setMethod(rpcCall.getMethod());
 		action.getRPCCall().setArgs("[1,\"blub\",true]");
-		
+		action.setValidFrom(validFrom);
+		action.setValidUntil(validUntil);
+
 		mockContext.checking(new Expectations() {
 			{
 				oneOf(mockDao).getByName(with(any(String.class)));
@@ -178,11 +223,13 @@ public class ActionManagerImplTest extends GenericNameManagerImplTestCase<Action
 					{
 						if(!(arg0 instanceof Action))
 							return false;
-								
+
 						Action a = (Action) arg0;
 						boolean matches = true;
 						matches = matches && (a.getMaxUses() == action.getMaxUses());
 						matches = matches && a.getRPCCall().equals(action.getRPCCall());
+						matches = matches && (a.getValidFrom().equals(action.getValidFrom()));
+						matches = matches && (a.getValidUntil().equals(action.getValidUntil()));
 						action.setCode(a.getCode());
 						return matches;
 					}
@@ -196,9 +243,25 @@ public class ActionManagerImplTest extends GenericNameManagerImplTestCase<Action
 			}
 		});
 
-		Action result = mockManager.createAction(rpcCall, 1);
+		Action result = mockManager.createAction(rpcCall, maxUses, validFrom, validUntil);
 		mockContext.assertIsSatisfied();
-		
+
 		assertNotNull(result.getCode());
+	}
+
+	public void testIsValid() throws Exception
+	{
+		int interval = 200;
+		Action action = new Action();
+		action.setValidFrom(new Date(referenceTime - interval / 2));
+		action.setValidUntil(new Date(referenceTime + interval / 2));
+
+		assertTrue(mockManager.isValid(action, new Date(referenceTime)));
+		assertTrue(mockManager.isValid(action, new Date(referenceTime + interval / 2)));
+		assertTrue(mockManager.isValid(action, new Date(referenceTime - interval / 2)));
+		assertFalse(mockManager.isValid(action, new Date(referenceTime + interval / 2 + 1)));
+		assertFalse(mockManager.isValid(action, new Date(referenceTime - interval / 2 - 1)));
+		assertFalse(mockManager.isValid(action, new Date(referenceTime + interval)));
+		assertFalse(mockManager.isValid(action, new Date(referenceTime - interval)));
 	}
 }

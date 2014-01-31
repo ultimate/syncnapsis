@@ -78,6 +78,7 @@
 	<bean id="actionManager" class="com.syncnapsis.data.service.impl.ActionManagerImpl">
 		<constructor-arg ref="actionDao" />
 		<property name="serializer" ref="serializer" />
+		<property name="securityManager" ref="securityManager"/>
 	</bean>
 
 	<bean id="blackListManager" class="com.syncnapsis.data.service.impl.BlackListManagerImpl">
