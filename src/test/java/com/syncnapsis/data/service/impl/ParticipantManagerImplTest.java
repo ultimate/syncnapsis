@@ -394,6 +394,9 @@ public class ParticipantManagerImplTest extends GenericManagerImplTestCase<Parti
 		match.getParticipants().add(new Participant());
 		match.getParticipants().add(new Participant());
 		match.getParticipants().add(new Participant());
+		
+		for(Participant p: match.getParticipants())
+			p.setActivated(true);
 
 		final Empire empire = new Empire();
 		empire.setId(-2L);
@@ -623,6 +626,26 @@ public class ParticipantManagerImplTest extends GenericManagerImplTestCase<Parti
 		assertEquals(4, mockManager.destroyCalled);
 		assertEquals(EnumDestructionType.givenUp, mockManager.destructionType);
 		assertEquals(new Date(referenceTime), mockManager.destructionDate);
+	}
+	
+	public void testGetNumberOfParticipants() throws Exception
+	{
+		int participantsTotal = 20;
+		int participantsActivated= 0;
+		
+		Match match = new Match();
+		match.setParticipants(new ArrayList<Participant>(participantsTotal));
+		
+		for(int i = 0; i < participantsTotal; i++)
+		{
+			Participant p = new Participant();
+			p.setActivated(random.nextBoolean(70, 30));
+			if(p.isActivated())
+				participantsActivated++;
+			match.getParticipants().add(p);
+		}
+		
+		assertEquals(participantsActivated, mockManager.getNumberOfParticipants(match));
 	}
 
 	public void testDestroy() throws Exception

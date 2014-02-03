@@ -275,7 +275,7 @@ public class ParticipantManagerImpl extends GenericManagerImpl<Participant, Long
 			return participant; // already participating
 		else if(match.getState() == EnumMatchState.canceled || match.getState() == EnumMatchState.finished)
 			return null; // adding participants not allowed anymore
-		else if(match.getParticipantsMax() > 0 && match.getParticipants().size() >= match.getParticipantsMax())
+		else if(match.getParticipantsMax() > 0 && getNumberOfParticipants(match) >= match.getParticipantsMax())
 			return null; // the match is 'full'
 
 		Date now = new Date(securityManager.getTimeProvider().get());
@@ -289,7 +289,7 @@ public class ParticipantManagerImpl extends GenericManagerImpl<Participant, Long
 		participant.setMatch(match);
 		participant.setEmpire(empire);
 		participant.setJoinedDate(now);
-		participant.setRank(match.getParticipants().size());
+		participant.setRank(getNumberOfParticipants(match));
 		participant.setRankFinal(false);
 		participant.setRankValue(0);
 		participant.setStartSystemsSelected(0);
@@ -351,6 +351,22 @@ public class ParticipantManagerImpl extends GenericManagerImpl<Participant, Long
 		// destroy will perform the save
 		destroy(participant, destructionType, now);
 		return true;
+	}
+	
+	/*
+	 * (non-Javadoc)
+	 * @see com.syncnapsis.data.service.ParticipantManager#getNumberOfParticipants(com.syncnapsis.data.model.Match)
+	 */
+	@Override
+	public int getNumberOfParticipants(Match match)
+	{
+		int count = 0;
+		for(Participant p: match.getParticipants())
+		{
+			if(p.isActivated())
+				count++;
+		}
+		return count;
 	}
 
 	/*

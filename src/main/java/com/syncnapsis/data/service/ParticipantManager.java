@@ -143,4 +143,12 @@ public interface ParticipantManager extends GenericManager<Participant, Long>
 	 * @return the list of start system populations
 	 */
 	public List<SolarSystemPopulation> randomSelectStartSystems(Participant participant, ExtendedRandom random);
+
+	/**
+	 * Get the count of participants for this match (only counting activated participants).
+	 * 
+	 * @param match - the match to check
+	 * @return the number of participants
+	 */
+	public int getNumberOfParticipants(Match match);
 }
