@@ -148,7 +148,7 @@
 	<!-- Utilities -->
 	<!-- =================================================================== -->
 
-	<bean id="mailer" class="com.syncnapsis.utils.mail.BaseGameMailer">
+	<bean id="mailer" class="com.syncnapsis.utils.mail.UniverseConquestMailer">
 		<constructor-arg value="mail.properties" />
 	</bean>
 
