@@ -135,4 +135,16 @@ public class UniverseConquestConstants
 	 * The factor for no priority
 	 */
 	public static final Constant<String>	PARAM_PRIORITY_NONE						= new StringConstant("priority.none");
+	/**
+	 * Reason for match start failed: 'already started'
+	 */
+	public static final String				REASON_ALREADY_STARTED					= "match.alreadyStarted";
+	/**
+	 * Reason for match start failed: 'not enough participants'
+	 */
+	public static final String				REASON_NOT_ENOUGH_PARTICIPANTS			= "match.notEnoughParticipants";
+	/**
+	 * Reason for match start failed: 'too many participants'
+	 */
+	public static final String				REASON_TOO_MANY_PARTICIPANTS			= "match.tooManyParticipants";
 }

@@ -27,20 +27,9 @@ public enum EnumStartCondition
 	 */
 	manually,
 	/**
-	 * The match will be started automatically when the maximum number of participants is reached
-	 * unless it has not been started manually before that.
-	 */
-	maxParticipantsReached,
-	/**
 	 * The match will start at a planned date and time.
 	 */
 	planned,
-	/**
-	 * The match will start at a planned date and time if the minimum number of participants is
-	 * reached. If there are less participants, the match will wait for a manual start or the
-	 * minimum number of participants to be reached.
-	 */
-	plannedAndMinParticipantsReached,
 	/**
 	 * The match will start immediately
 	 */

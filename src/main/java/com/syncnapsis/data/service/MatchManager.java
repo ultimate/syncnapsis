@@ -149,6 +149,37 @@ public interface MatchManager extends GenericNameManager<Match, Long>
 	public Match finishMatch(Match match);
 
 	/**
+	 * Check wether a match should start by its start condition. This method will only check the
+	 * start condition field but not any other prerequisites that must be met. This additional check
+	 * is performed by {@link MatchManager#isStartPossible(Match)}. If the start is necessary and
+	 * possible the match may be started using {@link MatchManager#startMatch(Match)}.
+	 * 
+	 * @param match - the match to check
+	 * @return true or false
+	 */
+	public boolean isStartNecessary(Match match);
+
+	/**
+	 * Check wether it is possible to start a match. This will check against the limits of min and
+	 * max participants and possibly other properties in the future. Only if this method returns
+	 * true it is possible to start the match using {@link MatchManager#startMatch(Match)}.
+	 * 
+	 * @param match - the match to check
+	 * @return true or false
+	 */
+	public boolean isStartPossible(Match match);
+
+	/**
+	 * Get reason why a match is not startable. If the returned list is empty or null, the match is
+	 * startable.
+	 * 
+	 * @see MatchManager#isStartPossible(Match)
+	 * @param match - the match to check
+	 * @return the list of reasons
+	 */
+	public List<String> getMatchStartNotPossibleReasons(Match match);
+
+	/**
 	 * Check wether the victory condition for the given match is met. If the condition is met the
 	 * match is ready to be finished by using {@link MatchManager#finishMatch(Match)}. This requires
 	 * the match's ranking to be up-to-date since this method won't update the ranking before

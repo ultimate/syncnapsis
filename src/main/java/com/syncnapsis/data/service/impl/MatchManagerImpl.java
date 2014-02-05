@@ -44,6 +44,7 @@ import com.syncnapsis.security.accesscontrol.MatchAccessController;
 import com.syncnapsis.utils.HibernateUtil;
 import com.syncnapsis.utils.MathUtil;
 import com.syncnapsis.utils.data.ExtendedRandom;
+import com.syncnapsis.utils.mail.UniverseConquestMailer;
 
 /**
  * Manager-Implementation for access to Match.
@@ -192,6 +193,8 @@ public class MatchManagerImpl extends GenericNameManagerImpl<Match, Long> implem
 			EnumJoinType startedJoinType)
 	{
 		Assert.isTrue(isAccessible(null, MatchAccessController.OPERATION_CREATE), "no access rights for 'create match'");
+		Assert.isTrue(participantsMax == 0 || participantsMax >= participantsMin, "participantsMax must either be 0 or be greater or equals to participantsMin");
+		Assert.isTrue(participantsMin > 0);
 
 		Galaxy galaxy = galaxyManager.get(galaxyId);
 		Assert.notNull(galaxy, "galaxy with ID " + galaxyId + " not found!");
@@ -259,26 +262,68 @@ public class MatchManagerImpl extends GenericNameManagerImpl<Match, Long> implem
 	@Override
 	public Match startMatchIfNecessary(Match match)
 	{
+		if(isStartNecessary(match))
+		{
+			List<String> notPossibleReasons = getMatchStartNotPossibleReasons(match);
+			if(notPossibleReasons.size() == 0)
+				return performStartMatch(match);
+			else
+				getMailer().sendMatchStartFailedNotification(match, notPossibleReasons.get(0));
+		}
+		return match;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see
+	 * com.syncnapsis.data.service.MatchManager#isStartNecessary(com.syncnapsis.data.model.Match)
+	 */
+	@Override
+	public boolean isStartNecessary(Match match)
+	{
 		Date now = new Date(securityManager.getTimeProvider().get());
 
 		switch(match.getStartCondition())
 		{
 			case manually:
-				break;
-			case maxParticipantsReached:
-				if(match.getParticipants().size() < match.getParticipantsMax())
-					break;
-			case immediately:
-				return performStartMatch(match);
-			case plannedAndMinParticipantsReached:
-				if(match.getParticipants().size() < match.getParticipantsMin())
-					break;
+				return false;
 			case planned:
 				if(match.getStartDate().after(now))
-					break;
-				return performStartMatch(match);
+					return false;
+			case immediately:
+				return true;
 		}
-		return match;
+		return false;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see
+	 * com.syncnapsis.data.service.MatchManager#isStartPossible(com.syncnapsis.data.model.Match)
+	 */
+	@Override
+	public boolean isStartPossible(Match match)
+	{
+		return getMatchStartNotPossibleReasons(match).size() == 0;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see
+	 * com.syncnapsis.data.service.MatchManager#getMatchStartNotPossibleReasons(com.syncnapsis.data
+	 * .model.Match)
+	 */
+	@Override
+	public List<String> getMatchStartNotPossibleReasons(Match match)
+	{
+		List<String> reasons = new ArrayList<String>(5);
+		if(match.getState() != EnumMatchState.planned)
+			reasons.add(UniverseConquestConstants.REASON_ALREADY_STARTED);
+		if(match.getParticipants().size() < match.getParticipantsMin())
+			reasons.add(UniverseConquestConstants.REASON_NOT_ENOUGH_PARTICIPANTS);
+		if(match.getParticipantsMax() > 0 && (match.getParticipants().size() > match.getParticipantsMax()))
+			reasons.add(UniverseConquestConstants.REASON_TOO_MANY_PARTICIPANTS);
+		return reasons;
 	}
 
 	/**
@@ -292,8 +337,9 @@ public class MatchManagerImpl extends GenericNameManagerImpl<Match, Long> implem
 	 */
 	protected Match performStartMatch(Match match)
 	{
-		if(match.getState() != EnumMatchState.planned)
-			throw new IllegalArgumentException("match already started, finished or canceled");
+		List<String> notPossibleReasons = getMatchStartNotPossibleReasons(match);
+		if(notPossibleReasons.size() > 0)
+			throw new IllegalArgumentException("match can not be started at current state: " + notPossibleReasons.get(0));
 
 		Date startDate = match.getStartDate();
 		if(startDate == null)
@@ -577,7 +623,7 @@ public class MatchManagerImpl extends GenericNameManagerImpl<Match, Long> implem
 		}
 
 		Collections.sort(updatedParticipants, Participant.BY_RANKVALUE);
-		
+
 		Date now = new Date(securityManager.getTimeProvider().get());
 
 		int count = 0;
@@ -607,5 +653,15 @@ public class MatchManagerImpl extends GenericNameManagerImpl<Match, Long> implem
 		}
 
 		return get(match.getId());
+	}
+
+	/**
+	 * Get the mailer from the security manager (casted to {@link UniverseConquestMailer})
+	 * 
+	 * @return the mailer
+	 */
+	protected UniverseConquestMailer getMailer()
+	{
+		return (UniverseConquestMailer) securityManager.getMailer();
 	}
 }

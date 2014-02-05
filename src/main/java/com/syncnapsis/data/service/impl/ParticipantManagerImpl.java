@@ -275,6 +275,7 @@ public class ParticipantManagerImpl extends GenericManagerImpl<Participant, Long
 			return participant; // already participating
 		else if(match.getState() == EnumMatchState.canceled || match.getState() == EnumMatchState.finished)
 			return null; // adding participants not allowed anymore
+		// TODO operation is not thread-safe here
 		else if(match.getParticipantsMax() > 0 && getNumberOfParticipants(match) >= match.getParticipantsMax())
 			return null; // the match is 'full'
 
