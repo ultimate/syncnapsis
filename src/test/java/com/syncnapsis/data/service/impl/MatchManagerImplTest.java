@@ -60,7 +60,7 @@ import com.syncnapsis.tests.annotations.TestExcludesMethods;
 import com.syncnapsis.utils.data.ExtendedRandom;
 
 @TestCoversClasses({ MatchManager.class, MatchManagerImpl.class })
-@TestExcludesMethods({ "isAccessible", "*etSecurityManager", "afterPropertiesSet" })
+@TestExcludesMethods({ "isAccessible", "*etSecurityManager", "afterPropertiesSet", "getMailer" })
 public class MatchManagerImplTest extends GenericNameManagerImplTestCase<Match, Long, MatchManager, MatchDao>
 {
 	private GalaxyManager						galaxyManager;
@@ -329,16 +329,21 @@ public class MatchManagerImplTest extends GenericNameManagerImplTestCase<Match, 
 		securityManager.setTimeProvider(new MockTimeProvider(referenceTime));
 
 		Match match = new Match();
+		match.setParticipants(new ArrayList<Participant>());
+		match.setState(EnumMatchState.planned);
+		assertTrue(matchManager.isStartPossible(match));
 
 		// immediately
 		match.setStartCondition(EnumStartCondition.immediately);
 		performed.set(false);
+		assertTrue(matchManager.isStartNecessary(match));
 		matchManager.startMatchIfNecessary(match);
 		assertTrue(performed.get());
 
 		// manually
 		match.setStartCondition(EnumStartCondition.manually);
 		performed.set(false);
+		assertFalse(matchManager.isStartNecessary(match));
 		matchManager.startMatchIfNecessary(match);
 		assertFalse(performed.get());
 
@@ -346,33 +351,120 @@ public class MatchManagerImplTest extends GenericNameManagerImplTestCase<Match, 
 		match.setStartCondition(EnumStartCondition.planned);
 		match.setStartDate(new Date(referenceTime + 10));
 		performed.set(false);
+		assertFalse(matchManager.isStartNecessary(match));
 		matchManager.startMatchIfNecessary(match);
 		assertFalse(performed.get());
 		match.setStartDate(new Date(referenceTime - 10));
+		assertTrue(matchManager.isStartNecessary(match));
 		matchManager.startMatchIfNecessary(match);
 		assertTrue(performed.get());
+	}
 
-		// plannedAndMinParticipantsReached
-		match.setStartCondition(EnumStartCondition.plannedAndMinParticipantsReached);
+	public void testIsStartNecessary() throws Exception
+	{
+		Match match = new Match();
+
+		match.setStartCondition(EnumStartCondition.immediately);
+		assertTrue(mockManager.isStartNecessary(match));
+
+		match.setStartCondition(EnumStartCondition.manually);
+		assertFalse(mockManager.isStartNecessary(match));
+
+		match.setStartCondition(EnumStartCondition.planned);
+		{
+			match.setStartDate(new Date(referenceTime - 100));
+			assertTrue(mockManager.isStartNecessary(match));
+
+			match.setStartDate(new Date(referenceTime));
+			assertTrue(mockManager.isStartNecessary(match));
+
+			match.setStartDate(new Date(referenceTime + 100));
+			assertFalse(mockManager.isStartNecessary(match));
+		}
+	}
+
+	public void testIsStartPossible() throws Exception
+	{
+		Match match = new Match();
+
+		match.setState(EnumMatchState.planned);
 		match.setParticipantsMin(2);
-		match.setParticipants(new ArrayList<Participant>());
-		performed.set(false);
-		matchManager.startMatchIfNecessary(match);
-		assertFalse(performed.get());
-		match.getParticipants().add(new Participant());
-		match.getParticipants().add(new Participant());
-		matchManager.startMatchIfNecessary(match);
-		assertTrue(performed.get());
+		match.setParticipantsMax(4);
 
-		// maxParticipantsReached
-		match.setStartCondition(EnumStartCondition.maxParticipantsReached);
-		match.setParticipantsMax(3);
-		performed.set(false);
-		matchManager.startMatchIfNecessary(match);
-		assertFalse(performed.get());
-		match.getParticipants().add(new Participant());
-		matchManager.startMatchIfNecessary(match);
-		assertTrue(performed.get());
+		match.setParticipants(new ArrayList<Participant>());
+
+		for(int i = 1; i < match.getParticipantsMax() + 3; i++)
+		{
+			Participant p = new Participant();
+			p.setActivated(true);
+			match.getParticipants().add(p);
+
+			if(i < match.getParticipantsMin() || i > match.getParticipantsMax())
+				assertFalse(mockManager.isStartPossible(match));
+			else
+				assertTrue(mockManager.isStartPossible(match));
+		}
+
+		while(match.getParticipants().size() > match.getParticipantsMax())
+			match.getParticipants().remove(0);
+
+		assertTrue(mockManager.isStartPossible(match));
+
+		match.setState(EnumMatchState.active);
+
+		assertFalse(mockManager.isStartPossible(match));
+	}
+
+	public void testGetMatchStartNotPossibleReasons() throws Exception
+	{
+		Match match = new Match();
+
+		match.setState(EnumMatchState.planned);
+		match.setParticipantsMin(2);
+		match.setParticipantsMax(4);
+
+		match.setParticipants(new ArrayList<Participant>());
+
+		List<String> reasons;
+
+		for(int i = 1; i < match.getParticipantsMax() + 3; i++)
+		{
+			Participant p = new Participant();
+			p.setActivated(true);
+			match.getParticipants().add(p);
+
+			reasons = mockManager.getMatchStartNotPossibleReasons(match);
+
+			assertNotNull(reasons);
+			if(i < match.getParticipantsMin())
+			{
+				assertEquals(1, reasons.size());
+				assertTrue(reasons.contains(UniverseConquestConstants.REASON_NOT_ENOUGH_PARTICIPANTS));
+			}
+			else if(i > match.getParticipantsMax())
+			{
+				assertEquals(1, reasons.size());
+				assertTrue(reasons.contains(UniverseConquestConstants.REASON_TOO_MANY_PARTICIPANTS));
+			}
+			else
+			{
+				assertEquals(0, reasons.size());
+			}
+		}
+
+		while(match.getParticipants().size() > match.getParticipantsMax())
+			match.getParticipants().remove(0);
+
+		reasons = mockManager.getMatchStartNotPossibleReasons(match);
+		assertNotNull(reasons);
+		assertEquals(0, reasons.size());
+
+		match.setState(EnumMatchState.active);
+
+		reasons = mockManager.getMatchStartNotPossibleReasons(match);
+		assertNotNull(reasons);
+		assertEquals(1, reasons.size());
+		assertTrue(reasons.contains(UniverseConquestConstants.REASON_ALREADY_STARTED));
 	}
 
 	public void testPerformStartMatch() throws Exception
@@ -424,8 +516,8 @@ public class MatchManagerImplTest extends GenericNameManagerImplTestCase<Match, 
 		});
 		mockContext.checking(new Expectations() {
 			{
-				exactly(match.getParticipants().size() - 1).of(mockParticipantManager).randomSelectStartSystems(
-						with(any(Participant.class)), with(equal(random)));
+				exactly(match.getParticipants().size() - 1).of(mockParticipantManager).randomSelectStartSystems(with(any(Participant.class)),
+						with(equal(random)));
 				will(returnValue(populations));
 			}
 		});
@@ -467,8 +559,8 @@ public class MatchManagerImplTest extends GenericNameManagerImplTestCase<Match, 
 		});
 		mockContext.checking(new Expectations() {
 			{
-				exactly(match.getParticipants().size() - 1).of(mockParticipantManager).randomSelectStartSystems(
-						with(any(Participant.class)), with(equal(random)));
+				exactly(match.getParticipants().size() - 1).of(mockParticipantManager).randomSelectStartSystems(with(any(Participant.class)),
+						with(equal(random)));
 				will(returnValue(populations));
 			}
 		});
@@ -508,8 +600,8 @@ public class MatchManagerImplTest extends GenericNameManagerImplTestCase<Match, 
 		});
 		mockContext.checking(new Expectations() {
 			{
-				exactly(match.getParticipants().size() - 1).of(mockParticipantManager).randomSelectStartSystems(
-						with(any(Participant.class)), with(equal(random)));
+				exactly(match.getParticipants().size() - 1).of(mockParticipantManager).randomSelectStartSystems(with(any(Participant.class)),
+						with(equal(random)));
 				will(returnValue(populations));
 			}
 		});
@@ -980,7 +1072,8 @@ public class MatchManagerImplTest extends GenericNameManagerImplTestCase<Match, 
 		checkRank(match.getParticipants(), 4, 3, (int) Math.floor(100.0 * 0 / rivals), false, false);
 	}
 
-	private void checkRank(List<Participant> participants, int index, int rankExpected, int rankValueExpected, boolean rankFinalExpected, boolean wasFinalBefore)
+	private void checkRank(List<Participant> participants, int index, int rankExpected, int rankValueExpected, boolean rankFinalExpected,
+			boolean wasFinalBefore)
 	{
 		assertEquals(rankExpected, participants.get(index).getRank());
 		assertEquals(rankValueExpected, participants.get(index).getRankValue());
