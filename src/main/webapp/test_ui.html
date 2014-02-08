@@ -145,12 +145,13 @@
 	}
 	#menu #menu_content div + div {
 		border-top: 1px solid rgba(0,255,255,0.5);
-		margin-top: -2px;
+		margin-top: -1px;
 	}
 	#menu #menu_content div.selected {
-		height: 300px;
-		max-height: 300px;
+		height: 293px;
+		max-height: 293px;
 		overflow: hidden;
+		overflow-y: auto;
 		transition: all 1s;
 		padding-top: 5px;
 		padding-bottom: 5px;
@@ -329,12 +330,72 @@
 		
 	init = function()
 	{
-		initBar("nav");
-		initBar("log");
+		//initBar("nav");
+		//initBar("log");
+		nav = new Tabs("nav", "menu_content");
+		log = new Tabs("log", "log_content");
 	
 		document.getElementById("overlay").className += " invisible";
 		setTimeout(function() {document.getElementById("overlay").className += " hidden";}, 3000);
 	};	
+	
+	Tabs = function(groupID, contentID)
+	{
+		var group = document.getElementById(groupID);
+		var selectors = group.children;
+		var contents = document.getElementById(contentID).children;
+
+		var childrenCount = selectors.length;
+
+		var width = group.offsetWidth;
+		width -= (childrenCount-1)*3;
+		var w0 = Math.floor(width / childrenCount);
+		var gap = width - w0*childrenCount;
+		
+		console.log("children = " + childrenCount + "  gap = " + gap);
+		
+		select = function(id)
+		{
+			var selector;
+			var content;
+			for(var i = 0; i < childrenCount; i++)
+			{
+				selector = selectors[i];
+				content = contents[i];
+				if(i == id)
+				{
+					selector.className = "selected";
+					content.className = "selected";
+				}
+				else
+				{
+					selector.className = "";
+					content.className = "";
+				}
+			}
+		};
+		
+		for(var i = 0; i < childrenCount; i++)
+		{
+			var selector = selectors[i];
+			
+			if(gap == 0)
+				selector.style.width = w0 + "px";
+			else
+			{
+				// in case 2: shift i by 0.5 to be centered
+				//   but since there may be the case gap is uneven and children not
+				//   we reshift it by 0.4 to weight one direction more than the other
+				if((gap % 2 == 0) && ((i <= gap/2) || (i > childrenCount-gap/2)))
+					selector.style.width = (w0+1) + "px";
+				else if((gap % 1 == 0) && (Math.abs(childrenCount/2-(i-0.4)) <= gap/2))
+					selector.style.width = (w0+1) + "px";	
+				else
+					selector.style.width = (w0) + "px";		
+				console.log("width set for child #" + i);		
+			}
+		}
+	};
 	
 	initBar = function(name)
 	{
