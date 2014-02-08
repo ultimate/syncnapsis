@@ -452,12 +452,15 @@
 </script>
 </head>
 <body>
-	<div id="defines" style="display: none">
+	<div id="defines">
 		<svg xmlns="http://www.w3.org/2000/svg"	xmlns:xlink="http://www.w3.org/1999/xlink">
+			<filter id="colorScheme">
+				<feColorMatrix in="SourceGraphic" type="matrix" values="0.0 0.0 0.0 0.0 0.0    0.0 1.0 0.0 0.0 0.0    0.0 0.0 1.0 0.0 0.0    0.0 0.0 0.0 1.0 0.0"/>
+			</filter>
 			<defs>
-				<g id="logo">
-					<circle cx="37.5" cy="37.5" r="30" style="fill: #008888; stroke: #00FFFF; stroke-width: 3px;" />
-					<line x1="0" y1="50" x2="75" y2="25" style="stroke: #00FFFF; stroke-width: 2px;"/>
+				<g id="logo" filter="url(#colorScheme)">
+					<circle cx="37.5" cy="37.5" r="30" style="fill: #888888; stroke: #FFFFFF; stroke-width: 3px;"/>
+					<line x1="0" y1="50" x2="75" y2="25" style="stroke: #FFFFFF; stroke-width: 2px;"/>
 				</g>
 			</defs>
 		</svg>
