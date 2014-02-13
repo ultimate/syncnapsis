@@ -13,14 +13,14 @@
 var TABS_HORIZONTAL = 1;
 var TABS_VERTICAL = 2;
 
-Tabs = function(barId, barMode, containerId, containerMode, containerSize)
+Tabs = function(barId, barMode, containerId, containerMode, selectedOverwriteHeight, selectedOverwriteWidth)
 {
 	var bar = document.getElementById(barId);
 	var container = document.getElementById(containerId);
 	var barSize;
 	var barSizeParam;
 	var containerSize;
-	var containerSizeParam;
+	var containerSizeParam = "unknown";
 	if(barMode == TABS_HORIZONTAL)
 	{
 		barSize = bar.offsetWidth;
@@ -50,7 +50,7 @@ Tabs = function(barId, barMode, containerId, containerMode, containerSize)
 		{
 			container.classList.add("tabcontainer_vertical");
 			childElemType = "div";
-			containerSize = container.offsetWidth;
+			containerSize = container.offsetHeight;
 			containerSizeParam = "height";
 		}
 		var containerChildren = container.children[0].children;
@@ -87,10 +87,16 @@ Tabs = function(barId, barMode, containerId, containerMode, containerSize)
 			if(i == index)
 			{
 				container.children[0].children[i].className = "selected";
-//				container.children[0].children[i].style[containerSizeParam] = (containerSize -  
+				console.log("setting " + containerSizeParam + " to " +  overwriteSize + "px")
+				container.children[0].children[i].style[containerSizeParam] = overwriteSize + "px";
+				container.children[0].children[i].style["max-" + containerSizeParam] = overwriteSize + "px";
 			}
 			else
+			{
 				container.children[0].children[i].className = "";
+				container.children[0].children[i].style[containerSizeParam] = "";
+				container.children[0].children[i].style["max-" + containerSizeParam] = "";
+			}
 		}
 	};
 

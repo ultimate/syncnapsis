@@ -71,7 +71,7 @@
 
 .tabcontainer_horizontal>div>span+span {
 	border-left: 1px solid rgba(0, 255, 255, 0.5);
-	margin-left: -2px;
+	margin-left: -1px;
 }
 
 .tabcontainer_horizontal>div>span.selected {
@@ -144,7 +144,7 @@
 
 .tabcontainer_vertical>div>div+div {
 	border-top: 1px solid rgba(0, 255, 255, 0.5);
-	margin-top: -2px;
+	margin-top: -1px;
 }
 
 .tabcontainer_vertical>div>div.selected {
