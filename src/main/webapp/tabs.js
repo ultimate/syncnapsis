@@ -13,14 +13,12 @@
 var TABS_HORIZONTAL = 1;
 var TABS_VERTICAL = 2;
 
-Tabs = function(barId, barMode, containerId, containerMode, selectedOverwriteHeight, selectedOverwriteWidth)
+Tabs = function(barId, barMode, containerId, containerMode, selectedOverwriteWidth, selectedOverwriteHeight)
 {
 	var bar = document.getElementById(barId);
 	var container = document.getElementById(containerId);
 	var barSize;
 	var barSizeParam;
-	var containerSize;
-	var containerSizeParam = "unknown";
 	if(barMode == TABS_HORIZONTAL)
 	{
 		barSize = bar.offsetWidth;
@@ -39,27 +37,24 @@ Tabs = function(barId, barMode, containerId, containerMode, selectedOverwriteHei
 
 	if(containerMode)
 	{
+		// we will reattach all children into a proper child element
+		// this way we can assure all childs are handled equally
 		if(containerMode == TABS_HORIZONTAL)
 		{
 			container.classList.add("tabcontainer_horizontal");
 			childElemType = "span";
-			containerSize = container.offsetWidth;
-			containerSizeParam = "width";
 		}
 		else if(containerMode == TABS_VERTICAL)
 		{
 			container.classList.add("tabcontainer_vertical");
 			childElemType = "div";
-			containerSize = container.offsetHeight;
-			containerSizeParam = "height";
 		}
 		var containerChildren = container.children[0].children;
 		var childrenCount = containerChildren.length;
 		for( var i = 0; i < childrenCount; i++)
 		{
 			childElem = document.createElement(childElemType);
-			// always remove first child (since new elements are added at the
-			// end)
+			// always remove first child (since new elements are added at the end)
 			childElem.appendChild(containerChildren[0]);
 			container.children[0].appendChild(childElem);
 		}
@@ -87,15 +82,36 @@ Tabs = function(barId, barMode, containerId, containerMode, selectedOverwriteHei
 			if(i == index)
 			{
 				container.children[0].children[i].className = "selected";
-				console.log("setting " + containerSizeParam + " to " +  overwriteSize + "px")
-				container.children[0].children[i].style[containerSizeParam] = overwriteSize + "px";
-				container.children[0].children[i].style["max-" + containerSizeParam] = overwriteSize + "px";
+				if(selectedOverwriteWidth)
+				{
+					console.log("setting width to " + selectedOverwriteWidth + "px")
+					container.children[0].children[i].style.width = selectedOverwriteWidth + "px";
+					container.children[0].children[i].style.maxWidth = selectedOverwriteWidth + "px";
+					container.children[0].children[i].style.minWidth = selectedOverwriteWidth + "px";
+				}
+				if(selectedOverwriteHeight)
+				{
+					console.log("setting height to " + selectedOverwriteHeight + "px")
+					container.children[0].children[i].style.height = selectedOverwriteHeight + "px";
+					container.children[0].children[i].style.maxHeight = selectedOverwriteHeight + "px";
+					container.children[0].children[i].style.minHeight = selectedOverwriteHeight + "px";
+				}
 			}
 			else
 			{
 				container.children[0].children[i].className = "";
-				container.children[0].children[i].style[containerSizeParam] = "";
-				container.children[0].children[i].style["max-" + containerSizeParam] = "";
+				if(selectedOverwriteWidth)
+				{
+					container.children[0].children[i].style.width = "";
+					container.children[0].children[i].style.maxWidth = "";
+					container.children[0].children[i].style.minWidth = "";
+				}
+				if(selectedOverwriteHeight)
+				{
+					container.children[0].children[i].style.height = "";
+					container.children[0].children[i].style.maxHeight = "";
+					container.children[0].children[i].style.minHeight = "";
+				}
 			}
 		}
 	};
