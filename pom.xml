@@ -20,13 +20,13 @@
 	<groupId>com.syncnapsis.syncnapsis-examples</groupId>
 	<artifactId>syncnapsis-examples-ui-playground</artifactId>
 	<packaging>war</packaging>
-	<version>0.8.4</version>
+	<version>0.9.0</version>
 	<name>syncnapsis-examples-ui-playground</name>
 
 	<parent>
 		<groupId>com.syncnapsis</groupId>
 		<artifactId>syncnapsis-examples</artifactId>
-		<version>0.8.4</version>
+		<version>0.9.0</version>
 	</parent>
 
 	<build>
@@ -49,12 +49,12 @@
 		<dependency>
 			<groupId>com.syncnapsis.syncnapsis-core</groupId>
 			<artifactId>syncnapsis-core-websockets</artifactId>
-			<version>0.8.4</version>
+			<version>0.9.0</version>
 		</dependency>
 		<dependency>
 			<groupId>com.syncnapsis.syncnapsis-core</groupId>
 			<artifactId>syncnapsis-core-game-base</artifactId>
-			<version>0.8.4</version>
+			<version>0.9.0</version>
 		</dependency>
 	</dependencies>
 
