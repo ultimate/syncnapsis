@@ -50,6 +50,9 @@ WebSockets.getContext = function()
 	// check if context is not empty
 	if(context.length == 0)
 		context = WebSockets.CONTEXT_SEPARATOR;
+	// check context not ending with "/#"
+	if(context.endsWith("#"))
+		context = context.substring(0, context.length-1);
 	// check context not ending with "/"
 	if(context.endsWith(WebSockets.CONTEXT_SEPARATOR))
 		context = context.substring(0, context.length-1);
