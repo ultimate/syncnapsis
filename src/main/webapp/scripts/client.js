@@ -16,6 +16,7 @@
 // @requires("Styles")
 // @requires("Events")
 // @requires("Lang")
+// @requires("Tabs")
 // @requires("application-base")
 var UI = {};
 
@@ -38,17 +39,26 @@ UI.constants.LOCALE_STRING_VARIABLE = "lang";
 UIManager = function()
 {
 	this.currentPlayer = null;
+	
+	console.log("initializing UIManager");
+	console.log("initializing Tabs");
 
-	this.localeChooser = document.getElementById(UI.constants.LOCALE_CHOOSER_ID);
+	this.nav = new Tabs("nav", TABS_HORIZONTAL, "menu_content", TABS_VERTICAL);
+	this.log = new Tabs("log", TABS_HORIZONTAL, "log_content", TABS_HORIZONTAL);
+	
 
-	this.layout_horizontal = new Styles.FillLayout([ "ad_left", "center", "ad_right" ], [ UI.constants.AD_WIDTH, null, UI.constants.AD_WIDTH ], Styles.layout.HORIZONTAL);
-	this.layout_vertical = new Styles.FillLayout([ "bar_top", "content", "bar_bottom" ], [ UI.constants.BAR_HEIGHT, null, UI.constants.BAR_HEIGHT ], Styles.layout.VERTICAL);
+//	this.localeChooser = document.getElementById(UI.constants.LOCALE_CHOOSER_ID);
+//
+//	this.layout_horizontal = new Styles.FillLayout([ "ad_left", "center", "ad_right" ], [ UI.constants.AD_WIDTH, null, UI.constants.AD_WIDTH ], Styles.layout.HORIZONTAL);
+//	this.layout_vertical = new Styles.FillLayout([ "bar_top", "content", "bar_bottom" ], [ UI.constants.BAR_HEIGHT, null, UI.constants.BAR_HEIGHT ], Styles.layout.VERTICAL);
+//
+//	this.layout_ad_left = new Styles.FillLayout([ "ad_left_inner", "ad_left_border" ], [ null, UI.constants.AD_BORDER ], Styles.layout.HORIZONTAL);
+//	this.layout_ad_right = new Styles.FillLayout([ "ad_right_border", "ad_right_inner" ], [ UI.constants.AD_BORDER, null ], Styles.layout.HORIZONTAL);
+//
+//	this.layout_bar_top = new Styles.FillLayout([ "bar_top_left", "bar_top_center", "bar_top_right" ], [ UI.constants.BAR_OUTER_WIDTH, null, UI.constants.BAR_OUTER_WIDTH ], Styles.layout.HORIZONTAL);
+//	this.layout_bar_bottom = new Styles.FillLayout([ "bar_bottom_left", "bar_bottom_center", "bar_bottom_right" ], [ UI.constants.BAR_OUTER_WIDTH, null, UI.constants.BAR_OUTER_WIDTH ], Styles.layout.HORIZONTAL);
 
-	this.layout_ad_left = new Styles.FillLayout([ "ad_left_inner", "ad_left_border" ], [ null, UI.constants.AD_BORDER ], Styles.layout.HORIZONTAL);
-	this.layout_ad_right = new Styles.FillLayout([ "ad_right_border", "ad_right_inner" ], [ UI.constants.AD_BORDER, null ], Styles.layout.HORIZONTAL);
-
-	this.layout_bar_top = new Styles.FillLayout([ "bar_top_left", "bar_top_center", "bar_top_right" ], [ UI.constants.BAR_OUTER_WIDTH, null, UI.constants.BAR_OUTER_WIDTH ], Styles.layout.HORIZONTAL);
-	this.layout_bar_bottom = new Styles.FillLayout([ "bar_bottom_left", "bar_bottom_center", "bar_bottom_right" ], [ UI.constants.BAR_OUTER_WIDTH, null, UI.constants.BAR_OUTER_WIDTH ], Styles.layout.HORIZONTAL);
+	console.log("initializing Windows");
 
 	this.window_login = new Styles.Window("login", "menu.login", "content_login");
 	this.window_login.setSize(300, 200);
@@ -61,12 +71,14 @@ UIManager = function()
 	this.window_static.center();
 	this.window_static.setMovable(true);
 
-	Events.fireEvent(window, Events.ONRESIZE);
+	console.log("showing UI");
 
-	this.onLogout();
-	this.updateLabels();
-	this.updateLinks();
-	this.populateLocaleChooser();
+//	Events.fireEvent(window, Events.ONRESIZE);
+//
+//	this.onLogout();	// TODO
+//	this.updateLabels(); // TODO
+//	this.updateLinks(); // TODO
+//	this.populateLocaleChooser(); // TODO
 	this.hideOverlay();
 };
 
@@ -112,7 +124,8 @@ UIManager.prototype.onUserLoaded = function(user)
 UIManager.prototype.hideOverlay = function()
 {
 	var overlay = document.getElementById(UI.constants.OVERLAY_ID);
-	overlay.className += " hidden";
+	overlay.className += " invisible";
+	setTimeout(function() {overlay.className += " hidden";}, 3000);
 };
 
 UIManager.prototype.populateLocaleChooser = function()
