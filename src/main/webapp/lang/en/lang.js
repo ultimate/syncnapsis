@@ -37,6 +37,7 @@ lang.menu.pinboard_tooltip		= lang.menu.pinboard;
 lang.menu.profile 				= "Profile";
 lang.menu.register 				= "Register";
 lang.menu.stats					= "Stats";
+lang.menu.welcome				= "Welcome. Please log in...";
 
 lang.profile = {};
 lang.profile.password			= "Password";
