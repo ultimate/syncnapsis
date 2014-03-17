@@ -66,6 +66,11 @@ Tabs = function(barId, barMode, containerId, containerMode, selectedOverwriteWid
 	var gap = barSize - s0 * childrenCount;
 
 	console.log("barSize=" + barSize + "  children=" + childrenCount + "  s0=" + s0 + "  gap = " + gap);
+	
+	this.onSelect = function(index)
+	{
+		//placeholder
+	};
 
 	this.select = function(index)
 	{
@@ -114,6 +119,7 @@ Tabs = function(barId, barMode, containerId, containerMode, selectedOverwriteWid
 				}
 			}
 		}
+		this.onSelect(index);
 	};
 
 	for( var i = 0; i < childrenCount; i++)
@@ -142,4 +148,6 @@ Tabs = function(barId, barMode, containerId, containerMode, selectedOverwriteWid
 		// console.log("width set child #" + i + ": " +
 		// children[i].style[barSizeParam]);
 	}
+	
+	this.select(0);
 };
