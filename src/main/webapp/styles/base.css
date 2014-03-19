@@ -23,12 +23,24 @@
 	transition: all 0.5s;
 }
 
-body {
+body, input {
 	background: rgb(0, 0, 0);
+	color: rgba(255, 255, 255, 0.9);
 	margin: 0px;
 	font-family: monospace;
 	font-size: 11px;
 	overflow: hidden;
+}
+
+input[type=text],
+input[type=password] {
+	border: 1px solid rgba(0,255,255,0.9);
+	background: rgba(0,0,0,0.3);
+}
+
+input[type=text].error,
+input[type=password].error {
+	border: 1px solid rgba(255,0,0,0.9);
 }
 
 .centered {
@@ -92,6 +104,15 @@ body {
 	/*margin-right: 1px;*/
 }
 
+#menu #door {
+	position: absolute;
+	right: 10px;
+	left: auto;
+	top: 10px;
+	width: 20px;
+	height: 20px;
+}
+
 #menu>div {
 	/*margin-top: 1px;*/
 	width: 250px;
@@ -102,6 +123,19 @@ body {
 #menu #userbar {
 	height: 50px;
 	top: 0px;
+}
+
+#menu #userbar>div {
+	padding: 0px;
+}
+
+#user_login {
+	line-height: 20px;
+}
+
+#user_login>input[type=text],
+#user_login>input[type=password] {
+	width: 100px;
 }
 
 #menu #nav {
@@ -117,7 +151,6 @@ body {
 */
 
 #menu #menu_content {
-	color: rgba(255, 255, 255, 0.9);
 	overflow: hidden;
 	height: 300px;
 	top: 107px;	
@@ -131,7 +164,6 @@ body {
 	width: 400px;
 	margin-top: 1px;
 	margin-bottom: 1px;
-	color: rgba(255, 255, 255, 0.9);
 }
 
 #bar_top {
@@ -140,7 +172,7 @@ body {
 }
 
 #bar_bottom {
-	height: 31px;
+	height: 33px;
 	line-height: 2.6em;
 	margin-bottom: 1px;
 	overflow: hidden;
@@ -154,27 +186,28 @@ body {
 #bar_bottom>.log_bar {
 	display: inline;
 	top: 0px;
-	height: 31px;
+	height: 32px;
 	margin-bottom: 1px;
 }
 
 #bar_bottom #log_title {
-	width: 80px;
+	width: 85px;
 	position: absolute;
 	left: 0px;
-	padding-left: 5px;
-	padding-right: 5px;
 }
 
 #bar_bottom>#log {
 	position: absolute;
-	width: 212px;
+	width: 224px;
 }
 
 #bar_bottom #log_menu {
-	width: 80px;
+	width: 85px;
 	position: absolute;
 	right: 0px;
+}
+
+#bar_bottom .inner {
 	padding-left: 5px;
 	padding-right: 5px;
 }
@@ -185,7 +218,7 @@ body {
 
 #bar_bottom #log_content {
 	position: absolute;
-	top: 32px;
+	top: 34px;
 	bottom: 0px;
 	overflow-x: hidden;
 	overflow-y: auto;
