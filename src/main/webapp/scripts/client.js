@@ -26,7 +26,7 @@ UI.constants.AD_BORDER = 2;
 UI.constants.BAR_HEIGHT = 24;
 UI.constants.BAR_OUTER_WIDTH = 300;
 
-UI.constants.LABEL_ID_PLAYERNAME = "bar_top_playername";
+UI.constants.LABEL_ID_PLAYERNAME = "userbar_playername";
 UI.constants.OVERLAY_ID = "overlay";
 UI.constants.STATIC_FRAME_ID = "static_frame";
 
@@ -36,15 +36,37 @@ UI.constants.LOCALE_BUTTON_TAGNAME = "input";
 UI.constants.LOCALE_KEY_ATTRIBUTE = "key";
 UI.constants.LOCALE_STRING_VARIABLE = "lang";
 
+UI.constants.NAV_TABS = "nav";
+UI.constants.NAV_CONTENT = "menu_content";
+UI.constants.LOG_TABS = "log";
+UI.constants.LOG_CONTENT = "log_content";
+UI.constants.LOG_FRAME = "bar_bottom";
+UI.constants.USERINFO_TABS = "door"; // just use this as a dummy selector we will overwrite the select for
+UI.constants.USERINFO_CONTENT = "userbar";
+
+UI.constants.NAV_WIDTH = 300;
+UI.constants.USERINFO_HEIGHT = 40;
+
 UIManager = function()
 {
 	this.currentPlayer = null;
+	this.logCls = document.getElementById(UI.constants.LOG_FRAME).className;
+	this.logOpen = false;
 	
 	console.log("initializing UIManager");
 	console.log("initializing Tabs");
 
-	this.nav = new Tabs("nav", TABS_HORIZONTAL, "menu_content", TABS_VERTICAL);
-	this.log = new Tabs("log", TABS_HORIZONTAL, "log_content", TABS_HORIZONTAL);
+	this.nav = new Tabs(UI.constants.NAV_TABS, TABS_HORIZONTAL, UI.constants.NAV_CONTENT, TABS_VERTICAL);
+	this.log = new Tabs(UI.constants.LOG_TABS, TABS_HORIZONTAL, UI.constants.LOG_CONTENT, TABS_HORIZONTAL);
+	this.log.select0 = this.log.select;
+	this.log.select = function(uiManager) {
+		return function(index) {
+			if(!uiManager.logOpen)
+				uiManager.showLog();
+			this.select0(index);
+		};
+	}(this);
+	this.userInfo = new Tabs(UI.constants.USERINFO_TABS, TABS_HORIZONTAL, UI.constants.USERINFO_CONTENT, TABS_VERTICAL, UI.constants.NAV_WIDTH, UI.constants.USERINFO_HEIGHT);
 	
 
 //	this.localeChooser = document.getElementById(UI.constants.LOCALE_CHOOSER_ID);
@@ -59,10 +81,6 @@ UIManager = function()
 //	this.layout_bar_bottom = new Styles.FillLayout([ "bar_bottom_left", "bar_bottom_center", "bar_bottom_right" ], [ UI.constants.BAR_OUTER_WIDTH, null, UI.constants.BAR_OUTER_WIDTH ], Styles.layout.HORIZONTAL);
 
 	console.log("initializing Windows");
-
-	this.window_login = new Styles.Window("login", "menu.login", "content_login");
-	this.window_login.setSize(300, 200);
-	this.window_login.center();
 	
 	this.window_register = null; // TODO
 	
@@ -74,9 +92,9 @@ UIManager = function()
 	console.log("showing UI");
 
 //	Events.fireEvent(window, Events.ONRESIZE);
-//
+
 //	this.onLogout();	// TODO
-//	this.updateLabels(); // TODO
+	this.updateLabels();
 //	this.updateLinks(); // TODO
 //	this.populateLocaleChooser(); // TODO
 	this.hideOverlay();
@@ -93,10 +111,11 @@ UIManager.prototype.onLogin = function(player)
 		// change language to users selection
 		server.uiManager.selectLocale(player.user.locale);
 		// switch ui to logged-in menu
-		document.getElementById("bar_top_left_loggedin").style.display = "block";
-		document.getElementById("bar_top_right_loggedin").style.display = "block";
-		document.getElementById("bar_top_left_loggedout").style.display = "none";
-		document.getElementById("bar_top_right_loggedout").style.display = "none";
+		this.userInfo.select(1);
+//		document.getElementById("bar_top_left_loggedin").style.display = "block";
+//		document.getElementById("bar_top_right_loggedin").style.display = "block";
+//		document.getElementById("bar_top_left_loggedout").style.display = "none";
+//		document.getElementById("bar_top_right_loggedout").style.display = "none";
 		
 		this.hideLogin();
 	}
@@ -107,11 +126,12 @@ UIManager.prototype.onLogin = function(player)
 };
 
 UIManager.prototype.onLogout = function(success)
-{
-	document.getElementById("bar_top_left_loggedin").style.display = "none";
-	document.getElementById("bar_top_right_loggedin").style.display = "none";
-	document.getElementById("bar_top_left_loggedout").style.display = "block";
-	document.getElementById("bar_top_right_loggedout").style.display = "block";
+{	
+	this.userInfo.select(0);
+//	document.getElementById("bar_top_left_loggedin").style.display = "none";
+//	document.getElementById("bar_top_right_loggedin").style.display = "none";
+//	document.getElementById("bar_top_left_loggedout").style.display = "block";
+//	document.getElementById("bar_top_right_loggedout").style.display = "block";
 	this.onUserLoaded({username: "anonymous"});
 };
 
@@ -189,6 +209,30 @@ UIManager.prototype.updateLabels = function(parent)
 	}
 };
 
+UIManager.prototype.showLog = function()
+{
+	if(this.logOpen)
+		return;
+	document.getElementById(UI.constants.LOG_FRAME).className += " open";
+	this.logOpen = true;
+};
+
+UIManager.prototype.hideLog = function()
+{
+	if(!this.logOpen)
+		return;
+	document.getElementById(UI.constants.LOG_FRAME).className = this.logCls;
+	this.logOpen = false;
+};
+
+UIManager.prototype.toggleLog = function()
+{
+	if(this.logOpen)
+		this.hideLog();
+	else
+		this.showLog();
+};
+
 UIManager.prototype.showLogin = function()
 {
 	this.window_login.setVisible(true);
@@ -203,6 +247,7 @@ UIManager.prototype.doLogin = function()
 {
 	var username = document.getElementById("login_username").value;
 	var password = document.getElementById("login_password").value;
+	// TODO
 	if(username == "" || username == null || password == "" || password == null)
 	{
 		if(username == "" || username == null)
@@ -242,6 +287,7 @@ UIManager.prototype.doRegister = function()
 //	server.playerManager.register(............);
 };
 
+// TODO
 UIManager.prototype.showStatic = function(key)
 {
 	this.window_static.setTitleKey(key);
