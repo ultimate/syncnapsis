@@ -132,17 +132,17 @@
 	</div>
 	<div id="bar_bottom" class="centered_x atbottom">
 		<div id="log_title" class="frame log_bar">
-			Event-Log:
+			<span class="inner">Event-Log:</span>
 		</div>
 		<div id="log" class="transparent_frame menubar centered_x log_bar">
-			<a id="log_1" href="javascript: selectContent(1, 'log', 'log', 'log_content');"><div class="frame">Pinboard (<span id="log_1_count">1</span>)</div></a>
-			<a id="log_2" href="javascript: selectContent(2, 'log', 'log', 'log_content');"><div class="frame">Match (<span id="log_2_count">7</span>)</div></a>
+			<a id="log_1"><div class="frame">Pinboard (<span id="log_1_count">1</span>)</div></a>
+			<a id="log_2"><div class="frame">Match (<span id="log_2_count">7</span>)</div></a>
 			<!--
-			<a id="log_3" href="javascript: selectContent(3, 'log', 'log', 'log_content');"><div class="frame">Test (<span id="log_3_count">0</span>)</div></a>
+			<a id="log_3"><div class="frame">Test (<span id="log_3_count">0</span>)</div></a>
 			-->
 		</div>
 		<div id="log_menu" class="frame log_bar">
-			aaaa
+			<span class="inner">aaaaa</span>
 		</div>
 		<div id="log_content" class="frame atbottom">
 			<div>
@@ -172,16 +172,44 @@
 		</div>
 	</div>
 	<div id="menu">
+		<div id="door" class="frame">
+			<a class="selected">O</a>
+		</div>
 		<div id="userbar" class="frame">
+			<div>
+			<div id="user_loggedout">
+				<label key="menu.welcome"></label>
+			</div>
+			<div id="user_loggedin">
+				<label key="menu.login_info"></label><b><label id="userbar_playername"></label></b>!
+			</div>
+			<div id="user_login">
+				<label key="profile.username"></label>:&nbsp;<input id="login_username" type="text"/><br>
+				<label key="profile.password"></label>:&nbsp;<input id="login_password" type="password"/>
+				<!-- 
+				<div class="form">
+					<div class="message" id="message_login_invalid_username" style="display: none;"><label key=""></label></div>
+					<div class="message" id="message_login_invalid_password" style="display: none;"><label key=""></label></div>
+				</div>
+				<div class="buttons">
+					<input type="button" key="menu.login" onclick="client.uiManager.doLogin();" />
+					<input type="button" key="menu.cancel" onclick="client.uiManager.hideLogin();" />
+					<input type="button" key="menu.register" onclick="client.uiManager.showRegister();" />
+					<div class="message" id="message_login_failed" style="display: none;"><label key=""></label></div><br/>
+				</div>
+				 -->
+			</div>
+			</div>
 		</div>
 		<div id="nav" class="transparent_frame menubar">
-			<a id="nav_1" href="javascript: selectContent(1, 'nav', 'nav', 'menu');" class="selected"><div class="frame">a</div></a>
-			<a id="nav_2" href="javascript: selectContent(2, 'nav', 'nav', 'menu');"><div class="frame">b</div></a>
-			<a id="nav_3" href="javascript: selectContent(3, 'nav', 'nav', 'menu');"><div class="frame">c</div></a>
-			<a id="nav_4" href="javascript: selectContent(4, 'nav', 'nav', 'menu');"><div class="frame">d</div></a>
+			<a id="nav_1" class="selected"><div class="frame">a</div></a>
+			<a id="nav_2"><div class="frame">b</div></a>
+			<a id="nav_3"><div class="frame">c</div></a>
+			<a id="nav_4"><div class="frame">d</div></a>
 			<!--<div class="frame"><a id="nav_2" href="">b</a></div>-->
 		</div>
 		<div id="menu_content" class="frame">
+			<div>
 			<div id="menu_1" class="selected">
 				foo<br>
 				bar<br>
@@ -234,6 +262,7 @@
 				<li>29</li>
 				</ul>
 			</div>
+			</div>
 		</div>
 		<div id="main" class="main frame">
 			<div id="logo_container2" class="logo_container centered_x">
@@ -266,46 +295,17 @@
 			</div>
 		</div>
 	</div>
-	<!-- for debug only -->
-	<div id="debug">
-		debug...<br>
-		<input id="debug_load" type="button" value="load" onclick="load(0);" /><br/>
-		<input id="debug_open" type="button" value="open/close log" onclick="openLog();" /><br/>
-	</div>
-	
-	<!-- old stuff for info -->
-	<!-- 
-	<div id="bar_top_right" class="bar_right">
-		<div id="bar_top_right_loggedin">
-			<span><label key="menu.login_info"></label>&nbsp;<b id="bar_top_playername">anonymous</b>&nbsp;:</span> <span><a href=""><label key="menu.profile"></label></a></span> <span><a
-				href="javascript: server.playerManager.logout();"><label key="menu.logout"></label></a></span>
-		</div>
-		<div id="bar_top_right_loggedout">
-			<span><a href="javascript: client.uiManager.showLogin();"><label key="menu.login"></label></a></span>
-		</div>
-	</div>
-	 -->
 	<div id="content" style="display: none;">
 		<div id="content_static">
 			<iframe name="static_frame">
 			</iframe>
 		</div>
-		<div id="content_login">
-			<div class="form">
-				<label key="profile.username"></label>:&nbsp;<input id="login_username" type="text" />
-				<div class="message" id="message_login_invalid_username" style="display: none;"><label key=""></label></div>
-				<br>
-				<label key="profile.password"></label>:&nbsp;<input id="login_password" type="password" />
-				<div class="message" id="message_login_invalid_password" style="display: none;"><label key=""></label></div>
-				<br>
-			</div>
-			<div class="buttons">
-				<input type="button" key="menu.login" onclick="client.uiManager.doLogin();" />
-				<input type="button" key="menu.cancel" onclick="client.uiManager.hideLogin();" />
-				<input type="button" key="menu.register" onclick="client.uiManager.showRegister();" />
-				<div class="message" id="message_login_failed" style="display: none;"><label key=""></label></div><br/>
-			</div>
-		</div>
+	</div>
+	<!-- for debug only -->
+	<div id="debug">
+		debug...<br>
+		<input id="debug_load" type="button" value="load" onclick="load(0);" /><br/>
+		<input id="debug_open" type="button" value="open/close log" onclick="client.uiManager.toggleLog();" /><br/>
 	</div>
 </body>
 </html>
