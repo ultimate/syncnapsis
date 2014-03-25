@@ -23,6 +23,16 @@
 	transition: all 0.5s;
 }
 
+body {
+	position: absolute;
+	width: auto;
+	height: auto;
+	left: 0px;
+	top: 0px;
+	bottom: 0px;
+	right: 1.5px
+}
+
 body, input {
 	background: rgb(0, 0, 0);
 	color: rgba(255, 255, 255, 0.9);
@@ -136,6 +146,8 @@ input[type=password].error {
 #user_login>input[type=text],
 #user_login>input[type=password] {
 	width: 100px;
+	position: absolute;
+	left: 100px;
 }
 
 #menu #nav {
