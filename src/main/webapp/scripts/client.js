@@ -66,7 +66,7 @@ UIManager = function()
 			this.select0(index);
 		};
 	}(this);
-	this.userInfo = new Tabs(UI.constants.USERINFO_TABS, TABS_HORIZONTAL, UI.constants.USERINFO_CONTENT, TABS_VERTICAL, UI.constants.NAV_WIDTH, UI.constants.USERINFO_HEIGHT);
+	this.userInfo = new Tabs(UI.constants.USERINFO_TABS, TABS_HORIZONTAL, UI.constants.USERINFO_CONTENT, TABS_VERTICAL);//, UI.constants.NAV_WIDTH, UI.constants.USERINFO_HEIGHT);
 	
 
 //	this.localeChooser = document.getElementById(UI.constants.LOCALE_CHOOSER_ID);
