@@ -141,13 +141,22 @@ input[type=password].error {
 
 #user_login {
 	line-height: 20px;
+	overflow: hidden;
+}
+
+#user_login>div>div {
+	overflow: hidden;
+}
+
+#user_login>label {
+	width: 100px;
+	display: block;
+	float: left;
 }
 
 #user_login>input[type=text],
 #user_login>input[type=password] {
 	width: 100px;
-	position: absolute;
-	left: 100px;
 }
 
 #menu #nav {

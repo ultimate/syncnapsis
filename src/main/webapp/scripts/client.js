@@ -43,6 +43,8 @@ UI.constants.LOG_CONTENT = "log_content";
 UI.constants.LOG_FRAME = "bar_bottom";
 UI.constants.USERINFO_TABS = "door"; // just use this as a dummy selector we will overwrite the select for
 UI.constants.USERINFO_CONTENT = "userbar";
+UI.constants.USERINFO_INDEX_LOGGEDOUT = 0;
+UI.constants.USERINFO_INDEX_LOGGEDIN = 1;
 
 UI.constants.NAV_WIDTH = 300;
 UI.constants.USERINFO_HEIGHT = 40;
@@ -111,7 +113,7 @@ UIManager.prototype.onLogin = function(player)
 		// change language to users selection
 		server.uiManager.selectLocale(player.user.locale);
 		// switch ui to logged-in menu
-		this.userInfo.select(1);
+		this.userInfo.select(UI.constants.USERINFO_INDEX_LOGGEDIN);
 //		document.getElementById("bar_top_left_loggedin").style.display = "block";
 //		document.getElementById("bar_top_right_loggedin").style.display = "block";
 //		document.getElementById("bar_top_left_loggedout").style.display = "none";
@@ -127,7 +129,7 @@ UIManager.prototype.onLogin = function(player)
 
 UIManager.prototype.onLogout = function(success)
 {	
-	this.userInfo.select(0);
+	this.userInfo.select(UI.constants.USERINFO_INDEX_LOGGEDOUT);
 //	document.getElementById("bar_top_left_loggedin").style.display = "none";
 //	document.getElementById("bar_top_right_loggedin").style.display = "none";
 //	document.getElementById("bar_top_left_loggedout").style.display = "block";
