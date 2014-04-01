@@ -49,6 +49,8 @@ UI.constants.USERINFO_INDEX_LOGGEDIN = 1;
 UI.constants.NAV_WIDTH = 300;
 UI.constants.USERINFO_HEIGHT = 40;
 
+UI.constants.TF_ERROR_BACKGROUND = "#FFEE88";
+
 UIManager = function()
 {
 	this.currentPlayer = null;
@@ -58,8 +60,11 @@ UIManager = function()
 	console.log("initializing UIManager");
 	console.log("initializing Tabs");
 
+	// init the nav ("normally")
 	this.nav = new Tabs(UI.constants.NAV_TABS, TABS_HORIZONTAL, UI.constants.NAV_CONTENT, TABS_VERTICAL);
+	// init the log with overwritten select which opens the log window on click
 	this.log = new Tabs(UI.constants.LOG_TABS, TABS_HORIZONTAL, UI.constants.LOG_CONTENT, TABS_HORIZONTAL);
+	// overwrite the log-select to open the log on select
 	this.log.select0 = this.log.select;
 	this.log.select = function(uiManager) {
 		return function(index) {
@@ -68,7 +73,16 @@ UIManager = function()
 			this.select0(index);
 		};
 	}(this);
+	// init the user info with a dummy tab selector (the "door")
+	// dummy is used since we need at least one tab selector
 	this.userInfo = new Tabs(UI.constants.USERINFO_TABS, TABS_HORIZONTAL, UI.constants.USERINFO_CONTENT, TABS_VERTICAL);//, UI.constants.NAV_WIDTH, UI.constants.USERINFO_HEIGHT);
+	// overwrite the door's onSelect to perform the login
+	this.door = document.getElementById(UI.constants.USERINFO_TABS).children[0]; // this is the 'a' tag
+	this.door.onclick = function(uiManager) {
+		return function() {
+			uiManager.doLogin();
+		}
+	} (this);
 	
 
 //	this.localeChooser = document.getElementById(UI.constants.LOCALE_CHOOSER_ID);
@@ -306,7 +320,7 @@ UIManager.prototype.showErrorMessage = function(textfield, messagefield)
 	if(textfield != null)
 	{
 		var bg = textfield.style.background;
-		textfield.style.background = "#FFEE88";
+		textfield.style.background = UI.constants.TF_ERROR_BACKGROUND;
 		setTimeout(function() {textfield.style.background = bg;}, 3000);
 	}
 	if(messagefield != null)
