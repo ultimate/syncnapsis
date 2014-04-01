@@ -105,6 +105,10 @@ public abstract class URLRewriteFilter extends FilterEngine
 		{
 			RequestDispatcher dispatcher = httpRequest.getRequestDispatcher(newURL);
 
+			String mimeType = httpRequest.getServletContext().getMimeType(newURL);
+			logger.debug("content type for file is '" + mimeType + "'");
+			httpResponse.setContentType(mimeType);
+
 			if(!useInclude)
 			{
 				dispatcher.forward(httpRequest, httpResponse);
@@ -119,6 +123,8 @@ public abstract class URLRewriteFilter extends FilterEngine
 			logger.debug("continuing filter chain...");
 			chain.doFilter(httpRequest, httpResponse);
 		}
+
+		logger.debug("content type is '" + httpResponse.getContentType() + "'");
 	}
 
 	/**
