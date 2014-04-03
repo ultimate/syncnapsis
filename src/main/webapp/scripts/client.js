@@ -33,7 +33,9 @@ UI.constants.STATIC_FRAME_ID = "static_frame";
 UI.constants.LOCALE_CHOOSER_ID = "locale_chooser";
 UI.constants.LOCALE_LABEL_TAGNAME = "label";
 UI.constants.LOCALE_BUTTON_TAGNAME = "input";
+UI.constants.LOCALE_LINK_TAGNAME = "a";
 UI.constants.LOCALE_KEY_ATTRIBUTE = "key";
+UI.constants.LOCALE_KEY_TOOLTIP_SUFFIX = "_tooltip"
 UI.constants.LOCALE_STRING_VARIABLE = "lang";
 
 UI.constants.NAV_TABS = "nav";
@@ -222,6 +224,13 @@ UIManager.prototype.updateLabels = function(parent)
 	{
 		if(elements[i].getAttribute("type") == "button")
 			elements[i].value = this.getString(elements[i].getAttribute(UI.constants.LOCALE_KEY_ATTRIBUTE));
+	}
+	// links
+	elements = document.getElementsByTagName(UI.constants.LOCALE_LINK_TAGNAME);
+	for( var i = 0; i < elements.length; i++)
+	{
+		elements[i].innerHTML = this.getString(elements[i].getAttribute(UI.constants.LOCALE_KEY_ATTRIBUTE));
+		elements[i].title = this.getString(elements[i].getAttribute(UI.constants.LOCALE_KEY_ATTRIBUTE + UI.constants.LOCALE_KEY_TOOLTIP_SUFFIX));
 	}
 };
 
