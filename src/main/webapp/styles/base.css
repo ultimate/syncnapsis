@@ -106,7 +106,7 @@ input[type=password].error {
 }
 
 #menu {
-	width: 250px;
+	width: 260px;
 	position: absolute;
 	right: 1px;
 	top: 1px;
@@ -116,22 +116,22 @@ input[type=password].error {
 
 #menu #door {
 	position: absolute;
-	right: 10px;
+	right: 7px;
 	left: auto;
-	top: 10px;
-	width: 20px;
-	height: 20px;
+	top: 7px;
+	width: 36px;
+	height: 36px;
 }
 
 #menu>div {
 	margin-top: 1px;
-	width: 250px;
+	width: 260px;
 	/*position: absolute;*/
 	/*left: 0px;*/
 }
 
 #menu #userbar {
-	height: 50px;
+	height: 68px;
 	/*top: 0px;*/
 }
 
@@ -148,7 +148,8 @@ input[type=password].error {
 	overflow: hidden;
 }
 
-#user_login>label {
+#user_login>label,
+#user_login>a {
 	width: 100px;
 	display: block;
 	float: left;
@@ -280,11 +281,12 @@ input[type=password].error {
 }
 
 .main {
-	width: 250px;
+	width: 260px;
 	height: 150px;
 }
 
-.links {
+#links,
+#overlay_links {
 	position: absolute;
 	left: 0px;
 	right: 0px;
