@@ -38,6 +38,10 @@ lang.menu.profile 				= "Profile";
 lang.menu.register 				= "Register";
 lang.menu.stats					= "Stats";
 
+lang.log = {};
+lang.log.title					= "Event-Log";
+lang.log.pinboard				= "Pinboard";
+lang.log.match					= "Match"
 lang.profile = {};
 lang.profile.password			= "Password";
 lang.profile.username			= "Username";

@@ -38,6 +38,11 @@ lang.menu.profile 				= "Profil";
 lang.menu.register 				= "Registrieren";
 lang.menu.stats 				= "Statistik";
 
+lang.log = {};
+lang.log.title					= "Ereignis-Log";
+lang.log.pinboard				= "Pinnwand";
+lang.log.match					= "Spiel"
+
 lang.profile = {};
 lang.profile.password			= "Passwort";
 lang.profile.username			= "Benutzername";
