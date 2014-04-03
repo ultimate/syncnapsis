@@ -28,6 +28,7 @@ lang.menu.contact 				= "Kontakt";
 lang.menu.contact_tooltip 		= "Kontaktinformationen / Impressum";
 lang.menu.disclaimer 			= "Rechtliches";
 lang.menu.disclaimer_tooltip 	= "Nutzungsbedingungen / Haftungsbeschränkung";
+lang.menu.forgot_password		= "Passwort vergessen?";
 lang.menu.login 				= "Anmelden";
 lang.menu.login_info			= "Hallo";
 lang.menu.logout 				= "Abmelden";

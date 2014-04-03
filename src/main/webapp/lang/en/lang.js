@@ -28,6 +28,7 @@ lang.menu.contact 				= "Contact";
 lang.menu.contact_tooltip 		= "Contact informationen / Site notice"
 lang.menu.disclaimer 			= "Legal Stuff";
 lang.menu.disclaimer_tooltip 	= "Site policy / Disclaimer";
+lang.menu.forgot_password		= "Forgot password?";
 lang.menu.login    				= "Login";
 lang.menu.login_info			= "Hello";
 lang.menu.logout   				= "Logout";
