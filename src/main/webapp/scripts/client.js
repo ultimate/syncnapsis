@@ -51,8 +51,6 @@ UI.constants.USERINFO_INDEX_LOGGEDIN = 1;
 UI.constants.NAV_WIDTH = 300;
 UI.constants.USERINFO_HEIGHT = 40;
 
-UI.constants.TF_ERROR_BACKGROUND = "#FFEE88";
-
 UIManager = function()
 {
 	this.currentPlayer = null;
@@ -316,9 +314,12 @@ UIManager.prototype.showErrorMessage = function(textfield, messagefield)
 {
 	if(textfield != null)
 	{
-		var bg = textfield.style.background;
-		textfield.style.background = UI.constants.TF_ERROR_BACKGROUND;
-		setTimeout(function() {textfield.style.background = bg;}, 3000);
+//		var bg = textfield.style.background;
+//		textfield.style.background = UI.constants.TF_ERROR_BACKGROUND;
+//		setTimeout(function() {textfield.style.background = bg;}, 3000);
+		var cls = textfield.className;
+		textfield.className = cls + " error";
+		setTimeout(function() {textfield.className = cls;}, 3000);
 	}
 	if(messagefield != null)
 	{

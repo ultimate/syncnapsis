@@ -51,6 +51,7 @@ input[type=password] {
 input[type=text].error,
 input[type=password].error {
 	border: 1px solid rgba(255,0,0,0.9);
+	background: rgba(255,239,136,1.0);
 }
 
 .centered {
