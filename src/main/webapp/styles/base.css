@@ -1,7 +1,7 @@
-body {
-	background: #000000;
+body , input , select {
+	background: rgb(0,0,0);
 	overflow: hidden;
-	color: #EEEEEE;
+	color: rgba(255,255,255,0.9);
 	font-family: monospace;
 	margin: 0px;
 }
