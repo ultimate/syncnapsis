@@ -106,7 +106,7 @@ input[type=password].error {
 }
 
 #menu {
-	width: 260px;
+	width: 275px;
 	position: absolute;
 	right: 1px;
 	top: 1px;
@@ -114,18 +114,28 @@ input[type=password].error {
 	/*margin-right: 1px;*/
 }
 
-#menu #door {
+#menu #menu_fixed {
 	position: absolute;
 	right: 7px;
 	left: auto;
 	top: 7px;
 	width: 36px;
+	/*height: 36px;*/
+	bottom: 7px;
+}
+
+#menu #menu_fixed #door {
+	width: 36px;
 	height: 36px;
+}
+
+#locale_chooser {
+	
 }
 
 #menu>div {
 	margin-top: 1px;
-	width: 260px;
+	width: 275px;
 	/*position: absolute;*/
 	/*left: 0px;*/
 }
@@ -155,9 +165,10 @@ input[type=password].error {
 	float: left;
 }
 
+#user_login>a+a, 
 #user_login>input[type=text],
 #user_login>input[type=password] {
-	width: 100px;
+	width: 110px;
 }
 
 #menu #nav {
@@ -247,29 +258,6 @@ input[type=password].error {
 	width: 398px;
 }
 
-#bar_bottom #log_content div {
-	width: 500%;
-}
-
-#bar_bottom #log_content div>span {
-	display: inline-block;
-	width: 0%;
-	overflow: hidden;
-	float: left;
-	height: 100px;
-	min-height: 100px;
-}
-
-#bar_bottom #log_content div>span+span {
-	border-left: 1px solid rgba(0, 255, 255, 0.5);
-	margin-left: -2px;
-}
-
-#bar_bottom #log_content div>span.selected {
-	width: 21%;
-	height: auto;
-}
-
 .frame {
 	border: 1px solid rgba(0, 255, 255, 0.8);
 	background: rgba(0, 255, 255, 0.3);
@@ -281,7 +269,7 @@ input[type=password].error {
 }
 
 .main {
-	width: 260px;
+	width: 275px;
 	height: 150px;
 }
 

@@ -172,38 +172,26 @@
 		</div>
 	</div>
 	<div id="menu">
-		<div id="door" class="frame">
-			<a class="selected">O</a>
+		<div id="menu_fixed" class="frame_invisible">
+			<div id="door" class="frame">
+				<a class="selected">O</a>
+			</div>
+			<select id="locale_chooser">
+				<option>DE</option>
+				<option>EN</option>
+			</select>
 		</div>
 		<div id="userbar" class="frame">
 			<div>
 			<div id="user_login">
 				<label key="profile.username" for="login_username"></label><input id="login_username" type="text"/><br/>
 				<label key="profile.password" for="login_password"></label><input id="login_password" type="password"/><br/>
+				<a href=""><label key="menu.register"></label></a>
+				<a href=""><label key="menu.forgot_password"></label></a>
 				<!-- 
-				<div class="links">
-				 -->
-					<a href=""><label key="menu.register"></label></a>
-					<a href=""><label key="menu.forgot_password"></label></a>
-					LC
-				<!-- 
-				</div>
-				<table>
-					<tbody>
-						<tr><td><label key="profile.username"></label>:</td><td><input id="login_username" type="text"/></td></tr>
-						<tr><td><label key="profile.password"></label>:</td><td><input id="login_password" type="password"/></td></tr>
-					</tbody>
-				</table>
-				<div class="form">
-					<div class="message" id="message_login_invalid_username" style="display: none;"><label key=""></label></div>
-					<div class="message" id="message_login_invalid_password" style="display: none;"><label key=""></label></div>
-				</div>
-				<div class="buttons">
 					<input type="button" key="menu.login" onclick="client.uiManager.doLogin();" />
 					<input type="button" key="menu.cancel" onclick="client.uiManager.hideLogin();" />
 					<input type="button" key="menu.register" onclick="client.uiManager.showRegister();" />
-					<div class="message" id="message_login_failed" style="display: none;"><label key=""></label></div><br/>
-				</div>
 				 -->
 			</div>
 			<div id="user_loggedin">

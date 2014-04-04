@@ -82,7 +82,10 @@ UIManager = function()
 	this.door = document.getElementById(UI.constants.USERINFO_TABS).children[0]; // this is the 'a' tag
 	this.door.onclick = function(uiManager) {
 		return function() {
-			uiManager.doLogin();
+			if(uiManager.currentPlayer == null)
+				uiManager.doLogin();
+			else
+				uiManager.doLogout();
 		}
 	} (this);
 	
@@ -130,12 +133,8 @@ UIManager.prototype.onLogin = function(player)
 		server.uiManager.selectLocale(player.user.locale);
 		// switch ui to logged-in menu
 		this.userInfo.select(UI.constants.USERINFO_INDEX_LOGGEDIN);
-//		document.getElementById("bar_top_left_loggedin").style.display = "block";
-//		document.getElementById("bar_top_right_loggedin").style.display = "block";
-//		document.getElementById("bar_top_left_loggedout").style.display = "none";
-//		document.getElementById("bar_top_right_loggedout").style.display = "none";
 		
-		this.hideLogin();
+		// TODO toggle login button
 	}
 	else
 	{
@@ -146,10 +145,9 @@ UIManager.prototype.onLogin = function(player)
 UIManager.prototype.onLogout = function(success)
 {	
 	this.userInfo.select(UI.constants.USERINFO_INDEX_LOGGEDOUT);
-//	document.getElementById("bar_top_left_loggedin").style.display = "none";
-//	document.getElementById("bar_top_right_loggedin").style.display = "none";
-//	document.getElementById("bar_top_left_loggedout").style.display = "block";
-//	document.getElementById("bar_top_right_loggedout").style.display = "block";
+
+	// TODO toggle login button
+	
 	this.onUserLoaded({username: "anonymous"});
 };
 
@@ -256,16 +254,6 @@ UIManager.prototype.toggleLog = function()
 		this.hideLog();
 	else
 		this.showLog();
-};
-
-UIManager.prototype.showLogin = function()
-{
-	this.window_login.setVisible(true);
-};
-
-UIManager.prototype.hideLogin = function()
-{
-	this.window_login.setVisible(false);
 };
 
 UIManager.prototype.doLogin = function()
