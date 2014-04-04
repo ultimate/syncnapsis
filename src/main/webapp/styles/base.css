@@ -33,7 +33,7 @@ body {
 	right: 1.5px
 }
 
-body, input {
+body, input, select {
 	background: rgb(0, 0, 0);
 	color: rgba(255, 255, 255, 0.9);
 	margin: 0px;

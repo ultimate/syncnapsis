@@ -51,6 +51,9 @@ UI.constants.USERINFO_INDEX_LOGGEDIN = 1;
 UI.constants.NAV_WIDTH = 300;
 UI.constants.USERINFO_HEIGHT = 40;
 
+UI.constants.IMAGE_PATH = "images";
+UI.constants.IMAGE_TYPE = ".png";
+
 UIManager = function()
 {
 	this.currentPlayer = null;
@@ -165,25 +168,31 @@ UIManager.prototype.hideOverlay = function()
 UIManager.prototype.populateLocaleChooser = function()
 {
 	// clear children
-	while(this.localeChooser.hasChildNodes())
+	while(this.localeChooser.list.hasChildNodes())
 	{
-		this.localeChooser.removeChild(this.localeChooser.lastChild);
+		this.localeChooser.list.removeChild(this.localeChooser.list.lastChild);
 	}
 	// add options
-	var option;
+	var option, img, text;
+	var selected = 0;
+	var index = 0;
 	for( var i in lang.EnumLocale)
 	{
 		if(typeof(lang.EnumLocale[i]) == Reflections.type.FUNCTION)
 			continue;
-		option = document.createElement("option");
+		option = document.createElement("li");
 		option.value = i;
-		option.text = lang.EnumLocale[i];
+		img = document.createElement("img");
+		img.src = UI.constants.IMAGE_PATH + "/" + i + UI.constants.IMAGE_TYPE;
+		text = document.createTextNode(lang.EnumLocale[i]);
+		option.appendChild(img);
+		option.appendChild(text);
 		if("EnumLocale." + i == lang.current)
-		{
-			option.setAttribute("selected", "selected");
-		}
-		this.localeChooser.appendChild(option);
+			selected = index; 
+		this.localeChooser.list.appendChild(option);
+		index++;
 	}
+	this.localeChooser.select(selected);
 };
 
 UIManager.prototype.getString = function(key)
