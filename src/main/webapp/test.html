@@ -4,10 +4,12 @@
 <link rel="stylesheet" type="text/css" href="styles/default.css" />
 <link rel="stylesheet" type="text/css" href="styles/base.css" />
 <link rel="stylesheet" type="text/css" href="styles/components.css" />
+<link rel="stylesheet" type="text/css" href="styles/select.css" />
+<script type="text/javascript" src="scripts/util/Events.js"></script>
+<script type="text/javascript" src="scripts/select.js"></script>
 <!--
 <script type="text/javascript" src="scripts/lib/json2.js"></script>
 <script type="text/javascript" src="scripts/util/Requests.js"></script>
-<script type="text/javascript" src="scripts/util/Events.js"></script>
 <script type="text/javascript" src="scripts/util/Reflections.js"></script>
 <script type="text/javascript" src="scripts/util/Arrays.js"></script>
 <script type="text/javascript" src="scripts/util/Strings.js"></script>
@@ -28,31 +30,117 @@
 		w.setVisible(true);
 	}
 </script>
-</head>
 -->
-<body>
+<script type="text/javascript">
+	var open = false;
+	toggleSelects = function() {
+		var elems = document.getElementsByClassName("select");
+		for(var i = 0; i < elems.length; i++)
+		{
+			if(open)	
+				elems[i].classList.add("open");
+			else	
+				elems[i].classList.remove("open");
+		}
+		open = !open;
+	};
+
+	var selects = new Array();
+	init = function()
+	{
+		var elems = document.getElementsByClassName("select");
+		for(var i = 0; i < elems.length; i++)
+		{
+			selects[i] = new Select(elems[i]);
+		}
+	};
+</script>
+</head>
+<body onload="init();">
 <div id="testdiv">aaa</div>
 <a href="javascript: test();">test</a>
 	<!--  -->
+
 	
-<div style="position: absolute; left: 200px; top: 200px; width: 300px; height: 200px">
+<div style="position: absolute; left: 600px; top: 200px; width: 300px; height: 200px">
+	<input type="button" onclick="javascript: toggleSelects();" value="toggle selects">
+</div>
+
+	
+<div style="position: absolute; left: 200px; top: 200px; width: 400px; height: 200px">
 	<input type="text" value="textfield"/><br>
 	<input type="password" value="password"/><br>
+	<br>
 	<select class="w200">
 		<option>option 1</option>
 		<option>option 2</option>
 		<option>option 3</option>
-	</select>
+		<option>option 1</option>
+		<option>option 2</option>
+		<option>option 3</option>
+		<option>option 1</option>
+		<option>option 2</option>
+		<option>option 3</option>
+		<option>option 1</option>
+		<option>option 2</option>
+		<option>option 3</option>
+		<option>option 1</option>
+		<option>option 2</option>
+		<option>option 3</option>
+		<option>option 1</option>
+		<option>option 2</option>
+		<option>option 3</option>
+	</select>&nbsp;
 	<select class="w100">
 		<option>option 1</option>
 		<option>option 2</option>
 		<option>option 3</option>
-	</select>
+	</select>&nbsp;
 	<select class="w50">
 		<option>option 1</option>
 		<option>option 2</option>
 		<option>option 3</option>
-	</select>
+	</select><br>
+	<br>
+	<div class="select w200" id="s200">
+		<span></span>
+		<ul>
+			<li>option 1</li>
+			<li>option 2</li>
+			<li>option 3</li>
+			<li>opt<b>io</b>n 1</li>
+			<li>option 2</li>
+			<li>option 3</li>
+			<li>opt<i>io</i>n 1</li>
+			<li>option 2</li>
+			<li>option 3</li>
+			<li>opt<u>io</u>n 1</li>
+			<li>option 2</li>
+			<li>option 3</li>
+			<li>option 1</li>
+			<li>option 2</li>
+			<li>option 3</li>
+			<li>option 1</li>
+			<li>option 2</li>
+			<li>option 3</li>
+		</ul>
+	</div>&nbsp;
+	<div class="select w100" id="s100">
+		<span></span>
+		<ul>
+			<li>option 1</li>
+			<li>option 2</li>
+			<li>option 3</li>
+		</ul>
+	</div>&nbsp;
+	<div class="select w50" id="s50">
+		<span></span>
+		<ul>
+			<li>option 1</li>
+			<li>option 2</li>
+			<li>option 3</li>
+		</ul>
+	</div><br>
 </div>
 </body>
 </html>

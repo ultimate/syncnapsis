@@ -9,44 +9,16 @@
 }
 
 input[type=text],
-input[type=password],
-select {
+input[type=password] {
 	border: 1px solid rgba(0,255,255,0.9);
 	background: rgba(0,0,0,0.3);
 }
 
 input[type=text].error,
 input[type=password].error,
-select {
+.error {
 	border: 1px solid rgba(0,255,255,0.9);
 	background: rgba(255,239,136,1.0);
-}
-
-select {
-	-webkit-appearance: none;  /*Removes default chrome and safari style*/
-	-moz-appearance: none; /* Removes Default Firefox style*/
-	background: url('../images/arrow-down.png') no-repeat rgba(1,1,1,0);  /*Adds background-image*/
-	height: 20px;/*fix for mac input height*/
-	text-indent: 0.01px; /* Removes default arrow from firefox*/
-	text-overflow: "";  /*Removes default arrow from firefox*/
-	cursor: pointer;  
-}
-
-select option {
-	background: rgba(0,0,0,1.0);
-}
-
-select.w200 {
-	background-position: 180px 4px;  /*Position of the background-image*/
-	width: 200px; /*Width of select dropdown to give space for arrow image*/
-}
-select.w100 {
-	background-position: 80px 4px;  /*Position of the background-image*/
-	width: 100px; /*Width of select dropdown to give space for arrow image*/
-}
-select.w50 {
-	background-position: 30px 4px;  /*Position of the background-image*/
-	width: 50px; /*Width of select dropdown to give space for arrow image*/
 }
 
 /* REMINDER 
