@@ -53,6 +53,8 @@
 
 .select>ul {
 	height: 0px;
+	margin-top: 0px;
+	margin-left: -1px;
 	padding: 0px;
 	overflow: hidden;
 }
