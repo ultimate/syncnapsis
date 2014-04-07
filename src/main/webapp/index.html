@@ -19,6 +19,8 @@
 <meta charset="UTF-8">
 <link rel="stylesheet" type="text/css" href="styles/default.css" />
 <link rel="stylesheet" type="text/css" href="styles/base.css" />
+<link rel="stylesheet" type="text/css" href="styles/components.css" />
+<link rel="stylesheet" type="text/css" href="styles/select.css" />
 <link rel="stylesheet" type="text/css" href="styles/tabs.css" />
 <link rel="stylesheet" type="text/css" href="styles/window.css" />
 <script type="text/javascript" src="scripts/util/Requests.js"></script>
@@ -44,6 +46,7 @@
 	DependencyManager.register("Base", "base.js");
 	DependencyManager.register("Styles", "styles.js");
 	DependencyManager.register("Client", "client.js");
+	DependencyManager.register("Select", "select.js");
 	DependencyManager.register("Tabs", "tabs.js");
 	DependencyManager.register("Lang", "lang/lang.js", true);
 	// register services
@@ -176,10 +179,10 @@
 			<div id="door" class="frame">
 				<a class="selected">O</a>
 			</div>
-			<select id="locale_chooser">
-				<option>DE</option>
-				<option>EN</option>
-			</select>
+			<div id="locale_chooser" class="select">
+				<span></span>
+				<ul></ul>
+			</div>
 		</div>
 		<div id="userbar" class="frame">
 			<div>

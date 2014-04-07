@@ -90,7 +90,7 @@ UIManager = function()
 		}
 	} (this);
 	
-
+	this.localeChooser = new Select(UI.constants.LOCALE_CHOOSER_ID);
 //	this.localeChooser = document.getElementById(UI.constants.LOCALE_CHOOSER_ID);
 //
 //	this.layout_horizontal = new Styles.FillLayout([ "ad_left", "center", "ad_right" ], [ UI.constants.AD_WIDTH, null, UI.constants.AD_WIDTH ], Styles.layout.HORIZONTAL);
@@ -118,7 +118,7 @@ UIManager = function()
 //	this.onLogout();	// TODO
 	this.updateLabels();
 //	this.updateLinks(); // TODO
-//	this.populateLocaleChooser(); // TODO
+	this.populateLocaleChooser(); // TODO
 	this.hideOverlay();
 };
 
