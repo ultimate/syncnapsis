@@ -42,18 +42,6 @@ body, input, select {
 	overflow: hidden;
 }
 
-input[type=text],
-input[type=password] {
-	border: 1px solid rgba(0,255,255,0.9);
-	background: rgba(0,0,0,0.3);
-}
-
-input[type=text].error,
-input[type=password].error {
-	border: 1px solid rgba(255,0,0,0.9);
-	background: rgba(255,239,136,1.0);
-}
-
 .centered {
 	position: absolute;
 	left: 0px;
@@ -131,7 +119,7 @@ input[type=password].error {
 }
 
 #locale_chooser {
-	
+	margin-top: 2px;	
 }
 
 #menu>div {
@@ -301,13 +289,4 @@ a {
 
 .links a {
 	margin: 8px;
-}
-
-/* needed??? */
-#locale_chooser {
-	width: 100px;
-	height: 20px;
-	font-family: monospace;
-	font-size: 13px;
-	margin-top: -2px;
 }
