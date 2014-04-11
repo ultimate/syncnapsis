@@ -34,25 +34,25 @@
 
 .select.w200,
 .select.w200>ul {
-	background-position: 180px 4px;  /*Position of the background-image*/
+	background-position: 184px 3px;  /*Position of the background-image*/
 	width: 200px; /*Width of select dropdown to give space for arrow image*/
 }
 
 .select.w100,
 .select.w100>ul {
-	background-position: 80px 4px;  /*Position of the background-image*/
+	background-position: 84px 3px;  /*Position of the background-image*/
 	width: 100px; /*Width of select dropdown to give space for arrow image*/
 }
 
 .select.w50,
 .select.w50>ul {
-	background-position: 30px 4px;  /*Position of the background-image*/
+	background-position: 34px 3px;  /*Position of the background-image*/
 	width: 50px; /*Width of select dropdown to give space for arrow image*/
 }
 
 .select.w36,
 .select.w36>ul {
-	background-position: 16px 4px;  /*Position of the background-image*/
+	background-position: 20px 3px;  /*Position of the background-image*/
 	width: 36px; /*Width of select dropdown to give space for arrow image*/
 }
 

@@ -168,10 +168,7 @@ UIManager.prototype.hideOverlay = function()
 UIManager.prototype.populateLocaleChooser = function()
 {
 	// clear children
-	while(this.localeChooser.list.hasChildNodes())
-	{
-		this.localeChooser.list.removeChild(this.localeChooser.list.lastChild);
-	}
+	this.localeChooser.options.length = 0;
 	// add options
 	var option, img, text;
 	var selected = 0;
@@ -180,18 +177,17 @@ UIManager.prototype.populateLocaleChooser = function()
 	{
 		if(typeof(lang.EnumLocale[i]) == Reflections.type.FUNCTION)
 			continue;
-		option = document.createElement("li");
-		option.value = i;
-		img = document.createElement("img");
-		img.src = UI.constants.IMAGE_PATH + "/" + i + UI.constants.IMAGE_TYPE;
-		text = document.createTextNode(lang.EnumLocale[i]);
-		option.appendChild(img);
-		option.appendChild(text);
+		option = {
+				value: i,
+				image: UI.constants.IMAGE_PATH + "/" + i + UI.constants.IMAGE_TYPE,
+				title: lang.EnumLocale[i]
+		};
 		if("EnumLocale." + i == lang.current)
 			selected = index; 
-		this.localeChooser.list.appendChild(option);
+		this.localeChooser.options[this.localeChooser.options.length] = option;
 		index++;
 	}
+	this.localeChooser.update();
 	this.localeChooser.select(selected);
 };
 

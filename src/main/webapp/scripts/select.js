@@ -19,23 +19,34 @@ Select = function(element)
 		this.element = document.getElementById(element);
 	else
 		this.element = element;
-	this.display = this.element.children[0];
-	this.list = this.element.children[1];
-	this.options = this.element.children[1].children;
+	
+	this.display = document.createElement("span");
+	this.element.appendChild(this.display);
+	
+	this.list = document.createElement("ul");
+	this.element.appendChild(this.list);
+	
+	this.options = new Array();
+	
+//	this.display = this.element.children[0];
+//	this.list = this.element.children[1];
+//	this.options = this.element.children[1].children;
+	
 	this.isOpen = false;
 	this.value = null;
 	this.valueIndex = null;
 	this.highlightIndex = null;
 	this.active = false;
+	
 	this.unhighlight = function() {
 		for(var i = 0; i < this.options.length; i++)
-			this.options[i].classList.remove("active");
+			this.options[i].element.classList.remove("active");
 	};
 	this.highlight = function(index) {
 		if(!index)
 			index = this.valueIndex;
 		if(index != null && index >= 0 && index < this.options.length)
-			this.options[index].classList.add("active");
+			this.options[index].element.classList.add("active");
 		this.highlightIndex = index;
 	};
 	this.open = function() {
@@ -55,13 +66,24 @@ Select = function(element)
 		this.unhighlight();
 		this.highlight();
 	};
+	this.getOptionContent = function(option) {
+		var content = new Array();
+		if(option.image)
+		{
+			content.push("<img src='");
+			content.push(option.image);
+			content.push("'>");
+		}
+		content.push(option.title);
+		return content.join("");
+	};
 	this.select = function(index) {
 		if(index != null && index >= 0 && index < this.options.length)
 		{
 			var option = this.options[index];
-			this.value = option.getAttribute("value");
+			this.value = option.value;
 			this.valueIndex = index;
-			this.display.innerHTML = option.innerHTML;
+			this.display.innerHTML = this.getOptionContent(option);
 		}
 		else
 		{
@@ -84,6 +106,35 @@ Select = function(element)
 		else
 			this.select(0);
 	};
+	this.update = function() {
+		while(this.list.children.length > 0)
+			this.list.removeChild(this.list.children[0]);
+
+		for(var i = 0; i < this.options.length; i++)
+		{
+			if(this.options[i].element == null)
+			{
+				this.options[i].element = document.createElement("li");
+				this.options[i].element.innerHTML = this.getOptionContent(this.options[i]);
+				this.list.appendChild(this.options[i].element);
+				
+				this.options[i].element.onclick = function(select, i) {
+					return function(event)
+					{
+						select.select(i);
+						select.close(true);// stay active	
+					};
+				} (this, i);
+				this.options[i].element.onmousemove = function(select, i) {
+					return function(event)
+					{
+						select.unhighlight();
+						select.highlight(i);
+					};
+				} (this, i);
+			}
+		}
+	};
 	this.element.onclick = function(select) {
 		return function(event)
 		{
@@ -97,23 +148,6 @@ Select = function(element)
 			}
 		};
 	} (this);
-	for(var i = 0; i < this.options.length; i++)
-	{
-		this.options[i].onclick = function(select, i) {
-			return function(event)
-			{
-				select.select(i);
-				select.close(true);// stay active	
-			};
-		} (this, i);
-		this.options[i].onmousemove = function(select, i) {
-			return function(event)
-			{
-				select.unhighlight();
-				select.highlight(i);
-			};
-		} (this, i);
-	}
 	Events.addEventListener(Events.CLICK, function(select) {
 		return function(event) {
 			if(event.target != select.element && event.target != select.display)
