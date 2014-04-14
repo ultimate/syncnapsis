@@ -287,7 +287,7 @@ DependencyManager.indexOf = function(scriptName)
 DependencyManager.addScript = function(scriptIndex)
 {
 	if(!DependencyManager.scriptVoid[scriptIndex])
-		{
+	{
 		var id = "script_" + scriptIndex;
 
 		var content = DependencyManager.scriptContents[scriptIndex];
@@ -348,6 +348,7 @@ DependencyManager.addDependencies = function(scriptIndex, content)
 
 DependencyManager.dependenciesSatisfied = function(scriptIndex)
 {
+	var script = DependencyManager.scripts[scriptIndex];
 	var dependencies = DependencyManager.scriptDependencies[scriptIndex];
 	var allDependenciesSatisfied = true;
 	var dependencyIndex = -1;
@@ -355,7 +356,7 @@ DependencyManager.dependenciesSatisfied = function(scriptIndex)
 	{
 		dependencyIndex = DependencyManager.indexOf(dependencies[i]);
 		if(dependencyIndex == -1)
-			throw new Error("dependency undefined: '" + dependencies[i] + "'");
+			throw new Error("dependency '" + dependencies[i] + "' is undefined but required for '" + script + "'");
 		allDependenciesSatisfied = allDependenciesSatisfied && DependencyManager.scriptAdded[dependencyIndex];
 	}
 	return allDependenciesSatisfied;
@@ -445,15 +446,21 @@ DependencyManager.loadingProgressed = function()
 	}
 };
 
+DependencyManager.getProgress = function()
+{
+	return Math.round(100*DependencyManager.scriptsLoaded / DependencyManager.scripts.length);
+};
+
 DependencyManager.defaultOnLoadingProgressed = function(progressBarID, progressFieldID)
 {
 	return function() {
 		var progressBar = document.getElementById(progressBarID);
 		var progressField = document.getElementById(progressFieldID);
 		
-		var loaded = DependencyManager.scriptsLoaded;
-		var total  = DependencyManager.scripts.length;
-		var progress = Math.round(100*loaded/total) + "%";
+//		var loaded = DependencyManager.scriptsLoaded;
+//		var total  = DependencyManager.scripts.length;
+//		var progress = Math.round(100*loaded/total) + "%";
+		var progress = DependencyManager.getProgress() + "%";
 		progressBar.style.width = progress;
 		progressField.innerHTML = progress;
 		

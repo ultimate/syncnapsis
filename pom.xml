@@ -20,13 +20,13 @@
 	<groupId>com.syncnapsis.syncnapsis-core</groupId>
 	<artifactId>syncnapsis-core-utils</artifactId>
 	<packaging>jar</packaging>
-	<version>0.8.4</version>
+	<version>0.9.0</version>
 	<name>syncnapsis-core-utils</name>
 
 	<parent>
 		<groupId>com.syncnapsis</groupId>
 		<artifactId>syncnapsis-core</artifactId>
-		<version>0.8.4</version>
+		<version>0.9.0</version>
 	</parent>
 
 	<build>

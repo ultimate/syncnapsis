@@ -53,7 +53,7 @@ public class PropertiesUtil
 	 */
 	public static Properties loadProperties(String name) throws IOException
 	{
-		BufferedInputStream bis = new BufferedInputStream(ClassLoader.getSystemResourceAsStream(name));
+		BufferedInputStream bis = new BufferedInputStream(PropertiesUtil.class.getClassLoader().getResourceAsStream(name));
 		Properties properties = new Properties();
 		properties.load(bis);
 		bis.close();
