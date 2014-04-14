@@ -20,11 +20,14 @@ Select = function(element)
 	else
 		this.element = element;
 	
-	this.display = document.createElement("span");
+	this.display = document.createElement("div");
 	this.element.appendChild(this.display);
 	
 	this.list = document.createElement("ul");
 	this.element.appendChild(this.list);
+	
+	this.element.classList.add("select");
+	//this.element.classList.add("w36");
 	
 	this.options = new Array();
 	

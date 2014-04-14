@@ -51,7 +51,15 @@
 		var elems = document.getElementsByClassName("select");
 		for(var i = 0; i < elems.length; i++)
 		{
-			selects[i] = new Select(elems[i]);
+			selects[i] = new Select(elems[i])
+			for(var x = 0; x < (i+1)*3; x++)
+			{
+				selects[i].options[x] = {
+					value: x,
+					title: "Option " + x
+				};
+			}
+			selects[i].update();
 		}
 	};
 </script>
@@ -103,48 +111,12 @@
 	</select><br>
 	<br>
 	<div class="select w200" id="s200">
-		<span></span>
-		<ul>
-			<li>option 1</li>
-			<li>option 2</li>
-			<li>option 3</li>
-			<li>opt<b>io</b>n 1</li>
-			<li>option 2</li>
-			<li>option 3</li>
-			<li>opt<i>io</i>n 1</li>
-			<li>option 2</li>
-			<li>option 3</li>
-			<li>opt<u>io</u>n 1</li>
-			<li>option 2</li>
-			<li>option 3</li>
-			<li>option 1</li>
-			<li>option 2</li>
-			<li>option 3</li>
-			<li>option 1</li>
-			<li>option 2</li>
-			<li>option 3</li>
-		</ul>
 	</div>&nbsp;
 	<div class="select w100" id="s100">
-		<span></span>
-		<ul>
-			<li>option 1</li>
-			<li>option 2</li>
-			<li>option 3</li>
-		</ul>
 	</div>&nbsp;
 	<div class="select w50" id="s50">
-		<span></span>
-		<ul>
-			<li>option 1</li>
-			<li>option 2</li>
-			<li>option 3</li>
-		</ul>
 	</div><br>
 	<div class="select w50" id="s50_2">
-		<span></span>
-		<ul>
-		</ul>
 	</div><br>
 </div>
 </body>

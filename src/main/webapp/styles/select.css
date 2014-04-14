@@ -33,24 +33,28 @@
 }
 
 .select.w200,
+.select.w200>div,
 .select.w200>ul {
 	background-position: 184px 3px;  /*Position of the background-image*/
 	width: 200px; /*Width of select dropdown to give space for arrow image*/
 }
 
 .select.w100,
+.select.w100>div,
 .select.w100>ul {
 	background-position: 84px 3px;  /*Position of the background-image*/
 	width: 100px; /*Width of select dropdown to give space for arrow image*/
 }
 
 .select.w50,
+.select.w50>div,
 .select.w50>ul {
 	background-position: 34px 3px;  /*Position of the background-image*/
 	width: 50px; /*Width of select dropdown to give space for arrow image*/
 }
 
 .select.w36,
+.select.w36>div,
 .select.w36>ul {
 	background-position: 20px 3px;  /*Position of the background-image*/
 	width: 36px; /*Width of select dropdown to give space for arrow image*/
@@ -65,10 +69,18 @@
 	cursor: pointer;
 }
 
-.select>span {
-	padding: 2px;
+.select>div {
+	padding-left: 2px;
 	text-decoration: none;
-	width: 100%;
+	overflow: hidden;
+	height: 16px;
+}
+
+.select>div:after {
+	background: url('../images/arrow-down.png') no-repeat rgba(0,0,0,0);  /*Adds background-image*/
+	background-position: -3px 1px;  /*Position of the background-image*/
+	content: 'a';
+	color: rgba(0,0,0,0);
 }
 
 .select>ul {
