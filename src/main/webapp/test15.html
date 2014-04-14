@@ -8,7 +8,7 @@
 	-->
 	<meta charset="utf-8">
 	<head>
-		<script type="text/javascript" src="scripts/three.min.js"></script>
+		<script type="text/javascript" src="scripts/three.min-66.js"></script>
 		<script type="text/javascript" src="scripts/stats.min.js"></script>
 		<script type="text/javascript" src="view.js"></script>		
 		<script type="text/javascript">
@@ -372,43 +372,50 @@
 			
 			updatePlanes = function()
 			{
+				var material;
 				if(planes.xy)
 				{
+					material = View.materials.planeT.clone();
+					material.color = new THREE.Color(0x00ff99);
 					if(document.getElementById("planesXY").checked)
 					{
 						for(var i = 0; i < planes.xy.length; i ++)
-							planes.xy[i].material = View.materials.planesXY;
+							planes.xy[i].material = material;
 					}
 					else
 					{
 						for(var i = 0; i < planes.xy.length; i ++)
-							planes.xy[i].material = View.materials.planesInvisible;
+							planes.xy[i].material = View.materials.invisible;
 					}
 				}
 				if(planes.xz)
 				{
+					material = View.materials.planeT.clone();
+					material.color = new THREE.Color(0xff9900);
 					if(document.getElementById("planesXZ").checked)
 					{
 						for(var i = 0; i < planes.xz.length; i ++)
-							planes.xz[i].material = View.materials.planesXZ;
+							planes.xz[i].material = material;
 					}
 					else
 					{
 						for(var i = 0; i < planes.xz.length; i ++)
-							planes.xz[i].material = View.materials.planesInvisible;
+							planes.xz[i].material = View.materials.invisible;
 					}
 				}
 				if(planes.yz)
 				{
+					material = View.materials.planeT.clone();
+					material.color = new THREE.Color(0x9900ff);
 					if(document.getElementById("planesYZ").checked)
 					{
 						for(var i = 0; i < planes.yz.length; i ++)
-							planes.yz[i].material = View.materials.planesYZ;
+							planes.yz[i].material = material;
 					}
 					else
 					{
 						for(var i = 0; i < planes.yz.length; i ++)
-							planes.yz[i].material = View.materials.planesInvisible;
+							planes.yz[i].material = View.materials.invisible;
 					}
 				}
 			};
@@ -469,17 +476,6 @@
 				}
 				View.shaders.attributes.customColor.needsUpdate = true;	
 			};
-					
-			getSystemMaterial = function(selected, linked)
-			{
-				if(!selected && !linked)
-					return View.materials.inactive;
-				if(selected)
-					return View.materials.selected;
-				if(linked)
-					return View.materials.neighbor
-				return View.materials.initial;
-			};
 			
 			createGalaxy = function(sectors, stepSize)
 			{
@@ -510,7 +506,7 @@
 					}
 					
 					galaxy.particles.dynamic = true;
-					galaxy.particleSystem = new THREE.ParticleSystem(galaxy.particles, getSystemMaterial(false, false))
+					galaxy.particleSystem = new THREE.ParticleSystem(galaxy.particles, View.materials.system)
 					galaxy.particleSystem.dynamic = true;
 
 					scene.add(galaxy.particleSystem);					

@@ -67,10 +67,7 @@ View.shaders = {
 };
 
 View.materials = {
-	initial: new THREE.MeshBasicMaterial( { color: 0xff0000, wireframe: true } ),
-	selected: new THREE.MeshBasicMaterial( { color: 0x000000, wireframe: true } ),
-	neighbor: new THREE.MeshBasicMaterial( { color: 0xff0099, wireframe: true } ),
-	inactive:  new THREE.ShaderMaterial( {
+	system:  new THREE.ShaderMaterial( {
 		uniforms: 		View.shaders.uniforms,
 		attributes:     View.shaders.attributes,
 		vertexShader:   View.shaders.vertexShader,
@@ -79,8 +76,7 @@ View.materials = {
 		depthTest: 		false,
 		transparent:	true,
 	}),
-	planesXY: new THREE.MeshBasicMaterial( { color: 0x00ff99 , opacity:0.6 , wireframe: true } ),
-	planesXZ: new THREE.MeshBasicMaterial( { color: 0xff9900 , opacity:0.6 , wireframe: true } ),
-	planesYZ: new THREE.MeshBasicMaterial( { color: 0x9900ff , opacity:0.6 , wireframe: true } ),
-	planesInvisible: new THREE.MeshBasicMaterial( { visible: false} ),
+	planeT: new THREE.MeshBasicMaterial( { opacity:0.2 , wireframe: false, transparent:	true, side: THREE.DoubleSide } ),
+	planeW: new THREE.MeshBasicMaterial( { opacity:0.6 , wireframe: true } ),	
+	invisible: new THREE.MeshBasicMaterial( { visible: false} ),
 };
