@@ -10,9 +10,12 @@
 	<head>
 		<script type="text/javascript" src="scripts/three.min-66.js"></script>
 		<script type="text/javascript" src="scripts/stats.min.js"></script>
+		<script type="text/javascript" src="scripts/util/Events.js"></script>		
 		<script type="text/javascript" src="view.js"></script>		
 		<script type="text/javascript">
 		<!--
+			var view;
+		
 			var camera, scene, renderer, projector, stats;
 			var mesh,mesh2;			
 			var mouse = { x: 0, y: 0 };			
@@ -25,7 +28,6 @@
 				animate();			
 			}, false);			
 			document.addEventListener( 'mousedown', onClick, false );			
-			//document.addEventListener( 'mouseup', clearColors, false );			
 			document.addEventListener( 'DOMMouseScroll', mousewheel, false );			
 			
 			function mousewheel(e){			
@@ -91,7 +93,7 @@
 
 				if ( intersects.length > 0 ) {
 					findNeighbors(intersects[0].object.position);					
-					intersects[0].object.material = View.materials.selected;					
+					intersects[0].object.material = view.materials.selected;					
 					activeMesh = intersects[0].object;					
 					cameraOffset = [activeMesh.position.x,activeMesh.position.y,activeMesh.position.z];
 				}
@@ -109,7 +111,7 @@
 				
 				distances.sort(compare);
 				for(var i=0;i<=5;i++) {
-					distances[i].object.material = View.materials.neighbor;
+					distances[i].object.material = view.materials.neighbor;
 					var currentColor = 0xff9900;
 					var lineMaterial = new THREE.LineBasicMaterial({ color: currentColor });
 					var geometry = new THREE.Geometry();
@@ -132,25 +134,21 @@
 			  if (a.distance > b.distance)
 				return 1;
 			  return 0;
-			}				
-			
-			function clearColors() {
-				/*
-				for(var i=0;i<allCubes.length;i++) {				
-					allCubes[i].material = View.materials.inactive;
-				};
-				*/
-			};			
+			}			
 			
 			function init() {
+				
+				view = new View(document.getElementById("view"));
+				
+				// tmp for accessibility
+				camera = view.camera;
+				renderer = view.renderer;
+							
 				imgTexture = new THREE.MeshBasicMaterial({ //CHANGED to MeshBasicMaterial
 					map:THREE.ImageUtils.loadTexture('test.png')
 				});
 				
 				imgTexture.map.needsUpdate = true; //ADDED
-
-				camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 10000 );
-				camera.position.z = cameraRadius;
 
 				scene = new THREE.Scene();
 				
@@ -159,16 +157,7 @@
 
 				projector = new THREE.Projector();
 
-				renderer = new THREE.WebGLRenderer({antialias: true, clearColor: 0x000000, clearAlpha: 1 });
-				//renderer = new THREE.CanvasRenderer({antialias: true});
-				renderer.setSize( window.innerWidth, window.innerHeight );
-
-				document.body.appendChild(renderer.domElement );	
-
 				stats = new Stats();
-				stats.domElement.style.position = 'absolute';
-				stats.domElement.style.top = '0px';
-				stats.domElement.style.right = '0px';
 				document.body.appendChild( stats.domElement );				
 				
 				var testDiv = document.createElement('div');
@@ -234,8 +223,9 @@
 				if(planes.xy == null)
 				{
 					planes.xy = new Array();
-					geometry = new THREE.PlaneGeometry(galaxyInfo.boundX*2, galaxyInfo.boundY*2);
-					material = View.materials.planesXY;
+					geometry = new THREE.PlaneGeometry(galaxyInfo.boundX*2, galaxyInfo.boundY*2);					
+					material = view.materials.planeT.clone();
+					material.color = new THREE.Color(0x00ff99);
 					for(var i = 0; i < count; i++) {
 						mesh = new THREE.Mesh(geometry, material);
 						scene.add(mesh);
@@ -250,8 +240,9 @@
 				if(planes.xz == null)
 				{
 					planes.xz = new Array();
-					geometry = new THREE.PlaneGeometry(galaxyInfo.boundX*2, galaxyInfo.boundZ*2);
-					material = View.materials.planesXZ;
+					geometry = new THREE.PlaneGeometry(galaxyInfo.boundX*2, galaxyInfo.boundZ*2);				
+					material = view.materials.planeT.clone();
+					material.color = new THREE.Color(0x9900ff);
 					for(var i = 0; i < count; i++) {
 						mesh = new THREE.Mesh(geometry, material);
 						scene.add(mesh);
@@ -266,8 +257,9 @@
 				if(planes.yz == null)
 				{
 					planes.yz = new Array();
-					geometry = new THREE.PlaneGeometry(galaxyInfo.boundZ*2, galaxyInfo.boundY*2);
-					material = View.materials.planesYZ;
+					geometry = new THREE.PlaneGeometry(galaxyInfo.boundZ*2, galaxyInfo.boundY*2);				
+					material = view.materials.planeT.clone();
+					material.color = new THREE.Color(0xff9900);
 					for(var i = 0; i < count; i++) {
 						mesh = new THREE.Mesh(geometry, material);
 						scene.add(mesh);
@@ -358,8 +350,8 @@
 							galaxy.colors[i].calculateRGB(colormodel);
 						}
 					}					
-					View.shaders.attributes.size.needsUpdate = true;	
-					View.shaders.attributes.customColor.needsUpdate = true;	
+					view.shaders.attributes.size.needsUpdate = true;	
+					view.shaders.attributes.customColor.needsUpdate = true;	
 				}
 				
 				//console.log("stars updated: " + inMotion);
@@ -372,51 +364,11 @@
 			
 			updatePlanes = function()
 			{
-				var material;
 				if(planes.xy)
 				{
-					material = View.materials.planeT.clone();
-					material.color = new THREE.Color(0x00ff99);
-					if(document.getElementById("planesXY").checked)
-					{
-						for(var i = 0; i < planes.xy.length; i ++)
-							planes.xy[i].material = material;
-					}
-					else
-					{
-						for(var i = 0; i < planes.xy.length; i ++)
-							planes.xy[i].material = View.materials.invisible;
-					}
-				}
-				if(planes.xz)
-				{
-					material = View.materials.planeT.clone();
-					material.color = new THREE.Color(0xff9900);
-					if(document.getElementById("planesXZ").checked)
-					{
-						for(var i = 0; i < planes.xz.length; i ++)
-							planes.xz[i].material = material;
-					}
-					else
-					{
-						for(var i = 0; i < planes.xz.length; i ++)
-							planes.xz[i].material = View.materials.invisible;
-					}
-				}
-				if(planes.yz)
-				{
-					material = View.materials.planeT.clone();
-					material.color = new THREE.Color(0x9900ff);
-					if(document.getElementById("planesYZ").checked)
-					{
-						for(var i = 0; i < planes.yz.length; i ++)
-							planes.yz[i].material = material;
-					}
-					else
-					{
-						for(var i = 0; i < planes.yz.length; i ++)
-							planes.yz[i].material = View.materials.invisible;
-					}
+					planes.xy[0].material.visible = document.getElementById("planesXY").checked; // material used for all planes
+					planes.xz[0].material.visible = document.getElementById("planesXZ").checked;
+					planes.yz[0].material.visible = document.getElementById("planesYZ").checked;
 				}
 			};
 			
@@ -474,7 +426,7 @@
 				{
 					galaxy.colors[i].calculateRGB(colormodel);
 				}
-				View.shaders.attributes.customColor.needsUpdate = true;	
+				view.shaders.attributes.customColor.needsUpdate = true;	
 			};
 			
 			createGalaxy = function(sectors, stepSize)
@@ -489,8 +441,8 @@
 						particles: new THREE.Geometry(),
 						particleSystem: null,
 						info: null,
-						sizes: View.shaders.attributes.size.value,
-						colors: View.shaders.attributes.customColor.value,
+						sizes: view.shaders.attributes.size.value,
+						colors: view.shaders.attributes.customColor.value,
 						animation: -1,
 					};					
 					
@@ -500,13 +452,13 @@
 						galaxy.particles.vertices[i] = particle;	
 						galaxy.particles.vertices[i].target = new THREE.Vector3(0, 0, 0);
 
-						galaxy.sizes[i] = Math.random()*(View.shaders.sizeMax-View.shaders.sizeMin)+View.shaders.sizeMin;		
+						galaxy.sizes[i] = Math.random()*(view.shaders.sizeMax-view.shaders.sizeMin)+view.shaders.sizeMin;		
 
 						galaxy.colors[i] = new StarColor(Math.random(), 0, 0);
 					}
 					
 					galaxy.particles.dynamic = true;
-					galaxy.particleSystem = new THREE.ParticleSystem(galaxy.particles, View.materials.system)
+					galaxy.particleSystem = new THREE.ParticleSystem(galaxy.particles, view.materials.system)
 					galaxy.particleSystem.dynamic = true;
 
 					scene.add(galaxy.particleSystem);					
@@ -533,7 +485,7 @@
 					galaxy.particles.vertices[i].target.y = sector.y;
 					galaxy.particles.vertices[i].target.z = sector.z;
 					
-					galaxy.sizes[i] = Math.random()*(View.shaders.sizeMax-View.shaders.sizeMin)+View.shaders.sizeMin;
+					galaxy.sizes[i] = Math.random()*(view.shaders.sizeMax-view.shaders.sizeMin)+view.shaders.sizeMin;
 					
 					galaxy.colors[i].radius_tmp = sector.r;
 					galaxy.colors[i].radius2_tmp = sector.r2;
@@ -566,8 +518,8 @@
 				console.log("updated: " + updated + " removed: " + removed);
 				
 				galaxy.particleSystem.geometry.verticesNeedUpdate = true;
-				View.shaders.attributes.size.needsUpdate = true;	
-				View.shaders.attributes.customColor.needsUpdate = true;	
+				view.shaders.attributes.size.needsUpdate = true;	
+				view.shaders.attributes.customColor.needsUpdate = true;	
 				
 				galaxy.info = new GalaxyInfo(minX, maxX, minY, maxY, minZ, maxZ, maxR, maxR2);
 			};
@@ -1112,6 +1064,7 @@
 			body {
 				padding: 0px;
 				margin: 0px;
+				overflow: hidden;
 			}
 			#control {
 				position: absolute;
@@ -1120,8 +1073,20 @@
 				width: 270px;
 				height: 100%;
 				background: #111111;
-				color: #AAAAAA;
+				color: #AAAAAA;<
 				border: 1px solid #888888;
+			}
+			#stats {			
+				position: absolute;
+				top: 0px;
+				right: 0px;
+			}			
+			#view {
+				position: absolute;
+				left: 0px;
+				top: 0px;
+				right: 0px;
+				bottom: 0px;
 			}
 			.colormodel {
 				height: 20px;
@@ -1145,6 +1110,7 @@
 		</style>		
 	</head>
 	<body>
+		<canvas id="view"></canvas>
 		<div id="control">
 			Show-Planes?<br>
 			<input type="checkbox" id="planesXY" checked="checked"/> XY &nbsp;

@@ -15,15 +15,15 @@
 //@requires("vertexshader")
 //@requires("fragmentshader")
 
-var View = {};
+var ViewUtil = {};
 
-View.loadShader = function(name) {
+ViewUtil.loadShader = function(name) {
 	var index = DependencyManager.indexOf(name);
 	return DependencyManager.scriptContents[index];
 };
 
 // for debugging without Request.js - START
-View.loadShader = function(name) {
+ViewUtil.loadShader = function(name) {
 	if(name == "vertexshader")
 	{	
 		return "uniform float amplitude;\
@@ -50,33 +50,55 @@ void main() {\
 };
 // for debugging without Request.js - END
 
-View.shaders = {
-	attributes: {
-		size: {	type: 'f', value: [] },
-		customColor: { type: 'c', value: [] }
-	},
-	uniforms: {
-		amplitude: { type: "f", value: 1.0 },
-		color:     { type: "c", value: new THREE.Color( 0xffffff ) },
-		texture:   { type: "t", value: THREE.ImageUtils.loadTexture( "img/star.png" ) },
-	},
-	vertexShader:   View.loadShader( "vertexshader" ),
-	fragmentShader: View.loadShader( "fragmentshader" ),
-	sizeMin: 10,
-	sizeMax: 30,
-};
 
-View.materials = {
-	system:  new THREE.ShaderMaterial( {
-		uniforms: 		View.shaders.uniforms,
-		attributes:     View.shaders.attributes,
-		vertexShader:   View.shaders.vertexShader,
-		fragmentShader: View.shaders.fragmentShader,
-		blending: 		THREE.AdditiveBlending,
-		depthTest: 		false,
-		transparent:	true,
-	}),
-	planeT: new THREE.MeshBasicMaterial( { opacity:0.2 , wireframe: false, transparent:	true, side: THREE.DoubleSide } ),
-	planeW: new THREE.MeshBasicMaterial( { opacity:0.6 , wireframe: true } ),	
-	invisible: new THREE.MeshBasicMaterial( { visible: false} ),
-};
+
+
+
+
+
+var View = function(container) {
+	this.shaders = {
+		attributes: {
+			size: {	type: 'f', value: [] },
+			customColor: { type: 'c', value: [] }
+		},
+		uniforms: {
+			amplitude: { type: "f", value: 1.0 },
+			color:     { type: "c", value: new THREE.Color( 0xffffff ) },
+			texture:   { type: "t", value: THREE.ImageUtils.loadTexture( "img/star.png" ) },
+		},
+		vertexShader:   ViewUtil.loadShader( "vertexshader" ),
+		fragmentShader: ViewUtil.loadShader( "fragmentshader" ),
+		sizeMin: 10,
+		sizeMax: 30,
+	};
+	this.materials = {
+		system:  new THREE.ShaderMaterial( {
+			uniforms: 		this.shaders.uniforms,
+			attributes:     this.shaders.attributes,
+			vertexShader:   this.shaders.vertexShader,
+			fragmentShader: this.shaders.fragmentShader,
+			blending: 		THREE.AdditiveBlending,
+			depthTest: 		false,
+			transparent:	true,
+		}),
+		planeT: new THREE.MeshBasicMaterial( { opacity:0.2 , wireframe: false, transparent:	true, side: THREE.DoubleSide } ),
+		planeW: new THREE.MeshBasicMaterial( { opacity:0.6 , wireframe: true } ),	
+		invisible: new THREE.MeshBasicMaterial( { visible: false} ),
+	};	
+
+	this.camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 10000 );
+	this.camera.position.z = cameraRadius; // TODO
+	
+	this.renderer = new THREE.WebGLRenderer({canvas: container, antialias: true, clearColor: 0x000000, clearAlpha: 1 }); 
+	
+	this.updateSize = function() {
+		this.renderer.setSize( window.innerWidth, window.innerHeight, true );
+		this.camera.aspect = window.innerWidth / window.innerHeight;
+		this.camera.updateProjectionMatrix();
+		console.log("updating view size: " + window.innerWidth + "x" + window.innerHeight + " (aspect: " + this.camera.aspect + ")");
+	};
+		
+	Events.addEventListener(Events.ONRESIZE, Events.wrapEventHandler(this, this.updateSize), window);	
+	Events.fireEvent(window, Events.ONRESIZE);	
+}
