@@ -181,6 +181,7 @@ DependencyManager.doOnLoadingProgressed = new Array();
 
 DependencyManager.scripts = new Array();
 DependencyManager.scriptPaths = new Array();
+DependencyManager.scriptVoid = new Array();
 DependencyManager.scriptAdded = new Array();
 DependencyManager.scriptContents = new Array();
 DependencyManager.scriptContentChanged = new Array();
@@ -198,7 +199,7 @@ DependencyManager.scriptContentChanged[0] = false;
 DependencyManager.scriptDependencies[0] = {};
 DependencyManager.scriptDoOnReload[0] = null;
 
-DependencyManager.register = function(scriptName, scriptPath, external, dependencies)
+DependencyManager.register = function(scriptName, scriptPath, scriptVoid, external, dependencies)
 {
 	if(DependencyManager.indexOf(scriptName) == -1)
 	{
@@ -206,6 +207,7 @@ DependencyManager.register = function(scriptName, scriptPath, external, dependen
 
 		DependencyManager.scripts[scriptIndex] = scriptName;
 		DependencyManager.scriptPaths[scriptIndex] = (external ? "" : DependencyManager.scriptSubpath) + scriptPath;
+		DependencyManager.scriptVoid[scriptIndex] = (scriptVoid ? true : false);
 		DependencyManager.scriptAdded[scriptIndex] = false;
 		DependencyManager.scriptContents[scriptIndex] = null;
 		DependencyManager.scriptDependencies[scriptIndex] = dependencies;
@@ -284,30 +286,33 @@ DependencyManager.indexOf = function(scriptName)
 
 DependencyManager.addScript = function(scriptIndex)
 {
-	var id = "script_" + scriptIndex;
+	if(!DependencyManager.scriptVoid[scriptIndex])
+		{
+		var id = "script_" + scriptIndex;
 
-	var content = DependencyManager.scriptContents[scriptIndex];
-	var scriptNode = document.getElementById(id);
-	if(scriptNode == null)
-	{
-		scriptNode = document.createElement("script");
-		scriptNode.id = id;
-		scriptNode.type = "text/javascript";
-		scriptNode.setAttribute("name", DependencyManager.scripts[scriptIndex]);
-		if(console)
-			console.debug("adding script_" + scriptIndex + ": " + DependencyManager.scripts[scriptIndex]);
-		document.getElementsByTagName("head")[0].appendChild(scriptNode);
+		var content = DependencyManager.scriptContents[scriptIndex];
+		var scriptNode = document.getElementById(id);
+		if(scriptNode == null)
+		{
+			scriptNode = document.createElement("script");
+			scriptNode.id = id;
+			scriptNode.type = "text/javascript";
+			scriptNode.setAttribute("name", DependencyManager.scripts[scriptIndex]);
+			if(console)
+				console.debug("adding script_" + scriptIndex + ": " + DependencyManager.scripts[scriptIndex]);
+			document.getElementsByTagName("head")[0].appendChild(scriptNode);
+		}
+		else
+		{
+			if(console)
+				console.debug("updating script_" + scriptIndex + ": " + DependencyManager.scripts[scriptIndex]);
+			// re-evaluating script is required (script content is not live updated)
+			// ATTENTION: use window.eval(x) or eval.call(window, x) for global scope
+			// (otherwise reloaded content is only available inside this function)
+			window.eval(content);
+		}
+		scriptNode.text = content;
 	}
-	else
-	{
-		if(console)
-			console.debug("updating script_" + scriptIndex + ": " + DependencyManager.scripts[scriptIndex]);
-		// re-evaluating script is required (script content is not live updated)
-		// ATTENTION: use window.eval(x) or eval.call(window, x) for global scope
-		// (otherwise reloaded content is only available inside this function)
-		window.eval(content);
-	}
-	scriptNode.text = content;
 	// mark script loaded
 	DependencyManager.scriptAdded[scriptIndex] = true;
 };
