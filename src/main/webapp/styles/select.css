@@ -32,55 +32,31 @@
 	background: rgba(255,239,136,1.0);
 }
 
-.select.w200,
-.select.w200>div,
-.select.w200>ul {
-	background-position: 184px 3px;  /*Position of the background-image*/
-	width: 200px; /*Width of select dropdown to give space for arrow image*/
-}
-
-.select.w100,
-.select.w100>div,
-.select.w100>ul {
-	background-position: 84px 3px;  /*Position of the background-image*/
-	width: 100px; /*Width of select dropdown to give space for arrow image*/
-}
-
-.select.w50,
-.select.w50>div,
-.select.w50>ul {
-	background-position: 34px 3px;  /*Position of the background-image*/
-	width: 50px; /*Width of select dropdown to give space for arrow image*/
-}
-
-.select.w36,
-.select.w36>div,
-.select.w36>ul {
-	background-position: 20px 3px;  /*Position of the background-image*/
-	width: 36px; /*Width of select dropdown to give space for arrow image*/
-}
-
 .select {
 	height: 16px;
 	line-height: 16px;
 	overflow: hidden;
-	background: url('../images/arrow-down.png') no-repeat rgba(0,54,54,0.9);  /*Adds background-image*/
 	display: inline-block;
 	cursor: pointer;
 }
 
 .select>div {
-	padding-left: 2px;
 	text-decoration: none;
 	overflow: hidden;
 	height: 16px;
 }
 
+.select>div>span {
+	padding-left: 2px;
+	whitespace: nowrap;
+}
+
 .select>div:after {
 	background: url('../images/arrow-down.png') no-repeat rgba(0,0,0,0);  /*Adds background-image*/
-	background-position: -3px 1px;  /*Position of the background-image*/
-	content: 'a';
+	background-position: 0px 2px;  /*Position of the background-image*/
+	content: '00';
 	color: rgba(0,0,0,0);
+	float: right;
 }
 
 .select>ul {

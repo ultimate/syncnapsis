@@ -20,8 +20,11 @@ Select = function(element)
 	else
 		this.element = element;
 	
-	this.display = document.createElement("div");
-	this.element.appendChild(this.display);
+	this.displayParent = document.createElement("div");
+	this.element.appendChild(this.displayParent);
+	
+	this.display = document.createElement("span");
+	this.displayParent.appendChild(this.display);
 	
 	this.list = document.createElement("ul");
 	this.element.appendChild(this.list);
@@ -153,7 +156,7 @@ Select = function(element)
 	} (this);
 	Events.addEventListener(Events.CLICK, function(select) {
 		return function(event) {
-			if(event.target != select.element && event.target != select.display)
+			if(event.target != select.element && event.target != select.display && event.target != select.displayParent)
 				select.close();
 		};
 	} (this));
