@@ -48,6 +48,9 @@ UI.constants.USERINFO_CONTENT = "userbar";
 UI.constants.USERINFO_INDEX_LOGGEDOUT = 0;
 UI.constants.USERINFO_INDEX_LOGGEDIN = 1;
 
+UI.constants.LOGIN_USERNAME_ID = "login_username";
+UI.constants.LOGIN_PASSWORD_ID = "login_password";
+
 UI.constants.NAV_WIDTH = 300;
 UI.constants.USERINFO_HEIGHT = 40;
 
@@ -126,6 +129,8 @@ UIManager.prototype.onLogin = function(player)
 {
 	if(player != null)
 	{		
+		// clear password field
+		document.getElementById(UI.constants.LOGIN_PASSWORD_ID).value = "";
 		// store the current player
 		this.currentPlayer = player;
 		// set the player name in the top bar (after loading the user)
@@ -134,21 +139,20 @@ UIManager.prototype.onLogin = function(player)
 		server.uiManager.selectLocale(player.user.locale);
 		// switch ui to logged-in menu
 		this.userInfo.select(UI.constants.USERINFO_INDEX_LOGGEDIN);
-		
-		// TODO toggle login button
 	}
 	else
 	{
-		this.showErrorMessage(null, document.getElementById("message_login_failed"));
+		this.showErrorMessage(document.getElementById(UI.constants.LOGIN_USERNAME_ID), null);
+		this.showErrorMessage(document.getElementById(UI.constants.LOGIN_PASSWORD_ID), null);
 	}
 };
 
 UIManager.prototype.onLogout = function(success)
 {	
+	// switch ui to logged-out menu
 	this.userInfo.select(UI.constants.USERINFO_INDEX_LOGGEDOUT);
-
-	// TODO toggle login button
-	
+	// "unload" user
+	this.currentPlayer = null;
 	this.onUserLoaded({username: "anonymous"});
 };
 
@@ -261,14 +265,14 @@ UIManager.prototype.toggleLog = function()
 
 UIManager.prototype.doLogin = function()
 {
-	var username = document.getElementById("login_username").value;
-	var password = document.getElementById("login_password").value;
+	var username = document.getElementById(UI.constants.LOGIN_USERNAME_ID).value;
+	var password = document.getElementById(UI.constants.LOGIN_PASSWORD_ID).value;
 	if(username == "" || username == null || password == "" || password == null)
 	{
 		if(username == "" || username == null)
-			this.showErrorMessage(document.getElementById("login_username"), document.getElementById("message_login_invalid_username"));
+			this.showErrorMessage(document.getElementById(UI.constants.LOGIN_USERNAME_ID), null);
 		if(password == "" || password == null)
-			this.showErrorMessage(document.getElementById("login_password"), document.getElementById("message_login_invalid_password"));
+			this.showErrorMessage(document.getElementById(UI.constants.LOGIN_PASSWORD_ID), null);
 		return;
 	}
 	console.log("login as: " + username + ":" + password);
