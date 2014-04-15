@@ -122,6 +122,10 @@ body, input, select {
 	margin-top: 2px;	
 }
 
+#locale_chooser * {
+	width: 36px;
+}
+
 #menu>div {
 	margin-top: 1px;
 	width: 275px;
