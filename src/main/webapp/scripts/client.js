@@ -263,7 +263,6 @@ UIManager.prototype.doLogin = function()
 {
 	var username = document.getElementById("login_username").value;
 	var password = document.getElementById("login_password").value;
-	// TODO
 	if(username == "" || username == null || password == "" || password == null)
 	{
 		if(username == "" || username == null)
@@ -274,6 +273,11 @@ UIManager.prototype.doLogin = function()
 	}
 	console.log("login as: " + username + ":" + password);
 	server.playerManager.login(username, password);
+};
+
+UIManager.prototype.doLogout = function()
+{
+	server.playerManager.logout();
 };
 
 UIManager.prototype.showRegister = function()
