@@ -48,7 +48,9 @@
 
 .select>div>span {
 	padding-left: 2px;
-	whitespace: nowrap;
+	white-space: nowrap;
+	position: absolute;
+	overflow: hidden;
 }
 
 .select>div:after {
@@ -62,7 +64,7 @@
 .select>ul {
 	height: 0px;
 	margin-top: 0px;
-	margin-left: -1px;
+	margin-left: -0.5px;
 	padding: 0px;
 	overflow: hidden;
 	z-index: 10;
