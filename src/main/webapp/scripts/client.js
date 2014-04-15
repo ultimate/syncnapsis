@@ -158,6 +158,7 @@ UIManager.prototype.onLogout = function(success)
 
 UIManager.prototype.onUserLoaded = function(user)
 {
+	console.log("user loaded: " + user.username);
 	// set the player name in the top bar
 	document.getElementById(UI.constants.LABEL_ID_PLAYERNAME).innerHTML = user.username;
 };
