@@ -19,8 +19,7 @@
 			var camera, scene, renderer, projector, stats;
 			var mesh,mesh2;			
 			var mouse = { x: 0, y: 0 };			
-			var cameraRadius = 2000,cameraRadiusTarget = 2000;			
-			var imgTexture;			
+			var cameraRadius = 2000,cameraRadiusTarget = 2000;	
 			var activeSector = null;			
 			
 			document.addEventListener("DOMContentLoaded", function(){	
@@ -140,15 +139,10 @@
 				
 				view = new View(document.getElementById("view"));
 				
-				// tmp for accessibility
+				// export for accessibility - START
 				camera = view.camera;
 				renderer = view.renderer;
-							
-				imgTexture = new THREE.MeshBasicMaterial({ //CHANGED to MeshBasicMaterial
-					map:THREE.ImageUtils.loadTexture('test.png')
-				});
-				
-				imgTexture.map.needsUpdate = true; //ADDED
+				// export for accessibility - END
 
 				scene = new THREE.Scene();
 				
@@ -412,7 +406,7 @@
 				//alert(str);
 				window.eval(str);
 				
-				createGalaxy(sectors, 1);
+				createGalaxy(sectors, 10);
 				updateColormodelConfig();
 				createPlanes(galaxy.info);
 				//setTimeout(updateStars, 100);
@@ -446,7 +440,7 @@
 						animation: -1,
 					};					
 					
-					for(var i = 0; i < galaxy.maxSectors; i += stepSize)
+					for(var i = 0; i < galaxy.maxSectors; i++)
 					{				
 						particle = new THREE.Vector3(0, 0, 0);
 						galaxy.particles.vertices[i] = particle;	
@@ -477,9 +471,10 @@
 				
 				var updated = 0;
 				var removed = 0;
-				for(var i = 0; i < sectors.length; i += stepSize)
+				var i = 0;
+				for(var s = 0; s < sectors.length; s += stepSize)
 				{				
-					sector = parseSector(sectors[i]);
+					sector = parseSector(sectors[s]);
 					
 					galaxy.particles.vertices[i].target.x = sector.x;
 					galaxy.particles.vertices[i].target.y = sector.y;
@@ -499,9 +494,11 @@
 					if(sector.z < minZ)	minZ = sector.z;
 					if(sector.z > maxZ)	maxZ = sector.z;
 					if(sector.r > maxR) maxR = sector.r;
-					if(sector.r2 > maxR2) maxR2 = sector.r2;				
+					if(sector.r2 > maxR2) maxR2 = sector.r2;	
+
+					i++;					
 				};		
-				for(var i = sectors.length; i < galaxy.maxSectors; i += stepSize)
+				for(; i < galaxy.maxSectors; i++)
 				{
 					galaxy.particles.vertices[i].target.x = 0;
 					galaxy.particles.vertices[i].target.y = 0;
