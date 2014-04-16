@@ -17,6 +17,7 @@
 // @requires("Events")
 // @requires("Lang")
 // @requires("Tabs")
+// @requires("Select")
 // @requires("application-base")
 var UI = {};
 
@@ -94,17 +95,11 @@ UIManager = function()
 	} (this);
 	
 	this.localeChooser = new Select(UI.constants.LOCALE_CHOOSER_ID);
-//	this.localeChooser = document.getElementById(UI.constants.LOCALE_CHOOSER_ID);
-//
-//	this.layout_horizontal = new Styles.FillLayout([ "ad_left", "center", "ad_right" ], [ UI.constants.AD_WIDTH, null, UI.constants.AD_WIDTH ], Styles.layout.HORIZONTAL);
-//	this.layout_vertical = new Styles.FillLayout([ "bar_top", "content", "bar_bottom" ], [ UI.constants.BAR_HEIGHT, null, UI.constants.BAR_HEIGHT ], Styles.layout.VERTICAL);
-//
-//	this.layout_ad_left = new Styles.FillLayout([ "ad_left_inner", "ad_left_border" ], [ null, UI.constants.AD_BORDER ], Styles.layout.HORIZONTAL);
-//	this.layout_ad_right = new Styles.FillLayout([ "ad_right_border", "ad_right_inner" ], [ UI.constants.AD_BORDER, null ], Styles.layout.HORIZONTAL);
-//
-//	this.layout_bar_top = new Styles.FillLayout([ "bar_top_left", "bar_top_center", "bar_top_right" ], [ UI.constants.BAR_OUTER_WIDTH, null, UI.constants.BAR_OUTER_WIDTH ], Styles.layout.HORIZONTAL);
-//	this.layout_bar_bottom = new Styles.FillLayout([ "bar_bottom_left", "bar_bottom_center", "bar_bottom_right" ], [ UI.constants.BAR_OUTER_WIDTH, null, UI.constants.BAR_OUTER_WIDTH ], Styles.layout.HORIZONTAL);
-
+	this.localeChooser.onselect = function(oldValue, newValue) {
+		if(newValue != oldValue)
+			server.uiManager.selectLocale(newValue);
+	};
+	
 	console.log("initializing Windows");
 	
 	this.window_register = null; // TODO
@@ -116,9 +111,9 @@ UIManager = function()
 
 	console.log("showing UI");
 
-//	Events.fireEvent(window, Events.ONRESIZE);
+	Events.fireEvent(window, Events.ONRESIZE);
 
-//	this.onLogout();	// TODO
+	this.onLogout();	// just in case ;-)
 	this.updateLabels();
 //	this.updateLinks(); // TODO
 	this.populateLocaleChooser(); // TODO

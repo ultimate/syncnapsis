@@ -83,7 +83,9 @@ Select = function(element)
 		content.push(option.title);
 		return content.join("");
 	};
+	this.onselect = function(oldValue, newValue) {};
 	this.select = function(index) {
+		var oldValue = this.value;
 		if(index != null && index >= 0 && index < this.options.length)
 		{
 			var option = this.options[index];
@@ -99,6 +101,7 @@ Select = function(element)
 		}
 		this.unhighlight();
 		this.highlight();
+		this.onselect(oldValue, this.value);
 	};
 	this.selectPrevious = function() {
 		if(this.valueIndex != null && this.valueIndex > 0)
