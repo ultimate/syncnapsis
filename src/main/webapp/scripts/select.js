@@ -84,7 +84,7 @@ Select = function(element)
 		return content.join("");
 	};
 	this.onselect = function(oldValue, newValue) {};
-	this.select = function(index) {
+	this.select = function(index, skipOnselect) {
 		var oldValue = this.value;
 		if(index != null && index >= 0 && index < this.options.length)
 		{
@@ -101,7 +101,20 @@ Select = function(element)
 		}
 		this.unhighlight();
 		this.highlight();
-		this.onselect(oldValue, this.value);
+		if(!skipOnselect)
+			this.onselect(oldValue, this.value);
+	};
+	this.selectByValue = function(value, skipOnselect) {
+		// look for a matching value
+		for(var o = 0; o < this.options.length; o++)
+		{
+			if(this.options[o].value == value)
+			{
+				this.select(o, skipOnselect);
+				return;
+			}
+		}
+		this.select(null, skipOnselect);
 	};
 	this.selectPrevious = function() {
 		if(this.valueIndex != null && this.valueIndex > 0)

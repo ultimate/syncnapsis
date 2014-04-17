@@ -115,11 +115,9 @@ UIManager = function()
 	Events.fireEvent(window, Events.ONRESIZE);
 
 	this.onLogout();	// just in case ;-)
-	this.updateLabels();
 //	this.updateLinks(); // TODO
-	console.log("populating locale chooser");
+	this.updateLabels();
 	this.populateLocaleChooser();
-	console.log("populating locale chooser DONE");
 	this.hideOverlay();
 };
 
@@ -132,7 +130,7 @@ UIManager.prototype.onLogin = function(player)
 		// store the current player
 		this.currentPlayer = player;
 		// set the player name in the top bar (after loading the user)
-		server.entityManager.load(player.user, this.onUserLoaded);
+		server.entityManager.load(player.user, Events.wrapEventHandler(this, this.onUserLoaded));
 		// change language to users selection
 		server.uiManager.selectLocale(player.user.locale);
 		// switch ui to logged-in menu
@@ -157,8 +155,10 @@ UIManager.prototype.onLogout = function(success)
 UIManager.prototype.onUserLoaded = function(user)
 {
 	console.log("user loaded: " + user.username);
-	// set the player name in the top bar
 	document.getElementById(UI.constants.LABEL_ID_PLAYERNAME).innerHTML = user.username;
+	if(user)
+		this.localeChooser.selectByValue(user.locale);
+//	server.uiManager.selectLocale(user.locale);
 };
 
 UIManager.prototype.hideOverlay = function()
@@ -191,7 +191,7 @@ UIManager.prototype.populateLocaleChooser = function()
 		index++;
 	}
 	this.localeChooser.update();
-	this.localeChooser.select(selected);
+	this.localeChooser.selectByValue(lang.current.substring(11), true);
 };
 
 UIManager.prototype.getString = function(key)

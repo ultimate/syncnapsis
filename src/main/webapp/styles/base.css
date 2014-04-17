@@ -95,12 +95,18 @@ body, input, select {
 }
 
 #menu {
-	width: 275px;
 	position: absolute;
 	right: 1px;
 	top: 1px;
-	/*padding-right: 2px;*/
-	/*margin-right: 1px;*/
+}
+
+#menu, 
+#menu>div {
+	width: 285px;
+}
+
+#menu>div {
+	margin-top: 1px;
 }
 
 #menu #menu_fixed {
@@ -124,13 +130,6 @@ body, input, select {
 
 #locale_chooser * {
 	width: 36px;
-}
-
-#menu>div {
-	margin-top: 1px;
-	width: 275px;
-	/*position: absolute;*/
-	/*left: 0px;*/
 }
 
 #menu #userbar {
@@ -161,7 +160,7 @@ body, input, select {
 #user_login>a+a, 
 #user_login>input[type=text],
 #user_login>input[type=password] {
-	width: 110px;
+	width: 120px;
 }
 
 #menu #nav {
