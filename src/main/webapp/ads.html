@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<!--
+ - Syncnapsis Framework - Copyright (c) 2012 ultimate
+ - 
+ - This program is free software; you can redistribute it and/or modify it under the terms of
+ - the GNU General Public License as published by the Free Software Foundation; either version
+ - 3 of the License, or any later version.
+ - 
+ - This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+ - without even the implied warranty of MECHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ - See the GNU General Public License for more details.
+ - 
+ - You should have received a copy of the GNU General Plublic License along with this program;
+ - if not, see <http://www.gnu.org/licenses/>.
+-->
+<html>
+<head>
+<title>syncnapsis</title>
+<meta charset="UTF-8">
+<link rel="stylesheet" type="text/css" href="styles/default.css" />
+<link rel="stylesheet" type="text/css" href="styles/base.css" />
+<link rel="stylesheet" type="text/css" href="styles/ads.css" />
+<link rel="stylesheet" type="text/css" href="styles/tabs.css" />
+<script type="text/javascript" src="scripts/util/Requests.js"></script>
+<script type="text/javascript">
+	// configure DependencyManager for delayed load
+	DependencyManager.instantLoad = false;
+	// register util-JS
+	DependencyManager.register("Arrays", "util/Arrays.js");
+	DependencyManager.register("Console", "util/Console.js");
+	DependencyManager.register("Events", "util/Events.js");
+	DependencyManager.register("Proxies", "util/Proxies.js");
+	DependencyManager.register("Reflections", "util/Reflections.js");
+	DependencyManager.register("Strings", "util/Strings.js");
+	// register lib-JS
+	DependencyManager.register("DateFormat", "lib/date.format.js");
+	DependencyManager.register("JSON", "lib/json2.js");
+	// register WebSocket-JS
+	DependencyManager.register("WebSockets", "websockets/WebSockets.js");
+	DependencyManager.register("Fallback", "websockets/Fallback.js");
+	DependencyManager.register("RPCSocket", "websockets/RPCSocket.js");
+	// register site-specific-JS
+	DependencyManager.register("Ad", "ad.js");
+	DependencyManager.register("Base", "base.js");
+	DependencyManager.register("Styles", "styles.js");
+	DependencyManager.register("Client", "client.js");
+	DependencyManager.register("Tabs", "tabs.js");
+	DependencyManager.register("Lang", "lang/lang.js", true);
+	// register services
+	DependencyManager.register("GenericManager", "service/GenericManager.js");
+	DependencyManager.register("PlayerManager", "service/PlayerManager.js");
+	// additional module libraries 
+	DependencyManager.register("application-base", "application-base.js");
+	DependencyManager.register("game-base", "game-base.js");
+	// complete registration
+	DependencyManager.onLoadingProgressed(DependencyManager.defaultOnLoadingProgressed("loader_bar", "loader_text"));
+	DependencyManager.onLoadingFinished("init()");
+	// DependencyManager.registrationDone(); // will be called onload
+</script>
+</head>
+<body onload="DependencyManager.registrationDone();">
+	<div id="overlay" class="centered">
+		<div id="loader_frame" class="centered">
+			<div id="loader_center" class="centered_y">
+				<span>Loading...</span><br>
+				<div id="loader" class="centered_x">
+					<div id="loader_bar"></div>
+				</div>
+				<br> <span id="loader_text">0%</span>
+			</div>
+		</div>
+		<!-- TODO contact & disclaimer in der Ecke hinzufügen -->
+	</div>
+	<div id="main">
+		<div id="ad_left" class="ad">
+			<div id="ad_left_inner" class="ad_inner">
+				<img id="ad_left_img" class="ad_img centered" src="images/banner-160x600.png" />
+			</div>
+			<div id="ad_left_border" class="ad_border">
+				<img id="ad_left_toggle" class="ad_toggle centered_y" src="images/toggle-hide.png" onclick="Ad.toggle(true);" />
+			</div>
+		</div>
+		<div id="center">
+			<div id="bar_top" class="bar">
+				<div id="bar_top_left" class="bar_left">
+					<div id="bar_top_left_loggedin">
+						<span><a href=""><label key="menu.x"></label></a></span>
+					</div>
+					<div id="bar_top_left_loggedout">
+						<span><select id="locale_chooser" size="1" onchange="server.uiManager.selectLocale(this.value);"></select></span>
+					</div>
+				</div>
+				<div id="bar_top_center" class="bar_center">
+					<span>www.syncnapsis.com</span>
+				</div>
+				<div id="bar_top_right" class="bar_right">
+					<div id="bar_top_right_loggedin">
+						<span><label key="menu.login_info"></label>&nbsp;<b id="bar_top_playername">anonymous</b>&nbsp;:</span> <span><a href=""><label key="menu.profile"></label></a></span> <span><a
+							href="javascript: server.playerManager.logout();"><label key="menu.logout"></label></a></span>
+					</div>
+					<div id="bar_top_right_loggedout">
+						<span><a href="javascript: client.uiManager.showLogin();"><label key="menu.login"></label></a></span>
+					</div>
+				</div>
+			</div>
+			<div id="content">the content</div>
+			<div id="bar_bottom" class="bar">
+				<div id="bar_bottom_left" class="bar_left">
+					<span><a href=""><label key="menu.pinboard"></label></a></span> <span><a href=""><label key="menu.news"></label></a></span> <span><a href=""><label key="menu.stats"></label></a></span>
+				</div>
+				<div id="bar_bottom_center" class="bar_center">
+					<span>www.syncnapsis.com</span>
+				</div>
+				<div id="bar_bottom_right" class="bar_right">
+					<span><a href=""><label key="menu.about"></label></a></span>
+					<span><a href="lang/contact.html" target="_blank"><label key="menu.contact"></label></a></span>
+					<span><a href="lang/disclaimer.html" target="_blank"><label	key="menu.disclaimer"></label></a></span>
+				</div>
+			</div>
+		</div>
+		<div id="ad_right" class="ad">
+			<div id="ad_right_border" class="ad_border">
+				<img id="ad_right_toggle" class="ad_toggle centered_y flip-horizontal" src="images/toggle-hide.png" onclick="Ad.toggle(true);" />
+			</div>
+			<div id="ad_right_inner" class="ad_inner">
+				<img id="ad_right_img" class="ad_img" src="images/banner-160x600.png" />
+			</div>
+		</div>
+	</div>
+	<div id="content" style="display: none;">
+		<div id="content_login">
+			<div class="form">
+				<label key="profile.username"></label>:&nbsp;<input id="login_username" type="text" />
+				<div class="message" id="message_login_invalid_username" style="display: none;"><label key=""></label></div>
+				<br>
+				<label key="profile.password"></label>:&nbsp;<input id="login_password" type="password" />
+				<div class="message" id="message_login_invalid_password" style="display: none;"><label key=""></label></div>
+				<br>
+			</div>
+			<div class="buttons">
+				<input type="button" key="menu.login" onclick="client.uiManager.doLogin();" />
+				<input type="button" key="menu.cancel" onclick="client.uiManager.hideLogin();" />
+				<input type="button" key="menu.register" onclick="client.uiManager.showRegister();" />
+				<div class="message" id="message_login_failed" style="display: none;"><label key=""></label></div><br/>
+			</div>
+		</div>
+		<div id="content_static">
+			<iframe name="static_frame">
+			</iframe>
+		</div>
+	</div>
+</body>
+</html>
