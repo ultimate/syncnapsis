@@ -38,17 +38,19 @@ connect = function()
 	var genericRPCHandler = new WebSockets.rpc.GenericRPCHandler(client);
 	var url = WebSockets.getRelativeURL(WSConfiguration.path);
 	rpcSocket = new WebSockets.RPCSocket(url, WSConfiguration.protocol, genericRPCHandler.anonymous(), null, null);
-	var genericRPCInvocationHandler = new WebSockets.rpc.GenericRPCInvocationHandler(rpcSocket, server);
-	// init client-side managers
-	client.uiManager = new UIManager();
-	client.messageManager = new MessageManager();
-	// init server-side managers as proxies (may use same "class/interface") 
-	server.userManager = Proxies.newProxyInstance(GenericManager, genericRPCInvocationHandler); // currently GenericManager is sufficient
-	server.playerManager = Proxies.newProxyInstance(PlayerManager, genericRPCInvocationHandler);
-	server.uiManager = Proxies.newProxyInstance(ServerUIManager, genericRPCInvocationHandler);
-	server.messageManager = Proxies.newProxyInstance(ServerMessageManager, genericRPCInvocationHandler);
-	// init additional services
-	server.entityManager = new EntityManager(server);
+	rpcSocket.onopen = function() {
+		var genericRPCInvocationHandler = new WebSockets.rpc.GenericRPCInvocationHandler(rpcSocket, server);
+		// init server-side managers as proxies (may use same "class/interface") 
+		server.userManager = Proxies.newProxyInstance(GenericManager, genericRPCInvocationHandler); // currently GenericManager is sufficient
+		server.playerManager = Proxies.newProxyInstance(PlayerManager, genericRPCInvocationHandler);
+		server.uiManager = Proxies.newProxyInstance(ServerUIManager, genericRPCInvocationHandler);
+		server.messageManager = Proxies.newProxyInstance(ServerMessageManager, genericRPCInvocationHandler);
+		// init additional services
+		server.entityManager = new EntityManager(server);
+		// init client-side managers
+		client.uiManager = new UIManager();
+		client.messageManager = new MessageManager();
+	};
 };
 
 disconnect = function()
