@@ -96,6 +96,7 @@ UIManager = function()
 	
 	this.localeChooser = new Select(UI.constants.LOCALE_CHOOSER_ID);
 	this.localeChooser.onselect = function(oldValue, newValue) {
+		console.log("changing value from " + oldValue + " -> " + newValue);
 		if(newValue != oldValue)
 			server.uiManager.selectLocale(newValue);
 	};
@@ -116,7 +117,9 @@ UIManager = function()
 	this.onLogout();	// just in case ;-)
 	this.updateLabels();
 //	this.updateLinks(); // TODO
-	this.populateLocaleChooser(); // TODO
+	console.log("populating locale chooser");
+	this.populateLocaleChooser();
+	console.log("populating locale chooser DONE");
 	this.hideOverlay();
 };
 
@@ -182,7 +185,7 @@ UIManager.prototype.populateLocaleChooser = function()
 				image: UI.constants.IMAGE_PATH + "/" + i + UI.constants.IMAGE_TYPE,
 				title: lang.EnumLocale[i]
 		};
-		if("EnumLocale." + i == lang.current)
+		if(("EnumLocale." + i) == lang.current)
 			selected = index; 
 		this.localeChooser.options[this.localeChooser.options.length] = option;
 		index++;
