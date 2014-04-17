@@ -19,6 +19,8 @@
 <meta charset="UTF-8">
 <link rel="stylesheet" type="text/css" href="styles/default.css" />
 <link rel="stylesheet" type="text/css" href="styles/base.css" />
+<link rel="stylesheet" type="text/css" href="styles/tabs.css" />
+<link rel="stylesheet" type="text/css" href="styles/window.css" />
 <script type="text/javascript" src="scripts/util/Requests.js"></script>
 <script type="text/javascript">
 	// configure DependencyManager for delayed load
@@ -42,108 +44,270 @@
 	DependencyManager.register("Base", "base.js");
 	DependencyManager.register("Styles", "styles.js");
 	DependencyManager.register("Client", "client.js");
+	DependencyManager.register("Tabs", "tabs.js");
 	DependencyManager.register("Lang", "lang/lang.js", true);
 	// register services
 	DependencyManager.register("GenericManager", "service/GenericManager.js");
 	DependencyManager.register("PlayerManager", "service/PlayerManager.js");
 	// additional module libraries 
 	DependencyManager.register("application-base", "application-base.js");
+	DependencyManager.register("game-base", "game-base.js");
+	// provide a setProgress method
+	setProgress = function()
+	{
+		var progress = DependencyManager.getProgress();
+		console.log("progress=" + progress);
+		if(progress > 100)
+			progress = 100;
+		var c = 37.5;
+		var r = 2*c;
+		var xEnd = c + r*Math.sin(2*Math.PI*progress/100);
+		var yEnd = c - r*Math.cos(2*Math.PI*progress/100);
+		var d = "M" + c + "," + (c-r) + " ";
+		if(progress < 100)
+		{
+			var largeArc = progress > 50 ? 1 : 0;
+			d += "A" + r + "," + r + " 0 " + largeArc + ",1 " + xEnd + "," + yEnd + " L" + c + "," + c + " z";
+		}
+		else
+		{
+			d += "A" + r + "," + r + " 0 0,1 " + c + "," + (c+r) + " ";
+			d += "A" + r + "," + r + " 0 0,1 " + c + "," + (c-r) + " ";
+			d += "z";
+		}
+		document.getElementById("loader_clippath").setAttribute("d", d);
+	};
 	// complete registration
-	DependencyManager.onLoadingProgressed(DependencyManager.defaultOnLoadingProgressed("loader_bar", "loader_text"));
+	DependencyManager.onLoadingProgressed(setProgress);
 	DependencyManager.onLoadingFinished("init()");
 	// DependencyManager.registrationDone(); // will be called onload
 </script>
+<script type="text/javascript">
+	// debug-js
+	load = function(progress)
+	{
+		setProgress(progress);
+		var time = Math.round(Math.random()*200);
+		if(progress < 100)
+			setTimeout(function() { load(progress+5); }, time);
+		else
+			init();
+		document.getElementById("debug_load").disabled = "disabled";
+	};
+	var clsName;
+	openLog = function()
+	{
+		if(clsName)
+		{
+			document.getElementById("bar_bottom").className = clsName;
+			clsName = null;
+		}
+		else
+		{
+			clsName = document.getElementById("bar_bottom").className;
+			document.getElementById("bar_bottom").className += " open";
+		}
+	};
+
+</script>
 </head>
 <body onload="DependencyManager.registrationDone();">
-	<div id="overlay" class="centered">
-		<div id="loader_frame" class="centered">
-			<div id="loader_center" class="centered_y">
-				<span>Loading...</span><br>
-				<div id="loader" class="centered_x">
-					<div id="loader_bar"></div>
-				</div>
-				<br> <span id="loader_text">0%</span>
-			</div>
-		</div>
-		<!-- TODO contact & disclaimer in der Ecke hinzufügen -->
+	<div id="defines">
+		<svg xmlns="http://www.w3.org/2000/svg"	xmlns:xlink="http://www.w3.org/1999/xlink">
+			<filter id="colorScheme">
+				<feColorMatrix in="SourceGraphic" type="matrix" values="0.0 0.0 0.0 0.0 0.0    0.0 1.0 0.0 0.0 0.0    0.0 0.0 1.0 0.0 0.0    0.0 0.0 0.0 1.0 0.0"/>
+			</filter>
+			<defs>
+				<g id="logo" filter="url(#colorScheme)">
+					<circle cx="37.5" cy="37.5" r="30" style="fill: #888888; stroke: #FFFFFF; stroke-width: 3px;"/>
+					<line x1="0" y1="50" x2="75" y2="25" style="stroke: #FFFFFF; stroke-width: 2px;"/>
+				</g>
+			</defs>
+		</svg>
 	</div>
-	<div id="main">
-		<div id="ad_left" class="ad">
-			<div id="ad_left_inner" class="ad_inner">
-				<img id="ad_left_img" class="ad_img centered" src="images/banner-160x600.png" />
-			</div>
-			<div id="ad_left_border" class="ad_border">
-				<img id="ad_left_toggle" class="ad_toggle centered_y" src="images/toggle-hide.png" onclick="Ad.toggle(true);" />
+	<div id="bar_top" class="centered_x attop">
+		<div class="frame">
+		top
+		</div>
+	</div>
+	<div id="bar_bottom" class="centered_x atbottom">
+		<div id="log_title" class="frame log_bar">
+			<span class="inner"><label key="log.title"></label>:</span>
+		</div>
+		<div id="log" class="transparent_frame menubar centered_x log_bar">
+			<a id="log_1"><div class="frame"><label key="log.pinboard"></label> (<span id="log_1_count">1</span>)</div></a>
+			<a id="log_2"><div class="frame"><label key="log.match"></label> (<span id="log_2_count">7</span>)</div></a>
+			<!--
+			<a id="log_3"><div class="frame">Test (<span id="log_3_count">0</span>)</div></a>
+			-->
+		</div>
+		<div id="log_menu" class="frame log_bar">
+			<span class="inner">aaaaa</span>
+		</div>
+		<div id="log_content" class="frame atbottom">
+			<div>
+			<span id="log_content_1" class="selected">
+				<ul>
+					<li><b>13:34:23 User1:</b> bla bla bla</li>
+					<li><b>13:35:44 User2:</b> selber</li>
+					<li><b>13:36:23 User1:</b> bla</li>
+					<li><b>13:37:23 User1:</b> bla</li>
+					<li><b>13:38:23 User1:</b> bla</li>
+					<li><b>13:39:23 User1:</b> bla</li>
+					<li><b>13:40:23 User1:</b> bla</li>
+					<li><b>13:41:23 User1:</b> bla</li>
+				</ul>
+			</span>
+			<span id="log_content_2">
+				<ul>
+					<li><b>12:14:23 INFO:</b> Colonization successful</li>
+					<li><b>14:25:44 WARN:</b> Incoming attack</li>
+					<li><b>14:30:23 WARN:</b> Colony lost</li>
+				</ul>
+			</span>
+			<span id="log_content_3">
+				foo bar
+			</span>
 			</div>
 		</div>
-		<div id="center">
-			<div id="bar_top" class="bar">
-				<div id="bar_top_left" class="bar_left">
-					<div id="bar_top_left_loggedin">
-						<span><a href=""><label key="menu.x"></label></a></span>
-					</div>
-					<div id="bar_top_left_loggedout">
-						<span><select id="locale_chooser" size="1" onchange="server.uiManager.selectLocale(this.value);"></select></span>
-					</div>
-				</div>
-				<div id="bar_top_center" class="bar_center">
-					<span>www.syncnapsis.com</span>
-				</div>
-				<div id="bar_top_right" class="bar_right">
-					<div id="bar_top_right_loggedin">
-						<span><label key="menu.login_info"></label>&nbsp;<b id="bar_top_playername">anonymous</b>&nbsp;:</span> <span><a href=""><label key="menu.profile"></label></a></span> <span><a
-							href="javascript: server.playerManager.logout();"><label key="menu.logout"></label></a></span>
-					</div>
-					<div id="bar_top_right_loggedout">
-						<span><a href="javascript: client.uiManager.showLogin();"><label key="menu.login"></label></a></span>
-					</div>
-				</div>
+	</div>
+	<div id="menu">
+		<div id="menu_fixed" class="frame_invisible">
+			<div id="door" class="frame">
+				<a class="selected">O</a>
 			</div>
-			<div id="content">the content</div>
-			<div id="bar_bottom" class="bar">
-				<div id="bar_bottom_left" class="bar_left">
-					<span><a href=""><label key="menu.pinboard"></label></a></span> <span><a href=""><label key="menu.news"></label></a></span> <span><a href=""><label key="menu.stats"></label></a></span>
-				</div>
-				<div id="bar_bottom_center" class="bar_center">
-					<span>www.syncnapsis.com</span>
-				</div>
-				<div id="bar_bottom_right" class="bar_right">
-					<span><a href=""><label key="menu.about"></label></a></span>
-					<span><a href="lang/contact.html" target="_blank"><label key="menu.contact"></label></a></span>
-					<span><a href="lang/disclaimer.html" target="_blank"><label	key="menu.disclaimer"></label></a></span>
-				</div>
+			<select id="locale_chooser">
+				<option>DE</option>
+				<option>EN</option>
+			</select>
+		</div>
+		<div id="userbar" class="frame">
+			<div>
+			<div id="user_login">
+				<label key="profile.username" for="login_username"></label><input id="login_username" type="text"/><br/>
+				<label key="profile.password" for="login_password"></label><input id="login_password" type="password"/><br/>
+				<a href=""><label key="menu.register"></label></a>
+				<a href=""><label key="menu.forgot_password"></label></a>
+				<!-- 
+					<input type="button" key="menu.login" onclick="client.uiManager.doLogin();" />
+					<input type="button" key="menu.cancel" onclick="client.uiManager.hideLogin();" />
+					<input type="button" key="menu.register" onclick="client.uiManager.showRegister();" />
+				 -->
+			</div>
+			<div id="user_loggedin">
+				<label key="menu.login_info"></label><b><label id="userbar_playername"></label></b>!
+			</div>
 			</div>
 		</div>
-		<div id="ad_right" class="ad">
-			<div id="ad_right_border" class="ad_border">
-				<img id="ad_right_toggle" class="ad_toggle centered_y flip-horizontal" src="images/toggle-hide.png" onclick="Ad.toggle(true);" />
+		<div id="nav" class="transparent_frame menubar">
+			<a id="nav_1" class="selected"><div class="frame">a</div></a>
+			<a id="nav_2"><div class="frame">b</div></a>
+			<a id="nav_3"><div class="frame">c</div></a>
+			<a id="nav_4"><div class="frame">d</div></a>
+			<!--<div class="frame"><a id="nav_2" href="">b</a></div>-->
+		</div>
+		<div id="menu_content" class="frame">
+			<div>
+			<div id="menu_1" class="selected">
+				foo<br>
+				bar<br>
+				foo<br>
+				bar<br>
+				foo<br>
+				bar<br>
+				foo<br>
+				bar<br>
 			</div>
-			<div id="ad_right_inner" class="ad_inner">
-				<img id="ad_right_img" class="ad_img" src="images/banner-160x600.png" />
+			<div id="menu_2" class="">
+				This is menu #2 with a very long text that should automatically wrap to fill this box.<br>
+				As you can see the surrounding container will be automatically resized to fit best for the content.
+			</div>
+			<div id="menu_3" class="">
+				blub
+			</div>
+			<div id="menu_4" class="">
+				Let's stretch the content to max ;-)<br>
+				A lot of options...
+				<ul>
+				<li>1</li>
+				<li>2</li>
+				<li>3</li>
+				<li>4</li>
+				<li>5</li>
+				<li>6</li>
+				<li>7</li>
+				<li>8</li>
+				<li>9</li>
+				<li>10</li>
+				<li>11</li>
+				<li>12</li>
+				<li>13</li>
+				<li>14</li>
+				<li>15</li>
+				<li>16</li>
+				<li>17</li>
+				<li>18</li>
+				<li>19</li>
+				<li>20</li>
+				<li>21</li>
+				<li>22</li>
+				<li>23</li>
+				<li>24</li>
+				<li>25</li>
+				<li>26</li>
+				<li>27</li>
+				<li>28</li>
+				<li>29</li>
+				</ul>
+			</div>
+			</div>
+		</div>
+		<div id="main" class="main frame">
+			<div id="logo_container2" class="logo_container centered_x">
+				<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="100%" height="100%" >
+					<use xlink:href="#logo"/>
+				</svg>
+			</div>
+			<div id="links" class="links">
+				<a href=""><label key="menu.contact"></label></a>
+				<a href=""><label key="menu.about"></label></a>
+				<a href=""><label key="menu.disclaimer"></label></a>
+			</div>
+		</div>
+	</div>
+	<div id="overlay" class="centered">
+		<div id="overlay_main" class="main frame centered">
+			<div id="logo_container1" class="logo_container centered">
+				<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="100%" height="100%" >
+					<use xlink:href="#logo" style="opacity: 0.2;"/>
+					<clipPath id="loader">
+						<path id="loader_clippath" d=""/>
+					</clipPath>
+					<use xlink:href="#logo" clip-path="url(#loader)"/>
+				</svg>
+			</div>
+			<div id="overlay_links" class="links">
+				<a href=""><label key="menu.contact">Contact</label></a>
+				<a href=""><label key="menu.about">?</label></a>
+				<a href=""><label key="menu.disclaimer">Legal Stuff</label></a>
 			</div>
 		</div>
 	</div>
 	<div id="content" style="display: none;">
-		<div id="content_login">
-			<div class="form">
-				<label key="profile.username"></label>:&nbsp;<input id="login_username" type="text" />
-				<div class="message" id="message_login_invalid_username" style="display: none;"><label key=""></label></div>
-				<br>
-				<label key="profile.password"></label>:&nbsp;<input id="login_password" type="password" />
-				<div class="message" id="message_login_invalid_password" style="display: none;"><label key=""></label></div>
-				<br>
-			</div>
-			<div class="buttons">
-				<input type="button" key="menu.login" onclick="client.uiManager.doLogin();" />
-				<input type="button" key="menu.cancel" onclick="client.uiManager.hideLogin();" />
-				<input type="button" key="menu.register" onclick="client.uiManager.showRegister();" />
-				<div class="message" id="message_login_failed" style="display: none;"><label key=""></label></div><br/>
-			</div>
-		</div>
 		<div id="content_static">
 			<iframe name="static_frame">
 			</iframe>
 		</div>
 	</div>
+	<!-- for debug only -->
+	<div id="debug">
+		debug...<br>
+		<input id="debug_load" type="button" value="load" onclick="load(0);" /><br/>
+		<input id="debug_open" type="button" value="open/close log" onclick="client.uiManager.toggleLog();" /><br/>
+	</div>
 </body>
 </html>
+<!--
+	TODO
+	localeChooser
+ -->

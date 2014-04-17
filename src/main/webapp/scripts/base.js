@@ -26,7 +26,9 @@ var server = {};
 var rpcSocket;
 
 init = function()
-{
+{	
+	console.log("init called");
+
 	connect();
 };
 

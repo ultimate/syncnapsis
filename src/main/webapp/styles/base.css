@@ -1,280 +1,313 @@
-body , input , select {
-	background: rgb(0,0,0);
-	overflow: hidden;
-	color: rgba(255,255,255,0.9);
-	font-family: monospace;
-	margin: 0px;
+#debug {
+	position: absolute;
+	top: 5px;
+	left: 5px;
+	width: 200px;
+	height: 150px;
+	border: 1px solid #AAAAAA;
+	background: rgba(255, 255, 255, 0.5);
 }
 
-a {
-	color: #EEEEEE;
+* {
+	opacity: 1;
+	transition: all 0.5s;
+}
+
+.hidden {
+	display: none;
+	transition: all 0.5s;
+}
+
+.invisible {
+	opacity: 0;
+	transition: all 0.5s;
+}
+
+body {
+	position: absolute;
+	width: auto;
+	height: auto;
+	left: 0px;
+	top: 0px;
+	bottom: 0px;
+	right: 1.5px
+}
+
+body, input, select {
+	background: rgb(0, 0, 0);
+	color: rgba(255, 255, 255, 0.9);
+	margin: 0px;
+	font-family: monospace;
+	font-size: 11px;
+	overflow: hidden;
+}
+
+input[type=text],
+input[type=password] {
+	border: 1px solid rgba(0,255,255,0.9);
+	background: rgba(0,0,0,0.3);
+}
+
+input[type=text].error,
+input[type=password].error {
+	border: 1px solid rgba(255,0,0,0.9);
+	background: rgba(255,239,136,1.0);
+}
+
+.centered {
+	position: absolute;
+	left: 0px;
+	right: 0px;
+	top: 0px;
+	bottom: 0px;
+	margin: auto;
+	transition: all 3s;
+}
+
+.centered_x {
+	position: absolute;
+	left: 0px;
+	right: 0px;
+	margin-left: auto;
+	margin-right: auto;
+	transition: all 3s;
+}
+
+.centered_y {
+	position: absolute;
+	top: 0px;
+	bottom: 0px;
+	margin-top: auto;
+	margin-bottom: auto;
+	transition: all 3s;
+}
+
+.attop {
+	position: absolute;
+	top: 0px;
+	bottom: auto;
+	margin-top: 0px;
+	margin-bottom: auto;
+	transition: all 3s;
+}
+
+.atbottom {
+	position: absolute;
+	top: auto;
+	bottom: 0px;
+	margin-top: auto;
+	margin-bottom: 0px;
+	transition: all 3s;
 }
 
 #overlay {
-	z-index: 100;
-	background: #333333;
-}
-
-#loader_frame {
-	z-index: 101;
-	width: 200px;
-	height: 100px;
-	border: 2px solid #000000;
-	background: #FFFFFF;
-	color: #000000;
-	text-align: center;
-}
-
-#loader_center {
 	width: 100%;
+	height: 100%;
+	background: rgb(0, 0, 0);
+}
+
+#menu {
+	width: 275px;
+	position: absolute;
+	right: 1px;
+	top: 1px;
+	/*padding-right: 2px;*/
+	/*margin-right: 1px;*/
+}
+
+#menu #menu_fixed {
+	position: absolute;
+	right: 7px;
+	left: auto;
+	top: 7px;
+	width: 36px;
+	/*height: 36px;*/
+	bottom: 7px;
+}
+
+#menu #menu_fixed #door {
+	width: 36px;
+	height: 36px;
+}
+
+#locale_chooser {
+	
+}
+
+#menu>div {
+	margin-top: 1px;
+	width: 275px;
+	/*position: absolute;*/
+	/*left: 0px;*/
+}
+
+#menu #userbar {
+	height: 68px;
+	/*top: 0px;*/
+}
+
+#menu #userbar>div {
+	padding: 0px;
+}
+
+#user_login {
+	line-height: 20px;
+	overflow: hidden;
+}
+
+#user_login>div>div {
+	overflow: hidden;
+}
+
+#user_login>label,
+#user_login>a {
+	width: 100px;
+	display: block;
+	float: left;
+}
+
+#user_login>a+a, 
+#user_login>input[type=text],
+#user_login>input[type=password] {
+	width: 110px;
+}
+
+#menu #nav {
 	height: 50px;
+	top: 54px;
+	line-height: 4.2em;
 }
 
-#loader {
-	border: 1px solid #000000;
-	width: 150px;
-	height: 13px;
+/*
+#menu #nav a {
+	margin-top: -2px;
+}
+*/
+
+#menu #menu_content {
+	overflow: hidden;
+	height: 300px;
+	/*top: 107px;*/	
 }
 
-#loader_bar { /* width set by JS */
-	height: 100%;
-	position: absolute;
-	background: #000000;
+#menu #main {
+	/*top: 410px;*/
 }
 
-.ad,.ad_inner,.ad_border {
-	background: #333333;
-	/*width set via JS */
-	height: 100%;
-	position: absolute;
-	/* left set via JS */
+#bar_top,#bar_bottom {
+	width: 400px;
+	margin-top: 1px;
+	margin-bottom: 1px;
+}
+
+#bar_top {
+	height: 30px;
+	line-height: 2.6em;
+}
+
+#bar_bottom {
+	height: 33px;
+	line-height: 2.6em;
+	margin-bottom: 1px;
+	overflow: hidden;
+	transition: all 1s;
+}
+
+#bar_bottom.open {
+	height: 130px;
+}
+
+#bar_bottom>.log_bar {
+	display: inline;
 	top: 0px;
-	text-align: center;
+	height: 32px;
+	margin-bottom: 1px;
 }
 
-.ad_border {
-	background: #000000;
-	overflow: visible;
-}
-
-.ad .ad_toggle {
-	z-index: 1;
-}
-
-#ad_left_toggle {
+#bar_bottom #log_title {
+	width: 85px;
+	position: absolute;
 	left: 0px;
 }
 
-#ad_right_toggle {
+#bar_bottom>#log {
+	position: absolute;
+	width: 224px;
+}
+
+#bar_bottom #log_menu {
+	width: 85px;
+	position: absolute;
 	right: 0px;
 }
 
-#center {
-	background: #00FF00;
-	/*width set via JS */
-	height: 100%;
-	position: absolute;
-	/* left set via JS */
-	top: 0px;
+#bar_bottom .inner {
+	padding-left: 5px;
+	padding-right: 5px;
 }
 
-.bar {
-	background: #0000FF;
-	width: 100%;
-	/*height set via JS */
+#bar_bottom.open #log_content {
+	opacity: 1;
+}
+
+#bar_bottom #log_content {
+	position: absolute;
+	top: 34px;
+	bottom: 0px;
+	overflow-x: hidden;
+	overflow-y: auto;
+	width: 398px;
+}
+
+.frame {
+	border: 1px solid rgba(0, 255, 255, 0.8);
+	background: rgba(0, 255, 255, 0.3);
+}
+
+.transparent_frame {
+	border: 1px solid rgba(0,0,0,0);
+	background: rgba(0,0,0,0);
+}
+
+.main {
+	width: 275px;
+	height: 150px;
+}
+
+#links,
+#overlay_links {
 	position: absolute;
 	left: 0px;
-	/*top set via JS */
-}
-
-.bar span {
-	position: relative;
-	top: 4px;
-	font-size: 13px;
-}
-
-.bar .bar_left {
-	position: absolute;
-	top: 0px;
-	height: 100%;
-	text-align: left;
-}
-
-.bar_left span {
-	left: 20px;
-}
-
-.bar .bar_right {
-	position: absolute;
-	top: 0px;
-	height: 100%;
-	text-align: right;
-}
-
-.bar_right span {
-	right: 20px;
-}
-
-.bar .bar_center {
-	position: absolute;
-	width: 400px;
-	height: 35px;
-	margin: auto;
-	z-index: 1;
-	background: #0000FF;
+	right: 0px;
+	bottom: 10px;
+	margin-left: 0px;
+	margin-right: 0px;
 	text-align: center;
 }
 
-.bar #bar_bottom_center span {
-	top: 15px;
+.logo_container {
+	width: 75px !important;
+	height: 75px;
+	bottom: 30px;
 }
 
-#bar_top_center {
-	top: 0px;
+#logo_container2 {
+	bottom: 50px;
 }
 
-#bar_bottom_center {
-	bottom: 0px;
+a {
+	color: rgba(255, 255, 255, 0.9);
 }
 
-#content {
-	background: #FFFF00;
-	width: 100%;
-	/*height set via JS */
-	position: absolute;
-	left: 0px;
-	position: absolute;
-	/*top set via JS */
+.links a {
+	margin: 8px;
 }
 
+/* needed??? */
 #locale_chooser {
 	width: 100px;
 	height: 20px;
 	font-family: monospace;
 	font-size: 13px;
 	margin-top: -2px;
-}
-
-/*
- * initial positioning
- * assuming inner (!) window width of
- * 1280 x 600
- */
-#ad_left {
-	width: 170px;
-	left: 0px;
-}
-
-#center {
-	width: 940px;
-	left: 170px;
-}
-
-#ad_right {
-	width: 170px;
-	left: 1110px;
-}
-
-#ad_left_inner {
-	width: 168px;
-	left: 0px;
-}
-
-#ad_left_border {
-	width: 2px;
-	left: 168px;
-}
-
-#ad_right_border {
-	width: 2px;
-	left: 0px;
-}
-
-#ad_right_inner {
-	width: 168px;
-	left: 2px;
-}
-
-#bar_top {
-	height: 24px;
-	top: 0px;
-}
-
-#content {
-	height: 552px;
-	top: 24px;
-}
-
-#bar_bottom {
-	height: 24px;
-	top: 576px;
-}
-
-.bar_left {
-	width: 300px;
-	left: 0px;
-}
-
-.bar_center {
-	width: 340px;
-	left: 300px;
-}
-
-.bar_right {
-	width: 300px;
-	left: 640px;
-}
-
-.window {
-	border: 1px solid #000000;
-	background: #FFFFFF;
-	color: #000000;
-}
-
-.window .window_title {
-	border-bottom: 2px solid #000000;
-	position: absolute;
-	top: 0px;
-	height: 30px;
-	width: 100%
-}
-
-.window .window_title label
-/*,.window .window_content div*/
- {
-	padding: 5px;
-}
-
-.window .window_title label {
-	position: relative;
-	top: 7px;
-}
-
-.window .window_close {
-	position: absolute;
-	top: 6px;
-	right: 5px;
-}
-
-.window .window_content {
-	position: absolute;
-	top: 30px;
-	bottom: 0px;
-	width: 100%;
-}
-
-.window .window_content > div {
-	position: absolute;
-	top: 4px;
-	bottom: 4px;
-	left: 2px;
-	right: 2px;
-}
-
-#content_static iframe {
-    overflow-x: hidden;
-    overflow-y: scroll;
-	height: 100%;
-	width: 100%;
-	border: none;
 }

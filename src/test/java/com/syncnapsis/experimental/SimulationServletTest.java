@@ -37,8 +37,8 @@ import com.syncnapsis.mock.util.ReturnArgAction;
 import com.syncnapsis.tests.BaseSpringContextTestCase;
 import com.syncnapsis.tests.annotations.TestExcludesMethods;
 import com.syncnapsis.universe.Calculator;
-import com.syncnapsis.utils.MathUtil;
 import com.syncnapsis.utils.data.ExtendedRandom;
+import com.syncnapsis.utils.math.Statistics;
 import com.syncnapsis.utils.serialization.Serializer;
 
 /**
@@ -202,7 +202,7 @@ public class SimulationServletTest extends BaseSpringContextTestCase
 			pop.setParticipant(new Participant());
 			pop.getParticipant().setId((i % parts + 1) * 100L);
 			pop.setColonizationDate(new Date(i * 10000));
-			pop.setPopulation(MathUtil.binomial(pops, i) * 1000000);
+			pop.setPopulation(Statistics.binomial(pops, i) * 1000000);
 			populations.add(pop);
 		}
 
