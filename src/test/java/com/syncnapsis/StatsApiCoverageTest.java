@@ -28,7 +28,7 @@ public class StatsApiCoverageTest extends CoverageTestCase
 	}
 
 	@Override
-	protected String ignoreSpecialClass(Class<?> c)
+	protected String ignoreSpecialClass(String packageName, Class<?> c)
 	{
 		if(c.isInterface())
 			return "Interface";
@@ -38,6 +38,6 @@ public class StatsApiCoverageTest extends CoverageTestCase
 			return "Generic-Data-Class --> Test in specific implementation!";
 		if(c.equals(GenericRankManagerImpl.class))
 			return "Generic-Data-Class --> Test in specific implementation!";
-		return super.ignoreSpecialClass(c);
+		return super.ignoreSpecialClass(packageName, c);
 	}
 }
