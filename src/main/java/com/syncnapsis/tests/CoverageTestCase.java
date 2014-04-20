@@ -70,10 +70,15 @@ public class CoverageTestCase extends LoggerTestCase
 	
 	public void testCoverage() throws Exception
 	{
-		Map<String, List<Class<TestCase>>> testAssociations = loadAssociations();
+		performCoverageTest(generalPackage);
+	}
+		
+	public void performCoverageTest(String packageName) throws Exception
+	{
+		Map<String, List<Class<TestCase>>> testAssociations = loadAssociations(packageName);
 
 		File classesDir = new File(mainClassesDir);
-		List<Class<Object>> allClasses = ClassUtil.findClasses(classesDir.toURI().toURL(), generalPackage, Object.class);
+		List<Class<Object>> allClasses = ClassUtil.findClasses(classesDir.toURI().toURL(), packageName, Object.class);
 		
 		int classCounter = 0;
 		int classCoveragePartial = 0;
@@ -95,9 +100,9 @@ public class CoverageTestCase extends LoggerTestCase
 			
 			testClasses = testAssociations.get(cls.getName());
 
-			if(ignoreSpecialClass(cls) != null)
+			if(ignoreSpecialClass(packageName, cls) != null)
 			{
-				logger.info(cls.getName() + " -> ignoring because of special reason: " + ignoreSpecialClass(cls));
+				logger.info(cls.getName() + " -> ignoring because of special reason: " + ignoreSpecialClass(packageName, cls));
 				classCoverageIgnored++;
 				continue;
 			}	
@@ -222,12 +227,12 @@ public class CoverageTestCase extends LoggerTestCase
 		}
 	}
 	
-	private Map<String, List<Class<TestCase>>> loadAssociations() throws MalformedURLException
+	private Map<String, List<Class<TestCase>>> loadAssociations(String packageName) throws MalformedURLException
 	{
 		Map<String, List<Class<TestCase>>> testAssociations = new TreeMap<String, List<Class<TestCase>>>();
 		
 		File classesDir = new File(testClassesDir);
-		List<Class<TestCase>> allTestClasses = ClassUtil.findClasses(classesDir.toURI().toURL(), generalPackage, TestCase.class);
+		List<Class<TestCase>> allTestClasses = ClassUtil.findClasses(classesDir.toURI().toURL(), packageName, TestCase.class);
 		
 		for(Class<TestCase> testCls: allTestClasses)
 		{
@@ -268,7 +273,7 @@ public class CoverageTestCase extends LoggerTestCase
 		return testAssociations;
 	}
 		
-	protected String ignoreSpecialClass(Class<?> c)
+	protected String ignoreSpecialClass(String packageName, Class<?> c)
 	{
 		if(c.isInterface())
 			return "Interface";
@@ -284,11 +289,11 @@ public class CoverageTestCase extends LoggerTestCase
 			return "Untested (by annotation)";
 		if(this.specialClasses.contains(c))
 			return "Special-Class-Ignore-List";
-		if(c.getName().startsWith(generalPackage + ".constants"))
+		if(c.getName().startsWith(packageName + ".constants"))
 			return "Constants-Class";
 		if(modelClass != null && modelClass.isAssignableFrom(c))
 			return "Model-Class";
-		if(c.getName().startsWith(generalPackage + ".mock"))
+		if(c.getName().startsWith(packageName + ".mock"))
 			return "Mock-class";
 		
 		return null;
