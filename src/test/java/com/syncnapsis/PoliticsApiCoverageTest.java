@@ -26,10 +26,10 @@ public class PoliticsApiCoverageTest extends CoverageTestCase
 	}
 
 	@Override
-	protected String ignoreSpecialClass(Class<?> c)
+	protected String ignoreSpecialClass(String packageName, Class<?> c)
 	{
 		if(c.isInterface())
 			return "Interface";
-		return super.ignoreSpecialClass(c);
+		return super.ignoreSpecialClass(packageName, c);
 	}
 }
