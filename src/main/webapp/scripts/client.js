@@ -38,6 +38,7 @@ UI.constants.LOCALE_LINK_TAGNAME = "a";
 UI.constants.LOCALE_KEY_ATTRIBUTE = "key";
 UI.constants.LOCALE_KEY_TOOLTIP_SUFFIX = "_tooltip";
 UI.constants.LOCALE_STRING_VARIABLE = "lang";
+UI.constants.LOCALE_PREFIX = "EnumLocale.";
 
 UI.constants.NAV_TABS = "nav";
 UI.constants.NAV_CONTENT = "menu_content";
@@ -55,8 +56,10 @@ UI.constants.LOGIN_PASSWORD_ID = "login_password";
 UI.constants.NAV_WIDTH = 300;
 UI.constants.USERINFO_HEIGHT = 40;
 
-UI.constants.IMAGE_PATH = "images";
+UI.constants.IMAGE_PATH = "images/";
 UI.constants.IMAGE_TYPE = ".png";
+UI.constants.FLAGS_PATH = "flags/";
+UI.constants.FLAGS_CLASS = "flag"
 
 UIManager = function()
 {
@@ -182,7 +185,8 @@ UIManager.prototype.populateLocaleChooser = function()
 			continue;
 		option = {
 				value: i,
-				image: UI.constants.IMAGE_PATH + "/" + i + UI.constants.IMAGE_TYPE,
+				image: UI.constants.IMAGE_PATH + UI.constants.FLAGS_PATH + i + UI.constants.IMAGE_TYPE,
+				imageClass: UI.constants.FLAGS_CLASS,
 				title: lang.EnumLocale[i]
 		};
 		if(("EnumLocale." + i) == lang.current)

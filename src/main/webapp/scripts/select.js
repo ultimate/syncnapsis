@@ -78,6 +78,11 @@ Select = function(element)
 		{
 			content.push("<img src='");
 			content.push(option.image);
+			if(option.imageClass)
+			{
+				content.push("' class='");
+				content.push(option.imageClass);
+			}
 			content.push("'>");
 		}
 		content.push(option.title);

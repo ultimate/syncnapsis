@@ -102,7 +102,7 @@ body, input, select {
 
 #menu, 
 #menu>div {
-	width: 285px;
+	width: 300px;
 }
 
 #menu>div {
@@ -130,6 +130,16 @@ body, input, select {
 
 #locale_chooser * {
 	width: 36px;
+}
+
+
+.flag,
+#locale_chooser .flag {
+	width: 16px;
+	height: 11px;
+	position: relative;
+	top:  3px;
+	margin-right: 3px;
 }
 
 #menu #userbar {
@@ -160,7 +170,7 @@ body, input, select {
 #user_login>a+a, 
 #user_login>input[type=text],
 #user_login>input[type=password] {
-	width: 120px;
+	width: 130px;
 }
 
 #menu #nav {
@@ -168,12 +178,6 @@ body, input, select {
 	top: 54px;
 	line-height: 4.2em;
 }
-
-/*
-#menu #nav a {
-	margin-top: -2px;
-}
-*/
 
 #menu #menu_content {
 	overflow: hidden;
