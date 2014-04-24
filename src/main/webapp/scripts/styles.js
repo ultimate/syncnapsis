@@ -152,15 +152,15 @@ Styles.Window = function(id, titleKey, contentDiv)
 		return frame;
 	
 	frame = document.createElement("div");
-	frame.style.position = "absolute";
-	frame.style.overflow = "hidden";
+//	frame.style.position = "absolute";
+//	frame.style.overflow = "hidden";
 	frame.className = "window";
 	frame.id = id;
 
 	frame._titleBar = document.createElement("div");
-	frame._titleBar.style.position = "absolute";
-	frame._titleBar.style.width = "100%";
-	frame._titleBar.className = "window_title";
+//	frame._titleBar.style.position = "absolute";
+//	frame._titleBar.style.width = "100%";
+	frame._titleBar.className = "window_title frame";
 
 	frame._titleLabel = document.createElement("label");
 	frame._titleLabel.setAttribute("key", titleKey);
@@ -172,9 +172,9 @@ Styles.Window = function(id, titleKey, contentDiv)
 	frame._titleBar.appendChild(frame._closeButton);
 
 	frame._contentFrame = document.createElement("div");
-	frame._contentFrame.style.position = "absolute";
-	frame._contentFrame.style.width = "100%";
-	frame._contentFrame.className = "window_content";
+//	frame._contentFrame.style.position = "absolute";
+//	frame._contentFrame.style.width = "100%";
+	frame._contentFrame.className = "window_content frame";
 
 	frame.appendChild(frame._titleBar);
 	frame.appendChild(frame._contentFrame);
@@ -225,7 +225,7 @@ Styles.Window = function(id, titleKey, contentDiv)
 	{
 		this.style.width = width + "px";
 		this.style.height = height + "px";
-		this._fill.fill();
+//		this._fill.fill();
 	};
 
 	frame.setPosition = function(x, y)
@@ -259,7 +259,7 @@ Styles.Window = function(id, titleKey, contentDiv)
 			Styles.mouseDown(event, frame);
 	}, frame._titleBar);
 
-	frame._fill = new Styles.FillLayout([ frame._titleBar, frame._contentFrame ], [ Styles.window.TITLE_HEIGHT, null ], Styles.layout.VERTICAL)
+//	frame._fill = new Styles.FillLayout([ frame._titleBar, frame._contentFrame ], [ Styles.window.TITLE_HEIGHT, null ], Styles.layout.VERTICAL)
 
 	frame.setContent(contentDiv);
 	frame.setMovable(false);

@@ -1,22 +1,19 @@
 /* old window stuff */
-
 .window {
-	border: 1px solid #000000;
-	background: #FFFFFF;
-	color: #000000;
+	border: 1px solid rgba(0, 0, 0, 0);
+	position: absolute;
+	overflow: hidden;
 }
 
 .window .window_title {
-	border-bottom: 2px solid #000000;
 	position: absolute;
 	top: 0px;
 	height: 30px;
 	width: 100%;
+	margin-left: -1px; 
 }
 
-.window .window_title label
-/*,.window .window_content div*/
- {
+.window .window_title label /*,.window .window_content div*/ {
 	padding: 5px;
 }
 
@@ -33,22 +30,23 @@
 
 .window .window_content {
 	position: absolute;
-	top: 30px;
+	top: 32px;
 	bottom: 0px;
 	width: 100%;
+	margin-left: -1px;
 }
 
-.window .window_content > div {
+.window .window_content>div {
 	position: absolute;
-	top: 4px;
-	bottom: 4px;
-	left: 2px;
-	right: 2px;
+	top: 0px;
+	bottom: 0px;
+	left: 0px;
+	right: 0px;
 }
 
 #content_static iframe {
-    overflow-x: hidden;
-    overflow-y: scroll;
+	overflow-x: hidden;
+	overflow-y: scroll;
 	height: 100%;
 	width: 100%;
 	border: none;
