@@ -118,9 +118,9 @@ UIManager = function()
 	Events.fireEvent(window, Events.ONRESIZE);
 
 	this.onLogout();	// just in case ;-)
-//	this.updateLinks(); // TODO
 	this.updateLabels();
 	this.populateLocaleChooser();
+	this.updateLinks();
 	this.hideOverlay();
 };
 

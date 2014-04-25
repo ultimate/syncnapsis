@@ -152,14 +152,10 @@ Styles.Window = function(id, titleKey, contentDiv)
 		return frame;
 	
 	frame = document.createElement("div");
-//	frame.style.position = "absolute";
-//	frame.style.overflow = "hidden";
 	frame.className = "window";
 	frame.id = id;
 
 	frame._titleBar = document.createElement("div");
-//	frame._titleBar.style.position = "absolute";
-//	frame._titleBar.style.width = "100%";
 	frame._titleBar.className = "window_title frame";
 
 	frame._titleLabel = document.createElement("label");
@@ -167,13 +163,11 @@ Styles.Window = function(id, titleKey, contentDiv)
 	frame._titleBar.appendChild(frame._titleLabel);
 
 	frame._closeButton = document.createElement("span");
-	frame._closeButton.innerHTML = "x";
+	frame._closeButton.innerHTML = "x"; // TODO button
 	frame._closeButton.className = "window_close";
 	frame._titleBar.appendChild(frame._closeButton);
 
 	frame._contentFrame = document.createElement("div");
-//	frame._contentFrame.style.position = "absolute";
-//	frame._contentFrame.style.width = "100%";
 	frame._contentFrame.className = "window_content frame";
 
 	frame.appendChild(frame._titleBar);

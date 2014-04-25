@@ -292,6 +292,11 @@ body, input, select {
 
 a {
 	color: rgba(255, 255, 255, 0.9);
+	cursor: pointer;
+}
+
+a * {
+	cursor: pointer;
 }
 
 .links a {

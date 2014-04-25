@@ -2,7 +2,6 @@
 .window {
 	border: 1px solid rgba(0, 0, 0, 0);
 	position: absolute;
-	overflow: hidden;
 }
 
 .window .window_title {
@@ -42,6 +41,7 @@
 	bottom: 0px;
 	left: 0px;
 	right: 0px;
+	padding: 3px;
 }
 
 #content_static iframe {

@@ -1,6 +1,15 @@
 body {
 	overflow: scroll;
-	margin: 10px;
+	padding: 10px;
+	background: rgba(0,0,0,0);
+}
+
+body>div {
+	margin-bottom: 10px;
+}
+
+body h1 {
+	margin-top: -5px;
 }
 
 ol li {
