@@ -194,18 +194,18 @@ Styles.Window = function(id, titleKey, contentDiv)
 	{
 		if(visible)
 		{
-			this.style.display = "block";
+			this.style.opacity = "1.0";
 			if(this._centered)
 				this.center();
 		}
 		else
-			this.style.display = "none";
+			this.style.opacity = "0.0";
 	};
 
 	frame.setClosable = function(closable)
 	{
 		if(closable)
-			this._closeButton.style.display = "block";
+			this._closeButton.style.display = "";
 		else
 			this._closeButton.style.display = "none";
 	};
