@@ -20,13 +20,19 @@
 			var mesh,mesh2;			
 			var mouse = { x: 0, y: 0 };			
 			var cameraRadius = 2000,cameraRadiusTarget = 2000;	
-			var activeSector = null;			
-			
+			var cameraRadiusMin = 100;
+			var cameraRadiusMax = 2500;
+			var cameraRadiusDelta = 300;
+			var cameraRadiusUpdateRate = 50;
+			var activeSector = null;		
+						
 			document.addEventListener("DOMContentLoaded", function(){	
 				init();
 				animate();			
 			}, false);			
-			document.addEventListener( 'mousedown', onClick, false );			
+			document.addEventListener( 'mousedown', onClick, false );	
+			document.addEventListener( 'mousemove', drag, false );		
+			document.addEventListener( 'mouseup', dragEnd, false );			
 			document.addEventListener( 'DOMMouseScroll', mousewheel, false );			
 			
 			function mousewheel(e){			
@@ -35,7 +41,12 @@
 				var e = window.event || e;
 				var delta = Math.max(-1, Math.min(1, (e.wheelDelta || -e.detail)));
 		
-				cameraRadiusTarget = cameraRadius + delta * 30;
+				cameraRadiusTarget = cameraRadius - delta * cameraRadiusDelta;
+				if(cameraRadiusTarget < cameraRadiusMin)
+					cameraRadiusTarget = cameraRadiusMin;
+				if(cameraRadiusTarget > cameraRadiusMax)
+					cameraRadiusTarget = cameraRadiusMax;
+				console.log("cameraRadiusTarget=" + cameraRadiusTarget);
 				return false;			
 			};
 
@@ -87,6 +98,11 @@
 					}						
 				}
 				console.log("dist2Min=" + dist2Min);
+				
+				if(activeSector == null)
+				{
+					dragStart(event);
+				}
 				/*
 				var intersects = ray.intersectObjects( allCubes );
 
@@ -97,6 +113,43 @@
 					cameraOffset = [activeMesh.position.x,activeMesh.position.y,activeMesh.position.z];
 				}
 				*/
+			};
+			
+			var lastX, lastY;
+			var dragging = false;
+			
+			function dragStart(event) {
+				lastX = event.pageX;
+				lastY = event.pageY;
+				dragging = true;
+			};
+			
+			function dragEnd(event) {
+				dragging = false;
+			};
+			
+			function drag(event) {
+				if(dragging)
+				{
+					var x = event.pageX;
+					var y = event.pageY;
+					
+					sphere_phi -= (x-lastX)/window.innerWidth * Math.PI * 1.5;
+					sphere_theta += (y-lastY)/window.innerHeight * Math.PI * 1.5;
+					//console.log("phi = " + sphere_phi + "    theta = " + sphere_theta);
+					
+					if(sphere_phi > sphere_phi_max)
+						sphere_phi = sphere_phi_max;
+					if(sphere_phi < sphere_phi_min)
+						sphere_phi = sphere_phi_min;
+					if(sphere_theta > sphere_theta_max)
+						sphere_theta = sphere_theta_max;
+					if(sphere_theta < sphere_theta_min)
+						sphere_theta = sphere_theta_min;
+						
+					lastX = x;
+					lastY = y;
+				}
 			};
 			
 			function findNeighbors(point) {
@@ -161,7 +214,11 @@
 			
 			var flip = 0;
 			var sphere_phi = 0;	
+			var sphere_phi_max = Math.PI / 2;
+			var sphere_phi_min = -Math.PI / 2;
 			var sphere_theta = 0;	
+			var sphere_theta_max = Math.PI / 2;
+			var sphere_theta_min = -Math.PI / 2 + 0.01;
 			var sphere_axis = 0;	
 			var rotationSpeed = 0.005;
 			var cameraOffset = [0,0,0];
@@ -175,10 +232,10 @@
 			function render() {					
 				if(cameraRadius != cameraRadiusTarget ) {
 					if(cameraRadiusTarget > cameraRadius) {
-						cameraRadius += 10
+						cameraRadius += cameraRadiusUpdateRate;
 					} 
 					if(cameraRadiusTarget < cameraRadius) {
-						cameraRadius -= 10
+						cameraRadius -= cameraRadiusUpdateRate;
 					} 
 				};						
 
@@ -383,8 +440,8 @@
 				camera.position.y = y + cameraOffset[1];
 				camera.position.z = z + cameraOffset[2];
 				camera.lookAt(new THREE.Vector3(0,0,0));
-				camera.up = new THREE.Vector3( 0,0,1 );
-				camera.rotation.z += sphere_axis;
+				camera.up = new THREE.Vector3( 0,1,0 );
+				camera.rotation.z = sphere_axis;
 			};
 			
 			selectGalaxy = function()
