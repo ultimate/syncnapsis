@@ -21,7 +21,7 @@
 			var mouse = { x: 0, y: 0 };			
 			var cameraRadius = 2000,cameraRadiusTarget = 2000;	
 			var cameraRadiusMin = 100;
-			var cameraRadiusMax = 2500;
+			var cameraRadiusMax = 2500; // depending on max sector coord?
 			var cameraRadiusDelta = 300;
 			var cameraRadiusUpdateRate = 50;
 			var activeSector = null;		
@@ -217,7 +217,7 @@
 			var sphere_phi_max = Math.PI / 2;
 			var sphere_phi_min = -Math.PI / 2;
 			var sphere_theta = 0.4;	
-			var sphere_theta_max = Math.PI / 2;
+			var sphere_theta_max = Math.PI / 2 - 0.01;
 			var sphere_theta_min = -Math.PI / 2 + 0.01;
 			var sphere_axis = 0;	
 			var rotationSpeed = 0.005;
