@@ -216,7 +216,7 @@
 			var sphere_phi = 0;	
 			var sphere_phi_max = Math.PI / 2;
 			var sphere_phi_min = -Math.PI / 2;
-			var sphere_theta = 0;	
+			var sphere_theta = 0.4;	
 			var sphere_theta_max = Math.PI / 2;
 			var sphere_theta_min = -Math.PI / 2 + 0.01;
 			var sphere_axis = 0;	
@@ -440,8 +440,9 @@
 				camera.position.y = y + cameraOffset[1];
 				camera.position.z = z + cameraOffset[2];
 				camera.lookAt(new THREE.Vector3(0,0,0));
-				camera.up = new THREE.Vector3( 0,1,0 );
-				camera.rotation.z = sphere_axis;
+				camera.up = new THREE.Vector3( 0,0,1 );
+				//console.log("camera:    pos=" + camera.position.x + "|" + camera.position.y + "|" + camera.position.z + "    rot=" + camera.rotation.x + "|" + camera.rotation.y + "|" + camera.rotation.z);
+				camera.rotation.z += sphere_axis; // otherwise we will always look upright
 			};
 			
 			selectGalaxy = function()

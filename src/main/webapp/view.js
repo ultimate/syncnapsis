@@ -88,7 +88,6 @@ var View = function(container) {
 	};	
 
 	this.camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 10000 );
-	this.camera.position.z = cameraRadius; // TODO
 	
 	this.renderer = new THREE.WebGLRenderer({canvas: container, antialias: true, clearColor: 0x000000, clearAlpha: 1 }); 
 	
