@@ -264,9 +264,11 @@
 		</div>
 		<div id="main" class="main frame">
 			<div id="logo_container2" class="logo_container centered_x">
-				<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="100%" height="100%" >
-					<use xlink:href="#logo"/>
-				</svg>
+				<a href="javascript: client.uiManager.showWelcome();">
+					<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="100%" height="100%" >
+						<use xlink:href="#logo"/>
+					</svg>
+				</a>
 			</div>
 			<div id="links" class="links">
 				<a href="lang/contact.html" target="_blank"><label key="menu.contact"></label></a>
@@ -297,6 +299,17 @@
 		<div id="content_static">
 			<iframe name="static_frame">
 			</iframe>
+		</div>
+		<div id="content_welcome">
+			<div>
+				<h1><label key="welcome.headLine1"></label></h1>
+			</div>
+			<div>
+				<h1><label key="welcome.headLine2"></label></h1>
+			</div>
+			<div>
+				<h1><label key="welcome.headLine3"></label></h1>
+			</div>
 		</div>
 	</div>
 	<!-- for debug only -->

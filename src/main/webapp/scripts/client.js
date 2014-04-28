@@ -108,10 +108,15 @@ UIManager = function()
 	
 	this.window_register = null; // TODO
 	
+	this.window_welcome = new Styles.Window("welcome", "", "content_welcome");
+	this.window_welcome.setSize(500, 500);
+	this.window_welcome.center();
+	this.window_welcome.setMovable(false);
+	
 	this.window_static = new Styles.Window("static", "", "content_static");
 	this.window_static.setSize(600, 400);
 	this.window_static.center();
-	this.window_static.setMovable(true);
+	this.window_static.setMovable(false);
 
 	console.log("showing UI");
 
@@ -295,6 +300,16 @@ UIManager.prototype.showRegister = function()
 UIManager.prototype.hideRegister = function()
 {
 	this.window_register.setVisible(false);
+};
+
+UIManager.prototype.showWelcome = function()
+{
+	this.window_welcome.setVisible(true);
+};
+
+UIManager.prototype.hideWelcome = function()
+{
+	this.window_welcome.setVisible(false);
 };
 
 UIManager.prototype.doRegister = function()

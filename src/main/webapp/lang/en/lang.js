@@ -43,6 +43,13 @@ lang.log = {};
 lang.log.title					= "Event-Log";
 lang.log.pinboard				= "Pinboard";
 lang.log.match					= "Match"
+	
 lang.profile = {};
 lang.profile.password			= "Password";
 lang.profile.username			= "Username";
+
+lang.welcome = {};
+lang.welcome.title				= "Welcome to syncnapsis";
+lang.welcome.headLine1			= "New here?";
+lang.welcome.headLine2			= "Curious?";
+lang.welcome.headLine3			= "News..."
