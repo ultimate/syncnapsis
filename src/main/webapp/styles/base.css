@@ -302,3 +302,7 @@ a * {
 .links a {
 	margin: 8px;
 }
+
+h1 {
+	margin-top: 0px;
+}

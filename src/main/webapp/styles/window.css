@@ -18,7 +18,7 @@
 }
 
 .window .window_title label {
-	padding: 5px;
+	padding: 10px;
 	position: relative;
 	top: 8px;
 	font-weight: bold;
@@ -44,7 +44,7 @@
 	bottom: 0px;
 	left: 0px;
 	right: 0px;
-	padding: 3px;
+	padding: 10px;
 }
 
 #content_static iframe {

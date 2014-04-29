@@ -109,7 +109,7 @@ UIManager = function()
 	this.window_register = null; // TODO
 	
 	this.window_welcome = new Styles.Window("welcome", "", "content_welcome");
-	this.window_welcome.setSize(500, 500);
+	this.window_welcome.setSize(500, 400);
 	this.window_welcome.center();
 	this.window_welcome.setMovable(false);
 	
@@ -238,13 +238,6 @@ UIManager.prototype.updateLabels = function(parent)
 		if(elements[i].getAttribute("type") == "button")
 			elements[i].value = this.getString(elements[i].getAttribute(UI.constants.LOCALE_KEY_ATTRIBUTE));
 	}
-//	// links // will break tabs!!!
-//	elements = document.getElementsByTagName(UI.constants.LOCALE_LINK_TAGNAME);
-//	for( var i = 0; i < elements.length; i++)
-//	{
-//		elements[i].innerHTML = this.getString(elements[i].getAttribute(UI.constants.LOCALE_KEY_ATTRIBUTE));
-//		elements[i].title = this.getString(elements[i].getAttribute(UI.constants.LOCALE_KEY_ATTRIBUTE) + UI.constants.LOCALE_KEY_TOOLTIP_SUFFIX);
-//	}
 };
 
 UIManager.prototype.showLog = function()
@@ -329,7 +322,6 @@ UIManager.prototype.doRegister = function()
 //	server.playerManager.register(............);
 };
 
-// TODO
 UIManager.prototype.showStatic = function(key)
 {
 	this.window_static.setTitleKey(key);
