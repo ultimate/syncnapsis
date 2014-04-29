@@ -38,16 +38,20 @@
 	margin-left: -1px;
 }
 
-.window .window_content>div {
+.window .window_content>* {
 	position: absolute;
 	top: 0px;
 	bottom: 0px;
 	left: 0px;
 	right: 0px;
-	padding: 10px;
+	padding: 5px;
 }
 
-#content_static iframe {
+.window .window_content>*>div {
+	padding-top: 5px;	
+}
+
+.window .window_content iframe {
 	overflow-x: hidden;
 	overflow-y: scroll;
 	height: 100%;
