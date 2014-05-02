@@ -306,3 +306,8 @@ a * {
 h1 {
 	margin-top: 0px;
 }
+
+#showWelcome label {
+	position: relative;
+	bottom: 3px;
+}

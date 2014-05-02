@@ -49,7 +49,8 @@ lang.profile.password			= "Password";
 lang.profile.username			= "Username";
 
 lang.welcome = {};
-lang.welcome.title				= "Welcome to syncnapsis";
 lang.welcome.headLine1			= "New here?";
 lang.welcome.headLine2			= "Curious?";
-lang.welcome.headLine3			= "News..."
+lang.welcome.headLine3			= "News...";
+lang.welcome.showOnLoad			= "Show this window on start?";
+lang.welcome.title				= "Welcome to syncnapsis";

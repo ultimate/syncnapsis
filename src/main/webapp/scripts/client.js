@@ -27,9 +27,12 @@ UI.constants.AD_BORDER = 2;
 UI.constants.BAR_HEIGHT = 24;
 UI.constants.BAR_OUTER_WIDTH = 300;
 
+UI.constants.KEY_SWOW_WELCOME = "showWelcomeOnLoad";
+
 UI.constants.LABEL_ID_PLAYERNAME = "userbar_playername";
 UI.constants.OVERLAY_ID = "overlay";
 UI.constants.STATIC_FRAME_ID = "static_frame";
+UI.constants.SHOW_WELCOME_ID = "showWelcomeOnLoad";
 
 UI.constants.LOCALE_CHOOSER_ID = "locale_chooser";
 UI.constants.LOCALE_LABEL_TAGNAME = "label";
@@ -126,6 +129,11 @@ UIManager = function()
 	this.updateLabels();
 	this.populateLocaleChooser();
 	this.updateLinks();
+	
+	this.updateShowWelcomeOnLoad(false);
+	if(this.showWelcomeOnLoad)
+		this.showWelcome();
+	
 	this.hideOverlay();
 };
 
@@ -303,6 +311,24 @@ UIManager.prototype.showWelcome = function()
 UIManager.prototype.hideWelcome = function()
 {
 	this.window_welcome.setVisible(false);
+};
+
+UIManager.prototype.updateShowWelcomeOnLoad = function(toggle)
+{
+	var val = localStorage.getItem(UI.constants.KEY_SWOW_WELCOME);
+	console.log("oldval=" + val);
+	if(val == null)
+		val = true;
+	console.log("toggling=" + toggle);
+	if(toggle)
+		val = !val;
+	console.log("newval=" + val);
+	localStorage.setItem(UI.constants.KEY_SWOW_WELCOME, val);
+	
+	this.showWelcomeOnLoad = val;
+	document.getElementById(UI.constants.SHOW_WELCOME_ID).checked = val;
+	
+	return false;
 };
 
 UIManager.prototype.doRegister = function()
