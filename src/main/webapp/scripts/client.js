@@ -172,7 +172,7 @@ UIManager.prototype.onUserLoaded = function(user)
 {
 	console.log("user loaded: " + user.username);
 	document.getElementById(UI.constants.LABEL_ID_PLAYERNAME).innerHTML = user.username;
-	if(user)
+	if(user && user.locale)
 		this.localeChooser.selectByValue(user.locale);
 //	server.uiManager.selectLocale(user.locale);
 };
