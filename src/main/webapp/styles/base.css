@@ -310,4 +310,5 @@ h1 {
 #showWelcome label {
 	position: relative;
 	bottom: 3px;
+	margin-left: 4px;
 }
