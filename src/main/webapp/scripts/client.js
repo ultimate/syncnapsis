@@ -315,20 +315,20 @@ UIManager.prototype.hideWelcome = function()
 
 UIManager.prototype.updateShowWelcomeOnLoad = function(toggle)
 {
-	var val = localStorage.getItem(UI.constants.KEY_SWOW_WELCOME);
-	console.log("oldval=" + val);
+	// use eval since localStorage returns string
+	var val = eval(localStorage.getItem(UI.constants.KEY_SWOW_WELCOME));
+	// init the value with true if not set
 	if(val == null)
 		val = true;
-	console.log("toggling=" + toggle);
+	// toggle
 	if(toggle)
 		val = !val;
-	console.log("newval=" + val);
 	localStorage.setItem(UI.constants.KEY_SWOW_WELCOME, val);
 	
 	this.showWelcomeOnLoad = val;
 	document.getElementById(UI.constants.SHOW_WELCOME_ID).checked = val;
 	
-	return false;
+	return true;
 };
 
 UIManager.prototype.doRegister = function()
