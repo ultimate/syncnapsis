@@ -112,7 +112,7 @@ UIManager = function()
 	this.window_register = null; // TODO
 	
 	this.window_welcome = new Styles.Window("welcome", "", "content_welcome");
-	this.window_welcome.setSize(800, 400);
+	this.window_welcome.setSize(500, 500);
 	this.window_welcome.center();
 	this.window_welcome.setMovable(false);
 	

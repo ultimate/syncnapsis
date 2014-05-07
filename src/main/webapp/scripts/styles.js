@@ -111,14 +111,18 @@ Styles.window = {};
 Styles.window.TITLE_HEIGHT = 30;
 
 Styles.activeElement = null;
+Styles.moveActiveElement = false;
 Styles.offsetX = 0;
 Styles.offsetY = 0;
+Styles.topZ = 10;
 
-Styles.mouseDown = function(event, element)
+Styles.mouseDown = function(event, element, moveElement)
 {
 	Styles.activeElement = element;
+	Styles.moveActiveElement = moveElement;
 	Styles.offsetX = event.layerX;
 	Styles.offsetY = event.layerY;
+	element.style.zIndex = Styles.topZ++;
 };
 
 Styles.move = function(event)
@@ -195,11 +199,15 @@ Styles.Window = function(id, titleKey, contentDiv)
 		if(visible)
 		{
 			this.style.opacity = "1.0";
+			this.style.zIndex = Styles.topZ++;
 			if(this._centered)
 				this.center();
 		}
 		else
+		{
 			this.style.opacity = "0.0";
+			this.style.zIndex = -100;
+		}
 	};
 
 	frame.setClosable = function(closable)
@@ -249,9 +257,13 @@ Styles.Window = function(id, titleKey, contentDiv)
 
 	Events.addEventListener(Events.MOUSEDOWN, function(event)
 	{
-		if(frame.movable)
-			Styles.mouseDown(event, frame);
+//		if(frame.movable)
+			Styles.mouseDown(event, frame, frame.movable);
 	}, frame._titleBar);
+	Events.addEventListener(Events.MOUSEDOWN, function(event)
+	{
+		Styles.mouseDown(event, frame, false);
+	}, frame._contentFrame);
 
 //	frame._fill = new Styles.FillLayout([ frame._titleBar, frame._contentFrame ], [ Styles.window.TITLE_HEIGHT, null ], Styles.layout.VERTICAL)
 
