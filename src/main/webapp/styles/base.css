@@ -122,6 +122,10 @@ body, input, select {
 	height: 36px;
 }
 
+#menu #menu_fixed #door:hover {
+	background: rgba(0, 141, 141, 0.9);
+}
+
 #locale_chooser {
 	margin-top: 2px;	
 }

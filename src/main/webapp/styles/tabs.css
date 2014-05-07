@@ -43,7 +43,7 @@
 }
 
 .tabbar_horizontal a:hover>div,.tabbar_horizontal a.selected>div {
-	background: rgba(0, 255, 255, 0.5);
+	background: rgba(0, 141, 141, 0.9);
 	transition: background 0.5s;
 }
 
