@@ -127,7 +127,7 @@ Styles.mouseDown = function(event, element, moveElement)
 
 Styles.move = function(event)
 {
-	if(Styles.activeElement != null)
+	if(Styles.activeElement != null && Styles.moveActiveElement)
 	{
 		var x = event.pageX - Styles.offsetX;
 		var y = event.pageY - Styles.offsetY;
