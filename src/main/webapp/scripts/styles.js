@@ -181,10 +181,33 @@ Styles.Window = function(id, titleKey, contentDiv)
 
 	frame.setContent = function(contentDiv)
 	{
+		var newContent;
 		if(typeof (contentDiv) == Reflections.type.STRING)
-			this._contentFrame.appendChild(document.getElementById(contentDiv));
+			newContent = document.getElementById(contentDiv);
 		else
-			this._contentFrame.appendChild(contentDiv);
+			newContent = contentDiv;
+		
+		this._contentFrame.appendChild(newContent);
+		
+		// add extra iframe mousedown listener
+		// or otherwise window won't focus on click...
+		var iframes = newContent.getElementsByTagName("iframe");
+		console.log("iframes found: " + iframes.length);
+		for(var i = 0; i < iframes.length; i++)
+		{
+			// Events.addEventListener won't work here since it is a different document
+			// instantly adding the listener won't work, too
+			//   since the doc isn't loaded yet and may change later
+			//   so we use the iframes.onload method to add the listener to the body
+			iframes[i].onload = function(iframe) {
+				return function(event) {
+					iframe.contentWindow.document.body.onmousedown = function(event)
+					{
+						Events.fireEvent(frame._contentFrame, Events.MOUSEDOWN);
+					};
+				};
+			}(iframes[i]);
+		}
 	};
 	
 	frame.setTitleKey = function(titleKey)
@@ -257,15 +280,12 @@ Styles.Window = function(id, titleKey, contentDiv)
 
 	Events.addEventListener(Events.MOUSEDOWN, function(event)
 	{
-//		if(frame.movable)
-			Styles.mouseDown(event, frame, frame.movable);
+		Styles.mouseDown(event, frame, frame.movable);
 	}, frame._titleBar);
 	Events.addEventListener(Events.MOUSEDOWN, function(event)
 	{
 		Styles.mouseDown(event, frame, false);
 	}, frame._contentFrame);
-
-//	frame._fill = new Styles.FillLayout([ frame._titleBar, frame._contentFrame ], [ Styles.window.TITLE_HEIGHT, null ], Styles.layout.VERTICAL)
 
 	frame.setContent(contentDiv);
 	frame.setMovable(false);
