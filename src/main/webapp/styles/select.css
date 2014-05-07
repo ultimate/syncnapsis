@@ -24,7 +24,7 @@
 .select,
 .select>ul {
 	border: 1px solid rgba(0,255,255,0.9);
-	background: rgba(0,54,54,0.9);
+	background: rgba(0,86,86,0.9);
 }
 
 .select.error {
