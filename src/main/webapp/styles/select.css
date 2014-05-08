@@ -79,7 +79,7 @@
 
 .select>ul>li:hover,
 .select>ul>li.active {
-	background: rgba(0,255,255,0.9);
+	background: rgba(0, 141, 141, 0.9);
 	color: rgba(0,0,0,0.9);
 }
 
