@@ -24,6 +24,8 @@ Events.ONRESIZE = "resize";
 Events.MOUSEDOWN = "mousedown";
 Events.MOUSEUP = "mouseup";
 Events.MOUSEMOVE = "mousemove";
+Events.MOUSEOVER = "mouseover";
+Events.MOUSEOUT = "mouseout";
 
 // fix IE Events Names
 // do that before defining any further constants or functions!!!
