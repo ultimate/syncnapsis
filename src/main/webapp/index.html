@@ -48,7 +48,7 @@
 	DependencyManager.register("Client", "client.js");
 	DependencyManager.register("Select", "select.js");
 	DependencyManager.register("Tabs", "tabs.js");
-	DependencyManager.register("Lang", "lang/lang.js", true);
+	DependencyManager.register("Lang", "lang/lang.js", false, true);
 	// register services
 	DependencyManager.register("GenericManager", "service/GenericManager.js");
 	DependencyManager.register("PlayerManager", "service/PlayerManager.js");
@@ -304,6 +304,10 @@
 			<div>
 				<div>
 					<h1><label key="welcome.headLine1"></label></h1>
+					<div id="welcome_toggle1" class="frame welcome_toggle">
+						<label key="welcome.toggle1_active"></label>
+						<label key="welcome.toggle1_inactive"></label>
+					</div>
 				</div>
 				<div>
 					<h1><label key="welcome.headLine2"></label></h1>
