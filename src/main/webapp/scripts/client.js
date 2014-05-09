@@ -33,6 +33,8 @@ UI.constants.LABEL_ID_PLAYERNAME = "userbar_playername";
 UI.constants.OVERLAY_ID = "overlay";
 UI.constants.STATIC_FRAME_ID = "static_frame";
 UI.constants.SHOW_WELCOME_ID = "showWelcomeOnLoad";
+UI.constants.WELCOME_TOOGLE1_ID = "welcome_toggle1";
+UI.constants.WELCOME_TOOGLE2_ID = "welcome_toggle2";
 
 UI.constants.LOCALE_CHOOSER_ID = "locale_chooser";
 UI.constants.LOCALE_LABEL_TAGNAME = "label";
@@ -111,7 +113,7 @@ UIManager = function()
 	
 	this.window_register = null; // TODO
 	
-	this.window_welcome = new Styles.Window("welcome", "", "content_welcome");
+	this.window_welcome = new Styles.Window("welcome", "welcome.title", "content_welcome");
 	this.window_welcome.setSize(500, 500);
 	this.window_welcome.center();
 	this.window_welcome.setMovable(false);
@@ -120,6 +122,9 @@ UIManager = function()
 	this.window_static.setSize(600, 400);
 	this.window_static.center();
 	this.window_static.setMovable(false);
+	
+	this.welcome_toggle1 = new Styles.HoverButton(UI.constants.WELCOME_TOOGLE1_ID, 0, 1);
+	this.welcome_toggle2 = new Styles.HoverButton(UI.constants.WELCOME_TOOGLE2_ID, 0, 1);
 
 	console.log("showing UI");
 

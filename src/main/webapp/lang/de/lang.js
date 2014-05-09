@@ -22,12 +22,12 @@ lang.EnumLocale.DE = "Deutsch";
 
 lang.menu = {};
 lang.menu.about 				= "?";
-lang.menu.about_tooltip 		= "Über Syncnapsis";
+lang.menu.about_tooltip 		= "&Uuml;ber Syncnapsis";
 lang.menu.cancel				= "Abbrechen";
 lang.menu.contact 				= "Kontakt";
 lang.menu.contact_tooltip 		= "Kontaktinformationen / Impressum";
 lang.menu.disclaimer 			= "Rechtliches";
-lang.menu.disclaimer_tooltip 	= "Nutzungsbedingungen / Haftungsbeschränkung";
+lang.menu.disclaimer_tooltip 	= "Nutzungsbedingungen / Haftungsbeschr&auml;nkung";
 lang.menu.forgot_password		= "Passwort vergessen?";
 lang.menu.login 				= "Anmelden";
 lang.menu.login_info			= "Hallo";
@@ -49,13 +49,10 @@ lang.profile.password			= "Passwort";
 lang.profile.username			= "Benutzername";
 
 lang.welcome = {};
-lang.welcome.headLine1			= "Neu hier?";
-lang.welcome.headLine2			= "Neugierig?";
-lang.welcome.headLine3			= "Neuigkeiten...";
+lang.welcome.headLine			= "Neuigkeiten:";
 lang.welcome.showOnLoad			= "Dieses Fenster beim Start anzeigen?";
 lang.welcome.title				= "Willkommen bei syncnapsis";
-lang.welcome.toggle1_active		= "Registrieren!";
+lang.welcome.toggle1_active		= lang.menu.register + "!";
 lang.welcome.toggle1_inactive	= "Neu hier?";
-lang.welcome.toggle2_active		= "Über syncnapsis!";
+lang.welcome.toggle2_active		= lang.menu.about_tooltip + "!";
 lang.welcome.toggle2_inactive	= "Neugierig?";
-	

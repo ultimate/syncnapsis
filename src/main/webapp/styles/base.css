@@ -266,6 +266,15 @@ body, input, select {
 	background: rgba(0,0,0,0);
 }
 
+.button {
+	/* for future use */
+}
+
+.button,
+.button *{
+	cursor: pointer;
+}
+
 .main {
 	width: 275px;
 	height: 150px;
@@ -313,4 +322,10 @@ h1 {
 	position: relative;
 	bottom: 3px;
 	margin-left: 4px;
+}
+
+.welcome_toggle {
+	text-align: center;
+	font-size: 20px;
+	font-weight: bold;
 }

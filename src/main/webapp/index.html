@@ -303,17 +303,23 @@
 		<div id="content_welcome">
 			<div>
 				<div>
-					<h1><label key="welcome.headLine1"></label></h1>
-					<div id="welcome_toggle1" class="frame welcome_toggle">
-						<label key="welcome.toggle1_active"></label>
-						<label key="welcome.toggle1_inactive"></label>
+					<div id="welcome_toggle1" class="frame button welcome_toggle">
+						<a href="javascript: client.uiManager.showRegister();">
+							<label key="welcome.toggle1_active"></label>
+							<label key="welcome.toggle1_inactive"></label>
+						</a>
 					</div>
 				</div>
 				<div>
-					<h1><label key="welcome.headLine2"></label></h1>
+					<div id="welcome_toggle2" class="frame button welcome_toggle">
+						<a href="javascript: client.uiManager.showRegister();">
+							<label key="welcome.toggle2_active"></label>
+							<label key="welcome.toggle2_inactive"></label>
+						</a>
+					</div>
 				</div>
 				<div>
-					<h1><label key="welcome.headLine3"></label></h1>
+					<h1><label key="welcome.headLine"></label></h1>
 					<!-- TODO add a news-pinboard here -->
 				</div>
 			</div>

@@ -49,12 +49,10 @@ lang.profile.password			= "Password";
 lang.profile.username			= "Username";
 
 lang.welcome = {};
-lang.welcome.headLine1			= "New here?";
-lang.welcome.headLine2			= "Curious?";
-lang.welcome.headLine3			= "News...";
+lang.welcome.headLine			= "News:";
 lang.welcome.showOnLoad			= "Show this window on start?";
 lang.welcome.title				= "Welcome to syncnapsis";
-lang.welcome.toggle1.active		= "Register!";
-lang.welcome.toggle1.inactive	= "New hier?";
-lang.welcome.toggle2.active		= "About syncnapsis!";
+lang.welcome.toggle1_active		= lang.menu.register + "!";
+lang.welcome.toggle1_inactive	= "New here?";
+lang.welcome.toggle2_active		= lang.menu.about_tooltip + "!";
 lang.welcome.toggle2.inactive	= "Curious?";
