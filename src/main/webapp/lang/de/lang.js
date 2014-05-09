@@ -42,7 +42,7 @@ lang.menu.stats 				= "Statistik";
 lang.log = {};
 lang.log.title					= "Ereignis-Log";
 lang.log.pinboard				= "Pinnwand";
-lang.log.match					= "Spiel"
+lang.log.match					= "Spiel";
 
 lang.profile = {};
 lang.profile.password			= "Passwort";
@@ -51,7 +51,11 @@ lang.profile.username			= "Benutzername";
 lang.welcome = {};
 lang.welcome.headLine1			= "Neu hier?";
 lang.welcome.headLine2			= "Neugierig?";
-lang.welcome.headLine3			= "Neuigkeiten..."
+lang.welcome.headLine3			= "Neuigkeiten...";
 lang.welcome.showOnLoad			= "Dieses Fenster beim Start anzeigen?";
 lang.welcome.title				= "Willkommen bei syncnapsis";
+lang.welcome.toggle1_active		= "Registrieren!";
+lang.welcome.toggle1_inactive	= "Neu hier?";
+lang.welcome.toggle2_active		= "Über syncnapsis!";
+lang.welcome.toggle2_inactive	= "Neugierig?";
 	

@@ -42,7 +42,7 @@ lang.menu.stats					= "Stats";
 lang.log = {};
 lang.log.title					= "Event-Log";
 lang.log.pinboard				= "Pinboard";
-lang.log.match					= "Match"
+lang.log.match					= "Match";
 	
 lang.profile = {};
 lang.profile.password			= "Password";
@@ -54,3 +54,7 @@ lang.welcome.headLine2			= "Curious?";
 lang.welcome.headLine3			= "News...";
 lang.welcome.showOnLoad			= "Show this window on start?";
 lang.welcome.title				= "Welcome to syncnapsis";
+lang.welcome.toggle1.active		= "Register!";
+lang.welcome.toggle1.inactive	= "New hier?";
+lang.welcome.toggle2.active		= "About syncnapsis!";
+lang.welcome.toggle2.inactive	= "Curious?";
