@@ -296,3 +296,38 @@ Styles.Window = function(id, titleKey, contentDiv)
 
 	return frame;
 };
+
+Styles.MultiLabelElement = function(id)
+{
+	var element = document.getElementById(id);
+	
+	element.show = function(childIndex) {
+		for(var c = 0; c < element.children.length; c++)
+		{
+			if(c == childIndex)
+				element.children[c].classList.remove("hidden");
+			else if(!element.children[c].classList.contains("hidden"))
+				element.children[c].classList.add("hidden");
+		}
+	};
+	
+	return element;
+};
+
+Styles.HoverButton = function(id, indexActive, indexInactive)
+{
+	var element = new Styles.MultiLabelElement(id);
+	
+	Events.addEventListener(Events.MOUSEOVER, function(event)
+	{
+		element.show(indexActive);
+	}, element);
+	Events.addEventListener(Events.MOUSEOUT, function(event)
+	{
+		element.show(indexInactive);
+	}, element);
+	
+	element.show(indexInactive);
+	
+	return element;
+};
