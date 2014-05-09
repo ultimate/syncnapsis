@@ -193,6 +193,7 @@ DependencyManager.scriptsLoaded = 1; // because of this script
 // add this script
 DependencyManager.scripts[0] = "Requests";
 DependencyManager.scriptPaths[0] = null; // don't know this script's path
+DependencyManager.scriptAdded[0] = false;
 DependencyManager.scriptAdded[0] = true;
 DependencyManager.scriptContents[0] = "";
 DependencyManager.scriptContentChanged[0] = false;
