@@ -17,15 +17,17 @@ echo Do you really want to store your credentials for this project and all submo
 
 valid=0
 
-while [ !$valid ] do
-	read LINE
+while [ !$valid ]
+do
+	read -n1 CHAR
+	echo
 	
-	if [ $LINE = "y" ] || [ $LINE = 'Y' ]
+	if [ $CHAR = "y" ] || [ $CHAR = "Y" ]
 	then
 		valid=1
 		accept=1
 	fi
-	if [ $LINE = "n" ] || [ $LINE = 'N' ]
+	if [ $CHAR = "n" ] || [ $CHAR = "N" ]
 	then
 		valid=1
 		accept=0
