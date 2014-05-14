@@ -17,7 +17,7 @@ echo Do you really want to store your credentials for this project and all submo
 
 valid=0
 
-while [  -eq 0$valid ]
+while [ $valid -eq 0 ]
 do
 	read -n1 CHAR
 	echo
