@@ -111,7 +111,10 @@ UIManager = function()
 	
 	console.log("initializing Windows");
 	
-	this.window_register = null; // TODO
+	this.window_register = new Styles.Window("register", "menu.register", "content_register");
+	this.window_register.setSize(400, 300);
+	this.window_register.center();
+	this.window_register.setMovable(false);
 	
 	this.window_welcome = new Styles.Window("welcome", "welcome.title", "content_welcome");
 	this.window_welcome.setSize(500, 500);

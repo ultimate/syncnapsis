@@ -45,7 +45,9 @@ lang.log.pinboard				= "Pinboard";
 lang.log.match					= "Match";
 	
 lang.profile = {};
+lang.profile.email				= "E-Mail";
 lang.profile.password			= "Password";
+lang.profile.password_confirm	= lang.profile.password + " confirmation";
 lang.profile.username			= "Username";
 
 lang.welcome = {};

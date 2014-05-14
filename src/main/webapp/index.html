@@ -183,7 +183,7 @@
 		</div>
 		<div id="userbar" class="frame">
 			<div>
-			<div id="user_login">
+			<div id="user_login" class="form">
 				<label key="profile.username" for="login_username"></label><input id="login_username" type="text"/><br/>
 				<label key="profile.password" for="login_password"></label><input id="login_password" type="password"/><br/>
 				<a href=""><label key="menu.register"></label></a>
@@ -323,6 +323,14 @@
 			</div>
 			<div id="showWelcome" class="atbottom">
 				<input type="checkbox" id="showWelcomeOnLoad" checked="checked" onclick="return client.uiManager.updateShowWelcomeOnLoad(true);"/><label for="showWelcomeOnLoad" key="welcome.showOnLoad"></label>
+			</div>
+		</div>
+		<div id="content_register">
+			<div id="user_register" class="form">
+				<label key="profile.username" for="reg_username"></label><input id="reg_username" type="text"/><br/>
+				<label key="profile.email" for="reg_email"></label><input id="reg_email" type="text"/><br/>
+				<label key="profile.password" for="reg_password"></label><input id="reg_password" type="password"/><br/>
+				<label key="profile.password_confirm" for="reg_password2"></label><input id="reg_password2" type="password"/><br/>
 			</div>
 		</div>
 	</div>

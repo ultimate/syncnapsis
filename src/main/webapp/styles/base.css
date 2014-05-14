@@ -153,25 +153,25 @@ body, input, select {
 	padding: 0px;
 }
 
-#user_login {
-	line-height: 20px;
-	overflow: hidden;
-}
-
+#user_login,
 #user_login>div>div {
 	overflow: hidden;
 }
 
-#user_login>label,
+.form {
+	line-height: 20px;
+}
+
+.form>label,
 #user_login>a {
 	width: 100px;
 	display: block;
 	float: left;
 }
 
-#user_login>a+a, 
-#user_login>input[type=text],
-#user_login>input[type=password] {
+.form>input[type=text],
+.form>input[type=password],
+#user_login>a+a {}
 	width: 130px;
 }
 
