@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 #
 # Syncnapsis Framework - Copyright (c) 2012 ultimate
 # 
