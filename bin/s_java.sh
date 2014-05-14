@@ -27,18 +27,21 @@ then
 	echo "ERROR: JAVA_HOME not found in your environment!"
 	error=1
 fi
-# check java.exe
+# check java executable
 if [!error -a -f $JAVA_HOME/bin/java]
+then
 	echo "ERROR: JAVA_HOME is invalid: /bin/java not found in $JAVA_HOME"
 	error=1
 fi
+# check S_HOME
 if ["$S_HOME" = ""]
 then
 	echo "ERROR: S_HOME not found in your environment!"
 	error=1
 fi
-# check java.exe
+# check s_java.sh
 if [!error -a -f $S_HOME/bin/s_java.sh]
+then
 	echo "ERROR: JAVA_HOME is invalid: /bin/s_java.sh not found in $S_HOME"
 	error=1
 fi
