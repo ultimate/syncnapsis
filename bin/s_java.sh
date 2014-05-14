@@ -28,7 +28,7 @@ then
 	error=1
 fi
 # check java executable
-if [!error -a -f $JAVA_HOME/bin/java]
+if [! error -a ! -f $JAVA_HOME/bin/java]
 then
 	echo "ERROR: JAVA_HOME is invalid: /bin/java not found in $JAVA_HOME"
 	error=1
@@ -40,7 +40,7 @@ then
 	error=1
 fi
 # check s_java.sh
-if [!error -a -f $S_HOME/bin/s_java.sh]
+if [! error -a ! -f $S_HOME/bin/s_java.sh]
 then
 	echo "ERROR: JAVA_HOME is invalid: /bin/s_java.sh not found in $S_HOME"
 	error=1
