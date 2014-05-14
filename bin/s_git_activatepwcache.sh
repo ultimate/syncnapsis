@@ -18,7 +18,7 @@ echo Do you really want to enable your credentials caching globally? Y/N
 
 valid=0
 
-while [ !$valid ]
+while [ $valid -eq 0 ]
 do
 	read -n1 CHAR	
 	echo
@@ -34,13 +34,13 @@ do
 		accept=0
 	fi
 	
-	if [ !$valid ]
+	if [ $valid -eq 0 ]
 	then
 		echo invalid selection
 	fi
 done
 
-if [ $accept ]
+if [ $accept -eq 1 ]
 then
 	echo enabling credential caching
 	git config --global credential.helper cache

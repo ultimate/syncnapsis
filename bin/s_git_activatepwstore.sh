@@ -17,7 +17,7 @@ echo Do you really want to store your credentials for this project and all submo
 
 valid=0
 
-while [ !$valid ]
+while [  -eq 0$valid ]
 do
 	read -n1 CHAR
 	echo
@@ -33,13 +33,13 @@ do
 		accept=0
 	fi
 	
-	if [ !$valid ]
+	if [ $valid -eq 0 ]
 	then
 		echo invalid selection
 	fi
 done
 
-if [ $accept ]
+if [ $accept -eq 1 ]
 then
 	echo enabling creadentials storing
 	git config credential.helper store

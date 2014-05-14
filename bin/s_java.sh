@@ -29,26 +29,26 @@ then
 fi
 # check java executable
 java -version > /dev/null 2>&1
-if [ !$error ] && [ $? != 0 ]
+if [ $error -eq 0 ] && [ $? != 0 ]
 then
         echo ERROR: JAVA_HOME is invalid: /bin/java not found in $JAVA_HOME
         error=1
 fi
 # check S_HOME
-if [ !$error ] && [ "$S_HOME" = "" ]
+if [ $error -eq 0 ] && [ "$S_HOME" = "" ]
 then
         echo ERROR: S_HOME not found in your environment!
         error=1
 fi
 # check s_java.sh
-if [ !$error ] && [ ! -f $S_HOME/bin/s_java.sh ]
+if [ $error -eq 0 ] && [ ! -f $S_HOME/bin/s_java.sh ]
 then
         echo ERROR: S_HOME is invalid: /bin/s_java.sh not found in $S_HOME
         error=1
 fi
 # ==== END VALIDATION ====
 
-if [ !$error ]
+if [ $error -eq 0 ]
 then
 # do the stuff
 	S_ARGS=$*
