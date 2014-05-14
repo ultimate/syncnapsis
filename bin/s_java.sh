@@ -22,7 +22,8 @@
 # ==== START VALIDATION ====
 error=0
 # check JAVA_HOME
-if [ "$JAVA_HOME" = ""] ; then
+if ["$JAVA_HOME" = ""]
+then
 	echo "ERROR: JAVA_HOME not found in your environment!"
 	error=1
 fi
@@ -31,7 +32,8 @@ if [!error -a -f $JAVA_HOME/bin/java]
 	echo "ERROR: JAVA_HOME is invalid: /bin/java not found in $JAVA_HOME"
 	error=1
 fi
-if [ "$S_HOME" = ""] ; then
+if ["$S_HOME" = ""]
+then
 	echo "ERROR: S_HOME not found in your environment!"
 	error=1
 fi
@@ -42,7 +44,8 @@ if [!error -a -f $S_HOME/bin/s_java.sh]
 fi
 # ==== END VALIDATION ====
 
-if [!error] ; then
+if [!error]
+then
 # do the stuff
 	S_ARGS=$*
 	S_JAVA_EXE=$JAVA_HOME/bin/java
@@ -68,7 +71,8 @@ if [!error] ; then
 	$S_JAVA_EXE -cp $S_CP $S_ARGS
 fi
 
-if [$? -eq 1] ; then
+if [$? -eq 1]
+then
 	error=1
 fi
 exit $error
