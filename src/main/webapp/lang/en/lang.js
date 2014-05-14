@@ -55,4 +55,4 @@ lang.welcome.title				= "Welcome to syncnapsis";
 lang.welcome.toggle1_active		= lang.menu.register + "!";
 lang.welcome.toggle1_inactive	= "New here?";
 lang.welcome.toggle2_active		= lang.menu.about_tooltip + "!";
-lang.welcome.toggle2.inactive	= "Curious?";
+lang.welcome.toggle2_inactive	= "Curious?";
