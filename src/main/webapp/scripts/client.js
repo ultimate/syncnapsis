@@ -324,7 +324,7 @@ UIManager.prototype.hideWelcome = function()
 UIManager.prototype.updateShowWelcomeOnLoad = function(toggle)
 {
 	// use eval since localStorage returns string
-	var val = (localStorage.getItem(UI.constants.KEY_SWOW_WELCOME) == "true");
+	var val = (localStorage.getItem(UI.constants.KEY_SWOW_WELCOME) != "false");
 	// toggle
 	if(toggle)
 		val = !val;
