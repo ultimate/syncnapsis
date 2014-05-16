@@ -268,10 +268,13 @@ public abstract class ServletUtil
 	 */
 	public static void copyRequestClientInfo(HttpServletRequest req, HttpSession session)
 	{
-		session.setAttribute(ATTRIBUTE_REMOTE_ADDR, req.getRemoteAddr());
-		session.setAttribute(ATTRIBUTE_REMOTE_HOST, req.getRemoteHost());
+		if(req.getHeader(ATTRIBUTE_USER_AGENT) != null)
+			session.setAttribute(ATTRIBUTE_USER_AGENT, req.getHeader(ATTRIBUTE_USER_AGENT));
+		if(req.getRemoteAddr() != null)
+			session.setAttribute(ATTRIBUTE_REMOTE_ADDR, req.getRemoteAddr());
+		if(req.getRemoteHost() != null)
+			session.setAttribute(ATTRIBUTE_REMOTE_HOST, req.getRemoteHost());
 		session.setAttribute(ATTRIBUTE_REMOTE_PORT, req.getRemotePort());
-		session.setAttribute(ATTRIBUTE_USER_AGENT, req.getHeader(ATTRIBUTE_USER_AGENT));
 	}
 
 	/**
