@@ -130,10 +130,14 @@ body, input, select {
 	margin-top: 2px;	
 }
 
-#locale_chooser * {
+#locale_chooser,
+#locale_chooser>* {
 	width: 36px;
 }
 
+#locale_chooser>div>span {
+	width: 34px;
+}
 
 .flag,
 #locale_chooser .flag {
