@@ -186,7 +186,7 @@
 			<div id="user_login" class="form">
 				<label key="profile.username" for="login_username"></label><input id="login_username" type="text"/><br/>
 				<label key="profile.password" for="login_password"></label><input id="login_password" type="password"/><br/>
-				<a href=""><label key="menu.register"></label></a>
+				<a href="javascript: client.uiManager.showRegister();"><label key="menu.register"></label></a>
 				<a href=""><label key="menu.forgot_password"></label></a>
 				<!-- 
 					<input type="button" key="menu.login" onclick="client.uiManager.doLogin();" />
@@ -272,7 +272,7 @@
 			</div>
 			<div id="links" class="links">
 				<a href="lang/contact.html" target="_blank"><label key="menu.contact"></label></a>
-				<a href="" target="_blank"><label key="menu.about"></label></a>
+				<a href="lang/about.html" target="_blank"><label key="menu.about"></label></a>
 				<a href="lang/disclaimer.html" target="_blank"><label key="menu.disclaimer"></label></a>
 			</div>
 		</div>
@@ -290,7 +290,7 @@
 			</div>
 			<div id="overlay_links" class="links">
 				<a href="lang/contact.html" target="_blank"><label key="menu.contact">Contact</label></a>
-				<a href="" target="_blank"><label key="menu.about">?</label></a>
+				<a href="lang/about.html" target="_blank"><label key="menu.about">?</label></a>
 				<a href="lang/disclaimer.html" target="_blank"><label key="menu.disclaimer">Legal Stuff</label></a>
 			</div>
 		</div>
@@ -310,7 +310,7 @@
 						</a>
 					</div>
 					<div class="frame button welcome_toggle">
-						<a id="welcome_toggle2" href="javascript: client.uiManager.showRegister();">
+						<a id="welcome_toggle2" href="lang/about.html" target="_blank">
 							<label key="welcome.toggle2_active"></label>
 							<label key="welcome.toggle2_inactive"></label>
 						</a>
