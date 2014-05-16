@@ -191,7 +191,9 @@ public class LocaleFilter extends URLRewriteFilter
 	@Override
 	protected String rewriteURL(String url, HttpServletRequest request, HttpServletResponse response) throws ServletException
 	{
+		ServletUtil.copyRequestClientInfo(request, request.getSession());
 		sessionProvider.set(request.getSession());
+
 		EnumLocale locale = localeProvider.get();
 
 		String target;

@@ -123,7 +123,7 @@ public class RPCLog extends BaseObject<Long>
 	 * 
 	 * @return userAgent
 	 */
-	@Column(nullable = false, length = LENGTH_NAME_LONG)
+	@Column(nullable = false, length = LENGTH_NAME_VERYLONG)
 	public String getUserAgent()
 	{
 		return userAgent;

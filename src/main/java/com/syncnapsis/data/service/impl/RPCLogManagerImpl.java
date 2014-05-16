@@ -42,6 +42,11 @@ public class RPCLogManagerImpl extends GenericManagerImpl<RPCLog, Long> implemen
 	 * The additional RPC-Logger
 	 */
 	protected transient final Logger rpcLogger = LoggerFactory.getLogger("rpclogger");
+	
+	/**
+	 * Value for the User-Agent session attribute if value is null
+	 */
+	public static final String				USER_AGENT_NULL = "unknown";
 
 	/**
 	 * The DateFormat used for RPC-Logging
@@ -190,6 +195,8 @@ public class RPCLogManagerImpl extends GenericManagerImpl<RPCLog, Long> implemen
 		log.setRPCCall(call);
 		log.setUser(user);
 		log.setUserAgent(ServletUtil.getUserAgent(session));
+		if(log.getUserAgent() == null)
+			log.setUserAgent(USER_AGENT_NULL);
 		
 		if(rpcLogger.isInfoEnabled())
 		{
