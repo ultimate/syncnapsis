@@ -38,6 +38,10 @@ public interface Model
 	 * Standard-Länge für lange Namen
 	 */
 	public static final int	LENGTH_NAME_LONG		= 100;
+	/**
+	 * Standard-Länge für lange Namen
+	 */
+	public static final int	LENGTH_NAME_VERYLONG	= 200;
 
 	/**
 	 * Standard-Länge für Passwörter
