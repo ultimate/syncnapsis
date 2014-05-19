@@ -47,7 +47,7 @@ lang.log.match					= "Spiel";
 lang.profile = {};
 lang.profile.email				= "E-Mail";
 lang.profile.password			= "Passwort";
-lang.profile.password_confirm	= lang.profile.password + "-Wiederholung";
+lang.profile.password_confirm	= lang.profile.password + " wiederholen";
 lang.profile.username			= "Benutzername";
 
 lang.welcome = {};

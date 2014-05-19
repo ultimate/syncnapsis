@@ -162,7 +162,8 @@ body, input, select {
 	overflow: hidden;
 }
 
-.form {
+.form,
+.largeform {
 	line-height: 20px;
 }
 
@@ -177,6 +178,18 @@ body, input, select {
 .form>input[type=password],
 #user_login>a+a {
 	width: 130px;
+}
+
+.largeform>label {
+	width: 150px;
+	display: block;
+	float: left;
+}
+
+.largeform>input[type=text],
+.largeform>input[type=password] {
+	width: 230px;
+	float: right;
 }
 
 #menu #nav {
