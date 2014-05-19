@@ -31,7 +31,8 @@ PlayerManager = function()
 	
 	this.register = function(username, email, password, passwordConfirm)
 	{
-		// return Player
+		// return PLayer
+		return function(player) { client.uiManager.onRegister(player); };
 	};
 };
 

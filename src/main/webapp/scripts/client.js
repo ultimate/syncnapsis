@@ -1,17 +1,13 @@
 /**
  * Syncnapsis Framework - Copyright (c) 2012 ultimate
  * 
- * This program is free software; you can redistribute it and/or modify it under
- * the terms of the GNU General Public License as published by the Free Software
- * Foundation; either version 3 of the License, or any later version.
+ * This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the
+ * License, or any later version.
  * 
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MECHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
- * details.
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MECHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * General Public License for more details.
  * 
- * You should have received a copy of the GNU General Plublic License along with
- * this program; if not, see <http://www.gnu.org/licenses/>.
+ * You should have received a copy of the GNU General Plublic License along with this program; if not, see <http://www.gnu.org/licenses/>.
  */
 // @requires("Styles")
 // @requires("Events")
@@ -35,6 +31,10 @@ UI.constants.STATIC_FRAME_ID = "static_frame";
 UI.constants.SHOW_WELCOME_ID = "showWelcomeOnLoad";
 UI.constants.WELCOME_TOOGLE1_ID = "welcome_toggle1";
 UI.constants.WELCOME_TOOGLE2_ID = "welcome_toggle2";
+UI.constants.REG_USERNAME_ID = "reg_username";
+UI.constants.REG_EMAIL_ID = "reg_email";
+UI.constants.REG_PASSWORD_ID = "reg_password";
+UI.constants.REG_PASSWORD2_ID = "reg_password2";
 
 UI.constants.LOCALE_CHOOSER_ID = "locale_chooser";
 UI.constants.LOCALE_LABEL_TAGNAME = "label";
@@ -90,7 +90,7 @@ UIManager = function()
 	}(this);
 	// init the user info with a dummy tab selector (the "door")
 	// dummy is used since we need at least one tab selector
-	this.userInfo = new Tabs(UI.constants.USERINFO_TABS, TABS_HORIZONTAL, UI.constants.USERINFO_CONTENT, TABS_VERTICAL);//, UI.constants.NAV_WIDTH, UI.constants.USERINFO_HEIGHT);
+	this.userInfo = new Tabs(UI.constants.USERINFO_TABS, TABS_HORIZONTAL, UI.constants.USERINFO_CONTENT, TABS_VERTICAL);// , UI.constants.NAV_WIDTH, UI.constants.USERINFO_HEIGHT);
 	// overwrite the door's onSelect to perform the login
 	this.door = document.getElementById(UI.constants.USERINFO_TABS).children[0]; // this is the 'a' tag
 	this.door.onclick = function(uiManager) {
@@ -182,7 +182,22 @@ UIManager.prototype.onUserLoaded = function(user)
 	document.getElementById(UI.constants.LABEL_ID_PLAYERNAME).innerHTML = user.username;
 	if(user && user.locale)
 		this.localeChooser.selectByValue(user.locale);
-//	server.uiManager.selectLocale(user.locale);
+// server.uiManager.selectLocale(user.locale);
+};
+
+UIManager.prototype.onRegister = function(player)
+{
+	if(player != null)
+	{
+		console.log(player);
+	}
+	else
+	{
+		this.showErrorMessage(document.getElementById(UI.constants.REG_USERNAME_ID), null);
+		this.showErrorMessage(document.getElementById(UI.constants.REG_EMAIL_ID), null);
+		this.showErrorMessage(document.getElementById(UI.constants.REG_PASSWORD_ID), null);
+		this.showErrorMessage(document.getElementById(UI.constants.REG_PASSWORD2_ID), null);
+	}
 };
 
 UIManager.prototype.hideOverlay = function()
@@ -284,16 +299,56 @@ UIManager.prototype.doLogin = function()
 {
 	var username = document.getElementById(UI.constants.LOGIN_USERNAME_ID).value;
 	var password = document.getElementById(UI.constants.LOGIN_PASSWORD_ID).value;
-	if(username == "" || username == null || password == "" || password == null)
+	
+	var error = false
+	if(username == "" || username == null)
 	{
-		if(username == "" || username == null)
-			this.showErrorMessage(document.getElementById(UI.constants.LOGIN_USERNAME_ID), null);
-		if(password == "" || password == null)
-			this.showErrorMessage(document.getElementById(UI.constants.LOGIN_PASSWORD_ID), null);
-		return;
+		this.showErrorMessage(document.getElementById(UI.constants.LOGIN_USERNAME_ID), null);
+		error = true;
 	}
+	if(password == "" || password == null)
+	{
+		this.showErrorMessage(document.getElementById(UI.constants.LOGIN_PASSWORD_ID), null);
+		error = true;
+	}
+	if(error)
+		return;
 	console.log("login as: " + username + ":" + password);
 	server.playerManager.login(username, password);
+};
+
+UIManager.prototype.doRegister = function()
+{
+	var username = document.getElementById(UI.constants.REG_USERNAME_ID).value;
+	var email = document.getElementById(UI.constants.REG_EMAIL_ID).value;
+	var password = document.getElementById(UI.constants.REG_PASSWORD_ID).value;
+	var password2 = document.getElementById(UI.constants.REG_PASSWORD2_ID).value;
+	
+	var error = false
+	if(username == "" || username == null)
+	{
+		this.showErrorMessage(document.getElementById(UI.constants.REG_USERNAME_ID), null);
+		error = true;
+	}
+	if(email == "" || email == null)
+	{
+		this.showErrorMessage(document.getElementById(UI.constants.REG_EMAIL_ID), null);
+		error = true;
+	}
+	if(password == "" || password == null || password != password2)
+	{
+		this.showErrorMessage(document.getElementById(UI.constants.REG_PASSWORD_ID), null);
+		error = true;
+	}
+	if(password2 == "" || password2 == null || password != password2)
+	{
+		this.showErrorMessage(document.getElementById(UI.constants.REG_PASSWORD2_ID), null);
+		error = true;
+	}
+	if(error)
+		return;
+
+	server.playerManager.register(username, email, password, password2);
 };
 
 UIManager.prototype.doLogout = function()
@@ -336,23 +391,6 @@ UIManager.prototype.updateShowWelcomeOnLoad = function(toggle)
 	return true;
 };
 
-UIManager.prototype.doRegister = function()
-{
-//	var username = document.getElementById("register_username").value;
-//	var password = document.getElementById("register_password").value;
-//	// TODO password confirm
-//	// TODO email
-//	if(username == "" || password == "")
-//	{
-//		if(username == "" || username == null)
-//			this.showErrorMessage(document.getElementyById("register_username"), document.getElementById("message_register_invalid_username"));
-//		if(password == "" || password == null)
-//			this.showErrorMessage(document.getElementyById("register_password"), document.getElementById("message_register_invalid_password"));
-//		return;
-//	}
-//	server.playerManager.register(............);
-};
-
 UIManager.prototype.showStatic = function(key)
 {
 	this.window_static.setTitleKey(key);
@@ -368,9 +406,9 @@ UIManager.prototype.showErrorMessage = function(textfield, messagefield)
 {
 	if(textfield != null)
 	{
-//		var bg = textfield.style.background;
-//		textfield.style.background = UI.constants.TF_ERROR_BACKGROUND;
-//		setTimeout(function() {textfield.style.background = bg;}, 3000);
+// var bg = textfield.style.background;
+// textfield.style.background = UI.constants.TF_ERROR_BACKGROUND;
+// setTimeout(function() {textfield.style.background = bg;}, 3000);
 		var cls = textfield.className;
 		textfield.className = cls + " error";
 		setTimeout(function() {textfield.className = cls;}, 3000);
