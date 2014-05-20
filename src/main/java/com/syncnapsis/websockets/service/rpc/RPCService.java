@@ -159,24 +159,42 @@ public class RPCService extends BaseService implements InitializingBean, RPCHand
 					+ (message.getData() != null ? message.getData().getClass() + " " : "") + message.getData());
 			return;
 		}
+		
+		Object result = null;
 		try
 		{
-			Object result = this.doRPC((RPCCall) message.getData(), getAuthorities());
-			if(result != Void.TYPE)
-			{
-				try
-				{
-					this.respond(message, result);
-				}
-				catch(IOException e)
-				{
-					logger.error("Could not send response.", e);
-				}
-			}
+			result = this.doRPC((RPCCall) message.getData(), getAuthorities());
 		}
 		catch(Exception e)
 		{
 			logger.error("Exception doing RPC: " + e.getMessage());
+			result = new RPCError(e.getCause());
+			
+			try
+			{
+				logger.debug("" + e.getCause());
+				logger.debug("" + e.getCause().getMessage());
+				logger.debug("" + e.getCause().getClass().getName());
+				logger.debug("" + serializer.serialize(e.getCause(), getAuthorities()));
+				logger.debug("" + serializer.serialize(result, getAuthorities()));
+			}
+			catch(SerializationException e1)
+			{
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		}
+		
+		if(result != Void.TYPE)
+		{
+			try
+			{
+				this.respond(message, result);
+			}
+			catch(IOException e)
+			{
+				logger.error("Could not send response.", e);
+			}
 		}
 	}
 
