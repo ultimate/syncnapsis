@@ -193,7 +193,8 @@ public class UserManagerImpl extends GenericNameManagerImpl<User, Long> implemen
 			// email verification
 			RPCCall rpcCall = new RPCCall(getBeanName(), RPC_VERIFY_REGISTRATION, new Object[] { user.getId() });
 			Action action = actionManager.createAction(rpcCall, 1, null, validDate);
-			securityManager.getMailer().sendVerifyRegistration(user, action);
+			boolean mailSend = securityManager.getMailer().sendVerifyRegistration(user, action);
+			logger.info("registration mail successfully send: " + mailSend);
 		}
 
 		return user;
