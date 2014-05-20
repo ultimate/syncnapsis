@@ -71,7 +71,7 @@ UIManager = function()
 	this.currentPlayer = null;
 	this.logCls = document.getElementById(UI.constants.LOG_FRAME).className;
 	this.logOpen = false;
-	
+
 	console.log("initializing UIManager");
 	console.log("initializing Tabs");
 
@@ -81,8 +81,10 @@ UIManager = function()
 	this.log = new Tabs(UI.constants.LOG_TABS, TABS_HORIZONTAL, UI.constants.LOG_CONTENT, TABS_HORIZONTAL);
 	// overwrite the log-select to open the log on select
 	this.log.select0 = this.log.select;
-	this.log.select = function(uiManager) {
-		return function(index) {
+	this.log.select = function(uiManager)
+	{
+		return function(index)
+		{
 			if(!uiManager.logOpen)
 				uiManager.showLog();
 			this.select0(index);
@@ -93,39 +95,42 @@ UIManager = function()
 	this.userInfo = new Tabs(UI.constants.USERINFO_TABS, TABS_HORIZONTAL, UI.constants.USERINFO_CONTENT, TABS_VERTICAL);// , UI.constants.NAV_WIDTH, UI.constants.USERINFO_HEIGHT);
 	// overwrite the door's onSelect to perform the login
 	this.door = document.getElementById(UI.constants.USERINFO_TABS).children[0]; // this is the 'a' tag
-	this.door.onclick = function(uiManager) {
-		return function() {
+	this.door.onclick = function(uiManager)
+	{
+		return function()
+		{
 			if(uiManager.currentPlayer == null)
 				uiManager.doLogin();
 			else
 				uiManager.doLogout();
 		}
-	} (this);
-	
+	}(this);
+
 	this.localeChooser = new Select(UI.constants.LOCALE_CHOOSER_ID);
-	this.localeChooser.onselect = function(oldValue, newValue) {
+	this.localeChooser.onselect = function(oldValue, newValue)
+	{
 		console.log("changing value from " + oldValue + " -> " + newValue);
 		if(newValue != oldValue)
 			server.uiManager.selectLocale(newValue);
 	};
-	
+
 	console.log("initializing Windows");
-	
+
 	this.window_register = new Styles.Window("register", "menu.register", "content_register");
 	this.window_register.setSize(400, 300);
 	this.window_register.center();
 	this.window_register.setMovable(false);
-	
+
 	this.window_welcome = new Styles.Window("welcome", "welcome.title", "content_welcome");
 	this.window_welcome.setSize(500, 500);
 	this.window_welcome.center();
 	this.window_welcome.setMovable(false);
-	
+
 	this.window_static = new Styles.Window("static", "", "content_static");
 	this.window_static.setSize(600, 400);
 	this.window_static.center();
 	this.window_static.setMovable(false);
-	
+
 	this.welcome_toggle1 = new Styles.HoverButton(UI.constants.WELCOME_TOOGLE1_ID, 0, 1);
 	this.welcome_toggle2 = new Styles.HoverButton(UI.constants.WELCOME_TOOGLE2_ID, 0, 1);
 
@@ -133,22 +138,22 @@ UIManager = function()
 
 	Events.fireEvent(window, Events.ONRESIZE);
 
-	this.onLogout();	// just in case ;-)
+	this.onLogout(); // just in case ;-)
 	this.updateLabels();
 	this.populateLocaleChooser();
 	this.updateLinks();
-	
+
 	this.updateShowWelcomeOnLoad(false);
 	if(this.showWelcomeOnLoad)
 		this.showWelcome();
-	
+
 	this.hideOverlay();
 };
 
 UIManager.prototype.onLogin = function(player)
 {
 	if(player != null)
-	{		
+	{
 		// clear password field
 		document.getElementById(UI.constants.LOGIN_PASSWORD_ID).value = "";
 		// store the current player
@@ -168,12 +173,14 @@ UIManager.prototype.onLogin = function(player)
 };
 
 UIManager.prototype.onLogout = function(success)
-{	
+{
 	// switch ui to logged-out menu
 	this.userInfo.select(UI.constants.USERINFO_INDEX_LOGGEDOUT);
 	// "unload" user
 	this.currentPlayer = null;
-	this.onUserLoaded({username: "anonymous"});
+	this.onUserLoaded({
+		username : "anonymous"
+	});
 };
 
 UIManager.prototype.onUserLoaded = function(user)
@@ -182,14 +189,15 @@ UIManager.prototype.onUserLoaded = function(user)
 	document.getElementById(UI.constants.LABEL_ID_PLAYERNAME).innerHTML = user.username;
 	if(user && user.locale)
 		this.localeChooser.selectByValue(user.locale);
-// server.uiManager.selectLocale(user.locale);
+	// server.uiManager.selectLocale(user.locale);
 };
 
-UIManager.prototype.onRegister = function(player)
+UIManager.prototype.onRegister = function(player, password)
 {
 	if(player != null)
 	{
 		console.log(player);
+		console.log(password);
 	}
 	else
 	{
@@ -204,7 +212,10 @@ UIManager.prototype.hideOverlay = function()
 {
 	var overlay = document.getElementById(UI.constants.OVERLAY_ID);
 	overlay.className += " invisible";
-	setTimeout(function() {overlay.className += " hidden";}, 3000);
+	setTimeout(function()
+	{
+		overlay.className += " hidden";
+	}, 3000);
 };
 
 UIManager.prototype.populateLocaleChooser = function()
@@ -217,16 +228,16 @@ UIManager.prototype.populateLocaleChooser = function()
 	var index = 0;
 	for( var i in lang.EnumLocale)
 	{
-		if(typeof(lang.EnumLocale[i]) == Reflections.type.FUNCTION)
+		if(typeof (lang.EnumLocale[i]) == Reflections.type.FUNCTION)
 			continue;
 		option = {
-				value: i,
-				image: UI.constants.IMAGE_PATH + UI.constants.FLAGS_PATH + i + UI.constants.IMAGE_TYPE,
-				imageClass: UI.constants.FLAGS_CLASS,
-				title: lang.EnumLocale[i]
+			value : i,
+			image : UI.constants.IMAGE_PATH + UI.constants.FLAGS_PATH + i + UI.constants.IMAGE_TYPE,
+			imageClass : UI.constants.FLAGS_CLASS,
+			title : lang.EnumLocale[i]
 		};
 		if(("EnumLocale." + i) == lang.current)
-			selected = index; 
+			selected = index;
 		this.localeChooser.options[this.localeChooser.options.length] = option;
 		index++;
 	}
@@ -299,7 +310,7 @@ UIManager.prototype.doLogin = function()
 {
 	var username = document.getElementById(UI.constants.LOGIN_USERNAME_ID).value;
 	var password = document.getElementById(UI.constants.LOGIN_PASSWORD_ID).value;
-	
+
 	var error = false
 	if(username == "" || username == null)
 	{
@@ -323,7 +334,7 @@ UIManager.prototype.doRegister = function()
 	var email = document.getElementById(UI.constants.REG_EMAIL_ID).value;
 	var password = document.getElementById(UI.constants.REG_PASSWORD_ID).value;
 	var password2 = document.getElementById(UI.constants.REG_PASSWORD2_ID).value;
-	
+
 	var error = false
 	if(username == "" || username == null)
 	{
@@ -348,7 +359,16 @@ UIManager.prototype.doRegister = function()
 	if(error)
 		return;
 
-	server.playerManager.register(username, email, password, password2);
+	// we do not use the default callback, since we want to keep the password for auto-login
+	var callback = function(password)
+	{
+		return function(player)
+		{
+			client.uiManager.onRegister(player, password);
+		};
+	}(password);
+
+	server.playerManager.register(username, email, password, password2, callback);
 };
 
 UIManager.prototype.doLogout = function()
@@ -384,10 +404,10 @@ UIManager.prototype.updateShowWelcomeOnLoad = function(toggle)
 	if(toggle)
 		val = !val;
 	localStorage.setItem(UI.constants.KEY_SWOW_WELCOME, val);
-	
+
 	this.showWelcomeOnLoad = val;
 	document.getElementById(UI.constants.SHOW_WELCOME_ID).checked = val;
-	
+
 	return true;
 };
 
@@ -406,18 +426,24 @@ UIManager.prototype.showErrorMessage = function(textfield, messagefield)
 {
 	if(textfield != null)
 	{
-// var bg = textfield.style.background;
-// textfield.style.background = UI.constants.TF_ERROR_BACKGROUND;
-// setTimeout(function() {textfield.style.background = bg;}, 3000);
+		// var bg = textfield.style.background;
+		// textfield.style.background = UI.constants.TF_ERROR_BACKGROUND;
+		// setTimeout(function() {textfield.style.background = bg;}, 3000);
 		var cls = textfield.className;
 		textfield.className = cls + " error";
-		setTimeout(function() {textfield.className = cls;}, 3000);
+		setTimeout(function()
+		{
+			textfield.className = cls;
+		}, 3000);
 	}
 	if(messagefield != null)
 	{
 		var disp = messagefield.style.display;
 		messagefield.style.display = "none";
-		setTimeout(function() {messagefield.style.display = disp;}, 3000);
+		setTimeout(function()
+		{
+			messagefield.style.display = disp;
+		}, 3000);
 	}
 };
 
@@ -429,9 +455,10 @@ UIManager.prototype.updateLinks = function()
 		if(links[i].target == "_blank")
 		{
 			links[i].target = UI.constants.STATIC_FRAME_ID;
-			links[i].onclick = (function(link, uiManager) 
+			links[i].onclick = (function(link, uiManager)
 			{
-				return function() {
+				return function()
+				{
 					uiManager.showStatic(link.getElementsByTagName(UI.constants.LOCALE_LABEL_TAGNAME)[0].getAttribute(UI.constants.LOCALE_KEY_ATTRIBUTE));
 				};
 			})(links[i], this);
@@ -455,7 +482,7 @@ MessageManager = function()
 MessageManager.prototype.updatePinboard = function(pinboardId, messages)
 {
 	console.log("updating pinboard #" + pinboardId);
-	for(var i = 0; i < messages.length; i++)
+	for( var i = 0; i < messages.length; i++)
 	{
 		console.log(messages[i]);
 	}
