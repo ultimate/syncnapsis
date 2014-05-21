@@ -1,6 +1,0 @@
-[submodule "syncnapsis-examples-ui-playground"]
-	path = syncnapsis-examples-ui-playground
-	url = https://github.com/syncnapsis/syncnapsis-examples-ui-playground.git
-[submodule "syncnapsis-examples-HelloWorld"]
-	path = syncnapsis-examples-HelloWorld
-	url = https://github.com/syncnapsis/syncnapsis-examples-HelloWorld.git
