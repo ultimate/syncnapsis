@@ -48,19 +48,25 @@ public abstract class DefaultData
 
 	public static final String			STRING_EMAIL_COMPLETE_NO_DOT_NO_AT			= STRING_EMAIL_SYMBOLS + STRING_ASCII_LETTERS_LOWER
 																							+ STRING_ASCII_LETTERS_UPPER + STRING_ASCII_NUMBERS;
-
+	@Deprecated
 	private static final String[]		STRING_TOP_LEVEL_DOMAIN_EXTENSIONS_ARRAY	= {
-			// nicht gesponsorte TLDs
+																					// nicht
+																					// gesponsorte
+																					// TLDs
 			"arpa", "biz", "com", "info", "name", "net", "org", "pro",
 			// gesponsorte TLDs
 			"aero", "asia", "cat", "coop", "edu", "gov", "int", "jobs", "mil", "mobi", "museum", "tel", "travel" };
 
+	@Deprecated
 	public static final List<String>	STRING_TOP_LEVEL_DOMAIN_EXTENSIONS_LIST		= Collections.unmodifiableList(Arrays
 																							.asList(STRING_TOP_LEVEL_DOMAIN_EXTENSIONS_ARRAY));
+	@Deprecated
 	public static final String			STRING_TOP_LEVEL_DOMAIN_EXTENSIONS			= toRegExpString(STRING_TOP_LEVEL_DOMAIN_EXTENSIONS_ARRAY);
 
-	public static final String			REGEXP_DOMAIN								= "(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?\\.)+(?:[a-zA-Z]{2}|"
+	@Deprecated
+	public static final String			REGEXP_DOMAIN_OLD							= "(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?\\.)+(?:[a-zA-Z]{2}|"
 																							+ STRING_TOP_LEVEL_DOMAIN_EXTENSIONS + ")";
+	public static final String			REGEXP_DOMAIN								= "(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?";
 	public static final String			REGEXP_EMAIL								= "[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+)*@"
 																							+ REGEXP_DOMAIN;
 

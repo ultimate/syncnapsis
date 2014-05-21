@@ -427,6 +427,7 @@ public class ExtendedRandom extends Random
 	 * 
 	 * @return a random and valid domain
 	 */
+	@SuppressWarnings("deprecation")
 	public String nextDomain()
 	{
 		String topLevelDomain;
