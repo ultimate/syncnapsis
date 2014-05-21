@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- - Syncnapsis Framework - Copyright (c) 2012 ultimate - - This program 
+	is free software; you can redistribute it and/or modify it under the terms 
+	of - the GNU General Public License as published by the Free Software Foundation; 
+	either version - 3 of the License, or any later version. - - This program 
+	is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; 
+	- without even the implied warranty of MECHANTABILITY or FITNESS FOR A PARTICULAR 
+	PURPOSE. - See the GNU General Public License for more details. - - You should 
+	have received a copy of the GNU General Plublic License along with this program; 
+	- if not, see <http://www.gnu.org/licenses/>. -->
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+            http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd
+            http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.0.xsd"
+	default-lazy-init="true">
+
+	<!-- =================================================================== -->
+	<!-- DAO -->
+	<!-- =================================================================== -->
+
+	<bean id="galaxyDao" class="com.syncnapsis.data.dao.hibernate.GalaxyDaoHibernate">
+	    <constructor-arg ref="sessionFactory"/>
+	</bean>
+
+	<bean id="matchDao" class="com.syncnapsis.data.dao.hibernate.MatchDaoHibernate">
+	    <constructor-arg ref="sessionFactory"/>
+	</bean>
+
+	<bean id="participantDao" class="com.syncnapsis.data.dao.hibernate.ParticipantDaoHibernate">
+	    <constructor-arg ref="sessionFactory"/>
+	</bean>
+
+	<bean id="solarSystemDao" class="com.syncnapsis.data.dao.hibernate.SolarSystemDaoHibernate">
+	    <constructor-arg ref="sessionFactory"/>
+	</bean>
+
+	<bean id="solarSystemInfrastructureDao"	class="com.syncnapsis.data.dao.hibernate.SolarSystemInfrastructureDaoHibernate">
+	    <constructor-arg ref="sessionFactory"/>
+	</bean>
+
+	<bean id="solarSystemPopulationDao"	class="com.syncnapsis.data.dao.hibernate.SolarSystemPopulationDaoHibernate">
+	    <constructor-arg ref="sessionFactory"/>
+	</bean>
+
+	<!-- =================================================================== -->
+	<!-- Service -->
+	<!-- =================================================================== -->
+
+	<bean id="galaxyManager" class="com.syncnapsis.data.service.impl.GalaxyManagerImpl">
+		<constructor-arg ref="galaxyDao" />
+		<constructor-arg ref="solarSystemManager" />
+		<property name="calculator" ref="calculator" />
+		<property name="securityManager" ref="securityManager" />
+	</bean>
+
+	<bean id="matchManager" class="com.syncnapsis.data.service.impl.MatchManagerImpl">
+		<constructor-arg ref="matchDao" />
+		<constructor-arg ref="galaxyManager" />
+		<constructor-arg ref="participantManager" />
+		<constructor-arg ref="solarSystemPopulationManager" />
+		<constructor-arg ref="solarSystemInfrastructureManager" />
+	</bean>
+
+	<bean id="participantManager" class="com.syncnapsis.data.service.impl.ParticipantManagerImpl">
+		<constructor-arg ref="participantDao" />
+		<constructor-arg ref="empireManager" />
+		<constructor-arg ref="solarSystemPopulationManager" />
+		<constructor-arg ref="solarSystemInfrastructureManager" />
+		<property name="calculator" ref="calculator" />
+		<property name="securityManager" ref="securityManager" />
+	</bean>
+
+	<bean id="solarSystemManager" class="com.syncnapsis.data.service.impl.SolarSystemManagerImpl">
+		<constructor-arg ref="solarSystemDao" />
+	</bean>
+
+	<bean id="solarSystemInfrastructureManager"
+		class="com.syncnapsis.data.service.impl.SolarSystemInfrastructureManagerImpl">
+		<constructor-arg ref="solarSystemInfrastructureDao" />
+		<property name="infrastructureGenerator" ref="infrastructureGenerator" />
+		<property name="securityManager" ref="securityManager" />
+	</bean>
+
+	<bean id="solarSystemPopulationManager"
+		class="com.syncnapsis.data.service.impl.SolarSystemPopulationManagerImpl">
+		<constructor-arg ref="solarSystemPopulationDao" />
+		<constructor-arg ref="solarSystemInfrastructureManager" />
+		<property name="calculator" ref="calculator" />
+		<property name="securityManager" ref="securityManager" />
+	</bean>
+
+	<!-- =================================================================== -->
+	<!-- non-DB-Managers -->
+	<!-- =================================================================== -->
+
+	<bean id="uiManager" class="com.syncnapsis.client.UIManagerImpl">
+		<property name="securityManager" ref="securityManager" />
+		<property name="connectionProvider" ref="connectionProvider" />
+		<property name="rpcService" ref="rpcService" />
+	</bean>
+
+	<bean id="messageManager" class="com.syncnapsis.client.MessageManagerImpl">
+		<property name="securityManager" ref="securityManager" />
+		<property name="connectionProvider" ref="connectionProvider" />
+		<property name="rpcService" ref="rpcService" />
+		<property name="pinboardManager" ref="pinboardManager" />
+		<property name="pinboardMessageManager" ref="pinboardMessageManager" />
+	</bean>
+
+	<!-- =================================================================== -->
+	<!-- WebSockets -->
+	<!-- =================================================================== -->
+
+	<bean id="rpcHandler"
+		class="com.syncnapsis.websockets.service.rpc.DelegatingRPCHandler">
+		<property name="delegate" ref="logRPCHandler" />
+	</bean>
+
+	<!-- =================================================================== -->
+	<!-- Security -->
+	<!-- =================================================================== -->
+
+	<bean id="securityManager" class="com.syncnapsis.security.BaseGameManager">
+		<constructor-arg ref="baseGameManager" />
+		<property name="accessControllers">
+			<list>
+				<ref bean="fieldAccessController" />
+				<ref bean="methodAccessController" />
+				<ref bean="matchAccessController" />
+				<ref bean="solarSystemPopulationAccessController" />
+			</list>
+		</property>
+	</bean>
+
+	<bean id="matchAccessController" class="com.syncnapsis.security.accesscontrol.MatchAccessController">
+		<constructor-arg ref="accessRule"/>
+	</bean>
+
+	<bean id="solarSystemPopulationAccessController" class="com.syncnapsis.security.accesscontrol.SolarSystemPopulationAccessController">
+		<constructor-arg ref="accessRule"/>
+	</bean>
+	
+	<bean id="accessRule" class="com.syncnapsis.security.accesscontrol.BaseAccessRule" />
+
+	<!-- =================================================================== -->
+	<!-- Utilities -->
+	<!-- =================================================================== -->
+
+	<bean id="mailer" class="com.syncnapsis.utils.mail.UniverseConquestMailer">
+		<constructor-arg value="mail.properties" />
+	</bean>
+
+	<bean id="infrastructureGenerator"
+		class="com.syncnapsis.utils.data.SolarSystemInfrastructureGenerator">
+		<constructor-arg ref="calculator" />
+	</bean>
+
+	<bean id="calculator" class="com.syncnapsis.universe.CalculatorImpl">
+	</bean>
+
+	<bean id="constantLoader" class="com.syncnapsis.utils.constants.ParameterConstantLoader" lazy-init="false">
+		<constructor-arg ref="parameterManager" />
+		<property name="constantClasses">
+			<list>
+				<value>com.syncnapsis.constants.ApplicationBaseConstants</value>
+				<value>com.syncnapsis.constants.GameBaseConstants</value>
+				<value>com.syncnapsis.constants.UniverseConquestConstants</value>
+			</list>
+		</property>
+	</bean>
+
+	<!-- =================================================================== -->
+	<!-- Hibernate -->
+	<!-- =================================================================== -->
+
+	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
+		destroy-method="close">
+		<property name="driverClassName" value="${jdbc.driverClassName}" />
+		<property name="url" value="${jdbc.url}" />
+		<property name="username" value="${jdbc.username}" />
+		<property name="password" value="${jdbc.password}" />
+		<property name="maxActive" value="100" />
+		<property name="maxWait" value="1000" />
+		<property name="poolPreparedStatements" value="true" />
+		<!-- <property name="defaultAutoCommit" value="true"/> -->
+	</bean>
+
+	<bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<property name="configLocation" value="classpath:hibernate.cfg.xml" />
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.dialect">${hibernate.dialect}</prop>
+				<!--
+				<prop key="hibernate.jdbc.batch_size">0</prop>
+				<prop key="hibernate.show_sql">false</prop> 
+				<prop key="hibernate.format_sql">true</prop>
+				<prop key="hibernate.use_sql_comments">true</prop> 
+				<prop key="hibernate.query.substitutions">true 1, false 0</prop>
+				<prop key="hibernate.max_fetch_depth">6</prop> 
+				<prop key="hibernate.hbm2ddl.auto">${hibernate.hbm2ddlauto}</prop>
+				<prop key="hibernate.cache.use_second_level_cache">${hibernate.use_second_level_cache}</prop> 
+				<prop key="hibernate.cache.provider_class">org.hibernate.cache.EhCacheProvider</prop>
+				-->
+			</props>
+		</property>
+	</bean>
+
+	<bean id="transactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<tx:annotation-driven transaction-manager="transactionManager" />
+
+</beans>

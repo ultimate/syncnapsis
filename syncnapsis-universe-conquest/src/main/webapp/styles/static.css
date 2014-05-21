@@ -1,0 +1,27 @@
+body {
+	overflow: scroll;
+	padding-top: 5px;
+	padding-bottom: 10px;
+	background: rgba(0,0,0,0);
+}
+
+body>div {
+	margin-bottom: 10px;
+}
+
+ol li {
+	margin-bottom: 12pt;
+}
+
+ol li ol li, ol li ul li {
+	margin-bottom: 0;
+}
+
+#footer {
+	text-align: center;
+}
+
+#footer hr {
+	margin-top: 20px;
+	margin-bottom: 20px;
+}
