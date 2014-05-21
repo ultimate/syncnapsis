@@ -1,0 +1,301 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ - Syncnapsis Framework - Copyright (c) 2012 ultimate
+ - 
+ - This program is free software; you can redistribute it and/or modify it under the terms of
+ - the GNU General Public License as published by the Free Software Foundation; either version
+ - 3 of the License, or any later version.
+ - 
+ - This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+ - without even the implied warranty of MECHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ - See the GNU General Public License for more details.
+ - 
+ - You should have received a copy of the GNU General Plublic License along with this program;
+ - if not, see <http://www.gnu.org/licenses/>.
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.syncnapsis.syncnapsis-universe</groupId>
+	<artifactId>syncnapsis-universe-evolution</artifactId>
+	<packaging>jar</packaging>
+	<version>0.9.0</version>
+	<name>syncnapsis-universe-evolution</name>
+
+	<parent>
+		<groupId>com.syncnapsis</groupId>
+		<artifactId>syncnapsis-universe</artifactId>
+		<version>0.9.0</version>
+	</parent>
+
+	<build>
+		<defaultGoal>install</defaultGoal>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-war-plugin</artifactId>
+				<version>2.0</version>
+				<configuration>
+					<webappDirectory>target/webapp</webappDirectory>
+					<attachClasses>true</attachClasses>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+	<dependencies>
+		<dependency>
+			<groupId>com.syncnapsis.syncnapsis-core</groupId>
+			<artifactId>syncnapsis-core-websockets</artifactId>
+			<version>0.9.0</version>
+		</dependency>
+		<dependency>
+			<groupId>com.syncnapsis.syncnapsis-modules</groupId>
+			<artifactId>syncnapsis-modules-politics-complex-impl</artifactId>
+			<version>0.9.0</version>
+		</dependency>
+		<dependency>
+			<groupId>com.syncnapsis.syncnapsis-modules</groupId>
+			<artifactId>syncnapsis-modules-stats-base-impl</artifactId>
+			<version>0.9.0</version>
+		</dependency>
+		<dependency>
+			<groupId>com.syncnapsis.syncnapsis-universe</groupId>
+			<artifactId>syncnapsis-universe-utils</artifactId>
+			<version>0.9.0</version>
+		</dependency>
+		<dependency>
+			<groupId>com.syncnapsis.syncnapsis-core</groupId>
+			<artifactId>syncnapsis-core-game-base</artifactId>
+			<version>0.9.0</version>
+		</dependency>
+		<!-- BASE - START -->
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<version>${log4j.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-log4j12</artifactId>
+			<version>${slf4j.version}</version>
+		</dependency>
+		<!-- BASE - END -->
+	</dependencies>
+
+	<profiles>
+		<!-- ================= dbunit Profiles ================= -->
+		<!-- TODO: update similar to universe-conquest -->
+		<profile>
+			<id>full-db</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>hibernate3-maven-plugin</artifactId>
+						<version>2.0-alpha-1</version>
+						<configuration>
+							<components>
+								<component>
+									<name>hbm2ddl</name>
+									<implementation>annotationconfiguration</implementation>
+								</component>
+							</components>
+							<componentProperties>
+								<drop>true</drop>
+								<jdk5>true</jdk5>
+								<propertyfile>target/classes/jdbc.properties</propertyfile>
+								<skip>${maven.test.skip}</skip>
+							</componentProperties>
+						</configuration>
+						<executions>
+							<execution>
+								<id>full-db</id>
+								<phase>generate-test-resources</phase>
+								<goals>
+									<goal>hbm2ddl</goal>
+								</goals>
+							</execution>
+						</executions>
+						<dependencies>
+							<dependency>
+								<groupId>${jdbc.groupId}</groupId>
+								<artifactId>${jdbc.artifactId}</artifactId>
+								<version>${jdbc.version}</version>
+							</dependency>
+							<dependency>
+								<groupId>org.hibernate</groupId>
+								<artifactId>hibernate-core</artifactId>
+								<version>${hibernate.version}</version>
+								<exclusions>
+									<exclusion>
+										<groupId>commons-collections</groupId>
+										<artifactId>commons-collections</artifactId>
+									</exclusion>
+								</exclusions>
+							</dependency>
+						</dependencies>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		<profile>
+			<id>data-base</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>dbunit-maven-plugin</artifactId>
+						<version>1.0-beta-1</version>
+						<configuration>
+							<dataTypeFactoryName>${dbunit.dataTypeFactoryName}</dataTypeFactoryName>
+							<driver>${jdbc.driverClassName}</driver>
+							<username>${jdbc.username}</username>
+							<password>${jdbc.password}</password>
+							<url>${jdbc.url}</url>
+							<type>INSERT</type>
+							<schema>${dbunit.schema}</schema>
+							<skip>${maven.test.skip}</skip>
+							<src>${dbunit.src.tables}</src>
+						</configuration>
+						<executions>
+							<execution>
+								<id>data-del</id>
+								<phase>process-test-resources</phase>
+								<configuration>
+									<type>DELETE_ALL</type>
+									<src>${dbunit.src.tables}</src>
+								</configuration>
+								<goals>
+									<goal>operation</goal>
+								</goals>
+							</execution>
+							<execution>
+								<id>data-base</id>
+								<phase>process-test-resources</phase>
+								<configuration>
+									<type>INSERT</type>
+									<src>${dbunit.src.base}</src>
+								</configuration>
+								<goals>
+									<goal>operation</goal>
+								</goals>
+							</execution>
+						</executions>
+						<dependencies>
+							<dependency>
+								<groupId>${jdbc.groupId}</groupId>
+								<artifactId>${jdbc.artifactId}</artifactId>
+								<version>${jdbc.version}</version>
+							</dependency>
+						</dependencies>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		<profile>
+			<id>data</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>dbunit-maven-plugin</artifactId>
+						<version>1.0-beta-1</version>
+						<configuration>
+							<dataTypeFactoryName>${dbunit.dataTypeFactoryName}</dataTypeFactoryName>
+							<driver>${jdbc.driverClassName}</driver>
+							<username>${jdbc.username}</username>
+							<password>${jdbc.password}</password>
+							<url>${jdbc.url}</url>
+							<type>INSERT</type>
+							<schema>${dbunit.schema}</schema>
+							<skip>${maven.test.skip}</skip>
+							<src>${dbunit.src.tables}</src>
+						</configuration>
+						<executions>
+							<execution>
+								<id>data-del</id>
+								<phase>process-test-resources</phase>
+								<configuration>
+									<type>DELETE_ALL</type>
+									<src>${dbunit.src.tables}</src>
+								</configuration>
+								<goals>
+									<goal>operation</goal>
+								</goals>
+							</execution>
+							<execution>
+								<id>data-base</id>
+								<phase>process-test-resources</phase>
+								<configuration>
+									<type>INSERT</type>
+									<src>${dbunit.src.base}</src>
+								</configuration>
+								<goals>
+									<goal>operation</goal>
+								</goals>
+							</execution>
+							<execution>
+								<id>data-test</id>
+								<phase>process-test-resources</phase>
+								<configuration>
+									<type>INSERT</type>
+									<src>${dbunit.src.test}</src>
+								</configuration>
+								<goals>
+									<goal>operation</goal>
+								</goals>
+							</execution>
+							<execution>
+								<id>data-dummy</id>
+								<phase>process-test-resources</phase>
+								<configuration>
+									<format>flat</format>
+									<type>INSERT</type>
+									<src>${dbunit.src.dummy}</src>
+								</configuration>
+								<goals>
+									<goal>operation</goal>
+								</goals>
+							</execution>
+							<execution>
+								<id>data-generated</id>
+								<phase>process-test-resources</phase>
+								<configuration>
+									<format>flat</format>
+									<type>INSERT</type>
+									<src>${dbunit.src.generated}</src>
+								</configuration>
+								<goals>
+									<goal>operation</goal>
+								</goals>
+							</execution>
+						</executions>
+						<dependencies>
+							<dependency>
+								<groupId>${jdbc.groupId}</groupId>
+								<artifactId>${jdbc.artifactId}</artifactId>
+								<version>${jdbc.version}</version>
+							</dependency>
+						</dependencies>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
+
+	<properties>
+		<!-- Database settings - Start -->
+		<dbunit.dataTypeFactoryName>org.dbunit.dataset.datatype.DefaultDataTypeFactory</dbunit.dataTypeFactoryName>
+		<dbunit.src.tables>src/test/resources/data-tables.xml</dbunit.src.tables>
+		<dbunit.src.base>src/test/resources/data-base.xml</dbunit.src.base>
+		<dbunit.src.test>src/test/resources/data-test.xml</dbunit.src.test>
+		<dbunit.src.dummy>src/test/resources/data-dummy.xml</dbunit.src.dummy>
+		<dbunit.src.generated>src/test/resources/data-generated.xml</dbunit.src.generated>
+		<dbunit.src>${dbunit.src.base}</dbunit.src>
+		
+		<!-- used to fix hibernate-plugin-dtd-bug -->
+		<hibernate.version>4.0.1.Final</hibernate.version> <!-- 19.01.2012 -->
+	</properties>
+</project>

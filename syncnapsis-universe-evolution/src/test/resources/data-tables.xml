@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ - Syncnapsis Framework - Copyright (c) 2012 ultimate
+ - 
+ - This program is free software; you can redistribute it and/or modify it under the terms of
+ - the GNU General Public License as published by the Free Software Foundation; either version
+ - 3 of the License, or any later version.
+ - 
+ - This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+ - without even the implied warranty of MECHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ - See the GNU General Public License for more details.
+ - 
+ - You should have received a copy of the GNU General Plublic License along with this program;
+ - if not, see <http://www.gnu.org/licenses/>.
+-->
+<!DOCTYPE dataset SYSTEM "dataset.dtd">
+<dataset>	
+	<table name="parameter"></table>	
+	<table name="guiwindowparams"></table>
+	<table name="guiaction"></table>	
+	<table name="messenger"></table>
+	<table name="menuitem"></table>
+	<table name="menuparent"></table>	
+
+	<table name="app_userrole"></table>	
+	<table name="app_userrole_fallback"></table>	
+	<table name="app_user"></table>	
+	<table name="playerrole"></table>	
+	<table name="playerrole_fallback"></table>	
+	<table name="player"></table>	
+	<table name="playerrank"></table>	
+	<table name="sittingstatus"></table>	
+	<table name="usercontact"></table>	
+	<table name="messengercontact"></table>	
+	<table name="menuquicklaunchitem"></table>	
+	<table name="news"></table>
+	
+	<table name="authoritygroup"></table>	
+	<table name="authority"></table>	
+	<table name="authorities"></table>	
+	<table name="authoritiesgranted"></table>	
+	<table name="authoritiesnotgranted"></table>	
+
+	<table name="alliance"></table>	
+	<table name="alliancerank"></table>	
+	<table name="alliancememberrank"></table>	
+	<table name="alliancememberrankparent"></table>	
+
+	<table name="empire"></table>	
+	<table name="empirerank"></table>	
+	<table name="alliancemember"></table>	
+
+	<table name="contactgroup"></table>
+	<table name="alliancealliancecontact"></table>
+	<table name="alliancealliancecontactgroup"></table>	
+	<table name="empireempirecontact"></table>	
+	<table name="empireempirecontactgroup"></table>	
+	<table name="empirealliancecontact"></table>	
+	<table name="empirealliancecontactgroup"></table>	
+
+	<table name="usercurrentempire"></table>
+</dataset>

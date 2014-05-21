@@ -1,0 +1,237 @@
+<html>
+<head>
+<script type="text/javascript" src="scripts/util/Requests.js"></script>
+
+<script type="text/javascript">
+	DependencyManager.register("Arrays", "util/Arrays.js");
+	DependencyManager.register("Console", "util/Console.js");
+	DependencyManager.register("Events", "util/Events.js");
+	DependencyManager.register("Proxies", "util/Proxies.js");
+	DependencyManager.register("Reflections", "util/Reflections.js");
+	DependencyManager.register("Strings", "util/Strings.js");
+	DependencyManager.register("DateFormat", "lib/date.format.js");
+	DependencyManager.register("JSON", "lib/json2.js");
+
+	DependencyManager.register("WebSockets", "websockets/WebSockets.js");
+	DependencyManager.register("Fallback", "websockets/Fallback.js");
+	DependencyManager.register("RPCSocket", "websockets/RPCSocket.js");
+
+	DependencyManager.onLoadingFinished(init);
+	DependencyManager.registrationDone();
+
+	var ws;
+	var rpcSocket;
+	var server;
+	var client;
+	var div;
+
+	Server = function()
+	{
+		this.startPinging = function()
+		{
+		};
+
+		this.stopPinging = function()
+		{
+		};
+
+		this.ping = function(message)
+		{
+		};
+
+		this.post = function(entity)
+		{
+		};
+
+		this.setAuthorities = function(authorities)
+		{
+		};
+	};
+
+	Client = function()
+	{
+		this.ping = function(message)
+		{
+			console.log(message);
+		};
+
+		this.post = function(entity)
+		{
+			this.ping("post: " + (entity ? null : "[id=" + entity.id + ", name=" + entity.name + "]"));
+		};
+	};
+
+	function init()
+	{
+		div = document.getElementById("ta");
+	}
+
+	function connectRPC()
+	{
+		var url = document.getElementById("tf_url").value;
+
+		var objectHolder = null; // use window
+		var genericRPCHandler = new WebSockets.rpc.GenericRPCHandler(objectHolder);
+		rpcSocket = new WebSockets.RPCSocket(url, "rpc", genericRPCHandler.anonymous(), null, null);
+		var genericRPCInvocationHandler = new WebSockets.rpc.GenericRPCInvocationHandler(rpcSocket, objectHolder);
+
+		client = new Client();
+		server = Proxies.newProxyInstance(Server, genericRPCInvocationHandler);
+	}
+	
+	function disconnectRPC()
+	{
+		rpcSocket.close();
+	}
+
+	// Chat
+	function connect()
+	{
+		var url = document.getElementById("tf_url").value;
+		ws = new WebSocket(url, "chat");
+		ws.onopen = function(e)
+		{
+			print("connection opened");
+		};
+		ws.onclose = function(e)
+		{
+			print("connection closed");
+		};
+		ws.onmessage = function(e)
+		{
+			print("received: " + e.data);
+		};
+		ws.onerror = function(e)
+		{
+			print("error: " + e.data);
+		};
+	}
+
+	function disconnect()
+	{
+		ws.close();
+		rpcSocket.close();
+	}
+
+	function send()
+	{
+		var message = document.getElementById("tf_message").value;
+		print("sending: " + message);
+		ws.send(message);
+	}
+	
+	function startPinging()
+	{
+		server.startPinging();
+	}
+	
+	function stopPinging()
+	{
+		server.stopPinging();
+	}
+
+	function ping()
+	{
+		var message = document.getElementById("tf_ping").value;
+		print("pinging: " + message);
+		server.ping(message);
+	}
+	
+	function post()
+	{
+		server.post(getEntityFromForm());
+	}
+	
+	function get()
+	{
+		printEntity(server.get(getEntityFromForm().id));
+	}
+	
+	function getAll()
+	{
+		var list = server.getAll();
+		for(e in list)
+			printEntity(e);
+	}
+	
+	function save()
+	{
+		printEntity(server.save(getEntityFromForm()));
+	}
+	
+	function getEntityFromForm()
+	{
+		var entity = {};
+		entity.id = parseInt(document.getElementById("tf_entity_id").value);
+		if(document.getElementById("tf_entity_name").value != "")
+			entity.name = document.getElementById("tf_entity_name").value;
+		if(document.getElementById("tf_entity_value").value != "")
+			entity.value = document.getElementById("tf_entity_value").value;
+		return entity;		
+	}
+	
+	function printEntity(e)
+	{
+		print("[id=" + e.id + ",name=" + e.name + ",value=" + e.value + "]");
+	}
+	
+	function setAuthority()
+	{
+		var authorities = [document.getElementById("s_authority").value, "random"];
+		server.setAuthorities(authorities);
+	}
+
+	function print(text)
+	{
+		div.innerHTML = text + "<br>" + div.innerHTML;
+	}
+</script>
+</head>
+<body>
+	<table>
+		<tr>
+			<td>
+				<input type="text" value="ws://localhost:8080/peu/ws" id="tf_url" />
+				<input type="button" value="connect" onclick="javascript:connect();" />
+				<input type="button" value="disconnect" onclick="javascript:disconnect();" />
+				<br />
+				<input type="text" value="" id="tf_message" />
+				<input type="button" value="send" onclick="javascript:send();" />
+				<br />
+			</td>
+			<td>
+				RPC:<br />
+				<input type="button" value="connectRPC" onclick="javascript:connectRPC();" />
+				<input type="button" value="disconnectRPC" onclick="javascript:disconnectRPC();" />
+				<br />
+				<input type="button" value="startPinging" onclick="javascript:startPinging();" />
+				<input type="button" value="stopPinging" onclick="javascript:stopPinging();" />
+				<br />
+				<input type="text" value="" id="tf_ping" />
+				<input type="button" value="ping" onclick="javascript:ping();" />
+				<br />
+				<select id="s_authority">
+					<option value="admin">admin</option>
+					<option value="user">user</option>
+					<option value="demo">demo</option>
+				</select>
+				<input type="button" value="set Authority" onclick="javascript:setAuthority();" />
+				<br />
+				<input type="text" value="1" id="tf_entity_id" />
+				<input type="text" value="one" id="tf_entity_name" />
+				<input type="text" value="val1" id="tf_entity_value" />
+				<input type="button" value="post" onclick="javascript:post();" />
+				<input type="button" value="save" onclick="javascript:save();" />
+				<input type="button" value="get" onclick="javascript:get();" />
+				<input type="button" value="getAll" onclick="javascript:getAll();" />
+				<br />
+			</td>
+		</tr>
+		<tr>
+			<td colspan="2">
+				<div id="ta"></div>
+			</td>
+		</tr>
+	</table>
+</body>
+</html>
