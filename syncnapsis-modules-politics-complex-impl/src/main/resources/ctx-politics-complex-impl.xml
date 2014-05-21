@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ - Syncnapsis Framework - Copyright (c) 2012 ultimate
+ - 
+ - This program is free software; you can redistribute it and/or modify it under the terms of
+ - the GNU General Public License as published by the Free Software Foundation; either version
+ - 3 of the License, or any later version.
+ - 
+ - This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+ - without even the implied warranty of MECHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ - See the GNU General Public License for more details.
+ - 
+ - You should have received a copy of the GNU General Plublic License along with this program;
+ - if not, see <http://www.gnu.org/licenses/>.
+-->
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+            http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd
+            http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.0.xsd"
+	default-lazy-init="true">
+	
+    <!-- =================================================================== -->
+    <!-- DAO						                                         -->
+    <!-- =================================================================== -->
+
+	<bean id="allianceAllianceContactDao" class="com.syncnapsis.data.dao.hibernate.AllianceAllianceContactDaoHibernate">
+	    <constructor-arg ref="sessionFactory"/>
+	</bean>
+
+	<bean id="allianceDao" class="com.syncnapsis.data.dao.hibernate.AllianceDaoHibernate">
+	    <constructor-arg ref="sessionFactory"/>
+	</bean>
+
+	<bean id="allianceMemberRankDao" class="com.syncnapsis.data.dao.hibernate.AllianceMemberRankDaoHibernate">
+	    <constructor-arg ref="sessionFactory"/>
+	</bean>
+	
+	<bean id="allianceRankDao" class="com.syncnapsis.data.dao.hibernate.AllianceRankDaoHibernate">
+	    <constructor-arg ref="sessionFactory"/>
+	</bean>
+
+	<bean id="contactGroupDao" class="com.syncnapsis.data.dao.hibernate.ContactGroupDaoHibernate">
+	    <constructor-arg ref="sessionFactory"/>
+	</bean>
+
+	<bean id="empireAllianceContactDao" class="com.syncnapsis.data.dao.hibernate.EmpireAllianceContactDaoHibernate">
+	    <constructor-arg ref="sessionFactory"/>
+	</bean>
+
+	<bean id="empireEmpireContactDao" class="com.syncnapsis.data.dao.hibernate.EmpireEmpireContactDaoHibernate">
+	    <constructor-arg ref="sessionFactory"/>
+	</bean>
+	
+    <!-- =================================================================== -->
+    <!-- Service					                                         -->
+    <!-- =================================================================== -->
+
+	<bean id="allianceAllianceContactManager" class="com.syncnapsis.data.service.impl.AllianceAllianceContactManagerImpl">
+		<constructor-arg ref="allianceAllianceContactDao" />
+	</bean>  
+    
+	<bean id="allianceManager" class="com.syncnapsis.data.service.impl.AllianceManagerImpl">
+		<constructor-arg ref="allianceDao" />
+	</bean>  
+    
+	<bean id="allianceMemberRankManager" class="com.syncnapsis.data.service.impl.AllianceMemberRankManagerImpl">
+		<constructor-arg ref="allianceMemberRankDao" />
+	</bean>  
+    
+	<bean id="allianceRankManager" class="com.syncnapsis.data.service.impl.AllianceRankManagerImpl">
+		<constructor-arg ref="allianceRankDao" />
+	</bean>  
+    
+	<bean id="contactGroupManager" class="com.syncnapsis.data.service.impl.ContactGroupManagerImpl">
+		<constructor-arg ref="contactGroupDao" />
+	</bean>  
+    
+    <bean id="empireAllianceContactManager" class="com.syncnapsis.data.service.impl.EmpireAllianceContactManagerImpl">
+        <constructor-arg ref="empireAllianceContactDao"/>
+    </bean>  
+    
+    <bean id="empireEmpireContactManager" class="com.syncnapsis.data.service.impl.EmpireEmpireContactManagerImpl">
+        <constructor-arg ref="empireEmpireContactDao"/>
+    </bean>  
+    
+    <!-- =================================================================== -->
+    <!-- Security					                                         -->
+    <!-- =================================================================== -->
+	
+</beans>
