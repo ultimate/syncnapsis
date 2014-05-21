@@ -66,7 +66,7 @@ public abstract class DefaultData
 	@Deprecated
 	public static final String			REGEXP_DOMAIN_OLD							= "(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?\\.)+(?:[a-zA-Z]{2}|"
 																							+ STRING_TOP_LEVEL_DOMAIN_EXTENSIONS + ")";
-	public static final String			REGEXP_DOMAIN								= "(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?";
+	public static final String			REGEXP_DOMAIN								= "(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?\\.)+[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?";
 	public static final String			REGEXP_EMAIL								= "[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+)*@"
 																							+ REGEXP_DOMAIN;
 

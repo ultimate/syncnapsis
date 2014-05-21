@@ -35,9 +35,12 @@ public class EmailValidatorTest extends LoggerTestCase
 		assertFalse(v.isValid("example@syncnapsis"));
 		
 		ExtendedRandom r = new ExtendedRandom();
+		String email;
 		for(int i = 0; i < 100; i++)
 		{
-			assertTrue(v.isValid(r.nextEmail(30+i)));
+			email = r.nextEmail(30+i);
+			logger.debug(email);
+			assertTrue(v.isValid(email));
 		}
 	}
 }

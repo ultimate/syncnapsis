@@ -107,12 +107,14 @@ public class ExtendedRandomTest extends LoggerTestCase
 
 	public void testNextDomain() throws Exception
 	{
-		String regexp = DefaultData.REGEXP_DOMAIN;
+		String regexp1 = DefaultData.REGEXP_DOMAIN_OLD;
+		String regexp2 = DefaultData.REGEXP_DOMAIN;
 		String r;
 		for(int i = 0; i < 20; i++)
 		{
 			r = random.nextDomain();
-			assertTrue(r.matches(regexp));
+			assertTrue(r.matches(regexp1));
+			assertTrue(r.matches(regexp2));
 		}
 	}
 
