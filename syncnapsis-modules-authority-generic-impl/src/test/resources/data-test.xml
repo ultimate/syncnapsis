@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ - Syncnapsis Framework - Copyright (c) 2012 ultimate
+ - 
+ - This program is free software; you can redistribute it and/or modify it under the terms of
+ - the GNU General Public License as published by the Free Software Foundation; either version
+ - 3 of the License, or any later version.
+ - 
+ - This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+ - without even the implied warranty of MECHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ - See the GNU General Public License for more details.
+ - 
+ - You should have received a copy of the GNU General Plublic License along with this program;
+ - if not, see <http://www.gnu.org/licenses/>.
+-->
+<!DOCTYPE dataset SYSTEM "dataset.dtd">
+<dataset>	
+	
+	<table name="authoritygroup">
+		<column>id</column>
+		<column>version</column>
+		<column>name</column>
+		<row>
+			<value description="id">91</value>
+			<value description="version">1</value>
+			<value description="name">auth1</value>
+		</row>
+		<row>
+			<value description="id">92</value>
+			<value description="version">1</value>
+			<value description="name">auth2</value>
+		</row>
+	</table>
+	
+	<table name="authority">
+		<column>id</column>
+		<column>version</column>
+		<column>name</column>
+		<column>fkAuthorityGroup</column>
+		<row>
+			<value description="id">9101</value>
+			<value description="version">1</value>
+			<value description="name">auth101</value>
+			<value description="fkAuthorityGroup">91</value>
+		</row>
+		<row>
+			<value description="id">9102</value>
+			<value description="version">1</value>
+			<value description="name">auth102</value>
+			<value description="fkAuthorityGroup">91</value>
+		</row>
+		<row>
+			<value description="id">9103</value>
+			<value description="version">1</value>
+			<value description="name">auth103</value>
+			<value description="fkAuthorityGroup">91</value>
+		</row>
+		<row>
+			<value description="id">9201</value>
+			<value description="version">1</value>
+			<value description="name">auth201</value>
+			<value description="fkAuthorityGroup">92</value>
+		</row>
+		<row>
+			<value description="id">9202</value>
+			<value description="version">1</value>
+			<value description="name">auth202</value>
+			<value description="fkAuthorityGroup">92</value>
+		</row>
+	</table>
+	
+	<table name="authorities">
+		<column>id</column>
+		<column>version</column>
+		<row>
+			<!-- dummy -->
+			<value description="id">1</value>
+			<value description="version">0</value>
+		</row>
+	</table>
+</dataset>
