@@ -105,6 +105,7 @@ public class ExtendedRandomTest extends LoggerTestCase
 		}
 	}
 
+	@SuppressWarnings("deprecation")
 	public void testNextDomain() throws Exception
 	{
 		String regexp1 = DefaultData.REGEXP_DOMAIN_OLD;
