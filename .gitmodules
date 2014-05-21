@@ -1,9 +1,0 @@
-[submodule "syncnapsis-universe-evolution"]
-	path = syncnapsis-universe-evolution
-	url = https://github.com/syncnapsis/syncnapsis-universe-evolution.git
-[submodule "syncnapsis-universe-conquest"]
-	path = syncnapsis-universe-conquest
-	url = https://github.com/syncnapsis/syncnapsis-universe-conquest.git
-[submodule "syncnapsis-universe-utils"]
-	path = syncnapsis-universe-utils
-	url = https://github.com/syncnapsis/syncnapsis-universe-utils.git
