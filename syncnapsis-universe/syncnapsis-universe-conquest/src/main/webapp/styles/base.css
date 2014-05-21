@@ -1,0 +1,356 @@
+#debug {
+	position: absolute;
+	top: 5px;
+	left: 5px;
+	width: 200px;
+	height: 150px;
+	border: 1px solid #AAAAAA;
+	background: rgba(255, 255, 255, 0.5);
+}
+
+* {
+	opacity: 1;
+	transition: all 0.5s;
+}
+
+.hidden {
+	display: none;
+}
+
+.invisible {
+	opacity: 0;
+}
+
+body {
+	position: absolute;
+	width: auto;
+	height: auto;
+	left: 0px;
+	top: 0px;
+	bottom: 0px;
+	right: 1.5px
+}
+
+body, input, select {
+	background: rgb(0, 0, 0);
+	color: rgba(255, 255, 255, 0.9);
+	margin: 0px;
+	font-family: monospace;
+	font-size: 11px;
+	overflow: hidden;
+}
+
+.centered {
+	position: absolute;
+	left: 0px;
+	right: 0px;
+	top: 0px;
+	bottom: 0px;
+	margin: auto;
+	transition: all 3s;
+}
+
+.centered_x {
+	position: absolute;
+	left: 0px;
+	right: 0px;
+	margin-left: auto;
+	margin-right: auto;
+	transition: all 3s;
+}
+
+.centered_y {
+	position: absolute;
+	top: 0px;
+	bottom: 0px;
+	margin-top: auto;
+	margin-bottom: auto;
+	transition: all 3s;
+}
+
+.attop {
+	position: absolute;
+	top: 0px;
+	bottom: auto;
+	margin-top: 0px;
+	margin-bottom: auto;
+	transition: all 3s;
+}
+
+.atbottom {
+	position: absolute;
+	top: auto;
+	bottom: 0px;
+	margin-top: auto;
+	margin-bottom: 0px;
+	transition: all 3s;
+}
+
+#overlay {
+	width: 100%;
+	height: 100%;
+	background: rgb(0, 0, 0);
+}
+
+#menu {
+	position: absolute;
+	right: 1px;
+	top: 1px;
+}
+
+#menu, 
+#menu>div {
+	width: 300px;
+}
+
+#menu>div {
+	margin-top: 1px;
+}
+
+#menu #menu_fixed {
+	position: absolute;
+	right: 7px;
+	left: auto;
+	top: 7px;
+	width: 36px;
+	/*height: 36px;*/
+	bottom: 7px;
+}
+
+#menu #menu_fixed #door {
+	width: 36px;
+	height: 36px;
+}
+
+#menu #menu_fixed #door:hover {
+	background: rgba(0, 141, 141, 0.9);
+}
+
+#locale_chooser {
+	margin-top: 2px;	
+}
+
+#locale_chooser,
+#locale_chooser>* {
+	width: 36px;
+}
+
+#locale_chooser>div>span {
+	width: 34px;
+}
+
+.flag,
+#locale_chooser .flag {
+	width: 16px;
+	height: 11px;
+	position: relative;
+	top:  3px;
+	margin-right: 3px;
+}
+
+#menu #userbar {
+	height: 68px;
+	/*top: 0px;*/
+}
+
+#menu #userbar>div {
+	padding: 0px;
+}
+
+#user_login,
+#user_login>div>div {
+	overflow: hidden;
+}
+
+.form,
+.largeform {
+	line-height: 20px;
+}
+
+.form>label,
+#user_login>a {
+	width: 100px;
+	display: block;
+	float: left;
+}
+
+.form>input[type=text],
+.form>input[type=password],
+#user_login>a+a {
+	width: 130px;
+}
+
+.largeform>label {
+	width: 150px;
+	display: block;
+	float: left;
+}
+
+.largeform>input[type=text],
+.largeform>input[type=password] {
+	width: 230px;
+	float: right;
+}
+
+#menu #nav {
+	height: 50px;
+	top: 54px;
+	line-height: 4.2em;
+}
+
+#menu #menu_content {
+	overflow: hidden;
+	height: 300px;
+	/*top: 107px;*/	
+}
+
+#menu #main {
+	/*top: 410px;*/
+}
+
+#bar_top,#bar_bottom {
+	width: 400px;
+	margin-top: 1px;
+	margin-bottom: 1px;
+}
+
+#bar_top {
+	height: 30px;
+	line-height: 2.6em;
+}
+
+#bar_bottom {
+	height: 33px;
+	line-height: 2.6em;
+	margin-bottom: 1px;
+	overflow: hidden;
+	transition: all 1s;
+}
+
+#bar_bottom.open {
+	height: 130px;
+}
+
+#bar_bottom>.log_bar {
+	display: inline;
+	top: 0px;
+	height: 32px;
+	margin-bottom: 1px;
+}
+
+#bar_bottom #log_title {
+	width: 85px;
+	position: absolute;
+	left: 0px;
+}
+
+#bar_bottom>#log {
+	position: absolute;
+	width: 224px;
+}
+
+#bar_bottom #log_menu {
+	width: 85px;
+	position: absolute;
+	right: 0px;
+}
+
+#bar_bottom .inner {
+	padding-left: 5px;
+	padding-right: 5px;
+}
+
+#bar_bottom.open #log_content {
+	opacity: 1;
+}
+
+#bar_bottom #log_content {
+	position: absolute;
+	top: 34px;
+	bottom: 0px;
+	overflow-x: hidden;
+	overflow-y: auto;
+	width: 398px;
+}
+
+.frame {
+	border: 1px solid rgba(0, 255, 255, 0.8);
+	background: rgba(0,86,86,0.9);
+}
+
+.transparent_frame {
+	border: 1px solid rgba(0,0,0,0);
+	background: rgba(0,0,0,0);
+}
+
+.button {
+	text-align: center;
+	font-weight: bold;
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+
+.welcome_toggle {
+	font-size: 20px;
+}
+
+.button a {
+	width: 100%;
+	height: 100%;
+	text-decoration: none;
+	display: block;
+}
+
+.button,
+.button *{
+	cursor: pointer;
+}
+
+.main {
+	width: 275px;
+	height: 150px;
+}
+
+#links,
+#overlay_links {
+	position: absolute;
+	left: 0px;
+	right: 0px;
+	bottom: 10px;
+	margin-left: 0px;
+	margin-right: 0px;
+	text-align: center;
+}
+
+.logo_container {
+	width: 75px !important;
+	height: 75px;
+	bottom: 30px;
+}
+
+#logo_container2 {
+	bottom: 50px;
+}
+
+a {
+	color: rgba(255, 255, 255, 0.9);
+	cursor: pointer;
+}
+
+a * {
+	cursor: pointer;
+}
+
+.links a {
+	margin: 8px;
+}
+
+h1 {
+	margin-top: 0px;
+}
+
+#showWelcome label {
+	position: relative;
+	bottom: 3px;
+	margin-left: 4px;
+}
