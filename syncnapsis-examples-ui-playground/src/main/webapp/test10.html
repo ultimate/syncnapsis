@@ -1,0 +1,923 @@
+<!DOCTYPE html>
+<html lang="de">
+	<!--
+		- replaced the cubes with a Galaxy out of particles! (unfortunately particles are for CanvasRenderers only :( )
+		- make it use a particle system (so we can use a WebGLRenderer again!)
+		- using an image for the particle
+		- cleaned up code a little bit
+	-->
+	<meta charset="utf-8">
+	<head>
+		<script type="text/javascript" src="scripts/three.min-50.js"></script>
+		<script type="text/javascript" src="sectors-0.1-medium.js"></script>
+		<script type="text/javascript">
+		<!--
+			var camera, scene, renderer, projector;
+			var mesh,mesh2;			
+			var mouse = { x: 0, y: 0 };			
+			var cameraRadius = 2000,cameraRadiusTarget = 2000;			
+			var imgTexture;			
+			var activeMesh = null;			
+			
+			document.addEventListener("DOMContentLoaded", function(){	
+				init();
+				animate();			
+			}, false);			
+			document.addEventListener( 'mousedown', onClick, false );			
+			document.addEventListener( 'mouseup', clearColors, false );			
+			document.addEventListener( 'DOMMouseScroll', mousewheel, false );			
+			
+			function mousewheel(e){			
+				e.preventDefault();
+			
+				var e = window.event || e;
+				var delta = Math.max(-1, Math.min(1, (e.wheelDelta || -e.detail)));
+		
+				cameraRadiusTarget = cameraRadius + delta * 30;
+				return false;			
+			};
+
+			function onClick( event ) {
+				event.preventDefault();
+
+				mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
+				mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;			
+				
+				var vector = new THREE.Vector3( mouse.x, mouse.y, 1 );				
+				projector.unprojectVector( vector, camera );
+				var ray = new THREE.Ray( camera.position, vector.subSelf( camera.position ).normalize() );
+				/*
+				var intersects = ray.intersectObjects( allCubes );
+
+				if ( intersects.length > 0 ) {
+					findNeighbors(intersects[0].object.position);					
+					intersects[0].object.material = materials.selected;					
+					activeMesh = intersects[0].object;					
+					cameraOffset = [activeMesh.position.x,activeMesh.position.y,activeMesh.position.z];
+				}
+				*/
+			};
+			
+			function findNeighbors(point) {
+				var distances = [];	
+				/*				
+				for(var i=0;i<allCubes.length;i++) {				
+					var distance = Math.sqrt(  squareIt(allCubes[i].position.x - point.x)  +  squareIt(allCubes[i].position.y - point.y) + squareIt(allCubes[i].position.z - point.z)           );
+					distances.push({distance:distance,object:allCubes[i]});
+				};
+				*/
+				
+				distances.sort(compare);
+				for(var i=0;i<=5;i++) {
+					distances[i].object.material = materials.neighbor;
+					var currentColor = 0xff9900;
+					var lineMaterial = new THREE.LineBasicMaterial({ color: currentColor });
+					var geometry = new THREE.Geometry();
+					
+					geometry.vertices.push(new THREE.Vector3(point.x, point.y, point.z));
+					geometry.vertices.push(new THREE.Vector3(distances[i].object.position.x, distances[i].object.position.y, distances[i].object.position.z));
+					
+					var line = new THREE.Line(geometry, lineMaterial);
+					scene.add(line);
+				}
+			};
+			
+			function squareIt(number) {
+				return number * number;
+			}
+
+			function compare(a,b) {
+			  if (a.distance < b.distance)
+				 return -1;
+			  if (a.distance > b.distance)
+				return 1;
+			  return 0;
+			}				
+			
+			function clearColors() {
+				/*
+				for(var i=0;i<allCubes.length;i++) {				
+					allCubes[i].material = materials.inactive;
+				};
+				*/
+			};			
+			
+			function init() {
+				imgTexture = new THREE.MeshBasicMaterial({ //CHANGED to MeshBasicMaterial
+					map:THREE.ImageUtils.loadTexture('test.png')
+				});
+				
+				imgTexture.map.needsUpdate = true; //ADDED
+
+				camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 10000 );
+				camera.position.z = cameraRadius;
+
+				scene = new THREE.Scene();
+				
+				galaxy = createGalaxy(sectors, 10);	
+				showStarColors();
+				updateColormodelConfig();
+				createPlanes(galaxy.info);
+
+				projector = new THREE.Projector();
+
+				renderer = new THREE.WebGLRenderer({antialias: true});
+				//renderer = new THREE.CanvasRenderer({antialias: true});
+				renderer.setSize( window.innerWidth, window.innerHeight );
+
+				document.body.appendChild(renderer.domElement );			
+				
+				var testDiv = document.createElement('div');
+				testDiv.id = 'testDiv';
+				document.body.appendChild(testDiv);
+			};		
+			
+			var flip = 0;
+			var sphere_phi = 0;	
+			var sphere_theta = 0;	
+			var sphere_axis = 0;	
+			var rotationSpeed = 0.005;
+			var cameraOffset = [0,0,0];
+			
+			function animate() {					
+				if(cameraRadius != cameraRadiusTarget ) {
+					if(cameraRadiusTarget > cameraRadius) {
+						cameraRadius += 10
+					} 
+					if(cameraRadiusTarget < cameraRadius) {
+						cameraRadius -= 10
+					} 
+				};						
+
+				updatePlanes();
+				updateCamera();
+				renderer.render( scene, camera );
+
+				
+				if(activeMesh != null) {				
+					var coords = toScreenXY(activeMesh.position,camera);
+					var testC = document.getElementById('testDiv');
+					testC.style.left = (coords[0] * window.innerWidth - 50) + 'px';
+					testC.style.top = (coords[1] * window.innerHeight - 50) + 'px';
+					testC.innerHTML = activeMesh.id;
+				};
+				// note: three.js includes requestAnimationFrame shim
+				requestAnimationFrame( animate );			
+			}		
+			
+			<!-- new -->
+			
+			var galaxy;
+			var planes = {};
+			
+			createPlanes = function(galaxyInfo) {			
+				var count = 9;
+				var geometry;
+				var material;
+				var mesh;			
+				// XY
+				planes.xy = new Array();
+				geometry = new THREE.PlaneGeometry(galaxyInfo.boundX*2, galaxyInfo.boundY*2);
+				material = materials.planesXY;
+				for(var i = 0; i < count; i++) {
+					mesh = new THREE.Mesh(geometry, material);
+					mesh.position.z = galaxyInfo.boundZ/count * 2 * (i+0.5) - galaxyInfo.boundZ;
+					mesh.rotation.z = Math.PI / 2;
+					scene.add(mesh);
+					planes.xy.push(mesh);
+				};			
+				// XZ
+				planes.xz = new Array();
+				geometry = new THREE.PlaneGeometry(galaxyInfo.boundX*2, galaxyInfo.boundZ*2);
+				material = materials.planesXZ;
+				for(var i = 0; i < count; i++) {
+					mesh = new THREE.Mesh(geometry, material);
+					mesh.position.y = galaxyInfo.boundY/count * 2 * (i+0.5) - galaxyInfo.boundY;
+					mesh.rotation.x = Math.PI / 2;
+					scene.add(mesh);
+					planes.xz.push(mesh);
+				};		
+				// YZ
+				planes.yz = new Array();
+				geometry = new THREE.PlaneGeometry(galaxyInfo.boundZ*2, galaxyInfo.boundY*2);
+				material = materials.planesYZ;
+				for(var i = 0; i < count; i++) {
+					mesh = new THREE.Mesh(geometry, material);
+					mesh.position.x = galaxyInfo.boundX/count * 2 * (i+0.5) - galaxyInfo.boundX;
+					mesh.rotation.y = Math.PI / 2;
+					scene.add(mesh);
+					planes.yz.push(mesh);
+				};
+			};	
+			
+			updatePlanes = function()
+			{
+				if(document.getElementById("planesXY").checked)
+				{
+					for(var i = 0; i < planes.xy.length; i ++)
+						planes.xy[i].material = materials.planesXY;
+				}
+				else
+				{
+					for(var i = 0; i < planes.xy.length; i ++)
+						planes.xy[i].material = materials.planesInvisible;
+				}
+				if(document.getElementById("planesXZ").checked)
+				{
+					for(var i = 0; i < planes.xz.length; i ++)
+						planes.xz[i].material = materials.planesXZ;
+				}
+				else
+				{
+					for(var i = 0; i < planes.xz.length; i ++)
+						planes.xz[i].material = materials.planesInvisible;
+				}
+				if(document.getElementById("planesYZ").checked)
+				{
+					for(var i = 0; i < planes.yz.length; i ++)
+						planes.yz[i].material = materials.planesYZ;
+				}
+				else
+				{
+					for(var i = 0; i < planes.yz.length; i ++)
+						planes.yz[i].material = materials.planesInvisible;
+				}
+			};
+			
+			updateCamera = function()
+			{
+				if(document.getElementById("rotateY").checked)
+					sphere_phi -= rotationSpeed;
+				if(document.getElementById("rotateX").checked)
+					sphere_theta += rotationSpeed;
+				if(document.getElementById("rotateZ").checked)
+					sphere_axis += rotationSpeed;
+					
+				var x = cameraRadius * Math.sin(Math.PI/2 - sphere_theta) * Math.cos(sphere_phi);
+				var y = cameraRadius * Math.sin(Math.PI/2 - sphere_theta) * Math.sin(sphere_phi);
+				var z = cameraRadius * Math.cos(Math.PI/2 - sphere_theta); 
+										
+				camera.position.x = x + cameraOffset[0];
+				camera.position.y = y + cameraOffset[1];
+				camera.position.z = z + cameraOffset[2];
+				camera.lookAt(new THREE.Vector3(0,0,0));
+				camera.up = new THREE.Vector3( 0,0,1 );
+				camera.rotation.z += sphere_axis;
+			};
+			
+			updateColors = function()
+			{
+				var colormodel = colormodels[checkedRadioButton("colormodel")];
+				for(i = 0; i < galaxy.colors.length; i++)
+				{
+					galaxy.particles.colors[i].calculateRGB(colormodel);
+				}
+			};			
+			
+			var materials = {
+				initial: new THREE.MeshBasicMaterial( { color: 0xff0000, wireframe: true } ),
+				selected: new THREE.MeshBasicMaterial( { color: 0x000000, wireframe: true } ),
+				neighbor: new THREE.MeshBasicMaterial( { color: 0xff0099, wireframe: true } ),
+				//inactive: new THREE.MeshBasicMaterial( { color: 0x999999, wireframe: true } ),
+				inactive: new THREE.ParticleBasicMaterial({
+					size: 20,
+					map: THREE.ImageUtils.loadTexture("img/star.png"),
+					vertexColors: true,
+				}),
+				planesXY: new THREE.MeshBasicMaterial( { color: 0x00ff99 , opacity:0.6 , wireframe: true } ),
+				planesXZ: new THREE.MeshBasicMaterial( { color: 0xff9900 , opacity:0.6 , wireframe: true } ),
+				planesYZ: new THREE.MeshBasicMaterial( { color: 0x9900ff , opacity:0.6 , wireframe: true } ),
+				planesInvisible: new THREE.MeshBasicMaterial( { visible: false} ),
+			};
+			
+			getSystemMaterial = function(selected, linked)
+			{
+				if(!selected && !linked)
+					return materials.inactive;
+				if(selected)
+					return materials.selected;
+				if(linked)
+					return materials.neighbor
+				return materials.initial;
+			};
+			
+			createGalaxy = function(sectors, stepSize)
+			{
+				if(stepSize == undefined)
+					stepSize = 1;
+				var minX = 1000000000;
+				var minY = 1000000000;
+				var minZ = 1000000000;
+				var maxX = -1000000000;
+				var maxY = -1000000000;
+				var maxZ = -1000000000;
+				var maxR = 0;
+				var maxR2 = 0;
+				var sector;
+				var particle;
+				var particles = new THREE.Geometry();
+				var particleSystem;
+				var color;
+				var colors = new Array();
+				var particleCount = 0;
+				for(var i = 0; i < sectors.length; i += stepSize)
+				{
+					sector = parseSector(sectors[i]);								
+					particle = new THREE.Vector3(sector.x, sector.y, sector.z);
+					particles.vertices.push(particle);
+					if(sector.x < minX)	minX = sector.x;
+					if(sector.x > maxX)	maxX = sector.x;
+					if(sector.y < minY)	minY = sector.y;
+					if(sector.y > maxY)	maxY = sector.y;
+					if(sector.z < minZ)	minZ = sector.z;
+					if(sector.z > maxZ)	maxZ = sector.z;
+					if(sector.r > maxR) maxR = sector.r;
+					if(sector.r2 > maxR2) maxR2 = sector.r2;
+							
+					color = new StarColor(Math.random(), sector.r, sector.r2);
+					colors.push(color);
+							
+					particleCount++;
+				}
+				particles.colors = colors;
+				particleSystem = new THREE.ParticleSystem(particles, getSystemMaterial(false, false));
+				particleSystem.sortParticles = true;
+				var galaxy = {
+					particles: particles,
+					particleSystem: particleSystem,
+					info: new GalaxyInfo(minX, maxX, minY, maxY, minZ, maxZ, maxR, maxR2),
+					count: particleCount,
+					colors: colors,
+				};
+				scene.add(galaxy.particleSystem);
+				return galaxy;
+			};
+			
+			parseSector = function(sector)
+			{
+				return {x: sector[0], y: sector[1], z: sector[2], r: Math.sqrt(sector[0]*sector[0] + sector[1]*sector[1] + sector[2]*sector[2]), r2: Math.sqrt(sector[0]*sector[0] + sector[1]*sector[1])} 
+			};
+
+			GalaxyInfo = function(minX, maxX, minY, maxY, minZ, maxZ, maxR, maxR2)
+			{
+				this.minX = minX;
+				this.maxX = maxX;
+				this.minY = minY;
+				this.maxY = maxY;
+				this.minZ = minZ;
+				this.maxZ = maxZ;
+				this.maxR = maxR;
+				this.maxR2 = maxR2;
+				this.boundX = getBound(minX, maxX);
+				this.boundY = getBound(minY, maxY);
+				this.boundZ = getBound(minZ, maxZ);
+			};
+			
+			getBound = function(min, max)
+			{
+				var absMax = Math.max(Math.abs(min), Math.abs(max));
+				var leadingDigit = parseInt((absMax + "").substring(0,1));
+				var digits = (absMax + "").length;
+				var base10 = Math.pow(10, digits-1);
+				return (leadingDigit+1)*base10;
+			};
+
+			toScreenXY = function(position, camera)
+			{
+				var pos = position.clone();
+				projScreenMat = new THREE.Matrix4();
+				projScreenMat.multiply( camera.projectionMatrix, camera.matrixWorldInverse );
+				projScreenMat.multiplyVector3( pos );
+				return [(pos.x + 1)/2,-(pos.y - 1)/2];
+			};	
+
+			StarColor = function(heat, radius, radius2)
+			{
+				this.heat = heat;
+				this.radius = radius;
+				this.radius2 = radius2;
+			};
+			
+			StarColor.prototype = new THREE.Color(0xFFFFFF);
+			
+			StarColor.prototype.calculateRGB = function(colormodel)
+			{
+				var param1;
+				if(colormodelconfig.param1 == colormodelconfig.heat)
+					param1 = this.heat;				
+				else if(colormodelconfig.param1 == colormodelconfig.radius)
+					param1 = this.radius/galaxy.info.maxR;			
+				else if(colormodelconfig.param1 == colormodelconfig.radius2)
+					param1 = this.radius2/galaxy.info.maxR2;			
+				else if(colormodelconfig.param1 == colormodelconfig.radius_inv)
+					param1 = 1 - this.radius/galaxy.info.maxR;			
+				else if(colormodelconfig.param1 == colormodelconfig.radius2_inv)
+					param1 = 1 - this.radius2/galaxy.info.maxR2;	
+				else 
+					param1 = 0;
+					
+				var param2;
+				if(colormodelconfig.param2 == colormodelconfig.heat)
+					param2 = this.heat;				
+				else if(colormodelconfig.param2 == colormodelconfig.radius)
+					param2 = this.radius/galaxy.info.maxR;			
+				else if(colormodelconfig.param2 == colormodelconfig.radius2)
+					param2 = this.radius2/galaxy.info.maxR2;			
+				else if(colormodelconfig.param2 == colormodelconfig.radius_inv)
+					param2 = 1 - this.radius/galaxy.info.maxR;			
+				else if(colormodelconfig.param2 == colormodelconfig.radius2_inv)
+					param2 = 1 - this.radius2/galaxy.info.maxR2;	
+				else 
+					param2 = 0;
+				
+				var rgb = colormodel.getRGB(param1, param2);
+				this.setRGB(rgb.r, rgb.g, rgb.b);
+			};
+			
+			var colormodels = {
+				white  :  {
+					getRGB: function(param) {
+						return {r: 1, g: 1, b: 1};
+					},
+					parameters: 1,
+				},
+				yellowwhite_1 :  {
+					getRGB: function(param) {
+						return {r: 1, g: 1, b: Math.sqrt(param)};
+					},
+					parameters: 1,
+				},
+				yellowwhite_2 :  {
+					getRGB: function(param) {
+						return {r: 1, g: 1, b: param};
+					},
+					parameters: 1,
+				},
+				yellowwhite_3 :  {
+					getRGB: function(param) {
+						return {r: 1, g: 1, b: Math.pow(param,2)};
+					},
+					parameters: 1,
+				},
+				yellow  :  {
+					getRGB: function(param) {
+						return {r: 1, g: 1, b: 0};
+					},
+					parameters: 1,
+				},
+				fullrange : {
+					getRGB: function(param) {
+						var bound1 = 0.1;
+						var bound2 = 0.5;
+						var bound3 = 0.9;
+						var redStart = 0.6;
+						var blueEnd = 0.8;			
+							
+						if(param < bound1)
+							return {r: param/bound1*(1-redStart)+redStart, g: 0, b:0};
+						else if(param < bound2)
+							return {r: 1, g: (param-bound1)/(bound2-bound1), b: 0};
+						else if(param < bound3)
+							return {r: 1, g: 1, b: (param-bound2)/(bound3-bound2)};
+						else
+							return {r: (1-(param-bound3)/(1-bound3))*(1-blueEnd)+blueEnd, g: 1, b: 1};
+					},
+					parameters: 1,
+				},
+				fullrange2 : {
+					getRGB: function(param) {
+						var bound1 = 0.1;
+						var bound2 = 0.5;
+						var bound3 = 0.9;
+						var redStart = 0.6;
+						var blueEnd = 0.8;			
+							
+						if(param < bound1)
+							return {r: param/bound1*(1-redStart)+redStart, g: 0, b:0};
+						else if(param < bound2)
+							return {r: 1, g: Math.sqrt((param-bound1)/(bound2-bound1)), b: 0};
+						else if(param < bound3)
+							return {r: 1, g: 1, b: Math.pow((param-bound2)/(bound3-bound2), 2)};
+						else
+							return {r: (1-(param-bound3)/(1-bound3))*(1-blueEnd)+blueEnd, g: 1, b: 1};
+					},
+					parameters: 1,
+				},
+				partrange1a : {
+					getRGB: function(param) {
+						var bound = 0.5;	
+							
+						if(param < bound)
+							return {r: 1, g: param/bound, b: 0};
+						else
+							return {r: 1, g: 1, b: (param-bound)/(1-bound)};
+					},
+					parameters: 1,
+				},
+				partrange1b : {
+					getRGB: function(param) {
+						var bound = 0.5;
+							
+						if(param < bound)
+							return {r: 1, g: Math.sqrt(param/bound), b: 0};
+						else
+							return {r: 1, g: 1, b: Math.pow((param-bound)/(1-bound),2)};
+					},
+					parameters: 1,
+				},
+				partrange1c : {
+					getRGB: function(param) {
+						var bound = 0.3;	
+							
+						if(param < bound)
+							return {r: 1, g: param/bound, b: 0};
+						else
+							return {r: 1, g: 1, b: (param-bound)/(1-bound)};
+					},
+					parameters: 1,
+				},
+				partrange1d : {
+					getRGB: function(param) {
+						var bound = 0.3;
+							
+						if(param < bound)
+							return {r: 1, g: Math.sqrt(param/bound), b: 0};
+						else
+							return {r: 1, g: 1, b: Math.pow((param-bound)/(1-bound),2)};
+					},
+					parameters: 1,
+				},
+				partrange2a : {
+					getRGB: function(param) {
+						var bound = 0.3;
+						var greenStart = 0.6;	
+							
+						if(param < bound)
+							return {r: 1, g: param/bound*(1-greenStart)+greenStart, b: 0};
+						else
+							return {r: 1, g: 1, b: (param-bound)/(1-bound)};
+					},
+					parameters: 1,
+				},
+				partrange2b : {
+					getRGB: function(param) {
+						var bound = 0.3;
+						var greenStart = 0.6;	
+							
+						if(param < bound)
+							return {r: 1, g: param/bound*(1-greenStart)+greenStart, b: 0};
+						else
+							return {r: 1, g: 1, b: Math.sqrt((param-bound)/(1-bound))};
+					},
+					parameters: 1,
+				},
+				orangewhite_1 : {
+					getRGB: function(param) {
+						var greenStart = 0.6;	
+						return {r: 1, g: param*(1-greenStart)+greenStart, b: param};
+					},
+					parameters: 1,
+				},
+				orangewhite_2 : {
+					getRGB: function(param) {
+						var greenStart = 0.6;
+						return {r: 1, g: Math.sqrt(param*(1-greenStart)+greenStart), b: Math.sqrt(param)};
+					},
+					parameters: 1,
+				},
+				fullrange2_1 : {
+					getRGB: function(param) {
+						var bound1 = 0.3;	
+						var bound2 = 0.7;	
+							
+						if(param < bound1)
+							return {r: 1, g: param/bound1, b: 0};
+						else if(param < bound2)
+							return {r: 1, g: 1, b: (param-bound1)/(bound2-bound1)};
+						else
+							return {r: (1-(param-bound2)/(1-bound2)), g: (1-(param-bound2)/(1-bound2)), b: 1};
+					},
+					parameters: 1,
+				},
+				fullrange2_2 : {
+					getRGB: function(param) {
+						var bound1 = 0.3;	
+						var bound2 = 0.7;	
+							
+						if(param < bound1)
+							return {r: 1, g: param/bound1, b: 0};
+						else if(param < bound2)
+							return {r: 1, g: 1, b: (param-bound1)/(bound2-bound1)};
+						else
+							return {r: Math.sqrt(1-(param-bound2)/(1-bound2)), g: Math.sqrt(1-(param-bound2)/(1-bound2)), b: 1};
+					},
+					parameters: 1,
+				},
+				fullrange3_1 : {
+					getRGB: function(param) {
+						var bound1 = 0.3;	
+						var bound2 = 0.7;
+						var notBlueMin = 0.5;						
+							
+						if(param < bound1)
+							return {r: 1, g: param/bound1, b: 0};
+						else if(param < bound2)
+							return {r: 1, g: 1, b: (param-bound1)/(bound2-bound1)};
+						else
+							return {r: (1-(param-bound2)/(1-bound2))*(1-notBlueMin)+notBlueMin, g: (1-(param-bound2)/(1-bound2))*(1-notBlueMin)+notBlueMin, b: 1};
+					},
+					parameters: 1,
+				},
+				fullrange3_2 : {
+					getRGB: function(param) {
+						var bound1 = 0.3;	
+						var bound2 = 0.7;
+						var notBlueMin = 0.5;			
+							
+						if(param < bound1)
+							return {r: 1, g: param/bound1, b: 0};
+						else if(param < bound2)
+							return {r: 1, g: 1, b: (param-bound1)/(bound2-bound1)};
+						else
+							return {r: Math.sqrt(1-(param-bound2)/(1-bound2))*(1-notBlueMin)+notBlueMin, g: Math.sqrt(1-(param-bound2)/(1-bound2))*(1-notBlueMin)+notBlueMin, b: 1};
+					},
+					parameters: 1,
+				},
+				fullrange4_1 : {
+					getRGB: function(param) {
+						var bound1 = 0.3;	
+						var bound2 = 0.7;
+						var redMin = 0.5;	
+						var greenMin = 0.75;				
+							
+						if(param < bound1)
+							return {r: 1, g: param/bound1, b: 0};
+						else if(param < bound2)
+							return {r: 1, g: 1, b: (param-bound1)/(bound2-bound1)};
+						else
+							return {r: (1-(param-bound2)/(1-bound2))*(1-redMin)+redMin, g: (1-(param-bound2)/(1-bound2))*(1-greenMin)+greenMin, b: 1};
+					},
+					parameters: 1,
+				},
+				fullrange4_2 : {
+					getRGB: function(param) {
+						var bound1 = 0.3;	
+						var bound2 = 0.7;
+						var redMin = 0.5;	
+						var greenMin = 0.75;			
+							
+						if(param < bound1)
+							return {r: 1, g: param/bound1, b: 0};
+						else if(param < bound2)
+							return {r: 1, g: 1, b: (param-bound1)/(bound2-bound1)};
+						else
+							return {r: Math.sqrt(1-(param-bound2)/(1-bound2))*(1-redMin)+redMin, g: Math.sqrt(1-(param-bound2)/(1-bound2))*(1-greenMin)+greenMin, b: 1};
+					},
+					parameters: 1,
+				},
+				spectrum : {
+					getRGB: function(param) {
+						var bound1 = 1/6;	
+						var bound2 = 2/6;	
+						var bound3 = 3/6;	
+						var bound4 = 4/6;		
+						var bound5 = 5/6;
+							
+						if(param < bound1)
+							return {r: 1-param/bound1, g: 0, b: 1};
+						else if(param < bound2)
+							return {r: 0, g: (param-bound1)/(bound2-bound1), b: 1};
+						else if(param < bound3)
+							return {r: 0, g: 1, b: 1-(param-bound2)/(bound3-bound2)};
+						else if(param < bound4)
+							return {r: (param-bound3)/(bound4-bound3), g: 1, b: 0};
+						else if(param < bound5)
+							return {r: 1, g: 1-(param-bound4)/(bound5-bound4), b: 0};
+						else
+							return {r: 1, g: 0, b: (param-bound5)/(1-bound5)};
+					},
+					parameters: 1,
+				},
+				bluewhite : {
+					getRGB: function(param) {
+						return {r: param, g: param, b: 1 };
+					},
+					parameters: 1,
+				},
+				bluewhite_1 : {
+					getRGB: function(param) {
+						return {r: Math.pow(param,2), g: Math.sqrt(param), b: 1 };
+					},
+					parameters: 1,
+				},
+				bluewhite_2 : {
+					getRGB: function(param) {
+						return {r: Math.sqrt(param), g: Math.pow(param,2), b: 1 };
+					},
+					parameters: 1,
+				},
+				radius :  {
+					getRGB: function(param) {
+						var bound = 0.6;
+						var red1 = 0.3;
+						var green1 = 0.7;
+						var green2 = 0.4;
+						var blueMin = 0.6;			
+						
+						if(param < bound)
+							return {r: (param/bound)*(1-red1)+red1, g: green1-Math.pow(param/bound,2)*(green1-green2), b: (1-Math.pow(param/bound,2))*(1-blueMin)+blueMin };
+						else
+							return {r: 1, g: Math.pow((param-bound)/(1-bound),0.7)*(1-green2)+green2, b: Math.pow((param-bound)/(1-bound),0.7)*(1-blueMin)+blueMin};
+					},
+					parameters: 1,
+				},
+				radius2 :  {
+					getRGB: function(param) {
+						var bound = 0.6;
+						var red1 = 0.3;
+						var green1 = 0.7;
+						var green2 = 0.2;
+						var blueMin = 0.3;			
+						
+						if(param < bound)
+							return {r: (param/bound)*(1-red1)+red1, g: green1-Math.pow(param/bound,2)*(green1-green2), b: (1-Math.pow(param/bound,2))*(1-blueMin)+blueMin };
+						else
+							return {r: 1, g: Math.pow((param-bound)/(1-bound),0.7)*(1-green2)+green2, b: Math.pow((param-bound)/(1-bound),0.7)*(1-blueMin)+blueMin};
+					},
+					parameters: 1,
+				},
+				radius3 :  {
+					getRGB: function(param) {
+						var bound = 0.6;
+						var red1 = 0.3;
+						var green1 = 0.7;
+						var green2 = 0.2;
+						var blueMin = 0.3;			
+						
+						if(param < bound)
+							return {r: (param/bound)*(1-red1)+red1, g: green1-Math.pow(param/bound,2)*(green1-green2), b: (1-Math.pow(param/bound,2))*(1-blueMin)+blueMin };
+						else
+							return {r: 1, g: Math.pow((param-bound)/(1-bound),0.3)*(1-green2)+green2, b: Math.pow((param-bound)/(1-bound),0.7)*(1-blueMin)+blueMin};
+					},
+					parameters: 1,
+				},
+				//Math.pow((param-bound)/(1-bound)*2-1,2)*(1-red2)+red2
+			};
+			
+			var colormodelconfig = {
+				heat: 0,
+				radius: 1,
+				radius2: 2,
+				radius_inv: 3,
+				radius2_inv: 4,
+				param1: 0,
+				param2: 0,
+			};
+			
+			updateColormodelConfig = function()
+			{
+				colormodelconfig.param1 = colormodelconfig[checkedRadioButton("param1")];
+				colormodelconfig.param2 = colormodelconfig[checkedRadioButton("param2")];
+				updateColors();			
+			};
+						
+			showStarColors = function()
+			{
+				var first = true;
+				var cmDiv = document.getElementById("colormodels");
+				for(cm in colormodels)
+				{	
+					if(typeof colormodels[cm] == "function")
+						continue;
+					var colormodel = colormodels[cm];
+					var div = document.createElement("div");
+					div.className = "colormodel";
+					var radio = document.createElement("input");
+					radio.type = "radio";
+					radio.value = cm;
+					radio.name = "colormodel";
+					radio.onchange = updateColors;
+					if(first)
+					{
+						radio.checked = "checked";
+						first = false;
+					}
+					div.appendChild(radio);
+					var bar = document.createElement("div");
+					bar.className = "colorbar";
+					div.appendChild(bar);
+					var desc = document.createElement("span");
+					desc.className = "colorbar_description";
+					desc.innerHTML = "(" + colormodel.parameters + ")";
+					div.appendChild(desc);
+					cmDiv.appendChild(div);
+					var steps = 100;
+					console.log(cm);
+					for(i = 0; i <= steps; i++)
+					{
+						var div2 = document.createElement("div");
+						div2.style.position = "absolute";
+						div2.style.left = i + "%";					
+						div2.style.width = "1%";
+						div2.style.height = "100%";
+						var c = colormodel.getRGB(i/steps, i/steps);
+						var cs= "rgb(" + Math.round(c.r*255) + "," + Math.round(c.g*255) + "," + Math.round(c.b*255) + ")";
+						div2.style.background = cs;
+						bar.appendChild(div2);						
+					}	
+				}
+			};	
+			
+			checkedRadioButton = function(sGroupName)
+			{   
+				var group = document.getElementsByName(sGroupName);
+
+				for ( var i = 0; i < group.length; i++) {
+					if (group.item(i).checked) {
+						return group.item(i).value;
+					} else if (group[0].type !== 'radio') {
+						//if you find any in the group not a radio button return null
+						return null;
+					}
+				}
+			};
+		//-->
+		</script>
+
+		<style type="text/css">
+		<!--		
+			#testDiv {		
+				position:absolute;
+				width:100px;
+				height:100px;
+				border:solid 3px #09f;
+				color:#09f;
+				font-family:arial,sans;
+				border-radius:50px;		
+			}
+			body {
+				background: #000000;
+			}
+			#control {
+				position: absolute;
+				top: 0px;
+				left: 0px;
+				width: 270px;
+				height: 100%;
+				background: #111111;
+				color: #AAAAAA;
+				border: 1px solid #888888;
+			}
+			.colormodel {
+				height: 20px;
+			}
+			.colorbar {
+				width: 200px;
+				height: 20px;
+				position: relative;
+				left: 30px;
+				top: -20px;
+				margin-bottom: -22px;
+				border: 1px solid #000000;
+			}
+			.colorbar_description {
+				position: relative;
+				left: 240px;
+				top: -19px;
+				margin-bottom: -22px;
+			}
+		-->
+		</style>		
+	</head>
+	<body>
+		<div id="control">
+			Show-Planes?<br>
+			<input type="checkbox" id="planesXY" checked="checked"/> XY &nbsp;
+			<input type="checkbox" id="planesXZ" checked="checked"/> XZ &nbsp;
+			<input type="checkbox" id="planesYZ" checked="checked"/> YZ &nbsp;
+			<br>
+			Rotate?<br>
+			<input type="checkbox" id="rotateX" /> X &nbsp;
+			<input type="checkbox" id="rotateY" checked="checked"/> Y &nbsp;
+			<input type="checkbox" id="rotateZ" /> Z &nbsp;
+			<br>
+			Colormodel?<br>
+			<div id="colormodels"><!-- generated by JS --></div>
+			&nbsp;&nbsp;P1: 
+			<input type="radio" name="param1" value="heat" onchange="updateColormodelConfig()" checked="checked"/> H 
+			<input type="radio" name="param1" value="radius" onchange="updateColormodelConfig()" /> R 
+			<input type="radio" name="param1" value="radius2" onchange="updateColormodelConfig()" /> R2 
+			<input type="radio" name="param1" value="radius_inv" onchange="updateColormodelConfig()" /> R' 
+			<input type="radio" name="param1" value="radius2_inv" onchange="updateColormodelConfig()" /> R2' 
+			<br>
+			&nbsp;&nbsp;P2: 
+			<input type="radio" name="param2" value="heat" onchange="updateColormodelConfig()"/> H 
+			<input type="radio" name="param2" value="radius" onchange="updateColormodelConfig()" checked="checked" /> R 
+			<input type="radio" name="param2" value="radius2" onchange="updateColormodelConfig()" /> R2 
+			<input type="radio" name="param2" value="radius_inv" onchange="updateColormodelConfig()" /> R' 
+			<input type="radio" name="param2" value="radius2_inv" onchange="updateColormodelConfig()" /> R2' 
+			<br>
+		</div>
+		<!-- generated by JS -->
+	</body>
+</html>

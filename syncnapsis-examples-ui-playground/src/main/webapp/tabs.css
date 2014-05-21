@@ -1,0 +1,158 @@
+/**
+ * Syncnapsis Framework - Copyright (c) 2012 ultimate
+ * 
+ * This program is free software; you can redistribute it and/or modify it under the terms of
+ * the GNU General Public License as published by the Free Software Foundation; either version
+ * 3 of the License, or any later version.
+ * 
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+ * without even the implied warranty of MECHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Plublic License along with this program;
+ * if not, see <http://www.gnu.org/licenses/>.
+ */
+.tabbar_horizontal {
+	padding: 0px;
+	transition: all 0s, background 0.5s;
+}
+
+.tabbar_horizontal a {
+	float: left;
+	display: inline;
+	height: 100%;
+	text-decoration: none;
+	margin-top: -2px;
+	margin-left: -1px;
+	transition: all 0s, background 0.5s;
+}
+
+.tabbar_horizontal a+a {
+	margin-left: 3px;
+	transition: all 0s, background 0.5s;
+}
+
+.tabbar_horizontal a>div {
+	margin-top: 1px;
+	text-align: center;
+	vertical-align: middle;
+	height: 100%;
+	position: relative;
+	width: 100%;
+	transition: all 0s, background 0.5s;
+}
+
+.tabbar_horizontal a:hover>div,.tabbar_horizontal a.selected>div {
+	background: rgba(0, 255, 255, 0.5);
+	transition: background 0.5s;
+}
+
+.tabcontainer_horizontal {
+	overflow: hidden;
+}
+
+.tabcontainer_horizontal>div {
+	width: 1000%;
+}
+
+.tabcontainer_horizontal>div>span {
+	display: inline-block;
+	width: 0%;
+	overflow-x: hidden;
+	overflow-y: hidden;
+	padding-right: 0px;
+	padding-left: 0px;
+	padding-top: 5px;
+	padding-bottom: 5px;
+	float: left;
+	height: 200px;
+	min-height: 200px;
+}
+
+.tabcontainer_horizontal>div>span+span {
+	border-left: 1px solid rgba(0, 255, 255, 0.5);
+	margin-left: -1px;
+}
+
+.tabcontainer_horizontal>div>span.selected {
+	width: 10.1%;
+	/*height: auto;*/
+	overflow-x: hidden;
+	overflow-y: auto;
+	padding-right: 5px;
+	padding-left: 5px;
+}
+
+.tabbar_vertical {
+	padding: 0px;
+	transition: all 0s, background 0.5s;
+}
+
+.tabbar_vertical a {
+	float: left;
+	display: inline;
+	width: 100%;
+	text-decoration: none;
+	margin-top: -2px;
+	margin-left: -1px;
+	transition: all 0s, background 0.5s;
+}
+
+.tabbar_vertical a+a {
+	margin-top: 3px;
+	transition: all 0s, background 0.5s;
+}
+
+.tabbar_vertical a>div {
+	margin-top: 1px;
+	text-align: center;
+	vertical-align: middle;
+	height: 100%;
+	position: relative;
+	width: 100%;
+	transition: all 0s, background 0.5s;
+}
+
+.tabbar_vertical a:hover>div,.tabbar_vertical a.selected>div {
+	background: rgba(0, 255, 255, 0.5);
+	transition: all 0.5s;
+}
+
+.tabcontainer_vertical {
+	width: 100%;
+	overflow: hidden;
+	height: 100%;
+}
+
+.tabcontainer_vertical>div {
+	height: 100%;
+	width: 100%;
+}
+
+.tabcontainer_vertical>div>div {
+	height: 0px;
+	max-height: 0px;
+	overflow-x: hidden;
+	overflow-y: hidden;
+	transition: all 1s;
+	padding-right: 5px;
+	padding-left: 5px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+	transition: all 0.5s, overflow-x 0s 1s, overflow-y 0s 1s;
+}
+
+.tabcontainer_vertical>div>div+div {
+	border-top: 1px solid rgba(0, 255, 255, 0.5);
+	margin-top: -1px;
+}
+
+.tabcontainer_vertical>div>div.selected {
+	height: 100%;
+	max-height: 100%;
+	overflow-x: hidden;
+	overflow-y: auto;
+	padding-top: 5px;
+	padding-bottom: 5px;
+	transition: all 0.5s, overflow-x 0s 1s, overflow-y 0s 1s;
+}
