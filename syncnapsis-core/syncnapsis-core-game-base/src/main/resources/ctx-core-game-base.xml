@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ - Syncnapsis Framework - Copyright (c) 2012 ultimate
+ - 
+ - This program is free software; you can redistribute it and/or modify it under the terms of
+ - the GNU General Public License as published by the Free Software Foundation; either version
+ - 3 of the License, or any later version.
+ - 
+ - This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+ - without even the implied warranty of MECHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ - See the GNU General Public License for more details.
+ - 
+ - You should have received a copy of the GNU General Plublic License along with this program;
+ - if not, see <http://www.gnu.org/licenses/>.
+-->
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+            http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd
+            http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.0.xsd"
+	default-lazy-init="true">
+	
+    <!-- =================================================================== -->
+    <!-- DAO						                                         -->
+    <!-- =================================================================== -->
+
+	<bean id="empireDao" class="com.syncnapsis.data.dao.hibernate.EmpireDaoHibernate">
+		<constructor-arg ref="sessionFactory" />
+	</bean>
+
+	<bean id="playerDao" class="com.syncnapsis.data.dao.hibernate.PlayerDaoHibernate">
+		<constructor-arg ref="sessionFactory" />
+	</bean>
+
+	<bean id="playerRoleDao" class="com.syncnapsis.data.dao.hibernate.PlayerRoleDaoHibernate">
+		<constructor-arg ref="sessionFactory" />
+	</bean>
+	
+    <!-- =================================================================== -->
+    <!-- Service					                                         -->
+    <!-- =================================================================== -->
+
+	<bean id="empireManager" class="com.syncnapsis.data.service.impl.EmpireManagerImpl">
+		<constructor-arg ref="empireDao" />
+		<property name="securityManager" ref="securityManager" />
+	</bean>
+
+	<bean id="playerManager" class="com.syncnapsis.data.service.impl.PlayerManagerImpl">
+		<constructor-arg ref="playerDao" />
+		<constructor-arg ref="playerRoleManager" />
+		<constructor-arg ref="userManager" />
+		<property name="securityManager" ref="securityManager" />
+	</bean>
+
+	<bean id="playerRoleManager" class="com.syncnapsis.data.service.impl.PlayerRoleManagerImpl">
+		<constructor-arg ref="playerRoleDao" />
+	</bean>  
+	
+    <!-- =================================================================== -->
+    <!-- Security					                                         -->
+    <!-- =================================================================== -->
+
+	<bean id="empireProvider" class="com.syncnapsis.providers.impl.SessionBasedEmpireProvider">
+		<property name="sessionProvider" ref="sessionProvider" />
+		<property name="attributeName" value="j_empire" />
+	</bean>
+
+	<bean id="playerProvider" class="com.syncnapsis.providers.impl.SessionBasedPlayerProvider">
+		<property name="sessionProvider" ref="sessionProvider" />
+		<property name="attributeName" value="j_player" />
+	</bean>
+
+	<bean id="playerRoleBasedAuthorityProvider" class="com.syncnapsis.providers.impl.PlayerRoleBasedAuthorityProvider">
+		<constructor-arg ref="playerProvider" />
+		<constructor-arg ref="empireProvider" />
+	</bean>
+
+	<bean id="baseGameManager" class="com.syncnapsis.security.BaseGameManager">
+		<property name="accessControllers">
+			<list>
+				<ref bean="fieldAccessController" />
+				<ref bean="methodAccessController" />
+			</list>
+		</property>
+		<property name="timeProvider" ref="timeProvider" />
+		<property name="sessionProvider" ref="sessionProvider" />
+		<property name="localeProvider" ref="localeProvider" />
+		<property name="userProvider" ref="userProvider" />
+		<property name="playerProvider" ref="playerProvider" />
+		<property name="empireProvider" ref="empireProvider" />
+		<property name="authorityProvider" ref="playerRoleBasedAuthorityProvider" />
+		<property name="nameValidator" ref="nameValidator" />
+		<property name="emailValidator" ref="emailValidator" />
+		<property name="mailer" ref="mailer" />
+	</bean>
+
+</beans>

@@ -1,0 +1,34 @@
+<html>
+	<head>	
+		<script type="text/javascript" src="scripts/util/Requests.js"></script>
+		
+		<script type="text/javascript">
+		 	var testlogger;
+		 	var timeout = 10000;
+			
+		 	
+		 	DependencyManager.register("Arrays", 		"util/Arrays.js");
+		 	DependencyManager.register("Events", 		"util/Events.js");
+		 	DependencyManager.register("Logging", 		"util/Logging.js");
+		 	DependencyManager.register("DateFormat", 	"lib/date.format.js");
+		 	DependencyManager.afterLoading(init);
+		 	DependencyManager.registrationDone();
+		 	
+			function init()
+			{
+				testlogger = new Logging.Logger("test", Logging.LEVEL_TRACE);
+				setTimeout("log()", timeout);
+			}
+			
+			function log()
+			{
+				testlogger.debug("asldkjfh");
+				setTimeout("log()", timeout);
+			}	
+			
+		</script>
+	</head>
+	<body>
+		asdf
+	</body>
+</html>

@@ -1,0 +1,597 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  - Syncnapsis Framework - Copyright (c) 2012 ultimate 
+  - 
+  - This program is free software; you can redistribute it and/or modify it under the terms of 
+  - the GNU General Public License as published by the Free Software Foundation; either version 
+  - 3 of the License, or any later version. 
+  - 
+  - This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; 
+  - without even the implied warranty of MECHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+  - See the GNU General Public License for more details. 
+  - 
+  - You should have received a copy of the GNU General Plublic License along with this program; 
+  - if not, see <http://www.gnu.org/licenses/>. 
+  -->
+<!DOCTYPE dataset SYSTEM "dataset.dtd">
+<dataset>
+	<table name="parameter">
+		<column>id</column>
+		<column>name</column>
+		<column>value</column>
+		<column>version</column>
+		<row>
+			<value description="id">1</value>
+			<value description="name">session.timeout.default</value>
+			<value description="value">60</value>
+			<value description="version">1</value>
+		</row>
+		<row>
+			<value description="id">2</value>
+			<value description="name">registration.status.default</value>
+			<value description="value">active</value>
+			<value description="version">1</value>
+		</row>
+		<row>
+			<value description="id">3</value>
+			<value description="name">registration.timeToVerify</value>
+			<value description="value">604800000</value><!-- 1 week -->
+			<value description="version">1</value>
+		</row>
+		<row>
+			<value description="id">4</value>
+			<value description="name">email.change.timeToVerify</value>
+			<value description="value">86400000</value><!-- 1 day -->
+			<value description="version">1</value>
+		</row>
+		<row>
+			<value description="id">5</value>
+			<value description="name">action.code.length</value>
+			<value description="value">50</value>
+			<value description="version">1</value>
+		</row>
+		<row>
+			<value description="id">999901</value>
+			<value description="name">news.maxItems</value>
+			<value description="value">10</value>
+			<value description="version">1</value>
+		</row>
+		<row>
+			<value description="id">999902</value>
+			<value description="name">news.length1.maxAge</value>
+			<value description="value">86400</value>
+			<value description="version">1</value>
+		</row>
+		<row>
+			<value description="id">999903</value>
+			<value description="name">news.length2.maxAge</value>
+			<value description="value">172800</value>
+			<value description="version">1</value>
+		</row>
+		<row>
+			<value description="id">999904</value>
+			<value description="name">news.length3.maxAge</value>
+			<value description="value">259200</value>
+			<value description="version">1</value>
+		</row>
+		<row>
+			<value description="id">999905</value>
+			<value description="name">news.length4.maxAge</value>
+			<value description="value">432000</value>
+			<value description="version">1</value>
+		</row>
+		<row>
+			<value description="id">999906</value>
+			<value description="name">news.length5.maxAge</value>
+			<value description="value">604800</value>
+			<value description="version">1</value>
+		</row>
+		<row>
+			<value description="id">999907</value>
+			<value description="name">news.length6.maxAge</value>
+			<value description="value">1209600</value>
+			<value description="version">1</value>
+		</row>
+		<row>
+			<value description="id">999908</value>
+			<value description="name">news.length7.maxAge</value>
+			<value description="value">2419200</value>
+			<value description="version">1</value>
+		</row>
+		<row>
+			<value description="id">999909</value>
+			<value description="name">news.length8.maxAge</value>
+			<value description="value">4838400</value>
+			<value description="version">1</value>
+		</row>
+		<row>
+			<value description="id">999910</value>
+			<value description="name">news.length9.maxAge</value>
+			<value description="value">7257600</value>
+			<value description="version">1</value>
+		</row>
+	</table>
+
+	<table name="action">
+		<column>id</column>
+		<column>version</column>
+		<column>code</column>
+		<column>object</column>
+		<column>method</column>
+		<column>args</column>
+		<column>uses</column>
+		<column>maxUses</column>
+		<column>validFrom</column>
+		<column>validUntil</column>
+		<row>
+			<value description="id">1</value>
+			<value description="version">1</value>
+			<value description="action">1a2b3c</value>
+			<value description="object">a bean</value>
+			<value description="method">a method</value>
+			<value description="args"><![CDATA[[]]]></value>
+			<value description="uses">1</value>
+			<value description="maxUses">10</value>
+			<null/>
+			<null/>
+		</row>
+	</table>
+
+	<table name="messenger">
+		<column>id</column>
+		<column>version</column>
+		<column>name</column>
+		<column>activated</column>
+
+		<row>
+			<value description="id">1</value>
+			<value description="version">1</value>
+			<value description="name">ICQ</value>
+			<value description="activated">1</value>
+		</row>
+		<row>
+			<value description="id">2</value>
+			<value description="version">1</value>
+			<value description="name">AIM/AOL</value>
+			<value description="activated">1</value>
+		</row>
+		<row>
+			<value description="id">3</value>
+			<value description="version">1</value>
+			<value description="name">MSN/Windows Live</value>
+			<value description="activated">1</value>
+		</row>
+		<row>
+			<value description="id">4</value>
+			<value description="version">1</value>
+			<value description="name">Skype</value>
+			<value description="activated">1</value>
+		</row>
+		<row>
+			<value description="id">5</value>
+			<value description="version">1</value>
+			<value description="name">Yahoo</value>
+			<value description="activated">1</value>
+		</row>
+		<row>
+			<value description="id">6</value>
+			<value description="version">1</value>
+			<value description="name">Google Talk</value>
+			<value description="activated">1</value>
+		</row>
+	</table>
+
+	<table name="app_userrole">
+		<column>id</column>
+		<column>version</column>
+		<column>rolename</column>
+		<column>onlyAllowedToSeeActivated</column>
+		<column>mask</column>
+		<row>
+			<value description="id">1</value>
+			<value description="version">1</value>
+			<value description="rolename">ADMIN</value>
+			<value description="onlyAllowedToSeeActivated">0</value>
+			<value description="mask">1</value>
+		</row>
+		<row>
+			<value description="id">2</value>
+			<value description="version">1</value>
+			<value description="rolename">MODERATOR</value>
+			<value description="onlyAllowedToSeeActivated">1</value>
+			<value description="mask">2</value>
+		</row>
+		<row>
+			<value description="id">3</value>
+			<value description="version">1</value>
+			<value description="rolename">NORMAL_USER</value>
+			<value description="onlyAllowedToSeeActivated">1</value>
+			<value description="mask">4</value>
+		</row>
+		<row>
+			<value description="id">4</value>
+			<value description="version">1</value>
+			<value description="rolename">DEMO_USER</value>
+			<value description="onlyAllowedToSeeActivated">1</value>
+			<value description="mask">8</value>
+		</row>
+	</table>
+
+	<table name="app_userrole_fallback">
+		<column>fkRole</column>
+		<column>fkFallbackRole</column>
+		<row>
+			<value description="fkRole">1</value>
+			<value description="fkFallbackRole">2</value>
+		</row>
+		<row>
+			<value description="fkRole">2</value>
+			<value description="fkFallbackRole">3</value>
+		</row>
+		<row>
+			<value description="fkRole">3</value>
+			<value description="fkFallbackRole">4</value>
+		</row>
+	</table>
+
+	<table name="app_user">
+		<column>id</column>
+		<column>version</column>
+		<column>username</column>
+		<column>email</column>
+		<column>password</column>
+		<column>fkUserRole</column>
+		<column>roleExpireDate</column>
+		<column>activated</column>
+		<column>registrationDate</column>
+		<column>deleteDate</column>
+		<column>accountStatus</column>
+		<column>accountStatusExpireDate</column>
+		<column>nickname</column>
+		<column>title</column>
+		<column>birthday</column>
+		<column>city</column>
+		<column>gender</column>
+		<column>locale</column>
+		<column>timeZoneID</column>
+		<column>dateFormat</column>
+		<column>usingAdvancedMenu</column>
+		<column>usingTooltips</column>
+		<column>usingInfiniteSession</column>
+		<column>sessionTimeout</column>
+		<column>lastActiveDate</column>
+		<column>showEmail</column>
+		<column>description</column>
+		<column>imageURL</column>
+		<row>
+			<value description="id">0</value>
+			<value description="version">1</value>
+			<value description="username">admin</value>
+			<value description="email">admin@syncnapsis.com</value>
+			<value description="password">1000:f44963469d592d5648668945379d2ae969de43db26a32f60:b42983e9692adc9d5162bda2cf91ec47c63e7db37277c96f</value>
+			<value description="fkUserRole">1</value>
+			<null />
+			<value description="activated">1</value>
+			<value description="registrationDate">2008-01-01</value>
+			<null />
+			<value description="accountStatus">active</value>
+			<null />
+			<value description="nickname">Administrator</value>
+			<value description="title">Mr.</value>
+			<null />
+			<value description="city">Berlin</value>
+			<value description="gender">male</value>
+			<value description="locale">DE</value>
+			<value description="timeZoneID">Etc/GMT+1</value>
+			<value description="dateFormat">yMd24_minus</value>
+			<value description="usingAdvancedMenu">1</value>
+			<value description="usingTooltips">1</value>
+			<value description="usingInfiniteSession">0</value>
+			<value description="sessionTimeout">60</value>
+			<value description="lastActiveDate">2008-01-01</value>
+			<value description="showEmail">1</value>
+			<value description="description">Dies ist der Administrator</value>
+			<null />
+		</row>
+		<row>
+			<value description="id">1</value>
+			<value description="version">1</value>
+			<value description="username">user1</value>
+			<value description="email">user1@syncnapsis.com</value>
+			<value description="password">1000:3eff9b066f1696af832c571f88fbc2019ff8e7f6544c606e:f0c1229a02dc24c9e18274c0ddaaeb2977488e60ea1eafd2</value>
+			<value description="fkUserRole">3</value>
+			<null />
+			<value description="activated">1</value>
+			<value description="registrationDate">2008-01-01</value>
+			<null />
+			<value description="accountStatus">active</value>
+			<null />
+			<value description="nickname">user1</value>
+			<value description="title">Mr.</value>
+			<null />
+			<value description="city">Berlin</value>
+			<value description="gender">male</value>
+			<value description="locale">DE</value>
+			<value description="timeZoneID">Etc/GMT+1</value>
+			<value description="dateFormat">yMd24_minus</value>
+			<value description="usingAdvancedMenu">1</value>
+			<value description="usingTooltips">1</value>
+			<value description="usingInfiniteSession">0</value>
+			<value description="sessionTimeout">60</value>
+			<value description="lastActiveDate">2008-01-01</value>
+			<value description="showEmail">1</value>
+			<value description="description">The user #1</value>
+			<null />
+		</row>
+		<row>
+			<value description="id">2</value>
+			<value description="version">1</value>
+			<value description="username">user2</value>
+			<value description="email">user2@syncnapsis.com</value>
+			<value description="password">1000:aa406ee8102adf7b1982a6fd95d5f03f31b32a0b9c76b9a2:7e04661d8eb93b93ecd0e1306d1b5f53070561c068d5c949</value>
+			<value description="fkUserRole">3</value>
+			<null />
+			<value description="activated">1</value>
+			<value description="registrationDate">2008-01-01</value>
+			<null />
+			<value description="accountStatus">active</value>
+			<null />
+			<value description="nickname">user2</value>
+			<value description="title">Mr.</value>
+			<null />
+			<value description="city">Berlin</value>
+			<value description="gender">male</value>
+			<value description="locale">DE</value>
+			<value description="timeZoneID">Etc/GMT+1</value>
+			<value description="dateFormat">yMd24_minus</value>
+			<value description="usingAdvancedMenu">1</value>
+			<value description="usingTooltips">1</value>
+			<value description="usingInfiniteSession">0</value>
+			<value description="sessionTimeout">60</value>
+			<value description="lastActiveDate">2008-01-01</value>
+			<value description="showEmail">1</value>
+			<value description="description">The user #2</value>
+			<null />
+		</row>
+	</table>
+
+	<table name="messengercontact">
+		<column>id</column>
+		<column>version</column>
+		<column>address</column>
+		<column>fkUser</column>
+		<column>fkMessenger</column>
+		<row>
+			<value description="id">1</value>
+			<value description="version">0</value>
+			<value description="address">not available</value>
+			<value description="fkUser">1</value>
+			<value description="fkMessenger">4</value>
+		</row>
+		<row>
+			<value description="id">2</value>
+			<value description="version">0</value>
+			<value description="address">not available</value>
+			<value description="fkUser">1</value>
+			<value description="fkMessenger">4</value>
+		</row>
+		<row>
+			<value description="id">3</value>
+			<value description="version">0</value>
+			<value description="address">not available</value>
+			<value description="fkUser">1</value>
+			<value description="fkMessenger">4</value>
+		</row>
+		<row>
+			<value description="id">4</value>
+			<value description="version">0</value>
+			<value description="address">not available</value>
+			<value description="fkUser">1</value>
+			<value description="fkMessenger">4</value>
+		</row>
+		<row>
+			<value description="id">5</value>
+			<value description="version">0</value>
+			<value description="address">not available</value>
+			<value description="fkUser">1</value>
+			<value description="fkMessenger">5</value>
+		</row>
+	</table>
+
+	<table name="usercontact">
+		<column>id</column>
+		<column>version</column>
+		<column>fkUser1</column>
+		<column>fkUser2</column>
+		<column>approvedByUser1</column>
+		<column>approvedByUser2</column>
+		<row>
+			<value description="id">1</value>
+			<value description="version">0</value>
+			<value description="fkUser1">1</value>
+			<value description="fkUser2">2</value>
+			<value description="approvedByUser1">1</value>
+			<value description="approvedByUser2">1</value>
+		</row>
+	</table>
+
+	<table name="rpclog">
+		<column>id</column>
+		<column>version</column>
+		<column>object</column>
+		<column>method</column>
+		<column>args</column>
+		<column>executionDate</column>
+		<column>result</column>
+		<column>remoteAddr</column>
+		<column>userAgent</column>
+		<column>fkUser</column>
+		<row>
+			<value description="id">1</value>
+			<value description="version">1</value>
+			<value description="object">a bean</value>
+			<value description="method">a method</value>
+			<value description="args"><![CDATA[[]]]></value>
+			<value description="executionDate">2013-01-01 00:00:00</value>
+			<value description="result">1</value>
+			<value description="remoteAddr">127.0.0.1</value>
+			<value description="userAgent">a browser</value>
+			<value description="fkUser">0</value>
+		</row>
+	</table>
+
+	<table name="pinboard">
+		<column>id</column>
+		<column>version</column>
+		<column>activated</column>
+		<column>name</column>
+		<column>description</column>
+		<column>fkCreator</column>
+		<column>creationDate</column>
+		<column>locked</column>
+		<row>
+			<value description="id">1</value>
+			<value description="version">1</value>
+			<value description="activated">1</value>
+			<value description="name">testboard</value>
+			<value description="description"><![CDATA[the test pinboard]]></value>
+			<value description="fkCreator">0</value>
+			<value description="creationDate">2013-01-01 00:00:00</value>
+			<value description="locked">0</value>
+		</row>
+		<row>
+			<value description="id">2</value>
+			<value description="version">1</value>
+			<value description="activated">1</value>
+			<value description="name">a second board</value>
+			<value description="description"><![CDATA[the second pinboard]]></value>
+			<value description="fkCreator">0</value>
+			<value description="creationDate">2013-01-01 00:00:00</value>
+			<value description="locked">1</value>
+		</row>
+	</table>
+
+	<table name="pinboardmessage">
+		<column>id</column>
+		<column>version</column>
+		<column>activated</column>
+		<column>fkPinboard</column>
+		<column>fkCreator</column>
+		<column>creationDate</column>
+		<column>title</column>
+		<column>content</column>
+		<row>
+			<value description="id">1</value>
+			<value description="version">1</value>
+			<value description="activated">1</value>
+			<value description="fkPinboard">1</value>
+			<value description="fkCreator">0</value>
+			<value description="creationDate">2013-01-01 01:00:00</value>
+			<value description="title">first message on the board</value>
+			<value description="content"><![CDATA[hello!]]></value>
+		</row>
+		<row>
+			<value description="id">2</value>
+			<value description="version">1</value>
+			<value description="activated">1</value>
+			<value description="fkPinboard">1</value>
+			<value description="fkCreator">0</value>
+			<value description="creationDate">2013-01-01 02:00:00</value>
+			<null />
+			<value description="content"><![CDATA[enjoy this board]]></value>
+		</row>
+		<row>
+			<value description="id">3</value>
+			<value description="version">1</value>
+			<value description="activated">1</value>
+			<value description="fkPinboard">1</value>
+			<value description="fkCreator">1</value>
+			<value description="creationDate">2013-01-01 03:00:00</value>
+			<null />
+			<value description="content"><![CDATA[yeah, we will... ;-)]]></value>
+		</row>
+		<row>
+			<value description="id">4</value>
+			<value description="version">1</value>
+			<value description="activated">0</value>
+			<value description="fkPinboard">2</value>
+			<value description="fkCreator">0</value>
+			<value description="creationDate">2013-01-01 02:00:00</value>
+			<null />
+			<value description="content"><![CDATA[old announcement]]></value>
+		</row>
+		<row>
+			<value description="id">5</value>
+			<value description="version">1</value>
+			<value description="activated">1</value>
+			<value description="fkPinboard">2</value>
+			<value description="fkCreator">1</value>
+			<value description="creationDate">2013-01-01 03:00:00</value>
+			<null />
+			<value description="content"><![CDATA[new announcement]]></value>
+		</row>
+	</table>
+
+	<table name="blacklist">
+		<column>id</column>
+		<column>version</column>
+		<column>name</column>
+		<column>strict</column>
+		<row>
+			<value description="id">0</value>
+			<value description="version">1</value>
+			<value description="name">general</value>
+			<value description="strict">1</value>
+		</row>
+		<row>
+			<value description="id">1</value>
+			<value description="version">1</value>
+			<value description="name">email</value>
+			<value description="strict">0</value>
+		</row>
+		<row>
+			<value description="id">2</value>
+			<value description="version">1</value>
+			<value description="name">name</value>
+			<value description="strict">1</value>
+		</row>
+	</table>
+
+	<table name="blacklistentry">
+		<column>id</column>
+		<column>version</column>
+		<column>fkBlackList</column>
+		<column>value</column>
+		<row>
+			<value description="id">1</value>
+			<value description="version">1</value>
+			<value description="fkBlackList">0</value>
+			<value description="value"><![CDATA[badword]]></value>
+		</row>
+		<row>
+			<value description="id">101</value>
+			<value description="version">1</value>
+			<value description="fkBlackList">1</value>
+			<value description="value"><![CDATA[spammer@example.com]]></value>
+		</row>
+		<row>
+			<value description="id">102</value>
+			<value description="version">1</value>
+			<value description="fkBlackList">1</value>
+			<value description="value"><![CDATA[idiot@example.com]]></value>
+		</row>
+		<row>
+			<value description="id">201</value>
+			<value description="version">1</value>
+			<value description="fkBlackList">2</value>
+			<value description="value"><![CDATA[badguy]]></value>
+		</row>
+		<row>
+			<value description="id">202</value>
+			<value description="version">1</value>
+			<value description="fkBlackList">2</value>
+			<value description="value"><![CDATA[b4d6uy]]></value>
+		</row>
+	</table>
+
+</dataset>

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ - Syncnapsis Framework - Copyright (c) 2012 ultimate
+ - 
+ - This program is free software; you can redistribute it and/or modify it under the terms of
+ - the GNU General Public License as published by the Free Software Foundation; either version
+ - 3 of the License, or any later version.
+ - 
+ - This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+ - without even the implied warranty of MECHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ - See the GNU General Public License for more details.
+ - 
+ - You should have received a copy of the GNU General Plublic License along with this program;
+ - if not, see <http://www.gnu.org/licenses/>.
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.syncnapsis</groupId>
+    <artifactId>syncnapsis-core</artifactId>
+    <packaging>pom</packaging>
+    <version>0.9.0</version>
+	<name>syncnapsis-core</name>
+	
+	<parent>
+		<groupId>com</groupId>
+		<artifactId>syncnapsis</artifactId>
+		<version>0.9.0</version>
+	</parent>
+	
+	<modules>
+		<module>syncnapsis-core-application-base</module>
+		<module>syncnapsis-core-data</module>
+		<module>syncnapsis-core-game-base</module>
+		<module>syncnapsis-core-utils</module>
+		<module>syncnapsis-core-websockets</module>
+	</modules>
+</project>
