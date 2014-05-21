@@ -1,0 +1,474 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ - Syncnapsis Framework - Copyright (c) 2012 ultimate
+ - 
+ - This program is free software; you can redistribute it and/or modify it under the terms of
+ - the GNU General Public License as published by the Free Software Foundation; either version
+ - 3 of the License, or any later version.
+ - 
+ - This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+ - without even the implied warranty of MECHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ - See the GNU General Public License for more details.
+ - 
+ - You should have received a copy of the GNU General Plublic License along with this program;
+ - if not, see <http://www.gnu.org/licenses/>.
+-->
+<!DOCTYPE dataset SYSTEM "dataset.dtd">
+<dataset>
+	<table name="authoritygroup">
+		<column>id</column>
+		<column>version</column>
+		<column>name</column>
+		<row>
+			<value description="id">1</value>
+			<value description="version">1</value>
+			<value description="name">contactauthorities</value>
+		</row>
+		<row>
+			<value description="id">2</value>
+			<value description="version">1</value>
+			<value description="name">allianceauthorities</value>
+		</row>
+	</table>
+	
+	<table name="authority">
+		<column>id</column>
+		<column>version</column>
+		<column>name</column>
+		<column>fkAuthorityGroup</column>
+		<row>
+			<value description="id">101</value>
+			<value description="version">1</value>
+			<value description="name">allowedToFlyIntoTerritory</value>
+			<value description="fkAuthorityGroup">1</value>
+		</row>
+		<row>
+			<value description="id">102</value>
+			<value description="version">1</value>
+			<value description="name">allowedToSeeEconomy</value>
+			<value description="fkAuthorityGroup">1</value>
+		</row>
+		<row>
+			<value description="id">103</value>
+			<value description="version">1</value>
+			<value description="name">allowedToSeeOnlineStatus</value>
+			<value description="fkAuthorityGroup">1</value>
+		</row>
+		<row>
+			<value description="id">104</value>
+			<value description="version">1</value>
+			<value description="name">allowedToSeeReports</value>
+			<value description="fkAuthorityGroup">1</value>
+		</row>
+		<row>
+			<value description="id">105</value>
+			<value description="version">1</value>
+			<value description="name">allowedToSeeSpecialOffersInMarketPlace</value>
+			<value description="fkAuthorityGroup">1</value>
+		</row>
+		<row>
+			<value description="id">106</value>
+			<value description="version">1</value>
+			<value description="name">allowedToSeeTroops</value>
+			<value description="fkAuthorityGroup">1</value>
+		</row>
+		<row>
+			<value description="id">107</value>
+			<value description="version">1</value>
+			<value description="name">allowedToUseScanners</value>
+			<value description="fkAuthorityGroup">1</value>
+		</row>
+		<row>
+			<value description="id">108</value>
+			<value description="version">1</value>
+			<value description="name">allowedToUseStargates</value>
+			<value description="fkAuthorityGroup">1</value>
+		</row>
+		<row>
+			<value description="id">109</value>
+			<value description="version">1</value>
+			<value description="name">notAllowedToAttack</value>
+			<value description="fkAuthorityGroup">1</value>
+		</row>
+		<row>
+			<value description="id">201</value>
+			<value description="version">1</value>
+			<value description="name">allowedToChangeAllianceDescription</value>
+			<value description="fkAuthorityGroup">2</value>
+		</row>
+		<row>
+			<value description="id">202</value>
+			<value description="version">1</value>
+			<value description="name">allowedToChangeDiplomacy</value>
+			<value description="fkAuthorityGroup">2</value>
+		</row>
+		<row>
+			<value description="id">203</value>
+			<value description="version">1</value>
+			<value description="name">allowedToCommandAllianceFleet</value>
+			<value description="fkAuthorityGroup">2</value>
+		</row>
+		<row>
+			<value description="id">204</value>
+			<value description="version">1</value>
+			<value description="name">allowedToDecruitMembers</value>
+			<value description="fkAuthorityGroup">2</value>
+		</row>
+		<row>
+			<value description="id">205</value>
+			<value description="version">1</value>
+			<value description="name">allowedToDefineDiplomacy</value>
+			<value description="fkAuthorityGroup">2</value>
+		</row>
+		<row>
+			<value description="id">206</value>
+			<value description="version">1</value>
+			<value description="name">allowedToDefinePosts</value>
+			<value description="fkAuthorityGroup">2</value>
+		</row>
+		<row>
+			<value description="id">207</value>
+			<value description="version">1</value>
+			<value description="name">allowedToManageForum</value>
+			<value description="fkAuthorityGroup">2</value>
+		</row>
+		<row>
+			<value description="id">208</value>
+			<value description="version">1</value>
+			<value description="name">allowedToPromoteMembers</value>
+			<value description="fkAuthorityGroup">2</value>
+		</row>
+		<row>
+			<value description="id">209</value>
+			<value description="version">1</value>
+			<value description="name">allowedToRecruitMembers</value>
+			<value description="fkAuthorityGroup">2</value>
+		</row>
+		<row>
+			<value description="id">210</value>
+			<value description="version">1</value>
+			<value description="name">allowedToSendAllianceMail</value>
+			<value description="fkAuthorityGroup">2</value>
+		</row>
+	</table>
+	
+	<table name="alliance">
+		<column>id</column>
+		<column>version</column>
+		<column>activated</column>
+		<column>shortName</column>
+		<column>fullName</column>
+		<column>description</column>
+		<column>imageURL</column>
+		<column>primaryColor</column>
+		<column>secondaryColor</column>
+		<column>foundationDate</column>
+		<column>dissolutionDate</column>
+		<row>
+			<value description="id">0</value>
+			<value description="version">0</value>
+			<value description="activated">1</value>
+			<value description="shortName">A0</value>
+			<value description="fullName">Alliance #0</value>
+			<value description="description">The test alliance</value>
+			<null />
+			<value description="primaryColor">#000000</value>
+			<value description="secondaryColor">#000000</value>
+			<value description="foundationDate">2008-01-01</value>
+			<null />
+		</row>
+		<row>
+			<value description="id">1</value>
+			<value description="version">0</value>
+			<value description="activated">1</value>
+			<value description="shortName">A1</value>
+			<value description="fullName">Alliance #1</value>
+			<value description="description">The test alliance</value>
+			<null />
+			<value description="primaryColor">#000000</value>
+			<value description="secondaryColor">#000000</value>
+			<value description="foundationDate">2008-01-01</value>
+			<null />
+		</row>
+	</table>
+
+	<table name="alliancerank">
+		<column>id</column>
+		<column>version</column>
+		<column>fkEntity</column>
+		<column>timeOfCalculation</column>
+		<column>actual</column>
+		<column>numberOfEmpires</column>
+		<column>economy</column>
+		<column>averageEconomy</column>
+		<column>military</column>
+		<column>averageMilitary</column>
+		<column>averageScience</column>
+		<column>science</column>
+		<column>averageTotal</column>
+		<column>total</column>
+		<row>
+			<value description="id">0</value>
+			<value description="version">1</value>
+			<value description="fkEntity">0</value>
+			<value description="timeOfCalculation">2012-01-01</value>
+			<value description="actual">1</value>
+			<value description="numberOfEmpires">1</value>
+			<value description="economy">100</value>
+			<value description="averageEconomy">100</value>
+			<value description="military">100</value>
+			<value description="averageMilitary">100</value>
+			<value description="science">100</value>
+			<value description="averageScience">100</value>
+			<value description="total">300</value>
+			<value description="averageTotal">300</value>
+		</row>
+		<row>
+			<value description="id">1</value>
+			<value description="version">1</value>
+			<value description="fkEntity">1</value>
+			<value description="timeOfCalculation">2012-01-01</value>
+			<value description="actual">1</value>
+			<value description="numberOfEmpires">1</value>
+			<value description="economy">100</value>
+			<value description="averageEconomy">100</value>
+			<value description="military">100</value>
+			<value description="averageMilitary">100</value>
+			<value description="science">100</value>
+			<value description="averageScience">100</value>
+			<value description="total">300</value>
+			<value description="averageTotal">300</value>
+		</row>
+	</table>
+
+	<table name="alliancememberrank">
+		<column>id</column>
+		<column>version</column>
+		<column>fkAlliance</column>
+		<column>fkAuthorities</column>
+		<column>rankName</column>
+		<column>voteWeight</column>
+		<column>visible</column>
+		<row>
+			<value description="id">0</value>
+			<value description="version">1</value>
+			<value description="fkAlliance">0</value>
+			<value description="fkAuthorities">1</value>
+			<value description="rankName">default Rank</value>
+			<value description="voteWeight">1</value>
+			<value description="visible">1</value>
+		</row>
+		<row>
+			<value description="id">1</value>
+			<value description="version">1</value>
+			<value description="fkAlliance">1</value>
+			<value description="fkAuthorities">1</value>
+			<value description="rankName">default Rank</value>
+			<value description="voteWeight">1</value>
+			<value description="visible">1</value>
+		</row>
+	</table>
+
+	<table name="alliancemember">
+		<column>fkAllianceMemberRank</column>
+		<column>fkEmpire</column>
+		<row>
+			<value description="fkAllianceMemberRank">0</value>
+			<value description="fkEmpire">1</value>
+		</row>
+		<row>
+			<value description="fkAllianceMemberRank">1</value>
+			<value description="fkEmpire">2</value>
+		</row>
+	</table>
+
+	<table name="contactGroup">
+		<column>id</column>
+		<column>version</column>
+		<column>name</column>
+		<column>description</column>
+		<column>fkOwnerAlliance</column>
+		<column>fkOwnerEmpire</column>
+		<column>defaultVisible</column>
+		<row>
+			<value description="id">0</value>
+			<value description="version">1</value>
+			<value description="name">A0 CG</value>
+			<value description="description">The alliances default contact group</value>
+			<value description="fkOwnerAlliance">0</value>
+			<null />
+			<value description="defaultVisible">1</value>
+		</row>
+		<row>
+			<value description="id">1</value>
+			<value description="version">1</value>
+			<value description="name">A1 CG</value>
+			<value description="description">The alliances default contact group</value>
+			<value description="fkOwnerAlliance">1</value>
+			<null />
+			<value description="defaultVisible">1</value>
+		</row>
+		<row>
+			<value description="id">2</value>
+			<value description="version">1</value>
+			<value description="name">E1 CG</value>
+			<value description="description">The empires default contact group</value>
+			<null />
+			<value description="fkOwnerEmpire">1</value>
+			<value description="defaultVisible">1</value>
+		</row>
+		<row>
+			<value description="id">3</value>
+			<value description="version">1</value>
+			<value description="name">E2 CG</value>
+			<value description="description">The empires default contact group</value>
+			<null />
+			<value description="fkOwnerEmpire">2</value>
+			<value description="defaultVisible">1</value>
+		</row>
+	</table>
+
+	<table name="alliancealliancecontact">
+		<column>id</column>
+		<column>version</column>
+		<column>equalContactAuthorities</column>
+		<column>fkContact1</column>
+		<column>fkContactAuthorities1</column>
+		<column>fkChangedContactAuthorities1</column>
+		<column>approvedByContact1</column>
+		<column>changesApprovedByContact1</column>
+		<column>defaultVisible1</column>
+		<column>fkContact2</column>
+		<column>fkContactAuthorities2</column>
+		<column>fkChangedContactAuthorities2</column>
+		<column>approvedByContact2</column>
+		<column>changesApprovedByContact2</column>
+		<column>defaultVisible2</column>
+		<row>
+			<value description="id">1</value>
+			<value description="version">1</value>
+			<value description="equalContactAuthorities">1</value>
+			<value description="fkContact1">0</value>
+			<value description="fkContactAuthorities1">1</value>
+			<null />
+			<value description="approvedByContact1">1</value>
+			<value description="changesApprovedByContact1">1</value>
+			<value description="defaultVisible1">1</value>
+			<value description="fkContact2">1</value>
+			<value description="fkContactAuthorities2">1</value>
+			<null />
+			<value description="approvedByContact2">1</value>
+			<value description="changesApprovedByContact2">1</value>
+			<value description="defaultVisible2">1</value>
+		</row>
+	</table>
+
+	<table name="empirealliancecontact">
+		<column>id</column>
+		<column>version</column>
+		<column>equalContactAuthorities</column>
+		<column>fkContact1</column>
+		<column>fkContactAuthorities1</column>
+		<column>fkChangedContactAuthorities1</column>
+		<column>approvedByContact1</column>
+		<column>changesApprovedByContact1</column>
+		<column>defaultVisible1</column>
+		<column>fkContact2</column>
+		<column>fkContactAuthorities2</column>
+		<column>fkChangedContactAuthorities2</column>
+		<column>approvedByContact2</column>
+		<column>changesApprovedByContact2</column>
+		<column>defaultVisible2</column>
+		<row>
+			<value description="id">1</value>
+			<value description="version">1</value>
+			<value description="equalContactAuthorities">1</value>
+			<value description="fkContact1">2</value>
+			<value description="fkContactAuthorities1">1</value>
+			<null />
+			<value description="approvedByContact1">1</value>
+			<value description="changesApprovedByContact1">1</value>
+			<value description="defaultVisible1">1</value>
+			<value description="fkContact2">1</value>
+			<value description="fkContactAuthorities2">1</value>
+			<null />
+			<value description="approvedByContact2">1</value>
+			<value description="changesApprovedByContact2">1</value>
+			<value description="defaultVisible2">1</value>
+		</row>
+	</table>
+	
+	<table name="empireempirecontact">
+		<column>id</column>
+		<column>version</column>
+		<column>equalContactAuthorities</column>
+		<column>fkContact1</column>
+		<column>fkContactAuthorities1</column>
+		<column>fkChangedContactAuthorities1</column>
+		<column>approvedByContact1</column>
+		<column>changesApprovedByContact1</column>
+		<column>defaultVisible1</column>
+		<column>fkContact2</column>
+		<column>fkContactAuthorities2</column>
+		<column>fkChangedContactAuthorities2</column>
+		<column>approvedByContact2</column>
+		<column>changesApprovedByContact2</column>
+		<column>defaultVisible2</column>
+		<row>
+			<value description="id">1</value>
+			<value description="version">1</value>
+			<value description="equalContactAuthorities">1</value>
+			<value description="fkContact1">1</value>
+			<value description="fkContactAuthorities1">1</value>
+			<null />
+			<value description="approvedByContact1">1</value>
+			<value description="changesApprovedByContact1">1</value>
+			<value description="defaultVisible1">1</value>
+			<value description="fkContact2">2</value>
+			<value description="fkContactAuthorities2">1</value>
+			<null />
+			<value description="approvedByContact2">1</value>
+			<value description="changesApprovedByContact2">1</value>
+			<value description="defaultVisible2">1</value>
+		</row>
+	</table>
+	
+	<table name="alliancealliancecontactgroup">
+		<column>fkAllianceAllianceContact</column>
+		<column>fkContactGroup</column>
+		<row>
+			<value description="fkAllianceAllianceContact">1</value>
+			<value description="fkContactGroup">0</value>
+		</row>
+		<row>
+			<value description="fkAllianceAllianceContact">1</value>
+			<value description="fkContactGroup">1</value>
+		</row>
+	</table>
+
+	<table name="empirealliancecontactgroup">
+		<column>fkEmpireAllianceContact</column>
+		<column>fkContactGroup</column>
+		<row>
+			<value description="fkEmpireAllianceContact">1</value>
+			<value description="fkContactGroup">0</value>
+		</row>
+		<row>
+			<value description="fkEmpireAllianceContact">1</value>
+			<value description="fkContactGroup">3</value>
+		</row>
+	</table>
+
+	<table name="empireempirecontactgroup">
+		<column>fkEmpireEmpireContact</column>
+		<column>fkContactGroup</column>
+		<row>
+			<value description="fkEmpireEmpireContact">1</value>
+			<value description="fkContactGroup">2</value>
+		</row>
+		<row>
+			<value description="fkEmpireEmpireContact">1</value>
+			<value description="fkContactGroup">3</value>
+		</row>
+	</table>
+</dataset>
