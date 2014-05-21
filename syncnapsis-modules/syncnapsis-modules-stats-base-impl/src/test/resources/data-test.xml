@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ - Syncnapsis Framework - Copyright (c) 2012 ultimate
+ - 
+ - This program is free software; you can redistribute it and/or modify it under the terms of
+ - the GNU General Public License as published by the Free Software Foundation; either version
+ - 3 of the License, or any later version.
+ - 
+ - This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+ - without even the implied warranty of MECHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ - See the GNU General Public License for more details.
+ - 
+ - You should have received a copy of the GNU General Plublic License along with this program;
+ - if not, see <http://www.gnu.org/licenses/>.
+-->
+<!DOCTYPE dataset SYSTEM "dataset.dtd">
+<dataset>	
+	
+	<table name="empirerank">
+		<column>id</column>
+		<column>version</column>
+		<column>fkEntity</column>
+		<column>timeOfCalculation</column>
+		<column>actual</column>
+		<column>economy</column>
+		<column>military</column>
+		<column>science</column>
+		<column>total</column>
+		<row>
+			<value description="id">0</value>
+			<value description="version">1</value>
+			<value description="fkEntity">0</value>
+			<value description="timeOfCalculation">2012-01-01</value>
+			<value description="actual">1</value>
+			<value description="economy">100</value>
+			<value description="military">100</value>
+			<value description="science">100</value>
+			<value description="total">300</value>
+		</row>
+		<row>
+			<value description="id">1</value>
+			<value description="version">1</value>
+			<value description="fkEntity">1</value>
+			<value description="timeOfCalculation">2012-01-01</value>
+			<value description="actual">1</value>
+			<value description="economy">100</value>
+			<value description="military">100</value>
+			<value description="science">100</value>
+			<value description="total">300</value>
+		</row>
+		<row>
+			<value description="id">2</value>
+			<value description="version">1</value>
+			<value description="fkEntity">2</value>
+			<value description="timeOfCalculation">2012-01-01</value>
+			<value description="actual">1</value>
+			<value description="economy">100</value>
+			<value description="military">100</value>
+			<value description="science">100</value>
+			<value description="total">300</value>
+		</row>
+	</table>
+	
+	<table name="playerrank">
+		<column>id</column>
+		<column>version</column>
+		<column>fkEntity</column>
+		<column>timeOfCalculation</column>
+		<column>actual</column>
+		<column>numberOfEmpires</column>
+		<column>economy</column>
+		<column>averageEconomy</column>
+		<column>military</column>
+		<column>averageMilitary</column>
+		<column>averageScience</column>
+		<column>science</column>
+		<column>averageTotal</column>
+		<column>total</column>
+		<row>
+			<value description="id">0</value>
+			<value description="version">1</value>
+			<value description="fkEntity">0</value>
+			<value description="timeOfCalculation">2012-01-01</value>
+			<value description="actual">1</value>
+			<value description="numberOfEmpires">1</value>
+			<value description="economy">100</value>
+			<value description="averageEconomy">100</value>
+			<value description="military">100</value>
+			<value description="averageMilitary">100</value>
+			<value description="science">100</value>
+			<value description="averageScience">100</value>
+			<value description="total">300</value>
+			<value description="averageTotal">300</value>
+		</row>
+		<row>
+			<value description="id">1</value>
+			<value description="version">1</value>
+			<value description="fkEntity">1</value>
+			<value description="timeOfCalculation">2012-01-01</value>
+			<value description="actual">1</value>
+			<value description="numberOfEmpires">1</value>
+			<value description="economy">100</value>
+			<value description="averageEconomy">100</value>
+			<value description="military">100</value>
+			<value description="averageMilitary">100</value>
+			<value description="science">100</value>
+			<value description="averageScience">100</value>
+			<value description="total">300</value>
+			<value description="averageTotal">300</value>
+		</row>
+		<row>
+			<value description="id">2</value>
+			<value description="version">1</value>
+			<value description="fkEntity">2</value>
+			<value description="timeOfCalculation">2012-01-01</value>
+			<value description="actual">1</value>
+			<value description="numberOfEmpires">1</value>
+			<value description="economy">100</value>
+			<value description="averageEconomy">100</value>
+			<value description="military">100</value>
+			<value description="averageMilitary">100</value>
+			<value description="science">100</value>
+			<value description="averageScience">100</value>
+			<value description="total">300</value>
+			<value description="averageTotal">300</value>
+		</row>
+	</table>
+</dataset>

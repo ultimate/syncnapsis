@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ - Syncnapsis Framework - Copyright (c) 2012 ultimate
+ - 
+ - This program is free software; you can redistribute it and/or modify it under the terms of
+ - the GNU General Public License as published by the Free Software Foundation; either version
+ - 3 of the License, or any later version.
+ - 
+ - This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+ - without even the implied warranty of MECHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ - See the GNU General Public License for more details.
+ - 
+ - You should have received a copy of the GNU General Plublic License along with this program;
+ - if not, see <http://www.gnu.org/licenses/>.
+-->
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+            http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd
+            http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.0.xsd"
+	default-lazy-init="true">
+	
+	<!-- define the default mapper -->
+	<bean id="mapper" class="com.syncnapsis.utils.serialization.BaseMapper">
+		<property name="securityManager" ref="securityManager" />
+	</bean>
+
+	<!-- define the service-mapping -->
+	<bean id="serviceMapping" class="com.syncnapsis.websockets.ServiceMapping">
+		<property name="protocols">
+			<map key-type="java.lang.String" value-type="java.lang.String">
+				<entry key="rpc" value-ref="rpcService" />
+			</map>
+		</property>
+	</bean>
+	
+	<!-- define the used rpcHandler -->
+	<bean id="rpcHandler" class="com.syncnapsis.websockets.service.rpc.DelegatingRPCHandler">
+		<property name="delegate" ref="beanRPCHandler" />
+	</bean>
+	
+	<!-- the default securityManager -->
+	<bean id="fieldAccessController" class="com.syncnapsis.security.accesscontrol.FieldAccessController" />
+
+	<bean id="methodAccessController" class="com.syncnapsis.security.accesscontrol.MethodAccessController" />
+	
+	<bean id="securityManager" class="com.syncnapsis.security.SecurityManager">
+		<property name="accessControllers">
+			<list>
+				<ref bean="fieldAccessController" />
+				<ref bean="methodAccessController" />
+			</list>
+		</property>
+		<property name="timeProvider" ref="timeProvider" />
+		<property name="sessionProvider" ref="sessionProvider" />
+		<!-- 
+		not mandatory
+		<property name="authorityProvider" ref="authorityProvider" />
+		 -->
+	</bean>
+    
+</beans>

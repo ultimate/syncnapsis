@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ - Syncnapsis Framework - Copyright (c) 2012 ultimate
+ - 
+ - This program is free software; you can redistribute it and/or modify it under the terms of
+ - the GNU General Public License as published by the Free Software Foundation; either version
+ - 3 of the License, or any later version.
+ - 
+ - This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+ - without even the implied warranty of MECHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ - See the GNU General Public License for more details.
+ - 
+ - You should have received a copy of the GNU General Plublic License along with this program;
+ - if not, see <http://www.gnu.org/licenses/>.
+-->
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+            http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd
+            http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.0.xsd"
+	default-lazy-init="true">
+	
+    <!-- =================================================================== -->
+    <!-- DAO						                                         -->
+    <!-- =================================================================== -->
+    
+	<bean id="actionDao" class="com.syncnapsis.data.dao.hibernate.ActionDaoHibernate">
+	    <constructor-arg ref="sessionFactory"/>
+	</bean>
+
+	<bean id="blackListDao" class="com.syncnapsis.data.dao.hibernate.BlackListDaoHibernate">
+	    <constructor-arg ref="sessionFactory"/>
+	</bean>
+
+	<bean id="blackListEntryDao" class="com.syncnapsis.data.dao.hibernate.BlackListEntryDaoHibernate">
+	    <constructor-arg ref="sessionFactory"/>
+	</bean>
+
+	<bean id="messengerContactDao" class="com.syncnapsis.data.dao.hibernate.MessengerContactDaoHibernate">
+	    <constructor-arg ref="sessionFactory"/>
+	</bean>
+	
+	<bean id="messengerDao" class="com.syncnapsis.data.dao.hibernate.MessengerDaoHibernate">
+	    <constructor-arg ref="sessionFactory"/>
+	</bean>
+
+	<bean id="parameterDao" class="com.syncnapsis.data.dao.hibernate.ParameterDaoHibernate">
+	    <constructor-arg ref="sessionFactory"/>
+	</bean>
+
+	<bean id="pinboardDao" class="com.syncnapsis.data.dao.hibernate.PinboardDaoHibernate">
+	    <constructor-arg ref="sessionFactory"/>
+	</bean>
+
+	<bean id="pinboardMessageDao" class="com.syncnapsis.data.dao.hibernate.PinboardMessageDaoHibernate">
+	    <constructor-arg ref="sessionFactory"/>
+	</bean>
+	
+	<bean id="rpcLogDao" class="com.syncnapsis.data.dao.hibernate.RPCLogDaoHibernate">
+	    <constructor-arg ref="sessionFactory"/>
+	</bean>
+	
+	<bean id="userContactDao" class="com.syncnapsis.data.dao.hibernate.UserContactDaoHibernate">
+	    <constructor-arg ref="sessionFactory"/>
+	</bean>
+	
+	<bean id="userDao" class="com.syncnapsis.data.dao.hibernate.UserDaoHibernate">
+	    <constructor-arg ref="sessionFactory"/>
+	</bean>
+	
+	<bean id="userRoleDao" class="com.syncnapsis.data.dao.hibernate.UserRoleDaoHibernate">
+	    <constructor-arg ref="sessionFactory"/>
+	</bean>
+	
+    <!-- =================================================================== -->
+    <!-- Service					                                         -->
+    <!-- =================================================================== -->
+
+	<bean id="actionManager" class="com.syncnapsis.data.service.impl.ActionManagerImpl">
+		<constructor-arg ref="actionDao" />
+		<property name="serializer" ref="serializer" />
+		<property name="securityManager" ref="securityManager"/>
+	</bean>
+
+	<bean id="blackListManager" class="com.syncnapsis.data.service.impl.BlackListManagerImpl">
+		<constructor-arg ref="blackListDao" />
+	</bean>
+
+	<bean id="blackListEntryManager" class="com.syncnapsis.data.service.impl.BlackListEntryManagerImpl">
+		<constructor-arg ref="blackListEntryDao" />
+		<constructor-arg ref="blackListManager" />
+	</bean>
+
+	<bean id="messengerContactManager" class="com.syncnapsis.data.service.impl.MessengerContactManagerImpl">
+		<constructor-arg ref="messengerContactDao" />
+	</bean>
+
+	<bean id="messengerManager" class="com.syncnapsis.data.service.impl.MessengerManagerImpl">
+		<constructor-arg ref="messengerDao" />
+	</bean>
+
+	<bean id="parameterManager" class="com.syncnapsis.data.service.impl.ParameterManagerImpl">
+		<constructor-arg ref="parameterDao" />
+	</bean>
+    
+    <bean id="pinboardManager" class="com.syncnapsis.data.service.impl.PinboardManagerImpl">
+        <constructor-arg ref="pinboardDao"/>
+        <constructor-arg ref="pinboardMessageManager"/>
+		<property name="securityManager" ref="securityManager"/>
+    </bean>
+    
+    <bean id="pinboardMessageManager" class="com.syncnapsis.data.service.impl.PinboardMessageManagerImpl">
+        <constructor-arg ref="pinboardMessageDao"/>
+    </bean>
+
+	<bean id="rpcLogManager" class="com.syncnapsis.data.service.impl.RPCLogManagerImpl">
+		<constructor-arg ref="rpcLogDao" />
+		<property name="serializer" ref="serializer"/>
+	</bean>
+
+	<bean id="userManager" class="com.syncnapsis.data.service.impl.UserManagerImpl">
+		<constructor-arg ref="userDao" />
+		<constructor-arg ref="userRoleManager" />
+		<constructor-arg ref="actionManager" />
+		<property name="securityManager" ref="securityManager" />
+	</bean>
+
+	<bean id="userContactManager" class="com.syncnapsis.data.service.impl.UserContactManagerImpl">
+		<constructor-arg ref="userContactDao" />
+		<constructor-arg ref="userManager" />
+	</bean>
+
+	<bean id="userRoleManager" class="com.syncnapsis.data.service.impl.UserRoleManagerImpl">
+		<constructor-arg ref="userRoleDao" />
+	</bean>
+	
+    <!-- =================================================================== -->
+    <!-- Security					                                         -->
+    <!-- =================================================================== -->
+
+	<bean id="localeProvider" class="com.syncnapsis.providers.impl.SessionBasedLocaleProvider">
+		<property name="sessionProvider" ref="sessionProvider" />
+		<property name="attributeName" value="j_locale" />
+	</bean>
+
+	<bean id="userProvider" class="com.syncnapsis.providers.impl.SessionBasedUserProvider">
+		<property name="sessionProvider" ref="sessionProvider" />
+		<property name="attributeName" value="j_user" />
+	</bean>
+
+	<bean id="userRoleBasedAuthorityProvider" class="com.syncnapsis.providers.impl.UserRoleBasedAuthorityProvider">
+		<constructor-arg ref="userProvider" />
+	</bean>
+	
+	<bean id="fieldAccessController" class="com.syncnapsis.security.accesscontrol.FieldAccessController">
+		<constructor-arg ref="accessRule"/>
+	</bean>
+
+	<bean id="methodAccessController" class="com.syncnapsis.security.accesscontrol.MethodAccessController">
+		<constructor-arg ref="accessRule"/>
+	</bean>
+	
+	<bean id="baseApplicationManager" class="com.syncnapsis.security.BaseApplicationManager">
+		<property name="accessControllers">
+			<list>
+				<ref bean="fieldAccessController" />
+				<ref bean="methodAccessController" />
+			</list>
+		</property>
+		<property name="timeProvider" ref="timeProvider" />
+		<property name="sessionProvider" ref="sessionProvider" />
+		<property name="localeProvider" ref="localeProvider" />
+		<property name="userProvider" ref="userProvider" />
+		<property name="authorityProvider" ref="userRoleBasedAuthorityProvider" />
+		<property name="nameValidator" ref="nameValidator" />
+		<property name="emailValidator" ref="emailValidator" />
+		<property name="mailer" ref="mailer" />
+	</bean>
+	
+	<bean id="nameValidator" class="com.syncnapsis.security.validation.DBBlackListStringValidator" >
+		<property name="blackListManager" ref="blackListManager" />
+		<property name="blackListEntryManager" ref="blackListEntryManager" />
+		<property name="blackListName" value="name" />
+	</bean>
+	
+	<bean id="emailValidator" class="com.syncnapsis.security.validation.LogicalValidator" >
+		<constructor-arg value="AND"/>
+		<property>
+			<list>
+				<ref>emailValidator1</ref>
+				<ref>emailValidator2</ref>
+			</list>
+		</property>
+	</bean>
+	
+	<bean id="emailValidator1" class="com.syncnapsis.security.validation.RegExpValidator" >
+		<constructor-arg value=""/>
+	</bean>
+	
+	<bean id="emailValidator2" class="com.syncnapsis.security.validation.DBBlackListStringValidator" >
+		<property name="blackListManager" ref="blackListManager" />
+		<property name="blackListEntryManager" ref="blackListEntryManager" />
+		<property name="blackListName" value="email" />
+	</bean>
+	
+    <!-- =================================================================== -->
+    <!-- WebSockets					                                         -->
+    <!-- =================================================================== -->
+    	
+	<bean id="logRPCHandler" class="com.syncnapsis.websockets.service.rpc.LogRPCHandler">
+		<property name="delegate" ref="beanRPCHandler" />
+		<property name="rpcLogManager" ref="rpcLogManager" />
+		<property name="sessionProvider" ref="sessionProvider" />
+		<property name="timeProvider" ref="timeProvider" />
+		<property name="userProvider" ref="userProvider" />
+	</bean>
+	
+	<bean id="serviceMapping" class="com.syncnapsis.websockets.ServiceMapping">
+		<property name="protocols">
+			<map key-type="java.lang.String" value-type="java.lang.String">
+				<entry key="rpc" value-ref="openSessionInViewService"/>
+				<!-- 
+				<entry key="chat" value-ref="chatService" />
+				<entry key="rpc" value-ref="rpcService" />
+				 -->
+			</map>
+		</property>
+	</bean>
+
+	<bean id="openSessionInViewService" class="com.syncnapsis.websockets.service.OpenSessionInViewService">
+		<property name="interceptedService" ref="rpcService" />
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	
+    <!-- =================================================================== -->
+    <!-- Serialization				                                         -->
+    <!-- =================================================================== -->
+
+	<bean id="mapper" class="com.syncnapsis.utils.serialization.DataMapper">
+		<property name="securityManager" ref="securityManager" />
+		<property name="universalManager" ref="universalManager" />
+	</bean>
+      
+    <!-- =================================================================== -->
+    <!-- Servlets					                                         -->
+    <!-- =================================================================== -->
+
+	<bean id="actionFilter" class="com.syncnapsis.web.ActionFilter">
+		<property name="rpcHandler" ref="rpcHandler" />
+		<property name="serializer" ref="serializer" />
+		<property name="actionManager" ref="actionManager" />
+	</bean>
+
+	<bean id="localeFilter" class="com.syncnapsis.web.LocaleFilter">
+		<property name="sessionProvider" ref="sessionProvider" />
+		<property name="localeProvider" ref="localeProvider" />
+		<property name="localeDirectoryLevel" value="1" />
+		<property name="useInclude" value="true" />
+	</bean>
+	
+</beans>

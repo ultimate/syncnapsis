@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>syncnapsis</title>
+<meta charset="UTF-8">
+<style type="text/css">
+	#debug {
+		position: absolute;
+		top: 5px;
+		left: 5px;
+		width: 200px;
+		height: 150px;
+		border: 1px solid #AAAAAA;
+		background: rgba(255,255,255,0.5);
+	}
+	* {		
+		opacity: 1;
+		transition:  all 0.5s;
+	}
+	.hidden {
+		display: none;
+		transition:  all 0.5s;
+	}
+	.invisible {
+		opacity: 0;
+		transition:  all 0.5s;
+	}
+	body {
+		background: rgb(0,0,0);
+		margin: 0px;
+		font-family: monospace;
+		font-size: 11px;
+		overflow: hidden;
+	}
+	.centered {	
+		position: absolute;
+		left: 0px;
+		right: 0px;
+		top: 0px;
+		bottom: 0px;
+		margin: auto;
+		transition:  all 3s;
+	}
+	.centered_x {	
+		position: absolute;
+		left: 0px;
+		right: 0px;
+		margin-left: auto;
+		margin-right: auto;
+		transition:  all 3s;
+	}
+	.centered_y {	
+		position: absolute;
+		top: 0px;
+		bottom: 0px;
+		margin-top: auto;
+		margin-bottom: auto;
+		transition:  all 3s;
+	}
+	.attop {	
+		position: absolute;
+		top: 0px;
+		bottom: auto;
+		margin-top: 0px;
+		margin-bottom: auto;
+		transition:  all 3s;
+	}
+	.atbottom {	
+		position: absolute;
+		top: auto;
+		bottom: 0px;
+		margin-top: auto;
+		margin-bottom: 0px;
+		transition:  all 3s;
+	}
+	#overlay {
+		width: 100%;
+		height: 100%;
+		background: rgb(0,0,0);
+	}
+	#menu {
+		width: 250px;
+		position: absolute;
+		right: 0px;
+		top: 0px;
+		padding-right: 2px;
+		margin-right: 1px;
+	}
+	#menu > div {
+		margin-top: 1px;
+		width: 100%;
+	}
+	#menu #userbar {
+		height: 50px;
+		width: 100%;
+	}
+	#menu #nav {
+		height: 50px;
+		width: 100%;
+		line-height: 4.2em;
+	}
+	.menubar {
+		padding-bottom: 1px;
+		padding-top: 1px;
+	}
+	.menubar a {
+		float:left;
+		display:inline;
+		height: 100%;
+		text-decoration: none;
+	}
+	.menubar a + a {
+		margin-left: 3px;
+	}
+	.menubar a > div {
+		margin-top: 1px;
+		text-align: center;
+		vertical-align: middle;
+		height: 100%;
+		position: relative;
+		width: 100%;
+	}
+	.menubar a:hover div,
+	.menubar a.selected div  {
+		background: rgba(0,255,255,0.5);
+	}
+	#menu #nav a {	
+		margin-top: -2px;
+	}
+	#menu #menu_content {
+		width: 100%;
+		color: rgba(255,255,255,0.9);
+		overflow: hidden;
+		height: 300px;
+	}
+	#menu #menu_content div {
+		height: 0px;
+		max-height: 0px;
+		overflow: hidden;
+		transition: all 1s;
+		padding-right: 5px;
+		padding-left: 5px;
+		padding-top: 0px;
+		padding-bottom: 0px;
+	}
+	#menu #menu_content div + div {
+		border-top: 1px solid rgba(0,255,255,0.5);
+		margin-top: -1px;
+	}
+	#menu #menu_content div.selected {
+		height: 293px;
+		max-height: 293px;
+		overflow: hidden;
+		overflow-y: auto;
+		transition: all 1s;
+		padding-top: 5px;
+		padding-bottom: 5px;
+	}
+	
+	#bar_top, #bar_bottom {
+		width: 400px;
+		margin-top: 1px;
+		margin-bottom: 1px;
+		color: rgba(255,255,255,0.9);
+	}
+	#bar_top {
+		height: 30px;
+		line-height: 2.6em;
+	}
+	#bar_bottom {
+		height: 31px;
+		line-height: 2.6em;
+		margin-bottom: 1px;
+		overflow: hidden;
+		transition: all 1s;
+	}
+	#bar_bottom.open{
+		height: 130px;
+	}
+	#bar_bottom > log_bar {
+		display: inline;
+		top: 0px;
+		height: 30px;
+		margin-bottom: 1px;
+	}
+	#bar_bottom #log_title {
+		width: 80px;
+		position: absolute;
+		left: 0px;
+		padding-left: 5px;
+		padding-right: 5px;
+	}
+	#bar_bottom > #log {
+		position: absolute;
+		width: 212px;
+	}
+	#bar_bottom #log a {	
+		margin-top: -2px;
+	}
+	#bar_bottom #log a {
+		margin-left: -1px;
+	}
+	#bar_bottom #log a + a {
+		margin-left: 3px;
+	}
+	#bar_bottom #log_menu {
+		width: 80px;
+		position: absolute;
+		right: 0px;
+		padding-left: 5px;
+		padding-right: 5px;
+	}
+	#bar_bottom.open #log_content {
+		opacity: 1;
+	}
+	#bar_bottom #log_content {
+		position: absolute;
+		top: 32px;
+		bottom: 0px;
+		overflow-x: hidden;
+		overflow-y: auto;
+		width: 398px;
+	}
+	#bar_bottom #log_content div {
+		width: 500%;
+	}
+	#bar_bottom #log_content div > span {
+		display: inline-block;
+		width: 0%;
+		overflow: hidden;
+		float: left;
+		height: 100px;
+		min-height: 100px;
+	}
+	#bar_bottom #log_content div > span + span {
+		border-left: 1px solid rgba(0,255,255,0.5);
+		margin-left: -2px;
+	}
+	#bar_bottom #log_content div > span.selected {
+		width: 21%;
+		height: auto;
+	}
+	
+	.frame {	
+		border: 1px solid rgba(0,255,255,0.8);
+		background: rgba(0,255,255,0.3);
+	}
+	.main {
+		width: 250px;
+		height: 150px;
+	}
+	.links {
+		position: absolute;
+		left: 0px;
+		right: 0px;
+		bottom: 10px;
+		margin-left: 0px;
+		margin-right: 0px;
+		text-align: center;
+	}
+	.logo_container {
+		width: 75px !important;
+		height: 75px;
+		bottom: 30px;
+	}
+	#logo_container2 {
+		bottom: 50px;
+	}
+	a {	
+		color: rgba(255,255,255,0.9);
+	}
+	.links a {
+		margin: 8px;
+	}
+	
+	
+</style>
+<script type="text/javascript">
+	// debug-js
+	load = function(progress)
+	{
+		setProgress(progress);
+		var time = Math.round(Math.random()*200);
+		if(progress < 100)
+			setTimeout(function() { load(progress+5); }, time);
+		document.getElementById("debug_load").disabled = "disabled";
+	};
+	var clsName;
+	openLog = function()
+	{
+		if(clsName)
+		{
+			document.getElementById("bar_bottom").className = clsName;
+			clsName = null;
+		}
+		else
+		{
+			clsName = document.getElementById("bar_bottom").className;
+			document.getElementById("bar_bottom").className += " open";
+		}
+	};
+
+</script>
+<script type="text/javascript">
+	// real js
+	setProgress = function(progress)
+	{
+		if(progress > 100)
+			progress = 100;
+		var c = 37.5;
+		var r = 2*c;
+		var xEnd = c + r*Math.sin(2*Math.PI*progress/100);
+		var yEnd = c - r*Math.cos(2*Math.PI*progress/100);
+		var d = "M" + c + "," + (c-r) + " ";
+		if(progress < 100)
+		{
+			var largeArc = progress > 50 ? 1 : 0;
+			d += "A" + r + "," + r + " 0 " + largeArc + ",1 " + xEnd + "," + yEnd + " L" + c + "," + c + " z";
+		}
+		else
+		{
+			d += "A" + r + "," + r + " 0 0,1 " + c + "," + (c+r) + " ";
+			d += "A" + r + "," + r + " 0 0,1 " + c + "," + (c-r) + " ";
+			d += "z";
+		}
+		document.getElementById("loader_clippath").setAttribute("d", d);
+		if(progress == 100)
+			init();
+	};
+		
+	init = function()
+	{
+		//initBar("nav");
+		//initBar("log");
+		nav = new Tabs("nav", "menu_content");
+		log = new Tabs("log", "log_content");
+	
+		document.getElementById("overlay").className += " invisible";
+		setTimeout(function() {document.getElementById("overlay").className += " hidden";}, 3000);
+	};	
+	
+	Tabs = function(groupID, contentID)
+	{
+		var group = document.getElementById(groupID);
+		var selectors = group.children;
+		var contents = document.getElementById(contentID).children;
+
+		var childrenCount = selectors.length;
+
+		var width = group.offsetWidth;
+		width -= (childrenCount-1)*3;
+		var w0 = Math.floor(width / childrenCount);
+		var gap = width - w0*childrenCount;
+		
+		console.log("children = " + childrenCount + "  gap = " + gap);
+		
+		select = function(id)
+		{
+			var selector;
+			var content;
+			for(var i = 0; i < childrenCount; i++)
+			{
+				selector = selectors[i];
+				content = contents[i];
+				if(i == id)
+				{
+					selector.className = "selected";
+					content.className = "selected";
+				}
+				else
+				{
+					selector.className = "";
+					content.className = "";
+				}
+			}
+		};
+		
+		for(var i = 0; i < childrenCount; i++)
+		{
+			var selector = selectors[i];
+			
+			if(gap == 0)
+				selector.style.width = w0 + "px";
+			else
+			{
+				// in case 2: shift i by 0.5 to be centered
+				//   but since there may be the case gap is uneven and children not
+				//   we reshift it by 0.4 to weight one direction more than the other
+				if((gap % 2 == 0) && ((i <= gap/2) || (i > childrenCount-gap/2)))
+					selector.style.width = (w0+1) + "px";
+				else if((gap % 1 == 0) && (Math.abs(childrenCount/2-(i-0.4)) <= gap/2))
+					selector.style.width = (w0+1) + "px";	
+				else
+					selector.style.width = (w0) + "px";		
+				console.log("width set for child #" + i);		
+			}
+		}
+	};
+	
+	initBar = function(name)
+	{
+		var width = document.getElementById(name).offsetWidth;
+		var children = document.getElementById(name).children.length;
+		width -= (children-1)*3;
+		var w0 = Math.floor(width / children);
+		var gap = width - w0*children;
+		
+		console.log("children = " + children + "  gap = " + gap);
+		
+		for(var i = 1; i <= children; i++)
+		{
+			if(gap == 0)
+				document.getElementById(name + "_" + i).style.width = w0 + "px";
+			else
+			{
+				// in case 2: shift i by 0.5 to be centered
+				//   but since there may be the case gap is uneven and children not
+				//   we reshift it by 0.4 to weight one direction more than the other
+				if((gap % 2 == 0) && ((i <= gap/2) || (i > children-gap/2)))
+					document.getElementById(name + "_" + i).style.width = (w0+1) + "px";
+				else if((gap % 1 == 0) && (Math.abs(children/2-(i-0.4)) <= gap/2))
+					document.getElementById(name + "_" + i).style.width = (w0+1) + "px";	
+				else
+					document.getElementById(name + "_" + i).style.width = (w0) + "px";		
+				console.log("width set for " + name + "_" + i);		
+			}
+		}
+	};
+	
+	selectContent = function(id, groupName, selectorName, contentName)
+	{
+		var children = document.getElementById(groupName).children.length;
+		var selector;
+		var content;
+		for(var i = 1; i <= children; i++)
+		{
+			selector = document.getElementById(selectorName + "_" + i);
+			content = document.getElementById(contentName + "_" + i);
+			if(i == id)
+			{
+				selector.className = "selected";
+				content.className = "selected";
+			}
+			else
+			{
+				selector.className = "";
+				content.className = "";
+			}
+		}
+	};	
+
+</script>
+</head>
+<body>
+	<div id="defines">
+		<svg xmlns="http://www.w3.org/2000/svg"	xmlns:xlink="http://www.w3.org/1999/xlink">
+			<filter id="colorScheme">
+				<feColorMatrix in="SourceGraphic" type="matrix" values="0.0 0.0 0.0 0.0 0.0    0.0 1.0 0.0 0.0 0.0    0.0 0.0 1.0 0.0 0.0    0.0 0.0 0.0 1.0 0.0"/>
+			</filter>
+			<defs>
+				<g id="logo" filter="url(#colorScheme)">
+					<circle cx="37.5" cy="37.5" r="30" style="fill: #888888; stroke: #FFFFFF; stroke-width: 3px;"/>
+					<line x1="0" y1="50" x2="75" y2="25" style="stroke: #FFFFFF; stroke-width: 2px;"/>
+				</g>
+			</defs>
+		</svg>
+	</div>
+	<div id="bar_top" class="centered_x attop">
+		<div class="frame">
+		top
+		</div>
+	</div>
+	<div id="bar_bottom" class="centered_x atbottom">
+		<div id="log_title" class="frame log_bar">
+			Event-Log:
+		</div>
+		<div id="log" class="menubar centered_x log_bar">
+			<a id="log_1" href="javascript: selectContent(1, 'log', 'log', 'log_content');"><div class="frame">Pinboard (<span id="log_1_count">1</span>)</div></a>
+			<a id="log_2" href="javascript: selectContent(2, 'log', 'log', 'log_content');"><div class="frame">Match (<span id="log_2_count">7</span>)</div></a>
+			<!--
+			<a id="log_3" href="javascript: selectContent(3, 'log', 'log', 'log_content');"><div class="frame">Test (<span id="log_3_count">0</span>)</div></a>
+			-->
+		</div>
+		<div id="log_menu" class="frame log_bar">
+			aaaa
+		</div>
+		<div id="log_content" class="frame atbottom">
+			<div>
+			<span id="log_content_1" class="selected">
+				<ul>
+					<li><b>13:34:23 User1:</b> bla bla bla</li>
+					<li><b>13:35:44 User2:</b> selber</li>
+					<li><b>13:36:23 User1:</b> bla</li>
+					<li><b>13:37:23 User1:</b> bla</li>
+					<li><b>13:38:23 User1:</b> bla</li>
+					<li><b>13:39:23 User1:</b> bla</li>
+					<li><b>13:40:23 User1:</b> bla</li>
+					<li><b>13:41:23 User1:</b> bla</li>
+				</ul>
+			</span>
+			<span id="log_content_2">
+				<ul>
+					<li><b>12:14:23 INFO:</b> Colonization successful</li>
+					<li><b>14:25:44 WARN:</b> Incoming attack</li>
+					<li><b>14:30:23 WARN:</b> Colony lost</li>
+				</ul>
+			</span>
+			<span id="log_content_3">
+				foo bar
+			</span>
+			</div>
+		</div>
+	</div>
+	<div id="menu">
+		<div id="userbar" class="frame">
+		</div>
+		<div id="nav" class="menubar">
+			<a id="nav_1" href="javascript: selectContent(1, 'nav', 'nav', 'menu');" class="selected"><div class="frame">a</div></a>
+			<a id="nav_2" href="javascript: selectContent(2, 'nav', 'nav', 'menu');"><div class="frame">b</div></a>
+			<a id="nav_3" href="javascript: selectContent(3, 'nav', 'nav', 'menu');"><div class="frame">c</div></a>
+			<a id="nav_4" href="javascript: selectContent(4, 'nav', 'nav', 'menu');"><div class="frame">d</div></a>
+			<!--<div class="frame"><a id="nav_2" href="">b</a></div>-->
+		</div>
+		<div id="menu_content" class="frame">
+			<div id="menu_1" class="selected">
+				foo<br>
+				bar<br>
+				foo<br>
+				bar<br>
+				foo<br>
+				bar<br>
+				foo<br>
+				bar<br>
+			</div>
+			<div id="menu_2" class="">
+				This is menu #2 with a very long text that should automatically wrap to fill this box.<br>
+				As you can see the surrounding container will be automatically resized to fit best for the content.
+			</div>
+			<div id="menu_3" class="">
+				blub
+			</div>
+			<div id="menu_4" class="">
+				Let's stretch the content to max ;-)<br>
+				A lot of options...
+				<ul>
+				<li>1</li>
+				<li>2</li>
+				<li>3</li>
+				<li>4</li>
+				<li>5</li>
+				<li>6</li>
+				<li>7</li>
+				<li>8</li>
+				<li>9</li>
+				<li>10</li>
+				<li>11</li>
+				<li>12</li>
+				<li>13</li>
+				<li>14</li>
+				<li>15</li>
+				<li>16</li>
+				<li>17</li>
+				<li>18</li>
+				<li>19</li>
+				<li>20</li>
+				<li>21</li>
+				<li>22</li>
+				<li>23</li>
+				<li>24</li>
+				<li>25</li>
+				<li>26</li>
+				<li>27</li>
+				<li>28</li>
+				<li>29</li>
+				</ul>
+			</div>
+		</div>
+		<div id="main" class="main frame">
+			<div id="logo_container2" class="logo_container centered_x">
+				<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="100%" height="100%" >
+					<use xlink:href="#logo"/>
+				</svg>
+			</div>
+			<div id="links" class="links">
+				<a href="">about</a>
+				<a href="">site policy</a>
+				<a href="">disclaimer</a>
+			</div>
+		</div>
+	</div>
+	<div id="overlay" class="centered">
+		<div id="overlay_main" class="main frame centered">
+			<div id="logo_container1" class="logo_container centered">
+				<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="100%" height="100%" >
+					<use xlink:href="#logo" style="opacity: 0.2;"/>
+					<clipPath id="loader">
+						<path id="loader_clippath" d=""/>
+					</clipPath>
+					<use xlink:href="#logo" clip-path="url(#loader)"/>
+				</svg>
+			</div>
+			<div id="overlay_links" class="links">
+				<a href="">about</a>
+				<a href="">site policy</a>
+				<a href="">disclaimer</a>
+			</div>
+		</div>
+	</div>
+	<!-- for debug only -->
+	<div id="debug">
+		debug...<br>
+		<input id="debug_load" type="button" value="load" onclick="load(0);" /><br/>
+		<input id="debug_open" type="button" value="open/close log" onclick="openLog();" /><br/>
+	</div>
+</body>
+</html>

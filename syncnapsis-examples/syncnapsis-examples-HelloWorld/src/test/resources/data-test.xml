@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ - Syncnapsis Framework - Copyright (c) 2012 ultimate
+ - 
+ - This program is free software; you can redistribute it and/or modify it under the terms of
+ - the GNU General Public License as published by the Free Software Foundation; either version
+ - 3 of the License, or any later version.
+ - 
+ - This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+ - without even the implied warranty of MECHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ - See the GNU General Public License for more details.
+ - 
+ - You should have received a copy of the GNU General Plublic License along with this program;
+ - if not, see <http://www.gnu.org/licenses/>.
+-->
+<!DOCTYPE dataset SYSTEM "dataset.dtd">
+<dataset>	
+	<table name="guiwindow">
+		<column>id</column>
+		<column>version</column>
+		<column>positionX</column>
+		<column>positionY</column>
+		<column>width</column>
+		<column>height</column>
+		<column>rotation</column>
+		<row>
+			<value description="id">-1</value>
+			<value description="version">1</value>
+			<value description="positionX">100</value>
+			<value description="positionY">200</value>
+			<value description="width">400</value>
+			<value description="height">300</value>
+			<value description="rotation">0.0</value>
+		</row>
+		<row>
+			<value description="id">-2</value>
+			<value description="version">1</value>
+			<value description="positionX">500</value>
+			<value description="positionY">400</value>
+			<value description="width">300</value>
+			<value description="height">100</value>
+			<value description="rotation">30.0</value>
+		</row>
+	</table>
+
+	<table name="person">
+		<column>id</column>
+		<column>version</column>
+		<column>firstName</column>
+		<column>lastName</column>
+		<row>
+			<value description="id">-1</value>
+			<value description="version">1</value>
+			<value description="firstName">Mr.</value>
+			<value description="lastName">X</value>
+		</row>
+		<row>
+			<value description="id">-2</value>
+			<value description="version">1</value>
+			<value description="firstName">Mrs.</value>
+			<value description="lastName">Y</value>
+		</row>
+	</table>
+</dataset>

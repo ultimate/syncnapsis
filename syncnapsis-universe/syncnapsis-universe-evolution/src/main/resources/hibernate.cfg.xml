@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ - Syncnapsis Framework - Copyright (c) 2012 ultimate
+ - 
+ - This program is free software; you can redistribute it and/or modify it under the terms of
+ - the GNU General Public License as published by the Free Software Foundation; either version
+ - 3 of the License, or any later version.
+ - 
+ - This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+ - without even the implied warranty of MECHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ - See the GNU General Public License for more details.
+ - 
+ - You should have received a copy of the GNU General Plublic License along with this program;
+ - if not, see <http://www.gnu.org/licenses/>.
+-->
+<!DOCTYPE hibernate-configuration PUBLIC "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+
+<hibernate-configuration>
+    <session-factory>
+        
+        <mapping class="com.syncnapsis.data.model.Alliance"/>
+        <mapping class="com.syncnapsis.data.model.AllianceMemberRank"/>
+        <mapping class="com.syncnapsis.data.model.AllianceRank"/>
+        <mapping class="com.syncnapsis.data.model.Authority"/>
+        <mapping class="com.syncnapsis.data.model.AuthorityGroup"/>
+        <mapping class="com.syncnapsis.data.model.AuthoritiesGenericImpl"/>        
+        <mapping class="com.syncnapsis.data.model.ContactGroup"/>
+        <mapping class="com.syncnapsis.data.model.Empire"/>
+        <mapping class="com.syncnapsis.data.model.EmpireRank"/>
+        <mapping class="com.syncnapsis.data.model.GUIAction"/>
+        <mapping class="com.syncnapsis.data.model.GUIWindowParams"/>
+        <mapping class="com.syncnapsis.data.model.MenuItem"/>
+        <mapping class="com.syncnapsis.data.model.MenuQuickLaunchItem"/>
+        <mapping class="com.syncnapsis.data.model.Messenger"/>
+        <mapping class="com.syncnapsis.data.model.MessengerContact"/>
+        <mapping class="com.syncnapsis.data.model.Parameter"/>
+        <mapping class="com.syncnapsis.data.model.Player"/>
+        <mapping class="com.syncnapsis.data.model.PlayerRank"/>
+        <mapping class="com.syncnapsis.data.model.PlayerRole"/>
+        <mapping class="com.syncnapsis.data.model.User"/>
+        <mapping class="com.syncnapsis.data.model.UserContact"/>
+        <mapping class="com.syncnapsis.data.model.UserRole"/>           
+        
+        <mapping class="com.syncnapsis.data.model.contacts.AllianceAllianceContact"/>
+        <mapping class="com.syncnapsis.data.model.contacts.EmpireAllianceContact"/>
+        <mapping class="com.syncnapsis.data.model.contacts.EmpireEmpireContact"/>    
+    </session-factory>
+</hibernate-configuration>

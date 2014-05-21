@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ - Syncnapsis Framework - Copyright (c) 2012 ultimate
+ - 
+ - This program is free software; you can redistribute it and/or modify it under the terms of
+ - the GNU General Public License as published by the Free Software Foundation; either version
+ - 3 of the License, or any later version.
+ - 
+ - This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+ - without even the implied warranty of MECHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ - See the GNU General Public License for more details.
+ - 
+ - You should have received a copy of the GNU General Plublic License along with this program;
+ - if not, see <http://www.gnu.org/licenses/>.
+-->
+<!DOCTYPE hibernate-configuration PUBLIC "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+
+<hibernate-configuration>
+    <session-factory>
+     
+        <mapping class="com.syncnapsis.data.model.Action"/>
+        <mapping class="com.syncnapsis.data.model.BlackList"/>
+        <mapping class="com.syncnapsis.data.model.BlackListEntry"/>
+        <mapping class="com.syncnapsis.data.model.Messenger"/>
+        <mapping class="com.syncnapsis.data.model.MessengerContact"/>
+        <mapping class="com.syncnapsis.data.model.Parameter"/>
+        <mapping class="com.syncnapsis.data.model.Pinboard"/>
+        <mapping class="com.syncnapsis.data.model.PinboardMessage"/>
+        <mapping class="com.syncnapsis.data.model.RPCLog"/>
+        <mapping class="com.syncnapsis.data.model.User"/>
+        <mapping class="com.syncnapsis.data.model.UserContact"/>
+        <mapping class="com.syncnapsis.data.model.UserRole"/>
+        
+        <mapping class="com.syncnapsis.data.model.Empire"/>
+        <mapping class="com.syncnapsis.data.model.Player"/>
+        <mapping class="com.syncnapsis.data.model.PlayerRole"/>
+        
+        <mapping class="com.syncnapsis.data.model.Galaxy"/>
+        <mapping class="com.syncnapsis.data.model.Match"/>
+        <mapping class="com.syncnapsis.data.model.Participant"/>
+        <mapping class="com.syncnapsis.data.model.SolarSystem"/>
+        <mapping class="com.syncnapsis.data.model.SolarSystemInfrastructure"/>
+        <mapping class="com.syncnapsis.data.model.SolarSystemPopulation"/>
+
+    </session-factory>
+</hibernate-configuration>

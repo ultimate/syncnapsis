@@ -1,0 +1,91 @@
+/**
+ * Syncnapsis Framework - Copyright (c) 2012 ultimate
+ * 
+ * This program is free software; you can redistribute it and/or modify it under the terms of
+ * the GNU General Public License as published by the Free Software Foundation; either version
+ * 3 of the License, or any later version.
+ * 
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+ * without even the implied warranty of MECHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Plublic License along with this program;
+ * if not, see <http://www.gnu.org/licenses/>.
+ */
+.select {
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+
+.select,
+.select>ul {
+	border: 1px solid rgba(0,255,255,0.9);
+	background: rgba(0,86,86,0.9);
+}
+
+.select.error {
+	border: 1px solid rgba(0,255,255,0.9);
+	background: rgba(255,239,136,1.0);
+}
+
+.select {
+	height: 16px;
+	line-height: 16px;
+	overflow: hidden;
+	display: inline-block;
+	cursor: pointer;
+}
+
+.select>div {
+	text-decoration: none;
+	overflow: hidden;
+	height: 16px;
+}
+
+.select>div>span {
+	padding-left: 1.5px;
+	white-space: nowrap;
+	position: absolute;
+	overflow: hidden;
+}
+
+.select>div:after {
+	background: url('../images/arrow-down.png') no-repeat rgba(0,0,0,0);  /*Adds background-image*/
+	background-position: 0px 2px;  /*Position of the background-image*/
+	content: '00';
+	color: rgba(0,0,0,0);
+	float: right;
+}
+
+.select>ul {
+	height: 0px;
+	margin-top: 0px;
+	margin-left: -0.5px;
+	padding: 0px;
+	overflow: hidden;
+	z-index: 10;
+}
+
+.select>ul>li {
+	overflow: hidden;
+	white-space: nowrap;
+	padding-left: 2px;
+	padding-right: 2px;
+}
+
+.select>ul>li:hover,
+.select>ul>li.active {
+	background: rgba(0, 141, 141, 0.9);
+	color: rgba(0,0,0,0.9);
+}
+
+.select.open>ul {
+	height: auto;
+	position: absolute;
+	margin-top: 0px;
+	margin-left: -1px;
+}

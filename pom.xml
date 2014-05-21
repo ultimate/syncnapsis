@@ -1,0 +1,360 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ - Syncnapsis Framework - Copyright (c) 2012 ultimate
+ - 
+ - This program is free software; you can redistribute it and/or modify it under the terms of
+ - the GNU General Public License as published by the Free Software Foundation; either version
+ - 3 of the License, or any later version.
+ - 
+ - This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+ - without even the implied warranty of MECHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ - See the GNU General Public License for more details.
+ - 
+ - You should have received a copy of the GNU General Plublic License along with this program;
+ - if not, see <http://www.gnu.org/licenses/>.
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com</groupId>
+	<artifactId>syncnapsis</artifactId>
+	<packaging>pom</packaging>
+	<version>0.9.0</version>
+	<name>syncnapsis-framework</name>
+	<url>http://github.com/organizations/syncnapsis</url>
+
+	<modules>
+		<module>syncnapsis-core</module>
+		<module>syncnapsis-dev</module>
+		<module>syncnapsis-examples</module>
+		<module>syncnapsis-modules</module>
+		<module>syncnapsis-universe</module>
+	</modules>
+
+	<prerequisites>
+		<maven>2.2.1</maven>
+	</prerequisites>
+
+	<developers>
+		<developer>
+			<name>ultimate</name>
+			<email>ultimate@syncnapsis.com</email>
+		</developer>
+		<developer>
+			<name>moronicjoker</name>
+			<email>moronicjoker@syncnapsis.com</email>
+		</developer>
+	</developers>
+
+	<organization>
+		<name>syncnapsis</name>
+		<url>http://github.com/organizations/syncnapsis</url>
+	</organization>
+
+	<build>
+		<defaultGoal>install</defaultGoal>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<source>1.6</source>
+					<target>1.6</target>
+					<encoding>ISO-8859-1</encoding>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-eclipse-plugin</artifactId>
+				<version>2.8</version>
+				<configuration>
+					<downloadSources>true</downloadSources>
+					<downloadJavadocs>true</downloadJavadocs>
+					<projectNameTemplate>[artifactId]</projectNameTemplate>
+					<workspace>${basedir}</workspace>
+					<workspaceActiveCodeStyleProfileName>format-java</workspaceActiveCodeStyleProfileName>
+					<workspaceCodeStylesURL>file:format-java.xml</workspaceCodeStylesURL>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>2.12.4</version>
+				<configuration>
+					<useFile>${surefire.useFile}</useFile>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-deploy-plugin</artifactId>
+				<version>2.7</version>
+				<configuration>
+					<skip>${mvn.deploy.skip}</skip>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>hibernate3-maven-plugin</artifactId>
+				<version>2.0-alpha-1</version>
+				<configuration>
+					<components>
+						<component>
+							<name>hbm2ddl</name>
+							<implementation>annotationconfiguration</implementation>
+						</component>
+					</components>
+					<componentProperties>
+						<jdk5>true</jdk5>
+						<propertyfile>${jdbc.properties}</propertyfile>
+						<configurationfile>${db.hibernate.cfg}</configurationfile>
+						<skip>${db.hibernate.skip}</skip>
+					</componentProperties>
+				</configuration>
+				<dependencies>
+					<dependency>
+						<groupId>${jdbc.groupId}</groupId>
+						<artifactId>${jdbc.artifactId}</artifactId>
+						<version>${jdbc.version}</version>
+					</dependency>
+					<dependency>
+						<groupId>org.hibernate</groupId>
+						<artifactId>hibernate-core</artifactId>
+						<version>${hibernate.version}</version>
+						<exclusions>
+							<exclusion>
+								<groupId>commons-collections</groupId>
+								<artifactId>commons-collections</artifactId>
+							</exclusion>
+						</exclusions>
+					</dependency>
+				</dependencies>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>dbunit-maven-plugin</artifactId>
+				<version>1.0-beta-1</version>
+				<configuration>
+					<dataTypeFactoryName>${db.dbunit.dataTypeFactoryName}</dataTypeFactoryName>
+					<driver>${jdbc.driverClassName}</driver>
+					<username>${jdbc.username}</username>
+					<password>${jdbc.password}</password>
+					<url>${jdbc.url}</url>
+					<schema>${db.dbunit.schema}</schema>
+					<type>INSERT</type>
+					<src>${db.dbunit.src}</src>
+					<skip>${db.dbunit.skip}</skip>
+				</configuration>
+				<dependencies>
+					<dependency>
+						<groupId>${jdbc.groupId}</groupId>
+						<artifactId>${jdbc.artifactId}</artifactId>
+						<version>${jdbc.version}</version>
+					</dependency>
+				</dependencies>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>versions-maven-plugin</artifactId>
+				<version>1.3.1</version>
+				<configuration>
+					<generateBackupPoms>false</generateBackupPoms>
+				</configuration>				
+			</plugin>
+		</plugins>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>true</filtering>
+				<excludes>
+					<exclude>**/*.xls</exclude>
+				</excludes>
+			</resource>
+		</resources>
+		<testResources>
+			<testResource>
+				<directory>src/test/resources</directory>
+				<filtering>true</filtering>
+			</testResource>
+			<testResource>
+				<directory>src/main/webapp</directory>
+				<filtering>true</filtering>
+				<includes>
+					<include>**/*.xml</include>
+				</includes>
+			</testResource>
+		</testResources>
+		<extensions>
+		</extensions>
+	</build>
+
+	<repositories>
+		<repository>
+			<id>central</id>
+			<url>http://repo1.maven.org/maven2</url>
+		</repository>
+		<repository>
+			<id>mvnrepository.com</id>
+			<url>http://mvnrepository.com</url>
+		</repository>
+		<repository>
+			<id>maven2-repository.dev.java.net</id>
+			<url>http://download.java.net/maven/2</url>
+		</repository>
+		<repository>
+			<id>glassfish-repository.dev.java.net</id>
+			<url>http://download.java.net/maven/glassfish</url>
+		</repository>
+		<repository>
+			<id>appfuse</id>
+			<url>http://static.appfuse.org/repository</url>
+		</repository>
+	</repositories>
+
+	<pluginRepositories>
+		<!-- no additional plugin repos -->
+	</pluginRepositories>
+
+	<dependencies>
+		<!-- BASE - START -->
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<version>${log4j.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<version>${log4j.version}</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-log4j12</artifactId>
+			<version>${slf4j.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-log4j12</artifactId>
+			<version>${slf4j.version}</version>
+			<scope>compile</scope>
+		</dependency>
+		<!-- BASE - END -->
+		<!-- WEB - START -->
+		<dependency>
+			<groupId>org.glassfish</groupId>
+			<artifactId>javax.servlet</artifactId>
+			<version>${servlet.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<!-- WEB - END -->
+    	<!-- websockets - START -->
+        <dependency>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-websocket</artifactId>
+            <version>${jetty.version}</version>
+            <scope>provided</scope>
+           	<exclusions>
+           		<exclusion>
+		            <groupId>org.eclipse.jetty.orbit</groupId>
+		            <artifactId>javax.servlet</artifactId>
+           		</exclusion>
+           	</exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-server</artifactId>
+            <version>${jetty.version}</version>
+            <scope>provided</scope>
+           	<exclusions>
+           		<exclusion>
+		            <groupId>org.eclipse.jetty.orbit</groupId>
+		            <artifactId>javax.servlet</artifactId>
+           		</exclusion>
+           	</exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-servlet</artifactId>
+            <version>${jetty.version}</version>
+            <scope>provided</scope>
+        </dependency>
+    	<!-- websockets - END -->
+	</dependencies>
+
+	<profiles>
+		<profile>
+			<id>fullInstall</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-source-plugin</artifactId>
+						<version>2.1.2</version>
+						<executions>
+							<execution>
+								<id>attach-sources</id>
+								<goals>
+									<goal>jar-no-fork</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-javadoc-plugin</artifactId>
+						<version>2.8</version>
+						<executions>
+							<execution>
+								<id>attach-javadoc</id>
+								<goals>
+									<goal>jar</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
+
+	<properties>
+		<!-- Database settings - Start -->
+		<hibernate.dialect>org.hibernate.dialect.PostgreSQLDialect</hibernate.dialect>
+		<hibernate.showSql>false</hibernate.showSql>
+		<jdbc.groupId>postgresql</jdbc.groupId>
+		<jdbc.artifactId>postgresql</jdbc.artifactId>
+		<jdbc.version>9.1-901.jdbc4</jdbc.version> <!-- 19.01.2012 -->
+		<jdbc.driverClassName>org.postgresql.Driver</jdbc.driverClassName>
+		<jdbc.url><![CDATA[jdbc:postgresql://localhost:5432/syncnapsis_test]]></jdbc.url>
+		<jdbc.username>syncnapsis_test</jdbc.username>
+		<jdbc.password>syncnapsis_test</jdbc.password>
+		<!-- Database settings - End -->
+
+		<!-- Versions of Dependencies -->
+
+		<!-- Global-Dependencies -->
+		<servlet.version>3.1.1</servlet.version> <!-- 19.01.2012 -->
+		<slf4j.version>1.6.4</slf4j.version> <!-- 19.01.2012 -->
+		<log4j.version>1.2.16</log4j.version> <!-- 19.01.2012 -->
+    	<jetty.version>8.1.9.v20130131</jetty.version> <!-- 31.01.2013 -->
+		<!-- For Profiles only -->
+		<hibernate.version>4.0.1.Final</hibernate.version> <!-- 19.01.2012 -->
+
+		<!-- Profiles, Deployment etc. -->
+		<mvn.deploy.skip>false</mvn.deploy.skip>
+		<jdbc.properties>target/test-classes/jdbc.properties</jdbc.properties>
+		<db.dbunit.dataTypeFactoryName>org.dbunit.dataset.datatype.DefaultDataTypeFactory</db.dbunit.dataTypeFactoryName>
+		<db.dbunit.src>src/test/resources/data-test.xml</db.dbunit.src>
+		<db.dbunit.skip>true</db.dbunit.skip>
+		<db.hibernate.cfg>src/test/resources/hibernate.cfg.xml</db.hibernate.cfg>
+		<db.hibernate.skip>true</db.hibernate.skip>
+
+		<!-- Tests -->
+		<surefire.useFile>false</surefire.useFile>
+
+		<!-- Other -->
+		<maven.build.timestamp.format>yyyy-MM-dd</maven.build.timestamp.format>
+	</properties>
+</project>

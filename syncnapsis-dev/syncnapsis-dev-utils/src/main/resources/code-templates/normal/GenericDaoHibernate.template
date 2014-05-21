@@ -1,0 +1,49 @@
+/**
+ * Syncnapsis Framework - Copyright (c) 2012 ultimate
+ * 
+ * This program is free software; you can redistribute it and/or modify it under the terms of
+ * the GNU General Public License as published by the Free Software Foundation; either version
+ * 3 of the License, or any later version.
+ * 
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+ * without even the implied warranty of MECHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Plublic License along with this program;
+ * if not, see <http://www.gnu.org/licenses/>.
+ */
+package ${package}.data.dao.hibernate;
+
+import org.hibernate.SessionFactory;
+
+import ${package}.data.dao.${model}Dao;
+import ${package}.data.model.${model};
+
+/**
+ * Dao-Implementation for Hibernate for access to ${model}
+ * 
+ * @author ultimate
+ */
+public class ${model}DaoHibernate extends GenericDaoHibernate<${model}, ${pkType}> implements ${model}Dao
+{
+	/**
+	 * Create a new DAO-Instance using the super-class GenericDaoHibernate
+	 * with the model-Class ${model}
+	 */
+	@Deprecated
+	public ${model}DaoHibernate()
+	{
+		super(${model}.class);
+	}
+	
+	/**
+	 * Create a new DAO-Instance using the super-class GenericDaoHibernate
+	 * with the model-Class ${model} and the given SessionFactory
+	 *
+	 * @param sessionFactory - the SessionFactory to use
+	 */
+	public ${model}DaoHibernate(SessionFactory sessionFactory)
+	{
+		super(sessionFactory, ${model}.class);
+	}
+}
