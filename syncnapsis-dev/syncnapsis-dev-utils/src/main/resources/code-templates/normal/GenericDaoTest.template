@@ -1,0 +1,49 @@
+/**
+ * Syncnapsis Framework - Copyright (c) 2012 ultimate
+ * 
+ * This program is free software; you can redistribute it and/or modify it under the terms of
+ * the GNU General Public License as published by the Free Software Foundation; either version
+ * 3 of the License, or any later version.
+ * 
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+ * without even the implied warranty of MECHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Plublic License along with this program;
+ * if not, see <http://www.gnu.org/licenses/>.
+ */
+package ${package}.data.dao;
+
+import ${package}.data.dao.hibernate.${model}DaoHibernate;
+import ${package}.data.model.${model};
+import ${package}.tests.GenericDaoTestCase;
+import ${package}.tests.annotations.TestCoversClasses;
+
+@TestCoversClasses({${model}Dao.class, ${model}DaoHibernate.class})
+public class ${model}DaoTest extends GenericDaoTestCase<${model}, ${pkType}>
+{
+	private ${model}Dao ${entity}Dao;
+	
+	@Override
+	protected void setUp() throws Exception
+	{
+		super.setUp();
+		
+		${pkType} existingId = ${entity}Dao.getAll().get(0).getId();
+		
+		${model} ${entity} = new ${model}();
+		// set individual properties here (especially not-null properties!)
+		
+		setEntity(${entity});
+		
+		setEntityProperty(/* a valid property name */);
+		setEntityPropertyValue(/* a valid property value */);
+		
+		setExistingEntityId(existingId);
+		setBadEntityId(-1L);
+		
+		setGenericDao(${entity}Dao);
+	}
+	
+	// insert individual Tests here
+}
