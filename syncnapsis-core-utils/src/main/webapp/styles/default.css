@@ -1,0 +1,53 @@
+.flip-horizontal {
+	-moz-transform: scaleX(-1);
+	-webkit-transform: scaleX(-1);
+	-o-transform: scaleX(-1);
+	transform: scaleX(-1);
+	-ms-filter: fliph; /*IE*/
+	filter: fliph; /*IE*/
+}
+
+.flip-vertical {
+	-moz-transform: scaleY(-1);
+	-webkit-transform: scaleY(-1);
+	-o-transform: scaleY(-1);
+	transform: scaleY(-1);
+	-ms-filter: flipv; /*IE*/
+	filter: flipv; /*IE*/
+}
+
+/*
+	hide elements
+*/
+.hidden {
+	display: none;
+}
+
+/* 
+	centering or stretching via
+	position:absolute + auto-margin
+	centering: width & height = fixed
+	stretching: width & height not set
+*/
+.centered {
+	position: absolute;
+	top: 0px;
+	bottom: 0px;
+	left: 0px;
+	right: 0px;
+	margin: auto;
+}
+
+.centered_x {
+	position: absolute;
+	left: 0px;
+	right: 0px;
+	margin: auto;
+}
+
+.centered_y {
+	position: absolute;
+	top: 0px;
+	bottom: 0px;
+	margin: auto;
+}

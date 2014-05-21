@@ -1,0 +1,45 @@
+<html>
+	<head>	
+		<script type="text/javascript">
+		
+			aType = function()
+			{
+				this.name = "lala";
+			};
+			
+			bType = function()
+			{
+				
+			};
+			bType.prototype = aType;			
+
+			cType = function()
+			{
+				
+			};
+			cType.prototype = bType;
+			
+			var a = new aType();
+			var b = new bType();
+			var c = new cType();
+			
+			alert(typeof(b).prototype);
+			
+			function test(t, type)
+			{
+				if(t instanceof type)
+					return true;
+				else
+					return false;
+			}
+		
+			alert(test(a, aType) + " " + test(b, aType) + " " + test(c, aType) + "\n" +
+					test(a, bType) + " " + test(b, bType) + " " + test(c, bType) + "\n" +
+					test(a, cType) + " " + test(b, cType) + " " + test(c, cType) + "\n");
+			
+		</script>
+	</head>
+	<body>
+		asdf
+	</body>
+</html>
