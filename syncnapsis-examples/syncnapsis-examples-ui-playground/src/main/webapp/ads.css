@@ -1,0 +1,66 @@
+
+.ad,.ad_inner,.ad_border {
+	background: #333333;
+	/*width set via JS */
+	height: 100%;
+	position: absolute;
+	/* left set via JS */
+	top: 0px;
+	text-align: center;
+}
+
+.ad_border {
+	background: #000000;
+	overflow: visible;
+}
+
+.ad .ad_toggle {
+	z-index: 1;
+}
+
+#ad_left_toggle {
+	left: 0px;
+}
+
+#ad_right_toggle {
+	right: 0px;
+}
+/*
+ * initial positioning
+ * assuming inner (!) window width of
+ * 1280 x 600
+ */
+#ad_left {
+	width: 170px;
+	left: 0px;
+}
+
+#center {
+	width: 940px;
+	left: 170px;
+}
+
+#ad_right {
+	width: 170px;
+	left: 1110px;
+}
+
+#ad_left_inner {
+	width: 168px;
+	left: 0px;
+}
+
+#ad_left_border {
+	width: 2px;
+	left: 168px;
+}
+
+#ad_right_border {
+	width: 2px;
+	left: 0px;
+}
+
+#ad_right_inner {
+	width: 168px;
+	left: 2px;
+}

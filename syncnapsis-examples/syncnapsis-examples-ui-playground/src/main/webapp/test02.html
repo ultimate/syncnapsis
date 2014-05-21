@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="de">
+
+	<meta charset="utf-8">
+
+	<head>
+	  
+		<script src="scripts/three.min-50.js"></script>
+
+		<script type="text/javascript">
+		<!--
+			var camera, scene, renderer, projector;
+			//var geometry, material, mesh;
+			
+			var mesh,mesh2;
+			
+			var mouse = { x: 0, y: 0 };
+			
+			var cameraRadius = 200;
+			
+			var colorSelected = new THREE.MeshBasicMaterial( { color: 0xff9900, wireframe: true } );
+			
+			var colorInactive = new THREE.MeshBasicMaterial( { color: 0x999999, wireframe: true } );
+			
+			var colorNeighbor = new THREE.MeshBasicMaterial( { color: 0x99ff00, wireframe: true } );
+
+			
+			document.addEventListener("DOMContentLoaded", function(){
+	
+				init();
+				animate();
+			
+			
+			}, false);
+			
+			
+			document.addEventListener( 'mousedown', onClick, false );
+			
+			document.addEventListener( 'mouseup', clearColors, false );
+
+			function onClick( event ) {
+
+				event.preventDefault();
+
+				mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
+				mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+				
+				
+				var vector = new THREE.Vector3( mouse.x, mouse.y, 1 );
+				
+				projector.unprojectVector( vector, camera );
+
+				var ray = new THREE.Ray( camera.position, vector.subSelf( camera.position ).normalize() );
+
+				var intersects = ray.intersectObjects( allCubes );
+
+				if ( intersects.length > 0 ) {
+				
+					findNeighbors(intersects[0].point);
+					
+					intersects[0].object.material = colorSelected;
+					
+				}
+
+			};
+			
+			function findNeighbors(point) {
+			
+				
+				
+				var distances = [];
+				
+				for(var i=0;i<allCubes.length;i++) {
+				
+					var distance = Math.sqrt(  squareIt(allCubes[i].position.x - point.x)  +  squareIt(allCubes[i].position.y - point.y) + squareIt(allCubes[i].position.z - point.z)           );
+				
+					distances.push({distance:distance,object:allCubes[i]});
+				
+				};
+				
+				
+				distances.sort(compare);
+
+				for(var i=0;i<=5;i++) {
+				
+					distances[i].object.material = colorNeighbor;
+				
+				}
+				
+				
+			};
+			
+			function squareIt(number) {
+				return number * number;
+			}
+
+			function compare(a,b) {
+			  if (a.distance < b.distance)
+				 return -1;
+			  if (a.distance > b.distance)
+				return 1;
+			  return 0;
+			}			
+			
+			
+			
+			function clearColors() {
+			
+				console.log('clearing colors');
+			
+				for(var i=0;i<allCubes.length;i++) {
+				
+					allCubes[i].material = colorInactive;
+				
+				};
+			
+			};
+			
+			
+			function init() {
+
+				camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 10000 );
+				camera.position.z = cameraRadius;
+
+				scene = new THREE.Scene();
+
+				/*
+				
+				var geometry = new THREE.CubeGeometry( 100, 100, 100 );
+				var material = new THREE.MeshBasicMaterial( { color: 0xff9900, wireframe: true } );
+
+				mesh = new THREE.Mesh( geometry, material );
+				
+				scene.add( mesh );
+				*/
+				
+				createCubes();
+				
+				//createTestCubes();
+
+				projector = new THREE.Projector();
+
+
+				renderer = new THREE.WebGLRenderer({antialias: true});
+				renderer.setSize( window.innerWidth, window.innerHeight );
+
+				document.body.appendChild(renderer.domElement );
+			};
+			
+			
+			var allCubes = new Array();
+			
+			function createCubes() {
+			
+				//var count = Math.floor(Math.random()*300);
+				
+				var count = 100;
+				
+				for(var i=0;i<count;i++) {
+			
+					var geometry = new THREE.CubeGeometry( 10,10,10 );
+					
+					var material = colorInactive;
+
+					var mesh = new THREE.Mesh( geometry, material );
+				
+					scene.add( mesh );
+					
+					mesh.position.x = generateCoords();
+					mesh.position.y = generateCoords();
+					mesh.position.z = generateCoords();
+			
+					allCubes.push(mesh);
+				};
+			
+			};
+			
+			
+			
+			function createTestCubes() {
+
+				var coords = [
+				
+					[cameraRadius,cameraRadius],
+					
+					[cameraRadius,-cameraRadius],
+					
+					[-cameraRadius,-cameraRadius],
+					
+					[-cameraRadius,cameraRadius]
+					
+				];
+				
+				for(var i=0;i<coords.length;i++) {
+			
+					var geometry = new THREE.CubeGeometry( 30,30,30 );
+					
+					var material = new THREE.MeshBasicMaterial( { color: 0xff0000, wireframe: true } );
+
+					var mesh = new THREE.Mesh( geometry, material );
+				
+					scene.add( mesh );
+					
+					mesh.position.x = coords[i][0];
+					//mesh.position.y = generateCoords();
+					mesh.position.z = coords[i][1];
+			
+					allCubes.push(mesh);
+				};
+			
+			
+			};
+			
+			
+			
+			function generateCoords() {
+			
+				return Math.floor(Math.random()*200) - 100;
+			
+			};
+			
+			
+			
+			
+			var flip = 0;
+
+			var circleAngle = 0;
+			
+			function animate() {
+
+				// note: three.js includes requestAnimationFrame shim
+				requestAnimationFrame( animate );
+				
+				
+				
+				//console.log(camera.position.z);
+				
+				/*
+				
+				
+				if( flip == 0 ) {
+				
+					camera.position.z -= 10;
+					
+					if(camera.position.z < 100) {
+					
+						flip = 1;
+					
+					}
+				
+				} else {
+				
+					camera.position.z += 10;
+					
+					if(camera.position.z > 1000) {
+					
+						flip = 0;
+					
+					}
+					
+					
+				}
+				
+				*/
+				
+				//camera.rotation.x += 0.01;
+				
+				
+				
+				
+				
+				if( circleAngle < 360 ) {
+
+					
+					var x = cameraRadius * Math.cos(circleAngle); 
+					var y = cameraRadius * Math.sin(circleAngle); 
+				
+					camera.position.x = x;
+					
+					camera.position.z = y;
+				
+					circleAngle += 0.005;
+				
+				} else {
+				
+					circleAngle = 0;
+				
+					var x = cameraRadius * Math.cos(circleAngle); 
+					var y = cameraRadius * Math.sin(circleAngle); 
+				
+				
+					camera.position.x = x;
+					
+					camera.position.z = y;
+				
+					circleAngle += 0.005;
+				
+				}
+				
+				//var angle = circleAngle * ( Math.PI / 180);
+			
+				camera.rotation.y  = - circleAngle + 77;
+				
+				/*
+				for(var i=0;i<allCubes.length;i++) {
+				
+					allCubes[i].rotation.x += 0.01;
+					allCubes[i].rotation.y += 0.01;
+					
+				}
+				*/
+				
+				renderer.render( scene, camera );
+				
+
+				
+
+				
+				
+
+			}
+			
+		//-->
+		</script>
+
+		<style type="text/css">
+		<!--
+		
+
+	
+		-->
+		</style>
+		
+		
+	</head>
+	
+	<body>
+	
+
+	
+	
+	</body>
+	
+</html>

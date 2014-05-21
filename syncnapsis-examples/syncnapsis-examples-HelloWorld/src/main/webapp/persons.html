@@ -1,0 +1,53 @@
+<html>
+<head>
+<script type="text/javascript" src="scripts/Request.js" ></script>
+<script type="text/javascript">
+	save = function()
+	{
+		var id = document.getElementById("tf_id").value;
+		var firstName = document.getElementById("tf_firstName").value;
+		var lastName = document.getElementById("tf_lastName").value;
+		var params = "";
+		if(id != null)
+			params = "id=" + id + "&";
+		params = params + "firstName=" + firstName + "&lastName=" + lastName;
+		AJAX.sendRequest("personservice", params, "POST", ok, err);
+	};
+	
+	load = function()
+	{
+		AJAX.sendRequest("personservice", null, "GET", show, err);
+	}
+	
+	ok = function(request)
+	{
+		document.getElementById("result").innerHTML = "OK";
+	};
+	
+	err = function(request)
+	{
+		document.getElementById("result").innerHTML = "ERROR";
+	};
+	
+	show = function(request)
+	{
+		document.getElementById("list").innerHTML = request.responseText;
+	};
+</script>
+</head>
+<body>
+<div>
+	ID <input type="text" id="tf_id" /><br/>
+	First Name <input type="text" id="tf_firstName" /><br/>
+	Last Name <input type="text" id="tf_lastName" /><br/>
+	<input type="button" value="Save/Update" onclick="javascript:save();"/>
+</div>
+<div id="result">
+</div>
+<div>	
+	<input type="button" value="Load" onclick="javascript:load();"/>
+</div>
+<div id="list">
+</div>
+</body>
+</html>
