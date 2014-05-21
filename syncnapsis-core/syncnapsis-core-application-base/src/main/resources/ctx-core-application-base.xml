@@ -184,16 +184,15 @@
 	
 	<bean id="emailValidator" class="com.syncnapsis.security.validation.LogicalValidator" >
 		<constructor-arg value="AND"/>
-		<property>
+		<property name="validators">
 			<list>
-				<ref>emailValidator1</ref>
-				<ref>emailValidator2</ref>
+				<ref bean="emailValidator1" />
+				<ref bean="emailValidator2" />
 			</list>
 		</property>
 	</bean>
 	
-	<bean id="emailValidator1" class="com.syncnapsis.security.validation.RegExpValidator" >
-		<constructor-arg value=""/>
+	<bean id="emailValidator1" class="com.syncnapsis.security.validation.EmailValidator" >
 	</bean>
 	
 	<bean id="emailValidator2" class="com.syncnapsis.security.validation.DBBlackListStringValidator" >
