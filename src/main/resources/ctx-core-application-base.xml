@@ -182,7 +182,21 @@
 		<property name="blackListName" value="name" />
 	</bean>
 	
-	<bean id="emailValidator" class="com.syncnapsis.security.validation.DBBlackListStringValidator" >
+	<bean id="emailValidator" class="com.syncnapsis.security.validation.LogicalValidator" >
+		<constructor-arg value="AND"/>
+		<property>
+			<list>
+				<ref>emailValidator1</ref>
+				<ref>emailValidator2</ref>
+			</list>
+		</property>
+	</bean>
+	
+	<bean id="emailValidator1" class="com.syncnapsis.security.validation.RegExpValidator" >
+		<constructor-arg value=""/>
+	</bean>
+	
+	<bean id="emailValidator2" class="com.syncnapsis.security.validation.DBBlackListStringValidator" >
 		<property name="blackListManager" ref="blackListManager" />
 		<property name="blackListEntryManager" ref="blackListEntryManager" />
 		<property name="blackListName" value="email" />
