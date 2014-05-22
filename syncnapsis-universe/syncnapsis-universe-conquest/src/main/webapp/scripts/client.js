@@ -167,8 +167,6 @@ UIManager.prototype.onLogin = function(player)
 		this.currentPlayer = player;
 		// set the player name in the top bar (after loading the user)
 		server.entityManager.load(player.user, Events.wrapEventHandler(this, this.onUserLoaded));
-		// change language to users selection
-		server.uiManager.selectLocale(player.user.locale);
 		// switch ui to logged-in menu
 		this.userInfo.select(UI.constants.USERINFO_INDEX_LOGGEDIN);
 		// hide welcome
@@ -195,10 +193,11 @@ UIManager.prototype.onLogout = function(success)
 UIManager.prototype.onUserLoaded = function(user)
 {
 	console.log("user loaded: " + user.username);
+	// set welcome username
 	document.getElementById(UI.constants.LABEL_ID_PLAYERNAME).innerHTML = user.username;
+	// change language to users selection
 	if(user && user.locale)
 		this.localeChooser.selectByValue(user.locale);
-	// server.uiManager.selectLocale(user.locale);
 };
 
 UIManager.prototype.onRegister = function(player, username, password)
