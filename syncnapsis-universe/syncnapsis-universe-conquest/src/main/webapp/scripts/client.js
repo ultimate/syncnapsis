@@ -171,6 +171,8 @@ UIManager.prototype.onLogin = function(player)
 		server.uiManager.selectLocale(player.user.locale);
 		// switch ui to logged-in menu
 		this.userInfo.select(UI.constants.USERINFO_INDEX_LOGGEDIN);
+		// hide welcome
+		this.hideWelcome();
 	}
 	else
 	{
@@ -199,15 +201,21 @@ UIManager.prototype.onUserLoaded = function(user)
 	// server.uiManager.selectLocale(user.locale);
 };
 
-UIManager.prototype.onRegister = function(player, password)
+UIManager.prototype.onRegister = function(player, username, password)
 {
 	if(player != null && player.j_type == Types.Player)
 	{
-		server.playerManager.login(username, password);
+		setTimeout(function(uiManager) { return function() {
+			uiManager.hideRegister();
+			server.playerManager.login(username, password);
+		}; } (this), 3000);
+		
+		// TODO show success message
 	}
 	else if(player != null && player.exceptionClass != null)
 	{
-		// TODO
+		console.log("error: " + player.message);
+		// TODO show error message
 		
 		this.showErrorMessage(document.getElementById(UI.constants.REG_USERNAME_ID), null);
 		this.showErrorMessage(document.getElementById(UI.constants.REG_EMAIL_ID), null);
@@ -368,13 +376,13 @@ UIManager.prototype.doRegister = function()
 		return;
 
 	// we do not use the default callback, since we want to keep the password for auto-login
-	var callback = function(password)
+	var callback = function(username, password)
 	{
 		return function(player)
 		{
-			client.uiManager.onRegister(player, password);
+			client.uiManager.onRegister(player, username, password);
 		};
-	}(password);
+	}(username, password);
 
 	server.playerManager.register(username, email, password, password2, callback);
 };
