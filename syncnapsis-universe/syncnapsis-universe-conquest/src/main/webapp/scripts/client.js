@@ -66,6 +66,13 @@ UI.constants.IMAGE_TYPE = ".png";
 UI.constants.FLAGS_PATH = "flags/";
 UI.constants.FLAGS_CLASS = "flag"
 
+Types.Galaxy = "com.syncnapsis.data.model.Galaxy";
+Types.Match = "com.syncnapsis.data.model.Match";
+Types.Participant = "com.syncnapsis.data.model.Participant";
+Types.SolarSystem = "com.syncnapsis.data.model.SolarSystem";
+Types.SolarSystemInfrastructure = "com.syncnapsis.data.model.SolarSystemInfrastructure";
+Types.SolarSystemPopulation = "com.syncnapsis.data.model.SolarSystemPopulation";
+
 UIManager = function()
 {
 	this.currentPlayer = null;
@@ -194,13 +201,14 @@ UIManager.prototype.onUserLoaded = function(user)
 
 UIManager.prototype.onRegister = function(player, password)
 {
-	if(player != null)
+	if(player != null && player.j_type == Types.Player)
 	{
-		console.log(player);
-		console.log(password);
+		server.playerManager.login(username, password);
 	}
-	else
+	else if(player != null && player.exceptionClass != null)
 	{
+		// TODO
+		
 		this.showErrorMessage(document.getElementById(UI.constants.REG_USERNAME_ID), null);
 		this.showErrorMessage(document.getElementById(UI.constants.REG_EMAIL_ID), null);
 		this.showErrorMessage(document.getElementById(UI.constants.REG_PASSWORD_ID), null);

@@ -14,4 +14,8 @@
  */
 //@requires("application-base")
 
+Types.Empire = "com.syncnapsis.data.model.Empire";
+Types.Player = "com.syncnapsis.data.model.Player";
+Types.PlayerRole= "com.syncnapsis.data.model.PlayerRole";
+	
 // TODO extend ApplicationBase

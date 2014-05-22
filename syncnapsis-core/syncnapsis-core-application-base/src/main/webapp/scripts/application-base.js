@@ -14,6 +14,18 @@
  */
 //@requires("RPCSocket")
 
+Types = {};
+Types.Action = "com.syncnapsis.data.model.Action";
+Types.BlackList = "com.syncnapsis.data.model.BlackList";
+Types.BlackListEntry = "com.syncnapsis.data.model.BlackListEntry";
+Types.Messenger = "com.syncnapsis.data.model.Messenger";
+Types.MessengerContact = "com.syncnapsis.data.model.MessengerContact";
+Types.Pinboard = "com.syncnapsis.data.model.Pinboard";
+Types.PinboardMessage = "com.syncnapsis.data.model.PinboardMessage";
+Types.User = "com.syncnapsis.data.model.User";
+Types.UserContact = "com.syncnapsis.data.model.UserContact";
+Types.UserRole = "com.syncnapsis.data.model.UserRole";
+
 EntityManager = function(server)
 {
 	if(server == null)
