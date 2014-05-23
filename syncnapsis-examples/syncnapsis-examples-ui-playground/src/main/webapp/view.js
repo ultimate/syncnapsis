@@ -22,41 +22,47 @@ ViewUtil.loadShader = function(name) {
 	return DependencyManager.scriptContents[index];
 };
 
-ViewUtil.AnimatedVariable = function(initialValue, min, max, animationStepSize) {
+ViewUtil.INSTANT = Number.MAX_VALUE;
+
+ViewUtil.AnimatedVariable = function(initialValue, min, max, animationSpeed) {
 	this.value = initialValue;
 	this.target = initialValue;
 	this.min = min;
 	this.max = max;	
-	this.stepSize = animationStepSize;	
+	this.speed = animationSpeed;	
 	
-	this.animate = function(instant) {
+	this.animate = function(time) {
 		if(this.min != null && this.target < this.min)
 			this.target = this.min;
 		if(this.max != null && this.target > this.max)
 			this.target = this.max;
 			
+		var step = this.speed * time / 1000;
+			
 		var dist = Math.abs(this.target - this.value);
 		var sgn = Math.sign(this.target - this.value);
 			
-		if(instant || dist < this.stepSize)
+		if(time == ViewUtil.INSTANT || dist < step)
 			this.value = this.target;
 		else 
-			this.value += sgn*this.stepSize;		
+			this.value += sgn*step;		
 	};
 };
 
-ViewUtil.AnimatedVector3 = function(initialValue, animationStepSize) {
+ViewUtil.AnimatedVector3 = function(initialValue, animationSpeed) {
 	this.value = initialValue.clone();
 	this.target = initialValue.clone();
-	this.stepSize = animationStepSize;
+	this.speed = animationSpeed;
 	
-	this.animate = function(instant) {
+	this.animate = function(time) {
 		var dx = this.target.x - this.value.x;
 		var dy = this.target.y - this.value.y;
 		var dz = this.target.z - this.value.z;
 		var dist2 = dx*dx + dy*dy + dz*dz;
 		
-		if(instant || dist2 < (this.stepSize*this.stepSize))
+		var step = this.speed * time / 1000;
+		
+		if(time == ViewUtil.INSTANT || dist2 < (step*step))
 		{
 			// copy each coordinate individually
 			// otherwise we would have the same object and manipulating the target-object would not be possible
@@ -66,17 +72,17 @@ ViewUtil.AnimatedVector3 = function(initialValue, animationStepSize) {
 		}
 		else
 		{
-			var anim = 2;
+			var anim = 2; // DECIDE WHICH OPTION TO USE...
 			if(anim == 1)
 			{
 				var max = Math.max(Math.abs(dx), Math.max(Math.abs(dy), Math.abs(dz)));
-				this.value.x += dx/max * this.stepSize;
-				this.value.y += dy/max * this.stepSize;
-				this.value.z += dz/max * this.stepSize;
+				this.value.x += dx/max * step;
+				this.value.y += dy/max * step;
+				this.value.z += dz/max * step;
 			}
 			else
 			{
-				var s = Math.abs(this.stepSize) / Math.sqrt(dist2);
+				var s = Math.abs(step) / Math.sqrt(dist2);
 				this.value.x += s*dx;
 				this.value.y += s*dy;
 				this.value.z += s*dz;
@@ -151,21 +157,27 @@ var View = function(container) {
 	};	
 
 	this.camera = {
-		target: new ViewUtil.AnimatedVector3(new THREE.Vector3(0,0,0), 10),
-		radius: new ViewUtil.AnimatedVariable(2000, 100, 2500, 50),
-		sphere_phi: new ViewUtil.AnimatedVariable(0, null, null, 0.005),
-		sphere_theta: new ViewUtil.AnimatedVariable(0.4, - Math.PI / 2 + 0.01, Math.PI / 2 - 0.01, 0.005),
+		target: new ViewUtil.AnimatedVector3(new THREE.Vector3(0,0,0), 500),
+		radius: new ViewUtil.AnimatedVariable(2000, 100, 2500, 2500),
+		sphere_phi: new ViewUtil.AnimatedVariable(0, null, null, 0.25),
+		sphere_theta: new ViewUtil.AnimatedVariable(0.4, - Math.PI / 2 + 0.01, Math.PI / 2 - 0.01, 0.25),
 		sphere_axis: new ViewUtil.AnimatedVariable(0, 0, 0, 0),
 		flip: 0,
 		up: new THREE.Vector3(0, 0, 1),
 		camera: new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 10000 ),
 		
+		lastAnimation: new Date().getTime(),
+		
 		animate: function() {
-			this.target.animate();
-			this.radius.animate();
-			this.sphere_phi.animate();
-			this.sphere_theta.animate();
-			this.sphere_axis.animate();		
+			var now = new Date().getTime();
+			var time = now - this.lastAnimation;
+			this.lastAnimation = now;
+			
+			this.target.animate(time);
+			this.radius.animate(time);
+			this.sphere_phi.animate(time);
+			this.sphere_theta.animate(time);
+			this.sphere_axis.animate(time);		
 						
 			//console.log("camera:    angles=" + this.sphere_phi.value + "|" + this.sphere_theta.value + "|" + this.sphere_axis.value + "    target=" + this.target.value.x + "|" + this.target.value.y + "|" + this.target.value.z);
 		},

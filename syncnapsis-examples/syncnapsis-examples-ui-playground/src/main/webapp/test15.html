@@ -134,8 +134,8 @@
 					camera.sphere_phi.target = camera.sphere_phi.value - (x-lastX)/window.innerWidth * Math.PI * 1.5;
 					camera.sphere_theta.target = camera.sphere_theta.value + (y-lastY)/window.innerHeight * Math.PI * 1.5;
 					
-					camera.sphere_phi.animate(true);
-					camera.sphere_theta.animate(true);
+					camera.sphere_phi.animate(ViewUtil.INSTANT);
+					camera.sphere_theta.animate(ViewUtil.INSTANT);
 					
 					lastX = x;
 					lastY = y;
