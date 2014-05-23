@@ -22,6 +22,75 @@ ViewUtil.loadShader = function(name) {
 	return DependencyManager.scriptContents[index];
 };
 
+ViewUtil.INSTANT = Number.MAX_VALUE;
+
+ViewUtil.AnimatedVariable = function(initialValue, min, max, animationSpeed) {
+	this.value = initialValue;
+	this.target = initialValue;
+	this.min = min;
+	this.max = max;	
+	this.speed = animationSpeed;	
+	
+	this.animate = function(time) {
+		if(this.min != null && this.target < this.min)
+			this.target = this.min;
+		if(this.max != null && this.target > this.max)
+			this.target = this.max;
+			
+		var step = this.speed * time / 1000;
+			
+		var dist = Math.abs(this.target - this.value);
+		var sgn = Math.sign(this.target - this.value);
+			
+		if(time == ViewUtil.INSTANT || dist < step)
+			this.value = this.target;
+		else 
+			this.value += sgn*step;		
+	};
+};
+
+ViewUtil.AnimatedVector3 = function(initialValue, animationSpeed) {
+	this.value = initialValue.clone();
+	this.target = initialValue.clone();
+	this.speed = animationSpeed;
+	
+	this.animate = function(time) {
+		var dx = this.target.x - this.value.x;
+		var dy = this.target.y - this.value.y;
+		var dz = this.target.z - this.value.z;
+		var dist2 = dx*dx + dy*dy + dz*dz;
+		
+		var step = this.speed * time / 1000;
+		
+		if(time == ViewUtil.INSTANT || dist2 < (step*step))
+		{
+			// copy each coordinate individually
+			// otherwise we would have the same object and manipulating the target-object would not be possible
+			this.value.x = this.target.x;
+			this.value.y = this.target.y;
+			this.value.z = this.target.z;
+		}
+		else
+		{
+			var anim = 2; // DECIDE WHICH OPTION TO USE...
+			if(anim == 1)
+			{
+				var max = Math.max(Math.abs(dx), Math.max(Math.abs(dy), Math.abs(dz)));
+				this.value.x += dx/max * step;
+				this.value.y += dy/max * step;
+				this.value.z += dz/max * step;
+			}
+			else
+			{
+				var s = Math.abs(step) / Math.sqrt(dist2);
+				this.value.x += s*dx;
+				this.value.y += s*dy;
+				this.value.z += s*dz;
+			}
+		}
+	};
+};
+
 // for debugging without Request.js - START
 ViewUtil.loadShader = function(name) {
 	if(name == "vertexshader")
@@ -87,16 +156,63 @@ var View = function(container) {
 		invisible: new THREE.MeshBasicMaterial( { visible: false} ),
 	};	
 
-	this.camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 10000 );
+	this.camera = {
+		target: new ViewUtil.AnimatedVector3(new THREE.Vector3(0,0,0), 500),
+		radius: new ViewUtil.AnimatedVariable(2000, 100, 2500, 2500),
+		sphere_phi: new ViewUtil.AnimatedVariable(0, null, null, 0.25),
+		sphere_theta: new ViewUtil.AnimatedVariable(0.4, - Math.PI / 2 + 0.01, Math.PI / 2 - 0.01, 0.25),
+		sphere_axis: new ViewUtil.AnimatedVariable(0, 0, 0, 0),
+		flip: 0,
+		up: new THREE.Vector3(0, 0, 1),
+		camera: new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 10000 ),
+		
+		lastAnimation: new Date().getTime(),
+		
+		animate: function() {
+			var now = new Date().getTime();
+			var time = now - this.lastAnimation;
+			this.lastAnimation = now;
+			
+			this.target.animate(time);
+			this.radius.animate(time);
+			this.sphere_phi.animate(time);
+			this.sphere_theta.animate(time);
+			this.sphere_axis.animate(time);		
+						
+			//console.log("camera:    angles=" + this.sphere_phi.value + "|" + this.sphere_theta.value + "|" + this.sphere_axis.value + "    target=" + this.target.value.x + "|" + this.target.value.y + "|" + this.target.value.z);
+		},
+		
+		update: function() {
+				var x = this.radius.value * Math.sin(Math.PI/2 - this.sphere_theta.value) * Math.cos(this.sphere_phi.value);
+				var y = this.radius.value * Math.sin(Math.PI/2 - this.sphere_theta.value) * Math.sin(this.sphere_phi.value);
+				var z = this.radius.value * Math.cos(Math.PI/2 - this.sphere_theta.value); 
+										
+				//console.log("camera:    pos=" + this.camera.position.x + "|" + this.camera.position.y + "|" + this.camera.position.z + "    rot=" + this.camera.rotation.x + "|" + this.camera.rotation.y + "|" + this.camera.rotation.z);
+				this.camera.position.x = x + this.target.value.x;
+				this.camera.position.y = y + this.target.value.y;
+				this.camera.position.z = z + this.target.value.z;
+				//console.log("camera:    pos=" + this.camera.position.x + "|" + this.camera.position.y + "|" + this.camera.position.z + "    rot=" + this.camera.rotation.x + "|" + this.camera.rotation.y + "|" + this.camera.rotation.z);
+				//console.log("look at: " + this.target.value.x + "|" + this.target.value.y + "|" + this.target.value.z + ", up: " + this.up);
+				this.camera.up = this.up;
+				//console.log("camera:    pos=" + this.camera.position.x + "|" + this.camera.position.y + "|" + this.camera.position.z + "    rot=" + this.camera.rotation.x + "|" + this.camera.rotation.y + "|" + this.camera.rotation.z);
+				this.camera.lookAt(this.target.value);
+				//console.log("camera:    pos=" + this.camera.position.x + "|" + this.camera.position.y + "|" + this.camera.position.z + "    rot=" + this.camera.rotation.x + "|" + this.camera.rotation.y + "|" + this.camera.rotation.z);
+				//console.log("camera:    pos=" + this.camera.position.x + "|" + this.camera.position.y + "|" + this.camera.position.z + "    rot=" + this.camera.rotation.x + "|" + this.camera.rotation.y + "|" + this.camera.rotation.z);
+				this.camera.rotation.z += this.sphere_axis.value; // otherwise we will always look upright
+		}
+	};
 	
 	this.renderer = new THREE.WebGLRenderer({canvas: container, antialias: true, clearColor: 0x000000, clearAlpha: 1 }); 
 	
 	this.updateSize = function() {
 		this.renderer.setSize( window.innerWidth, window.innerHeight, true );
-		this.camera.aspect = window.innerWidth / window.innerHeight;
-		this.camera.updateProjectionMatrix();
-		console.log("updating view size: " + window.innerWidth + "x" + window.innerHeight + " (aspect: " + this.camera.aspect + ")");
+		this.camera.camera.aspect = window.innerWidth / window.innerHeight;
+		this.camera.camera.updateProjectionMatrix();
+		console.log("updating view size: " + window.innerWidth + "x" + window.innerHeight + " (aspect: " + this.camera.camera.aspect + ")");
 	};
+	
+	console.log("the camera:    pos=" + this.camera.camera.position.x + "|" + this.camera.camera.position.y + "|" + this.camera.camera.position.z + "    rot=" + this.camera.camera.rotation.x + "|" + this.camera.camera.rotation.y + "|" + this.camera.camera.rotation.z);
+	this.camera.update();
 		
 	Events.addEventListener(Events.ONRESIZE, Events.wrapEventHandler(this, this.updateSize), window);	
 	Events.fireEvent(window, Events.ONRESIZE);	
