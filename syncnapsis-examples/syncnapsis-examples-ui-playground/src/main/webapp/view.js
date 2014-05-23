@@ -22,6 +22,59 @@ ViewUtil.loadShader = function(name) {
 	return DependencyManager.scriptContents[index];
 };
 
+ViewUtil.AnimatedVariable = function(initialValue, min, max, animationStepSize) {
+	this.value = initialValue;
+	this.target = initialValue;
+	this.min = min;
+	this.max = max;	
+	this.stepSize = animationStepSize;	
+	
+	this.animate = function()
+	{
+		if(this.min != null && this.target < this.min)
+			this.target = this.min;
+		if(this.max != null && this.target > this.max)
+			this.target = this.max;
+			
+		if(this.value < (this.target - this.stepSize))
+			this.value += this.stepSize;
+		else if(this.value > (this.target + this.stepSize))
+			this.value -= this.stepSize;
+		else
+			this.value = this.target;
+	};
+};
+
+ViewUtil.AnimatedVector = function(initialValue, animationStepSize) {
+	this.value = initialValue.clone();
+	this.target = initialValue.clone();
+	this.stepSize = animationStepSize;
+	
+	this.animate = function()
+	{
+		var dx = this.target.x - this.value.x;
+		var dy = this.target.y - this.value.y;
+		var dz = this.target.z - this.value.z;
+		var dist2 = dx*dx + dy*dy + dz*dz;
+		
+		if(dist2 < (this.stepSize*this.stepSize))
+		{
+			// copy each coordinate individually
+			// otherwise we would have the same object and manipulating the target-object would not be possible
+			this.value.x = this.target.x;
+			this.value.y = this.target.y;
+			this.value.z = this.target.z;
+		}
+		else
+		{
+			var s = Math.abs(this.stepSize) / Math.sqrt(dist2);
+			this.value.x += s*dx;
+			this.value.y += s*dy;
+			this.value.z += s*dz;
+		}
+	};
+};
+
 // for debugging without Request.js - START
 ViewUtil.loadShader = function(name) {
 	if(name == "vertexshader")
