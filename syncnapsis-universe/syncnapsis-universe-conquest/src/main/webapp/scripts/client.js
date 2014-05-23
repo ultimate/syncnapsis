@@ -35,6 +35,7 @@ UI.constants.REG_USERNAME_ID = "reg_username";
 UI.constants.REG_EMAIL_ID = "reg_email";
 UI.constants.REG_PASSWORD_ID = "reg_password";
 UI.constants.REG_PASSWORD2_ID = "reg_password2";
+UI.constants.REG_MESSAGE_ID = "reg_message";
 
 UI.constants.LOCALE_CHOOSER_ID = "locale_chooser";
 UI.constants.LOCALE_LABEL_TAGNAME = "label";
@@ -64,7 +65,9 @@ UI.constants.USERINFO_HEIGHT = 40;
 UI.constants.IMAGE_PATH = "images/";
 UI.constants.IMAGE_TYPE = ".png";
 UI.constants.FLAGS_PATH = "flags/";
-UI.constants.FLAGS_CLASS = "flag"
+UI.constants.FLAGS_CLASS = "flag";
+
+UI.constants.MESSAGE_SHOW_CLASS = "show";
 
 Types.Galaxy = "com.syncnapsis.data.model.Galaxy";
 Types.Match = "com.syncnapsis.data.model.Match";
@@ -214,8 +217,9 @@ UIManager.prototype.onRegister = function(player, username, password)
 	else if(player != null && player.exceptionClass != null)
 	{
 		console.log("error: " + player.message);
-		// TODO show error message
-		
+		// show error message
+		this.showErrorMessage(null, document.getElementById(UI.constants.REG_MESSAGE_ID), player.message);
+		// TODO highlight erronous fields
 		this.showErrorMessage(document.getElementById(UI.constants.REG_USERNAME_ID), null);
 		this.showErrorMessage(document.getElementById(UI.constants.REG_EMAIL_ID), null);
 		this.showErrorMessage(document.getElementById(UI.constants.REG_PASSWORD_ID), null);
@@ -437,27 +441,26 @@ UIManager.prototype.hideStatic = function()
 	this.window_static.setVisible(false);
 };
 
-UIManager.prototype.showErrorMessage = function(textfield, messagefield)
+UIManager.prototype.showErrorMessage = function(inputfield, messagefield, message)
 {
-	if(textfield != null)
+	if(inputfield != null)
 	{
-		// var bg = textfield.style.background;
-		// textfield.style.background = UI.constants.TF_ERROR_BACKGROUND;
-		// setTimeout(function() {textfield.style.background = bg;}, 3000);
-		var cls = textfield.className;
-		textfield.className = cls + " error";
+		var cls = inputfield.className;
+		inputfield.className = cls + " error";
 		setTimeout(function()
 		{
-			textfield.className = cls;
+			inputfield.className = cls;
 		}, 3000);
 	}
 	if(messagefield != null)
 	{
-		var disp = messagefield.style.display;
-		messagefield.style.display = "none";
+		if(message)
+			messagefield.innerHTML = getString(message);
+		
+		messagefield.classList.append(UI.constants.MESSAGE_SHOW_CLASS);
 		setTimeout(function()
 		{
-			messagefield.style.display = disp;
+			messagefield.classList.remove(UI.constants.MESSAGE_SHOW_CLASS);
 		}, 3000);
 	}
 };

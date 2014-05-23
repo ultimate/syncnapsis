@@ -20,19 +20,3 @@ input[type=password].error,
 	border: 1px solid rgba(0,255,255,0.9);
 	background: rgba(255,40,40,0.9);
 }
-
-/* REMINDER 
-
-
-<a href="javascript: server.playerManager.logout();">
-
-
-<select id="locale_chooser" size="1" onchange="server.uiManager.selectLocale(this.value);"></select>
-
-
-<span><a href=""><label key="menu.about"></label></a></span>
-<span><a href="lang/contact.html" target="_blank"><label key="menu.contact"></label></a></span>
-<span><a href="lang/disclaimer.html" target="_blank"><label	key="menu.disclaimer"></label></a></span>
-
-
-*/
