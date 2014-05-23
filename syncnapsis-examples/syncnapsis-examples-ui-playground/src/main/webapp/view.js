@@ -66,10 +66,21 @@ ViewUtil.AnimatedVector3 = function(initialValue, animationStepSize) {
 		}
 		else
 		{
-			var s = Math.abs(this.stepSize) / Math.sqrt(dist2);
-			this.value.x += s*dx;
-			this.value.y += s*dy;
-			this.value.z += s*dz;
+			var anim = 2;
+			if(anim == 1)
+			{
+				var max = Math.max(Math.abs(dx), Math.max(Math.abs(dy), Math.abs(dz)));
+				this.value.x += dx/max * this.stepSize;
+				this.value.y += dy/max * this.stepSize;
+				this.value.z += dz/max * this.stepSize;
+			}
+			else
+			{
+				var s = Math.abs(this.stepSize) / Math.sqrt(dist2);
+				this.value.x += s*dx;
+				this.value.y += s*dy;
+				this.value.z += s*dz;
+			}
 		}
 	};
 };
