@@ -18,19 +18,14 @@
 		
 			var camera, scene, renderer, projector, stats;
 			var mesh,mesh2;			
-			var mouse = { x: 0, y: 0 };			
-			var cameraRadius = 2000,cameraRadiusTarget = 2000;	
-			var cameraRadiusMin = 100;
-			var cameraRadiusMax = 2500; // depending on max sector coord?
-			var cameraRadiusDelta = 300;
-			var cameraRadiusUpdateRate = 50;
+			var mouse = { x: 0, y: 0 };	
 			var activeSector = null;		
 						
 			document.addEventListener("DOMContentLoaded", function(){	
 				init();
 				animate();			
 			}, false);			
-			document.addEventListener( 'mousedown', onClick, false );	
+			document.addEventListener( 'mousedown', dragStart, false );	
 			document.addEventListener( 'mousemove', drag, false );		
 			document.addEventListener( 'mouseup', dragEnd, false );			
 			document.addEventListener( 'DOMMouseScroll', mousewheel, false );			
@@ -41,12 +36,7 @@
 				var e = window.event || e;
 				var delta = Math.max(-1, Math.min(1, (e.wheelDelta || -e.detail)));
 		
-				cameraRadiusTarget = cameraRadius - delta * cameraRadiusDelta;
-				if(cameraRadiusTarget < cameraRadiusMin)
-					cameraRadiusTarget = cameraRadiusMin;
-				if(cameraRadiusTarget > cameraRadiusMax)
-					cameraRadiusTarget = cameraRadiusMax;
-				console.log("cameraRadiusTarget=" + cameraRadiusTarget);
+				camera.radius.target -= delta * 200;
 				return false;			
 			};
 
@@ -57,8 +47,8 @@
 				mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;			
 				
 				var vector = new THREE.Vector3( mouse.x, mouse.y, 1 );				
-				projector.unprojectVector( vector, camera );
-				var ray = new THREE.Ray( camera.position, vector.sub( camera.position ).normalize() );
+				projector.unprojectVector( vector, camera.camera );
+				var ray = new THREE.Ray( camera.camera.position, vector.sub( camera.camera.position ).normalize() );
 				
 				var o = ray.origin;
 				var d = ray.direction;
@@ -100,9 +90,10 @@
 				console.log("dist2Min=" + dist2Min);
 				
 				if(activeSector == null)
-				{
-					dragStart(event);
-				}
+					camera.target.target = new THREE.Vector3(0,0,0);
+				else
+					camera.target.target = activeSector;
+				
 				/*
 				var intersects = ray.intersectObjects( allCubes );
 
@@ -116,16 +107,22 @@
 			};
 			
 			var lastX, lastY;
+			var drags;
 			var dragging = false;
 			
 			function dragStart(event) {
 				lastX = event.pageX;
 				lastY = event.pageY;
 				dragging = true;
+				drags = 0;
 			};
 			
 			function dragEnd(event) {
 				dragging = false;
+				if(drags < 5)
+				{
+					onClick(event);
+				}
 			};
 			
 			function drag(event) {
@@ -134,21 +131,16 @@
 					var x = event.pageX;
 					var y = event.pageY;
 					
-					sphere_phi -= (x-lastX)/window.innerWidth * Math.PI * 1.5;
-					sphere_theta += (y-lastY)/window.innerHeight * Math.PI * 1.5;
-					//console.log("phi = " + sphere_phi + "    theta = " + sphere_theta);
+					camera.sphere_phi.target = camera.sphere_phi.value - (x-lastX)/window.innerWidth * Math.PI * 1.5;
+					camera.sphere_theta.target = camera.sphere_theta.value + (y-lastY)/window.innerHeight * Math.PI * 1.5;
 					
-					if(sphere_phi > sphere_phi_max)
-						sphere_phi = sphere_phi_max;
-					if(sphere_phi < sphere_phi_min)
-						sphere_phi = sphere_phi_min;
-					if(sphere_theta > sphere_theta_max)
-						sphere_theta = sphere_theta_max;
-					if(sphere_theta < sphere_theta_min)
-						sphere_theta = sphere_theta_min;
-						
+					camera.sphere_phi.animate(true);
+					camera.sphere_theta.animate(true);
+					
 					lastX = x;
 					lastY = y;
+					
+					drags++;
 				}
 			};
 			
@@ -210,18 +202,7 @@
 				var testDiv = document.createElement('div');
 				testDiv.id = 'testDiv';
 				document.body.appendChild(testDiv);
-			};		
-			
-			var flip = 0;
-			var sphere_phi = 0;	
-			var sphere_phi_max = Math.PI / 2;
-			var sphere_phi_min = -Math.PI / 2;
-			var sphere_theta = 0.4;	
-			var sphere_theta_max = Math.PI / 2 - 0.01;
-			var sphere_theta_min = -Math.PI / 2 + 0.01;
-			var sphere_axis = 0;	
-			var rotationSpeed = 0.005;
-			var cameraOffset = [0,0,0];
+			};	
 			
 			function animate() {				
 				requestAnimationFrame( animate );	
@@ -229,23 +210,14 @@
 				stats.update();		
 			}	
 
-			function render() {					
-				if(cameraRadius != cameraRadiusTarget ) {
-					if(cameraRadiusTarget > cameraRadius) {
-						cameraRadius += cameraRadiusUpdateRate;
-					} 
-					if(cameraRadiusTarget < cameraRadius) {
-						cameraRadius -= cameraRadiusUpdateRate;
-					} 
-				};						
-
+			function render() {
 				updatePlanes();
 				updateCamera();
-				renderer.render( scene, camera );
+				renderer.render( scene, camera.camera );
 				
 				if(activeSector != null) {	
 					//console.log("sector = (" + activeSector.x + "," + activeSector.y + "," + activeSector.z + ")");				
-					var coords = toScreenXY(activeSector,camera);
+					var coords = toScreenXY(activeSector,camera.camera);
 					//console.log("coords = (" + coords[0] + "," + coords[1] + ")");
 					var testC = document.getElementById('testDiv');
 					var divWidth = divHeight = 26;
@@ -426,23 +398,21 @@
 			updateCamera = function()
 			{
 				if(document.getElementById("rotateY").checked)
-					sphere_phi -= rotationSpeed;
+					camera.sphere_phi.target = Number.MAX_VALUE;
+				else
+					camera.sphere_phi.target = camera.sphere_phi.value;
 				if(document.getElementById("rotateX").checked)
-					sphere_theta += rotationSpeed;
+					camera.sphere_theta.target = Number.MAX_VALUE;
+				else
+					camera.sphere_theta.target = camera.sphere_theta.value;
 				if(document.getElementById("rotateZ").checked)
-					sphere_axis += rotationSpeed;
-					
-				var x = cameraRadius * Math.sin(Math.PI/2 - sphere_theta) * Math.cos(sphere_phi);
-				var y = cameraRadius * Math.sin(Math.PI/2 - sphere_theta) * Math.sin(sphere_phi);
-				var z = cameraRadius * Math.cos(Math.PI/2 - sphere_theta); 
-										
-				camera.position.x = x + cameraOffset[0];
-				camera.position.y = y + cameraOffset[1];
-				camera.position.z = z + cameraOffset[2];
-				camera.lookAt(new THREE.Vector3(0,0,0));
-				camera.up = new THREE.Vector3( 0,0,1 );
-				//console.log("camera:    pos=" + camera.position.x + "|" + camera.position.y + "|" + camera.position.z + "    rot=" + camera.rotation.x + "|" + camera.rotation.y + "|" + camera.rotation.z);
-				camera.rotation.z += sphere_axis; // otherwise we will always look upright
+					camera.sphere_axis.target = Number.MAX_VALUE;
+				else
+					camera.sphere_axis.target = camera.sphere_axis.value;
+			
+			
+				camera.animate();
+				camera.update();
 			};
 			
 			selectGalaxy = function()
