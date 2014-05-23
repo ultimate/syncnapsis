@@ -36,6 +36,7 @@ UI.constants.REG_EMAIL_ID = "reg_email";
 UI.constants.REG_PASSWORD_ID = "reg_password";
 UI.constants.REG_PASSWORD2_ID = "reg_password2";
 UI.constants.REG_MESSAGE_ID = "reg_message";
+UI.constants.REG_ERROR_ID = "reg_error";
 
 UI.constants.LOCALE_CHOOSER_ID = "locale_chooser";
 UI.constants.LOCALE_LABEL_TAGNAME = "label";
@@ -211,19 +212,31 @@ UIManager.prototype.onRegister = function(player, username, password)
 			uiManager.hideRegister();
 			server.playerManager.login(username, password);
 		}; } (this), 3000);
-		
+
 		// TODO show success message
+		this.showErrorMessage(null, document.getElementById(UI.constants.REG_MESSAGE_ID), "welcome.title");
 	}
 	else if(player != null && player.exceptionClass != null)
 	{
 		console.log("error: " + player.message);
 		// show error message
-		this.showErrorMessage(null, document.getElementById(UI.constants.REG_MESSAGE_ID), player.message);
+		this.showErrorMessage(null, document.getElementById(UI.constants.REG_ERROR_ID), player.message);
 		// TODO highlight erronous fields
-		this.showErrorMessage(document.getElementById(UI.constants.REG_USERNAME_ID), null);
-		this.showErrorMessage(document.getElementById(UI.constants.REG_EMAIL_ID), null);
-		this.showErrorMessage(document.getElementById(UI.constants.REG_PASSWORD_ID), null);
-		this.showErrorMessage(document.getElementById(UI.constants.REG_PASSWORD2_ID), null);
+			
+			
+		if(player.message == "error.username_exists" || player.message == "error.invalid_username")
+		{
+			this.showErrorMessage(document.getElementById(UI.constants.REG_USERNAME_ID), null);
+		}
+		if(player.message == "error.email_exists" || player.message == "error.invalid_email")
+		{
+			this.showErrorMessage(document.getElementById(UI.constants.REG_EMAIL_ID), null);
+		}
+		if(player.message == "error.password_mismatch")
+		{
+			this.showErrorMessage(document.getElementById(UI.constants.REG_PASSWORD_ID), null);
+			this.showErrorMessage(document.getElementById(UI.constants.REG_PASSWORD2_ID), null);
+		}
 	}
 };
 
@@ -355,23 +368,20 @@ UIManager.prototype.doRegister = function()
 	var password2 = document.getElementById(UI.constants.REG_PASSWORD2_ID).value;
 
 	var error = false
-	if(username == "" || username == null)
+	if(!error && (username == "" || username == null))
 	{
-		this.showErrorMessage(document.getElementById(UI.constants.REG_USERNAME_ID), null);
+		this.showErrorMessage(document.getElementById(UI.constants.REG_USERNAME_ID), document.getElementById(UI.constants.REG_ERROR_ID), "error.invalid_username");
 		error = true;
 	}
-	if(email == "" || email == null)
+	if(!error && (email == "" || email == null))
 	{
-		this.showErrorMessage(document.getElementById(UI.constants.REG_EMAIL_ID), null);
+		this.showErrorMessage(document.getElementById(UI.constants.REG_EMAIL_ID), document.getElementById(UI.constants.REG_ERROR_ID), "error.invalid_email");
 		error = true;
 	}
-	if(password == "" || password == null || password != password2)
+	if(!error && (password == "" || password == null ||  password != password2))
 	{
+		this.showErrorMessage(null, document.getElementById(UI.constants.REG_ERROR_ID), "error.password_mismatch");
 		this.showErrorMessage(document.getElementById(UI.constants.REG_PASSWORD_ID), null);
-		error = true;
-	}
-	if(password2 == "" || password2 == null || password != password2)
-	{
 		this.showErrorMessage(document.getElementById(UI.constants.REG_PASSWORD2_ID), null);
 		error = true;
 	}
@@ -455,9 +465,9 @@ UIManager.prototype.showErrorMessage = function(inputfield, messagefield, messag
 	if(messagefield != null)
 	{
 		if(message)
-			messagefield.innerHTML = getString(message);
+			messagefield.innerHTML = this.getString(message);
 		
-		messagefield.classList.append(UI.constants.MESSAGE_SHOW_CLASS);
+		messagefield.classList.add(UI.constants.MESSAGE_SHOW_CLASS);
 		setTimeout(function()
 		{
 			messagefield.classList.remove(UI.constants.MESSAGE_SHOW_CLASS);
