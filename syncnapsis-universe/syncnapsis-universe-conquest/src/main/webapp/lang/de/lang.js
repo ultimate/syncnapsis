@@ -31,6 +31,9 @@ lang.error.no_password			= lang.error.error + ": kein Passwort angegeben!";
 lang.error.password_mismatch 	= lang.error.error + ": Nicht-&Uuml;bereinstimmung der Passw&ouml;rter!";
 lang.error.username_exists 		= lang.error.error + ": Benutzername ist bereits registriert!";
 
+lang.message = {};
+lang.message.register			= "Registrierung erfolgreich! Du wirst automatisch eingeloggt...";
+
 lang.menu = {};
 lang.menu.about 				= "?";
 lang.menu.about_tooltip 		= "&Uuml;ber Syncnapsis";

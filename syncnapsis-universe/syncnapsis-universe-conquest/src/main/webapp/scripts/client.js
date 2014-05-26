@@ -37,6 +37,9 @@ UI.constants.REG_PASSWORD_ID = "reg_password";
 UI.constants.REG_PASSWORD2_ID = "reg_password2";
 UI.constants.REG_MESSAGE_ID = "reg_message";
 UI.constants.REG_ERROR_ID = "reg_error";
+UI.constants.REG_BUTTON_ID = "reg_button";
+UI.constants.REG_ACTION = "javascript: client.uiManager.doRegister();";
+UI.constants.REG_VOID = "javascript: return false;";
 
 UI.constants.LOCALE_CHOOSER_ID = "locale_chooser";
 UI.constants.LOCALE_LABEL_TAGNAME = "label";
@@ -69,6 +72,7 @@ UI.constants.FLAGS_PATH = "flags/";
 UI.constants.FLAGS_CLASS = "flag";
 
 UI.constants.MESSAGE_SHOW_CLASS = "show";
+UI.constants.BUTTON_DISABLED_CLASS = "disabled";
 
 Types.Galaxy = "com.syncnapsis.data.model.Galaxy";
 Types.Match = "com.syncnapsis.data.model.Match";
@@ -211,7 +215,12 @@ UIManager.prototype.onRegister = function(player, username, password)
 		setTimeout(function(uiManager) { return function() {
 			uiManager.hideRegister();
 			server.playerManager.login(username, password);
-		}; } (this), 3000);
+		}; } (this), 5000);
+		
+		setTimeout(function() {
+			document.getElementById(UI.constants.REG_BUTTON).children[0].href = UI.constants.REG_ACTION;
+			document.getElementById(UI.constants.REG_BUTTON).classList.remove(UI.constants.BUTTON_DISABLED_CLASS);
+		}, 10000);
 
 		// TODO show success message
 		this.showErrorMessage(null, document.getElementById(UI.constants.REG_MESSAGE_ID), "welcome.title");
@@ -362,11 +371,17 @@ UIManager.prototype.doLogin = function()
 
 UIManager.prototype.doRegister = function()
 {
+	// clear errors
+	document.getElementById(UI.constants.REG_ERROR_ID).innerHTML = "";
+	document.getElementById(UI.constants.REG_MESSAGE_ID).innerHTML = "";
+
+	// get input
 	var username = document.getElementById(UI.constants.REG_USERNAME_ID).value;
 	var email = document.getElementById(UI.constants.REG_EMAIL_ID).value;
 	var password = document.getElementById(UI.constants.REG_PASSWORD_ID).value;
 	var password2 = document.getElementById(UI.constants.REG_PASSWORD2_ID).value;
-
+	
+	// validate input
 	var error = false
 	if(!error && (username == "" || username == null))
 	{
@@ -387,6 +402,10 @@ UIManager.prototype.doRegister = function()
 	}
 	if(error)
 		return;
+
+	// disable button
+	document.getElementById(UI.constants.REG_BUTTON).children[0].href = UI.constants.REG_VOID;
+	document.getElementById(UI.constants.REG_BUTTON).classList.add(UI.constants.BUTTON_DISABLED_CLASS);
 
 	// we do not use the default callback, since we want to keep the password for auto-login
 	var callback = function(username, password)

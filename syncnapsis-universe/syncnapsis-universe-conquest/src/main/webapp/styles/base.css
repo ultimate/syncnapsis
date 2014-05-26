@@ -301,6 +301,10 @@ body, input, select {
 	display: block;
 }
 
+.button_disabled {
+	color: rgb(128,128,128);
+}
+
 .button,
 .button *{
 	cursor: pointer;

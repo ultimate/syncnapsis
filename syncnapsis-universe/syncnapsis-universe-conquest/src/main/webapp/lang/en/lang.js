@@ -31,6 +31,9 @@ lang.error.no_password			= lang.error.error + ": no password provided!";
 lang.error.password_mismatch 	= lang.error.error + ": passwords do not match!";
 lang.error.username_exists 		= lang.error.error + ": username is already registered!";
 
+lang.message = {};
+lang.message.register			= "Registration successful! You will be logged in automatically...";
+
 lang.menu = {};
 lang.menu.about 				= "?";
 lang.menu.about_tooltip 		= "About Syncnapsis";
