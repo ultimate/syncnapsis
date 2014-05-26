@@ -361,11 +361,12 @@ h1 {
 
 #reg_message, #reg_error {
 	border: 1px solid rgba(0,0,0,0);
-	height: 50px;
+	height: 20px;
+	margin-top: 7px;
 }
 
 #reg_error {
-	margin-top: -50px;
+	margin-top: -22px;
 }
 
 #reg_message.show {

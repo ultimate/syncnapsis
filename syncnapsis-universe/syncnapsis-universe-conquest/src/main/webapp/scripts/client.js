@@ -132,7 +132,7 @@ UIManager = function()
 	console.log("initializing Windows");
 
 	this.window_register = new Styles.Window("register", "menu.register", "content_register");
-	this.window_register.setSize(400, 300);
+	this.window_register.setSize(400, 193);
 	this.window_register.center();
 	this.window_register.setMovable(false);
 
