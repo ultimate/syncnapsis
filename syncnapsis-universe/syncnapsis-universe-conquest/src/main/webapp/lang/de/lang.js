@@ -36,7 +36,7 @@ lang.message.register			= "Registrierung erfolgreich! Du wirst automatisch einge
 
 lang.menu = {};
 lang.menu.about 				= "?";
-lang.menu.about_tooltip 		= "&Uuml;ber Syncnapsis";
+lang.menu.about_tooltip 		= "&Uuml;ber syncnapsis";
 lang.menu.cancel				= "Abbrechen";
 lang.menu.contact 				= "Kontakt";
 lang.menu.contact_tooltip 		= "Kontaktinformationen / Impressum";

@@ -328,6 +328,8 @@ UIManager.prototype.updateLabels = function(parent)
 		if(elements[i].getAttribute("type") == "button")
 			elements[i].value = this.getString(elements[i].getAttribute(UI.constants.LOCALE_KEY_ATTRIBUTE));
 	}
+	// static pages
+	document.getElementById(UI.constants.STATIC_FRAME_ID).contentWindow.location.reload(true)
 };
 
 UIManager.prototype.showLog = function()
