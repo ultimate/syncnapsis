@@ -99,6 +99,7 @@
 		<property name="securityManager" ref="securityManager" />
 		<property name="connectionProvider" ref="connectionProvider" />
 		<property name="rpcService" ref="rpcService" />
+		<property name="userManager" ref="userManager" />
 	</bean>
 
 	<bean id="messageManager" class="com.syncnapsis.client.MessageManagerImpl">

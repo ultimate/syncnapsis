@@ -11,6 +11,10 @@
  */
 package com.syncnapsis.client;
 
+import org.springframework.util.Assert;
+
+import com.syncnapsis.data.model.User;
+import com.syncnapsis.data.service.UserManager;
 import com.syncnapsis.enums.EnumLocale;
 
 /**
@@ -21,11 +25,47 @@ import com.syncnapsis.enums.EnumLocale;
 public class UIManagerImpl extends BaseClientManager implements UIManager
 {
 	/**
+	 * The UserManager
+	 */
+	protected UserManager userManager;
+	
+	/**
 	 * Default Constructor
 	 */
 	public UIManagerImpl()
 	{
 		super();
+	}
+
+	/**
+	 * The UserManager
+	 * 
+	 * @return userManager
+	 */
+	public UserManager getUserManager()
+	{
+		return userManager;
+	}
+
+	/**
+	 * The UserManager
+	 * 
+	 * @param userManager - the UserManager
+	 */
+	public void setUserManager(UserManager userManager)
+	{
+		this.userManager = userManager;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see com.syncnapsis.client.BaseClientManager#afterPropertiesSet()
+	 */
+	@Override
+	public void afterPropertiesSet() throws Exception
+	{
+		super.afterPropertiesSet();
+		Assert.notNull(userManager, "userManager must not be null!");
 	}
 
 	/*
@@ -48,6 +88,14 @@ public class UIManagerImpl extends BaseClientManager implements UIManager
 	{
 		logger.debug("setting locale: " + locale);
 		securityManager.getLocaleProvider().set(locale);
+		if(securityManager.getPlayerProvider().get() != null)
+		{
+			logger.debug("saving user locale");
+			User user = securityManager.getUserProvider().get();
+			user.setLocale(locale);
+			user = userManager.save(user);
+			securityManager.getUserProvider().set(user);
+		}
 		logger.debug("reloading locale on client now!");
 		((UIManager) getClientInstance("uiManager", connectionProvider.get())).reloadLocale();
 	}

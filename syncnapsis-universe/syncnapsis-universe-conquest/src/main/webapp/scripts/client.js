@@ -306,6 +306,9 @@ UIManager.prototype.reloadLocale = function()
 	// just reload the corresponding lang-script
 	// DependencyManager will call the update-function after reload
 	DependencyManager.reloadScript("Lang", Events.wrapEventHandler(this, this.updateLabels));
+	// reload the user (since the locale has been saved)
+	if(this.currentPlayer)
+		server.entityManager.load(this.currentPlayer.user);
 };
 
 UIManager.prototype.updateLabels = function(parent)
