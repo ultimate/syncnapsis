@@ -208,6 +208,14 @@ body, input, select {
 	/*top: 410px;*/
 }
 
+#menu #nav.menu_hidden,
+#menu #menu_content.menu_hidden {
+	height: 0px;
+	border: 0px;
+	margin-top: 0px;
+	overflow: hidden;
+}
+
 #bar_top,#bar_bottom {
 	width: 400px;
 	margin-top: 1px;

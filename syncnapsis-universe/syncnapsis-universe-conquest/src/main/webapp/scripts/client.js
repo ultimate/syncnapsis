@@ -73,6 +73,7 @@ UI.constants.FLAGS_CLASS = "flag";
 
 UI.constants.MESSAGE_SHOW_CLASS = "show";
 UI.constants.BUTTON_DISABLED_CLASS = "disabled";
+UI.constants.MENU_HIDDEN_CLASS = "menu_hidden";
 
 Types.Galaxy = "com.syncnapsis.data.model.Galaxy";
 Types.Match = "com.syncnapsis.data.model.Match";
@@ -177,6 +178,9 @@ UIManager.prototype.onLogin = function(player)
 		server.entityManager.load(player.user, Events.wrapEventHandler(this, this.onUserLoaded));
 		// switch ui to logged-in menu
 		this.userInfo.select(UI.constants.USERINFO_INDEX_LOGGEDIN);
+		// switch menu to logged-in view
+		document.getElementById(UI.constants.NAV_TABS).classList.remove(UI.constants.MENU_HIDDEN_CLASS);
+		document.getElementById(UI.constants.NAV_CONTENT).classList.remove(UI.constants.MENU_HIDDEN_CLASS);
 		// hide welcome
 		this.hideWelcome();
 	}
@@ -191,6 +195,9 @@ UIManager.prototype.onLogout = function(success)
 {
 	// switch ui to logged-out menu
 	this.userInfo.select(UI.constants.USERINFO_INDEX_LOGGEDOUT);
+	// switch menu to logged-out view
+	document.getElementById(UI.constants.NAV_TABS).classList.add(UI.constants.MENU_HIDDEN_CLASS);
+	document.getElementById(UI.constants.NAV_CONTENT).classList.add(UI.constants.MENU_HIDDEN_CLASS);
 	// "unload" user
 	this.currentPlayer = null;
 	this.onUserLoaded({
