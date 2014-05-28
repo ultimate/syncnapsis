@@ -25,7 +25,6 @@ public interface MessageManager
 {
 	/**
 	 * Add a message to the pinboard given by id.<br>
-	 * The user posting
 	 * 
 	 * @see PinboardManager#postMessage(Long, String, String)
 	 * @param boardId - the id of the pinboard to add the message to
@@ -45,7 +44,7 @@ public interface MessageManager
 	public void updatePinboard(Long pinboardId, List<PinboardMessage> messages);
 
 	/**
-	 * Refresh an update for the pinboard given by id.<br>
+	 * Request an update for the pinboard given by id.<br>
 	 * The update will contain the newest messages available within the given range for the number
 	 * of messages.
 	 * 

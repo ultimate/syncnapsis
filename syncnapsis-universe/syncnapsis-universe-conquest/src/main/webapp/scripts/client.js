@@ -538,6 +538,7 @@ MessageManager = function()
 {
 };
 
+//public void updatePinboard(Long pinboardId, List<PinboardMessage> messages);
 MessageManager.prototype.updatePinboard = function(pinboardId, messages)
 {
 	console.log("updating pinboard #" + pinboardId);
@@ -551,11 +552,13 @@ ServerMessageManager = function()
 {
 };
 
+//public void postPinboardMessage(Long pinboardId, String title, String message);
 ServerMessageManager.prototype.postPinboardMessage = function(pinboardId, title, message)
 {
 	// stub for server-entity
 };
 
+//public void requestPinboardUpdate(Long pinboardId, int messageCount);
 ServerMessageManager.prototype.requestPinboardUpdate = function(pinboardId, messageCount)
 {
 	// stub for server-entity
