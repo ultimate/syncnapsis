@@ -70,7 +70,7 @@
 					p = galaxy.particles.vertices[i];
 					n = new THREE.Vector3(0,0,0);
 					opd = (p.x-o.x)*d.x + (p.y-o.y)*d.y + (p.z-o.z)*d.z;
-					// opd is in opposite direction to n (intersection have negative opd)
+					// opd is in direction to n (intersection have positive opd)
 					if(opd < 0) // wrong direction (behind the camera)
 						continue;
 					n.x = (o.x - p.x)+opd*d.x;
@@ -218,6 +218,22 @@
 				if(activeSector != null) {	
 					//console.log("sector = (" + activeSector.x + "," + activeSector.y + "," + activeSector.z + ")");				
 					var coords = toScreenXY(activeSector,camera.camera);
+					
+					// TODO move this part of the calculation INTO toScreenXY as shown by https://github.com/mrdoob/three.js/issues/78
+					/*
+					toScreenXY: function ( position, camera, jqdiv ) {
+
+						var pos = position.clone();
+						projScreenMat = new THREE.Matrix4();
+						projScreenMat.multiply( camera.projectionMatrix, camera.matrixWorldInverse );
+						projScreenMat.multiplyVector3( pos );
+
+						return { x: ( pos.x + 1 ) * jqdiv.width() / 2 + jqdiv.offset().left,
+							 y: ( - pos.y + 1) * jqdiv.height() / 2 + jqdiv.offset().top };
+
+					}
+					*/
+					
 					//console.log("coords = (" + coords[0] + "," + coords[1] + ")");
 					var testC = document.getElementById('testDiv');
 					var divWidth = divHeight = 26;
