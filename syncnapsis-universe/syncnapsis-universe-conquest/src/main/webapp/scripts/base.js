@@ -13,6 +13,7 @@
  * if not, see <http://www.gnu.org/licenses/>.
  */
 //@requires("Client")
+//@requires("Server")
 //@requires("RPCSocket")
 //@requires("PlayerManager")
 //@requires("application-base")

@@ -9,12 +9,13 @@
  * 
  * You should have received a copy of the GNU General Plublic License along with this program; if not, see <http://www.gnu.org/licenses/>.
  */
-// @requires("Styles")
-// @requires("Events")
-// @requires("Lang")
-// @requires("Tabs")
-// @requires("Select")
-// @requires("application-base")
+//@requires("Styles")
+//@requires("Events")
+//@requires("Lang")
+//@requires("Tabs")
+//@requires("Select")
+//@requires("Pinboard")
+//@requires("application-base")
 var UI = {};
 
 UI.constants = {};
@@ -525,15 +526,6 @@ UIManager.prototype.updateLinks = function()
 	}
 };
 
-ServerUIManager = function()
-{
-};
-
-ServerUIManager.prototype.selectLocale = function(selection)
-{
-	// stub for server-entity
-};
-
 MessageManager = function()
 {
 };
@@ -546,20 +538,4 @@ MessageManager.prototype.updatePinboard = function(pinboardId, messages)
 	{
 		console.log(messages[i]);
 	}
-};
-
-ServerMessageManager = function()
-{
-};
-
-//public void postPinboardMessage(Long pinboardId, String title, String message);
-ServerMessageManager.prototype.postPinboardMessage = function(pinboardId, title, message)
-{
-	// stub for server-entity
-};
-
-//public void requestPinboardUpdate(Long pinboardId, int messageCount);
-ServerMessageManager.prototype.requestPinboardUpdate = function(pinboardId, messageCount)
-{
-	// stub for server-entity
 };
