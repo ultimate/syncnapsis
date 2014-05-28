@@ -201,6 +201,21 @@ var View = function(container) {
 				this.camera.rotation.z += this.sphere_axis.value; // otherwise we will always look upright
 		}
 	};
+		
+	// add part to calc real screen coord according to https://github.com/mrdoob/three.js/issues/78
+	/*
+	toScreenXY: function ( position, camera, jqdiv ) {
+
+		var pos = position.clone();
+		projScreenMat = new THREE.Matrix4();
+		projScreenMat.multiply( camera.projectionMatrix, camera.matrixWorldInverse );
+		projScreenMat.multiplyVector3( pos );
+
+		return { x: ( pos.x + 1 ) * jqdiv.width() / 2 + jqdiv.offset().left,
+			 y: ( - pos.y + 1) * jqdiv.height() / 2 + jqdiv.offset().top };
+
+	}
+	*/
 	
 	this.renderer = new THREE.WebGLRenderer({canvas: container, antialias: true, clearColor: 0x000000, clearAlpha: 1 }); 
 	
