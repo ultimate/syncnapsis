@@ -26,12 +26,13 @@ public interface PinboardManager extends GenericNameManager<Pinboard, Long>
 {
 	/**
 	 * Add a message to the pinboard given by id.<br>
-	 * The user posting will be determined from the session.
+	 * The user posting will be determined from the session and must have rights to post to the
+	 * board either bei being its owner or because the pinboard is not locked.
 	 * 
 	 * @param boardId - the id of the pinboard to add the message to
 	 * @param title - the title of the message (optional)
 	 * @param message - the message content to add
-	 * @return the message object created
+	 * @return the message object created or null if the user is not allowed to post messages
 	 */
 	public PinboardMessage postMessage(Long pinboardId, String title, String message);
 }

@@ -22,6 +22,7 @@ import org.springframework.mock.web.MockHttpSession;
 import com.syncnapsis.data.dao.PinboardDao;
 import com.syncnapsis.data.model.Pinboard;
 import com.syncnapsis.data.model.PinboardMessage;
+import com.syncnapsis.data.model.User;
 import com.syncnapsis.data.service.PinboardManager;
 import com.syncnapsis.data.service.PinboardMessageManager;
 import com.syncnapsis.data.service.UserManager;
@@ -59,8 +60,11 @@ public class PinboardManagerImplTest extends GenericNameManagerImplTestCase<Pinb
 		securityManager.setTimeProvider(new MockTimeProvider(123456));
 		securityManager.setUserProvider(userProvider);
 		
+		User postingUser = userManager.getAll().get(0);
+		User other = userManager.getAll().get(1);
+		
 		sessionProvider.set(new MockHttpSession());
-		userProvider.set(userManager.getAll().get(0));
+		userProvider.set(postingUser);
 		
 		PinboardManagerImpl pinboardManagerImpl = new PinboardManagerImpl(mockDao, mockPinboardMessageManager);
 		pinboardManagerImpl.setSecurityManager(securityManager);
@@ -76,25 +80,71 @@ public class PinboardManagerImplTest extends GenericNameManagerImplTestCase<Pinb
 		message.setActivated(true);
 		message.setContent(content);
 		message.setCreationDate(new Date(securityManager.getTimeProvider().get()));
-		message.setCreator(userProvider.get());
+		message.setCreator(postingUser);
 		message.setPinboard(pinboard);	
 		message.setTitle(title);
+
+		// posting user is pinboard creator
+		{
+			pinboard.setCreator(postingUser);
+			pinboard.setLocked(true);
+			
+			mockContext.checking(new Expectations() {
+				{
+					oneOf(mockPinboardMessageManager).save(message);
+					will(returnValue(message));
+				}
+			});
+			mockContext.checking(new Expectations() {
+				{
+					oneOf(mockDao).get(pinboardId);
+					will(returnValue(pinboard));
+				}
+			});
+			
+			PinboardMessage result = pinboardManagerImpl.postMessage(pinboardId, title, content);
+			mockContext.assertIsSatisfied();
+			assertEquals(result, message);
+		}
+		// posting user is NOT pinboard creator and pinboard is LOCKED
+		{
+			pinboard.setCreator(other);
+			pinboard.setLocked(true);
+			
+			mockContext.checking(new Expectations() {
+				{
+					oneOf(mockDao).get(pinboardId);
+					will(returnValue(pinboard));
+				}
+			});
+			
+			PinboardMessage result = pinboardManagerImpl.postMessage(pinboardId, title, content);
+			mockContext.assertIsSatisfied();
+			assertNull(result);
+		}
 		
-		mockContext.checking(new Expectations() {
-			{
-				oneOf(mockPinboardMessageManager).save(message);
-				will(returnValue(message));
-			}
-		});
-		mockContext.checking(new Expectations() {
-			{
-				oneOf(mockDao).get(pinboardId);
-				will(returnValue(pinboard));
-			}
-		});
+		// board is unlocked
+		{
+			pinboard.setCreator(other);
+			pinboard.setLocked(false);
+			
+			mockContext.checking(new Expectations() {
+				{
+					oneOf(mockPinboardMessageManager).save(message);
+					will(returnValue(message));
+				}
+			});
+			mockContext.checking(new Expectations() {
+				{
+					oneOf(mockDao).get(pinboardId);
+					will(returnValue(pinboard));
+				}
+			});
+			
+			PinboardMessage result = pinboardManagerImpl.postMessage(pinboardId, title, content);
+			mockContext.assertIsSatisfied();
+			assertEquals(result, message);
+		}
 		
-		PinboardMessage result = pinboardManagerImpl.postMessage(pinboardId, title, content);
-		mockContext.assertIsSatisfied();
-		assertEquals(result, message);
 	}
 }
