@@ -35,6 +35,8 @@ UI.constants.REG_USERNAME_ID = "reg_username";
 UI.constants.REG_EMAIL_ID = "reg_email";
 UI.constants.REG_PASSWORD_ID = "reg_password";
 UI.constants.REG_PASSWORD2_ID = "reg_password2";
+UI.constants.REG_MESSAGE_ID = "reg_message";
+UI.constants.REG_ERROR_ID = "reg_error";
 
 UI.constants.LOCALE_CHOOSER_ID = "locale_chooser";
 UI.constants.LOCALE_LABEL_TAGNAME = "label";
@@ -64,7 +66,16 @@ UI.constants.USERINFO_HEIGHT = 40;
 UI.constants.IMAGE_PATH = "images/";
 UI.constants.IMAGE_TYPE = ".png";
 UI.constants.FLAGS_PATH = "flags/";
-UI.constants.FLAGS_CLASS = "flag"
+UI.constants.FLAGS_CLASS = "flag";
+
+UI.constants.MESSAGE_SHOW_CLASS = "show";
+
+Types.Galaxy = "com.syncnapsis.data.model.Galaxy";
+Types.Match = "com.syncnapsis.data.model.Match";
+Types.Participant = "com.syncnapsis.data.model.Participant";
+Types.SolarSystem = "com.syncnapsis.data.model.SolarSystem";
+Types.SolarSystemInfrastructure = "com.syncnapsis.data.model.SolarSystemInfrastructure";
+Types.SolarSystemPopulation = "com.syncnapsis.data.model.SolarSystemPopulation";
 
 UIManager = function()
 {
@@ -160,10 +171,10 @@ UIManager.prototype.onLogin = function(player)
 		this.currentPlayer = player;
 		// set the player name in the top bar (after loading the user)
 		server.entityManager.load(player.user, Events.wrapEventHandler(this, this.onUserLoaded));
-		// change language to users selection
-		server.uiManager.selectLocale(player.user.locale);
 		// switch ui to logged-in menu
 		this.userInfo.select(UI.constants.USERINFO_INDEX_LOGGEDIN);
+		// hide welcome
+		this.hideWelcome();
 	}
 	else
 	{
@@ -186,25 +197,46 @@ UIManager.prototype.onLogout = function(success)
 UIManager.prototype.onUserLoaded = function(user)
 {
 	console.log("user loaded: " + user.username);
+	// set welcome username
 	document.getElementById(UI.constants.LABEL_ID_PLAYERNAME).innerHTML = user.username;
+	// change language to users selection
 	if(user && user.locale)
 		this.localeChooser.selectByValue(user.locale);
-	// server.uiManager.selectLocale(user.locale);
 };
 
-UIManager.prototype.onRegister = function(player, password)
+UIManager.prototype.onRegister = function(player, username, password)
 {
-	if(player != null)
+	if(player != null && player.j_type == Types.Player)
 	{
-		console.log(player);
-		console.log(password);
+		setTimeout(function(uiManager) { return function() {
+			uiManager.hideRegister();
+			server.playerManager.login(username, password);
+		}; } (this), 3000);
+
+		// TODO show success message
+		this.showErrorMessage(null, document.getElementById(UI.constants.REG_MESSAGE_ID), "welcome.title");
 	}
-	else
+	else if(player != null && player.exceptionClass != null)
 	{
-		this.showErrorMessage(document.getElementById(UI.constants.REG_USERNAME_ID), null);
-		this.showErrorMessage(document.getElementById(UI.constants.REG_EMAIL_ID), null);
-		this.showErrorMessage(document.getElementById(UI.constants.REG_PASSWORD_ID), null);
-		this.showErrorMessage(document.getElementById(UI.constants.REG_PASSWORD2_ID), null);
+		console.log("error: " + player.message);
+		// show error message
+		this.showErrorMessage(null, document.getElementById(UI.constants.REG_ERROR_ID), player.message);
+		// TODO highlight erronous fields
+			
+			
+		if(player.message == "error.username_exists" || player.message == "error.invalid_username")
+		{
+			this.showErrorMessage(document.getElementById(UI.constants.REG_USERNAME_ID), null);
+		}
+		if(player.message == "error.email_exists" || player.message == "error.invalid_email")
+		{
+			this.showErrorMessage(document.getElementById(UI.constants.REG_EMAIL_ID), null);
+		}
+		if(player.message == "error.password_mismatch")
+		{
+			this.showErrorMessage(document.getElementById(UI.constants.REG_PASSWORD_ID), null);
+			this.showErrorMessage(document.getElementById(UI.constants.REG_PASSWORD2_ID), null);
+		}
 	}
 };
 
@@ -336,23 +368,20 @@ UIManager.prototype.doRegister = function()
 	var password2 = document.getElementById(UI.constants.REG_PASSWORD2_ID).value;
 
 	var error = false
-	if(username == "" || username == null)
+	if(!error && (username == "" || username == null))
 	{
-		this.showErrorMessage(document.getElementById(UI.constants.REG_USERNAME_ID), null);
+		this.showErrorMessage(document.getElementById(UI.constants.REG_USERNAME_ID), document.getElementById(UI.constants.REG_ERROR_ID), "error.invalid_username");
 		error = true;
 	}
-	if(email == "" || email == null)
+	if(!error && (email == "" || email == null))
 	{
-		this.showErrorMessage(document.getElementById(UI.constants.REG_EMAIL_ID), null);
+		this.showErrorMessage(document.getElementById(UI.constants.REG_EMAIL_ID), document.getElementById(UI.constants.REG_ERROR_ID), "error.invalid_email");
 		error = true;
 	}
-	if(password == "" || password == null || password != password2)
+	if(!error && (password == "" || password == null ||  password != password2))
 	{
+		this.showErrorMessage(null, document.getElementById(UI.constants.REG_ERROR_ID), "error.password_mismatch");
 		this.showErrorMessage(document.getElementById(UI.constants.REG_PASSWORD_ID), null);
-		error = true;
-	}
-	if(password2 == "" || password2 == null || password != password2)
-	{
 		this.showErrorMessage(document.getElementById(UI.constants.REG_PASSWORD2_ID), null);
 		error = true;
 	}
@@ -360,13 +389,13 @@ UIManager.prototype.doRegister = function()
 		return;
 
 	// we do not use the default callback, since we want to keep the password for auto-login
-	var callback = function(password)
+	var callback = function(username, password)
 	{
 		return function(player)
 		{
-			client.uiManager.onRegister(player, password);
+			client.uiManager.onRegister(player, username, password);
 		};
-	}(password);
+	}(username, password);
 
 	server.playerManager.register(username, email, password, password2, callback);
 };
@@ -422,27 +451,26 @@ UIManager.prototype.hideStatic = function()
 	this.window_static.setVisible(false);
 };
 
-UIManager.prototype.showErrorMessage = function(textfield, messagefield)
+UIManager.prototype.showErrorMessage = function(inputfield, messagefield, message)
 {
-	if(textfield != null)
+	if(inputfield != null)
 	{
-		// var bg = textfield.style.background;
-		// textfield.style.background = UI.constants.TF_ERROR_BACKGROUND;
-		// setTimeout(function() {textfield.style.background = bg;}, 3000);
-		var cls = textfield.className;
-		textfield.className = cls + " error";
+		var cls = inputfield.className;
+		inputfield.className = cls + " error";
 		setTimeout(function()
 		{
-			textfield.className = cls;
+			inputfield.className = cls;
 		}, 3000);
 	}
 	if(messagefield != null)
 	{
-		var disp = messagefield.style.display;
-		messagefield.style.display = "none";
+		if(message)
+			messagefield.innerHTML = this.getString(message);
+		
+		messagefield.classList.add(UI.constants.MESSAGE_SHOW_CLASS);
 		setTimeout(function()
 		{
-			messagefield.style.display = disp;
+			messagefield.classList.remove(UI.constants.MESSAGE_SHOW_CLASS);
 		}, 3000);
 	}
 };

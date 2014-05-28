@@ -20,6 +20,17 @@ lang.EnumLocale = {};
 lang.EnumLocale.EN = "English";
 lang.EnumLocale.DE = "Deutsch";
 
+lang.error = {};
+lang.error.error				= "Fehler";
+lang.error.email_exists 		= lang.error.error + ": e-Mail-Adresse ist bereits registriert!";
+lang.error.invalid_email 		= lang.error.error + ": ung&uuml;ltige e-Mail-Adresse!";
+lang.error.invalid_empirename 	= lang.error.error + ": ung&uuml;ltiger Imperiumsname!";
+lang.error.invalid_username 	= lang.error.error + ": ung&uuml;ltiger Benutzername!";
+lang.error.max_empires 			= lang.error.error + ": &Uuml;berschreitung der maximalen Anzahl an Imperien!";
+lang.error.no_password			= lang.error.error + ": kein Passwort angegeben!";
+lang.error.password_mismatch 	= lang.error.error + ": Nicht-&Uuml;bereinstimmung der Passw&ouml;rter!";
+lang.error.username_exists 		= lang.error.error + ": Benutzername ist bereits registriert!";
+
 lang.menu = {};
 lang.menu.about 				= "?";
 lang.menu.about_tooltip 		= "&Uuml;ber Syncnapsis";
@@ -58,3 +69,6 @@ lang.welcome.toggle1_active		= lang.menu.register + "!";
 lang.welcome.toggle1_inactive	= "Neu hier?";
 lang.welcome.toggle2_active		= lang.menu.about_tooltip + "!";
 lang.welcome.toggle2_inactive	= "Neugierig?";
+
+
+

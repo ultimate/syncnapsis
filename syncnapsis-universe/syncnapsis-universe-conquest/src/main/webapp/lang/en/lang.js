@@ -20,6 +20,17 @@ lang.EnumLocale = {};
 lang.EnumLocale.EN = "English";
 lang.EnumLocale.DE = "Deutsch";
 
+lang.error = {};
+lang.error.error				= "Error";
+lang.error.email_exists 		= lang.error.error + ": e-mail-address is already registered!";
+lang.error.invalid_email 		= lang.error.error + ": invalid e-mail-address!";
+lang.error.invalid_empirename 	= lang.error.error + ": invalid empirename!";
+lang.error.invalid_username 	= lang.error.error + ": invalid username!";
+lang.error.max_empires 			= lang.error.error + ": Maximum number of empires exceeded!";
+lang.error.no_password			= lang.error.error + ": no password provided!";
+lang.error.password_mismatch 	= lang.error.error + ": passwords do not match!";
+lang.error.username_exists 		= lang.error.error + ": username is already registered!";
+
 lang.menu = {};
 lang.menu.about 				= "?";
 lang.menu.about_tooltip 		= "About Syncnapsis";
@@ -45,7 +56,7 @@ lang.log.pinboard				= "Pinboard";
 lang.log.match					= "Match";
 	
 lang.profile = {};
-lang.profile.email				= "E-Mail";
+lang.profile.email				= "E-mail";
 lang.profile.password			= "Password";
 lang.profile.password_confirm	= "Repeat " + lang.profile.password;
 lang.profile.username			= "Username";
