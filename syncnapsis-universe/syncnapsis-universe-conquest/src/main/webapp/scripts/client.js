@@ -76,13 +76,6 @@ UI.constants.MESSAGE_SHOW_CLASS = "show";
 UI.constants.BUTTON_DISABLED_CLASS = "disabled";
 UI.constants.MENU_HIDDEN_CLASS = "menu_hidden";
 
-Types.Galaxy = "com.syncnapsis.data.model.Galaxy";
-Types.Match = "com.syncnapsis.data.model.Match";
-Types.Participant = "com.syncnapsis.data.model.Participant";
-Types.SolarSystem = "com.syncnapsis.data.model.SolarSystem";
-Types.SolarSystemInfrastructure = "com.syncnapsis.data.model.SolarSystemInfrastructure";
-Types.SolarSystemPopulation = "com.syncnapsis.data.model.SolarSystemPopulation";
-
 UIManager = function()
 {
 	this.currentPlayer = null;

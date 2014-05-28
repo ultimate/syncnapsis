@@ -10,6 +10,13 @@
  * You should have received a copy of the GNU General Plublic License along with this program; if not, see <http://www.gnu.org/licenses/>.
  */
 
+Types.Galaxy = "com.syncnapsis.data.model.Galaxy";
+Types.Match = "com.syncnapsis.data.model.Match";
+Types.Participant = "com.syncnapsis.data.model.Participant";
+Types.SolarSystem = "com.syncnapsis.data.model.SolarSystem";
+Types.SolarSystemInfrastructure = "com.syncnapsis.data.model.SolarSystemInfrastructure";
+Types.SolarSystemPopulation = "com.syncnapsis.data.model.SolarSystemPopulation";
+
 ServerUIManager = function()
 {
 };
