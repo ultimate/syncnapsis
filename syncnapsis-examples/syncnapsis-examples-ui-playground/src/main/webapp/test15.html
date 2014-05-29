@@ -77,7 +77,7 @@
 					n.y = (o.y - p.y)+opd*d.y;
 					n.z = (o.z - p.z)+opd*d.z;
 					dist2 = (n.x*n.x + n.y*n.y + n.z*n.z);
-					//if(dist2 < 10000)
+					if(dist2 < 10000)
 						console.log("opd=" + opd + " dist=" + dist2 + " x|y|z= " + p.x + "|" + p.y + "|" + p.z);
 					if(dist2 < dist2Min)
 							dist2Min = dist2;
