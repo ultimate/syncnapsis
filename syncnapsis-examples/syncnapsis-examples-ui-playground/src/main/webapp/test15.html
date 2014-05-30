@@ -36,7 +36,8 @@
 				var e = window.event || e;
 				var delta = Math.max(-1, Math.min(1, (e.wheelDelta || -e.detail)));
 		
-				camera.radius.target -= delta * 200;
+				camera.radius.target -= delta * 100;
+				console.log("z=" + view.getScreenCoords(new THREE.Vector3(200,0,0)).z + " r=" + camera.radius.target + " dx=" + (view.getScreenCoords(new THREE.Vector3(200,0,0)).x - view.getScreenCoords(new THREE.Vector3(200,100,0)).x));
 				return false;			
 			};
 
@@ -258,11 +259,24 @@
 					//console.log("sector = (" + activeSector.x + "," + activeSector.y + "," + activeSector.z + ")");				
 					var coords = view.getScreenCoords(activeSector);
 					
+					var p1 = activeSector;
+					var p2 = camera.camera.position;
+					
+					var size = 26;
+					var dist = Math.sqrt((p1.x-p2.x)*(p1.x-p2.x) + (p1.y-p2.y)*(p1.y-p2.y) + (p1.z-p2.z)*(p1.z-p2.z));
+					size = 6000 / (2 * Math.tan((camera.camera.fov * Math.PI / 180) / 2) * dist);
+					size = Math.round(size);
+					
+					borderWidth = 3;
+					
 					//console.log("coords = (" + coords.x + "," + coords.y + ")");
 					var testC = document.getElementById('testDiv');
-					var divWidth = divHeight = 26;
-					testC.style.left = Math.round(coords.x - divWidth/2) + 'px';
-					testC.style.top = Math.round(coords.y - divHeight/2) + 'px';
+					var divWidth = divHeight = size;
+					testC.style.left = Math.round(coords.x - divWidth/2 - borderWidth) + 'px';
+					testC.style.top = Math.round(coords.y - divHeight/2 - borderWidth) + 'px';
+					testC.style.width = size + 'px';
+					testC.style.height = size + 'px';
+					testC.style.borderRadius = size + 'px';
 					//testC.innerHTML = activeMesh.id;
 				}
 				else {
