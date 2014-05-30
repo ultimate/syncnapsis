@@ -37,7 +37,7 @@
 				var delta = Math.max(-1, Math.min(1, (e.wheelDelta || -e.detail)));
 		
 				camera.radius.target -= delta * 100;
-				console.log("z=" + view.getScreenCoords(new THREE.Vector3(200,0,0)).z + " r=" + camera.radius.target + " dx=" + (view.getScreenCoords(new THREE.Vector3(200,0,0)).x - view.getScreenCoords(new THREE.Vector3(200,100,0)).x));
+				
 				return false;			
 			};
 
@@ -255,9 +255,14 @@
 				updateCamera();
 				renderer.render( scene, camera.camera );
 				
-				if(activeSector != null) {	
+				var coords;
+				
+				if(activeSector != null && (coords = view.getScreenCoords(activeSector)).z < 1) {	
 					//console.log("sector = (" + activeSector.x + "," + activeSector.y + "," + activeSector.z + ")");				
-					var coords = view.getScreenCoords(activeSector);
+					//var coords = view.getScreenCoords(activeSector);
+					
+					//console.log("coords.z=" + coords.z);
+					
 					
 					var p1 = activeSector;
 					var p2 = camera.camera.position;
