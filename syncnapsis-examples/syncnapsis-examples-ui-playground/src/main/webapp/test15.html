@@ -42,52 +42,91 @@
 
 			function onClick( event ) {
 				//event.preventDefault();
+				
+				var sec1, sec2;
 
-				mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
-				mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;			
-				
-				var vector = new THREE.Vector3( mouse.x, mouse.y, 1 );				
-				projector.unprojectVector( vector, camera.camera );
-				var ray = new THREE.Ray( camera.camera.position, vector.sub( camera.camera.position ).normalize() );
-				
-				var o = ray.origin;
-				var d = ray.direction;
-				console.log("origin: (" + o.x + "," + o.y + "," + o.z + ") direction: (" + d.x + "," + d.y + "," + d.z + ")");
-				var p;
-				var n; // normal vector to line = (o-p)-((o-p)*d)d // * = dot-product
-				var dist2; // = (|n|)^2 // use square to avoid sqrt
-				var opd; // temp for (o-p)*d
-				var opdMin = 10000000;;
-				var dist2Min = 10000000;;
-				
-				activeSector = null;
-				
-				for(var i = 0; i < galaxy.particles.vertices.length; i++)
+				console.time("proj");
 				{
-					if(galaxy.sizes[i] == 0)
-						continue;
+					mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
+					mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;	
+				
+					var vector = new THREE.Vector3( mouse.x, mouse.y, 1 );				
+					projector.unprojectVector( vector, camera.camera );
+					var ray = new THREE.Ray( camera.camera.position, vector.sub( camera.camera.position ).normalize() );
 					
-					p = galaxy.particles.vertices[i];
-					n = new THREE.Vector3(0,0,0);
-					opd = (p.x-o.x)*d.x + (p.y-o.y)*d.y + (p.z-o.z)*d.z;
-					// opd is in direction to n (intersection have positive opd)
-					if(opd < 0) // wrong direction (behind the camera)
-						continue;
-					n.x = (o.x - p.x)+opd*d.x;
-					n.y = (o.y - p.y)+opd*d.y;
-					n.z = (o.z - p.z)+opd*d.z;
-					dist2 = (n.x*n.x + n.y*n.y + n.z*n.z);
-					if(dist2 < 10000)
-						console.log("opd=" + opd + " dist=" + dist2 + " x|y|z= " + p.x + "|" + p.y + "|" + p.z);
-					if(dist2 < dist2Min)
-							dist2Min = dist2;
-					if(opd < opdMin && dist2 <= galaxy.sizes[i]*galaxy.sizes[i])
+					var o = ray.origin;
+					var d = ray.direction;
+					//console.log("origin: (" + o.x + "," + o.y + "," + o.z + ") direction: (" + d.x + "," + d.y + "," + d.z + ")");
+					var p;
+					var n = new THREE.Vector3(0,0,0);; // normal vector to line = (o-p)-((o-p)*d)d // * = dot-product
+					var dist2; // = (|n|)^2 // use square to avoid sqrt
+					var opd; // temp for (o-p)*d
+					var opdMin = 10000000;;
+					var dist2Min = 10000000;;
+						
+					
+					activeSector = null;
+					
+					for(var i = 0; i < galaxy.particles.vertices.length; i++)
 					{
-						opdMin = opd;
-						activeSector = galaxy.particles.vertices[i];
-					}									
+						if(galaxy.sizes[i] == 0)
+							continue;
+						
+						p = galaxy.particles.vertices[i];
+						opd = (p.x-o.x)*d.x + (p.y-o.y)*d.y + (p.z-o.z)*d.z;
+						// opd is in direction to n (intersection have positive opd)
+						if(opd < 0) // wrong direction (behind the camera)
+							continue;
+						n.x = (o.x - p.x)+opd*d.x;
+						n.y = (o.y - p.y)+opd*d.y;
+						n.z = (o.z - p.z)+opd*d.z;
+						dist2 = (n.x*n.x + n.y*n.y + n.z*n.z);
+						//if(dist2 < 10000)
+						//	console.log("opd=" + opd + " dist=" + dist2 + " x|y|z= " + p.x + "|" + p.y + "|" + p.z);
+						if(dist2 < dist2Min)
+								dist2Min = dist2;
+						if(opd < opdMin && dist2 <= galaxy.sizes[i]*galaxy.sizes[i])
+						{
+							opdMin = opd;
+							sec1 = p;
+						}									
+					}
+					//console.log("dist2Min=" + dist2Min);
+				}				
+				console.timeEnd("proj");
+				
+				
+				console.time("scr");
+				{
+					mouse.x = event.clientX;
+					mouse.y = event.clientY;
+				
+					var p;
+					var dist2;
+					var screenCoords;
+					var zMin = 10000000;
+					
+					for(var i = 0; i < galaxy.particles.vertices.length; i++)
+					{
+						if(galaxy.sizes[i] == 0)
+							continue;
+							
+						p = galaxy.particles.vertices[i];
+						screenCoords = view.getScreenCoords(p);
+						dist2 = (screenCoords.x-mouse.x)*(screenCoords.x-mouse.x) + (screenCoords.y-mouse.y)*(screenCoords.y-mouse.y);
+						//console.log("dist=" + dist2 + " x|y|z= " + p.x + "|" + p.y + "|" + p.z);
+						if(screenCoords.z < zMin && dist2 < galaxy.sizes[i]*galaxy.sizes[i])
+						{
+							zMin = screenCoords.z;
+							sec2 = p;
+						}
+					}
 				}
-				console.log("dist2Min=" + dist2Min);
+				console.timeEnd("scr");
+				
+				activeSector = sec2;
+				
+				console.log("sec1=" + (sec1 == null ? null : (sec1.x + "|" + sec1.y + "|" + sec1.z)) + " sec2=" + (sec2 == null ? null : (sec2.x + "|" + sec2.y + "|" + sec2.z)) );
 				
 				if(activeSector == null)
 					camera.target.target = new THREE.Vector3(0,0,0);
@@ -217,28 +256,13 @@
 				
 				if(activeSector != null) {	
 					//console.log("sector = (" + activeSector.x + "," + activeSector.y + "," + activeSector.z + ")");				
-					var coords = toScreenXY(activeSector,camera.camera);
+					var coords = view.getScreenCoords(activeSector);
 					
-					// TODO move this part of the calculation INTO toScreenXY as shown by https://github.com/mrdoob/three.js/issues/78
-					/*
-					toScreenXY: function ( position, camera, jqdiv ) {
-
-						var pos = position.clone();
-						projScreenMat = new THREE.Matrix4();
-						projScreenMat.multiply( camera.projectionMatrix, camera.matrixWorldInverse );
-						projScreenMat.multiplyVector3( pos );
-
-						return { x: ( pos.x + 1 ) * jqdiv.width() / 2 + jqdiv.offset().left,
-							 y: ( - pos.y + 1) * jqdiv.height() / 2 + jqdiv.offset().top };
-
-					}
-					*/
-					
-					//console.log("coords = (" + coords[0] + "," + coords[1] + ")");
+					//console.log("coords = (" + coords.x + "," + coords.y + ")");
 					var testC = document.getElementById('testDiv');
 					var divWidth = divHeight = 26;
-					testC.style.left = Math.round(coords[0] * window.innerWidth - divWidth/2) + 'px';
-					testC.style.top = Math.round(coords[1] * window.innerHeight - divHeight/2) + 'px';
+					testC.style.left = Math.round(coords.x - divWidth/2) + 'px';
+					testC.style.top = Math.round(coords.y - divHeight/2) + 'px';
 					//testC.innerHTML = activeMesh.id;
 				}
 				else {
@@ -593,16 +617,6 @@
 				var base10 = Math.pow(10, digits-1);
 				return (leadingDigit+1)*base10;
 			};
-
-			toScreenXY = function(position, camera)
-			{
-				var pos = position.clone();
-				projScreenMat = new THREE.Matrix4();
-				projScreenMat.multiplyMatrices( camera.projectionMatrix, camera.matrixWorldInverse );
-				pos.applyProjection(projScreenMat);
-				//console.log("pos = (" + pos.x + "," + pos.y + ")");
-				return [(pos.x + 1)/2,-(pos.y - 1)/2];
-			};	
 
 			StarColor = function(heat, radius, radius2)
 			{
