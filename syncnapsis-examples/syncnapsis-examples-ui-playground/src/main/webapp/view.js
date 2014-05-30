@@ -126,6 +126,9 @@ void main() {\
 
 
 var View = function(container) {
+	
+	this.container = container;
+	
 	this.shaders = {
 		attributes: {
 			size: {	type: 'f', value: [] },
@@ -165,7 +168,8 @@ var View = function(container) {
 		flip: 0,
 		up: new THREE.Vector3(0, 0, 1),
 		camera: new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 10000 ),
-		
+		projection: new THREE.Matrix4(), // set in update function
+				
 		lastAnimation: new Date().getTime(),
 		
 		animate: function() {
@@ -199,31 +203,26 @@ var View = function(container) {
 				//console.log("camera:    pos=" + this.camera.position.x + "|" + this.camera.position.y + "|" + this.camera.position.z + "    rot=" + this.camera.rotation.x + "|" + this.camera.rotation.y + "|" + this.camera.rotation.z);
 				//console.log("camera:    pos=" + this.camera.position.x + "|" + this.camera.position.y + "|" + this.camera.position.z + "    rot=" + this.camera.rotation.x + "|" + this.camera.rotation.y + "|" + this.camera.rotation.z);
 				this.camera.rotation.z += this.sphere_axis.value; // otherwise we will always look upright
+				
+				this.projection.multiplyMatrices(this.camera.projectionMatrix, this.camera.matrixWorldInverse);
 		}
 	};
-		
-	// add part to calc real screen coord according to https://github.com/mrdoob/three.js/issues/78
-	/*
-	toScreenXY: function ( position, camera, jqdiv ) {
-
-		var pos = position.clone();
-		projScreenMat = new THREE.Matrix4();
-		projScreenMat.multiply( camera.projectionMatrix, camera.matrixWorldInverse );
-		projScreenMat.multiplyVector3( pos );
-
-		return { x: ( pos.x + 1 ) * jqdiv.width() / 2 + jqdiv.offset().left,
-			 y: ( - pos.y + 1) * jqdiv.height() / 2 + jqdiv.offset().top };
-
-	}
-	*/
 	
-	this.renderer = new THREE.WebGLRenderer({canvas: container, antialias: true, clearColor: 0x000000, clearAlpha: 1 }); 
+	this.renderer = new THREE.WebGLRenderer({canvas: this.container, antialias: true, clearColor: 0x000000, clearAlpha: 1 }); 
 	
 	this.updateSize = function() {
 		this.renderer.setSize( window.innerWidth, window.innerHeight, true );
 		this.camera.camera.aspect = window.innerWidth / window.innerHeight;
 		this.camera.camera.updateProjectionMatrix();
 		console.log("updating view size: " + window.innerWidth + "x" + window.innerHeight + " (aspect: " + this.camera.camera.aspect + ")");
+	};
+	
+	this.getScreenCoords = function(vector) {
+		var vec = vector.clone();
+		vec.applyProjection(this.camera.projection);
+		vec.x = (vec.x + 1) * this.container.width / 2 + this.container.offsetLeft;
+		vec.y = (-vec.y + 1) * this.container.height / 2 + this.container.offsetTop;
+		return vec;
 	};
 	
 	console.log("the camera:    pos=" + this.camera.camera.position.x + "|" + this.camera.camera.position.y + "|" + this.camera.camera.position.z + "    rot=" + this.camera.camera.rotation.x + "|" + this.camera.camera.rotation.y + "|" + this.camera.camera.rotation.z);
