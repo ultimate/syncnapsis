@@ -97,7 +97,7 @@ public class PinboardManagerImpl extends GenericNameManagerImpl<Pinboard, Long> 
 	 * @see com.syncnapsis.data.service.PinboardManager#postMessage(java.lang.Long, java.lang.String, java.lang.String)
 	 */
 	@Override
-	public PinboardMessage postMessage(Long pinboardId, String title, String message)
+	public synchronized PinboardMessage postMessage(Long pinboardId, String title, String message)
 	{
 		// get additional post information
 		Pinboard pinboard = get(pinboardId);
@@ -107,12 +107,15 @@ public class PinboardManagerImpl extends GenericNameManagerImpl<Pinboard, Long> 
 		if(pinboard.isLocked() && !pinboard.getCreator().getId().equals(creator.getId()))
 			return null;
 		
+		int messageId = pinboardMessageManager.getLatestMessageId(pinboardId);
+		
 		// create and save the message
 		PinboardMessage pinboardMessage = new PinboardMessage();
 		pinboardMessage.setActivated(true);
 		pinboardMessage.setContent(message);
 		pinboardMessage.setCreationDate(new Date(securityManager.getTimeProvider().get()));
 		pinboardMessage.setCreator(creator);
+		pinboardMessage.setMessageId(messageId+1);
 		pinboardMessage.setPinboard(pinboard);
 		pinboardMessage.setTitle(title);
 		

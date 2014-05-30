@@ -72,6 +72,7 @@ public class PinboardManagerImplTest extends GenericNameManagerImplTestCase<Pinb
 		final Long pinboardId = 1L;
 		final String title = "title";
 		final String content = "content";
+		final int messageId = 12;
 		
 		final Pinboard pinboard = new Pinboard(); // just a dummy
 		pinboard.setId(pinboardId);
@@ -81,6 +82,7 @@ public class PinboardManagerImplTest extends GenericNameManagerImplTestCase<Pinb
 		message.setContent(content);
 		message.setCreationDate(new Date(securityManager.getTimeProvider().get()));
 		message.setCreator(postingUser);
+		message.setMessageId(messageId+1);
 		message.setPinboard(pinboard);	
 		message.setTitle(title);
 
@@ -93,6 +95,12 @@ public class PinboardManagerImplTest extends GenericNameManagerImplTestCase<Pinb
 				{
 					oneOf(mockPinboardMessageManager).save(message);
 					will(returnValue(message));
+				}
+			});
+			mockContext.checking(new Expectations() {
+				{
+					oneOf(mockPinboardMessageManager).getLatestMessageId(pinboardId);
+					will(returnValue(messageId));
 				}
 			});
 			mockContext.checking(new Expectations() {
@@ -132,6 +140,12 @@ public class PinboardManagerImplTest extends GenericNameManagerImplTestCase<Pinb
 				{
 					oneOf(mockPinboardMessageManager).save(message);
 					will(returnValue(message));
+				}
+			});
+			mockContext.checking(new Expectations() {
+				{
+					oneOf(mockPinboardMessageManager).getLatestMessageId(pinboardId);
+					will(returnValue(messageId));
 				}
 			});
 			mockContext.checking(new Expectations() {
