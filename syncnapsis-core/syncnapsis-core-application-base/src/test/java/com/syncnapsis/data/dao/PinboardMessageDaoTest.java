@@ -22,67 +22,75 @@ import com.syncnapsis.data.model.PinboardMessage;
 import com.syncnapsis.tests.GenericDaoTestCase;
 import com.syncnapsis.tests.annotations.TestCoversClasses;
 
-@TestCoversClasses({PinboardMessageDao.class, PinboardMessageDaoHibernate.class})
+@TestCoversClasses({ PinboardMessageDao.class, PinboardMessageDaoHibernate.class })
 public class PinboardMessageDaoTest extends GenericDaoTestCase<PinboardMessage, Long>
 {
-	private PinboardMessageDao pinboardMessageDao;
-	
+	private PinboardMessageDao	pinboardMessageDao;
+
 	@Override
 	protected void setUp() throws Exception
 	{
 		super.setUp();
-		
+
 		Long existingId = pinboardMessageDao.getAll().get(0).getId();
-		
+
 		PinboardMessage pinboardMessage = new PinboardMessage();
 		// set individual properties here
-		
+
 		setEntity(pinboardMessage);
-		
+
 		setEntityProperty("content");
 		setEntityPropertyValue("the message content...");
-		
+
 		setExistingEntityId(existingId);
 		setBadEntityId(-1L);
-		
+
 		setGenericDao(pinboardMessageDao);
 	}
-	
+
 	public void testGetByPinboard() throws Exception
 	{
 		List<PinboardMessage> allMessages = pinboardMessageDao.getAll();
-		
+
 		List<Long> pinboards = new ArrayList<Long>();
-		for(PinboardMessage m: allMessages)
+		for(PinboardMessage m : allMessages)
 		{
 			if(!pinboards.contains(m.getPinboard().getId()))
 				pinboards.add(m.getPinboard().getId());
 		}
-		
+
 		assertTrue(pinboards.size() > 0);
-		
+
 		List<PinboardMessage> boardMessages;
 		List<PinboardMessage> someBoardMessages;
 		final int count = 2;
 		int totalMessages = 0;
-		
-		for(Long pinboardId: pinboards)
+
+		for(Long pinboardId : pinboards)
 		{
 			boardMessages = pinboardMessageDao.getByPinboard(pinboardId);
 			totalMessages += boardMessages.size();
-			
+
+			for(int i = 1; i < boardMessages.size(); i++)
+			{
+				// check sort order
+				assertEquals(boardMessages.get(i).getMessageId(), boardMessages.get(i - 1).getMessageId() - 1);
+				if(i == boardMessages.size())
+					assertEquals(1, boardMessages.get(i).getMessageId());
+			}
+
 			assertTrue(boardMessages.size() < allMessages.size());
-			
+
 			someBoardMessages = pinboardMessageDao.getByPinboard(pinboardId, count);
-			
+
 			if(boardMessages.size() > count)
 				assertEquals(count, someBoardMessages.size());
 			else
 				assertEquals(boardMessages.size(), someBoardMessages.size());
 		}
-		
+
 		assertEquals(allMessages.size(), totalMessages);
 	}
-	
+
 	// insert individual Tests here
 }

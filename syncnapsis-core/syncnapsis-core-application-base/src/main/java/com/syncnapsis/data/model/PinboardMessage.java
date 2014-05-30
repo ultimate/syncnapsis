@@ -44,6 +44,13 @@ public class PinboardMessage extends ActivatableInstance<Long> implements Ownabl
 	protected Pinboard	pinboard;
 
 	/**
+	 * The message id within the pinboard this message belongs to.<br>
+	 * All messages are numbered consecutively for each pinboard. This way clients may check their
+	 * local message list for missing messages.
+	 */
+	protected int		messageId;
+
+	/**
 	 * The user that created the message
 	 */
 	protected User		creator;
@@ -73,6 +80,19 @@ public class PinboardMessage extends ActivatableInstance<Long> implements Ownabl
 	public Pinboard getPinboard()
 	{
 		return pinboard;
+	}
+
+	/**
+	 * The message id within the pinboard this message belongs to.<br>
+	 * All messages are numbered consecutively for each pinboard. This way clients may check their
+	 * local message list for missing messages.
+	 * 
+	 * @return messageId
+	 */
+	@Column(nullable = false)
+	public int getMessageId()
+	{
+		return messageId;
 	}
 
 	/**
@@ -132,6 +152,18 @@ public class PinboardMessage extends ActivatableInstance<Long> implements Ownabl
 	}
 
 	/**
+	 * The message id within the pinboard this message belongs to.<br>
+	 * All messages are numbered consecutively for each pinboard. This way clients may check their
+	 * local message list for missing messages.
+	 * 
+	 * @param messageId - the consecutive id
+	 */
+	public void setMessageId(int messageId)
+	{
+		this.messageId = messageId;
+	}
+
+	/**
 	 * The user that created the message
 	 * 
 	 * @param creator - the User
@@ -182,10 +214,6 @@ public class PinboardMessage extends ActivatableInstance<Long> implements Ownabl
 		return Collections.nCopies(1, getCreator());
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * @see com.syncnapsis.data.model.base.BaseObject#hashCode()
-	 */
 	@Override
 	public int hashCode()
 	{
@@ -194,15 +222,12 @@ public class PinboardMessage extends ActivatableInstance<Long> implements Ownabl
 		result = prime * result + ((content == null) ? 0 : content.hashCode());
 		result = prime * result + ((creationDate == null) ? 0 : creationDate.hashCode());
 		result = prime * result + ((creator == null) ? 0 : creator.getId().hashCode());
+		result = prime * result + messageId;
 		result = prime * result + ((pinboard == null) ? 0 : pinboard.getId().hashCode());
 		result = prime * result + ((title == null) ? 0 : title.hashCode());
 		return result;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * @see com.syncnapsis.data.model.base.BaseObject#equals(java.lang.Object)
-	 */
 	@Override
 	public boolean equals(Object obj)
 	{
@@ -234,6 +259,8 @@ public class PinboardMessage extends ActivatableInstance<Long> implements Ownabl
 		}
 		else if(!creator.getId().equals(other.creator.getId()))
 			return false;
+		if(messageId != other.messageId)
+			return false;
 		if(pinboard == null)
 		{
 			if(other.pinboard != null)
@@ -259,8 +286,8 @@ public class PinboardMessage extends ActivatableInstance<Long> implements Ownabl
 	public String toString()
 	{
 		ToStringBuilder builder = new ToStringBuilder(this);
-		builder.append("pinboard", pinboard.getId()).append("creator", creator.getId()).append("creationDate", creationDate).append("title", title)
-				.append("content", content);
+		builder.append("pinboard", pinboard.getId()).append("messageId", messageId).append("creator", creator.getId())
+				.append("creationDate", creationDate).append("title", title).append("content", content);
 		return builder.toString();
 	}
 }

@@ -58,7 +58,7 @@ public class PinboardMessageDaoHibernate extends GenericDaoHibernate<PinboardMes
 	@Override
 	public List<PinboardMessage> getByPinboard(Long pinboardId)
 	{
-		return createQuery("from PinboardMessage where pinboard.id = ? and activated=true order by creationDate desc", pinboardId).list();
+		return createQuery("from PinboardMessage where pinboard.id = ? and activated=true order by messageId desc", pinboardId).list();
 	}
 
 	/*
@@ -69,7 +69,7 @@ public class PinboardMessageDaoHibernate extends GenericDaoHibernate<PinboardMes
 	@Override
 	public List<PinboardMessage> getByPinboard(Long pinboardId, int count)
 	{
-		Query q = createQuery("from PinboardMessage where pinboard.id = ? and activated=true order by creationDate desc", pinboardId);
+		Query q = createQuery("from PinboardMessage where pinboard.id = ? and activated=true order by messageId desc", pinboardId);
 		q.setMaxResults(count);
 		return q.list();
 	}
