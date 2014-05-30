@@ -62,4 +62,14 @@ public class PinboardMessageManagerImpl extends GenericManagerImpl<PinboardMessa
 	{
 		return pinboardMessageDao.getByPinboard(pinboardId, count);
 	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see com.syncnapsis.data.service.PinboardMessageManager#getLatestMessageId(java.lang.Long)
+	 */
+	@Override
+	public int getLatestMessageId(Long pinboardId)
+	{
+		return pinboardMessageDao.getLatestMessageId(pinboardId);
+	}
 }

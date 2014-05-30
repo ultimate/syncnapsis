@@ -41,4 +41,12 @@ public interface PinboardMessageManager extends GenericManager<PinboardMessage, 
 	 * @return the list of messages
 	 */
 	public List<PinboardMessage> getByPinboard(Long pinboardId, int count);
+
+	/**
+	 * Get the latest message id for a pinboard
+	 * 
+	 * @param pinboardId - the pinboard id
+	 * @return the latest message id
+	 */
+	public int getLatestMessageId(Long pinboardId);
 }
