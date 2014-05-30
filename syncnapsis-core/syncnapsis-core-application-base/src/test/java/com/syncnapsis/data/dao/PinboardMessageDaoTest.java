@@ -95,6 +95,8 @@ public class PinboardMessageDaoTest extends GenericDaoTestCase<PinboardMessage, 
 	public void testGetLatestMessageId() throws Exception
 	{
 		assertEquals(3, pinboardMessageDao.getLatestMessageId(1L));
+		// invalid pinboard
+		assertEquals(0, pinboardMessageDao.getLatestMessageId(987L));
 	}
 
 	// insert individual Tests here
