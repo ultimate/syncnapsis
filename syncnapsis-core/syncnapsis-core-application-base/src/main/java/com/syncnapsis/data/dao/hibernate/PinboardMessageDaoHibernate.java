@@ -73,4 +73,14 @@ public class PinboardMessageDaoHibernate extends GenericDaoHibernate<PinboardMes
 		q.setMaxResults(count);
 		return q.list();
 	}
+	
+	/*
+	 * (non-Javadoc)
+	 * @see com.syncnapsis.data.dao.PinboardMessageDao#getLatestMessageId(java.lang.Long)
+	 */
+	@Override
+	public int getLatestMessageId(Long pinboardId)
+	{
+		return (Integer) createQuery("select max(messageId) from PinboardMessage where pinboard.id = ?", pinboardId).uniqueResult();
+	}
 }
