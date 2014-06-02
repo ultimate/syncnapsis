@@ -128,6 +128,8 @@ void main() {\
 var View = function(container) {
 	
 	this.container = container;
+	this.canvas = document.createElement("canvas");
+	this.container.appendChild(this.canvas);
 	
 	this.shaders = {
 		attributes: {
@@ -223,20 +225,20 @@ var View = function(container) {
 		}
 	};
 	
-	this.renderer = new THREE.WebGLRenderer({canvas: this.container, antialias: true, clearColor: 0x000000, clearAlpha: 1 }); 
+	this.renderer = new THREE.WebGLRenderer({canvas: this.canvas, antialias: true, clearColor: 0x000000, clearAlpha: 1 }); 
 	
 	this.updateSize = function() {
-		this.renderer.setSize( window.innerWidth, window.innerHeight, true );
-		this.camera.camera.aspect = window.innerWidth / window.innerHeight;
+		this.renderer.setSize( this.container.offsetWidth, this.container.offsetHeight, true );
+		this.camera.camera.aspect = this.container.offsetWidth / this.container.offsetHeight;
 		this.camera.camera.updateProjectionMatrix();
-		console.log("updating view size: " + window.innerWidth + "x" + window.innerHeight + " (aspect: " + this.camera.camera.aspect + ")");
+		console.log("updating view size: " + this.container.offsetWidth + "x" + this.container.offsetHeight + " (aspect: " + this.camera.camera.aspect + ")");
 	};
 	
 	this.getScreenCoords = function(vector) {
 		var vec = vector.clone();
 		vec.applyProjection(this.camera.projection);
-		vec.x = (vec.x + 1) * this.container.width / 2 + this.container.offsetLeft;
-		vec.y = (-vec.y + 1) * this.container.height / 2 + this.container.offsetTop;
+		vec.x = (vec.x + 1) * this.container.offsetWidth / 2 + this.container.offsetLeft;
+		vec.y = (-vec.y + 1) * this.container.offsetHeight / 2 + this.container.offsetTop;
 		return vec;
 	};
 	
