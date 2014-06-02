@@ -140,4 +140,15 @@ public class MessageManagerImpl extends BaseClientManager implements MessageMana
 		List<PinboardMessage> messages = pinboardMessageManager.getByPinboard(pinboardId, messageCount);
 		((MessageManager) getClientInstance(getBeanName(), getConnectionProvider().get())).updatePinboard(pinboardId, messages);
 	}
+	
+	/*
+	 * (non-Javadoc)
+	 * @see com.syncnapsis.client.MessageManager#requestPinboardUpdate(java.lang.Long, int, int)
+	 */
+	@Override
+	public void requestPinboardUpdate(Long pinboardId, int fromMessageId, int toMessageId)
+	{
+		List<PinboardMessage> messages = pinboardMessageManager.getByPinboard(pinboardId, fromMessageId, toMessageId);
+		((MessageManager) getClientInstance(getBeanName(), getConnectionProvider().get())).updatePinboard(pinboardId, messages);
+	}
 }

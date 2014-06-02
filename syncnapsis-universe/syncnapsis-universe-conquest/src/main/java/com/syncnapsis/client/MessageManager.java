@@ -52,4 +52,15 @@ public interface MessageManager
 	 * @param messageCount - the amount of messages to get
 	 */
 	public void requestPinboardUpdate(Long pinboardId, int messageCount);
+
+	/**
+	 * Request an update for the pinboard given by id.<br>
+	 * The update will contain the newest messages available within the given range for the number
+	 * of messages.
+	 * 
+	 * @param pinboardId - the id of the pinboard to update
+	 * @param fromMessageId - the first message id to get (inclusive)
+	 * @param toMessageId - the last message id to get (inclusive)
+	 */
+	public void requestPinboardUpdate(Long pinboardId, int fromMessageId, int toMessageId);
 }
