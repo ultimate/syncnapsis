@@ -73,6 +73,17 @@ public class PinboardMessageDaoHibernate extends GenericDaoHibernate<PinboardMes
 		q.setMaxResults(count);
 		return q.list();
 	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see com.syncnapsis.data.dao.PinboardMessageDao#getByPinboard(java.lang.Long, int, int)
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<PinboardMessage> getByPinboard(Long pinboardId, int fromMessageId, int toMessageId)
+	{
+		return createQuery("from PinboardMessage where pinboard.id = ? and activated=true and messageId >= ? and messageId <= ? order by messageId desc", pinboardId, fromMessageId, toMessageId).list();
+	}
 	
 	/*
 	 * (non-Javadoc)

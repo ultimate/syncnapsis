@@ -43,6 +43,16 @@ public interface PinboardMessageDao extends GenericDao<PinboardMessage, Long>
 	public List<PinboardMessage> getByPinboard(Long pinboardId, int count);
 
 	/**
+	 * Get messages belonging to a pinboard within a given message id range
+	 * 
+	 * @param pinboardId - the pinboard id
+	 * @param fromMessageId - the smallest message id to fetch (inclusive)
+	 * @param toMessageId - the largestmessage id to fetch (inclusive)
+	 * @return the list of messages
+	 */
+	public List<PinboardMessage> getByPinboard(Long pinboardId, int fromMessageId, int toMessageId);
+
+	/**
 	 * Get the latest message id for a pinboard
 	 * 
 	 * @param pinboardId - the pinboard id

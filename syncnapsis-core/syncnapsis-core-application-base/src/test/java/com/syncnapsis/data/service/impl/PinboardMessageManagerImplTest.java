@@ -37,12 +37,26 @@ public class PinboardMessageManagerImplTest extends GenericManagerImplTestCase<P
 	
 	public void testGetByPinboard() throws Exception
 	{
+		// getByPinboard(pinboardId)
 		MethodCall managerCall = new MethodCall("getByPinboard", new ArrayList<PinboardMessage>(), 1L);
 		MethodCall daoCall = managerCall;
 		simpleGenericTest(managerCall, daoCall);
 
+		// getByPinboard(pinboardId, count)
 		managerCall = new MethodCall("getByPinboard", new ArrayList<PinboardMessage>(), 1L, 10);
 		daoCall = managerCall;
+		simpleGenericTest(managerCall, daoCall);
+		
+		// getByPinboard(pinboardId, fromMessageId, toMessageId)
+		managerCall = new MethodCall("getByPinboard", new ArrayList<PinboardMessage>(), 1L, 1, 1);
+		daoCall = managerCall;
+		simpleGenericTest(managerCall, daoCall);
+	}
+	
+	public void testGetLatestMessageId() throws Exception
+	{
+		MethodCall managerCall = new MethodCall("getLatestMessageId", 3, 1L);
+		MethodCall daoCall = managerCall;
 		simpleGenericTest(managerCall, daoCall);
 	}
 }

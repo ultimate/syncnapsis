@@ -476,6 +476,7 @@
 		<column>version</column>
 		<column>activated</column>
 		<column>fkPinboard</column>
+		<column>messageId</column>
 		<column>fkCreator</column>
 		<column>creationDate</column>
 		<column>title</column>
@@ -485,6 +486,7 @@
 			<value description="version">1</value>
 			<value description="activated">1</value>
 			<value description="fkPinboard">1</value>
+			<value description="messageId">1</value>
 			<value description="fkCreator">0</value>
 			<value description="creationDate">2013-01-01 01:00:00</value>
 			<value description="title">first message on the board</value>
@@ -495,6 +497,7 @@
 			<value description="version">1</value>
 			<value description="activated">1</value>
 			<value description="fkPinboard">1</value>
+			<value description="messageId">2</value>
 			<value description="fkCreator">0</value>
 			<value description="creationDate">2013-01-01 02:00:00</value>
 			<null />
@@ -505,7 +508,8 @@
 			<value description="version">1</value>
 			<value description="activated">1</value>
 			<value description="fkPinboard">1</value>
-			<value description="fkCreator">1</value>
+			<value description="messageId">3</value>
+			<value description="fkCreator">2</value>
 			<value description="creationDate">2013-01-01 03:00:00</value>
 			<null />
 			<value description="content"><![CDATA[yeah, we will... ;-)]]></value>
@@ -513,22 +517,68 @@
 		<row>
 			<value description="id">4</value>
 			<value description="version">1</value>
-			<value description="activated">0</value>
-			<value description="fkPinboard">2</value>
-			<value description="fkCreator">0</value>
-			<value description="creationDate">2013-01-01 02:00:00</value>
+			<value description="activated">1</value>
+			<value description="fkPinboard">1</value>
+			<value description="messageId">4</value>
+			<value description="fkCreator">1</value>
+			<value description="creationDate">2013-01-01 04:00:00</value>
 			<null />
-			<value description="content"><![CDATA[old announcement]]></value>
+			<value description="content"><![CDATA[I hope so...]]></value>
 		</row>
 		<row>
 			<value description="id">5</value>
 			<value description="version">1</value>
 			<value description="activated">1</value>
+			<value description="fkPinboard">1</value>
+			<value description="messageId">5</value>
+			<value description="fkCreator">0</value>
+			<value description="creationDate">2013-01-01 05:00:00</value>
+			<null />
+			<value description="content"><![CDATA[yeehaa :-D]]></value>
+		</row>
+		<row>
+			<value description="id">6</value>
+			<value description="version">1</value>
+			<value description="activated">0</value>
 			<value description="fkPinboard">2</value>
-			<value description="fkCreator">1</value>
+			<value description="messageId">1</value>
+			<value description="fkCreator">0</value>
+			<value description="creationDate">2013-01-01 02:00:00</value>
+			<null />
+			<value description="content"><![CDATA[very old announcement]]></value>
+		</row>
+		<row>
+			<value description="id">7</value>
+			<value description="version">1</value>
+			<value description="activated">0</value>
+			<value description="fkPinboard">2</value>
+			<value description="messageId">2</value>
+			<value description="fkCreator">0</value>
 			<value description="creationDate">2013-01-01 03:00:00</value>
 			<null />
+			<value description="content"><![CDATA[old announcement]]></value>
+		</row>
+		<row>
+			<value description="id">8</value>
+			<value description="version">1</value>
+			<value description="activated">1</value>
+			<value description="fkPinboard">2</value>
+			<value description="messageId">3</value>
+			<value description="fkCreator">1</value>
+			<value description="creationDate">2013-01-01 04:00:00</value>
+			<null />
 			<value description="content"><![CDATA[new announcement]]></value>
+		</row>
+		<row>
+			<value description="id">9</value>
+			<value description="version">1</value>
+			<value description="activated">1</value>
+			<value description="fkPinboard">2</value>
+			<value description="messageId">4</value>
+			<value description="fkCreator">1</value>
+			<value description="creationDate">2013-01-01 05:00:00</value>
+			<null />
+			<value description="content"><![CDATA[newest announcement]]></value>
 		</row>
 	</table>
 
