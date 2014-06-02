@@ -139,14 +139,29 @@ var View = function(container) {
 			color:     { type: "c", value: new THREE.Color( 0xffffff ) },
 			texture:   { type: "t", value: THREE.ImageUtils.loadTexture( "img/star.png" ) },
 		},
+		uniformsSelected: {
+			amplitude: { type: "f", value: 1.0 },
+			color:     { type: "c", value: new THREE.Color( 0xffffff ) },
+			texture:   { type: "t", value: THREE.ImageUtils.loadTexture( "img/circle.png" ) },
+		},
 		vertexShader:   ViewUtil.loadShader( "vertexshader" ),
 		fragmentShader: ViewUtil.loadShader( "fragmentshader" ),
 		sizeMin: 10,
 		sizeMax: 30,
 	};
+	
 	this.materials = {
 		system:  new THREE.ShaderMaterial( {
 			uniforms: 		this.shaders.uniforms,
+			attributes:     this.shaders.attributes,
+			vertexShader:   this.shaders.vertexShader,
+			fragmentShader: this.shaders.fragmentShader,
+			blending: 		THREE.AdditiveBlending,
+			depthTest: 		false,
+			transparent:	true,
+		}),
+		systemSelected:  new THREE.ShaderMaterial( {
+			uniforms: 		this.shaders.uniformsSelected,
 			attributes:     this.shaders.attributes,
 			vertexShader:   this.shaders.vertexShader,
 			fragmentShader: this.shaders.fragmentShader,
