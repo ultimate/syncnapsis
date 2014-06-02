@@ -46,6 +46,7 @@ connect = function()
 		server.playerManager = Proxies.newProxyInstance(PlayerManager, genericRPCInvocationHandler);
 		server.uiManager = Proxies.newProxyInstance(ServerUIManager, genericRPCInvocationHandler);
 		server.messageManager = Proxies.newProxyInstance(ServerMessageManager, genericRPCInvocationHandler);
+		server.pinboardManager = Proxies.newProxyInstance(GenericManager, genericRPCInvocationHandler); // currently GenericManager is sufficient
 		// init additional services
 		server.entityManager = new EntityManager(server);
 		// init client-side managers

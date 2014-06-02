@@ -14,7 +14,85 @@
  */
 //@requires("Server")
 
-Pinboard = function(container)
+/*
+ * This a view Entity for a Pinboard identified by its ID 
+ */
+Pinboard = function(container, pinboardName, initialMessages)
 {
+	if(initialMessages == null)
+		initialMessages = 10;
+
+	this.container = container;
+	this.pinboard = null;
+	this.messages = [];
+	this.messageCount = initialMessages;
 	
+	this.setUser = function(user)
+	{
+		this.user = user;
+		// TODO lock/unlock
+	};
+	
+	this.addMessage = function(message)
+	{
+		// add message at right position
+	};
+	
+	this.removeMessage = function(messageId)
+	{
+		
+	};
+	
+	this.checkForMissingMessages = function()
+	{
+		var from = null;
+		var to = null;
+		// check for missing messages
+		for(var i = 1; i < this.messages.length; i++)
+		{
+			if(this.messages[i].messageId != this.messages[i-1].messageId - 1)
+			{
+				// messageId not consecutive
+				if(from == null || from > this.messages[i].messageId)
+					from = this.messages[i].messageId;
+				if(to == null || to < this.messages[i].messageId)
+					to = this.messages[i].messageId;
+			}
+		}
+		if(from != null && to != null)
+			this.requestUpdate(from, to);
+	};
+	
+	this.update = function(messages)
+	{
+		for(var i = 0; i < messages.length; i++)
+		{
+			this.addMessage(messages[i]);
+		}
+		if(this.messages.length < this.messageCount)
+			this.checkForMissingMessages();
+	};
+	
+	this.requestUpdate = function(from, to)
+	{
+		if(from == null || to == null)
+			server.messageManager.requestPinboardUpdate(this.pinboard.id, this.messageCount);
+		else
+			server.messageManager.requestPinboardUpdate(this.pinboard.id, from, to);
+	};
+	
+	this.setMessageCount = function(messageCount)
+	{
+		this.messageCount = messageCount;
+		this.requestUpdate();
+	};
+	
+	this.init = function(pinboard)
+	{
+		this.pinboard = pinboard;
+		this.requestUpdate();
+	};
+	
+	// associate this view with a pinboard loaded by name
+	server.pinboardManager.getByName(pinboardName, Events.wrapEventHandler(this, this.init));
 };

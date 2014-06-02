@@ -35,3 +35,13 @@ GenericManager = function()
 //		// result callback must be passed as argument! no return here!		
 //	};
 };
+
+GenericNameManager = function()
+{
+	this.getByName = function(name)
+	{
+		// return entity
+	};
+};
+
+GenericNameManager.prototype = new GenericManager();
