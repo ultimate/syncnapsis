@@ -17,12 +17,17 @@
 
 var ViewUtil = {};
 
+ViewUtil.INSTANT = Number.MAX_VALUE;
+ViewUtil.MAX_PARTICLES = 100000;
+ViewUtil.INFINITY = new THREE.Vector3(1000000,1000000,1000000);
+ViewUtil.WHITE = new THREE.Color(1,1,1);
+ViewUtil.BLACK = new THREE.Color(0,0,0);
+ViewUtil.AMPLITUDE = 500.0;
+
 ViewUtil.loadShader = function(name) {
 	var index = DependencyManager.indexOf(name);
 	return DependencyManager.scriptContents[index];
 };
-
-ViewUtil.INSTANT = Number.MAX_VALUE;
 
 ViewUtil.AnimatedVariable = function(initialValue, min, max, animationSpeed) {
 	this.value = initialValue;
@@ -41,11 +46,20 @@ ViewUtil.AnimatedVariable = function(initialValue, min, max, animationSpeed) {
 			
 		var dist = Math.abs(this.target - this.value);
 		var sgn = Math.sign(this.target - this.value);
-			
+		
+		var changed;
 		if(time == ViewUtil.INSTANT || dist < step)
+		{
+			changed = (this.value != this.target);
 			this.value = this.target;
+		}
 		else 
+		{
+			changed = true;
 			this.value += sgn*step;		
+		}
+		
+		return changed;
 	};
 };
 
@@ -62,8 +76,10 @@ ViewUtil.AnimatedVector3 = function(initialValue, animationSpeed) {
 		
 		var step = this.speed * time / 1000;
 		
+		var changed;
 		if(time == ViewUtil.INSTANT || dist2 < (step*step))
 		{
+			changed = ((this.value.x != this.target.x) || (this.value.y != this.target.y) || (this.value.z != this.target.z));
 			// copy each coordinate individually
 			// otherwise we would have the same object and manipulating the target-object would not be possible
 			this.value.x = this.target.x;
@@ -72,6 +88,7 @@ ViewUtil.AnimatedVector3 = function(initialValue, animationSpeed) {
 		}
 		else
 		{
+			changed = true;
 			var anim = 2; // DECIDE WHICH OPTION TO USE...
 			if(anim == 1)
 			{
@@ -88,6 +105,181 @@ ViewUtil.AnimatedVector3 = function(initialValue, animationSpeed) {
 				this.value.z += s*dz;
 			}
 		}
+		
+		return changed;
+	};
+};
+
+ViewUtil.AnimatedColor = function(initialValue, animationSpeed) {
+	this.value = initialValue.clone();
+	this.target = initialValue.clone();
+	this.speed = animationSpeed;
+	
+	this.animate = function(time) {
+		var dx = this.target.r - this.value.r;
+		var dy = this.target.g - this.value.g;
+		var dz = this.target.b - this.value.b;
+		var dist2 = dx*dx + dy*dy + dz*dz;
+		
+		var step = this.speed * time / 1000;
+		
+		var changed;
+		if(time == ViewUtil.INSTANT || dist2 < (step*step))
+		{
+			changed = ((this.value.r != this.target.r) || (this.value.g != this.target.g) || (this.value.b != this.target.b));
+			// copy each coordinate individually
+			// otherwise we would have the same object and manipulating the target-object would not be possible
+			this.value.r = this.target.r;
+			this.value.g = this.target.g;
+			this.value.b = this.target.b;
+		}
+		else
+		{
+			changed = true;
+			var anim = 2; // DECIDE WHICH OPTION TO USE...
+			if(anim == 1)
+			{
+				var max = Math.max(Math.abs(dx), Math.max(Math.abs(dy), Math.abs(dz)));
+				this.value.r += dx/max * step;
+				this.value.g += dy/max * step;
+				this.value.b += dz/max * step;
+			}
+			else
+			{
+				var s = Math.abs(step) / Math.sqrt(dist2);
+				this.value.r += s*dx;
+				this.value.g += s*dy;
+				this.value.b += s*dz;
+			}
+		}
+		
+		return changed;
+	};
+};
+
+ViewUtil.ColorModel = {
+	white: {
+		name: "white",
+		getRGB: function(size, heat, radius) {
+			return new THREE.Color(1,1,1);
+		}
+	}
+}; 
+
+ViewUtil.GalaxyInfo = function() {
+	this.reset = function() {
+		this.minX = 1000000000;
+		this.minY = 1000000000;
+		this.minZ = 1000000000;
+		this.maxX = -1000000000;
+		this.maxY = -1000000000;
+		this.maxZ = -1000000000;
+		this.maxR = 0;
+	};
+	
+	this.update = function(system) {
+		if(system.coords.value.x < this.minX)	this.minX = system.coords.value.x;
+		if(system.coords.value.x > this.maxX)	this.maxX = system.coords.value.x;
+		if(system.coords.value.y < this.minY)	this.minY = system.coords.value.y;
+		if(system.coords.value.y > this.maxY)	this.maxY = system.coords.value.y;
+		if(system.coords.value.z < this.minZ)	this.minZ = system.coords.value.z;
+		if(system.coords.value.z > this.maxZ)	this.maxZ = system.coords.value.z;
+		if(system.radius > this.maxR) 			this.maxR = system.radius;
+	};
+};
+
+ViewUtil.Galaxy = function(attributes, material, maxSystems) {
+
+	this.systems = [];
+	this.systemCount = 0;
+	this.attributes = attributes;
+	this.material = material;
+	
+	this.particles = new THREE.Geometry();
+	this.particles.vertices = new Array(maxSystems); // can't change the amount later!!!
+	for(var v = 0; v < this.particles.vertices.length; v++)
+	{
+		this.particles.vertices[v] = ViewUtil.INFINITY.clone();
+		this.attributes.size.value[v] = 0;
+		this.attributes.customColor.value[v] = ViewUtil.BLACK.clone();
+	}
+	this.particles.dynamic = true;
+	
+	this.particleSystem = new THREE.ParticleSystem(this.particles, this.material)
+	this.particleSystem.dynamic = true;
+
+	this.info = new ViewUtil.GalaxyInfo();
+	
+	this.reset = function(size) {
+		this.info.reset();
+		this.systemCount = 0;
+		/*
+		for(var s = 0; s < this.systems.length; s++)
+		{
+			this.systems[s] = null;
+			this.attributes.size.value[s] = null;
+			this.attributes.customColor.value[s] = null;
+		}
+		*/
+	};
+	
+	this.register = function(system) {
+		system.index = this.systemCount;
+		system.galaxy = this;
+		system.updateColor();
+		this.systems[this.systemCount] = system;
+		this.info.update(system);
+		this.systemCount++;
+	};
+	
+	this.animate = function(time) {
+		for(var s = 0; s < this.systems.length; s++)
+		{
+			if(this.systems[s])
+				this.systems[s].animate(time);	
+		}
+	};
+};
+
+ViewUtil.System = function(x, y, z, size, heat) {
+	
+	var animationSpeed = 100;
+	this.coords = new ViewUtil.AnimatedVector3(new THREE.Vector3(x,y,z), animationSpeed);
+	this.size = new ViewUtil.AnimatedVariable(size, 10, 30, animationSpeed); 
+	this.heat = new ViewUtil.AnimatedVariable(heat, 0, 1, animationSpeed); 
+	this.color = new ViewUtil.AnimatedColor(new THREE.Color(), animationSpeed);
+	this.colorModel = ViewUtil.ColorModel.white;
+	
+	this.firstAnimation = true;
+	
+	this.updateColor = function() {
+		var x = this.coords.target.x;
+		var y = this.coords.target.y;
+		var z = this.coords.target.z;
+		this.radius = Math.sqrt(x*x + y*y + z*z) / this.galaxy.info.maxR;
+		this.color.target = this.colorModel.getRGB(this.size, this.heat, this.radius);
+	};
+	
+	this.animate = function(time) {
+		if(this.coords.animate(time) || this.firstAnimation)
+		{
+			this.galaxy.particles.vertices[this.index] = this.coords.value;
+			this.galaxy.particleSystem.geometry.verticesNeedUpdate = true;
+		}
+		if(this.size.animate(time) || this.firstAnimation)
+		{
+			this.galaxy.attributes.size.value[this.index] = this.size.value;
+			this.galaxy.attributes.size.needsUpdate = true;	
+		}
+		if(this.color.animate(time) || this.firstAnimation)
+		{
+			this.galaxy.attributes.customColor.value[this.index] = this.color.value;
+			this.galaxy.attributes.customColor.needsUpdate = true;	
+		}
+		
+		this.heat.animate(time);
+		
+		this.firstAnimation = false;
 	};
 };
 
@@ -102,7 +294,7 @@ varying vec3 vColor;\
 void main() {\
 	vColor = customColor;\
 	vec4 mvPosition = modelViewMatrix * vec4( position, 1.0 );\
-	gl_PointSize = size * ( 300.0 / length( mvPosition.xyz ) );\
+	gl_PointSize = size * ( amplitude / length( mvPosition.xyz ) );\
 	gl_Position = projectionMatrix * mvPosition;\
 }";
 	}
@@ -137,13 +329,13 @@ var View = function(container) {
 			customColor: { type: 'c', value: [] }
 		},
 		uniforms: {
-			amplitude: { type: "f", value: 1.0 },
-			color:     { type: "c", value: new THREE.Color( 0xffffff ) },
+			amplitude: { type: "f", value: ViewUtil.AMPLITUDE },
+			color:     { type: "c", value: ViewUtil.WHITE },
 			texture:   { type: "t", value: THREE.ImageUtils.loadTexture( "img/star.png" ) },
 		},
 		uniformsSelected: {
-			amplitude: { type: "f", value: 1.0 },
-			color:     { type: "c", value: new THREE.Color( 0xffffff ) },
+			amplitude: { type: "f", value: ViewUtil.AMPLITUDE },
+			color:     { type: "c", value: ViewUtil.WHITE },
 			texture:   { type: "t", value: THREE.ImageUtils.loadTexture( "img/circle.png" ) },
 		},
 		vertexShader:   ViewUtil.loadShader( "vertexshader" ),
@@ -186,14 +378,8 @@ var View = function(container) {
 		up: new THREE.Vector3(0, 0, 1),
 		camera: new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 10000 ),
 		projection: new THREE.Matrix4(), // set in update function
-				
-		lastAnimation: new Date().getTime(),
 		
-		animate: function() {
-			var now = new Date().getTime();
-			var time = now - this.lastAnimation;
-			this.lastAnimation = now;
-			
+		animate: function(time) {
 			this.target.animate(time);
 			this.radius.animate(time);
 			this.sphere_phi.animate(time);
@@ -240,6 +426,61 @@ var View = function(container) {
 		vec.x = (vec.x + 1) * this.container.offsetWidth / 2 + this.container.offsetLeft;
 		vec.y = (-vec.y + 1) * this.container.offsetHeight / 2 + this.container.offsetTop;
 		return vec;
+	};
+	
+	this.getScreenSize = function(system) {
+		var p1 = system.coords.value;
+		var p2 = this.camera.camera.position;
+		var dist = Math.sqrt((p1.x-p2.x)*(p1.x-p2.x) + (p1.y-p2.y)*(p1.y-p2.y) + (p1.z-p2.z)*(p1.z-p2.z));
+		return system.size / (2 * Math.tan((camera.camera.fov * Math.PI / 180) / 2) * dist);
+	};
+	
+	this.galaxy = new ViewUtil.Galaxy(this.shaders.attributes, this.materials.system, ViewUtil.MAX_PARTICLES);
+	this.scene = new THREE.Scene(); 
+	this.scene.add(this.galaxy.particleSystem);			
+	
+	// TODO for debug only
+	var g = new THREE.CubeGeometry(100,100,100);
+	var m = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
+	var cube = new THREE.Mesh( g, m );
+	this.scene.add(cube);
+	// TODO end
+	
+	this.load = function(sectors, stepSize) {
+		console.log("loading " + sectors.length + " sectors...");
+		if(stepSize == undefined)
+			stepSize = 1;	
+			
+		this.galaxy.reset();
+		
+		var system;
+		var x, y, z, size, heat;
+				
+		for(var s = 0; s < sectors.length; s += stepSize)
+		{			
+			x = sectors[s][0];
+			y = sectors[s][1];
+			z = sectors[s][2];
+			size = Math.random()*(this.shaders.sizeMax-this.shaders.sizeMin)+this.shaders.sizeMin; // TODO
+			heat = Math.random(); // TODO
+			system = new ViewUtil.System(x, y, z, size, heat);
+			
+			this.galaxy.register(system);
+		};
+	};
+	
+	this.lastAnimation = new Date().getTime();
+	
+	this.render = function() {
+		var now = new Date().getTime();
+		var time = now - this.lastAnimation;
+		this.lastAnimation = now;
+			
+		this.galaxy.animate(time);
+		this.camera.animate(time);
+		
+		this.camera.update();
+		this.renderer.render( this.scene, this.camera.camera );
 	};
 	
 	console.log("the camera:    pos=" + this.camera.camera.position.x + "|" + this.camera.camera.position.y + "|" + this.camera.camera.position.z + "    rot=" + this.camera.camera.rotation.x + "|" + this.camera.camera.rotation.y + "|" + this.camera.camera.rotation.z);

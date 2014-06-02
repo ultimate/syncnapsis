@@ -45,6 +45,8 @@
 				//event.preventDefault();
 				
 				var sec1, sec2;
+					
+				var galaxy = view.galaxy;
 
 				console.time("proj");
 				{
@@ -68,12 +70,13 @@
 					
 					activeSector = null;
 					
-					for(var i = 0; i < galaxy.particles.vertices.length; i++)
+					for(var i = 0; i < galaxy.systems.length; i++)
 					{
-						if(galaxy.sizes[i] == 0)
+						p = galaxy.systems[i].coords.value;
+						size = galaxy.systems[i].size.value;
+						if(size == 0)
 							continue;
 						
-						p = galaxy.particles.vertices[i];
 						opd = (p.x-o.x)*d.x + (p.y-o.y)*d.y + (p.z-o.z)*d.z;
 						// opd is in direction to n (intersection have positive opd)
 						if(opd < 0) // wrong direction (behind the camera)
@@ -86,10 +89,10 @@
 						//	console.log("opd=" + opd + " dist=" + dist2 + " x|y|z= " + p.x + "|" + p.y + "|" + p.z);
 						if(dist2 < dist2Min)
 								dist2Min = dist2;
-						if(opd < opdMin && dist2 <= galaxy.sizes[i]*galaxy.sizes[i])
+						if(opd < opdMin && dist2 <= size*size)
 						{
 							opdMin = opd;
-							sec1 = p;
+							sec1 = galaxy.systems[i];
 						}									
 					}
 					//console.log("dist2Min=" + dist2Min);
@@ -107,16 +110,16 @@
 					var screenCoords;
 					var zMin = 10000000;
 					
-					for(var i = 0; i < galaxy.particles.vertices.length; i++)
+					for(var i = 0; i < galaxy.systems.length; i++)
 					{
-						if(galaxy.sizes[i] == 0)
+						p = galaxy.systems[i];
+						if(p.size.value == 0)
 							continue;
 							
-						p = galaxy.particles.vertices[i];
-						screenCoords = view.getScreenCoords(p);
+						screenCoords = view.getScreenCoords(p.coords.value);
 						dist2 = (screenCoords.x-mouse.x)*(screenCoords.x-mouse.x) + (screenCoords.y-mouse.y)*(screenCoords.y-mouse.y);
 						//console.log("dist=" + dist2 + " x|y|z= " + p.x + "|" + p.y + "|" + p.z);
-						if(screenCoords.z < zMin && dist2 < galaxy.sizes[i]*galaxy.sizes[i])
+						if(screenCoords.z < zMin && dist2 < p.size.value*p.size.value)
 						{
 							zMin = screenCoords.z;
 							sec2 = p;
@@ -126,6 +129,11 @@
 				console.timeEnd("scr");
 				
 				activeSector = sec2;
+				
+				if(sec1)
+				sec1 = sec1.coords.value;
+				if(sec2)
+				sec2 = sec2.coords.value;
 				
 				console.log("sec1=" + (sec1 == null ? null : (sec1.x + "|" + sec1.y + "|" + sec1.z)) + " sec2=" + (sec2 == null ? null : (sec2.x + "|" + sec2.y + "|" + sec2.z)) );
 				
@@ -222,7 +230,23 @@
 			
 			function init() {
 				
-				view = new View(document.getElementById("view"));
+				view = new View(document.getElementById("view"));				
+				
+				var iframe = document.getElementById("sectors-test.js");
+				var load = function() {	
+					console.log("iframe loaded!");
+					var str = iframe.contentWindow.document.body.innerHTML;
+					str = str.substring(5,str.length-6);
+					//alert(str);
+					window.eval(str);
+					
+					view.load(sectors);
+				};
+				console.log("iframe loaded ? " + (iframe.contentWindow.document.body != null));
+				if(iframe.contentWindow.document.body != null)
+					load();
+				else
+					iframe.onload = load;
 				
 				// export for accessibility - START
 				camera = view.camera;
@@ -232,7 +256,7 @@
 				scene = new THREE.Scene();
 				
 				showStarColors();
-				selectGalaxy();
+				//selectGalaxy();
 
 				projector = new THREE.Projector();
 
@@ -246,7 +270,8 @@
 			
 			function animate() {				
 				requestAnimationFrame( animate );	
-				render();
+				view.render();
+				//render();
 				stats.update();		
 			}	
 
@@ -257,7 +282,7 @@
 				
 				var coords;
 				
-				if(activeSector != null && (coords = view.getScreenCoords(activeSector)).z < 1) {	
+				if(activeSector != null && (coords = view.getScreenCoords(activeSector.coords.value)).z < 1) {	
 					//console.log("sector = (" + activeSector.x + "," + activeSector.y + "," + activeSector.z + ")");				
 					//var coords = view.getScreenCoords(activeSector);
 					
@@ -268,9 +293,7 @@
 					var p2 = camera.camera.position;
 					
 					var size = 26;
-					var dist = Math.sqrt((p1.x-p2.x)*(p1.x-p2.x) + (p1.y-p2.y)*(p1.y-p2.y) + (p1.z-p2.z)*(p1.z-p2.z));
-					size = 6000 / (2 * Math.tan((camera.camera.fov * Math.PI / 180) / 2) * dist);
-					size = Math.round(size);
+					size = view.getScreenSize(activeSector);
 					
 					borderWidth = 3;
 					
