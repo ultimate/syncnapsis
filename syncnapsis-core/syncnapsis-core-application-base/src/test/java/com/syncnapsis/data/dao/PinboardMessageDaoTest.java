@@ -82,9 +82,9 @@ public class PinboardMessageDaoTest extends GenericDaoTestCase<PinboardMessage, 
 			}
 
 			assertTrue(boardMessages.size() < allMessages.size());
-			
-			fromMessageId = boardMessages.get(0).getMessageId();
-			toMessageId = boardMessages.get(boardMessages.size()-1).getMessageId();
+
+			toMessageId = boardMessages.get(0).getMessageId();
+			fromMessageId = boardMessages.get(boardMessages.size() - 1).getMessageId();
 
 			// some board messages - getByPinboard(pinboardId, count)
 			someBoardMessages = pinboardMessageDao.getByPinboard(pinboardId, count);
@@ -95,26 +95,26 @@ public class PinboardMessageDaoTest extends GenericDaoTestCase<PinboardMessage, 
 				assertEquals(boardMessages.size(), someBoardMessages.size());
 
 			// selected board messages - getByPinboard(pinboardId, fromMessageId, toMessageId)
-			someBoardMessages = pinboardMessageDao.getByPinboard(pinboardId, fromMessageId+1, toMessageId-1);
-			
-			assertEquals(boardMessages.size()-2, someBoardMessages.size());
-			assertEquals(fromMessageId+1, someBoardMessages.get(0).getMessageId());
-			assertEquals(toMessageId-1, someBoardMessages.get(someBoardMessages.size()-1).getMessageId());
+			someBoardMessages = pinboardMessageDao.getByPinboard(pinboardId, fromMessageId + 1, toMessageId - 1);
+
+			assertEquals(boardMessages.size() - 2, someBoardMessages.size());
+			assertEquals(toMessageId - 1, someBoardMessages.get(0).getMessageId());
+			assertEquals(fromMessageId + 1, someBoardMessages.get(someBoardMessages.size() - 1).getMessageId());
 		}
 
 		assertEquals(allMessages.size(), totalMessages);
 	}
-	
+
 	public void testGetLatestMessageId() throws Exception
 	{
 		// valid pinboard
 		long pinboardId = 1L;
-		
+
 		List<PinboardMessage> messages = pinboardMessageDao.getByPinboard(pinboardId);
-		int latestMessageId = messages.get(messages.size()-1).getMessageId();
-		
+		int latestMessageId = messages.get(0).getMessageId(); // first message is the newest message
+
 		assertEquals(latestMessageId, pinboardMessageDao.getLatestMessageId(pinboardId));
-		
+
 		// invalid pinboard
 		assertEquals(0, pinboardMessageDao.getLatestMessageId(987L));
 	}
