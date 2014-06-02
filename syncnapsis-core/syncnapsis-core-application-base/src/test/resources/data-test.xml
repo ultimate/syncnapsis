@@ -539,7 +539,7 @@
 		<row>
 			<value description="id">6</value>
 			<value description="version">1</value>
-			<value description="activated">0</value>
+			<value description="activated">1</value>
 			<value description="fkPinboard">2</value>
 			<value description="messageId">1</value>
 			<value description="fkCreator">0</value>
@@ -550,7 +550,7 @@
 		<row>
 			<value description="id">7</value>
 			<value description="version">1</value>
-			<value description="activated">0</value>
+			<value description="activated">1</value>
 			<value description="fkPinboard">2</value>
 			<value description="messageId">2</value>
 			<value description="fkCreator">0</value>
