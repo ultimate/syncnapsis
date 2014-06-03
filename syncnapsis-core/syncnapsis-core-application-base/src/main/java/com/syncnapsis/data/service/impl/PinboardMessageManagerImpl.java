@@ -36,7 +36,7 @@ public class PinboardMessageManagerImpl extends GenericManagerImpl<PinboardMessa
 	/**
 	 * PinboardMessageDao for database access
 	 */
-	protected PinboardMessageDao	pinboardMessageDao;
+	protected PinboardMessageDao		pinboardMessageDao;
 
 	/**
 	 * The SecurityManager (BaseApplicationManager)
@@ -98,7 +98,7 @@ public class PinboardMessageManagerImpl extends GenericManagerImpl<PinboardMessa
 			// check for the current user
 			User creator = messages.get(0).getPinboard().getCreator();
 			User current = securityManager.getUserProvider().get();
-			if(current == null || !creator.getId().equals(current.getId()));
+			if(current == null || !creator.getId().equals(current.getId()))
 				return new ArrayList<PinboardMessage>(0);
 		}
 		return messages;
@@ -111,17 +111,38 @@ public class PinboardMessageManagerImpl extends GenericManagerImpl<PinboardMessa
 	@Override
 	public List<PinboardMessage> getByPinboard(Long pinboardId, int count)
 	{
-		return pinboardMessageDao.getByPinboard(pinboardId, count);
+		List<PinboardMessage> messages = pinboardMessageDao.getByPinboard(pinboardId, count);
+		// check for hidden pinboard
+		if(messages.size() > 0 && messages.get(0).getPinboard().isHidden())
+		{
+			// check for the current user
+			User creator = messages.get(0).getPinboard().getCreator();
+			User current = securityManager.getUserProvider().get();
+			if(current == null || !creator.getId().equals(current.getId()))
+				return new ArrayList<PinboardMessage>(0);
+		}
+		return messages;
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.syncnapsis.data.service.PinboardMessageManager#getByPinboard(java.lang.Long, int, int)
+	 * @see com.syncnapsis.data.service.PinboardMessageManager#getByPinboard(java.lang.Long, int,
+	 * int)
 	 */
 	@Override
 	public List<PinboardMessage> getByPinboard(Long pinboardId, int fromMessageId, int toMessageId)
 	{
-		return pinboardMessageDao.getByPinboard(pinboardId, fromMessageId, toMessageId);
+		List<PinboardMessage> messages = pinboardMessageDao.getByPinboard(pinboardId, fromMessageId, toMessageId);
+		// check for hidden pinboard
+		if(messages.size() > 0 && messages.get(0).getPinboard().isHidden())
+		{
+			// check for the current user
+			User creator = messages.get(0).getPinboard().getCreator();
+			User current = securityManager.getUserProvider().get();
+			if(current == null || !creator.getId().equals(current.getId()))
+				return new ArrayList<PinboardMessage>(0);
+		}
+		return messages;
 	}
 
 	/*
