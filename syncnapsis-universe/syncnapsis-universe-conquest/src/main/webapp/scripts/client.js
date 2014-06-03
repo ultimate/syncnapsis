@@ -143,6 +143,9 @@ UIManager = function()
 
 	this.welcome_toggle1 = new Styles.HoverButton(UI.constants.WELCOME_TOOGLE1_ID, 0, 1);
 	this.welcome_toggle2 = new Styles.HoverButton(UI.constants.WELCOME_TOOGLE2_ID, 0, 1);
+	
+	console.log("creating pinboard(s)");
+	this.pinboards = [];
 
 	console.log("showing UI");
 
@@ -526,7 +529,8 @@ MessageManager = function()
 //public void updatePinboard(Long pinboardId, List<PinboardMessage> messages);
 MessageManager.prototype.updatePinboard = function(pinboardId, messages)
 {
-	console.log("updating pinboard #" + pinboardId);
+	console.log("updating pinboard #" + pinboardId + " with " + messages.length + " messages");
+	client.uiManager.getPinboard(pinboardId).updated(messages);
 	for( var i = 0; i < messages.length; i++)
 	{
 		console.log(messages[i]);

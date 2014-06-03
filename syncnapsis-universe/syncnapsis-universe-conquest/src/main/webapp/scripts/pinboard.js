@@ -15,17 +15,23 @@
 //@requires("Server")
 
 /*
- * This a view Entity for a Pinboard identified by its ID 
+ * This a view Entity for a Pinboard identified by its ID
+ * (Messages are sorted newest first!) 
  */
-Pinboard = function(container, pinboardName, initialMessages)
+Pinboard = function(container, pinboardName, initialMessages, removeOldMessages)
 {
 	if(initialMessages == null)
 		initialMessages = 10;
 
-	this.container = container;
 	this.pinboard = null;
 	this.messages = [];
 	this.messageCount = initialMessages;
+	this.removeOldMessages = removeOldMessages;
+	this.container = container;
+	
+	// TODO start - init view
+	this.messageContainer = null;
+	// end - init view
 	
 	this.setUser = function(user)
 	{
@@ -36,11 +42,36 @@ Pinboard = function(container, pinboardName, initialMessages)
 	this.addMessage = function(message)
 	{
 		// add message at right position
+		var i;
+		for(i = 0; i < this.messages.length; i++)
+		{
+			if(this.messages[i].messageId < message.messageId)
+				break;
+		}
+		this.messages.splice(i, 0, message);
+		// create dom element
+		message.element = document.createElement("span");
+		message.element.innerHTML = message.content; // TODO
+		
+		this.messageContainer.insertBefore(element, this.messageContainer.children[i]);
 	};
 	
 	this.removeMessage = function(messageId)
 	{
-		
+		var index = null;
+		for(var i = 0; i < this.messages.length; i++)
+		{
+			if(this.messages[i].messageId == messageId)
+			{
+				index = i;
+				break;
+			}
+		}
+		if(index != null)
+		{
+			this.messageContainer.removeChild(this.messages[index].element);
+			this.messages.splice(index, 1);
+		}
 	};
 	
 	this.checkForMissingMessages = function()
@@ -69,8 +100,19 @@ Pinboard = function(container, pinboardName, initialMessages)
 		{
 			this.addMessage(messages[i]);
 		}
+
 		if(this.messages.length < this.messageCount)
+		{
 			this.checkForMissingMessages();
+		}
+		if(this.removeOldMessages)
+		{
+			while(this.messages.length > this.messageCount)
+			{
+				// remove the last message
+				this.removeMessage(this.messages[this.messages.length-1].messageId);
+			}
+		}
 	};
 	
 	this.requestUpdate = function(from, to)
