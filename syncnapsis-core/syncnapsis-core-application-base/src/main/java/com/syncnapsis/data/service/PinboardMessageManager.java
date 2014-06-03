@@ -26,7 +26,8 @@ import com.syncnapsis.data.model.PinboardMessage;
 public interface PinboardMessageManager extends GenericManager<PinboardMessage, Long>
 {
 	/**
-	 * Get all messages belonging to a pinboard
+	 * Get all messages belonging to a pinboard.<br>
+	 * <b>Note:</b> The Manager should check the visibility of the pinboard
 	 * 
 	 * @param pinboardId - the pinboard id
 	 * @return the list of messages
@@ -34,7 +35,8 @@ public interface PinboardMessageManager extends GenericManager<PinboardMessage, 
 	public List<PinboardMessage> getByPinboard(Long pinboardId);
 
 	/**
-	 * Get the newest messages belonging to a pinboard
+	 * Get the newest messages belonging to a pinboard.<br>
+	 * <b>Note:</b> The Manager should check the visibility of the pinboard
 	 * 
 	 * @param pinboardId - the pinboard id
 	 * @param count - the number of messages to get
@@ -43,7 +45,8 @@ public interface PinboardMessageManager extends GenericManager<PinboardMessage, 
 	public List<PinboardMessage> getByPinboard(Long pinboardId, int count);
 
 	/**
-	 * Get messages belonging to a pinboard within a given message id range
+	 * Get messages belonging to a pinboard within a given message id range.<br>
+	 * <b>Note:</b> The Manager should check the visibility of the pinboard
 	 * 
 	 * @param pinboardId - the pinboard id
 	 * @param fromMessageId - the smallest message id to fetch (inclusive)
@@ -53,7 +56,8 @@ public interface PinboardMessageManager extends GenericManager<PinboardMessage, 
 	public List<PinboardMessage> getByPinboard(Long pinboardId, int fromMessageId, int toMessageId);
 
 	/**
-	 * Get the latest message id for a pinboard
+	 * Get the latest message id for a pinboard.<br>
+	 * <b>Note:</b> The Manager should check the visibility of the pinboard
 	 * 
 	 * @param pinboardId - the pinboard id
 	 * @return the latest message id

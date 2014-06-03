@@ -449,6 +449,7 @@
 		<column>fkCreator</column>
 		<column>creationDate</column>
 		<column>locked</column>
+		<column>hidden</column>
 		<row>
 			<value description="id">1</value>
 			<value description="version">1</value>
@@ -458,6 +459,7 @@
 			<value description="fkCreator">0</value>
 			<value description="creationDate">2013-01-01 00:00:00</value>
 			<value description="locked">0</value>
+			<value description="hidden">0</value>
 		</row>
 		<row>
 			<value description="id">2</value>
@@ -468,6 +470,18 @@
 			<value description="fkCreator">0</value>
 			<value description="creationDate">2013-01-01 00:00:00</value>
 			<value description="locked">1</value>
+			<value description="hidden">0</value>
+		</row>
+		<row>
+			<value description="id">3</value>
+			<value description="version">1</value>
+			<value description="activated">1</value>
+			<value description="name">notes</value>
+			<value description="description"><![CDATA[notes]]></value>
+			<value description="fkCreator">0</value>
+			<value description="creationDate">2013-01-01 00:00:00</value>
+			<value description="locked">1</value>
+			<value description="hidden">1</value>
 		</row>
 	</table>
 
@@ -579,6 +593,28 @@
 			<value description="creationDate">2013-01-01 05:00:00</value>
 			<null />
 			<value description="content"><![CDATA[newest announcement]]></value>
+		</row>
+		<row>
+			<value description="id">10</value>
+			<value description="version">1</value>
+			<value description="activated">1</value>
+			<value description="fkPinboard">3</value>
+			<value description="messageId">1</value>
+			<value description="fkCreator">0</value>
+			<value description="creationDate">2013-01-01 05:00:00</value>
+			<null />
+			<value description="content"><![CDATA[note 1]]></value>
+		</row>
+		<row>
+			<value description="id">11</value>
+			<value description="version">1</value>
+			<value description="activated">1</value>
+			<value description="fkPinboard">3</value>
+			<value description="messageId">2</value>
+			<value description="fkCreator">0</value>
+			<value description="creationDate">2013-01-01 06:00:00</value>
+			<null />
+			<value description="content"><![CDATA[note 2]]></value>
 		</row>
 	</table>
 

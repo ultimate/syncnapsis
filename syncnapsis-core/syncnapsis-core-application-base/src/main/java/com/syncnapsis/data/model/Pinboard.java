@@ -36,7 +36,7 @@ import com.syncnapsis.security.Ownable;
  * @author ultimate
  */
 @Entity
-@Table(name="pinboard")
+@Table(name = "pinboard")
 public class Pinboard extends ActivatableInstance<Long> implements Ownable<User>
 {
 	/**
@@ -63,6 +63,11 @@ public class Pinboard extends ActivatableInstance<Long> implements Ownable<User>
 	 * Is this pinboard locked for new messages?
 	 */
 	protected boolean				locked;
+
+	/**
+	 * Is this pinboard hidden for other users than the creator?
+	 */
+	protected boolean				hidden;
 
 	/**
 	 * The messages posted to this pinboard
@@ -127,6 +132,17 @@ public class Pinboard extends ActivatableInstance<Long> implements Ownable<User>
 	}
 
 	/**
+	 * Is this pinboard hidden for other users than the creator?
+	 * 
+	 * @return hidden
+	 */
+	@Column(nullable = false)
+	public boolean isHidden()
+	{
+		return hidden;
+	}
+
+	/**
 	 * The messages posted to this pinboard
 	 * 
 	 * @return messages
@@ -188,6 +204,16 @@ public class Pinboard extends ActivatableInstance<Long> implements Ownable<User>
 	}
 
 	/**
+	 * Is this pinboard hidden for other users than the creator?
+	 * 
+	 * @param hidden - true or false
+	 */
+	public void setHidden(boolean hidden)
+	{
+		this.hidden = hidden;
+	}
+
+	/**
 	 * The messages posted to this pinboard
 	 * 
 	 * @param messages - the List of messages
@@ -196,7 +222,7 @@ public class Pinboard extends ActivatableInstance<Long> implements Ownable<User>
 	{
 		this.messages = messages;
 	}
-	
+
 	/*
 	 * (non-Javadoc)
 	 * @see com.syncnapsis.security.Ownable#getOwners()
@@ -220,6 +246,7 @@ public class Pinboard extends ActivatableInstance<Long> implements Ownable<User>
 		result = prime * result + ((creationDate == null) ? 0 : creationDate.hashCode());
 		result = prime * result + ((creator == null) ? 0 : creator.getId().hashCode());
 		result = prime * result + ((description == null) ? 0 : description.hashCode());
+		result = prime * result + (hidden ? 1231 : 1237);
 		result = prime * result + (locked ? 1231 : 1237);
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
 		return result;
@@ -259,6 +286,8 @@ public class Pinboard extends ActivatableInstance<Long> implements Ownable<User>
 				return false;
 		}
 		else if(!description.equals(other.description))
+			return false;
+		if(hidden != other.hidden)
 			return false;
 		if(locked != other.locked)
 			return false;

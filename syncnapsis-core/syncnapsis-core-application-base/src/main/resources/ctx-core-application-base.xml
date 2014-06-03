@@ -110,6 +110,7 @@
     
     <bean id="pinboardMessageManager" class="com.syncnapsis.data.service.impl.PinboardMessageManagerImpl">
         <constructor-arg ref="pinboardMessageDao"/>
+		<property name="securityManager" ref="securityManager"/>
     </bean>
 
 	<bean id="rpcLogManager" class="com.syncnapsis.data.service.impl.RPCLogManagerImpl">

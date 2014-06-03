@@ -104,7 +104,7 @@ public class PinboardManagerImpl extends GenericNameManagerImpl<Pinboard, Long> 
 		User creator = securityManager.getUserProvider().get();
 		
 		// check permission to post
-		if(pinboard.isLocked() && !pinboard.getCreator().getId().equals(creator.getId()))
+		if((pinboard.isLocked() || pinboard.isHidden()) && !pinboard.getCreator().getId().equals(creator.getId()))
 			return null;
 		
 		int messageId = pinboardMessageManager.getLatestMessageId(pinboardId);
