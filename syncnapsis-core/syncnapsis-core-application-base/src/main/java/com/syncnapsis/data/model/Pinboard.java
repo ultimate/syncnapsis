@@ -68,8 +68,11 @@ public class Pinboard extends ActivatableInstance<Long> implements Ownable<User>
 	 * Is this pinboard hidden for other users than the creator?
 	 */
 	protected boolean				hidden;
-	
-	// TODO defaultMessageCount
+
+	/**
+	 * The default number of messages to display on the client
+	 */
+	protected int					defaultMessageCount;
 
 	/**
 	 * The messages posted to this pinboard
@@ -145,6 +148,17 @@ public class Pinboard extends ActivatableInstance<Long> implements Ownable<User>
 	}
 
 	/**
+	 * The default number of messages to display on the client
+	 * 
+	 * @return defaultMessageCount
+	 */
+	@Column(nullable = false)
+	public int getDefaultMessageCount()
+	{
+		return defaultMessageCount;
+	}
+	
+	/**
 	 * The messages posted to this pinboard
 	 * 
 	 * @return messages
@@ -216,6 +230,17 @@ public class Pinboard extends ActivatableInstance<Long> implements Ownable<User>
 	}
 
 	/**
+	 * The default number of messages to display on the client
+	 * 
+	 * @param defaultMessageCount - the amount of messages to display
+	 */
+	public void setDefaultMessageCount(int defaultMessageCount)
+	{
+		this.defaultMessageCount = defaultMessageCount;
+	}
+
+
+	/**
 	 * The messages posted to this pinboard
 	 * 
 	 * @param messages - the List of messages
@@ -235,11 +260,11 @@ public class Pinboard extends ActivatableInstance<Long> implements Ownable<User>
 	{
 		return Collections.nCopies(1, getCreator());
 	}
-
 	/*
 	 * (non-Javadoc)
 	 * @see com.syncnapsis.data.model.base.BaseObject#hashCode()
 	 */
+
 	@Override
 	public int hashCode()
 	{
@@ -247,6 +272,7 @@ public class Pinboard extends ActivatableInstance<Long> implements Ownable<User>
 		int result = super.hashCode();
 		result = prime * result + ((creationDate == null) ? 0 : creationDate.hashCode());
 		result = prime * result + ((creator == null) ? 0 : creator.getId().hashCode());
+		result = prime * result + defaultMessageCount;
 		result = prime * result + ((description == null) ? 0 : description.hashCode());
 		result = prime * result + (hidden ? 1231 : 1237);
 		result = prime * result + (locked ? 1231 : 1237);
@@ -281,6 +307,8 @@ public class Pinboard extends ActivatableInstance<Long> implements Ownable<User>
 				return false;
 		}
 		else if(!creator.getId().equals(other.creator.getId()))
+			return false;
+		if(defaultMessageCount != other.defaultMessageCount)
 			return false;
 		if(description == null)
 		{

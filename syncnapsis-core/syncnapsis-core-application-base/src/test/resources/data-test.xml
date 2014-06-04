@@ -450,6 +450,7 @@
 		<column>creationDate</column>
 		<column>locked</column>
 		<column>hidden</column>
+		<column>defaultMessageCount</column>
 		<row>
 			<value description="id">1</value>
 			<value description="version">1</value>
@@ -460,6 +461,7 @@
 			<value description="creationDate">2013-01-01 00:00:00</value>
 			<value description="locked">0</value>
 			<value description="hidden">0</value>
+			<value description="defaultMessageCount">10</value>
 		</row>
 		<row>
 			<value description="id">2</value>
@@ -471,6 +473,7 @@
 			<value description="creationDate">2013-01-01 00:00:00</value>
 			<value description="locked">1</value>
 			<value description="hidden">0</value>
+			<value description="defaultMessageCount">5</value>
 		</row>
 		<row>
 			<value description="id">3</value>
@@ -482,6 +485,7 @@
 			<value description="creationDate">2013-01-01 00:00:00</value>
 			<value description="locked">1</value>
 			<value description="hidden">1</value>
+			<value description="defaultMessageCount">10</value>
 		</row>
 	</table>
 
