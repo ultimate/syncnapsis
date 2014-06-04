@@ -31,7 +31,7 @@ import com.syncnapsis.utils.serialization.Serializer;
 import com.syncnapsis.websockets.service.rpc.RPCCall;
 
 @TestCoversClasses({ ActionManager.class, ActionManagerImpl.class })
-@TestExcludesMethods({ "*etSerializer", "afterPropertiesSet" })
+@TestExcludesMethods({ "*etSerializer", "*etSecurityManager", "afterPropertiesSet" })
 public class ActionManagerImplTest extends GenericNameManagerImplTestCase<Action, Long, ActionManager, ActionDao>
 {
 	private BaseApplicationManager	securityManager;

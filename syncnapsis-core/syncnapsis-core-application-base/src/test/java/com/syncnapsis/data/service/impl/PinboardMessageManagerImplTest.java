@@ -28,8 +28,10 @@ import com.syncnapsis.security.BaseApplicationManager;
 import com.syncnapsis.tests.GenericManagerImplTestCase;
 import com.syncnapsis.tests.annotations.TestCoversClasses;
 import com.syncnapsis.tests.annotations.TestCoversMethods;
+import com.syncnapsis.tests.annotations.TestExcludesMethods;
 
 @TestCoversClasses({ PinboardMessageManager.class, PinboardMessageManagerImpl.class })
+@TestExcludesMethods({ "*etSecurityManager", "afterPropertiesSet" })
 public class PinboardMessageManagerImplTest extends GenericManagerImplTestCase<PinboardMessage, Long, PinboardMessageManager, PinboardMessageDao>
 {
 	private BaseApplicationManager	securityManager;
