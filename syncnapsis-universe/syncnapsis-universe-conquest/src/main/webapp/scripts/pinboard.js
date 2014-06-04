@@ -18,14 +18,11 @@
  * This a view Entity for a Pinboard identified by its ID
  * (Messages are sorted newest first!) 
  */
-Pinboard = function(container, pinboardName, initialMessages, removeOldMessages)
+Pinboard = function(container, pinboardIdOrName, removeOldMessages)
 {
-	if(initialMessages == null)
-		initialMessages = 10;
-
 	this.pinboard = null;
 	this.messages = [];
-	this.messageCount = initialMessages;
+	this.messageCount = 0; 
 	this.removeOldMessages = removeOldMessages;
 	this.container = container;
 	
@@ -132,9 +129,13 @@ Pinboard = function(container, pinboardName, initialMessages, removeOldMessages)
 	this.init = function(pinboard)
 	{
 		this.pinboard = pinboard;
+		this.messageCount = this.pinboard.defaultMessageCount;
 		this.requestUpdate();
 	};
 	
-	// associate this view with a pinboard loaded by name
-	server.pinboardManager.getByName(pinboardName, Events.wrapEventHandler(this, this.init));
+	// associate this view with a pinboard loaded by name or id
+	if(typeof(pinboardIdOrName) == Reflections.type.STRING)
+		server.pinboardManager.getByName(pinboardIdOrName, Events.wrapEventHandler(this, this.init));
+	else
+		server.pinboardManager.get(pinboardIdOrName, Events.wrapEventHandler(this, this.init));
 };

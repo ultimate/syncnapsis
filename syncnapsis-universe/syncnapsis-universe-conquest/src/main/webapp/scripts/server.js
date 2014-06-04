@@ -9,6 +9,7 @@
  * 
  * You should have received a copy of the GNU General Plublic License along with this program; if not, see <http://www.gnu.org/licenses/>.
  */
+//@requires("game-base")
 
 Types.Galaxy = "com.syncnapsis.data.model.Galaxy";
 Types.Match = "com.syncnapsis.data.model.Match";
