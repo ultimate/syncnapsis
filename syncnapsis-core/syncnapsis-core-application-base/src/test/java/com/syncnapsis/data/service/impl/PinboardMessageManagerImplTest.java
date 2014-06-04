@@ -15,16 +15,25 @@
 package com.syncnapsis.data.service.impl;
 
 import java.util.ArrayList;
+import java.util.List;
+
+import org.jmock.Expectations;
 
 import com.syncnapsis.data.dao.PinboardMessageDao;
+import com.syncnapsis.data.model.Pinboard;
 import com.syncnapsis.data.model.PinboardMessage;
+import com.syncnapsis.data.model.User;
 import com.syncnapsis.data.service.PinboardMessageManager;
+import com.syncnapsis.security.BaseApplicationManager;
 import com.syncnapsis.tests.GenericManagerImplTestCase;
 import com.syncnapsis.tests.annotations.TestCoversClasses;
+import com.syncnapsis.tests.annotations.TestCoversMethods;
 
-@TestCoversClasses( { PinboardMessageManager.class, PinboardMessageManagerImpl.class })
+@TestCoversClasses({ PinboardMessageManager.class, PinboardMessageManagerImpl.class })
 public class PinboardMessageManagerImplTest extends GenericManagerImplTestCase<PinboardMessage, Long, PinboardMessageManager, PinboardMessageDao>
 {
+	private BaseApplicationManager	securityManager;
+
 	@Override
 	protected void setUp() throws Exception
 	{
@@ -34,25 +43,319 @@ public class PinboardMessageManagerImplTest extends GenericManagerImplTestCase<P
 		setMockDao(mockContext.mock(PinboardMessageDao.class));
 		setMockManager(new PinboardMessageManagerImpl(mockDao));
 	}
-	
-	public void testGetByPinboard() throws Exception
-	{
-		// getByPinboard(pinboardId)
-		MethodCall managerCall = new MethodCall("getByPinboard", new ArrayList<PinboardMessage>(), 1L);
-		MethodCall daoCall = managerCall;
-		simpleGenericTest(managerCall, daoCall);
 
-		// getByPinboard(pinboardId, count)
-		managerCall = new MethodCall("getByPinboard", new ArrayList<PinboardMessage>(), 1L, 10);
-		daoCall = managerCall;
-		simpleGenericTest(managerCall, daoCall);
+	@TestCoversMethods("getByPinboard")
+	public void testGetByPinboard_id() throws Exception
+	{
+		final User current = new User();
+		current.setId(123L);
+		final User other = new User();
+		other.setId(456L);
 		
-		// getByPinboard(pinboardId, fromMessageId, toMessageId)
-		managerCall = new MethodCall("getByPinboard", new ArrayList<PinboardMessage>(), 1L, 1, 1);
-		daoCall = managerCall;
-		simpleGenericTest(managerCall, daoCall);
+		securityManager.getUserProvider().set(current);
+		((PinboardMessageManagerImpl) mockManager).setSecurityManager(securityManager);
+
+		final long pinboardId = 1L;
+
+		final Pinboard pinboard = new Pinboard();
+		pinboard.setId(pinboardId);
+
+		final ArrayList<PinboardMessage> messages = new ArrayList<PinboardMessage>();
+
+		mockContext.checking(new Expectations() {
+			{
+				allowing(mockDao).getByPinboard(pinboardId);
+				will(returnValue(messages));
+			}
+		});
+
+		List<PinboardMessage> result;
+
+		// no messages (other + hidden)
+		{
+			pinboard.setCreator(other);
+			pinboard.setHidden(true);
+
+			result = mockManager.getByPinboard(pinboardId);
+			assertNotNull(result);
+			assertEquals(0, result.size());
+		}
+		// no messages (current + hidden)
+		{
+			pinboard.setCreator(current);
+			pinboard.setHidden(true);
+			result = mockManager.getByPinboard(pinboardId);
+			assertNotNull(result);
+			assertEquals(0, result.size());
+		}
+		// no messages (other + not hidden)
+		{
+			pinboard.setCreator(other);
+			pinboard.setHidden(false);
+			result = mockManager.getByPinboard(pinboardId);
+			assertNotNull(result);
+			assertEquals(0, result.size());
+		}
+		// no messages (current + not hidden)
+		{
+			pinboard.setCreator(current);
+			pinboard.setHidden(false);
+			result = mockManager.getByPinboard(pinboardId);
+			assertNotNull(result);
+			assertEquals(0, result.size());
+		}
+		
+		PinboardMessage message = new PinboardMessage();
+		message.setPinboard(pinboard);
+		messages.add(message);
+
+		// with messages (other + hidden)
+		{
+			pinboard.setCreator(other);
+			pinboard.setHidden(true);
+			result = mockManager.getByPinboard(pinboardId);
+			assertNotNull(result);
+			assertEquals(0, result.size());
+			assertNotSame(messages, result);
+		}
+		// with messages (current + hidden)
+		{
+			pinboard.setCreator(current);
+			pinboard.setHidden(true);
+			result = mockManager.getByPinboard(pinboardId);
+			assertNotNull(result);
+			assertEquals(messages.size(), result.size());
+			assertSame(messages, result);
+		}
+		// with messages (other + not hidden)
+		{
+			pinboard.setCreator(other);
+			pinboard.setHidden(false);
+			result = mockManager.getByPinboard(pinboardId);
+			assertNotNull(result);
+			assertEquals(messages.size(), result.size());
+			assertSame(messages, result);
+		}
+		// with messages (current + not hidden)
+		{
+			pinboard.setCreator(current);
+			pinboard.setHidden(false);
+			result = mockManager.getByPinboard(pinboardId);
+			assertNotNull(result);
+			assertEquals(messages.size(), result.size());
+			assertSame(messages, result);
+		}
 	}
+
+	@TestCoversMethods("getByPinboard")
+	public void testGetByPinboard_id_count() throws Exception
+	{
+		final User current = new User();
+		current.setId(123L);
+		final User other = new User();
+		other.setId(456L);
+		
+		securityManager.getUserProvider().set(current);
+		((PinboardMessageManagerImpl) mockManager).setSecurityManager(securityManager);
 	
+		final long pinboardId = 1L;
+		final int count = 1;
+	
+		final Pinboard pinboard = new Pinboard();
+		pinboard.setId(pinboardId);
+	
+		final ArrayList<PinboardMessage> messages = new ArrayList<PinboardMessage>();
+	
+		mockContext.checking(new Expectations() {
+			{
+				allowing(mockDao).getByPinboard(pinboardId, count);
+				will(returnValue(messages));
+			}
+		});
+	
+		List<PinboardMessage> result;
+	
+		// no messages (other + hidden)
+		{
+			pinboard.setCreator(other);
+			pinboard.setHidden(true);
+	
+			result = mockManager.getByPinboard(pinboardId, count);
+			assertNotNull(result);
+			assertEquals(0, result.size());
+		}
+		// no messages (current + hidden)
+		{
+			pinboard.setCreator(current);
+			pinboard.setHidden(true);
+			result = mockManager.getByPinboard(pinboardId, count);
+			assertNotNull(result);
+			assertEquals(0, result.size());
+		}
+		// no messages (other + not hidden)
+		{
+			pinboard.setCreator(other);
+			pinboard.setHidden(false);
+			result = mockManager.getByPinboard(pinboardId, count);
+			assertNotNull(result);
+			assertEquals(0, result.size());
+		}
+		// no messages (current + not hidden)
+		{
+			pinboard.setCreator(current);
+			pinboard.setHidden(false);
+			result = mockManager.getByPinboard(pinboardId, count);
+			assertNotNull(result);
+			assertEquals(0, result.size());
+		}
+		
+		PinboardMessage message = new PinboardMessage();
+		message.setPinboard(pinboard);
+		messages.add(message);
+	
+		// with messages (other + hidden)
+		{
+			pinboard.setCreator(other);
+			pinboard.setHidden(true);
+			result = mockManager.getByPinboard(pinboardId, count);
+			assertNotNull(result);
+			assertEquals(0, result.size());
+			assertNotSame(messages, result);
+		}
+		// with messages (current + hidden)
+		{
+			pinboard.setCreator(current);
+			pinboard.setHidden(true);
+			result = mockManager.getByPinboard(pinboardId, count);
+			assertNotNull(result);
+			assertEquals(messages.size(), result.size());
+			assertSame(messages, result);
+		}
+		// with messages (other + not hidden)
+		{
+			pinboard.setCreator(other);
+			pinboard.setHidden(false);
+			result = mockManager.getByPinboard(pinboardId, count);
+			assertNotNull(result);
+			assertEquals(messages.size(), result.size());
+			assertSame(messages, result);
+		}
+		// with messages (current + not hidden)
+		{
+			pinboard.setCreator(current);
+			pinboard.setHidden(false);
+			result = mockManager.getByPinboard(pinboardId, count);
+			assertNotNull(result);
+			assertEquals(messages.size(), result.size());
+			assertSame(messages, result);
+		}
+	}
+
+	@TestCoversMethods("getByPinboard")
+	public void testGetByPinboard_id_from_to() throws Exception
+	{
+		final User current = new User();
+		current.setId(123L);
+		final User other = new User();
+		other.setId(456L);
+		
+		securityManager.getUserProvider().set(current);
+		((PinboardMessageManagerImpl) mockManager).setSecurityManager(securityManager);
+	
+		final long pinboardId = 1L;
+		final int from = 1;
+		final int to = 2;
+	
+		final Pinboard pinboard = new Pinboard();
+		pinboard.setId(pinboardId);
+	
+		final ArrayList<PinboardMessage> messages = new ArrayList<PinboardMessage>();
+	
+		mockContext.checking(new Expectations() {
+			{
+				allowing(mockDao).getByPinboard(pinboardId, from, to);
+				will(returnValue(messages));
+			}
+		});
+	
+		List<PinboardMessage> result;
+	
+		// no messages (other + hidden)
+		{
+			pinboard.setCreator(other);
+			pinboard.setHidden(true);
+	
+			result = mockManager.getByPinboard(pinboardId, from, to);
+			assertNotNull(result);
+			assertEquals(0, result.size());
+		}
+		// no messages (current + hidden)
+		{
+			pinboard.setCreator(current);
+			pinboard.setHidden(true);
+			result = mockManager.getByPinboard(pinboardId, from, to);
+			assertNotNull(result);
+			assertEquals(0, result.size());
+		}
+		// no messages (other + not hidden)
+		{
+			pinboard.setCreator(other);
+			pinboard.setHidden(false);
+			result = mockManager.getByPinboard(pinboardId, from, to);
+			assertNotNull(result);
+			assertEquals(0, result.size());
+		}
+		// no messages (current + not hidden)
+		{
+			pinboard.setCreator(current);
+			pinboard.setHidden(false);
+			result = mockManager.getByPinboard(pinboardId, from, to);
+			assertNotNull(result);
+			assertEquals(0, result.size());
+		}
+		
+		PinboardMessage message = new PinboardMessage();
+		message.setPinboard(pinboard);
+		messages.add(message);
+	
+		// with messages (other + hidden)
+		{
+			pinboard.setCreator(other);
+			pinboard.setHidden(true);
+			result = mockManager.getByPinboard(pinboardId, from, to);
+			assertNotNull(result);
+			assertEquals(0, result.size());
+			assertNotSame(messages, result);
+		}
+		// with messages (current + hidden)
+		{
+			pinboard.setCreator(current);
+			pinboard.setHidden(true);
+			result = mockManager.getByPinboard(pinboardId, from, to);
+			assertNotNull(result);
+			assertEquals(messages.size(), result.size());
+			assertSame(messages, result);
+		}
+		// with messages (other + not hidden)
+		{
+			pinboard.setCreator(other);
+			pinboard.setHidden(false);
+			result = mockManager.getByPinboard(pinboardId, from, to);
+			assertNotNull(result);
+			assertEquals(messages.size(), result.size());
+			assertSame(messages, result);
+		}
+		// with messages (current + not hidden)
+		{
+			pinboard.setCreator(current);
+			pinboard.setHidden(false);
+			result = mockManager.getByPinboard(pinboardId, from, to);
+			assertNotNull(result);
+			assertEquals(messages.size(), result.size());
+			assertSame(messages, result);
+		}
+	}
+
 	public void testGetLatestMessageId() throws Exception
 	{
 		MethodCall managerCall = new MethodCall("getLatestMessageId", 3, 1L);

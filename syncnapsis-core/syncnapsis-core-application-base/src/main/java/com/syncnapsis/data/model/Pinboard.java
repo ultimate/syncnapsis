@@ -68,6 +68,8 @@ public class Pinboard extends ActivatableInstance<Long> implements Ownable<User>
 	 * Is this pinboard hidden for other users than the creator?
 	 */
 	protected boolean				hidden;
+	
+	// TODO defaultMessageCount
 
 	/**
 	 * The messages posted to this pinboard

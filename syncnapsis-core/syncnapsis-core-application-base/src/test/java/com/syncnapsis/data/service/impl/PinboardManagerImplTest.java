@@ -85,11 +85,12 @@ public class PinboardManagerImplTest extends GenericNameManagerImplTestCase<Pinb
 		message.setMessageId(messageId+1);
 		message.setPinboard(pinboard);	
 		message.setTitle(title);
-
-		// posting user is pinboard creator
+		
+		// posting user is pinboard creator (locked and hidden make no difference)
 		{
 			pinboard.setCreator(postingUser);
 			pinboard.setLocked(true);
+			pinboard.setHidden(true);
 			
 			mockContext.checking(new Expectations() {
 				{
@@ -118,6 +119,24 @@ public class PinboardManagerImplTest extends GenericNameManagerImplTestCase<Pinb
 		{
 			pinboard.setCreator(other);
 			pinboard.setLocked(true);
+			pinboard.setHidden(false);
+			
+			mockContext.checking(new Expectations() {
+				{
+					oneOf(mockDao).get(pinboardId);
+					will(returnValue(pinboard));
+				}
+			});
+			
+			PinboardMessage result = pinboardManagerImpl.postMessage(pinboardId, title, content);
+			mockContext.assertIsSatisfied();
+			assertNull(result);
+		}
+		// posting user is NOT pinboard creator and pinboard is HIDDEN
+		{
+			pinboard.setCreator(other);
+			pinboard.setLocked(false);
+			pinboard.setHidden(true);
 			
 			mockContext.checking(new Expectations() {
 				{
@@ -131,10 +150,11 @@ public class PinboardManagerImplTest extends GenericNameManagerImplTestCase<Pinb
 			assertNull(result);
 		}
 		
-		// board is unlocked
+		// board is neither locked nor hidden
 		{
 			pinboard.setCreator(other);
 			pinboard.setLocked(false);
+			pinboard.setHidden(false);
 			
 			mockContext.checking(new Expectations() {
 				{
