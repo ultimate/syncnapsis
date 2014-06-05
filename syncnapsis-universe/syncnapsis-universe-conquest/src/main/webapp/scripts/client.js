@@ -216,7 +216,7 @@ UIManager.prototype.onUserLoaded = function(user)
 
 UIManager.prototype.onRegister = function(player, username, password)
 {
-	if(player != null && player.j_type == Types.Player)
+	if(player != null && server.entityManager.getType(player) == Types.Player)
 	{
 		setTimeout(function(uiManager) { return function() {
 			uiManager.hideRegister();
@@ -224,8 +224,8 @@ UIManager.prototype.onRegister = function(player, username, password)
 		}; } (this), 5000);
 		
 		setTimeout(function() {
-			document.getElementById(UI.constants.REG_BUTTON).children[0].href = UI.constants.REG_ACTION;
-			document.getElementById(UI.constants.REG_BUTTON).classList.remove(UI.constants.BUTTON_DISABLED_CLASS);
+			document.getElementById(UI.constants.REG_BUTTON_ID).children[0].href = UI.constants.REG_ACTION;
+			document.getElementById(UI.constants.REG_BUTTON_ID).classList.remove(UI.constants.BUTTON_DISABLED_CLASS);
 		}, 10000);
 
 		// TODO show success message
@@ -415,8 +415,8 @@ UIManager.prototype.doRegister = function()
 		return;
 
 	// disable button
-	document.getElementById(UI.constants.REG_BUTTON).children[0].href = UI.constants.REG_VOID;
-	document.getElementById(UI.constants.REG_BUTTON).classList.add(UI.constants.BUTTON_DISABLED_CLASS);
+	document.getElementById(UI.constants.REG_BUTTON_ID).children[0].href = UI.constants.REG_VOID;
+	document.getElementById(UI.constants.REG_BUTTON_ID).classList.add(UI.constants.BUTTON_DISABLED_CLASS);
 
 	// we do not use the default callback, since we want to keep the password for auto-login
 	var callback = function(username, password)
