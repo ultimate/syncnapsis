@@ -27,7 +27,8 @@ Pinboard = function(container, pinboardIdOrName, removeOldMessages)
 	this.container = container;
 	
 	// TODO start - init view
-	this.messageContainer = null;
+	this.messageContainer = document.createElement("div");
+	this.container.appendChild(this.messageContainer);
 	// end - init view
 	
 	this.setUser = function(user)
@@ -50,7 +51,7 @@ Pinboard = function(container, pinboardIdOrName, removeOldMessages)
 		message.element = document.createElement("span");
 		message.element.innerHTML = message.content; // TODO
 		
-		this.messageContainer.insertBefore(element, this.messageContainer.children[i]);
+		this.messageContainer.insertBefore(message.element, this.messageContainer.children[i]);
 	};
 	
 	this.removeMessage = function(messageId)

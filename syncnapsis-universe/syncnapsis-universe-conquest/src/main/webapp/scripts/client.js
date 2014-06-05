@@ -524,6 +524,16 @@ UIManager.prototype.updateLinks = function()
 	}
 };
 
+UIManager.prototype.getPinboard = function(pinboardId)
+{
+	for(var i = 0; i < this.pinboards.length; i++)
+	{
+		if(this.pinboards[i].pinboard.id == pinboardId)
+			return this.pinboards[i];
+	}
+	return null;
+};
+
 MessageManager = function()
 {
 };
@@ -532,9 +542,13 @@ MessageManager = function()
 MessageManager.prototype.updatePinboard = function(pinboardId, messages)
 {
 	console.log("updating pinboard #" + pinboardId + " with " + messages.length + " messages");
-	client.uiManager.getPinboard(pinboardId).updated(messages);
-	for( var i = 0; i < messages.length; i++)
+	var pinboard = client.uiManager.getPinboard(pinboardId);
+	if(pinboard != null)
 	{
-		console.log(messages[i]);
+		pinboard.update(messages);
+	}
+	else
+	{
+		console.log("no matching pinboard found!");
 	}
 };
