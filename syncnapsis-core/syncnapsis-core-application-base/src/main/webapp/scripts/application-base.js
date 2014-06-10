@@ -31,6 +31,7 @@ EntityManager = function(server)
 	if(server == null)
 		throw new Error("server must not be null!");
 	var _server = server;
+	var _entities = {};
 	
 	this.getType = function(entity)
 	{
@@ -42,6 +43,26 @@ EntityManager = function(server)
 		type = type.substring(type.lastIndexOf(".")+1);
 		type = type.substring(0,1).toLowerCase() + type.substring(1);
 		return type + "Manager";
+	};
+	
+	this.set = function(entity)
+	{
+		var type = this.getType(entity);
+		var id = entity.id;
+		if(type != null && id != null)
+		{
+			if(this[type] == null)
+				this[type] = {};
+			
+			this[type][id] = entity;
+		}
+	};
+	
+	this.get = function(type, id)
+	{
+		if(this[type] == null)
+			return null;
+		return this[type][id];
 	};
 	
 	this.extend = function(entity)
@@ -64,18 +85,38 @@ EntityManager = function(server)
 		}
 	};
 	
-	this.load = function(entity, callback)
+	this.load = function(entity, callback, force)
 	{
 		// assure entity-functionality
 		this.extend(entity);
 		// get the type of the entity
 		var type = this.getType(entity);
+		// get the id of the entity
+		var id = entity.id;
 		// get the corresponding manager-name
 		var manager = this.getManagerNameForType(type);
 		if(_server[manager] == null)
 			throw new Error("required manager '" + manager + "' not found for type '" + type + "'");
-		// get the entity from the manager
-		_server[manager].get(entity.id, function(result) { entity.merge(result); if(callback != undefined) (callback)(entity); } );
+		
+		if(force || this.get(type, id) == null)
+		{
+			// get the entity from the manager
+			_server[manager].get(id, function(entityManager) {
+				return function(result) {
+					entity.merge(result);
+					entityManager.set(entity);
+					if(callback != undefined)
+						(callback)(entity);
+				}
+			}(this));
+		}
+		else
+		{
+			// get the entity from the cache
+			entity.merge(this.get(type, id));
+			if(callback != undefined)
+				(callback)(entity);
+		}
 	};
 };
 
