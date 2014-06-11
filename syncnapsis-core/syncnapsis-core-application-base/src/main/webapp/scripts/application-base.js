@@ -31,7 +31,7 @@ EntityManager = function(server)
 	if(server == null)
 		throw new Error("server must not be null!");
 	var _server = server;
-	var _entities = {};
+	var _cache = {};
 	
 	this.getType = function(entity)
 	{
@@ -51,18 +51,23 @@ EntityManager = function(server)
 		var id = entity.id;
 		if(type != null && id != null)
 		{
-			if(this[type] == null)
-				this[type] = {};
+			if(this._cache[type] == null)
+				this._cache[type] = {};
 			
-			this[type][id] = entity;
+			this._cache[type][id] = entity;
 		}
 	};
 	
 	this.get = function(type, id)
 	{
-		if(this[type] == null)
+		if(this._cache[type] == null)
 			return null;
-		return this[type][id];
+		return this._cache[type][id];
+	};
+	
+	this.clearCache = function()
+	{
+		this.._cache = {};
 	};
 	
 	this.extend = function(entity)
