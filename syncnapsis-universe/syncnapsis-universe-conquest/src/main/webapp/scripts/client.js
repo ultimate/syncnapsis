@@ -76,6 +76,8 @@ UI.constants.MESSAGE_SHOW_CLASS = "show";
 UI.constants.BUTTON_DISABLED_CLASS = "disabled";
 UI.constants.MENU_HIDDEN_CLASS = "menu_hidden";
 
+UI.constants.DEFAULT_DATE_FORMAT = "yyyy-MM-dd HH:mm:ss";
+
 UIManager = function()
 {
 	this.currentPlayer = null;
@@ -174,7 +176,7 @@ UIManager.prototype.onLogin = function(player)
 		// store the current player
 		this.currentPlayer = player;
 		// set the player name in the top bar (after loading the user)
-		server.entityManager.load(player.user, Events.wrapEventHandler(this, this.onUserLoaded));
+		server.entityManager.load(player.user, Events.wrapEventHandler(this, this.onUserLoaded), true);
 		// switch ui to logged-in menu
 		this.userInfo.select(UI.constants.USERINFO_INDEX_LOGGEDIN);
 		// switch menu to logged-in view
@@ -192,6 +194,8 @@ UIManager.prototype.onLogin = function(player)
 
 UIManager.prototype.onLogout = function(success)
 {
+	// clear entity cache
+	server.entityManager.clearCache();
 	// switch ui to logged-out menu
 	this.userInfo.select(UI.constants.USERINFO_INDEX_LOGGEDOUT);
 	// switch menu to logged-out view
@@ -305,9 +309,9 @@ UIManager.prototype.reloadLocale = function()
 	// just reload the corresponding lang-script
 	// DependencyManager will call the update-function after reload
 	DependencyManager.reloadScript("Lang", Events.wrapEventHandler(this, this.updateLabels));
-	// reload the user (since the locale has been saved)
+	// force reload oof the user (since the locale has been saved)
 	if(this.currentPlayer)
-		server.entityManager.load(this.currentPlayer.user);
+		server.entityManager.load(this.currentPlayer.user, null, true);
 };
 
 UIManager.prototype.updateLabels = function(parent)
