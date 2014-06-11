@@ -17,6 +17,9 @@ package com.syncnapsis.enums;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
+
 /**
  * Enum für die Spezifizierung des Datumsformats eines Users.
  * 
@@ -103,6 +106,7 @@ public enum EnumDateFormat
 	}
 
 	@Override
+	@JsonValue
 	public String toString()
 	{
 		if(this.equals(dMy24_dot))
@@ -134,5 +138,16 @@ public enum EnumDateFormat
 		if(this.equals(yMd12_minus))
 			return "yyyy-MM-dd hh:mm:ss a";
 		return "";
+	}
+	
+	@JsonCreator
+	public static EnumDateFormat parse(String format)
+	{
+		for(EnumDateFormat df: EnumDateFormat.values())
+		{
+			if(df.toString().equals(format))
+				return df;
+		}
+		return null;
 	}
 }
