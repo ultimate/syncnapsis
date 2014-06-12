@@ -18,13 +18,12 @@
  * This a view Entity for a Pinboard identified by its ID
  * (Messages are sorted newest first!) 
  */
-Pinboard = function(container, pinboardIdOrName, removeOldMessages, showMessageTitle)
+Pinboard = function(container, pinboardIdOrName, removeOldMessages)
 {
 	this.pinboard = null;
 	this.messages = [];
 	this.messageCount = 0; 
 	this.removeOldMessages = removeOldMessages;
-	this.showMessageTitle = showMessageTitle;
 	this.container = container;
 	
 	// TODO start - init view
@@ -50,33 +49,45 @@ Pinboard = function(container, pinboardIdOrName, removeOldMessages, showMessageT
 		this.messages.splice(i, 0, message);
 		
 		// define a callback for creating the message element
-		var createElement = function()
+		var createElement = function(pinboard)
 		{
-			// create dom element
-			message.element = document.createElement("div");
-			
-			var user = document.createElement("div");
-			user.classList.add("user");
-			user.innerHTML = message.creator.username;
-			
-			var time = document.createElement("div");
-			time.classList.add("time");
-			if(this.user != null)
-				time.innerHTML = new Date(message.creationDate).format(this.user.dateFormat);
-			else
-				time.innerHTML = new Date(message.creationDate).format(UI.constants.DEFAULT_DATE_FORMAT);
-			
-			message.element.innerHTML = message.content; // TODO
-			
-			this.messageContainer.insertBefore(message.element, this.messageContainer.children[i]);
-			
-		};
+			return function()
+			{
+				// create dom element
+				message.element = document.createElement("div");
+				
+				var user = document.createElement("div");
+				user.classList.add("user");
+				user.appendChild(document.createTextNode(message.creator.username));
+				
+				var df = (pinboard.user != null ? pinboard.user.dateFormat : UI.constants.DEFAULT_DATE_FORMAT);
+
+				var time = document.createElement("div");
+				time.classList.add("time");
+				time.appendChild(document.createTextNode(new Date(message.creationDate).format(df)));
+				
+				var title = document.createElement("div");
+				title.classList.add("title");
+				title.appendChild(document.createTextNode(message.title));
+				
+				var content = document.createElement("div");
+				content.classList.add("content");
+				content.appendChild(document.createTextNode(message.content));
+				
+				message.element.appendChild(user);
+				message.element.appendChild(time);
+				message.element.appendChild(title);
+				message.element.appendChild(content);
+				
+				pinboard.messageContainer.insertBefore(message.element, pinboard.messageContainer.children[i]);
+			}
+		} (this);
 		
 		// load the user for the message
 		var u = server.entityManager.get(Types.User, message.creator.id);
 		if(u == null)
 		{
-			server.entityManager.load(message.user, createElement);
+			server.entityManager.load(message.creator, createElement);
 		}
 		else
 		{
