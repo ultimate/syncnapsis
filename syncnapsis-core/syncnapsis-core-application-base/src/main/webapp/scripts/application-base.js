@@ -67,7 +67,7 @@ EntityManager = function(server)
 	
 	this.clearCache = function()
 	{
-		this.._cache = {};
+		this._cache = {};
 	};
 	
 	this.extend = function(entity)
