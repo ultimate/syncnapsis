@@ -18,12 +18,13 @@
  * This a view Entity for a Pinboard identified by its ID
  * (Messages are sorted newest first!) 
  */
-Pinboard = function(container, pinboardIdOrName, removeOldMessages)
+Pinboard = function(container, pinboardIdOrName, removeOldMessages, showMessageTitle)
 {
 	this.pinboard = null;
 	this.messages = [];
 	this.messageCount = 0; 
 	this.removeOldMessages = removeOldMessages;
+	this.showMessageTitle = showMessageTitle;
 	this.container = container;
 	
 	// TODO start - init view
@@ -47,11 +48,41 @@ Pinboard = function(container, pinboardIdOrName, removeOldMessages)
 				break;
 		}
 		this.messages.splice(i, 0, message);
-		// create dom element
-		message.element = document.createElement("span");
-		message.element.innerHTML = message.content; // TODO
 		
-		this.messageContainer.insertBefore(message.element, this.messageContainer.children[i]);
+		// define a callback for creating the message element
+		var createElement = function()
+		{
+			// create dom element
+			message.element = document.createElement("div");
+			
+			var user = document.createElement("div");
+			user.classList.add("user");
+			user.innerHTML = message.creator.username;
+			
+			var time = document.createElement("div");
+			time.classList.add("time");
+			if(this.user != null)
+				time.innerHTML = new Date(message.creationDate).format(this.user.dateFormat);
+			else
+				time.innerHTML = new Date(message.creationDate).format(UI.constants.DEFAULT_DATE_FORMAT);
+			
+			message.element.innerHTML = message.content; // TODO
+			
+			this.messageContainer.insertBefore(message.element, this.messageContainer.children[i]);
+			
+		};
+		
+		// load the user for the message
+		var u = server.entityManager.get(Types.User, message.creator.id);
+		if(u == null)
+		{
+			server.entityManager.load(message.user, createElement);
+		}
+		else
+		{
+			message.creator = u;
+			(createElement)(message);
+		}
 	};
 	
 	this.removeMessage = function(messageId)
@@ -90,6 +121,11 @@ Pinboard = function(container, pinboardIdOrName, removeOldMessages)
 		}
 		if(from != null && to != null)
 			this.requestUpdate(from, to);
+	};
+	
+	this.post = function(title, message)
+	{
+		server.messageManager.postPinboardMessage(this.pinboard.id, title, message);
 	};
 	
 	this.update = function(messages)
