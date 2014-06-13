@@ -218,19 +218,36 @@ UIManager.prototype.onUserLoaded = function(user)
 		this.localeChooser.selectByValue(user.locale);
 };
 
+UIManager.prototype.enableRegisterButton = function(enable)
+{
+	if(enable)
+	{
+		document.getElementById(UI.constants.REG_BUTTON_ID).children[0].href = UI.constants.REG_ACTION;
+		document.getElementById(UI.constants.REG_BUTTON_ID).classList.remove(UI.constants.BUTTON_DISABLED_CLASS);
+	}
+	else
+	{
+		document.getElementById(UI.constants.REG_BUTTON_ID).children[0].href = UI.constants.REG_VOID;
+		document.getElementById(UI.constants.REG_BUTTON_ID).classList.add(UI.constants.BUTTON_DISABLED_CLASS);
+	}
+};
+
 UIManager.prototype.onRegister = function(player, username, password)
 {
 	if(player != null && server.entityManager.getType(player) == Types.Player)
 	{
+		// auto login
 		setTimeout(function(uiManager) { return function() {
 			uiManager.hideRegister();
 			server.playerManager.login(username, password);
 		}; } (this), 5000);
 		
-		setTimeout(function() {
-			document.getElementById(UI.constants.REG_BUTTON_ID).children[0].href = UI.constants.REG_ACTION;
-			document.getElementById(UI.constants.REG_BUTTON_ID).classList.remove(UI.constants.BUTTON_DISABLED_CLASS);
-		}, 10000);
+		// enable register button
+		setTimeout(function(uiManager) {
+			return function() {
+				uiManager.enableRegisterButton(true);
+			};
+		} (this), 10000);
 
 		// TODO show success message
 		this.showErrorMessage(null, document.getElementById(UI.constants.REG_MESSAGE_ID), "welcome.title");
@@ -240,9 +257,9 @@ UIManager.prototype.onRegister = function(player, username, password)
 		console.log("error: " + player.message);
 		// show error message
 		this.showErrorMessage(null, document.getElementById(UI.constants.REG_ERROR_ID), player.message);
-		// TODO highlight erronous fields
 			
 			
+		// highlight erronous fields
 		if(player.message == "error.username_exists" || player.message == "error.invalid_username")
 		{
 			this.showErrorMessage(document.getElementById(UI.constants.REG_USERNAME_ID), null);
@@ -256,6 +273,9 @@ UIManager.prototype.onRegister = function(player, username, password)
 			this.showErrorMessage(document.getElementById(UI.constants.REG_PASSWORD_ID), null);
 			this.showErrorMessage(document.getElementById(UI.constants.REG_PASSWORD2_ID), null);
 		}
+		
+		// enable register button
+		this.enableRegisterButton(true);
 	}
 };
 
@@ -421,9 +441,8 @@ UIManager.prototype.doRegister = function()
 	if(error)
 		return;
 
-	// disable button
-	document.getElementById(UI.constants.REG_BUTTON_ID).children[0].href = UI.constants.REG_VOID;
-	document.getElementById(UI.constants.REG_BUTTON_ID).classList.add(UI.constants.BUTTON_DISABLED_CLASS);
+	// disable register button
+	this.enableRegisterButton(false);
 
 	// we do not use the default callback, since we want to keep the password for auto-login
 	var callback = function(username, password)
