@@ -325,7 +325,10 @@ UIManager.prototype.updateLabels = function(parent)
 	elements = parent.getElementsByTagName(UI.constants.LOCALE_LABEL_TAGNAME);
 	for( var i = 0; i < elements.length; i++)
 	{
-		elements[i].innerHTML = this.getString(elements[i].getAttribute(UI.constants.LOCALE_KEY_ATTRIBUTE));
+		// remove all current children
+		while(elements[i].firstChild)
+			elements[i].removeChild(elements[i].firstChild);
+		elements[i].appendChild(document.createTextNode(this.getString(elements[i].getAttribute(UI.constants.LOCALE_KEY_ATTRIBUTE))));
 	}
 	// buttons
 	elements = document.getElementsByTagName(UI.constants.LOCALE_BUTTON_TAGNAME);
