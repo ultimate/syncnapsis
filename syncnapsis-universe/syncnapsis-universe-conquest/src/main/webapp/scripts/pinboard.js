@@ -18,7 +18,7 @@
  * This a view Entity for a Pinboard identified by its ID
  * (Messages are sorted newest first!) 
  */
-Pinboard = function(container, pinboardIdOrName, removeOldMessages)
+Pinboard = function(container, pinboardIdOrName, style, removeOldMessages)
 {
 	this.pinboard = null;
 	this.messages = [];
@@ -26,9 +26,19 @@ Pinboard = function(container, pinboardIdOrName, removeOldMessages)
 	this.removeOldMessages = removeOldMessages;
 	this.container = container;
 	
-	// TODO start - init view
+	// start - init view
+	// set style
+	this.container.classList.add("pinboard");
+	this.container.classList.add(style);
+	// add container for messages
 	this.messageContainer = document.createElement("div");
+	this.messageContainer.classList.add("messages");
 	this.container.appendChild(this.messageContainer);
+	// add input area
+	this.inputContainer = document.createElement("div");
+	// TODO
+	this.inputContainer.classList.add("input");
+	this.container.appendChild(this.inputContainer);
 	// end - init view
 	
 	this.setUser = function(user)
@@ -68,7 +78,7 @@ Pinboard = function(container, pinboardIdOrName, removeOldMessages)
 				
 				var title = document.createElement("div");
 				title.classList.add("title");
-				title.appendChild(document.createTextNode(message.title));
+				title.appendChild(document.createTextNode(message.title ? message.title : ""));
 				
 				var content = document.createElement("div");
 				content.classList.add("content");

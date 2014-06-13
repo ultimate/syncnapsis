@@ -149,7 +149,7 @@ UIManager = function()
 	console.log("creating pinboard(s)");
 	this.pinboards = [];
 //	this.pinboards.push(new Pinboard(container, pinboardName, initialMessages, removeOldMessages));
-	this.pinboards.push(new Pinboard(document.getElementById("pinboard"), "testboard", false));
+	this.pinboards.push(new Pinboard(document.getElementById("pinboard"), "testboard", "blog", false));
 
 	console.log("showing UI");
 

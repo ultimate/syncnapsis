@@ -1,0 +1,62 @@
+/**
+ * Syncnapsis Framework - Copyright (c) 2012 ultimate
+ * 
+ * This program is free software; you can redistribute it and/or modify it under the terms of
+ * the GNU General Public License as published by the Free Software Foundation; either version
+ * 3 of the License, or any later version.
+ * 
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+ * without even the implied warranty of MECHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Plublic License along with this program;
+ * if not, see <http://www.gnu.org/licenses/>.
+ */
+
+/*
+ * This file contains different pinboard styles.
+ * They may be used by simply adding the "root" class to the pinboard container.
+ * Available classes are:
+ * - blog
+ * - chat
+ * - log
+ */
+ 
+/* general */
+
+.pinboard>.messages {
+	overflow-y: scroll;
+	padding-right: 5px;
+}
+  
+/* blog */
+.pinboard.blog .user {
+	display: none;
+}
+
+.pinboard.blog .title {
+	float: left;
+	font-weight: bold;
+	width: 60%;
+}
+
+.pinboard.blog .time {
+	float: right;
+	text-align: right;
+	width: 30%;
+}
+
+.pinboard.blog .content {
+	float: left;
+	text-align: justify;
+	margin-top: 5px;
+	margin-bottom: 15px;
+	width: 100%;
+}
+ 
+ 
+ 
+ 
+ 
+ 
+ 
