@@ -24,29 +24,45 @@
  
 /* general */
 
+.pinboard {
+	overflow: hidden;
+	position: relative;
+}
+
 .pinboard>.messages {
 	overflow-y: scroll;
 	padding-right: 5px;
+	position: absolute;
+	top: 0px;
+	bottom: 20px;
+	height: auto;
+}
+
+.pinboard>.input {
+	overflow: hidden;
+	position: absolute;
+	bottom: 0px;
+	height: 20px;
 }
   
 /* blog */
-.pinboard.blog .user {
+.pinboard.blog .messages .user {
 	display: none;
 }
 
-.pinboard.blog .title {
+.pinboard.blog .messages .title {
 	float: left;
 	font-weight: bold;
 	width: 60%;
 }
 
-.pinboard.blog .time {
+.pinboard.blog .messages .time {
 	float: right;
 	text-align: right;
 	width: 30%;
 }
 
-.pinboard.blog .content {
+.pinboard.blog .messages .content {
 	float: left;
 	text-align: justify;
 	margin-top: 5px;
