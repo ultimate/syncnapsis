@@ -18,12 +18,13 @@
  * This a view Entity for a Pinboard identified by its ID
  * (Messages are sorted newest first!) 
  */
-Pinboard = function(container, pinboardIdOrName, style, removeOldMessages)
+Pinboard = function(container, pinboardIdOrName, style, removeOldMessages, enableInput)
 {
 	this.pinboard = null;
 	this.messages = [];
 	this.messageCount = 0; 
 	this.removeOldMessages = removeOldMessages;
+	this.enableInput = enableInput;
 	this.container = container;
 	
 	// start - init view
@@ -35,10 +36,35 @@ Pinboard = function(container, pinboardIdOrName, style, removeOldMessages)
 	this.messageContainer.classList.add("messages");
 	this.container.appendChild(this.messageContainer);
 	// add input area
-	this.inputContainer = document.createElement("div");
-	// TODO
-	this.inputContainer.classList.add("input");
-	this.container.appendChild(this.inputContainer);
+	if(this.enableInput)
+	{
+		this.inputContainer = document.createElement("div");
+		
+		this.titleInput = document.createElement("input");
+		titleInput.type = "text";
+		var title = document.createElement("div");
+		title.classList.add("title");
+		title.appendChild(titleInput);
+		this.inputContainer.appendChild(title);
+		
+		this.contentInput = document.createElement("input");
+		contentInput.type = "text";
+		var content = document.createElement("div");
+		content.classList.add("content");
+		content.appendChild(titleInput);
+		content.appendChild(contentInput);
+		this.inputContainer.appendChild(content);
+		
+		this.postButton = document.createElement("input");
+		postButton.type = "button";
+		postButton.classList.add("frame");
+		postButton.classList.add("button");
+		this.inputContainer.appendChild(postButton);
+		
+		// TODO
+		this.inputContainer.classList.add("input");
+		this.container.appendChild(this.inputContainer);
+	}
 	// end - init view
 	
 	this.setUser = function(user)

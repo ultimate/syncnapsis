@@ -29,23 +29,28 @@
 	position: relative;
 }
 
-.pinboard>.messages {
+.pinboard .messages {
 	overflow-y: scroll;
 	padding-right: 5px;
 	position: absolute;
 	top: 0px;
-	bottom: 20px;
 	height: auto;
 }
 
-.pinboard>.input {
+.pinboard .input {
 	overflow: hidden;
 	position: absolute;
 	bottom: 0px;
-	height: 20px;
+	left: 0px;
+	right: 0px;
 }
   
 /* blog */
+
+.pinboard.blog .messages {
+	bottom: 30px;
+}
+
 .pinboard.blog .messages .user {
 	display: none;
 }
@@ -68,6 +73,18 @@
 	margin-top: 5px;
 	margin-bottom: 15px;
 	width: 100%;
+}
+
+.pinboard.blog .input {
+	height: 30px;
+}
+
+.pinboard.blog .input input[type=text]{
+	float: left;
+}
+
+.pinboard.blog .input input[type=button]{
+	float: right;
 }
  
  

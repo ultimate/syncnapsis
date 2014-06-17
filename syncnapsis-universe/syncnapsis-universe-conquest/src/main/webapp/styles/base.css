@@ -401,3 +401,7 @@ h1 {
 	border: 1px solid rgba(0,255,255,0.9);
 	background: rgba(255,40,40,0.9); 
 }
+
+#pinboard_news {
+	height: 300px;
+}
