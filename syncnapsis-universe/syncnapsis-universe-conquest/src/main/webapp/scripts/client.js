@@ -104,6 +104,7 @@ UIManager = function()
 	}(this);
 	// init the user info with a dummy tab selector (the "door")
 	// dummy is used since we need at least one tab selector
+	// TODO don't make door a tab-selector // just a simple button
 	this.userInfo = new Tabs(UI.constants.USERINFO_TABS, TABS_HORIZONTAL, UI.constants.USERINFO_CONTENT, TABS_VERTICAL);// , UI.constants.NAV_WIDTH, UI.constants.USERINFO_HEIGHT);
 	// overwrite the door's onSelect to perform the login
 	this.door = document.getElementById(UI.constants.USERINFO_TABS).children[0]; // this is the 'a' tag

@@ -46,7 +46,7 @@ body {
 	right: 1.5px
 }
 
-body, input, select {
+body, select {
 	background: rgb(0, 0, 0);
 	color: rgba(255, 255, 255, 0.9);
 	margin: 0px;
@@ -137,9 +137,11 @@ body, input, select {
 	height: 36px;
 }
 
+/*
 #menu #menu_fixed #door:hover {
 	background: rgba(0, 141, 141, 0.9);
 }
+*/
 
 #locale_chooser {
 	margin-top: 2px;	
@@ -309,12 +311,6 @@ body, input, select {
 .button {
 	text-align: center;
 	font-weight: bold;
-	margin-top: 10px;
-	margin-bottom: 10px;
-}
-
-.welcome_toggle {
-	font-size: 20px;
 }
 
 .button a {
@@ -322,6 +318,12 @@ body, input, select {
 	height: 100%;
 	text-decoration: none;
 	display: block;
+	transition: background 0.5s;
+}
+
+.button a:hover {
+	background: rgba(0, 141, 141, 0.9);
+	transition: background 0.5s;
 }
 
 .button_disabled {
@@ -331,6 +333,12 @@ body, input, select {
 .button,
 .button *{
 	cursor: pointer;
+}
+
+.welcome_toggle {
+	font-size: 20px;
+	margin-top: 10px;
+	margin-bottom: 10px;
 }
 
 .main {

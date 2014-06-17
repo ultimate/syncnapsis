@@ -48,7 +48,7 @@
 /* blog */
 
 .pinboard.blog .messages {
-	bottom: 30px;
+	bottom: 100px;
 }
 
 .pinboard.blog .messages .user {
@@ -76,15 +76,41 @@
 }
 
 .pinboard.blog .input {
-	height: 30px;
+	height: 100px;
 }
 
-.pinboard.blog .input input[type=text]{
+.pinboard.blog .input .title{
 	float: left;
+	font-weight: bold;
+	margin-top: 5px;
+	width: 60%;
 }
 
-.pinboard.blog .input input[type=button]{
-	float: right;
+.pinboard.blog .input .title input{
+	width: 100%;
+	heigth: 100%;
+}
+
+.pinboard.blog .input .content{
+	position: absolute;
+	top: 25px;
+	left: 0px;
+	right: 40px;
+	bottom: 0px;
+}
+
+.pinboard.blog .input .content textarea {
+	width: 100%;
+	heigth: 100%;
+	resize: none;
+}
+
+.pinboard.blog .input .button{
+	position: absolute;
+	top: 25px;
+	right: 0px;
+	bottom: 0px;
+	width: 30px;
 }
  
  

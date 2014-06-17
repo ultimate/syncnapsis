@@ -23,14 +23,24 @@
 }
 
 input[type=text],
-input[type=password] {
+input[type=password],
+textarea {
 	border: 1px solid rgba(0,255,255,0.9);
 	background: rgba(0,0,0,0.3);
 }
 
 input[type=text].error,
 input[type=password].error,
+textarea.error,
 .error {
 	border: 1px solid rgba(0,255,255,0.9);
 	background: rgba(255,40,40,0.9);
+}
+
+input,
+textarea {
+	color: rgba(255, 255, 255, 0.9);
+	margin: 0px;
+	font-family: monospace;
+	font-size: 11px;
 }

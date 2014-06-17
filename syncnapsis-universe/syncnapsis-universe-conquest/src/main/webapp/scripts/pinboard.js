@@ -18,54 +18,14 @@
  * This a view Entity for a Pinboard identified by its ID
  * (Messages are sorted newest first!) 
  */
-Pinboard = function(container, pinboardIdOrName, style, removeOldMessages, enableInput)
+Pinboard = function(container, pinboardIdOrName, style, removeOldMessages, disableInput)
 {
 	this.pinboard = null;
 	this.messages = [];
 	this.messageCount = 0; 
 	this.removeOldMessages = removeOldMessages;
-	this.enableInput = enableInput;
+	this.disableInput = disableInput;
 	this.container = container;
-	
-	// start - init view
-	// set style
-	this.container.classList.add("pinboard");
-	this.container.classList.add(style);
-	// add container for messages
-	this.messageContainer = document.createElement("div");
-	this.messageContainer.classList.add("messages");
-	this.container.appendChild(this.messageContainer);
-	// add input area
-	if(this.enableInput)
-	{
-		this.inputContainer = document.createElement("div");
-		
-		this.titleInput = document.createElement("input");
-		titleInput.type = "text";
-		var title = document.createElement("div");
-		title.classList.add("title");
-		title.appendChild(titleInput);
-		this.inputContainer.appendChild(title);
-		
-		this.contentInput = document.createElement("input");
-		contentInput.type = "text";
-		var content = document.createElement("div");
-		content.classList.add("content");
-		content.appendChild(titleInput);
-		content.appendChild(contentInput);
-		this.inputContainer.appendChild(content);
-		
-		this.postButton = document.createElement("input");
-		postButton.type = "button";
-		postButton.classList.add("frame");
-		postButton.classList.add("button");
-		this.inputContainer.appendChild(postButton);
-		
-		// TODO
-		this.inputContainer.classList.add("input");
-		this.container.appendChild(this.inputContainer);
-	}
-	// end - init view
 	
 	this.setUser = function(user)
 	{
@@ -216,6 +176,55 @@ Pinboard = function(container, pinboardIdOrName, style, removeOldMessages, enabl
 		this.messageCount = this.pinboard.defaultMessageCount;
 		this.requestUpdate();
 	};
+
+	
+	// start - init view
+	{
+		// set style
+		this.container.classList.add("pinboard");
+		this.container.classList.add(style);
+		// add container for messages
+		this.messageContainer = document.createElement("div");
+		this.messageContainer.classList.add("messages");
+		this.container.appendChild(this.messageContainer);
+		// add input area
+		if(!this.disableInput)
+		{
+			this.inputContainer = document.createElement("div");
+			
+			this.titleInput = document.createElement("input");
+			this.titleInput.type = "text";
+			var title = document.createElement("div");
+			title.classList.add("title");
+			title.appendChild(this.titleInput);
+			this.inputContainer.appendChild(title);
+			
+			this.contentInput = document.createElement("textarea");
+			var content = document.createElement("div");
+			content.classList.add("content");
+			content.appendChild(this.contentInput);
+			this.inputContainer.appendChild(content);
+			
+			this.postButton = document.createElement("div");
+			var a = document.createElement("a");
+			a.onclick = function(pinboard) {
+				return function() {
+					pinboard.post(pinboard.titleInput.value, pinboard.contentInput.value);
+				};
+			} (this);
+			a.appendChild(document.createTextNode(">"));
+			this.postButton.appendChild(a);
+			this.postButton.classList.add("frame");
+			this.postButton.classList.add("button");
+			this.inputContainer.appendChild(this.postButton);
+			
+			// TODO
+			this.inputContainer.classList.add("input");
+			this.container.appendChild(this.inputContainer);
+		}
+	}
+	// end - init view
+	
 	
 	// associate this view with a pinboard loaded by name or id
 	if(typeof(pinboardIdOrName) == Reflections.type.STRING)
