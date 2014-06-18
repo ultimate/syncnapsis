@@ -326,7 +326,7 @@ body, select {
 	transition: background 0.5s;
 }
 
-.button_disabled {
+.button.disabled {
 	color: rgb(128,128,128);
 }
 

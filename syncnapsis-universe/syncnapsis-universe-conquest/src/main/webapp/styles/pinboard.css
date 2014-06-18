@@ -97,12 +97,14 @@
 	left: 0px;
 	right: 40px;
 	bottom: 0px;
+	border: 1px solid transparent;
 }
 
 .pinboard.blog .input .content textarea {
 	width: 100%;
-	heigth: 100%;
+	height: 100%;
 	resize: none;
+	margin: -1px;
 }
 
 .pinboard.blog .input .button{

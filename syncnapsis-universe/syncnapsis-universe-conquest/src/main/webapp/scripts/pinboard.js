@@ -30,6 +30,19 @@ Pinboard = function(container, pinboardIdOrName, style, removeOldMessages, disab
 	this.setUser = function(user)
 	{
 		this.user = user;
+		
+		if(this.user && !this.disableInput)
+		{
+			this.postButton.classList.remove("disabled");
+			// TODO onclick
+			
+		}
+		else
+		{
+			this.postButton.classList.add("disabled");
+			// TODO onclick
+		
+		}
 		// TODO lock/unlock
 	};
 	
@@ -132,7 +145,12 @@ Pinboard = function(container, pinboardIdOrName, style, removeOldMessages, disab
 	
 	this.post = function(title, message)
 	{
+		if(this.user == null)
+			return false; // ignore
+		if(message == null || message == "")
+			return false; // ignore
 		server.messageManager.postPinboardMessage(this.pinboard.id, title, message);
+		return true;
 	};
 	
 	this.update = function(messages)
@@ -225,6 +243,7 @@ Pinboard = function(container, pinboardIdOrName, style, removeOldMessages, disab
 	}
 	// end - init view
 	
+	this.setUser(null);	
 	
 	// associate this view with a pinboard loaded by name or id
 	if(typeof(pinboardIdOrName) == Reflections.type.STRING)
