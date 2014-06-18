@@ -56,7 +56,7 @@ UI.constants.NAV_CONTENT = "menu_content";
 UI.constants.LOG_TABS = "log";
 UI.constants.LOG_CONTENT = "log_content";
 UI.constants.LOG_FRAME = "bar_bottom";
-UI.constants.USERINFO_TABS = "door"; // just use this as a dummy selector we will overwrite the select for
+UI.constants.USERINFO_BUTTON = "door";
 UI.constants.USERINFO_CONTENT = "userbar";
 UI.constants.USERINFO_INDEX_LOGGEDOUT = 0;
 UI.constants.USERINFO_INDEX_LOGGEDIN = 1;
@@ -105,9 +105,9 @@ UIManager = function()
 	// init the user info with a dummy tab selector (the "door")
 	// dummy is used since we need at least one tab selector
 	// TODO don't make door a tab-selector // just a simple button
-	this.userInfo = new Tabs(UI.constants.USERINFO_TABS, TABS_HORIZONTAL, UI.constants.USERINFO_CONTENT, TABS_VERTICAL);// , UI.constants.NAV_WIDTH, UI.constants.USERINFO_HEIGHT);
+	this.userInfo = new Tabs(null, TABS_HORIZONTAL, UI.constants.USERINFO_CONTENT, TABS_VERTICAL);// , UI.constants.NAV_WIDTH, UI.constants.USERINFO_HEIGHT);
 	// overwrite the door's onSelect to perform the login
-	this.door = document.getElementById(UI.constants.USERINFO_TABS).children[0]; // this is the 'a' tag
+	this.door = document.getElementById(UI.constants.USERINFO_BUTTON).children[0]; // this is the 'a' tag
 	this.door.onclick = function(uiManager)
 	{
 		return function()
