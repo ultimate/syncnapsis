@@ -26,6 +26,48 @@ Pinboard = function(container, pinboardIdOrName, style, removeOldMessages, disab
 	this.removeOldMessages = removeOldMessages;
 	this.disableInput = disableInput;
 	this.container = container;
+
+	
+	// start - init view
+	{
+		// set style
+		this.container.classList.add("pinboard");
+		this.container.classList.add(style);
+		// add container for messages
+		this.messageContainer = document.createElement("div");
+		this.messageContainer.classList.add("messages");
+		this.container.appendChild(this.messageContainer);
+		// add input area
+		if(!this.disableInput)
+		{
+			this.inputContainer = document.createElement("div");
+			
+			this.titleInput = document.createElement("input");
+			this.titleInput.type = "text";
+			var title = document.createElement("div");
+			title.classList.add("title");
+			title.appendChild(this.titleInput);
+			this.inputContainer.appendChild(title);
+			
+			this.contentInput = document.createElement("textarea");
+			var content = document.createElement("div");
+			content.classList.add("content");
+			content.appendChild(this.contentInput);
+			this.inputContainer.appendChild(content);
+			
+			this.postButton = document.createElement("div");
+			var a = document.createElement("a");
+			a.appendChild(document.createTextNode(">")); // TODO
+			this.postButton.appendChild(a);
+			this.postButton.classList.add("frame");
+			this.postButton.classList.add("button");
+			this.inputContainer.appendChild(this.postButton);
+			
+			this.inputContainer.classList.add("input");
+			this.container.appendChild(this.inputContainer);
+		}
+	}
+	// end - init view
 	
 	this.setUser = function(user)
 	{
@@ -34,14 +76,20 @@ Pinboard = function(container, pinboardIdOrName, style, removeOldMessages, disab
 		if(this.user && !this.disableInput)
 		{
 			this.postButton.classList.remove("disabled");
-			// TODO onclick
-			
+			this.postButton.children[0].onclick = function(pinboard) {
+				return function() {
+					pinboard.post(pinboard.titleInput.value, pinboard.contentInput.value);
+				};
+			} (this);
+			this.titleInput.disabled = false;
+			this.contentInput.disabled = false;
 		}
 		else
 		{
 			this.postButton.classList.add("disabled");
-			// TODO onclick
-		
+			this.postButton.children[0].onclick = null;
+			this.titleInput.disabled = true;
+			this.contentInput.disabled = true;
 		}
 		// TODO lock/unlock
 	};
@@ -194,54 +242,6 @@ Pinboard = function(container, pinboardIdOrName, style, removeOldMessages, disab
 		this.messageCount = this.pinboard.defaultMessageCount;
 		this.requestUpdate();
 	};
-
-	
-	// start - init view
-	{
-		// set style
-		this.container.classList.add("pinboard");
-		this.container.classList.add(style);
-		// add container for messages
-		this.messageContainer = document.createElement("div");
-		this.messageContainer.classList.add("messages");
-		this.container.appendChild(this.messageContainer);
-		// add input area
-		if(!this.disableInput)
-		{
-			this.inputContainer = document.createElement("div");
-			
-			this.titleInput = document.createElement("input");
-			this.titleInput.type = "text";
-			var title = document.createElement("div");
-			title.classList.add("title");
-			title.appendChild(this.titleInput);
-			this.inputContainer.appendChild(title);
-			
-			this.contentInput = document.createElement("textarea");
-			var content = document.createElement("div");
-			content.classList.add("content");
-			content.appendChild(this.contentInput);
-			this.inputContainer.appendChild(content);
-			
-			this.postButton = document.createElement("div");
-			var a = document.createElement("a");
-			a.onclick = function(pinboard) {
-				return function() {
-					pinboard.post(pinboard.titleInput.value, pinboard.contentInput.value);
-				};
-			} (this);
-			a.appendChild(document.createTextNode(">"));
-			this.postButton.appendChild(a);
-			this.postButton.classList.add("frame");
-			this.postButton.classList.add("button");
-			this.inputContainer.appendChild(this.postButton);
-			
-			// TODO
-			this.inputContainer.classList.add("input");
-			this.container.appendChild(this.inputContainer);
-		}
-	}
-	// end - init view
 	
 	this.setUser(null);	
 	
