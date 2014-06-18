@@ -15,22 +15,8 @@ var TABS_VERTICAL = 2;
 
 Tabs = function(barId, barMode, containerId, containerMode, selectedOverwriteWidth, selectedOverwriteHeight)
 {
-	var bar = document.getElementById(barId);
+	var bar = barId ? document.getElementById(barId) : null;
 	var container = document.getElementById(containerId);
-	var barSize;
-	var barSizeParam;
-	if(barMode == TABS_HORIZONTAL)
-	{
-		barSize = bar.offsetWidth;
-		barSizeParam = "width";
-		bar.classList.add("tabbar_horizontal");
-	}
-	else if(barMode == TABS_VERTICAL)
-	{
-		barSize = bar.offsetHeight;
-		barSizeParam = "height";
-		bar.classList.add("tabbar_vertical");
-	}
 
 	var childElem;
 	var childElemType;
@@ -60,12 +46,7 @@ Tabs = function(barId, barMode, containerId, containerMode, selectedOverwriteWid
 		}
 	}
 
-	var childrenCount = bar.children.length;
-	barSize -= ((childrenCount - 1) * 3 + 2);
-	var s0 = Math.floor(barSize / childrenCount);
-	var gap = barSize - s0 * childrenCount;
 
-	console.log("barSize=" + barSize + "  children=" + childrenCount + "  s0=" + s0 + "  gap = " + gap);
 	
 	this.onSelect = function(index)
 	{
@@ -75,12 +56,15 @@ Tabs = function(barId, barMode, containerId, containerMode, selectedOverwriteWid
 	this.select = function(index)
 	{
 		console.log("select " + index + " (" + bar + ", " + container + ")");
-		for( var i = 0; i < bar.children.length; i++)
+		if(bar)
 		{
-			if(i == index)
-				bar.children[i].className = "selected";
-			else
-				bar.children[i].className = "";
+			for( var i = 0; i < bar.children.length; i++)
+			{
+				if(i == index)
+					bar.children[i].className = "selected";
+				else
+					bar.children[i].className = "";
+			}
 		}
 		for( var i = 0; i < container.children[0].children.length; i++)
 		{
@@ -122,31 +106,56 @@ Tabs = function(barId, barMode, containerId, containerMode, selectedOverwriteWid
 		this.onSelect(index);
 	};
 
-	for( var i = 0; i < childrenCount; i++)
+	if(bar)
 	{
-		bar.children[i].href = "#"; // add this if you want a "hand" cursor instead of an "arrow"
-		bar.children[i].onclick = function(tabs, index)
+		var barSize;
+		var barSizeParam;
+		if(barMode == TABS_HORIZONTAL)
 		{
-			return function()
-			{
-				tabs.select(index);
-			};
-		}(this, i);
-		if(gap == 0)
-			bar.children[i].style[barSizeParam] = s0 + "px";
-		else
-		{
-			// in case 2: shift i by 0.5 to be centered
-			// but since there may be the case gap is uneven and children not
-			// we reshift it by 0.4 to weight one direction more than the other
-			if(Math.abs(childrenCount / 2 - (i + 1 - 0.4)) <= gap / 2)
-				bar.children[i].style[barSizeParam] = (s0 + 1) + "px";
-			else
-				bar.children[i].style[barSizeParam] = (s0) + "px";
+			barSize = bar.offsetWidth;
+			barSizeParam = "width";
+			bar.classList.add("tabbar_horizontal");
 		}
-		bar.children[i].style.lineHeight = bar.children[i].offsetHeight + "px";
-		// console.log("width set child #" + i + ": " +
-		// children[i].style[barSizeParam]);
+		else if(barMode == TABS_VERTICAL)
+		{
+			barSize = bar.offsetHeight;
+			barSizeParam = "height";
+			bar.classList.add("tabbar_vertical");
+		}
+		
+		var childrenCount = bar.children.length;
+		barSize -= ((childrenCount - 1) * 3 + 2);
+		var s0 = Math.floor(barSize / childrenCount);
+		var gap = barSize - s0 * childrenCount;
+		
+		console.log("barSize=" + barSize + "  children=" + childrenCount + "  s0=" + s0 + "  gap = " + gap);
+
+		for( var i = 0; i < childrenCount; i++)
+		{
+			bar.children[i].href = "#"; // add this if you want a "hand" cursor instead of an "arrow"
+			bar.children[i].onclick = function(tabs, index)
+			{
+				return function()
+				{
+					tabs.select(index);
+				};
+			}(this, i);
+			if(gap == 0)
+				bar.children[i].style[barSizeParam] = s0 + "px";
+			else
+			{
+				// in case 2: shift i by 0.5 to be centered
+				// but since there may be the case gap is uneven and children not
+				// we reshift it by 0.4 to weight one direction more than the other
+				if(Math.abs(childrenCount / 2 - (i + 1 - 0.4)) <= gap / 2)
+					bar.children[i].style[barSizeParam] = (s0 + 1) + "px";
+				else
+					bar.children[i].style[barSizeParam] = (s0) + "px";
+			}
+			bar.children[i].style.lineHeight = bar.children[i].offsetHeight + "px";
+			// console.log("width set child #" + i + ": " +
+			// children[i].style[barSizeParam]);
+		}
 	}
 	
 	this.select(0);
