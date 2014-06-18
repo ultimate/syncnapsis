@@ -204,19 +204,28 @@ UIManager.prototype.onLogout = function(success)
 	document.getElementById(UI.constants.NAV_CONTENT).classList.add(UI.constants.MENU_HIDDEN_CLASS);
 	// "unload" user
 	this.currentPlayer = null;
-	this.onUserLoaded({
-		username : "anonymous"
-	});
+	this.onUserLoaded(null);
 };
 
 UIManager.prototype.onUserLoaded = function(user)
 {
-	console.log("user loaded: " + user.username);
-	// set welcome username
-	document.getElementById(UI.constants.LABEL_ID_PLAYERNAME).innerHTML = user.username;
-	// change language to users selection
-	if(user && user.locale)
+	if(user)
+	{
+		// set welcome username
+		document.getElementById(UI.constants.LABEL_ID_PLAYERNAME).innerHTML = user.username;
+		// change language to users selection
 		this.localeChooser.selectByValue(user.locale);
+	}
+	else
+	{
+		// set welcome username
+		document.getElementById(UI.constants.LABEL_ID_PLAYERNAME).innerHTML = "anonymous";
+	}
+	// set user for pinboards
+	for(var i = 0; i < this.pinboards.length; i++)
+	{
+		this.pinboards[i].setUser(user);
+	}
 };
 
 UIManager.prototype.enableRegisterButton = function(enable)
