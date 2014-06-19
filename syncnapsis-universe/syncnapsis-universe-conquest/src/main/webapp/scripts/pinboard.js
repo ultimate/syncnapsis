@@ -112,6 +112,7 @@ Pinboard = function(container, pinboardIdOrName, style, removeOldMessages, disab
 			{
 				// create dom element
 				message.element = document.createElement("div");
+				message.element.classList.add("message");
 				
 				var user = document.createElement("div");
 				user.classList.add("user");
