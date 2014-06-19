@@ -26,7 +26,7 @@ Pinboard = function(container, pinboardIdOrName, style, removeOldMessages, disab
 	this.removeOldMessages = removeOldMessages;
 	this.disableInput = disableInput;
 	this.container = container;
-
+	this.style = style;
 	
 	// start - init view
 	{
@@ -68,6 +68,13 @@ Pinboard = function(container, pinboardIdOrName, style, removeOldMessages, disab
 		}
 	}
 	// end - init view
+	
+	this.setStyle = function(style)
+	{
+		this.container.classList.remove(this.style);
+		this.container.classList.add(style);
+		this.style = style;
+	}
 	
 	this.setUser = function(user)
 	{
@@ -114,15 +121,15 @@ Pinboard = function(container, pinboardIdOrName, style, removeOldMessages, disab
 				message.element = document.createElement("div");
 				message.element.classList.add("message");
 				
-				var user = document.createElement("div");
-				user.classList.add("user");
-				user.appendChild(document.createTextNode(message.creator.username));
-				
 				var df = (pinboard.user != null ? pinboard.user.dateFormat : UI.constants.DEFAULT_DATE_FORMAT);
-
+				
 				var time = document.createElement("div");
 				time.classList.add("time");
 				time.appendChild(document.createTextNode(new Date(message.creationDate).format(df)));
+				
+				var user = document.createElement("div");
+				user.classList.add("user");
+				user.appendChild(document.createTextNode(message.creator.username));
 				
 				var title = document.createElement("div");
 				title.classList.add("title");
@@ -132,8 +139,8 @@ Pinboard = function(container, pinboardIdOrName, style, removeOldMessages, disab
 				content.classList.add("content");
 				content.appendChild(document.createTextNode(message.content));
 				
-				message.element.appendChild(user);
 				message.element.appendChild(time);
+				message.element.appendChild(user);
 				message.element.appendChild(title);
 				message.element.appendChild(content);
 				
