@@ -55,6 +55,17 @@
 	bottom: 100px;
 }
 
+.pinboard.blog .messages .message {
+	float: left;
+	width: 100%
+}
+
+.pinboard.blog .messages .message .time {
+	float: right;
+	text-align: right;
+	width: 30%;
+}
+
 .pinboard.blog .messages .message .user {
 	display: none;
 }
@@ -63,12 +74,6 @@
 	float: left;
 	font-weight: bold;
 	width: 60%;
-}
-
-.pinboard.blog .messages .message .time {
-	float: right;
-	text-align: right;
-	width: 30%;
 }
 
 .pinboard.blog .messages .message .content {
@@ -128,25 +133,25 @@
 	display: block;
 }
 
-.pinboard.chat .messages .message .user {
+.pinboard.chat .messages .message .time {
 	float: left;
+}
+
+.pinboard.chat .messages .message .user {
+	/*float: left;*/
 	font-weight: bold;
 }
 
 .pinboard.chat .messages .message .user:after {
-	content: "\a0-\a0"; /* \a0 for non-breaking space; \20 for breaking space */
+	content: "\a0:"; /* \a0 for non-breaking space; \20 for breaking space */
 }
 
 .pinboard.chat .messages .message .title {
 	display: none;
 }
 
-.pinboard.chat .messages .message .time {
-	/*float: left;*/
-}
-
 .pinboard.chat .messages .message .time:after {
-	content: "\a0:"; /* \a0 for non-breaking space; \20 for breaking space */
+	content: "\a0-\a0"; /* \a0 for non-breaking space; \20 for breaking space */
 }
 
 .pinboard.chat .messages .message .content {
@@ -165,7 +170,7 @@
 
 .pinboard.chat .input .content{
 	position: absolute;
-	top: 0px;
+	top: 5px;
 	left: 0px;
 	right: 40px;
 	bottom: 0px;
@@ -181,7 +186,7 @@
 
 .pinboard.chat .input .button{
 	position: absolute;
-	top: 0px;
+	top: 5px;
 	right: 0px;
 	bottom: 0px;
 	width: 30px;
@@ -193,6 +198,12 @@
 	bottom: 100px;
 }
 
+.pinboard.eventlog .messages .message .time {
+	float: right;
+	text-align: right;
+	width: 30%;
+}
+
 .pinboard.eventlog .messages .message .user {
 	display: none;
 }
@@ -201,12 +212,6 @@
 	float: left;
 	font-weight: bold;
 	width: 60%;
-}
-
-.pinboard.eventlog .messages .message .time {
-	float: right;
-	text-align: right;
-	width: 30%;
 }
 
 .pinboard.eventlog .messages .message .content {
