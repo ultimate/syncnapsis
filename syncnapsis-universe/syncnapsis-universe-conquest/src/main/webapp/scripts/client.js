@@ -78,6 +78,10 @@ UI.constants.MENU_HIDDEN_CLASS = "menu_hidden";
 
 UI.constants.DEFAULT_DATE_FORMAT = "yyyy-MM-dd HH:mm:ss";
 
+UI.constants.PINBOARD_NEWS = "pinboard_news";
+UI.constants.PINBOARD_CHAT = "pinboard_chat";
+UI.constants.PINBOARD_EVENTS = "pinboard_events";
+
 UIManager = function()
 {
 	this.currentPlayer = null;
@@ -149,8 +153,9 @@ UIManager = function()
 	
 	console.log("creating pinboard(s)");
 	this.pinboards = [];
-//	this.pinboards.push(new Pinboard(container, pinboardName, initialMessages, removeOldMessages));
-	this.pinboards.push(new Pinboard(document.getElementById("pinboard_news"), "testboard", "blog", "frame", false));
+	this.pinboards.push(new Pinboard(document.getElementById(UI.constants.PINBOARD_NEWS), "testboard", "blog", "frame", false, true));
+	this.pinboards.push(new Pinboard(document.getElementById(UI.constants.PINBOARD_CHAT), "testboard", "chat", null, false, false));
+	this.pinboards.push(new Pinboard(document.getElementById(UI.constants.PINBOARD_EVENTS), "testboard", "eventlog", null, false, true));
 
 	console.log("showing UI");
 
@@ -560,16 +565,6 @@ UIManager.prototype.updateLinks = function()
 	}
 };
 
-UIManager.prototype.getPinboard = function(pinboardId)
-{
-	for(var i = 0; i < this.pinboards.length; i++)
-	{
-		if(this.pinboards[i].pinboard.id == pinboardId)
-			return this.pinboards[i];
-	}
-	return null;
-};
-
 MessageManager = function()
 {
 };
@@ -578,13 +573,13 @@ MessageManager = function()
 MessageManager.prototype.updatePinboard = function(pinboardId, messages)
 {
 	console.log("updating pinboard #" + pinboardId + " with " + messages.length + " messages");
-	var pinboard = client.uiManager.getPinboard(pinboardId);
-	if(pinboard != null)
+
+	for(var i = 0; i < client.uiManager.pinboards.length; i++)
 	{
-		pinboard.update(messages);
-	}
-	else
-	{
-		console.log("no matching pinboard found!");
+		if(client.uiManager.pinboards[i].pinboard.id == pinboardId)
+		{
+			console.log("updating pinboard instance with index #" + i);
+			client.uiManager.pinboards[i].update(messages);
+		}
 	}
 };

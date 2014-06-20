@@ -413,3 +413,9 @@ h1 {
 #pinboard_news {
 	height: 300px;
 }
+
+#pinboard_chat,
+#pinboard_events {
+	height: 150px;
+	line-height: 1em;
+}

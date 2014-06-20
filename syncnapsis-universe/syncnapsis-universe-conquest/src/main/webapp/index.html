@@ -153,23 +153,12 @@
 		<div id="log_content" class="frame atbottom">
 			<div>
 			<span id="log_content_1" class="selected">
-				<ul>
-					<li><b>13:34:23 User1:</b> bla bla bla</li>
-					<li><b>13:35:44 User2:</b> selber</li>
-					<li><b>13:36:23 User1:</b> bla</li>
-					<li><b>13:37:23 User1:</b> bla</li>
-					<li><b>13:38:23 User1:</b> bla</li>
-					<li><b>13:39:23 User1:</b> bla</li>
-					<li><b>13:40:23 User1:</b> bla</li>
-					<li><b>13:41:23 User1:</b> bla</li>
-				</ul>
+				<div id="pinboard_chat">
+				</div>
 			</span>
 			<span id="log_content_2">
-				<ul>
-					<li><b>12:14:23 INFO:</b> Colonization successful</li>
-					<li><b>14:25:44 WARN:</b> Incoming attack</li>
-					<li><b>14:30:23 WARN:</b> Colony lost</li>
-				</ul>
+				<div id="pinboard_events">
+				</div>
 			</span>
 			<span id="log_content_3">
 				foo bar
@@ -321,9 +310,7 @@
 				</div>
 				<div>
 					<h1><label key="welcome.headLine"></label></h1>
-					<!-- TODO add a news-pinboard here -->
 					<div id="pinboard_news"></div>
-					<!-- TODO -->
 				</div>
 			</div>
 			<div id="showWelcome" class="atbottom">
@@ -353,6 +340,8 @@
 		debug...<br>
 		<input id="debug_load" type="button" value="load" onclick="load(0);" /><br/>
 		<input id="debug_open" type="button" value="open/close log" onclick="client.uiManager.toggleLog();" /><br/>
+		<div id="debug_container">
+		</div>
 	</div>
 </body>
 </html>

@@ -107,14 +107,13 @@ Pinboard = function(container, pinboardIdOrName, style, messageStyle, removeOldM
 			this.titleInput.disabled = false;
 			this.contentInput.disabled = false;
 		}
-		else
+		else if(!this.disableInput)
 		{
 			this.postButton.classList.add("disabled");
 			this.postButton.children[0].onclick = null;
 			this.titleInput.disabled = true;
 			this.contentInput.disabled = true;
 		}
-		// TODO lock/unlock
 	};
 	
 	this.addMessage = function(message)
