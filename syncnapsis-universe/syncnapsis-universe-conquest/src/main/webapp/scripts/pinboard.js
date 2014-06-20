@@ -18,7 +18,7 @@
  * This a view Entity for a Pinboard identified by its ID
  * (Messages are sorted newest first!) 
  */
-Pinboard = function(container, pinboardIdOrName, style, removeOldMessages, disableInput)
+Pinboard = function(container, pinboardIdOrName, style, messageStyle, removeOldMessages, disableInput)
 {
 	this.pinboard = null;
 	this.messages = [];
@@ -27,12 +27,14 @@ Pinboard = function(container, pinboardIdOrName, style, removeOldMessages, disab
 	this.disableInput = disableInput;
 	this.container = container;
 	this.style = style;
+	this.messageStyle = messageStyle;
 	
 	// start - init view
 	{
 		// set style
 		this.container.classList.add("pinboard");
-		this.container.classList.add(style);
+		if(this.style)
+			this.container.classList.add(this.style);
 		// add container for messages
 		this.messageContainer = document.createElement("div");
 		this.messageContainer.classList.add("messages");
@@ -71,9 +73,23 @@ Pinboard = function(container, pinboardIdOrName, style, removeOldMessages, disab
 	
 	this.setStyle = function(style)
 	{
-		this.container.classList.remove(this.style);
-		this.container.classList.add(style);
+		if(this.style)
+			this.container.classList.remove(this.style);
+		if(style)
+			this.container.classList.add(style);
 		this.style = style;
+	}
+	
+	this.setMessagStyle = function(messageStyle)
+	{
+		for(var i = 0; i < this.messages.length; i++)
+		{
+			if(this.messageStyle)
+				this.messages[i].element.classList.remove(this.messageStyle);
+			if(messageStyle)
+				this.messages[i].element.classList.add(messageStyle);
+		}
+		this.messageStyle = messageStyle;
 	}
 	
 	this.setUser = function(user)
@@ -120,6 +136,8 @@ Pinboard = function(container, pinboardIdOrName, style, removeOldMessages, disab
 				// create dom element
 				message.element = document.createElement("div");
 				message.element.classList.add("message");
+				if(pinboard.messageStyle)
+					message.element.classList.add(pinboard.messageStyle);
 				
 				var df = (pinboard.user != null ? pinboard.user.dateFormat : UI.constants.DEFAULT_DATE_FORMAT);
 				

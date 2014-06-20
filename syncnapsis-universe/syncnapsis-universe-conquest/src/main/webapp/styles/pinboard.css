@@ -137,6 +137,10 @@
 	float: left;
 }
 
+.pinboard.chat .messages .message .time:after {
+	content: "\a0-\a0"; /* \a0 for non-breaking space; \20 for breaking space */
+}
+
 .pinboard.chat .messages .message .user {
 	/*float: left;*/
 	font-weight: bold;
@@ -148,10 +152,6 @@
 
 .pinboard.chat .messages .message .title {
 	display: none;
-}
-
-.pinboard.chat .messages .message .time:after {
-	content: "\a0-\a0"; /* \a0 for non-breaking space; \20 for breaking space */
 }
 
 .pinboard.chat .messages .message .content {
@@ -192,16 +192,25 @@
 	width: 30px;
 }
   
+  
 /* eventlog */
 
 .pinboard.eventlog .messages {
-	bottom: 100px;
+	/*bottom: 25px;*/
+}
+
+.pinboard.eventlog .messages .message {
+	float: left;
+	width: 100%;
+	margin-bottom: 5px;
 }
 
 .pinboard.eventlog .messages .message .time {
-	float: right;
-	text-align: right;
-	width: 30%;
+	float: left;
+}
+
+.pinboard.eventlog .messages .message .time:after {
+	content: "\a0:"; /* \a0 for non-breaking space; \20 for breaking space */
 }
 
 .pinboard.eventlog .messages .message .user {
@@ -209,38 +218,28 @@
 }
 
 .pinboard.eventlog .messages .message .title {
-	float: left;
-	font-weight: bold;
-	width: 60%;
+	display: none;
 }
+
 
 .pinboard.eventlog .messages .message .content {
 	float: left;
 	text-align: justify;
-	margin-top: 5px;
-	margin-bottom: 15px;
-	width: 100%;
+	margin-left: 10px;
 }
 
 .pinboard.eventlog .input {
-	height: 100px;
+	/*height: 25px;*/
+	display: none;
 }
 
 .pinboard.eventlog .input .title{
-	float: left;
-	font-weight: bold;
-	margin-top: 5px;
-	width: 60%;
-}
-
-.pinboard.eventlog .input .title input{
-	width: 100%;
-	heigth: 100%;
+	display: none;
 }
 
 .pinboard.eventlog .input .content{
 	position: absolute;
-	top: 25px;
+	top: 5px;
 	left: 0px;
 	right: 40px;
 	bottom: 0px;
@@ -256,13 +255,8 @@
 
 .pinboard.eventlog .input .button{
 	position: absolute;
-	top: 25px;
+	top: 5px;
 	right: 0px;
 	bottom: 0px;
 	width: 30px;
 }
- 
- 
- 
- 
- 
