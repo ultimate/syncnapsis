@@ -37,10 +37,6 @@
 	height: auto;
 }
 
-.pinboard .messages .message {
-	margin-bottom: 15px;
-}
-
 .pinboard .input {
 	overflow: hidden;
 	position: absolute;
@@ -57,7 +53,8 @@
 
 .pinboard.blog .messages .message {
 	float: left;
-	width: 100%
+	width: 100%;
+	margin-bottom: 15px;
 }
 
 .pinboard.blog .messages .message .time {
@@ -131,6 +128,7 @@
 
 .pinboard.chat .messages .message {
 	display: block;
+	margin-bottom: 5px;
 }
 
 .pinboard.chat .messages .message .time {
@@ -142,12 +140,13 @@
 }
 
 .pinboard.chat .messages .message .user {
-	/*float: left;*/
+	float: left;
 	font-weight: bold;
 }
 
 .pinboard.chat .messages .message .user:after {
 	content: "\a0:"; /* \a0 for non-breaking space; \20 for breaking space */
+	margin-right: 10px;
 }
 
 .pinboard.chat .messages .message .title {
@@ -156,8 +155,9 @@
 
 .pinboard.chat .messages .message .content {
 	/*float: left;*/
+	/*margin-top: 5px;*/
 	text-align: justify;
-	margin-top: 5px;
+	margin-left: 10px;
 }
 
 .pinboard.chat .input {
