@@ -102,6 +102,8 @@ Pinboard = function(container, pinboardIdOrName, style, messageStyle, removeOldM
 			this.postButton.children[0].onclick = function(pinboard) {
 				return function() {
 					pinboard.post(pinboard.titleInput.value, pinboard.contentInput.value);
+					pinboard.titleInput.value = "";
+					pinboard.contentInput.value = "";
 				};
 			} (this);
 			this.titleInput.disabled = false;
