@@ -234,7 +234,7 @@ body, select {
 }
 
 #bar_top,#bar_bottom {
-	width: 400px;
+	width: 500px;
 	margin-top: 1px;
 	margin-bottom: 1px;
 }
@@ -245,7 +245,7 @@ body, select {
 }
 
 #bar_bottom {
-	height: 33px;
+	height: 34px;
 	line-height: 2.6em;
 	margin-bottom: 1px;
 	overflow: hidden;
@@ -253,7 +253,7 @@ body, select {
 }
 
 #bar_bottom.open {
-	height: 130px;
+	height: 230px;
 }
 
 #bar_bottom>.log_bar {
@@ -264,18 +264,18 @@ body, select {
 }
 
 #bar_bottom #log_title {
-	width: 85px;
+	width: 110px;
 	position: absolute;
 	left: 0px;
 }
 
 #bar_bottom>#log {
 	position: absolute;
-	width: 224px;
+	width: 274px;
 }
 
 #bar_bottom #log_menu {
-	width: 85px;
+	width: 110px;
 	position: absolute;
 	right: 0px;
 }
@@ -295,7 +295,7 @@ body, select {
 	bottom: 0px;
 	overflow-x: hidden;
 	overflow-y: auto;
-	width: 398px;
+	width: 498px;
 }
 
 .frame {
