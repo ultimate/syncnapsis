@@ -128,7 +128,9 @@ Pinboard = function(container, pinboardIdOrName, style, messageStyle, removeOldM
 		var i;
 		for(i = 0; i < this.messages.length; i++)
 		{
-			if(this.messages[i].messageId < message.messageId)
+			if(this.messages[i].messageId == message.messageId)
+				return; // message already in list
+			else if(this.messages[i].messageId < message.messageId)
 				break;
 		}
 		this.messages.splice(i, 0, message);
