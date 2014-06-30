@@ -260,3 +260,9 @@
 	bottom: 0px;
 	width: 30px;
 }
+
+/* noinput */
+
+.pinboard.noinput .messages {
+	bottom: 0px;
+}

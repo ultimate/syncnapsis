@@ -68,6 +68,10 @@ Pinboard = function(container, pinboardIdOrName, style, messageStyle, removeOldM
 			this.inputContainer.classList.add("input");
 			this.container.appendChild(this.inputContainer);
 		}
+		else
+		{
+			this.container.classList.add("noinput");
+		}
 	}
 	// end - init view
 	
