@@ -180,11 +180,14 @@ body, select {
 }
 
 .form,
-.largeform {
+.largeform,
+form,
+form.large {
 	line-height: 20px;
 }
 
 .form>label,
+form>label,
 #user_login>a {
 	width: 100px;
 	display: block;
@@ -193,18 +196,23 @@ body, select {
 
 .form>input[type=text],
 .form>input[type=password],
+form>input[type=text],
+form>input[type=password],
 #user_login>a+a {
 	width: 130px;
 }
 
-.largeform>label {
+.largeform>label,
+form.large>label {
 	width: 150px;
 	display: block;
 	float: left;
 }
 
 .largeform>input[type=text],
-.largeform>input[type=password] {
+.largeform>input[type=password],
+form.large>input[type=text],
+form.large>input[type=password] {
 	width: 230px;
 	float: right;
 }

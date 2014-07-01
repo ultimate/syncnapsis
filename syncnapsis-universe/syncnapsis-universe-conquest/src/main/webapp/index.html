@@ -157,16 +157,14 @@
 		</div>
 		<div id="userbar" class="frame">
 			<div>
-			<div id="user_login" class="form">
-				<label key="profile.username" for="login_username"></label><input id="login_username" type="text"/><br/>
-				<label key="profile.password" for="login_password"></label><input id="login_password" type="password"/><br/>
-				<a href="javascript: client.uiManager.showRegister();"><label key="menu.register"></label></a>
-				<a href=""><label key="menu.forgot_password"></label></a>
-				<!-- 
-					<input type="button" key="menu.login" onclick="client.uiManager.doLogin();" />
-					<input type="button" key="menu.cancel" onclick="client.uiManager.hideLogin();" />
-					<input type="button" key="menu.register" onclick="client.uiManager.showRegister();" />
-				 -->
+			<div id="user_login">
+				<form onsubmit="javascript: client.uiManager.doLogin(); return false;">
+					<label key="profile.username" for="login_username"></label><input id="login_username" type="text"/><br/>
+					<label key="profile.password" for="login_password"></label><input id="login_password" type="password"/><br/>
+					<a href="javascript: client.uiManager.showRegister();"><label key="menu.register"></label></a>
+					<a href=""><label key="menu.forgot_password"></label></a>
+				    <input type="submit" style="display: none;"/>
+				</form>
 			</div>
 			<div id="user_loggedin">
 				<label key="menu.login_info"></label>&nbsp;<b id="userbar_playername"></b>!
@@ -300,20 +298,23 @@
 			</div>
 		</div>
 		<div id="content_register">
-			<div id="user_register" class="largeform">
-				<label key="profile.username" for="reg_username"></label><input id="reg_username" type="text"/><br/>
-				<label key="profile.email" for="reg_email"></label><input id="reg_email" type="text"/><br/>
-				<label key="profile.password" for="reg_password"></label><input id="reg_password" type="password"/><br/>
-				<label key="profile.password_confirm" for="reg_password2"></label><input id="reg_password2" type="password"/><br/>
-				<div id="reg_message">
-				</div>
-				<div id="reg_error">
-				</div>
-				<div id="reg_button" class="frame button">
-					<a href="javascript: client.uiManager.doRegister();">
-						<label key="menu.register"></label>
-					</a>
-				</div>
+			<div id="user_register">
+				<form onsubmit="javascript: client.uiManager.doRegister(); return false;" class="large">
+					<label key="profile.username" for="reg_username"></label><input id="reg_username" type="text"/><br/>
+					<label key="profile.email" for="reg_email"></label><input id="reg_email" type="text"/><br/>
+					<label key="profile.password" for="reg_password"></label><input id="reg_password" type="password"/><br/>
+					<label key="profile.password_confirm" for="reg_password2"></label><input id="reg_password2" type="password"/><br/>
+					<div id="reg_message">
+					</div>
+					<div id="reg_error">
+					</div>
+					<div id="reg_button" class="frame button">
+						<a href="javascript: client.uiManager.doRegister();">
+							<label key="menu.register"></label>
+						</a>
+					</div>
+				    <input type="submit" style="display: none;"/>
+				</form>
 			</div>
 		</div>
 	</div>

@@ -408,7 +408,7 @@ UIManager.prototype.doLogin = function()
 	var username = document.getElementById(UI.constants.LOGIN_USERNAME_ID).value;
 	var password = document.getElementById(UI.constants.LOGIN_PASSWORD_ID).value;
 
-	var error = false
+	var error = false;
 	if(username == "" || username == null)
 	{
 		this.showErrorMessage(document.getElementById(UI.constants.LOGIN_USERNAME_ID), null);
@@ -420,9 +420,11 @@ UIManager.prototype.doLogin = function()
 		error = true;
 	}
 	if(error)
-		return;
+		return false;
 	console.log("login as: " + username + ":" + password);
 	server.playerManager.login(username, password);
+	
+	return false;
 };
 
 UIManager.prototype.doRegister = function()
