@@ -100,21 +100,6 @@
 			init();
 		document.getElementById("debug_load").disabled = "disabled";
 	};
-	var clsName;
-	openLog = function()
-	{
-		if(clsName)
-		{
-			document.getElementById("bar_bottom").className = clsName;
-			clsName = null;
-		}
-		else
-		{
-			clsName = document.getElementById("bar_bottom").className;
-			document.getElementById("bar_bottom").className += " open";
-		}
-	};
-
 </script>
 </head>
 <body onload="DependencyManager.registrationDone();">
@@ -148,7 +133,7 @@
 			-->
 		</div>
 		<div id="log_menu" class="frame log_bar">
-			<span class="inner">aaaaa</span>
+			<span class="log_toggle" onclick="javascript: client.uiManager.toggleLog();"><img id="log_toggle_arrow" class="flip-vertical" src="images/arrow-down.png" /></span>
 		</div>
 		<div id="log_content" class="frame atbottom">
 			<div>
@@ -339,7 +324,6 @@
 	<div id="debug">
 		debug...<br>
 		<input id="debug_load" type="button" value="load" onclick="load(0);" /><br/>
-		<input id="debug_open" type="button" value="open/close log" onclick="client.uiManager.toggleLog();" /><br/>
 		<div id="debug_container">
 		</div>
 	</div>

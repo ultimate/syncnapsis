@@ -34,7 +34,10 @@
 	padding-right: 5px;
 	position: absolute;
 	top: 0px;
+	right: 0px;
+	left: 0px;
 	height: auto;
+	width: auto;
 }
 
 .pinboard .input {
@@ -207,6 +210,7 @@
 
 .pinboard.eventlog .messages .message .time {
 	float: left;
+	margin-right: 10px;
 }
 
 .pinboard.eventlog .messages .message .time:after {
@@ -223,7 +227,6 @@
 
 
 .pinboard.eventlog .messages .message .content {
-	float: left;
 	text-align: justify;
 	margin-left: 10px;
 }

@@ -56,6 +56,7 @@ UI.constants.NAV_CONTENT = "menu_content";
 UI.constants.LOG_TABS = "log";
 UI.constants.LOG_CONTENT = "log_content";
 UI.constants.LOG_FRAME = "bar_bottom";
+UI.constants.LOG_TOGGLE_ARROW = "log_toggle_arrow";
 UI.constants.USERINFO_BUTTON = "door";
 UI.constants.USERINFO_CONTENT = "userbar";
 UI.constants.USERINFO_INDEX_LOGGEDOUT = 0;
@@ -380,7 +381,8 @@ UIManager.prototype.showLog = function()
 {
 	if(this.logOpen)
 		return;
-	document.getElementById(UI.constants.LOG_FRAME).className += " open";
+	document.getElementById(UI.constants.LOG_FRAME).classList.add("open");
+	document.getElementById(UI.constants.LOG_TOGGLE_ARROW).classList.remove("flip-vertical");
 	this.logOpen = true;
 };
 
@@ -388,7 +390,8 @@ UIManager.prototype.hideLog = function()
 {
 	if(!this.logOpen)
 		return;
-	document.getElementById(UI.constants.LOG_FRAME).className = this.logCls;
+	document.getElementById(UI.constants.LOG_FRAME).classList.remove("open");
+	document.getElementById(UI.constants.LOG_TOGGLE_ARROW).classList.add("flip-vertical");
 	this.logOpen = false;
 };
 
