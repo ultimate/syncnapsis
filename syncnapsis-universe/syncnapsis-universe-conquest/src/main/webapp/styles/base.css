@@ -280,6 +280,15 @@ body, select {
 	right: 0px;
 }
 
+#bar_bottom .log_toggle {
+	position: absolute;
+	right: 0px;
+	cursor: pointer;
+	width: 20px;
+	heigth: 20px;
+	padding-top: 4px;
+}
+
 #bar_bottom .inner {
 	padding-left: 5px;
 	padding-right: 5px;
@@ -293,9 +302,8 @@ body, select {
 	position: absolute;
 	top: 34px;
 	bottom: 0px;
-	overflow-x: hidden;
-	overflow-y: auto;
-	width: 498px;
+	overflow: hidden;
+	width: 499px;
 }
 
 .frame {
@@ -416,6 +424,7 @@ h1 {
 
 #pinboard_chat,
 #pinboard_events {
-	height: 150px;
+	height: 185px;
+	width: 490px;
 	line-height: 1em;
 }
