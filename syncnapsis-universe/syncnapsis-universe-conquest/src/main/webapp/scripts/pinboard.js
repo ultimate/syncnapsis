@@ -14,20 +14,34 @@
  */
 //@requires("Server")
 
+var PINBOARD_INPUT_NONE = 0;
+var PINBOARD_INPUT_SINGLE_LINE = 1;
+var PINBOARD_INPUT_MULTI_LINE = 2;
+
 /*
  * This a view Entity for a Pinboard identified by its ID
  * (Messages are sorted newest first!) 
  */
-Pinboard = function(container, pinboardIdOrName, style, messageStyle, removeOldMessages, disableInput)
+Pinboard = function(container, pinboardIdOrName, style, messageStyle, inputStyle, removeOldMessages)
 {
 	this.pinboard = null;
 	this.messages = [];
 	this.messageCount = 0; 
 	this.removeOldMessages = removeOldMessages;
-	this.disableInput = disableInput;
+	this.inputStyle = inputStyle;
 	this.container = container;
 	this.style = style;
 	this.messageStyle = messageStyle;
+	
+	// anonymous post event handler
+	var postHandler = function(pinboard) {
+		return function() {
+			pinboard.post(pinboard.titleInput.value, pinboard.contentInput.value);
+			pinboard.titleInput.value = "";
+			pinboard.contentInput.value = "";
+			return false;
+		};
+	} (this);
 	
 	// start - init view
 	{
@@ -40,9 +54,15 @@ Pinboard = function(container, pinboardIdOrName, style, messageStyle, removeOldM
 		this.messageContainer.classList.add("messages");
 		this.container.appendChild(this.messageContainer);
 		// add input area
-		if(!this.disableInput)
+		if(this.inputStyle > PINBOARD_INPUT_NONE)
 		{
-			this.inputContainer = document.createElement("div");
+			this.inputContainer = document.createElement("form");
+			
+			// add invisible button to enable submit on enter
+			var submitButton = document.createElement("input");
+			submitButton.type = "submit";
+			submitButton.style.display = "none";
+			this.inputContainer.appendChild(submitButton);
 			
 			this.titleInput = document.createElement("input");
 			this.titleInput.type = "text";
@@ -51,7 +71,23 @@ Pinboard = function(container, pinboardIdOrName, style, messageStyle, removeOldM
 			title.appendChild(this.titleInput);
 			this.inputContainer.appendChild(title);
 			
-			this.contentInput = document.createElement("textarea");
+			if(this.inputStyle == PINBOARD_INPUT_MULTI_LINE)
+			{
+				this.contentInput = document.createElement("textarea");
+				this.contentInput.onkeydown = function(pinboard)
+				{
+					return function(event)
+					{
+						// TODO handle enter
+						// TODO handle ctrl+enter
+					};
+				} (this);
+			}
+			else
+			{
+				this.contentInput = document.createElement("input");
+				this.contentInput.type = "text";
+			}
 			var content = document.createElement("div");
 			content.classList.add("content");
 			content.appendChild(this.contentInput);
@@ -100,25 +136,28 @@ Pinboard = function(container, pinboardIdOrName, style, messageStyle, removeOldM
 	{
 		this.user = user;
 		
-		if(this.user && !this.disableInput)
+		if(this.inputStyle > PINBOARD_INPUT_NONE)
 		{
-			this.postButton.classList.remove("disabled");
-			this.postButton.children[0].onclick = function(pinboard) {
-				return function() {
-					pinboard.post(pinboard.titleInput.value, pinboard.contentInput.value);
-					pinboard.titleInput.value = "";
-					pinboard.contentInput.value = "";
-				};
-			} (this);
-			this.titleInput.disabled = false;
-			this.contentInput.disabled = false;
-		}
-		else if(!this.disableInput)
-		{
-			this.postButton.classList.add("disabled");
-			this.postButton.children[0].onclick = null;
-			this.titleInput.disabled = true;
-			this.contentInput.disabled = true;
+			if(this.user)
+			{
+				this.inputContainer.onsubmit = postHandler;
+				this.postButton.classList.remove("disabled");
+				this.postButton.children[0].onclick = postHandler;
+				this.titleInput.disabled = false;
+				this.titleInput.classList.remove("disabled");
+				this.contentInput.disabled = false;
+				this.contentInput.classList.remove("disabled");
+			}
+			else
+			{
+				this.inputContainer.onsubmit = null;
+				this.postButton.classList.add("disabled");
+				this.postButton.children[0].onclick = null;
+				this.titleInput.disabled = true;
+				this.titleInput.classList.add("disabled");
+				this.contentInput.disabled = true;
+				this.contentInput.classList.add("disabled");
+			}
 		}
 	};
 	

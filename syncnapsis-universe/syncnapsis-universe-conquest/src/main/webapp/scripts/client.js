@@ -154,9 +154,9 @@ UIManager = function()
 	
 	console.log("creating pinboard(s)");
 	this.pinboards = [];
-	this.pinboards.push(new Pinboard(document.getElementById(UI.constants.PINBOARD_NEWS), "testboard", "blog", "frame", false, true));
-	this.pinboards.push(new Pinboard(document.getElementById(UI.constants.PINBOARD_CHAT), "testboard", "chat", null, false, false));
-	this.pinboards.push(new Pinboard(document.getElementById(UI.constants.PINBOARD_EVENTS), "testboard", "eventlog", null, false, true));
+	this.pinboards.push(new Pinboard(document.getElementById(UI.constants.PINBOARD_NEWS), "testboard", "blog", "frame", PINBOARD_INPUT_MULTI_LINE, false));
+	this.pinboards.push(new Pinboard(document.getElementById(UI.constants.PINBOARD_CHAT), "testboard", "chat", null, PINBOARD_INPUT_SINGLE_LINE, false));
+	this.pinboards.push(new Pinboard(document.getElementById(UI.constants.PINBOARD_EVENTS), "testboard", "eventlog", null, PINBOARD_INPUT_NONE, false));
 
 	console.log("showing UI");
 
