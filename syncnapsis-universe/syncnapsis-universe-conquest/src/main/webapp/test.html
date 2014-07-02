@@ -130,18 +130,44 @@
 </div>
 
 <div style="position: absolute; left: 1000px; top: 200px; width: 300px; height: 200px">
+	<form onsubmit="javascript: return submitTest();">
+		<input id="tf_user" type="text" /><br>
+		<input id="tf_pw" type="password" /><br>
+		<textarea id="ta"></textarea>
+	    <input type="submit" value="submit" style="display: none;"/>
+	</form>
 	<script type="text/javascript">
 	submitTest = function()
 	{
 		console.log(document.getElementById("tf_user") + ":" + document.getElementById("tf_pw"));
+		console.log(document.getElementById("ta").value);
 		return false;
 	}
+	
+	var down = false;
+	
+	document.getElementById("ta").onkeypress = function(event) {
+		if(event.keyCode == Events.KEY_ENTER)
+		{
+			if(Events.hasModifiers(event, Events.KEY_CTRL))
+			{
+				this.value = this.value + "\n";
+				this.scrollTop = 9999999; // scroll down
+			}
+			else if(down == false)
+			{
+				document.forms[0].onsubmit();
+			}
+			down = true;
+			return false;
+		}
+		//console.log("p");
+		return true;
+	};
+	document.getElementById("ta").onkeyup = function(event) {
+		down = false;
+	};
 	</script>
-	<form onsubmit="javascript: return submitTest();">
-		<input id="tf_user" type="text" /><br>
-		<input id="tf_pw" type="password" /><br>
-	    <input type="submit" value="submit" style="display: none;"/>
-	</form>
 </div>
 
 </body>
