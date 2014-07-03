@@ -25,6 +25,7 @@ import org.springframework.util.Assert;
 import com.syncnapsis.data.dao.RPCLogDao;
 import com.syncnapsis.data.model.RPCLog;
 import com.syncnapsis.data.model.User;
+import com.syncnapsis.data.model.base.Model;
 import com.syncnapsis.data.service.RPCLogManager;
 import com.syncnapsis.exceptions.SerializationException;
 import com.syncnapsis.utils.ServletUtil;
@@ -188,10 +189,20 @@ public class RPCLogManagerImpl extends GenericManagerImpl<RPCLog, Long> implemen
 			call.setArgs(e.getClass().getName() + ": " + e.getMessage());
 		}
 		
+		String resultS = result;
+		if(resultS.length() > Model.LENGTH_TEXT)
+		{
+			resultS = resultS.substring(0, Model.LENGTH_TEXT - 5) + " ...";
+			if(resultS.startsWith("{"))
+				resultS +=  "}";
+			else if(resultS.startsWith("["))
+				resultS +=  "]";
+		}
+		
 		RPCLog log = new RPCLog();
 		log.setExecutionDate(executionDate);
 		log.setRemoteAddr(ServletUtil.getRemoteAddr(session));
-		log.setResult(result);
+		log.setResult(resultS);
 		log.setRPCCall(call);
 		log.setUser(user);
 		log.setUserAgent(ServletUtil.getUserAgent(session));
