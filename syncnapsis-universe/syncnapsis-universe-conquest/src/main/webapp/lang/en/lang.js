@@ -15,6 +15,7 @@
 var lang = {};
 
 lang.current = "EnumLocale.EN";
+lang.unicode_test = "ÄäÖöÜüßÁáÀàÂâÉéÈèÊêÍíÌìÎîÓóÒòÔôÚúÙùÛû";
 
 lang.EnumLocale = {};
 lang.EnumLocale.EN = "English";
