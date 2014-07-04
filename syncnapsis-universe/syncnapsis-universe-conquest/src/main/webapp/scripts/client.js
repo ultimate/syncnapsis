@@ -75,6 +75,7 @@ UI.constants.FLAGS_CLASS = "flag";
 
 UI.constants.MESSAGE_SHOW_CLASS = "show";
 UI.constants.BUTTON_DISABLED_CLASS = "disabled";
+UI.constants.ERROR_CLASS = "error";
 UI.constants.MENU_HIDDEN_CLASS = "menu_hidden";
 
 UI.constants.DEFAULT_DATE_FORMAT = "yyyy-MM-dd HH:mm:ss";
@@ -531,11 +532,10 @@ UIManager.prototype.showErrorMessage = function(inputfield, messagefield, messag
 {
 	if(inputfield != null)
 	{
-		var cls = inputfield.className;
-		inputfield.className = cls + " error";
+		inputField.classList.add(UI.constants.ERROR_CLASS);
 		setTimeout(function()
 		{
-			inputfield.className = cls;
+			inputfield.classList.remove(UI.constants.ERROR_CLASS);
 		}, 3000);
 	}
 	if(messagefield != null)

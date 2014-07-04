@@ -12,6 +12,7 @@
  * You should have received a copy of the GNU General Plublic License along with this program;
  * if not, see <http://www.gnu.org/licenses/>.
  */
+//@requires("Events")
 //@requires("Server")
 
 var PINBOARD_INPUT_NONE = 0;
@@ -73,15 +74,34 @@ Pinboard = function(container, pinboardIdOrName, style, messageStyle, inputStyle
 			
 			if(this.inputStyle == PINBOARD_INPUT_MULTI_LINE)
 			{
+				var down = false;
+				
 				this.contentInput = document.createElement("textarea");
 				this.contentInput.onkeydown = function(pinboard)
 				{
 					return function(event)
 					{
-						// TODO handle enter
-						// TODO handle ctrl+enter
+						if(event.keyCode == Events.KEY_ENTER)
+						{
+							if(Events.hasModifiers(event, Events.KEY_CTRL))
+							{
+								// add new line on Ctrl+Enter
+								this.value = this.value + "\n";
+								this.scrollTop = 9999999; // scroll down
+							}
+							else if(down == false)
+							{
+								// post on Enter
+								postHandler();
+							}
+							down = true;
+							return false;
+						}
 					};
 				} (this);
+				this.contentInput.onkeyup = function(event) {
+					down = false;
+				};
 			}
 			else
 			{
