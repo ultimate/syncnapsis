@@ -37,6 +37,14 @@ Pinboard = function(container, pinboardIdOrName, style, messageStyle, inputStyle
 	// anonymous post event handler
 	var postHandler = function(pinboard) {
 		return function() {
+			if(pinboard.contentInput.value == null || pinboard.contentInput.value == "")
+			{
+				pinboard.contentInput.classList.add("error");
+				setTimeout(function() {
+					pinboard.contentInput.classList.remove("error");
+				}, 1000);
+				return false;
+			}
 			pinboard.post(pinboard.titleInput.value, pinboard.contentInput.value);
 			pinboard.titleInput.value = "";
 			pinboard.contentInput.value = "";
