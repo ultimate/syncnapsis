@@ -17,7 +17,6 @@ package com.syncnapsis.utils;
 import java.io.Serializable;
 import java.util.HashMap;
 
-import org.hibernate.FlushMode;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -26,13 +25,12 @@ import org.hibernate.service.ServiceRegistry;
 import org.hibernate.service.ServiceRegistryBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.orm.hibernate4.SessionHolder;
-import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 import com.syncnapsis.exceptions.ConversionException;
 
 /**
- * Util-Klasse für den Zugriff auf die Hibernate-Session
+ * Util class for static access to the {@link SessionFactoryUtil} and the underlying
+ * {@link SessionFactory}
  * 
  * @author ultimate
  */
@@ -49,9 +47,9 @@ public class HibernateUtil
 	private static HibernateUtil			instance	= new HibernateUtil();
 
 	/**
-	 * Hibernate SessionFactory singleton
+	 * Hibernate SessionFactoryUtil singleton
 	 */
-	private static SessionFactory			sessionFactory;
+	private static SessionFactoryUtil		sessionFactoryUtil;
 
 	/**
 	 * Only allow creation via getInstance
@@ -78,10 +76,10 @@ public class HibernateUtil
 	 */
 	public void setSessionFactory(SessionFactory sessionFactory)
 	{
-		logger.debug("setting SessionFactory: " + (sessionFactory == null ? null : sessionFactory.getClass().getName()));
-		if(HibernateUtil.sessionFactory != null)
-			logger.warn("SessionFactory is not null but will be overwritten!");
-		HibernateUtil.sessionFactory = sessionFactory;
+		logger.debug("setting SessionFactoryUtil for: " + (sessionFactory == null ? null : sessionFactory.getClass().getName()));
+		if(sessionFactoryUtil != null)
+			logger.warn("SessionFactoryUtil is not null but will be overwritten!");
+		sessionFactoryUtil = new SessionFactoryUtil(sessionFactory);
 	}
 
 	/**
@@ -92,83 +90,63 @@ public class HibernateUtil
 	 */
 	public SessionFactory getSessionFactory()
 	{
-		return initSessionFactory(null);
+		if(sessionFactoryUtil == null)
+			sessionFactoryUtil = new SessionFactoryUtil(initSessionFactory(null));
+		return sessionFactoryUtil.getSessionFactory();
 	}
 
 	/**
-	 * The current Session.
+	 * Static access to {@link SessionFactoryUtil#currentSession()}
 	 * 
-	 * @see HibernateUtil#getSessionFactory()
-	 * @see SessionFactory#getCurrentSession()
 	 * @return the Hibernate-Session
 	 */
 	public static Session currentSession() throws HibernateException
 	{
-		return instance.getSessionFactory().getCurrentSession();
+		return sessionFactoryUtil.currentSession();
 	}
 
 	/**
-	 * Closes the current Session
+	 * Static access to {@link SessionFactoryUtil#closeSession()}
 	 * 
-	 * @see HibernateUtil#currentSession()
 	 * @see Session#close()
 	 */
 	public static void closeSession() throws HibernateException
 	{
-		currentSession().close();
+		sessionFactoryUtil.closeSession();
 	}
 
 	/**
-	 * Open a Session that is bound to the {@link TransactionSynchronizationManager}.<br>
-	 * The Session will be configured with {@link FlushMode#COMMIT}
+	 * Static access to {@link SessionFactoryUtil#openBoundSession()}
 	 * 
-	 * @param useSessionHolder - select wether to use a SessionHolder for binding or not
 	 * @return the session opened
 	 */
 	public static Session openBoundSession()
 	{
-		Session session = sessionFactory.openSession();
-		session.setFlushMode(FlushMode.COMMIT);
-		TransactionSynchronizationManager.bindResource(sessionFactory, new SessionHolder(session));
-		return session;
+		return sessionFactoryUtil.openBoundSession();
 	}
 
 	/**
-	 * Close the session bound to the sessionFactory.
+	 * Static access to {@link SessionFactoryUtil#closeBoundSession()}
 	 * 
 	 * @return true when the Session has been closed successfully, false otherwise
 	 */
 	public static boolean closeBoundSession()
 	{
-		if(!isSessionBound())
-			return false;
-		Object resource = TransactionSynchronizationManager.unbindResource(sessionFactory);
-		if(resource instanceof Session)
-		{
-			((Session) resource).close();
-			return true;
-		}
-		else if(resource instanceof SessionHolder)
-		{
-			((SessionHolder) resource).getSession().close();
-			return true;
-		}
-		return false;
+		return sessionFactoryUtil.closeBoundSession();
 	}
 
 	/**
-	 * Is there a session bound for the SessionFactory?
+	 * Static access to {@link SessionFactoryUtil#isSessionBound()}
 	 * 
-	 * @see TransactionSynchronizationManager#hasResource(Object)
 	 * @return true or false
 	 */
 	public static boolean isSessionBound()
 	{
-		return TransactionSynchronizationManager.hasResource(sessionFactory);
+		return sessionFactoryUtil.isSessionBound();
 	}
 
 	/**
-	 * Initialize the SessionFactory if no SessionFactory is set.
+	 * Create a new SessionFactory from the given resource
 	 * 
 	 * @param resource - an optional path to a Resource from which the SessionFactory will be
 	 *            initialized.
@@ -176,31 +154,29 @@ public class HibernateUtil
 	 * @see Configuration#configure()
 	 * @return the newly created SessionFactory
 	 */
-	public SessionFactory initSessionFactory(String resource)
+	public static SessionFactory initSessionFactory(String resource)
 	{
-		if(sessionFactory == null)
+		try
 		{
-			try
-			{
-				Configuration configuration;
-				if(resource == null)
-					configuration = new Configuration().configure();
-				else
-					configuration = new Configuration().configure(resource);
+			Configuration configuration;
+			if(resource == null)
+				configuration = new Configuration().configure();
+			else
+				configuration = new Configuration().configure(resource);
 
-				ServiceRegistry serviceRegistry = new ServiceRegistryBuilder().applySettings(configuration.getProperties()).buildServiceRegistry();
+			ServiceRegistry serviceRegistry = new ServiceRegistryBuilder().applySettings(configuration.getProperties()).buildServiceRegistry();
 
-				sessionFactory = configuration.buildSessionFactory(serviceRegistry);
+			SessionFactory sessionFactory = configuration.buildSessionFactory(serviceRegistry);
 
-				logger.info("Hibernate configuration file loaded: " + (resource == null ? "hibernate.cfg.xml" : resource));
-			}
-			catch(Throwable ex)
-			{
-				logger.error("Initial SessionFactory creation failed: " + ex);
-				throw new ExceptionInInitializerError(ex);
-			}
+			logger.info("Hibernate configuration file loaded: " + (resource == null ? "hibernate.cfg.xml" : resource));
+
+			return sessionFactory;
 		}
-		return sessionFactory;
+		catch(Throwable ex)
+		{
+			logger.error("SessionFactory creation failed: " + ex);
+			throw new ExceptionInInitializerError(ex);
+		}
 	}
 
 	/**
@@ -246,7 +222,7 @@ public class HibernateUtil
 	public static Class<? extends Serializable> getIdType(Class<?> clazz)
 	{
 		if(!idTypes.containsKey(clazz))
-			idTypes.put(clazz, sessionFactory.getClassMetadata(clazz).getIdentifierType().getReturnedClass());
+			idTypes.put(clazz, sessionFactoryUtil.getSessionFactory().getClassMetadata(clazz).getIdentifierType().getReturnedClass());
 		return idTypes.get(clazz);
 	}
 }
