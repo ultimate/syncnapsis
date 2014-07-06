@@ -24,7 +24,7 @@ import com.syncnapsis.tests.annotations.TestCoversMethods;
 
 public class HibernateUtilTest extends BaseSpringContextTestCase
 {
-	@TestCoversMethods({ "getInstance", "*etSessionFactory", "initSessionFactory", "currentSession", "closeSession", "*BoundSession",
+	@TestCoversMethods({ "getInstance", "*etSessionFactory", "*etSessionFactoryUtil", "initSessionFactory", "currentSession", "closeSession", "*BoundSession",
 			"isSessionBound" })
 	public void testInstantiation()
 	{
