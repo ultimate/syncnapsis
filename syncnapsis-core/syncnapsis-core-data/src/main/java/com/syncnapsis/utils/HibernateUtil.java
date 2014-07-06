@@ -127,7 +127,7 @@ public class HibernateUtil
 	 */
 	public static Session currentSession() throws HibernateException
 	{
-		return sessionFactoryUtil.currentSession();
+		return getInstance().getSessionFactoryUtil().currentSession();
 	}
 
 	/**
@@ -137,7 +137,7 @@ public class HibernateUtil
 	 */
 	public static void closeSession() throws HibernateException
 	{
-		sessionFactoryUtil.closeSession();
+		getInstance().getSessionFactoryUtil().closeSession();
 	}
 
 	/**
@@ -147,7 +147,7 @@ public class HibernateUtil
 	 */
 	public static Session openBoundSession()
 	{
-		return sessionFactoryUtil.openBoundSession();
+		return getInstance().getSessionFactoryUtil().openBoundSession();
 	}
 
 	/**
@@ -157,7 +157,7 @@ public class HibernateUtil
 	 */
 	public static boolean closeBoundSession()
 	{
-		return sessionFactoryUtil.closeBoundSession();
+		return getInstance().getSessionFactoryUtil().closeBoundSession();
 	}
 
 	/**
@@ -167,7 +167,7 @@ public class HibernateUtil
 	 */
 	public static boolean isSessionBound()
 	{
-		return sessionFactoryUtil.isSessionBound();
+		return getInstance().getSessionFactoryUtil().isSessionBound();
 	}
 
 	/**
