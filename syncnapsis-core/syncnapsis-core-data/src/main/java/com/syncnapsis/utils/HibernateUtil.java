@@ -96,16 +96,28 @@ public class HibernateUtil
 	}
 
 	/**
-	 * The SessionFactory to be used by the HibernateUtil.
-	 * If the inner SessionFactory is null a new one will be initiated by default.
+	 * The SessionFactoryUtil used by the HibernateUtil.
+	 * If the inner SessionFactoryUtil is null a new one will be initiated by default.
 	 * 
+	 * @return the SessionFactory
+	 */
+	public SessionFactoryUtil getSessionFactoryUtil()
+	{
+		if(sessionFactoryUtil == null)
+			sessionFactoryUtil = new SessionFactoryUtil(initSessionFactory(null));
+		return sessionFactoryUtil;
+	}
+
+	/**
+	 * The SessionFactory to be used by the HibernateUtil.
+	 * If the inner SessionFactoryUtil is null a new one will be initiated by default.
+	 * 
+	 * @see HibernateUtil#getSessionFactoryUtil()
 	 * @return the SessionFactory
 	 */
 	public SessionFactory getSessionFactory()
 	{
-		if(sessionFactoryUtil == null)
-			sessionFactoryUtil = new SessionFactoryUtil(initSessionFactory(null));
-		return sessionFactoryUtil.getSessionFactory();
+		return getSessionFactoryUtil().getSessionFactory();
 	}
 
 	/**
