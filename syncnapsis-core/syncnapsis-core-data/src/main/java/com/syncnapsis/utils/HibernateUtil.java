@@ -83,6 +83,19 @@ public class HibernateUtil
 	}
 
 	/**
+	 * Directly set the SessionFactoryUtil to be used by the HibernateUtil
+	 * 
+	 * @param sessionFactoryUtil - the SessionFactoryUtil
+	 */
+	public void setSessionFactoryUtil(SessionFactoryUtil sessionFactoryUtil)
+	{
+		logger.debug("setting SessionFactoryUtil...");
+		if(HibernateUtil.sessionFactoryUtil != null)
+			logger.warn("SessionFactoryUtil is not null but will be overwritten!");
+		HibernateUtil.sessionFactoryUtil = sessionFactoryUtil;
+	}
+
+	/**
 	 * The SessionFactory to be used by the HibernateUtil.
 	 * If the inner SessionFactory is null a new one will be initiated by default.
 	 * 
