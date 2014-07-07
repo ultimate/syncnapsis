@@ -532,7 +532,7 @@ UIManager.prototype.showErrorMessage = function(inputfield, messagefield, messag
 {
 	if(inputfield != null)
 	{
-		inputField.classList.add(UI.constants.ERROR_CLASS);
+		inputfield.classList.add(UI.constants.ERROR_CLASS);
 		setTimeout(function()
 		{
 			inputfield.classList.remove(UI.constants.ERROR_CLASS);
@@ -541,7 +541,11 @@ UIManager.prototype.showErrorMessage = function(inputfield, messagefield, messag
 	if(messagefield != null)
 	{
 		if(message)
-			messagefield.innerHTML = this.getString(message);
+		{
+			while(messagefield.firstChild)
+				messagefield.removeChild(messagefield.firstChild);
+			messagefield.appendChild(document.createTextNode(this.getString(message)));
+		}
 		
 		messagefield.classList.add(UI.constants.MESSAGE_SHOW_CLASS);
 		setTimeout(function()
