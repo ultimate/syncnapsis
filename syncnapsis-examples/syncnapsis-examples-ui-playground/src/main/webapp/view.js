@@ -424,7 +424,7 @@ var View = function(container) {
 		var p1 = system.coords.value;
 		var p2 = this.camera.camera.position;
 		var dist = Math.sqrt((p1.x-p2.x)*(p1.x-p2.x) + (p1.y-p2.y)*(p1.y-p2.y) + (p1.z-p2.z)*(p1.z-p2.z));
-		return system.size / (2 * Math.tan((camera.camera.fov * Math.PI / 180) / 2) * dist);
+		return system.size.value / (2 * Math.tan((camera.camera.fov * Math.PI / 180) / 2) * dist);
 	};
 	
 	// TODO for debug only

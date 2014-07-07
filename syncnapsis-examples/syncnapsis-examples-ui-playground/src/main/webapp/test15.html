@@ -275,18 +275,10 @@
 				requestAnimationFrame( animate );	
 				view.render();
 				//render();
-				stats.update();		
-			}	
-
-			function render() {
-				updatePlanes();
-				updateCamera();
-				renderer.render( scene, camera.camera );
-				
-				var coords;
+				stats.update();	
 				
 				if(activeSector != null && (coords = view.getScreenCoords(activeSector.coords.value)).z < 1) {	
-					//console.log("sector = (" + activeSector.x + "," + activeSector.y + "," + activeSector.z + ")");				
+					console.log("sector = (" + activeSector.coords.value.x + "," + activeSector.coords.value.y + "," + activeSector.coords.value.z + ")");				
 					//var coords = view.getScreenCoords(activeSector);
 					
 					//console.log("coords.z=" + coords.z);
@@ -296,7 +288,7 @@
 					var p2 = camera.camera.position;
 					
 					var size = 26;
-					size = view.getScreenSize(activeSector);
+					//size = view.getScreenSize(activeSector);
 					
 					borderWidth = 3;
 					
@@ -314,7 +306,15 @@
 					var testC = document.getElementById('testDiv');
 					testC.style.left = "-1000px";
 					testC.style.top = "-1000px";
-				}
+				}	
+			}	
+
+			function render() {
+				updatePlanes();
+				updateCamera();
+				renderer.render( scene, camera.camera );
+				
+				var coords;
 			}
 			
 			<!-- new -->
