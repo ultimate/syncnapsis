@@ -36,14 +36,14 @@ import com.syncnapsis.utils.TimeZoneUtil;
 import com.syncnapsis.websockets.service.rpc.RPCCall;
 
 /**
- * Manager-Implementierung für den Zugriff auf User.
+ * Manager-Implementierung fï¿½r den Zugriff auf User.
  * 
  * @author ultimate
  */
 public class UserManagerImpl extends GenericNameManagerImpl<User, Long> implements UserManager, InitializingBean
 {
 	/**
-	 * UserDao für den Datenbankzugriff
+	 * UserDao fï¿½r den Datenbankzugriff
 	 */
 	protected UserDao					userDao;
 	/**
@@ -62,7 +62,7 @@ public class UserManagerImpl extends GenericNameManagerImpl<User, Long> implemen
 	/**
 	 * Standard Constructor
 	 * 
-	 * @param userDao - UserDao für den Datenbankzugriff
+	 * @param userDao - UserDao fï¿½r den Datenbankzugriff
 	 * @param userRoleManager - the UserRoleManager
 	 * @param actionManager - the ActionManager
 	 */
@@ -132,6 +132,16 @@ public class UserManagerImpl extends GenericNameManagerImpl<User, Long> implemen
 	{
 		securityManager.getUserProvider().set(null);
 		return true;
+	}
+	
+	/*
+	 * (non-Javadoc)
+	 * @see com.syncnapsis.data.service.UserManager#getCurrent()
+	 */
+	@Override
+	public User getCurrent()
+	{
+		return securityManager.getUserProvider().get();
 	}
 
 	/*

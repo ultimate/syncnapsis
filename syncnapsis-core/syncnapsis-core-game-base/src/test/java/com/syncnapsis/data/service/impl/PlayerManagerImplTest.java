@@ -287,8 +287,21 @@ public class PlayerManagerImplTest extends GenericManagerImplTestCase<Player, Lo
 		}
 	}
 
+	public void testGetCurrent() throws Exception
+	{
+		sessionProvider.set(new MockHttpSession());
+
+		Player player = new Player();
+
+		playerProvider.set(player);
+
+		assertSame(player, playerManager.getCurrent());
+	}
+
 	public void testRegister() throws Exception
 	{
+		sessionProvider.set(new MockHttpSession()); // for the locale provider
+		
 		String username = "a_new_user";
 		String email = "new@syncnapsis.com";
 		String password = "a_password";

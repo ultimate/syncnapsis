@@ -32,7 +32,7 @@ import com.syncnapsis.exceptions.UserRegistrationFailedException;
 import com.syncnapsis.security.BaseGameManager;
 
 /**
- * Manager-Implementierung für den Zugriff auf Player.
+ * Manager-Implementierung fï¿½r den Zugriff auf Player.
  * 
  * @author ultimate
  */
@@ -133,6 +133,16 @@ public class PlayerManagerImpl extends GenericManagerImpl<Player, Long> implemen
 	{
 		securityManager.getPlayerProvider().set(null);
 		return userManager.logout();
+	}	
+	
+	/*
+	 * (non-Javadoc)
+	 * @see com.syncnapsis.data.service.PlayerManager#getCurrent()
+	 */
+	@Override
+	public Player getCurrent()
+	{
+		return securityManager.getPlayerProvider().get();
 	}
 
 	/*
