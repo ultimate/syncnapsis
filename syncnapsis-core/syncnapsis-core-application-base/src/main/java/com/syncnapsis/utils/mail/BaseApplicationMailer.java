@@ -70,6 +70,10 @@ public class BaseApplicationMailer extends MultiMailer<TemplateMailer>
 	 * {@link BaseApplicationMailer#sendUserRoleChangedNotification(User, UserRole, String)}
 	 */
 	public static final String		TEMPLATE_USERROLE_CHANGED		= "userrole.changed";
+	
+	// TODO template.password.verify
+	// TODO template.password.reset
+	
 	/**
 	 * An Array containing the names of all required templates.
 	 */
