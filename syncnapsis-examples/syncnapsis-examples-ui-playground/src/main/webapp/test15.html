@@ -47,96 +47,98 @@
 				var sec1, sec2;
 					
 				var galaxy = view.galaxy;
-
-				console.time("proj");
+				
+				if(galaxy)
 				{
-					mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
-					mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;	
-				
-					var vector = new THREE.Vector3( mouse.x, mouse.y, 1 );				
-					projector.unprojectVector( vector, camera.camera );
-					var ray = new THREE.Ray( camera.camera.position, vector.sub( camera.camera.position ).normalize() );
-					
-					var o = ray.origin;
-					var d = ray.direction;
-					//console.log("origin: (" + o.x + "," + o.y + "," + o.z + ") direction: (" + d.x + "," + d.y + "," + d.z + ")");
-					var p;
-					var n = new THREE.Vector3(0,0,0);; // normal vector to line = (o-p)-((o-p)*d)d // * = dot-product
-					var dist2; // = (|n|)^2 // use square to avoid sqrt
-					var opd; // temp for (o-p)*d
-					var opdMin = 10000000;;
-					var dist2Min = 10000000;;
-						
-					
-					activeSector = null;
-					
-					for(var i = 0; i < galaxy.systems.length; i++)
+					console.time("proj");
 					{
-						p = galaxy.systems[i].coords.value;
-						size = galaxy.systems[i].size.value;
-						if(size == 0)
-							continue;
-						
-						opd = (p.x-o.x)*d.x + (p.y-o.y)*d.y + (p.z-o.z)*d.z;
-						// opd is in direction to n (intersection have positive opd)
-						if(opd < 0) // wrong direction (behind the camera)
-							continue;
-						n.x = (o.x - p.x)+opd*d.x;
-						n.y = (o.y - p.y)+opd*d.y;
-						n.z = (o.z - p.z)+opd*d.z;
-						dist2 = (n.x*n.x + n.y*n.y + n.z*n.z);
-						//if(dist2 < 10000)
-						//	console.log("opd=" + opd + " dist=" + dist2 + " x|y|z= " + p.x + "|" + p.y + "|" + p.z);
-						if(dist2 < dist2Min)
-								dist2Min = dist2;
-						if(opd < opdMin && dist2 <= size*size)
-						{
-							opdMin = opd;
-							sec1 = galaxy.systems[i];
-						}									
-					}
-					//console.log("dist2Min=" + dist2Min);
-				}				
-				console.timeEnd("proj");
-				
-				
-				console.time("scr");
-				{
-					mouse.x = event.clientX;
-					mouse.y = event.clientY;
-				
-					var p;
-					var dist2;
-					var screenCoords;
-					var zMin = 10000000;
+						mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
+						mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;	
 					
-					for(var i = 0; i < galaxy.systems.length; i++)
-					{
-						p = galaxy.systems[i];
-						if(p.size.value == 0)
-							continue;
+						var vector = new THREE.Vector3( mouse.x, mouse.y, 1 );				
+						projector.unprojectVector( vector, camera.camera );
+						var ray = new THREE.Ray( camera.camera.position, vector.sub( camera.camera.position ).normalize() );
+						
+						var o = ray.origin;
+						var d = ray.direction;
+						//console.log("origin: (" + o.x + "," + o.y + "," + o.z + ") direction: (" + d.x + "," + d.y + "," + d.z + ")");
+						var p;
+						var n = new THREE.Vector3(0,0,0);; // normal vector to line = (o-p)-((o-p)*d)d // * = dot-product
+						var dist2; // = (|n|)^2 // use square to avoid sqrt
+						var opd; // temp for (o-p)*d
+						var opdMin = 10000000;;
+						var dist2Min = 10000000;;
 							
-						screenCoords = view.getScreenCoords(p.coords.value);
-						dist2 = (screenCoords.x-mouse.x)*(screenCoords.x-mouse.x) + (screenCoords.y-mouse.y)*(screenCoords.y-mouse.y);
-						//console.log("dist=" + dist2 + " x|y|z= " + p.x + "|" + p.y + "|" + p.z);
-						if(screenCoords.z < zMin && dist2 < p.size.value*p.size.value)
+						
+						activeSector = null;
+						
+						for(var i = 0; i < galaxy.systems.length; i++)
 						{
-							zMin = screenCoords.z;
-							sec2 = p;
+							p = galaxy.systems[i].coords.value;
+							size = galaxy.systems[i].size.value;
+							if(size == 0)
+								continue;
+							
+							opd = (p.x-o.x)*d.x + (p.y-o.y)*d.y + (p.z-o.z)*d.z;
+							// opd is in direction to n (intersection have positive opd)
+							if(opd < 0) // wrong direction (behind the camera)
+								continue;
+							n.x = (o.x - p.x)+opd*d.x;
+							n.y = (o.y - p.y)+opd*d.y;
+							n.z = (o.z - p.z)+opd*d.z;
+							dist2 = (n.x*n.x + n.y*n.y + n.z*n.z);
+							//if(dist2 < 10000)
+							//	console.log("opd=" + opd + " dist=" + dist2 + " x|y|z= " + p.x + "|" + p.y + "|" + p.z);
+							if(dist2 < dist2Min)
+									dist2Min = dist2;
+							if(opd < opdMin && dist2 <= size*size)
+							{
+								opdMin = opd;
+								sec1 = galaxy.systems[i];
+							}									
+						}
+						//console.log("dist2Min=" + dist2Min);
+					}				
+					console.timeEnd("proj");
+					
+					
+					console.time("scr");
+					{
+						mouse.x = event.clientX;
+						mouse.y = event.clientY;
+					
+						var p;
+						var dist2;
+						var screenCoords;
+						var zMin = 10000000;
+						
+						for(var i = 0; i < galaxy.systems.length; i++)
+						{
+							p = galaxy.systems[i];
+							if(p.size.value == 0)
+								continue;
+								
+							screenCoords = view.getScreenCoords(p.coords.value);
+							dist2 = (screenCoords.x-mouse.x)*(screenCoords.x-mouse.x) + (screenCoords.y-mouse.y)*(screenCoords.y-mouse.y);
+							//console.log("dist=" + dist2 + " x|y|z= " + p.x + "|" + p.y + "|" + p.z);
+							if(screenCoords.z < zMin && dist2 < p.size.value*p.size.value)
+							{
+								zMin = screenCoords.z;
+								sec2 = p;
+							}
 						}
 					}
+					console.timeEnd("scr");
+					
+					activeSector = sec2;
+					
+					if(sec1)
+					sec1 = sec1.coords.value;
+					if(sec2)
+					sec2 = sec2.coords.value;
+					
+					console.log("sec1=" + (sec1 == null ? null : (sec1.x + "|" + sec1.y + "|" + sec1.z)) + " sec2=" + (sec2 == null ? null : (sec2.x + "|" + sec2.y + "|" + sec2.z)) );
 				}
-				console.timeEnd("scr");
-				
-				activeSector = sec2;
-				
-				if(sec1)
-				sec1 = sec1.coords.value;
-				if(sec2)
-				sec2 = sec2.coords.value;
-				
-				console.log("sec1=" + (sec1 == null ? null : (sec1.x + "|" + sec1.y + "|" + sec1.z)) + " sec2=" + (sec2 == null ? null : (sec2.x + "|" + sec2.y + "|" + sec2.z)) );
-				
 				if(activeSector == null)
 					camera.target.target = new THREE.Vector3(0,0,0);
 				//else
@@ -231,7 +233,7 @@
 			function init() {
 				
 				view = new View(document.getElementById("view"));				
-				
+				/*
 				var iframe = document.getElementById("sectors-test.js");
 				var load = function() {	
 					console.log("iframe loaded!");
@@ -246,7 +248,8 @@
 				if(iframe.contentWindow.document.body != null)
 					load();
 				else
-					iframe.onload = load;
+					iframe.onload = load;				
+				*/
 				
 				// export for accessibility - START
 				camera = view.camera;
@@ -256,7 +259,7 @@
 				scene = new THREE.Scene();
 				
 				showStarColors();
-				//selectGalaxy();
+				selectGalaxy();
 
 				projector = new THREE.Projector();
 
@@ -272,18 +275,10 @@
 				requestAnimationFrame( animate );	
 				view.render();
 				//render();
-				stats.update();		
-			}	
-
-			function render() {
-				updatePlanes();
-				updateCamera();
-				renderer.render( scene, camera.camera );
-				
-				var coords;
+				stats.update();	
 				
 				if(activeSector != null && (coords = view.getScreenCoords(activeSector.coords.value)).z < 1) {	
-					//console.log("sector = (" + activeSector.x + "," + activeSector.y + "," + activeSector.z + ")");				
+					console.log("sector = (" + activeSector.coords.value.x + "," + activeSector.coords.value.y + "," + activeSector.coords.value.z + ")");				
 					//var coords = view.getScreenCoords(activeSector);
 					
 					//console.log("coords.z=" + coords.z);
@@ -293,7 +288,7 @@
 					var p2 = camera.camera.position;
 					
 					var size = 26;
-					size = view.getScreenSize(activeSector);
+					//size = view.getScreenSize(activeSector);
 					
 					borderWidth = 3;
 					
@@ -311,7 +306,15 @@
 					var testC = document.getElementById('testDiv');
 					testC.style.left = "-1000px";
 					testC.style.top = "-1000px";
-				}
+				}	
+			}	
+
+			function render() {
+				updatePlanes();
+				updateCamera();
+				renderer.render( scene, camera.camera );
+				
+				var coords;
 			}
 			
 			<!-- new -->
@@ -516,11 +519,14 @@
 				//alert(str);
 				window.eval(str);
 				
+				view.load(sectors,1);
+				/*
 				createGalaxy(sectors, 1);
 				updateColormodelConfig();
 				createPlanes(galaxy.info);
 				//setTimeout(updateStars, 100);
 				updateStars(true);
+				*/
 			};
 			
 			updateColors = function()

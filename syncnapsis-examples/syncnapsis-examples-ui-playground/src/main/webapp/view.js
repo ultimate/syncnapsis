@@ -18,12 +18,14 @@
 var ViewUtil = {};
 
 ViewUtil.INSTANT = Number.MAX_VALUE;
-ViewUtil.MAX_PARTICLES = 100000;
 ViewUtil.INFINITY = new THREE.Vector3(1000000,1000000,1000000);
 ViewUtil.WHITE = new THREE.Color(1,1,1);
 ViewUtil.BLACK = new THREE.Color(0,0,0);
 ViewUtil.AMPLITUDE = 500.0;
 
+ViewUtil.SYSTEM_SIZE_MIN = 10;
+ViewUtil.SYSTEM_SIZE_MAX = 30;
+	
 ViewUtil.loadShader = function(name) {
 	var index = DependencyManager.indexOf(name);
 	return DependencyManager.scriptContents[index];
@@ -188,49 +190,77 @@ ViewUtil.GalaxyInfo = function() {
 	};
 };
 
-ViewUtil.Galaxy = function(attributes, material, maxSystems) {
+ViewUtil.GalaxyShader = function() {
 
-	this.systems = [];
-	this.systemCount = 0;
-	this.attributes = attributes;
-	this.material = material;
+	this.attributes = {
+		size: {	type: 'f', value: [] },
+		customColor: { type: 'c', value: [] }
+	};
+	
+	this.uniforms = {
+		amplitude: { type: "f", value: ViewUtil.AMPLITUDE },
+		color:     { type: "c", value: ViewUtil.WHITE },
+		texture:   { type: "t", value: THREE.ImageUtils.loadTexture( "img/star.png" ) },
+	};
+	
+	this.uniformsSelected = {
+			amplitude: { type: "f", value: ViewUtil.AMPLITUDE },
+			color:     { type: "c", value: ViewUtil.WHITE },
+			texture:   { type: "t", value: THREE.ImageUtils.loadTexture( "img/circle.png" ) },
+	};
+	
+	this.vertexShader = ViewUtil.loadShader( "vertexshader" );
+	this.fragmentShader = ViewUtil.loadShader( "fragmentshader" );
+		
+	this.materialNormal = new THREE.ShaderMaterial( {
+		uniforms: 		this.uniforms,
+		attributes:     this.attributes,
+		vertexShader:   this.vertexShader,
+		fragmentShader: this.fragmentShader,
+		blending: 		THREE.AdditiveBlending,
+		depthTest: 		false,
+		transparent:	true,
+	});
+	
+	this.materialSelected = new THREE.ShaderMaterial( {
+		uniforms: 		this.uniformsSelected,
+		attributes:     this.attributes,
+		vertexShader:   this.vertexShader,
+		fragmentShader: this.fragmentShader,
+		blending: 		THREE.AdditiveBlending,
+		depthTest: 		false,
+		transparent:	true,
+	});
+};
+
+ViewUtil.Galaxy = function(systems) {
+
+	this.shader = new ViewUtil.GalaxyShader();
+
+	this.systems = systems; // TODO think about copying the array?!
 	
 	this.particles = new THREE.Geometry();
-	this.particles.vertices = new Array(maxSystems); // can't change the amount later!!!
+	this.particles.vertices = new Array(this.systems.length); // can't change the amount later!!!
 	for(var v = 0; v < this.particles.vertices.length; v++)
 	{
 		this.particles.vertices[v] = ViewUtil.INFINITY.clone();
-		this.attributes.size.value[v] = 0;
-		this.attributes.customColor.value[v] = ViewUtil.BLACK.clone();
+		this.shader.attributes.size.value[v] = 0;
+		this.shader.attributes.customColor.value[v] = ViewUtil.BLACK.clone();
 	}
 	this.particles.dynamic = true;
 	
-	this.particleSystem = new THREE.ParticleSystem(this.particles, this.material)
+	this.particleSystem = new THREE.ParticleSystem(this.particles, this.shader.materialNormal)
 	this.particleSystem.dynamic = true;
 
 	this.info = new ViewUtil.GalaxyInfo();
-	
-	this.reset = function(size) {
-		this.info.reset();
-		this.systemCount = 0;
-		/*
-		for(var s = 0; s < this.systems.length; s++)
-		{
-			this.systems[s] = null;
-			this.attributes.size.value[s] = null;
-			this.attributes.customColor.value[s] = null;
-		}
-		*/
-	};
-	
-	this.register = function(system) {
-		system.index = this.systemCount;
-		system.galaxy = this;
-		system.updateColor();
-		this.systems[this.systemCount] = system;
-		this.info.update(system);
-		this.systemCount++;
-	};
+			
+	for(var s = 0; s < this.systems.length; s++)
+	{
+		this.systems[s].index = s;
+		this.systems[s].galaxy = this;
+		this.systems[s].updateColor();
+		this.info.update(this.systems[s]);
+	}
 	
 	this.animate = function(time) {
 		for(var s = 0; s < this.systems.length; s++)
@@ -268,13 +298,13 @@ ViewUtil.System = function(x, y, z, size, heat) {
 		}
 		if(this.size.animate(time) || this.firstAnimation)
 		{
-			this.galaxy.attributes.size.value[this.index] = this.size.value;
-			this.galaxy.attributes.size.needsUpdate = true;	
+			this.galaxy.shader.attributes.size.value[this.index] = this.size.value;
+			this.galaxy.shader.attributes.size.needsUpdate = true;	
 		}
 		if(this.color.animate(time) || this.firstAnimation)
 		{
-			this.galaxy.attributes.customColor.value[this.index] = this.color.value;
-			this.galaxy.attributes.customColor.needsUpdate = true;	
+			this.galaxy.shader.attributes.customColor.value[this.index] = this.color.value;
+			this.galaxy.shader.attributes.customColor.needsUpdate = true;	
 		}
 		
 		this.heat.animate(time);
@@ -323,46 +353,7 @@ var View = function(container) {
 	this.canvas = document.createElement("canvas");
 	this.container.appendChild(this.canvas);
 	
-	this.shaders = {
-		attributes: {
-			size: {	type: 'f', value: [] },
-			customColor: { type: 'c', value: [] }
-		},
-		uniforms: {
-			amplitude: { type: "f", value: ViewUtil.AMPLITUDE },
-			color:     { type: "c", value: ViewUtil.WHITE },
-			texture:   { type: "t", value: THREE.ImageUtils.loadTexture( "img/star.png" ) },
-		},
-		uniformsSelected: {
-			amplitude: { type: "f", value: ViewUtil.AMPLITUDE },
-			color:     { type: "c", value: ViewUtil.WHITE },
-			texture:   { type: "t", value: THREE.ImageUtils.loadTexture( "img/circle.png" ) },
-		},
-		vertexShader:   ViewUtil.loadShader( "vertexshader" ),
-		fragmentShader: ViewUtil.loadShader( "fragmentshader" ),
-		sizeMin: 10,
-		sizeMax: 30,
-	};
-	
 	this.materials = {
-		system:  new THREE.ShaderMaterial( {
-			uniforms: 		this.shaders.uniforms,
-			attributes:     this.shaders.attributes,
-			vertexShader:   this.shaders.vertexShader,
-			fragmentShader: this.shaders.fragmentShader,
-			blending: 		THREE.AdditiveBlending,
-			depthTest: 		false,
-			transparent:	true,
-		}),
-		systemSelected:  new THREE.ShaderMaterial( {
-			uniforms: 		this.shaders.uniformsSelected,
-			attributes:     this.shaders.attributes,
-			vertexShader:   this.shaders.vertexShader,
-			fragmentShader: this.shaders.fragmentShader,
-			blending: 		THREE.AdditiveBlending,
-			depthTest: 		false,
-			transparent:	true,
-		}),
 		planeT: new THREE.MeshBasicMaterial( { opacity:0.2 , wireframe: false, transparent:	true, side: THREE.DoubleSide } ),
 		planeW: new THREE.MeshBasicMaterial( { opacity:0.6 , wireframe: true } ),	
 		invisible: new THREE.MeshBasicMaterial( { visible: false} ),
@@ -412,6 +403,7 @@ var View = function(container) {
 	};
 	
 	this.renderer = new THREE.WebGLRenderer({canvas: this.canvas, antialias: true, clearColor: 0x000000, clearAlpha: 1 }); 
+	this.scene = new THREE.Scene(); 
 	
 	this.updateSize = function() {
 		this.renderer.setSize( this.container.offsetWidth, this.container.offsetHeight, true );
@@ -432,12 +424,8 @@ var View = function(container) {
 		var p1 = system.coords.value;
 		var p2 = this.camera.camera.position;
 		var dist = Math.sqrt((p1.x-p2.x)*(p1.x-p2.x) + (p1.y-p2.y)*(p1.y-p2.y) + (p1.z-p2.z)*(p1.z-p2.z));
-		return system.size / (2 * Math.tan((camera.camera.fov * Math.PI / 180) / 2) * dist);
+		return system.size.value / (2 * Math.tan((camera.camera.fov * Math.PI / 180) / 2) * dist);
 	};
-	
-	this.galaxy = new ViewUtil.Galaxy(this.shaders.attributes, this.materials.system, ViewUtil.MAX_PARTICLES);
-	this.scene = new THREE.Scene(); 
-	this.scene.add(this.galaxy.particleSystem);			
 	
 	// TODO for debug only
 	var g = new THREE.CubeGeometry(100,100,100);
@@ -451,9 +439,19 @@ var View = function(container) {
 		if(stepSize == undefined)
 			stepSize = 1;	
 			
-		this.galaxy.reset();
+		if(this.galaxy != null && this.galaxy.particleSystem != null)
+		{
+			console.log("removing previous galaxy...");
+			// TODO animate?!
+			
+			// remove the old particle system
+			this.scene.remove(this.galaxy.particleSystem);
+			delete this.galaxy;
+		}
 		
-		var system;
+		console.log("parsing sectors...");
+		
+		var systems = new Array();
 		var x, y, z, size, heat;
 				
 		for(var s = 0; s < sectors.length; s += stepSize)
@@ -461,12 +459,19 @@ var View = function(container) {
 			x = sectors[s][0];
 			y = sectors[s][1];
 			z = sectors[s][2];
-			size = Math.random()*(this.shaders.sizeMax-this.shaders.sizeMin)+this.shaders.sizeMin; // TODO
+			size = Math.random()*(ViewUtil.SYSTEM_SIZE_MAX-ViewUtil.SYSTEM_SIZE_MIN)+ViewUtil.SYSTEM_SIZE_MIN; // TODO
 			heat = Math.random(); // TODO
-			system = new ViewUtil.System(x, y, z, size, heat);
-			
-			this.galaxy.register(system);
+			systems[systems.length] = new ViewUtil.System(x, y, z, size, heat);
 		};
+		
+		// create a new galaxy object
+		console.log("creating galaxy...");
+		this.galaxy = new ViewUtil.Galaxy(systems);//, this.shaders.attributes, this.materials.system);
+		// add the new particle system
+		console.log("adding galaxy...");
+		this.scene.add(this.galaxy.particleSystem);			
+		
+		// TODO animate?!
 	};
 	
 	this.lastAnimation = new Date().getTime();
@@ -475,8 +480,9 @@ var View = function(container) {
 		var now = new Date().getTime();
 		var time = now - this.lastAnimation;
 		this.lastAnimation = now;
-			
-		this.galaxy.animate(time);
+		
+		if(this.galaxy != null)
+			this.galaxy.animate(time);
 		this.camera.animate(time);
 		
 		this.camera.update();
