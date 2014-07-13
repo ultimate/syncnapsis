@@ -18,6 +18,9 @@ import org.hibernate.FlushMode;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.cfg.Configuration;
+import org.hibernate.service.ServiceRegistry;
+import org.hibernate.service.ServiceRegistryBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.orm.hibernate4.SessionHolder;
@@ -35,12 +38,12 @@ public class SessionFactoryUtil
 	/**
 	 * Logger-Instance
 	 */
-	protected transient final Logger	logger	= LoggerFactory.getLogger(getClass());
+	protected static transient final Logger	logger	= LoggerFactory.getLogger(SessionFactoryUtil.class);
 
 	/**
 	 * Hibernate SessionFactory singleton
 	 */
-	protected SessionFactory			sessionFactory;
+	protected SessionFactory				sessionFactory;
 
 	/**
 	 * Create a new {@link SessionFactoryUtil} with the given {@link SessionFactory}
@@ -143,5 +146,39 @@ public class SessionFactoryUtil
 	public boolean isSessionBound()
 	{
 		return TransactionSynchronizationManager.hasResource(sessionFactory);
+	}
+
+	/**
+	 * Create a new SessionFactory from the given resource
+	 * 
+	 * @param resource - an optional path to a Resource from which the SessionFactory will be
+	 *            initialized.
+	 * @see Configuration#configure(String)
+	 * @see Configuration#configure()
+	 * @return the newly created SessionFactory
+	 */
+	public static SessionFactory initSessionFactory(String resource)
+	{
+		try
+		{
+			Configuration configuration;
+			if(resource == null)
+				configuration = new Configuration().configure();
+			else
+				configuration = new Configuration().configure(resource);
+
+			ServiceRegistry serviceRegistry = new ServiceRegistryBuilder().applySettings(configuration.getProperties()).buildServiceRegistry();
+
+			SessionFactory sessionFactory = configuration.buildSessionFactory(serviceRegistry);
+
+			logger.info("Hibernate configuration file loaded: " + (resource == null ? "hibernate.cfg.xml" : resource));
+
+			return sessionFactory;
+		}
+		catch(Throwable ex)
+		{
+			logger.error("SessionFactory creation failed: " + ex);
+			throw new ExceptionInInitializerError(ex);
+		}
 	}
 }
