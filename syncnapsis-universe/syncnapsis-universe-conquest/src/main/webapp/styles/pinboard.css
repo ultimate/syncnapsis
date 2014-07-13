@@ -34,7 +34,10 @@
 	padding-right: 5px;
 	position: absolute;
 	top: 0px;
+	right: 0px;
+	left: 0px;
 	height: auto;
+	width: auto;
 }
 
 .pinboard .input {
@@ -91,12 +94,12 @@
 	width: 60%;
 }
 
-.pinboard.blog .input .title input{
+.pinboard.blog .input .title input {
 	width: 100%;
 	heigth: 100%;
 }
 
-.pinboard.blog .input .content{
+.pinboard.blog .input .content {
 	position: absolute;
 	top: 25px;
 	left: 0px;
@@ -105,14 +108,15 @@
 	border: 1px solid transparent;
 }
 
-.pinboard.blog .input .content textarea {
+.pinboard.blog .input .content textarea,
+.pinboard.blog .input .content input[type=text] {
 	width: 100%;
 	height: 100%;
 	resize: none;
 	margin: -1px;
 }
 
-.pinboard.blog .input .button{
+.pinboard.blog .input .button {
 	position: absolute;
 	top: 25px;
 	right: 0px;
@@ -164,11 +168,11 @@
 	height: 25px;
 }
 
-.pinboard.chat .input .title{
+.pinboard.chat .input .title {
 	display: none;
 }
 
-.pinboard.chat .input .content{
+.pinboard.chat .input .content {
 	position: absolute;
 	top: 5px;
 	left: 0px;
@@ -177,14 +181,17 @@
 	border: 1px solid transparent;
 }
 
-.pinboard.chat .input .content textarea {
+.pinboard.chat .input .content textarea,
+.pinboard.chat .input .content input[type=text] {
 	width: 100%;
-	height: 100%;
+	height: 16px;
+	position: relative;
+	top: -1px;
 	resize: none;
 	margin: -1px;
 }
 
-.pinboard.chat .input .button{
+.pinboard.chat .input .button {
 	position: absolute;
 	top: 5px;
 	right: 0px;
@@ -207,6 +214,7 @@
 
 .pinboard.eventlog .messages .message .time {
 	float: left;
+	margin-right: 10px;
 }
 
 .pinboard.eventlog .messages .message .time:after {
@@ -223,7 +231,6 @@
 
 
 .pinboard.eventlog .messages .message .content {
-	float: left;
 	text-align: justify;
 	margin-left: 10px;
 }
@@ -233,11 +240,11 @@
 	display: none;
 }
 
-.pinboard.eventlog .input .title{
+.pinboard.eventlog .input .title {
 	display: none;
 }
 
-.pinboard.eventlog .input .content{
+.pinboard.eventlog .input .content {
 	position: absolute;
 	top: 5px;
 	left: 0px;
@@ -246,17 +253,24 @@
 	border: 1px solid transparent;
 }
 
-.pinboard.eventlog .input .content textarea {
+.pinboard.eventlog .input .content textarea,
+.pinboard.eventlog .input .content input[type=text] {
 	width: 100%;
 	height: 100%;
 	resize: none;
 	margin: -1px;
 }
 
-.pinboard.eventlog .input .button{
+.pinboard.eventlog .input .button {
 	position: absolute;
 	top: 5px;
 	right: 0px;
 	bottom: 0px;
 	width: 30px;
+}
+
+/* noinput */
+
+.pinboard.noinput .messages {
+	bottom: 0px;
 }

@@ -117,6 +117,17 @@ public class UserManagerImplTest extends GenericNameManagerImplTestCase<User, Lo
 		}
 	}
 
+	public void testGetCurrent() throws Exception
+	{
+		sessionProvider.set(new MockHttpSession());
+
+		User user = new User();
+
+		userProvider.set(user);
+
+		assertSame(user, userManager.getCurrent());
+	}
+
 	@TestCoversMethods({ "register", "verifyRegistration" })
 	public void testRegister() throws Exception
 	{

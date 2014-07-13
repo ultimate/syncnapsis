@@ -180,11 +180,14 @@ body, select {
 }
 
 .form,
-.largeform {
+.largeform,
+form,
+form.large {
 	line-height: 20px;
 }
 
 .form>label,
+form>label,
 #user_login>a {
 	width: 100px;
 	display: block;
@@ -193,18 +196,23 @@ body, select {
 
 .form>input[type=text],
 .form>input[type=password],
+form>input[type=text],
+form>input[type=password],
 #user_login>a+a {
 	width: 130px;
 }
 
-.largeform>label {
+.largeform>label,
+form.large>label {
 	width: 150px;
 	display: block;
 	float: left;
 }
 
 .largeform>input[type=text],
-.largeform>input[type=password] {
+.largeform>input[type=password],
+form.large>input[type=text],
+form.large>input[type=password] {
 	width: 230px;
 	float: right;
 }
@@ -234,7 +242,7 @@ body, select {
 }
 
 #bar_top,#bar_bottom {
-	width: 400px;
+	width: 500px;
 	margin-top: 1px;
 	margin-bottom: 1px;
 }
@@ -245,7 +253,7 @@ body, select {
 }
 
 #bar_bottom {
-	height: 33px;
+	height: 34px;
 	line-height: 2.6em;
 	margin-bottom: 1px;
 	overflow: hidden;
@@ -253,7 +261,7 @@ body, select {
 }
 
 #bar_bottom.open {
-	height: 130px;
+	height: 230px;
 }
 
 #bar_bottom>.log_bar {
@@ -264,20 +272,29 @@ body, select {
 }
 
 #bar_bottom #log_title {
-	width: 85px;
+	width: 110px;
 	position: absolute;
 	left: 0px;
 }
 
 #bar_bottom>#log {
 	position: absolute;
-	width: 224px;
+	width: 274px;
 }
 
 #bar_bottom #log_menu {
-	width: 85px;
+	width: 110px;
 	position: absolute;
 	right: 0px;
+}
+
+#bar_bottom .log_toggle {
+	position: absolute;
+	right: 0px;
+	cursor: pointer;
+	width: 20px;
+	heigth: 20px;
+	padding-top: 4px;
 }
 
 #bar_bottom .inner {
@@ -293,9 +310,8 @@ body, select {
 	position: absolute;
 	top: 34px;
 	bottom: 0px;
-	overflow-x: hidden;
-	overflow-y: auto;
-	width: 398px;
+	overflow: hidden;
+	width: 499px;
 }
 
 .frame {
@@ -416,6 +432,7 @@ h1 {
 
 #pinboard_chat,
 #pinboard_events {
-	height: 150px;
+	height: 185px;
+	width: 490px;
 	line-height: 1em;
 }

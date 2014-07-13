@@ -56,6 +56,7 @@ UI.constants.NAV_CONTENT = "menu_content";
 UI.constants.LOG_TABS = "log";
 UI.constants.LOG_CONTENT = "log_content";
 UI.constants.LOG_FRAME = "bar_bottom";
+UI.constants.LOG_TOGGLE_ARROW = "log_toggle_arrow";
 UI.constants.USERINFO_BUTTON = "door";
 UI.constants.USERINFO_CONTENT = "userbar";
 UI.constants.USERINFO_INDEX_LOGGEDOUT = 0;
@@ -74,6 +75,7 @@ UI.constants.FLAGS_CLASS = "flag";
 
 UI.constants.MESSAGE_SHOW_CLASS = "show";
 UI.constants.BUTTON_DISABLED_CLASS = "disabled";
+UI.constants.ERROR_CLASS = "error";
 UI.constants.MENU_HIDDEN_CLASS = "menu_hidden";
 
 UI.constants.DEFAULT_DATE_FORMAT = "yyyy-MM-dd HH:mm:ss";
@@ -153,9 +155,9 @@ UIManager = function()
 	
 	console.log("creating pinboard(s)");
 	this.pinboards = [];
-	this.pinboards.push(new Pinboard(document.getElementById(UI.constants.PINBOARD_NEWS), "testboard", "blog", "frame", false, true));
-	this.pinboards.push(new Pinboard(document.getElementById(UI.constants.PINBOARD_CHAT), "testboard", "chat", null, false, false));
-	this.pinboards.push(new Pinboard(document.getElementById(UI.constants.PINBOARD_EVENTS), "testboard", "eventlog", null, false, true));
+	this.pinboards.push(new Pinboard(document.getElementById(UI.constants.PINBOARD_NEWS), "testboard", "blog", "frame", PINBOARD_INPUT_NONE, false));
+	this.pinboards.push(new Pinboard(document.getElementById(UI.constants.PINBOARD_CHAT), "testboard", "chat", null, PINBOARD_INPUT_SINGLE_LINE, false));
+	this.pinboards.push(new Pinboard(document.getElementById(UI.constants.PINBOARD_EVENTS), "testboard", "eventlog", null, PINBOARD_INPUT_NONE, false));
 
 	console.log("showing UI");
 
@@ -380,7 +382,8 @@ UIManager.prototype.showLog = function()
 {
 	if(this.logOpen)
 		return;
-	document.getElementById(UI.constants.LOG_FRAME).className += " open";
+	document.getElementById(UI.constants.LOG_FRAME).classList.add("open");
+	document.getElementById(UI.constants.LOG_TOGGLE_ARROW).classList.remove("flip-vertical");
 	this.logOpen = true;
 };
 
@@ -388,7 +391,8 @@ UIManager.prototype.hideLog = function()
 {
 	if(!this.logOpen)
 		return;
-	document.getElementById(UI.constants.LOG_FRAME).className = this.logCls;
+	document.getElementById(UI.constants.LOG_FRAME).classList.remove("open");
+	document.getElementById(UI.constants.LOG_TOGGLE_ARROW).classList.add("flip-vertical");
 	this.logOpen = false;
 };
 
@@ -405,7 +409,7 @@ UIManager.prototype.doLogin = function()
 	var username = document.getElementById(UI.constants.LOGIN_USERNAME_ID).value;
 	var password = document.getElementById(UI.constants.LOGIN_PASSWORD_ID).value;
 
-	var error = false
+	var error = false;
 	if(username == "" || username == null)
 	{
 		this.showErrorMessage(document.getElementById(UI.constants.LOGIN_USERNAME_ID), null);
@@ -417,9 +421,11 @@ UIManager.prototype.doLogin = function()
 		error = true;
 	}
 	if(error)
-		return;
+		return false;
 	console.log("login as: " + username + ":" + password);
 	server.playerManager.login(username, password);
+	
+	return false;
 };
 
 UIManager.prototype.doRegister = function()
@@ -526,17 +532,20 @@ UIManager.prototype.showErrorMessage = function(inputfield, messagefield, messag
 {
 	if(inputfield != null)
 	{
-		var cls = inputfield.className;
-		inputfield.className = cls + " error";
+		inputfield.classList.add(UI.constants.ERROR_CLASS);
 		setTimeout(function()
 		{
-			inputfield.className = cls;
+			inputfield.classList.remove(UI.constants.ERROR_CLASS);
 		}, 3000);
 	}
 	if(messagefield != null)
 	{
 		if(message)
-			messagefield.innerHTML = this.getString(message);
+		{
+			while(messagefield.firstChild)
+				messagefield.removeChild(messagefield.firstChild);
+			messagefield.appendChild(document.createTextNode(this.getString(message)));
+		}
 		
 		messagefield.classList.add(UI.constants.MESSAGE_SHOW_CLASS);
 		setTimeout(function()

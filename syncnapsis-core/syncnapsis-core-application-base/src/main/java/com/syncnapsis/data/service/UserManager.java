@@ -19,7 +19,7 @@ import com.syncnapsis.exceptions.UserNotFoundException;
 import com.syncnapsis.exceptions.UserRegistrationFailedException;
 
 /**
- * Manager-Interface für den Zugriff auf User.
+ * Manager-Interface fï¿½r den Zugriff auf User.
  * 
  * @author ultimate
  */
@@ -80,6 +80,13 @@ public interface UserManager extends GenericNameManager<User, Long>
 	 * @return if the logout has successfully been performed
 	 */
 	public boolean logout();
+
+	/**
+	 * Get the user currently logged in.
+	 * 
+	 * @return the user logged in
+	 */
+	public User getCurrent();
 
 	/**
 	 * Perform the registration process for a new user.<br>

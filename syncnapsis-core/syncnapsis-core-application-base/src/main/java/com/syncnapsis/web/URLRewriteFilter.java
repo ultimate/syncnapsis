@@ -108,6 +108,7 @@ public abstract class URLRewriteFilter extends FilterEngine
 			String mimeType = httpRequest.getServletContext().getMimeType(newURL);
 			logger.debug("content type for file is '" + mimeType + "'");
 			httpResponse.setContentType(mimeType);
+			httpResponse.setCharacterEncoding("UTF-8");
 
 			if(!useInclude)
 			{
