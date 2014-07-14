@@ -49,7 +49,10 @@
 				var galaxy = view.galaxy;
 				
 				if(galaxy)
-				{
+				{						
+					view.deselect(0);
+					activeSector = null;
+						
 					console.time("proj");
 					{
 						mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
@@ -69,8 +72,6 @@
 						var opdMin = 10000000;;
 						var dist2Min = 10000000;;
 							
-						
-						activeSector = null;
 						
 						for(var i = 0; i < galaxy.systems.length; i++)
 						{
@@ -141,6 +142,8 @@
 				}
 				if(activeSector == null)
 					camera.target.target = new THREE.Vector3(0,0,0);
+								
+				view.select(activeSector);
 				//else
 				//	camera.target.target = activeSector;
 				
@@ -278,11 +281,10 @@
 				stats.update();	
 				
 				if(activeSector != null && (coords = view.getScreenCoords(activeSector.coords.value)).z < 1) {	
-					console.log("sector = (" + activeSector.coords.value.x + "," + activeSector.coords.value.y + "," + activeSector.coords.value.z + ")");				
+					//console.log("sector = (" + activeSector.coords.value.x + "," + activeSector.coords.value.y + "," + activeSector.coords.value.z + ")");				
 					//var coords = view.getScreenCoords(activeSector);
 					
 					//console.log("coords.z=" + coords.z);
-					
 					
 					var p1 = activeSector;
 					var p2 = camera.camera.position;
@@ -294,12 +296,14 @@
 					
 					//console.log("coords = (" + coords.x + "," + coords.y + ")");
 					var testC = document.getElementById('testDiv');
+					//document.body.removeChild(testC);
 					var divWidth = divHeight = size;
 					testC.style.left = Math.round(coords.x - divWidth/2 - borderWidth) + 'px';
 					testC.style.top = Math.round(coords.y - divHeight/2 - borderWidth) + 'px';
 					testC.style.width = size + 'px';
 					testC.style.height = size + 'px';
 					testC.style.borderRadius = size + 'px';
+					//document.body.appendChild(testC);
 					//testC.innerHTML = activeMesh.id;
 				}
 				else {
@@ -513,7 +517,7 @@
 			
 			doSelectGalaxy = function()
 			{
-				var iframe = document.getElementById(document.getElementById("select_galaxy").value)
+				var iframe = document.getElementById(document.getElementById("select_galaxy").value);
 				var str = iframe.contentWindow.document.body.innerHTML;
 				str = str.substring(5,str.length-6);
 				//alert(str);

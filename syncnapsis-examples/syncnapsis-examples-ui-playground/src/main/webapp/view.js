@@ -25,6 +25,7 @@ ViewUtil.AMPLITUDE = 500.0;
 
 ViewUtil.SYSTEM_SIZE_MIN = 10;
 ViewUtil.SYSTEM_SIZE_MAX = 30;
+ViewUtil.SELECTIONS_MAX = 2;
 	
 ViewUtil.loadShader = function(name) {
 	var index = DependencyManager.indexOf(name);
@@ -190,7 +191,7 @@ ViewUtil.GalaxyInfo = function() {
 	};
 };
 
-ViewUtil.GalaxyShader = function() {
+ViewUtil.GalaxyShader = function(imgPath) {
 
 	this.attributes = {
 		size: {	type: 'f', value: [] },
@@ -200,30 +201,14 @@ ViewUtil.GalaxyShader = function() {
 	this.uniforms = {
 		amplitude: { type: "f", value: ViewUtil.AMPLITUDE },
 		color:     { type: "c", value: ViewUtil.WHITE },
-		texture:   { type: "t", value: THREE.ImageUtils.loadTexture( "img/star.png" ) },
-	};
-	
-	this.uniformsSelected = {
-			amplitude: { type: "f", value: ViewUtil.AMPLITUDE },
-			color:     { type: "c", value: ViewUtil.WHITE },
-			texture:   { type: "t", value: THREE.ImageUtils.loadTexture( "img/circle.png" ) },
+		texture:   { type: "t", value: THREE.ImageUtils.loadTexture( imgPath ) },
 	};
 	
 	this.vertexShader = ViewUtil.loadShader( "vertexshader" );
 	this.fragmentShader = ViewUtil.loadShader( "fragmentshader" );
 		
-	this.materialNormal = new THREE.ShaderMaterial( {
+	this.material = new THREE.ShaderMaterial( {
 		uniforms: 		this.uniforms,
-		attributes:     this.attributes,
-		vertexShader:   this.vertexShader,
-		fragmentShader: this.fragmentShader,
-		blending: 		THREE.AdditiveBlending,
-		depthTest: 		false,
-		transparent:	true,
-	});
-	
-	this.materialSelected = new THREE.ShaderMaterial( {
-		uniforms: 		this.uniformsSelected,
 		attributes:     this.attributes,
 		vertexShader:   this.vertexShader,
 		fragmentShader: this.fragmentShader,
@@ -235,22 +220,41 @@ ViewUtil.GalaxyShader = function() {
 
 ViewUtil.Galaxy = function(systems) {
 
-	this.shader = new ViewUtil.GalaxyShader();
-
 	this.systems = systems; // TODO think about copying the array?!
 	
-	this.particles = new THREE.Geometry();
-	this.particles.vertices = new Array(this.systems.length); // can't change the amount later!!!
-	for(var v = 0; v < this.particles.vertices.length; v++)
-	{
-		this.particles.vertices[v] = ViewUtil.INFINITY.clone();
-		this.shader.attributes.size.value[v] = 0;
-		this.shader.attributes.customColor.value[v] = ViewUtil.BLACK.clone();
+	{ // particles for all systems
+		this.systemShader = new ViewUtil.GalaxyShader("img/star.png");
+		
+		this.systemGeometry = new THREE.Geometry();
+		this.systemGeometry.vertices = new Array(this.systems.length); // can't change the amount later!!!
+		for(var v = 0; v < this.systemGeometry.vertices.length; v++)
+		{
+			this.systemGeometry.vertices[v] = ViewUtil.INFINITY.clone();
+			this.systemShader.attributes.size.value[v] = 0;
+			this.systemShader.attributes.customColor.value[v] = ViewUtil.BLACK.clone();
+		}
+		this.systemGeometry.dynamic = true;
+		
+		this.systemParticles = new THREE.ParticleSystem(this.systemGeometry, this.systemShader.material);
+		this.systemParticles.dynamic = true;
 	}
-	this.particles.dynamic = true;
 	
-	this.particleSystem = new THREE.ParticleSystem(this.particles, this.shader.materialNormal)
-	this.particleSystem.dynamic = true;
+	{ // particles for selected system(s)
+		this.selectionShader = new ViewUtil.GalaxyShader("img/circle.png");
+		
+		this.selectionGeometry = new THREE.Geometry();
+		this.selectionGeometry.vertices = new Array(ViewUtil.SELECTIONS_MAX); // can't change the amount later!!!
+		for(var v = 0; v < this.selectionGeometry.vertices.length; v++)
+		{
+			this.selectionGeometry.vertices[v] = ViewUtil.INFINITY.clone();
+			this.selectionShader.attributes.size.value[v] = 0;
+			this.selectionShader.attributes.customColor.value[v] = ViewUtil.BLACK.clone();
+		}
+		this.selectionGeometry.dynamic = true;
+		
+		this.selectionParticles = new THREE.ParticleSystem(this.selectionGeometry, this.selectionShader.material);
+		this.selectionParticles.dynamic = true;
+	}
 
 	this.info = new ViewUtil.GalaxyInfo();
 			
@@ -262,12 +266,51 @@ ViewUtil.Galaxy = function(systems) {
 		this.info.update(this.systems[s]);
 	}
 	
+	this.selections = new Array(ViewUtil.SELECTIONS_MAX);
+		
+	this.select = function(system, selectionIndex) {
+		if(selectionIndex == null)
+			selectionIndex = 0;
+			
+		if(selectionIndex > this.selections.length)
+			throw new Error("index exceeding max selections");
+			
+		this.selections[selectionIndex] = system;		
+		return selectionIndex;
+	};
+	
+	this.deselect = function(selectionIndex) {
+		this.select(null, selectionIndex);
+	};
+	
 	this.animate = function(time) {
 		for(var s = 0; s < this.systems.length; s++)
 		{
 			if(this.systems[s])
 				this.systems[s].animate(time);	
 		}
+		this.systemGeometry.verticesNeedUpdate = true;
+		this.systemShader.attributes.size.needsUpdate = true;	
+		this.systemShader.attributes.customColor.needsUpdate = true;
+		
+		for(var s = 0; s < this.selections.length; s++)
+		{
+			if(this.selections[s])
+			{				
+				this.selectionGeometry.vertices[s] = this.selections[s].coords.value.clone();
+				this.selectionShader.attributes.size.value[s] = this.selections[s].size.value * 1.5;
+				this.selectionShader.attributes.customColor.value[s] = ViewUtil.WHITE.clone(); // = this.selections[s].customColor.value;
+			}
+			else
+			{
+				this.selectionGeometry.vertices[s] = ViewUtil.INFINITY.clone();
+				this.selectionShader.attributes.size.value[s] = 0;
+				this.selectionShader.attributes.customColor.value[s] = ViewUtil.BLACK.clone();
+			}
+		}
+		this.selectionGeometry.verticesNeedUpdate = true;
+		this.selectionShader.attributes.size.needsUpdate = true;	
+		this.selectionShader.attributes.customColor.needsUpdate = true;	
 	};
 };
 
@@ -293,18 +336,18 @@ ViewUtil.System = function(x, y, z, size, heat) {
 	this.animate = function(time) {
 		if(this.coords.animate(time) || this.firstAnimation)
 		{
-			this.galaxy.particles.vertices[this.index] = this.coords.value;
-			this.galaxy.particleSystem.geometry.verticesNeedUpdate = true;
+			this.galaxy.systemGeometry.vertices[this.index] = this.coords.value;
+			this.galaxy.systemGeometry.verticesNeedUpdate = true;
 		}
 		if(this.size.animate(time) || this.firstAnimation)
 		{
-			this.galaxy.shader.attributes.size.value[this.index] = this.size.value;
-			this.galaxy.shader.attributes.size.needsUpdate = true;	
+			this.galaxy.systemShader.attributes.size.value[this.index] = this.size.value;
+			this.galaxy.systemShader.attributes.size.needsUpdate = true;	
 		}
 		if(this.color.animate(time) || this.firstAnimation)
 		{
-			this.galaxy.shader.attributes.customColor.value[this.index] = this.color.value;
-			this.galaxy.shader.attributes.customColor.needsUpdate = true;	
+			this.galaxy.systemShader.attributes.customColor.value[this.index] = this.color.value;
+			this.galaxy.systemShader.attributes.customColor.needsUpdate = true;	
 		}
 		
 		this.heat.animate(time);
@@ -439,13 +482,17 @@ var View = function(container) {
 		if(stepSize == undefined)
 			stepSize = 1;	
 			
-		if(this.galaxy != null && this.galaxy.particleSystem != null)
+		if(this.galaxy != null)
 		{
 			console.log("removing previous galaxy...");
 			// TODO animate?!
 			
-			// remove the old particle system
-			this.scene.remove(this.galaxy.particleSystem);
+			// remove the old particle system(s)
+			if(this.galaxy.systemParticles != null)
+				this.scene.remove(this.galaxy.systemParticles);
+			if(this.galaxy.selectionParticles != null)
+				this.scene.remove(this.galaxy.selectionParticles);
+				
 			delete this.galaxy;
 		}
 		
@@ -466,10 +513,11 @@ var View = function(container) {
 		
 		// create a new galaxy object
 		console.log("creating galaxy...");
-		this.galaxy = new ViewUtil.Galaxy(systems);//, this.shaders.attributes, this.materials.system);
+		this.galaxy = new ViewUtil.Galaxy(systems);
 		// add the new particle system
 		console.log("adding galaxy...");
-		this.scene.add(this.galaxy.particleSystem);			
+		this.scene.add(this.galaxy.systemParticles);
+		this.scene.add(this.galaxy.selectionParticles);			
 		
 		// TODO animate?!
 	};
@@ -488,6 +536,16 @@ var View = function(container) {
 		this.camera.update();
 		this.renderer.render( this.scene, this.camera.camera );
 	};
+	
+	this.selections = new Array(ViewUtil.SELECTIONS_MAX);
+		
+	this.select = function(system, selectionIndex) {
+		return this.galaxy.select(system, selectionIndex);
+	};
+	
+	this.deselect = function(selectionIndex) {
+		this.galaxy.deselect(selectionIndex);
+	};	
 	
 	console.log("the camera:    pos=" + this.camera.camera.position.x + "|" + this.camera.camera.position.y + "|" + this.camera.camera.position.z + "    rot=" + this.camera.camera.rotation.x + "|" + this.camera.camera.rotation.y + "|" + this.camera.camera.rotation.z);
 	this.camera.update();
