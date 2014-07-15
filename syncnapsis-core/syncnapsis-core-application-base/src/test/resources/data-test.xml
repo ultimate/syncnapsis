@@ -51,6 +51,18 @@
 			<value description="version">1</value>
 		</row>
 		<row>
+			<value description="id">6</value>
+			<value description="name">password.reset.timeToVerify</value>
+			<value description="value">86400000</value><!-- 1 day -->
+			<value description="version">1</value>
+		</row>
+		<row>
+			<value description="id">7</value>
+			<value description="name">password.generated.length</value>
+			<value description="value">8</value>
+			<value description="version">1</value>
+		</row>
+		<row>
 			<value description="id">999901</value>
 			<value description="name">news.maxItems</value>
 			<value description="value">10</value>

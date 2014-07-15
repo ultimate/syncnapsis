@@ -70,15 +70,20 @@ public class BaseApplicationMailer extends MultiMailer<TemplateMailer>
 	 * {@link BaseApplicationMailer#sendUserRoleChangedNotification(User, UserRole, String)}
 	 */
 	public static final String		TEMPLATE_USERROLE_CHANGED		= "userrole.changed";
-	
-	// TODO template.password.verify
-	// TODO template.password.reset
-	
+	/**
+	 * Template name for {@link BaseApplicationMailer#sendVerifyPasswordReset(User, Action)}
+	 */
+	public static final String		TEMPLATE_PASSWORD_VERIFY		= "password.verify";
+	/**
+	 * Template name for {@link BaseApplicationMailer#sendPasswordResetted(User, String)}
+	 */
+	public static final String		TEMPLATE_PASSWORD_RESET			= "password.reset";
+
 	/**
 	 * An Array containing the names of all required templates.
 	 */
 	public static final String[]	REQUIRED_TEMPLATES				= new String[] { TEMPLATE_REGISTRATION_VERIFY, TEMPLATE_MAIL_ADDRESS_VERIFY,
-			TEMPLATE_NOTIFICATION, TEMPLATE_USERROLE_CHANGED,		};
+			TEMPLATE_NOTIFICATION, TEMPLATE_USERROLE_CHANGED, TEMPLATE_PASSWORD_RESET, TEMPLATE_PASSWORD_VERIFY,		};
 
 	/**
 	 * Construct a new Mailer by loading the Properties from the given file
@@ -230,6 +235,81 @@ public class BaseApplicationMailer extends MultiMailer<TemplateMailer>
 		try
 		{
 			return m.send(template, values, newMailAddress);
+		}
+		catch(AddressException e)
+		{
+			logger.error("could not send mail to '" + e.getRef() + "'");
+			return false;
+		}
+	}
+
+	/**
+	 * Send a verification mail for resetting a user's password.<br>
+	 * <br>
+	 * The exact content will depend on the template defined in the mail.properties but support for
+	 * including {@link User} and {@link Action} properties is given by default. The Action is
+	 * representing the action that the user has to execute (via clicking a link) for resetting his
+	 * password.<br>
+	 * <br>
+	 * This method will do a generic lookup for all keys used in the template using
+	 * {@link MessageUtil#extractValues(List, Object...)}.
+	 * 
+	 * @see MessageUtil#extractValues(List, Object...)
+	 * @see MessageUtil#getUsedTemplateKeys(String)
+	 * @see TemplateMailer#send(String, Map, String)
+	 * @param user - the user to change the password for
+	 * @param action - the action for confirming password reset
+	 * @return true if a message has been send, false otherwise
+	 */
+	public boolean sendVerifyPasswordReset(User user, Action action)
+	{
+		TemplateMailer m = get(user);
+
+		String template = TEMPLATE_PASSWORD_VERIFY;
+		List<String> keys = MessageUtil.getUsedTemplateKeys(m.getText(template));
+		keys.addAll(MessageUtil.getUsedTemplateKeys(m.getSubject(template)));
+		Map<String, Object> values = MessageUtil.extractValues(keys, user, action);
+		// fill other values?
+		try
+		{
+			return m.send(template, values, user.getEmail());
+		}
+		catch(AddressException e)
+		{
+			logger.error("could not send mail to '" + e.getRef() + "'");
+			return false;
+		}
+	}
+
+	/**
+	 * Send a mail with the password that has been set for a user on requested reset.<br>
+	 * <br>
+	 * The exact content will depend on the template defined in the mail.properties but support for
+	 * including {@link User} properties and the new password is given by default. <br>
+	 * <br>
+	 * This method will do a generic lookup for all keys used in the template using
+	 * {@link MessageUtil#extractValues(List, Object...)}.
+	 * 
+	 * @see MessageUtil#extractValues(List, Object...)
+	 * @see MessageUtil#getUsedTemplateKeys(String)
+	 * @see TemplateMailer#send(String, Map, String)
+	 * @param user - the user whose password was change
+	 * @param newPassword - the new password set
+	 * @return true if a message has been send, false otherwise
+	 */
+	public boolean sendPasswordResetted(User user, String newPassword)
+	{
+		TemplateMailer m = get(user);
+
+		String template = TEMPLATE_PASSWORD_VERIFY;
+		List<String> keys = MessageUtil.getUsedTemplateKeys(m.getText(template));
+		keys.addAll(MessageUtil.getUsedTemplateKeys(m.getSubject(template)));
+		Map<String, Object> values = MessageUtil.extractValues(keys, user);
+		values.put("newPassword", newPassword);
+		// fill other values?
+		try
+		{
+			return m.send(template, values, user.getEmail());
 		}
 		catch(AddressException e)
 		{
