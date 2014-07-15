@@ -327,11 +327,11 @@ public class UserManagerImpl extends GenericNameManagerImpl<User, Long> implemen
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.syncnapsis.data.service.UserManager#setPassword(java.lang.String, java.lang.String,
+	 * @see com.syncnapsis.data.service.UserManager#changePassword(java.lang.String, java.lang.String,
 	 * java.lang.String)
 	 */
 	@Override
-	public boolean setPassword(String oldPassword, String newPassword, String newPasswordConfirm) throws UserUpdateFailedException
+	public boolean changePassword(String oldPassword, String newPassword, String newPasswordConfirm) throws UserUpdateFailedException
 	{
 		if(newPassword == null)
 			throw new UserUpdateFailedException(ApplicationBaseConstants.ERROR_NO_PASSWORD);

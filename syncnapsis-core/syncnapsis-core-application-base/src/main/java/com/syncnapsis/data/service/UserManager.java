@@ -148,7 +148,7 @@ public interface UserManager extends GenericNameManager<User, Long>
 	 * @param newPasswordConfirm - the confirmation of the new password
 	 * @return
 	 */
-	public boolean setPassword(String oldPassword, String newPassword, String newPasswordConfirm) throws UserUpdateFailedException;
+	public boolean changePassword(String oldPassword, String newPassword, String newPasswordConfirm) throws UserUpdateFailedException;
 
 	/**
 	 * Request a password reset for the given user.<br>
