@@ -295,7 +295,8 @@ public class UserManagerImplTest extends GenericNameManagerImplTestCase<User, Lo
 			assertNotNull(actionManager.getByCode(code));
 			RPCCall rpcCall = actionManager.getRPCCall(code);
 			assertNotNull(rpcCall);
-
+			assertEquals(2, rpcCall.getArgs().length);
+			
 			logger.debug(rpcCall.getObject());
 			logger.debug(rpcCall.getMethod());
 			logger.debug("" + rpcCall.getArgs()[0]);
@@ -390,11 +391,11 @@ public class UserManagerImplTest extends GenericNameManagerImplTestCase<User, Lo
 			assertNotNull(actionManager.getByCode(code));
 			RPCCall rpcCall = actionManager.getRPCCall(code);
 			assertNotNull(rpcCall);
+			assertEquals(1, rpcCall.getArgs().length);
 
 			logger.debug(rpcCall.getObject());
 			logger.debug(rpcCall.getMethod());
 			logger.debug("" + rpcCall.getArgs()[0]);
-			logger.debug("" + rpcCall.getArgs()[1]);
 
 			String result = (String) rpcHandler.doRPC(rpcCall, new Object[] {});
 			assertEquals("ok", result);
@@ -408,7 +409,7 @@ public class UserManagerImplTest extends GenericNameManagerImplTestCase<User, Lo
 			assertEquals(user.getEmail(), m.getRecipients(RecipientType.TO)[0].toString());
 
 			message = (String) m.getContent();
-			int passwordIndex = message.indexOf(": ") + ": ".length();
+			int passwordIndex = message.indexOf(": ") + ": ".length(); // TODO fix the marker
 			String newPassword = message.substring(passwordIndex, passwordIndex + ApplicationBaseConstants.PARAM_PASSWORD_GENERATED_LENGTH.asInt());
 			logger.debug("'" + newPassword + "'");
 

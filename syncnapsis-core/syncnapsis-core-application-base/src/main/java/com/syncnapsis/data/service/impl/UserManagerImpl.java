@@ -366,7 +366,7 @@ public class UserManagerImpl extends GenericNameManagerImpl<User, Long> implemen
 		{
 			logger.debug("password reset requested for user " + user.getId());
 
-			RPCCall rpcCall = new RPCCall(getBeanName(), RPC_PERFORM_PASSWORD_RESET, new Object[] { user.getId(), email });
+			RPCCall rpcCall = new RPCCall(getBeanName(), RPC_PERFORM_PASSWORD_RESET, new Object[] { user.getId() });
 
 			Date validDate = new Date(securityManager.getTimeProvider().get() + ApplicationBaseConstants.PARAM_PASSWORD_RESET_TIME_TO_VERIFY.asLong());
 
