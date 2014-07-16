@@ -98,8 +98,11 @@ public class PinboardMessageDaoTest extends GenericDaoTestCase<PinboardMessage, 
 			someBoardMessages = pinboardMessageDao.getByPinboard(pinboardId, fromMessageId + 1, toMessageId - 1);
 
 			assertEquals(boardMessages.size() - 2, someBoardMessages.size());
-			assertEquals(toMessageId - 1, someBoardMessages.get(0).getMessageId());
-			assertEquals(fromMessageId + 1, someBoardMessages.get(someBoardMessages.size() - 1).getMessageId());
+			if(someBoardMessages.size() > 0)
+			{
+				assertEquals(toMessageId - 1, someBoardMessages.get(0).getMessageId());
+				assertEquals(fromMessageId + 1, someBoardMessages.get(someBoardMessages.size() - 1).getMessageId());
+			}
 		}
 
 		assertEquals(allMessages.size(), totalMessages);
