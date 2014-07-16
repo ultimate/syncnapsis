@@ -409,7 +409,8 @@ public class UserManagerImplTest extends GenericNameManagerImplTestCase<User, Lo
 			assertEquals(user.getEmail(), m.getRecipients(RecipientType.TO)[0].toString());
 
 			message = (String) m.getContent();
-			int passwordIndex = message.indexOf(": ") + ": ".length(); // TODO fix the marker
+			logger.debug(message);
+			int passwordIndex = message.indexOf(":\r\n") + ":\r\n".length();
 			String newPassword = message.substring(passwordIndex, passwordIndex + ApplicationBaseConstants.PARAM_PASSWORD_GENERATED_LENGTH.asInt());
 			logger.debug("'" + newPassword + "'");
 

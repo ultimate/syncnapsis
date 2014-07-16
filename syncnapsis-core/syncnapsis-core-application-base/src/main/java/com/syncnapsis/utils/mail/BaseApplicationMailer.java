@@ -301,7 +301,7 @@ public class BaseApplicationMailer extends MultiMailer<TemplateMailer>
 	{
 		TemplateMailer m = get(user);
 
-		String template = TEMPLATE_PASSWORD_VERIFY;
+		String template = TEMPLATE_PASSWORD_RESET;
 		List<String> keys = MessageUtil.getUsedTemplateKeys(m.getText(template));
 		keys.addAll(MessageUtil.getUsedTemplateKeys(m.getSubject(template)));
 		Map<String, Object> values = MessageUtil.extractValues(keys, user);
