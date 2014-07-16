@@ -67,8 +67,8 @@ public class BaseApplicationMailerTest extends BaseSpringContextTestCase
 
 		String subjectExpected = "Welcome to syncnapsis, " + user.getUsername();
 		String textExpected = "Hello " + user.getUsername() + ",\n" + "thank you for your registration and welcome to syncnapsis.\n"
-				+ "Please confirm your registration by clicking the following link:\n" + "http://www.syncnapsis.com/test/activate/"
-				+ action.getCode() + "\n" + "Best regards";
+				+ "Please confirm your registration by clicking the following link:\n" + "http://www.syncnapsis.com/test/action/" + action.getCode()
+				+ "\n" + "Best regards";
 		textExpected = textExpected.replace("\n", "\r\n"); // mailing replaced the line endings.
 
 		String toExpected = user.getEmail();
@@ -112,8 +112,8 @@ public class BaseApplicationMailerTest extends BaseSpringContextTestCase
 
 		String subjectExpected = "Verify your e-mail address";
 		String textExpected = "Hello " + user.getUsername() + ",\n" + "your e-mail address has been changed in your profile settings.\n"
-				+ "Please confirm these changes by clicking the following link:\n" + "http://www.syncnapsis.com/test/activate/" + action.getCode()
-				+ "\n" + "Beste regards";
+				+ "Please confirm these changes by clicking the following link:\n" + "http://www.syncnapsis.com/test/action/" + action.getCode()
+				+ "\n" + "Best regards";
 		textExpected = textExpected.replace("\n", "\r\n"); // mailing replaced the line endings.
 
 		Wiser w = new Wiser();
@@ -131,6 +131,87 @@ public class BaseApplicationMailerTest extends BaseSpringContextTestCase
 			assertEquals(1, msg.getAllRecipients().length);
 			assertEquals(1, msg.getRecipients(RecipientType.TO).length);
 			assertEquals(newEmail, ((InternetAddress) msg.getRecipients(RecipientType.TO)[0]).getAddress());
+			assertEquals(1, msg.getFrom().length);
+			assertEquals(m.getDefault().getGlobalProperty(Mailer.KEY_FROM), ((InternetAddress) msg.getFrom()[0]).getAddress());
+		}
+		finally
+		{
+			w.stop();
+		}
+	}
+
+	public void testSendVerifyPasswordReset() throws Exception
+	{
+		BaseApplicationMailer m = new BaseApplicationMailer(new File("target/test-classes/mail.properties"));
+
+		User user = new User();
+		user.setUsername("a guy");
+		user.setEmail("mail@example.com");
+
+		Action action = new Action();
+		action.setCode("34ae8c3f0142aa3bc4");
+
+		String subjectExpected = "Confirm the reset of your password";
+		String textExpected = "Hello " + user.getUsername() + ",\n" + "a password reset has been requested for you.\n"
+				+ "Please confirm the password reset by clicking the following link:\n" + "http://www.syncnapsis.com/test/action/"
+				+ action.getCode() + "\n" + "If you have not requested the reset of your password simply ignore this mail.\n" + "Best regards";
+		textExpected = textExpected.replace("\n", "\r\n"); // mailing replaced the line endings.
+
+		Wiser w = new Wiser();
+		w.start();
+
+		try
+		{
+			assertTrue(m.sendVerifyPasswordReset(user, action));
+
+			assertEquals(1, w.getMessages().size());
+			MimeMessage msg = w.getMessages().get(0).getMimeMessage();
+
+			assertEquals(subjectExpected, msg.getSubject());
+			assertEquals(textExpected, msg.getContent());
+			assertEquals(1, msg.getAllRecipients().length);
+			assertEquals(1, msg.getRecipients(RecipientType.TO).length);
+			assertEquals(user.getEmail(), ((InternetAddress) msg.getRecipients(RecipientType.TO)[0]).getAddress());
+			assertEquals(1, msg.getFrom().length);
+			assertEquals(m.getDefault().getGlobalProperty(Mailer.KEY_FROM), ((InternetAddress) msg.getFrom()[0]).getAddress());
+		}
+		finally
+		{
+			w.stop();
+		}
+	}
+
+	public void testSendPasswordResetted() throws Exception
+	{
+		BaseApplicationMailer m = new BaseApplicationMailer(new File("target/test-classes/mail.properties"));
+
+		User user = new User();
+		user.setUsername("a guy");
+		user.setEmail("mail@example.com");
+
+		String newPassword = "abc123";
+
+		String subjectExpected = "Password resetted";
+		String textExpected = "Hello " + user.getUsername() + ",\n" + "your password has successfully been resetted.\n" + "Your new password is:\n"
+				+ newPassword + "\n" + "It is recommended to change the password to an own one as soon as possible in your profile settings!\n"
+				+ "Best regards";
+		textExpected = textExpected.replace("\n", "\r\n"); // mailing replaced the line endings.
+
+		Wiser w = new Wiser();
+		w.start();
+
+		try
+		{
+			assertTrue(m.sendPasswordResetted(user, newPassword));
+
+			assertEquals(1, w.getMessages().size());
+			MimeMessage msg = w.getMessages().get(0).getMimeMessage();
+
+			assertEquals(subjectExpected, msg.getSubject());
+			assertEquals(textExpected, msg.getContent());
+			assertEquals(1, msg.getAllRecipients().length);
+			assertEquals(1, msg.getRecipients(RecipientType.TO).length);
+			assertEquals(user.getEmail(), ((InternetAddress) msg.getRecipients(RecipientType.TO)[0]).getAddress());
 			assertEquals(1, msg.getFrom().length);
 			assertEquals(m.getDefault().getGlobalProperty(Mailer.KEY_FROM), ((InternetAddress) msg.getFrom()[0]).getAddress());
 		}
