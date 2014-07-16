@@ -162,7 +162,7 @@
 					<label key="profile.username" for="login_username"></label><input id="login_username" type="text"/><br/>
 					<label key="profile.password" for="login_password"></label><input id="login_password" type="password"/><br/>
 					<a href="javascript: client.uiManager.showRegister();"><label key="menu.register"></label></a>
-					<a href=""><label key="menu.forgot_password"></label></a>
+					<a href="javascript: client.uiManager.showForgot();"><label key="menu.forgot_password"></label></a>
 				    <input type="submit" style="display: none;"/>
 				</form>
 			</div>
@@ -311,6 +311,24 @@
 					<div id="reg_button" class="frame button">
 						<a href="javascript: client.uiManager.doRegister();">
 							<label key="menu.register"></label>
+						</a>
+					</div>
+				    <input type="submit" style="display: none;"/>
+				</form>
+			</div>
+		</div>
+		<div id="content_forgot_password">
+			<div>
+				<form onsubmit="javascript: client.uiManager.forgotPassword(); return false;" class="large">
+					<label key="profile.username" for="forgot_username"></label><input id="forgot_username" type="text"/><br/>
+					<label key="profile.email" for="forgot_email"></label><input id="forgot_email" type="text"/><br/>
+					<div id="forgot_message">
+					</div>
+					<div id="forgot_error">
+					</div>
+					<div id="forgot_button" class="frame button">
+						<a href="javascript: client.uiManager.forgotPassword();">
+							<label key="menu.reset_password"></label>
 						</a>
 					</div>
 				    <input type="submit" style="display: none;"/>

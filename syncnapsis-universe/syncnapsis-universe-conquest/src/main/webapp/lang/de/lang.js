@@ -33,6 +33,8 @@ lang.error.password_mismatch 	= lang.error.error + ": Nicht-Übereinstimmung der
 lang.error.username_exists 		= lang.error.error + ": Benutzername ist bereits registriert!";
 
 lang.message = {};
+lang.message.error				= "Es ist ein Fehler aufgetreten! Bitte versuche es erneut...";
+lang.message.passwordReset		= "Passwort-Zurücksetzen angefordert! Bitte folge den Anweisungen in der die zugesendeten e-Mail...";
 lang.message.register			= "Registrierung erfolgreich! Du wirst automatisch eingeloggt...";
 
 lang.menu = {};
@@ -52,6 +54,7 @@ lang.menu.pinboard 				= "Pinnwand";
 lang.menu.pinboard_tooltip		= lang.menu.pinboard;
 lang.menu.profile 				= "Profil";
 lang.menu.register 				= "Registrieren";
+lang.menu.reset_password		= "Passwort zurücksetzen";
 lang.menu.stats 				= "Statistik";
 
 lang.log = {};

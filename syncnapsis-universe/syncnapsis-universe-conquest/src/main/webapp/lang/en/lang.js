@@ -33,6 +33,8 @@ lang.error.password_mismatch 	= lang.error.error + ": passwords do not match!";
 lang.error.username_exists 		= lang.error.error + ": username is already registered!";
 
 lang.message = {};
+lang.message.error				= "An error occurred! Please try again...";
+lang.message.passwordReset		= "Password reset requested! Please follow the instruction in the e-mail sent to you...";
 lang.message.register			= "Registration successful! You will be logged in automatically...";
 
 lang.menu = {};
@@ -52,6 +54,7 @@ lang.menu.pinboard 				= "Pinboard";
 lang.menu.pinboard_tooltip		= lang.menu.pinboard;
 lang.menu.profile 				= "Profile";
 lang.menu.register 				= "Register";
+lang.menu.reset_password		= "Reset password";
 lang.menu.stats					= "Stats";
 
 lang.log = {};

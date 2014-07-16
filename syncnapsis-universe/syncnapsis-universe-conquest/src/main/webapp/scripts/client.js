@@ -41,6 +41,13 @@ UI.constants.REG_ERROR_ID = "reg_error";
 UI.constants.REG_BUTTON_ID = "reg_button";
 UI.constants.REG_ACTION = "javascript: client.uiManager.doRegister();";
 UI.constants.REG_VOID = "javascript: return false;";
+UI.constants.FORGOT_USERNAME_ID = "forgot_username";
+UI.constants.FORGOT_EMAIL_ID = "forgot_email";
+UI.constants.FORGOT_MESSAGE_ID = "forgot_message";
+UI.constants.FORGOT_ERROR_ID = "forgot_error";
+UI.constants.FORGOT_BUTTON_ID = "forgot_button";
+UI.constants.FORGOT_ACTION = "javascript: client.uiManager.forgotPassword();";
+UI.constants.FORGOT_VOID = "javascript: return false;";
 
 UI.constants.LOCALE_CHOOSER_ID = "locale_chooser";
 UI.constants.LOCALE_LABEL_TAGNAME = "label";
@@ -140,6 +147,11 @@ UIManager = function()
 	this.window_register.center();
 	this.window_register.setMovable(false);
 
+	this.window_forgot = new Styles.Window("forgot", "menu.reset_password", "content_forgot_password");
+	this.window_forgot.setSize(400, 150);
+	this.window_forgot.center();
+	this.window_forgot.setMovable(false);
+
 	this.window_welcome = new Styles.Window("welcome", "welcome.title", "content_welcome");
 	this.window_welcome.setSize(500, 500);
 	this.window_welcome.center();
@@ -164,6 +176,7 @@ UIManager = function()
 	Events.fireEvent(window, Events.ONRESIZE);
 
 	this.onLogout(); // just in case ;-)
+	// TODO stay logged in
 	this.updateLabels();
 	this.populateLocaleChooser();
 	this.updateLinks();
@@ -249,6 +262,20 @@ UIManager.prototype.enableRegisterButton = function(enable)
 	}
 };
 
+UIManager.prototype.enableForgotButton = function(enable)
+{
+	if(enable)
+	{
+		document.getElementById(UI.constants.FORGOT_BUTTON_ID).children[0].href = UI.constants.FORGOT_ACTION;
+		document.getElementById(UI.constants.FORGOT_BUTTON_ID).classList.remove(UI.constants.BUTTON_DISABLED_CLASS);
+	}
+	else
+	{
+		document.getElementById(UI.constants.FORGOT_BUTTON_ID).children[0].href = UI.constants.FORGOT_VOID;
+		document.getElementById(UI.constants.FORGOT_BUTTON_ID).classList.add(UI.constants.BUTTON_DISABLED_CLASS);
+	}
+};
+
 UIManager.prototype.onRegister = function(player, username, password)
 {
 	if(player != null && server.entityManager.getType(player) == Types.Player)
@@ -266,8 +293,8 @@ UIManager.prototype.onRegister = function(player, username, password)
 			};
 		} (this), 10000);
 
-		// TODO show success message
-		this.showErrorMessage(null, document.getElementById(UI.constants.REG_MESSAGE_ID), "welcome.title");
+		// show success message
+		this.showErrorMessage(null, document.getElementById(UI.constants.REG_MESSAGE_ID), "message.register");
 	}
 	else if(player != null && player.exceptionClass != null)
 	{
@@ -482,6 +509,42 @@ UIManager.prototype.doLogout = function()
 	server.playerManager.logout();
 };
 
+UIManager.prototype.forgotPassword = function()
+{
+	// clear errors
+	document.getElementById(UI.constants.FORGOT_ERROR_ID).innerHTML = "";
+	document.getElementById(UI.constants.FORGOT_MESSAGE_ID).innerHTML = "";
+
+	// get input
+	var username = document.getElementById(UI.constants.FORGOT_USERNAME_ID).value;
+	var email = document.getElementById(UI.constants.FORGOT_EMAIL_ID).value;
+	
+	// validate input
+	var error = false
+	if(!error && (username == "" || username == null))
+	{
+		this.showErrorMessage(document.getElementById(UI.constants.FORGOT_USERNAME_ID), document.getElementById(UI.constants.FORGOT_ERROR_ID), "error.invalid_username");
+		error = true;
+	}
+	if(!error && (email == "" || email == null))
+	{
+		this.showErrorMessage(document.getElementById(UI.constants.FORGOT_EMAIL_ID), document.getElementById(UI.constants.FORGOT_ERROR_ID), "error.invalid_email");
+		error = true;
+	}
+	if(error)
+		return;
+
+	// disable forgot button for 5 seconds
+	this.enableForgotButton(false);
+	setTimeout(function(uiManager) {
+		return function() {
+			uiManager.enableForgotButton(true);
+		};
+	} (this), 5000);
+
+	server.userManager.requestPasswordReset(username, email);
+};
+
 UIManager.prototype.showRegister = function()
 {
 	this.window_register.setVisible(true);
@@ -490,6 +553,16 @@ UIManager.prototype.showRegister = function()
 UIManager.prototype.hideRegister = function()
 {
 	this.window_register.setVisible(false);
+};
+
+UIManager.prototype.showForgot = function()
+{
+	this.window_forgot.setVisible(true);
+};
+
+UIManager.prototype.hideForgot = function()
+{
+	this.window_forgot.setVisible(false);
 };
 
 UIManager.prototype.showWelcome = function()
