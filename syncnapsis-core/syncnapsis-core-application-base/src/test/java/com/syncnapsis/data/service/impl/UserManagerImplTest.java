@@ -354,7 +354,7 @@ public class UserManagerImplTest extends GenericNameManagerImplTestCase<User, Lo
 		assertFalse(oldHash.equals(newHash));
 	}
 
-	@TestCoversMethods({ "requestPasswordReset", "performPasswordReset(Long)" })
+	@TestCoversMethods({ "requestPasswordReset", "performPasswordReset" })
 	public void testResetPassword() throws Exception
 	{
 		User user = userManager.getByName("admin");
