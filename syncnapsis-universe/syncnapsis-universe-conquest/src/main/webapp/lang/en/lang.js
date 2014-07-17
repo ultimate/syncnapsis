@@ -34,7 +34,8 @@ lang.error.username_exists 		= lang.error.error + ": username is already registe
 
 lang.message = {};
 lang.message.error				= "An error occurred! Please try again...";
-lang.message.passwordReset		= "Password reset requested! Please follow the instruction in the e-mail sent to you...";
+lang.message.password_failure	= "Password reset failed! User and/or e-mail-address invalid...";
+lang.message.password_reset		= "Password reset requested! Please follow the instruction in the e-mail sent to you...";
 lang.message.register			= "Registration successful! You will be logged in automatically...";
 
 lang.menu = {};

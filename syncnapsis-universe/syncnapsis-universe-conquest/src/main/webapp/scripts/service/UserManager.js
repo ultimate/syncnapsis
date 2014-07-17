@@ -23,11 +23,11 @@ UserManager = function()
 		return function(result) {
 			if(result == true)
 			{
-				client.uiManager.showErrorMessage(null, document.getElementById(UI.constants.FORGOT_MESSAGE_ID), "message.register");
+				client.uiManager.showErrorMessage(null, document.getElementById(UI.constants.FORGOT_MESSAGE_ID), "message.password_reset");
 			}
 			else
 			{
-				client.uiManager.showErrorMessage(null, document.getElementById(UI.constants.FORGOT_ERROR_ID), "message.error");
+				client.uiManager.showErrorMessage(null, document.getElementById(UI.constants.FORGOT_ERROR_ID), "message.password_reset_failure");
 			}
 		};
 	};
