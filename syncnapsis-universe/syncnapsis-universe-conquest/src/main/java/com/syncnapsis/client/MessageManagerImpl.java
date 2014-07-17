@@ -17,6 +17,7 @@ import java.util.List;
 
 import org.springframework.util.Assert;
 
+import com.syncnapsis.data.model.Pinboard;
 import com.syncnapsis.data.model.PinboardMessage;
 import com.syncnapsis.data.service.PinboardManager;
 import com.syncnapsis.data.service.PinboardMessageManager;
@@ -115,6 +116,7 @@ public class MessageManagerImpl extends BaseClientManager implements MessageMana
 
 		for(Connection connection : connections)
 		{
+			// TODO check if client is allowed to see the pinboard
 			((MessageManager) getClientInstance(getBeanName(), connection)).updatePinboard(pinboardId, messages);
 		}
 	}
@@ -137,6 +139,7 @@ public class MessageManagerImpl extends BaseClientManager implements MessageMana
 	@Override
 	public void requestPinboardUpdate(Long pinboardId, int messageCount)
 	{
+		// TODO check if client is allowed to see the pinboard
 		List<PinboardMessage> messages = pinboardMessageManager.getByPinboard(pinboardId, messageCount);
 		((MessageManager) getClientInstance(getBeanName(), getConnectionProvider().get())).updatePinboard(pinboardId, messages);
 	}
@@ -148,6 +151,7 @@ public class MessageManagerImpl extends BaseClientManager implements MessageMana
 	@Override
 	public void requestPinboardUpdate(Long pinboardId, int fromMessageId, int toMessageId)
 	{
+		// TODO check if client is allowed to see the pinboard
 		List<PinboardMessage> messages = pinboardMessageManager.getByPinboard(pinboardId, fromMessageId, toMessageId);
 		((MessageManager) getClientInstance(getBeanName(), getConnectionProvider().get())).updatePinboard(pinboardId, messages);
 	}

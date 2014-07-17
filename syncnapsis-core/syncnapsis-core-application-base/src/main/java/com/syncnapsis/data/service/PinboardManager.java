@@ -16,6 +16,7 @@ package com.syncnapsis.data.service;
 
 import com.syncnapsis.data.model.Pinboard;
 import com.syncnapsis.data.model.PinboardMessage;
+import com.syncnapsis.data.model.User;
 
 /**
  * Manager-Interface for access to Pinboard.
@@ -35,4 +36,22 @@ public interface PinboardManager extends GenericNameManager<Pinboard, Long>
 	 * @return the message object created or null if the user is not allowed to post messages
 	 */
 	public PinboardMessage postMessage(Long pinboardId, String title, String message);
+
+	/**
+	 * Check whether the given user is allowed to post messages on the given pinboard
+	 * 
+	 * @param pinboard - the pinboard
+	 * @param user - the user to check
+	 * @return true or false
+	 */
+	public boolean checkPostPermission(Pinboard pinboard, User user);
+
+	/**
+	 * Check whether the given user is allowed to read messages on the given pinboard
+	 * 
+	 * @param pinboard - the pinboard
+	 * @param user - the user to check
+	 * @return true or false
+	 */
+	public boolean checkReadPermission(Pinboard pinboard, User user);
 }

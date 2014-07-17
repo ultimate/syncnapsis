@@ -181,4 +181,53 @@ public class PinboardManagerImplTest extends GenericNameManagerImplTestCase<Pinb
 		}
 		
 	}
+	
+	public void testCheckPostPermission() throws Exception
+	{
+		User creator = userManager.getAll().get(0);
+		User other = userManager.getAll().get(1);
+
+		Pinboard pinboard = new Pinboard();
+		pinboard.setCreator(creator);
+		
+		// check different cases for creator
+		{
+			pinboard.setHidden(false);
+			pinboard.setLocked(false);
+			assertTrue(mockManager.checkPostPermission(pinboard, creator));
+
+			pinboard.setHidden(false);
+			pinboard.setLocked(true);
+			assertTrue(mockManager.checkPostPermission(pinboard, creator));
+			
+			pinboard.setHidden(true);
+			pinboard.setLocked(false);
+			assertTrue(mockManager.checkPostPermission(pinboard, creator));
+			
+			pinboard.setHidden(true);
+			pinboard.setLocked(true);
+			assertTrue(mockManager.checkPostPermission(pinboard, creator));
+		}
+		
+		// check different cases for other user
+		{
+			pinboard.setHidden(false);
+			pinboard.setLocked(false);
+			assertTrue(mockManager.checkPostPermission(pinboard, other));
+			
+			pinboard.setHidden(false);
+			pinboard.setLocked(true);
+			assertFalse(mockManager.checkPostPermission(pinboard, other));
+			
+			pinboard.setHidden(true);
+			pinboard.setLocked(false);
+			assertFalse(mockManager.checkPostPermission(pinboard, other));
+			
+			pinboard.setHidden(true);
+			pinboard.setLocked(true);
+			assertFalse(mockManager.checkPostPermission(pinboard, other));
+		}
+	}
+
+	// TODO checkReadPermission
 }

@@ -101,10 +101,10 @@ public class PinboardManagerImpl extends GenericNameManagerImpl<Pinboard, Long> 
 	{
 		// get additional post information
 		Pinboard pinboard = get(pinboardId);
-		User creator = securityManager.getUserProvider().get();
+		User currentUser = securityManager.getUserProvider().get();
 		
 		// check permission to post
-		if((pinboard.isLocked() || pinboard.isHidden()) && !pinboard.getCreator().getId().equals(creator.getId()))
+		if(!checkPostPermission(pinboard, currentUser))
 			return null;
 		
 		int messageId = pinboardMessageManager.getLatestMessageId(pinboardId);
@@ -114,11 +114,45 @@ public class PinboardManagerImpl extends GenericNameManagerImpl<Pinboard, Long> 
 		pinboardMessage.setActivated(true);
 		pinboardMessage.setContent(message);
 		pinboardMessage.setCreationDate(new Date(securityManager.getTimeProvider().get()));
-		pinboardMessage.setCreator(creator);
+		pinboardMessage.setCreator(currentUser);
 		pinboardMessage.setMessageId(messageId+1);
 		pinboardMessage.setPinboard(pinboard);
 		pinboardMessage.setTitle(title);
 		
 		return pinboardMessageManager.save(pinboardMessage);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see com.syncnapsis.data.service.PinboardManager#checkPostPermission(com.syncnapsis.data.model.Pinboard, com.syncnapsis.data.model.User)
+	 */
+	@Override
+	public boolean checkPostPermission(Pinboard pinboard, User user)
+	{
+		if(pinboard.isLocked() || pinboard.isHidden())
+		{
+			return pinboard.getCreator().getId().equals(user.getId());
+		}
+		else
+		{
+			return true;
+		}
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see com.syncnapsis.data.service.PinboardManager#checkReadPermission(com.syncnapsis.data.model.Pinboard, com.syncnapsis.data.model.User)
+	 */
+	@Override
+	public boolean checkReadPermission(Pinboard pinboard, User user)
+	{
+		if(pinboard.isHidden())
+		{
+			return pinboard.getCreator().getId().equals(user.getId());
+		}
+		else
+		{
+			return true;
+		}
 	}
 }
