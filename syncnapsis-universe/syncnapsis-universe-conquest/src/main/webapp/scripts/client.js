@@ -176,7 +176,6 @@ UIManager = function()
 	Events.fireEvent(window, Events.ONRESIZE);
 
 	this.onLogout(); // just in case ;-)
-	// TODO stay logged in
 	this.updateLabels();
 	this.populateLocaleChooser();
 	this.updateLinks();
@@ -184,6 +183,10 @@ UIManager = function()
 	this.updateShowWelcomeOnLoad(false);
 	if(this.showWelcomeOnLoad)
 		this.showWelcome();
+	
+	// check for the current user
+	server.playerManager.getCurrent();
+	// will login if user found 
 
 	this.hideOverlay();
 };
