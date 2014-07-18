@@ -131,6 +131,8 @@ public class PinboardManagerImpl extends GenericNameManagerImpl<Pinboard, Long> 
 	{
 		if(pinboard.isLocked() || pinboard.isHidden())
 		{
+			if(user == null)
+				return false;
 			return pinboard.getCreator().getId().equals(user.getId());
 		}
 		else
@@ -148,6 +150,8 @@ public class PinboardManagerImpl extends GenericNameManagerImpl<Pinboard, Long> 
 	{
 		if(pinboard.isHidden())
 		{
+			if(user == null)
+				return false;
 			return pinboard.getCreator().getId().equals(user.getId());
 		}
 		else

@@ -139,7 +139,10 @@ public class MessageManagerImpl extends BaseClientManager implements MessageMana
 	@Override
 	public void requestPinboardUpdate(Long pinboardId, int messageCount)
 	{
-		// TODO check if client is allowed to see the pinboard
+		// check if client is allowed to see the pinboard
+		if(!pinboardManager.checkReadPermission(pinboard, user))
+			return;
+		// get the pinboard content
 		List<PinboardMessage> messages = pinboardMessageManager.getByPinboard(pinboardId, messageCount);
 		((MessageManager) getClientInstance(getBeanName(), getConnectionProvider().get())).updatePinboard(pinboardId, messages);
 	}
