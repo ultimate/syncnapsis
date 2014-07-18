@@ -18,6 +18,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.util.Assert;
 
+import com.syncnapsis.constants.ApplicationBaseConstants;
+import com.syncnapsis.data.model.User;
 import com.syncnapsis.providers.ConnectionProvider;
 import com.syncnapsis.security.BaseGameManager;
 import com.syncnapsis.utils.spring.Bean;
@@ -150,5 +152,17 @@ public class BaseClientManager extends Bean implements InitializingBean
 	protected Collection<Connection> getConnections()
 	{
 		return rpcService.getConnections();
+	}
+
+
+	/**
+	 * Get the user for the given {@link Connection}
+	 * 
+	 * @param connection - the connection
+	 * @return the user
+	 */
+	protected User getConnectionUser(Connection connection)
+	{
+		return (User) connection.getSession().getAttribute(ApplicationBaseConstants.SESSION_USER_KEY);
 	}
 }

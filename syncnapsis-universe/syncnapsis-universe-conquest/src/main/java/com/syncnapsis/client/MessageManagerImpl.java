@@ -17,7 +17,6 @@ import java.util.List;
 
 import org.springframework.util.Assert;
 
-import com.syncnapsis.data.model.Pinboard;
 import com.syncnapsis.data.model.PinboardMessage;
 import com.syncnapsis.data.service.PinboardManager;
 import com.syncnapsis.data.service.PinboardMessageManager;
@@ -108,6 +107,9 @@ public class MessageManagerImpl extends BaseClientManager implements MessageMana
 	public void postPinboardMessage(Long pinboardId, String title, String message)
 	{
 		PinboardMessage pinboardMessage = pinboardManager.postMessage(pinboardId, title, message);
+		
+		if(pinboardMessage == null)
+			return; // no post permission
 
 		List<PinboardMessage> messages = new ArrayList<PinboardMessage>(1);
 		messages.add(pinboardMessage);
@@ -116,7 +118,9 @@ public class MessageManagerImpl extends BaseClientManager implements MessageMana
 
 		for(Connection connection : connections)
 		{
-			// TODO check if client is allowed to see the pinboard
+			// check read permission
+			if(!pinboardManager.checkReadPermission(pinboardMessage.getPinboard(), getConnectionUser(connection)))
+				continue; // no read permission
 			((MessageManager) getClientInstance(getBeanName(), connection)).updatePinboard(pinboardId, messages);
 		}
 	}
@@ -139,14 +143,10 @@ public class MessageManagerImpl extends BaseClientManager implements MessageMana
 	@Override
 	public void requestPinboardUpdate(Long pinboardId, int messageCount)
 	{
-		// check if client is allowed to see the pinboard
-		if(!pinboardManager.checkReadPermission(pinboard, user))
-			return;
-		// get the pinboard content
 		List<PinboardMessage> messages = pinboardMessageManager.getByPinboard(pinboardId, messageCount);
 		((MessageManager) getClientInstance(getBeanName(), getConnectionProvider().get())).updatePinboard(pinboardId, messages);
 	}
-	
+
 	/*
 	 * (non-Javadoc)
 	 * @see com.syncnapsis.client.MessageManager#requestPinboardUpdate(java.lang.Long, int, int)
@@ -154,7 +154,6 @@ public class MessageManagerImpl extends BaseClientManager implements MessageMana
 	@Override
 	public void requestPinboardUpdate(Long pinboardId, int fromMessageId, int toMessageId)
 	{
-		// TODO check if client is allowed to see the pinboard
 		List<PinboardMessage> messages = pinboardMessageManager.getByPinboard(pinboardId, fromMessageId, toMessageId);
 		((MessageManager) getClientInstance(getBeanName(), getConnectionProvider().get())).updatePinboard(pinboardId, messages);
 	}
