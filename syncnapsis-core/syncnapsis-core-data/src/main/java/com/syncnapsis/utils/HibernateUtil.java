@@ -20,11 +20,10 @@ import java.util.HashMap;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.cfg.Configuration;
-import org.hibernate.service.ServiceRegistry;
-import org.hibernate.service.ServiceRegistryBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.InitializingBean;
+import org.springframework.util.Assert;
 
 import com.syncnapsis.exceptions.ConversionException;
 
@@ -34,7 +33,7 @@ import com.syncnapsis.exceptions.ConversionException;
  * 
  * @author ultimate
  */
-public class HibernateUtil
+public class HibernateUtil implements InitializingBean
 {
 	/**
 	 * Logger-Instance
@@ -77,9 +76,9 @@ public class HibernateUtil
 	public void setSessionFactory(SessionFactory sessionFactory)
 	{
 		logger.debug("setting SessionFactoryUtil for: " + (sessionFactory == null ? null : sessionFactory.getClass().getName()));
-		if(sessionFactoryUtil != null)
+		if(HibernateUtil.sessionFactoryUtil != null)
 			logger.warn("SessionFactoryUtil is not null but will be overwritten!");
-		sessionFactoryUtil = new SessionFactoryUtil(sessionFactory);
+		HibernateUtil.sessionFactoryUtil = new SessionFactoryUtil(sessionFactory);
 	}
 
 	/**
@@ -97,27 +96,32 @@ public class HibernateUtil
 
 	/**
 	 * The SessionFactoryUtil used by the HibernateUtil.
-	 * If the inner SessionFactoryUtil is null a new one will be initiated by default.
 	 * 
 	 * @return the SessionFactory
 	 */
 	public SessionFactoryUtil getSessionFactoryUtil()
 	{
-		if(sessionFactoryUtil == null)
-			sessionFactoryUtil = new SessionFactoryUtil(initSessionFactory(null));
 		return sessionFactoryUtil;
 	}
 
 	/**
 	 * The SessionFactory to be used by the HibernateUtil.
-	 * If the inner SessionFactoryUtil is null a new one will be initiated by default.
 	 * 
-	 * @see HibernateUtil#getSessionFactoryUtil()
 	 * @return the SessionFactory
 	 */
 	public SessionFactory getSessionFactory()
 	{
 		return getSessionFactoryUtil().getSessionFactory();
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.springframework.beans.factory.InitializingBean#afterPropertiesSet()
+	 */
+	@Override
+	public void afterPropertiesSet() throws Exception
+	{
+		Assert.notNull(sessionFactoryUtil, "sessionFactoryUtil must not be null!");
 	}
 
 	/**
@@ -171,37 +175,12 @@ public class HibernateUtil
 	}
 
 	/**
-	 * Create a new SessionFactory from the given resource
-	 * 
-	 * @param resource - an optional path to a Resource from which the SessionFactory will be
-	 *            initialized.
-	 * @see Configuration#configure(String)
-	 * @see Configuration#configure()
-	 * @return the newly created SessionFactory
+	 * @see SessionFactoryUtil#initSessionFactory(String)
 	 */
+	@Deprecated
 	public static SessionFactory initSessionFactory(String resource)
 	{
-		try
-		{
-			Configuration configuration;
-			if(resource == null)
-				configuration = new Configuration().configure();
-			else
-				configuration = new Configuration().configure(resource);
-
-			ServiceRegistry serviceRegistry = new ServiceRegistryBuilder().applySettings(configuration.getProperties()).buildServiceRegistry();
-
-			SessionFactory sessionFactory = configuration.buildSessionFactory(serviceRegistry);
-
-			logger.info("Hibernate configuration file loaded: " + (resource == null ? "hibernate.cfg.xml" : resource));
-
-			return sessionFactory;
-		}
-		catch(Throwable ex)
-		{
-			logger.error("SessionFactory creation failed: " + ex);
-			throw new ExceptionInInitializerError(ex);
-		}
+		return SessionFactoryUtil.initSessionFactory(resource);
 	}
 
 	/**

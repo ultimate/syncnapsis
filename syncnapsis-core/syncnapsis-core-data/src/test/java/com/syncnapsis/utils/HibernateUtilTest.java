@@ -21,11 +21,13 @@ import com.syncnapsis.data.model.LongModel;
 import com.syncnapsis.data.model.StringModel;
 import com.syncnapsis.tests.BaseSpringContextTestCase;
 import com.syncnapsis.tests.annotations.TestCoversMethods;
+import com.syncnapsis.tests.annotations.TestExcludesMethods;
 
+@TestExcludesMethods("afterPropertiesSet")
 public class HibernateUtilTest extends BaseSpringContextTestCase
 {
-	@TestCoversMethods({ "getInstance", "*etSessionFactory", "*etSessionFactoryUtil", "initSessionFactory", "currentSession", "closeSession", "*BoundSession",
-			"isSessionBound" })
+	@TestCoversMethods({ "getInstance", "*etSessionFactory", "*etSessionFactoryUtil", "initSessionFactory", "currentSession", "closeSession",
+			"*BoundSession", "isSessionBound" })
 	public void testInstantiation()
 	{
 		HibernateUtil h = HibernateUtil.getInstance();

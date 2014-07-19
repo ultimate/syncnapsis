@@ -24,7 +24,7 @@ public class SessionFactoryUtilTest extends BaseSpringContextTestCase
 {
 	private SessionFactory sessionFactory;
 	
-	@TestCoversMethods({ "getInstance", "*etSessionFactory", "currentSession", "openSession", "closeSession", "*BoundSession",
+	@TestCoversMethods({ "getInstance", "*etSessionFactory", "initSessionFactory", "currentSession", "openSession", "closeSession", "*BoundSession",
 			"isSessionBound" })
 	public void testInstantiation()
 	{
