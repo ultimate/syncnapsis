@@ -13,7 +13,7 @@ import com.syncnapsis.websockets.Connection;
 import com.syncnapsis.websockets.engine.http.HttpConnection;
 import com.syncnapsis.websockets.service.rpc.RPCService;
 
-@TestExcludesMethods({ "get*", "set*" })
+@TestExcludesMethods({ "get*", "set*", "afterPropertiesSet" })
 public class UIManagerImplTest extends BaseSpringContextTestCase
 {
 	private SessionProvider		sessionProvider;
