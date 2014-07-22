@@ -28,6 +28,8 @@ import com.syncnapsis.data.model.User;
 import com.syncnapsis.data.model.base.Model;
 import com.syncnapsis.data.service.RPCLogManager;
 import com.syncnapsis.exceptions.SerializationException;
+import com.syncnapsis.security.annotations.LogFilter;
+import com.syncnapsis.utils.ReflectionsUtil;
 import com.syncnapsis.utils.ServletUtil;
 import com.syncnapsis.utils.serialization.Serializer;
 import com.syncnapsis.websockets.service.rpc.RPCCall;
@@ -181,6 +183,19 @@ public class RPCLogManagerImpl extends GenericManagerImpl<RPCLog, Long> implemen
 		call.setMethod(rpcCall.getMethod());
 		try
 		{
+			// filter (serialized) arguments (e.g. passwords)
+			if(rpcCall.getInvocationInfo() != null && rpcCall.getInvocationInfo().getMethod() != null)
+			{
+				LogFilter filter = ReflectionsUtil.getAnnotation(rpcCall.getInvocationInfo().getMethod(), LogFilter.class);
+				if(filter != null)
+				{
+					for(int filteredArg: filter.filteredArgs())
+					{
+						rpcCall.getArgs()[filteredArg] = "****"; 
+					}
+				}
+			}
+
 			call.setArgs(serializer.serialize(rpcCall.getArgs(), authorities));
 		}
 		catch(SerializationException e)
