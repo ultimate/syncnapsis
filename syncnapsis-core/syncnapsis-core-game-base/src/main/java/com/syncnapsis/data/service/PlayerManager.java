@@ -20,6 +20,7 @@ import com.syncnapsis.exceptions.PlayerSelectionInvalidException;
 import com.syncnapsis.exceptions.PlayerSittingExistsException;
 import com.syncnapsis.exceptions.PlayerSittingNotPossibleException;
 import com.syncnapsis.exceptions.UserNotFoundException;
+import com.syncnapsis.security.annotations.LogFilter;
 
 /**
  * Manager-Interface f�r den Zugriff auf Player.
@@ -37,6 +38,7 @@ public interface PlayerManager extends GenericManager<Player, Long>
 	 * @return the player just logged in
 	 * @throws UserNotFoundException - if the login failed (wrong username or password)
 	 */
+	@LogFilter(filteredArgs = { 1 })
 	public Player login(String username, String password);
 
 	/**
@@ -46,7 +48,7 @@ public interface PlayerManager extends GenericManager<Player, Long>
 	 * @return if the logout has successfully been performed
 	 */
 	public boolean logout();
-	
+
 	/**
 	 * Get the player currently logged in.
 	 * 
@@ -66,6 +68,7 @@ public interface PlayerManager extends GenericManager<Player, Long>
 	 * @return the new Player
 	 * @throws PlayerRegistrationFailedException if registration fails
 	 */
+	@LogFilter(filteredArgs = { 0, 1, 2 })
 	public Player register(String username, String email, String password, String passwordConfirm) throws PlayerRegistrationFailedException;
 
 	/**

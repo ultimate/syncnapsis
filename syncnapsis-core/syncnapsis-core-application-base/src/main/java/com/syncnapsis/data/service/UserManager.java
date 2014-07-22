@@ -18,6 +18,7 @@ import com.syncnapsis.data.model.User;
 import com.syncnapsis.exceptions.UserNotFoundException;
 import com.syncnapsis.exceptions.UserRegistrationFailedException;
 import com.syncnapsis.exceptions.UserUpdateFailedException;
+import com.syncnapsis.security.annotations.LogFilter;
 
 /**
  * Manager-Interface f�r den Zugriff auf User.
@@ -75,6 +76,7 @@ public interface UserManager extends GenericNameManager<User, Long>
 	 * @return the user just logged in
 	 * @throws UserNotFoundException - if the login failed (wrong username or password)
 	 */
+	@LogFilter(filteredArgs = { 1 })
 	public User login(String username, String password);
 
 	/**
@@ -110,6 +112,7 @@ public interface UserManager extends GenericNameManager<User, Long>
 	 * @return the new User
 	 * @throws UserRegistrationFailedException if registration failed
 	 */
+	@LogFilter(filteredArgs = { 2, 3 })
 	public User register(String username, String email, String password, String passwordConfirm) throws UserRegistrationFailedException;
 
 	/**
@@ -140,14 +143,16 @@ public interface UserManager extends GenericNameManager<User, Long>
 	 * @return a message representing the result of the operation for action output
 	 */
 	public String verifyMailAddress(Long userId, String email);
-	
+
 	/**
 	 * Set the password for the current user
+	 * 
 	 * @param oldPassword - the old password
 	 * @param newPassword - the new password
 	 * @param newPasswordConfirm - the confirmation of the new password
 	 * @return
 	 */
+	@LogFilter(filteredArgs = { 0, 1, 2 })
 	public boolean changePassword(String oldPassword, String newPassword, String newPasswordConfirm) throws UserUpdateFailedException;
 
 	/**
