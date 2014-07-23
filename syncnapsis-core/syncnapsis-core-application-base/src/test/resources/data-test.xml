@@ -15,115 +15,6 @@
   -->
 <!DOCTYPE dataset SYSTEM "dataset.dtd">
 <dataset>
-	<table name="parameter">
-		<column>id</column>
-		<column>name</column>
-		<column>value</column>
-		<column>version</column>
-		<row>
-			<value description="id">1</value>
-			<value description="name">session.timeout.default</value>
-			<value description="value">60</value>
-			<value description="version">1</value>
-		</row>
-		<row>
-			<value description="id">2</value>
-			<value description="name">registration.status.default</value>
-			<value description="value">active</value>
-			<value description="version">1</value>
-		</row>
-		<row>
-			<value description="id">3</value>
-			<value description="name">registration.timeToVerify</value>
-			<value description="value">604800000</value><!-- 1 week -->
-			<value description="version">1</value>
-		</row>
-		<row>
-			<value description="id">4</value>
-			<value description="name">email.change.timeToVerify</value>
-			<value description="value">86400000</value><!-- 1 day -->
-			<value description="version">1</value>
-		</row>
-		<row>
-			<value description="id">5</value>
-			<value description="name">action.code.length</value>
-			<value description="value">50</value>
-			<value description="version">1</value>
-		</row>
-		<row>
-			<value description="id">6</value>
-			<value description="name">password.reset.timeToVerify</value>
-			<value description="value">86400000</value><!-- 1 day -->
-			<value description="version">1</value>
-		</row>
-		<row>
-			<value description="id">7</value>
-			<value description="name">password.generated.length</value>
-			<value description="value">8</value>
-			<value description="version">1</value>
-		</row>
-		<row>
-			<value description="id">999901</value>
-			<value description="name">news.maxItems</value>
-			<value description="value">10</value>
-			<value description="version">1</value>
-		</row>
-		<row>
-			<value description="id">999902</value>
-			<value description="name">news.length1.maxAge</value>
-			<value description="value">86400</value>
-			<value description="version">1</value>
-		</row>
-		<row>
-			<value description="id">999903</value>
-			<value description="name">news.length2.maxAge</value>
-			<value description="value">172800</value>
-			<value description="version">1</value>
-		</row>
-		<row>
-			<value description="id">999904</value>
-			<value description="name">news.length3.maxAge</value>
-			<value description="value">259200</value>
-			<value description="version">1</value>
-		</row>
-		<row>
-			<value description="id">999905</value>
-			<value description="name">news.length4.maxAge</value>
-			<value description="value">432000</value>
-			<value description="version">1</value>
-		</row>
-		<row>
-			<value description="id">999906</value>
-			<value description="name">news.length5.maxAge</value>
-			<value description="value">604800</value>
-			<value description="version">1</value>
-		</row>
-		<row>
-			<value description="id">999907</value>
-			<value description="name">news.length6.maxAge</value>
-			<value description="value">1209600</value>
-			<value description="version">1</value>
-		</row>
-		<row>
-			<value description="id">999908</value>
-			<value description="name">news.length7.maxAge</value>
-			<value description="value">2419200</value>
-			<value description="version">1</value>
-		</row>
-		<row>
-			<value description="id">999909</value>
-			<value description="name">news.length8.maxAge</value>
-			<value description="value">4838400</value>
-			<value description="version">1</value>
-		</row>
-		<row>
-			<value description="id">999910</value>
-			<value description="name">news.length9.maxAge</value>
-			<value description="value">7257600</value>
-			<value description="version">1</value>
-		</row>
-	</table>
-
 	<table name="action">
 		<column>id</column>
 		<column>version</column>
@@ -148,104 +39,6 @@
 			<null/>
 		</row>
 	</table>
-
-	<table name="messenger">
-		<column>id</column>
-		<column>version</column>
-		<column>name</column>
-		<column>activated</column>
-
-		<row>
-			<value description="id">1</value>
-			<value description="version">1</value>
-			<value description="name">ICQ</value>
-			<value description="activated">1</value>
-		</row>
-		<row>
-			<value description="id">2</value>
-			<value description="version">1</value>
-			<value description="name">AIM/AOL</value>
-			<value description="activated">1</value>
-		</row>
-		<row>
-			<value description="id">3</value>
-			<value description="version">1</value>
-			<value description="name">MSN/Windows Live</value>
-			<value description="activated">1</value>
-		</row>
-		<row>
-			<value description="id">4</value>
-			<value description="version">1</value>
-			<value description="name">Skype</value>
-			<value description="activated">1</value>
-		</row>
-		<row>
-			<value description="id">5</value>
-			<value description="version">1</value>
-			<value description="name">Yahoo</value>
-			<value description="activated">1</value>
-		</row>
-		<row>
-			<value description="id">6</value>
-			<value description="version">1</value>
-			<value description="name">Google Talk</value>
-			<value description="activated">1</value>
-		</row>
-	</table>
-
-	<table name="app_userrole">
-		<column>id</column>
-		<column>version</column>
-		<column>rolename</column>
-		<column>onlyAllowedToSeeActivated</column>
-		<column>mask</column>
-		<row>
-			<value description="id">1</value>
-			<value description="version">1</value>
-			<value description="rolename">ADMIN</value>
-			<value description="onlyAllowedToSeeActivated">0</value>
-			<value description="mask">1</value>
-		</row>
-		<row>
-			<value description="id">2</value>
-			<value description="version">1</value>
-			<value description="rolename">MODERATOR</value>
-			<value description="onlyAllowedToSeeActivated">1</value>
-			<value description="mask">2</value>
-		</row>
-		<row>
-			<value description="id">3</value>
-			<value description="version">1</value>
-			<value description="rolename">NORMAL_USER</value>
-			<value description="onlyAllowedToSeeActivated">1</value>
-			<value description="mask">4</value>
-		</row>
-		<row>
-			<value description="id">4</value>
-			<value description="version">1</value>
-			<value description="rolename">DEMO_USER</value>
-			<value description="onlyAllowedToSeeActivated">1</value>
-			<value description="mask">8</value>
-		</row>
-	</table>
-
-	<table name="app_userrole_fallback">
-		<column>fkRole</column>
-		<column>fkFallbackRole</column>
-		<row>
-			<value description="fkRole">1</value>
-			<value description="fkFallbackRole">2</value>
-		</row>
-		<row>
-			<value description="fkRole">2</value>
-			<value description="fkFallbackRole">3</value>
-		</row>
-		<row>
-			<value description="fkRole">3</value>
-			<value description="fkFallbackRole">4</value>
-		</row>
-	</table>
-
 	<table name="app_user">
 		<column>id</column>
 		<column>version</column>
@@ -276,37 +69,7 @@
 		<column>description</column>
 		<column>imageURL</column>
 		<row>
-			<value description="id">0</value>
-			<value description="version">1</value>
-			<value description="username">admin</value>
-			<value description="email">admin@syncnapsis.com</value>
-			<value description="password">1000:f44963469d592d5648668945379d2ae969de43db26a32f60:b42983e9692adc9d5162bda2cf91ec47c63e7db37277c96f</value>
-			<value description="fkUserRole">1</value>
-			<null />
-			<value description="activated">1</value>
-			<value description="registrationDate">2008-01-01</value>
-			<null />
-			<value description="accountStatus">active</value>
-			<null />
-			<value description="nickname">Administrator</value>
-			<value description="title">Mr.</value>
-			<null />
-			<value description="city">Berlin</value>
-			<value description="gender">male</value>
-			<value description="locale">DE</value>
-			<value description="timeZoneID">Etc/GMT+1</value>
-			<value description="dateFormat">yMd24_minus</value>
-			<value description="usingAdvancedMenu">1</value>
-			<value description="usingTooltips">1</value>
-			<value description="usingInfiniteSession">0</value>
-			<value description="sessionTimeout">60</value>
-			<value description="lastActiveDate">2008-01-01</value>
-			<value description="showEmail">1</value>
-			<value description="description">Dies ist der Administrator</value>
-			<null />
-		</row>
-		<row>
-			<value description="id">1</value>
+			<value description="id">10</value>
 			<value description="version">1</value>
 			<value description="username">user1</value>
 			<value description="email">user1@syncnapsis.com</value>
@@ -336,7 +99,7 @@
 			<null />
 		</row>
 		<row>
-			<value description="id">2</value>
+			<value description="id">20</value>
 			<value description="version">1</value>
 			<value description="username">user2</value>
 			<value description="email">user2@syncnapsis.com</value>
@@ -377,35 +140,35 @@
 			<value description="id">1</value>
 			<value description="version">0</value>
 			<value description="address">not available</value>
-			<value description="fkUser">1</value>
+			<value description="fkUser">10</value>
 			<value description="fkMessenger">4</value>
 		</row>
 		<row>
 			<value description="id">2</value>
 			<value description="version">0</value>
 			<value description="address">not available</value>
-			<value description="fkUser">1</value>
+			<value description="fkUser">10</value>
 			<value description="fkMessenger">4</value>
 		</row>
 		<row>
 			<value description="id">3</value>
 			<value description="version">0</value>
 			<value description="address">not available</value>
-			<value description="fkUser">1</value>
+			<value description="fkUser">10</value>
 			<value description="fkMessenger">4</value>
 		</row>
 		<row>
 			<value description="id">4</value>
 			<value description="version">0</value>
 			<value description="address">not available</value>
-			<value description="fkUser">1</value>
+			<value description="fkUser">10</value>
 			<value description="fkMessenger">4</value>
 		</row>
 		<row>
 			<value description="id">5</value>
 			<value description="version">0</value>
 			<value description="address">not available</value>
-			<value description="fkUser">1</value>
+			<value description="fkUser">10</value>
 			<value description="fkMessenger">5</value>
 		</row>
 	</table>
@@ -420,8 +183,8 @@
 		<row>
 			<value description="id">1</value>
 			<value description="version">0</value>
-			<value description="fkUser1">1</value>
-			<value description="fkUser2">2</value>
+			<value description="fkUser1">10</value>
+			<value description="fkUser2">20</value>
 			<value description="approvedByUser1">1</value>
 			<value description="approvedByUser2">1</value>
 		</row>
@@ -464,36 +227,36 @@
 		<column>hidden</column>
 		<column>defaultMessageCount</column>
 		<row>
-			<value description="id">1</value>
+			<value description="id">11</value>
 			<value description="version">1</value>
 			<value description="activated">1</value>
 			<value description="name">testboard</value>
 			<value description="description"><![CDATA[the test pinboard]]></value>
-			<value description="fkCreator">0</value>
+			<value description="fkCreator">1</value>
 			<value description="creationDate">2013-01-01 00:00:00</value>
 			<value description="locked">0</value>
 			<value description="hidden">0</value>
 			<value description="defaultMessageCount">10</value>
 		</row>
 		<row>
-			<value description="id">2</value>
+			<value description="id">12</value>
 			<value description="version">1</value>
 			<value description="activated">1</value>
 			<value description="name">a second board</value>
 			<value description="description"><![CDATA[the second pinboard]]></value>
-			<value description="fkCreator">0</value>
+			<value description="fkCreator">1</value>
 			<value description="creationDate">2013-01-01 00:00:00</value>
 			<value description="locked">1</value>
 			<value description="hidden">0</value>
 			<value description="defaultMessageCount">5</value>
 		</row>
 		<row>
-			<value description="id">3</value>
+			<value description="id">13</value>
 			<value description="version">1</value>
 			<value description="activated">1</value>
 			<value description="name">notes</value>
 			<value description="description"><![CDATA[notes]]></value>
-			<value description="fkCreator">0</value>
+			<value description="fkCreator">1</value>
 			<value description="creationDate">2013-01-01 00:00:00</value>
 			<value description="locked">1</value>
 			<value description="hidden">1</value>
@@ -515,9 +278,9 @@
 			<value description="id">1</value>
 			<value description="version">1</value>
 			<value description="activated">1</value>
-			<value description="fkPinboard">1</value>
+			<value description="fkPinboard">11</value>
 			<value description="messageId">1</value>
-			<value description="fkCreator">0</value>
+			<value description="fkCreator">1</value>
 			<value description="creationDate">2013-01-01 01:00:00</value>
 			<value description="title">first message on the board</value>
 			<value description="content"><![CDATA[hello!]]></value>
@@ -526,9 +289,9 @@
 			<value description="id">2</value>
 			<value description="version">1</value>
 			<value description="activated">1</value>
-			<value description="fkPinboard">1</value>
+			<value description="fkPinboard">11</value>
 			<value description="messageId">2</value>
-			<value description="fkCreator">0</value>
+			<value description="fkCreator">1</value>
 			<value description="creationDate">2013-01-01 02:00:00</value>
 			<null />
 			<value description="content"><![CDATA[enjoy this board]]></value>
@@ -537,9 +300,9 @@
 			<value description="id">3</value>
 			<value description="version">1</value>
 			<value description="activated">1</value>
-			<value description="fkPinboard">1</value>
+			<value description="fkPinboard">11</value>
 			<value description="messageId">3</value>
-			<value description="fkCreator">2</value>
+			<value description="fkCreator">20</value>
 			<value description="creationDate">2013-01-01 03:00:00</value>
 			<null />
 			<value description="content"><![CDATA[yeah, we will... ;-)]]></value>
@@ -548,7 +311,7 @@
 			<value description="id">4</value>
 			<value description="version">1</value>
 			<value description="activated">1</value>
-			<value description="fkPinboard">1</value>
+			<value description="fkPinboard">11</value>
 			<value description="messageId">4</value>
 			<value description="fkCreator">1</value>
 			<value description="creationDate">2013-01-01 04:00:00</value>
@@ -559,9 +322,9 @@
 			<value description="id">5</value>
 			<value description="version">1</value>
 			<value description="activated">1</value>
-			<value description="fkPinboard">1</value>
+			<value description="fkPinboard">11</value>
 			<value description="messageId">5</value>
-			<value description="fkCreator">0</value>
+			<value description="fkCreator">10</value>
 			<value description="creationDate">2013-01-01 05:00:00</value>
 			<null />
 			<value description="content"><![CDATA[yeehaa :-D]]></value>
@@ -570,9 +333,9 @@
 			<value description="id">6</value>
 			<value description="version">1</value>
 			<value description="activated">1</value>
-			<value description="fkPinboard">2</value>
+			<value description="fkPinboard">12</value>
 			<value description="messageId">1</value>
-			<value description="fkCreator">0</value>
+			<value description="fkCreator">1</value>
 			<value description="creationDate">2013-01-01 02:00:00</value>
 			<null />
 			<value description="content"><![CDATA[very old announcement]]></value>
@@ -581,9 +344,9 @@
 			<value description="id">7</value>
 			<value description="version">1</value>
 			<value description="activated">1</value>
-			<value description="fkPinboard">2</value>
+			<value description="fkPinboard">12</value>
 			<value description="messageId">2</value>
-			<value description="fkCreator">0</value>
+			<value description="fkCreator">1</value>
 			<value description="creationDate">2013-01-01 03:00:00</value>
 			<null />
 			<value description="content"><![CDATA[old announcement]]></value>
@@ -592,7 +355,7 @@
 			<value description="id">8</value>
 			<value description="version">1</value>
 			<value description="activated">1</value>
-			<value description="fkPinboard">2</value>
+			<value description="fkPinboard">12</value>
 			<value description="messageId">3</value>
 			<value description="fkCreator">1</value>
 			<value description="creationDate">2013-01-01 04:00:00</value>
@@ -603,7 +366,7 @@
 			<value description="id">9</value>
 			<value description="version">1</value>
 			<value description="activated">1</value>
-			<value description="fkPinboard">2</value>
+			<value description="fkPinboard">12</value>
 			<value description="messageId">4</value>
 			<value description="fkCreator">1</value>
 			<value description="creationDate">2013-01-01 05:00:00</value>
@@ -614,9 +377,9 @@
 			<value description="id">10</value>
 			<value description="version">1</value>
 			<value description="activated">1</value>
-			<value description="fkPinboard">3</value>
+			<value description="fkPinboard">13</value>
 			<value description="messageId">1</value>
-			<value description="fkCreator">0</value>
+			<value description="fkCreator">1</value>
 			<value description="creationDate">2013-01-01 05:00:00</value>
 			<null />
 			<value description="content"><![CDATA[note 1]]></value>
@@ -625,37 +388,12 @@
 			<value description="id">11</value>
 			<value description="version">1</value>
 			<value description="activated">1</value>
-			<value description="fkPinboard">3</value>
+			<value description="fkPinboard">13</value>
 			<value description="messageId">2</value>
-			<value description="fkCreator">0</value>
+			<value description="fkCreator">1</value>
 			<value description="creationDate">2013-01-01 06:00:00</value>
 			<null />
 			<value description="content"><![CDATA[note 2]]></value>
-		</row>
-	</table>
-
-	<table name="blacklist">
-		<column>id</column>
-		<column>version</column>
-		<column>name</column>
-		<column>strict</column>
-		<row>
-			<value description="id">0</value>
-			<value description="version">1</value>
-			<value description="name">general</value>
-			<value description="strict">1</value>
-		</row>
-		<row>
-			<value description="id">1</value>
-			<value description="version">1</value>
-			<value description="name">email</value>
-			<value description="strict">0</value>
-		</row>
-		<row>
-			<value description="id">2</value>
-			<value description="version">1</value>
-			<value description="name">name</value>
-			<value description="strict">1</value>
 		</row>
 	</table>
 
