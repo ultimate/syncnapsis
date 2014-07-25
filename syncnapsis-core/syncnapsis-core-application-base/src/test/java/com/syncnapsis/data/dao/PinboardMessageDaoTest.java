@@ -111,7 +111,7 @@ public class PinboardMessageDaoTest extends GenericDaoTestCase<PinboardMessage, 
 	public void testGetLatestMessageId() throws Exception
 	{
 		// valid pinboard
-		long pinboardId = 1L;
+		long pinboardId = 11L;
 
 		List<PinboardMessage> messages = pinboardMessageDao.getByPinboard(pinboardId);
 		int latestMessageId = messages.get(0).getMessageId(); // first message is the newest message

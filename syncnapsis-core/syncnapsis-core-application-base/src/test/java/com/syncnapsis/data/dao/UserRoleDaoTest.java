@@ -37,6 +37,7 @@ public class UserRoleDaoTest extends GenericNameDaoTestCase<UserRole, Long>
 
 		UserRole userRole = new UserRole();
 		userRole.setRolename("any name");
+		userRole.setMask(65536);
 
 		setEntity(userRole);
 
