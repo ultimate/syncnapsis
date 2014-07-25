@@ -140,6 +140,7 @@
 					<password>${jdbc.password}</password>
 					<url>${jdbc.url}</url>
 					<schema>${db.dbunit.schema}</schema>
+					<skip>${db.dbunit.skip}</skip>
 				</configuration>
 				<dependencies>
 					<dependency>

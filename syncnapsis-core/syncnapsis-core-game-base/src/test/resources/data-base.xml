@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ - Syncnapsis Framework - Copyright (c) 2012 ultimate
+ - 
+ - This program is free software; you can redistribute it and/or modify it under the terms of
+ - the GNU General Public License as published by the Free Software Foundation; either version
+ - 3 of the License, or any later version.
+ - 
+ - This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+ - without even the implied warranty of MECHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ - See the GNU General Public License for more details.
+ - 
+ - You should have received a copy of the GNU General Plublic License along with this program;
+ - if not, see <http://www.gnu.org/licenses/>.
+-->
+<!DOCTYPE dataset SYSTEM "dataset.dtd">
+<dataset>
+
+	<table name="playerrole">
+		<column>id</column>
+		<column>version</column>
+		<column>rolename</column>
+		<column>maxEmpires</column>
+		<column>maxSitters</column>
+		<column>maxSitted</column>
+		<column>mask</column>
+		<row>
+			<value description="id">0</value>
+			<value description="version">1</value>
+			<value description="rolename">SYSTEM</value>
+			<value description="maxEmpires">0</value>
+			<value description="maxSitters">0</value>
+			<value description="maxSitted">0</value>
+			<value description="mask">0</value>
+		</row>
+		<row>
+			<value description="id">1</value>
+			<value description="version">1</value>
+			<value description="rolename">PREMIUM_PLAYER</value>
+			<value description="maxEmpires">5</value>
+			<value description="maxSitters">5</value>
+			<value description="maxSitted">5</value>
+			<value description="mask">512</value>
+		</row>
+		<row>
+			<value description="id">2</value>
+			<value description="version">1</value>
+			<value description="rolename">NORMAL_PLAYER</value>
+			<value description="maxEmpires">2</value>
+			<value description="maxSitters">2</value>
+			<value description="maxSitted">2</value>
+			<value description="mask">1024</value>
+		</row>
+		<row>
+			<value description="id">3</value>
+			<value description="version">1</value>
+			<value description="rolename">DEMO_PLAYER</value>
+			<value description="maxEmpires">1</value>
+			<value description="maxSitters">0</value>
+			<value description="maxSitted">0</value>
+			<value description="mask">2048</value>
+		</row>
+	</table>
+
+	<table name="playerrole_fallback">
+		<column>fkRole</column>
+		<column>fkFallbackRole</column>
+		<row>
+			<value description="fkRole">1</value>
+			<value description="fkFallbackRole">2</value>
+		</row>
+		<row>
+			<value description="fkRole">2</value>
+			<value description="fkFallbackRole">3</value>
+		</row>
+	</table>
+	
+	<table name="player">
+		<column>id</column>
+		<column>version</column>
+		<column>activated</column>
+		<column>fkUser</column>
+		<column>fkPlayerrole</column>
+		<column>roleExpireDate</column>
+		<column>accountStatus</column>
+		<column>accountStatusExpireDate</column>
+		<column>bot</column>
+		<row>
+			<value description="id">0</value>
+			<value description="version">0</value>
+			<value description="activated">1</value>
+			<value description="fkUser">0</value>
+			<value description="fkPlayerrole">0</value>
+			<null />
+			<value description="accountStatus">locked</value>
+			<null />
+			<value description="bot">0</value>
+		</row>
+		<row>
+			<value description="id">1</value>
+			<value description="version">0</value>
+			<value description="activated">1</value>
+			<value description="fkUser">1</value>
+			<value description="fkPlayerrole">1</value>
+			<null />
+			<value description="accountStatus">active</value>
+			<null />
+			<value description="bot">0</value>
+		</row>
+	</table>
+	
+	<table name="empire">
+		<column>id</column>
+		<column>version</column>
+		<column>activated</column>
+		<column>fkPlayer</column>
+		<column>shortName</column>
+		<column>fullName</column>
+		<column>description</column>
+		<column>imageURL</column>
+		<column>primaryColor</column>
+		<column>secondaryColor</column>
+		<column>foundationDate</column>
+		<column>dissolutionDate</column>
+		<row>
+			<value description="id">1</value>
+			<value description="version">1</value>
+			<value description="activated">1</value>
+			<value description="fkPlayer">1</value>
+			<value description="shortName"><![CDATA[syncnapsis]]></value>
+			<value description="fullName"><![CDATA[syncnapsis]]></value>
+			<value description="description"><![CDATA[The syncnapsis admin empire.]]></value>
+			<null/>
+			<value description="primaryColor">#000000</value>
+			<value description="secondaryColor">#000000</value>
+			<value description="foundationDate">2008-01-01</value>
+			<null />
+		</row>
+	</table>
+</dataset>
