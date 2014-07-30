@@ -109,7 +109,7 @@ public class PoliticsComplexImplDataGeneratorTest extends BaseDaoTestCase
 
 	public void testCreateContact() throws Exception
 	{
-		Empire contact1 = empireManager.getByName("E0");
+		Empire contact1 = empireManager.getByName("E1");
 		Empire contact2 = empireManager.getByName("E2");
 		
 		Map<String, Boolean> authoritiesMap1 = new HashMap<String, Boolean>();
