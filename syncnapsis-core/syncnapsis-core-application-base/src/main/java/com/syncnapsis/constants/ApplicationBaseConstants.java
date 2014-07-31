@@ -68,6 +68,14 @@ public class ApplicationBaseConstants
 	public static final Constant<String>	PARAM_NEWS_MAXAGE					= new StringConstant("news.%L.maxAge");
 
 	/**
+	 * The ID of the system user
+	 */
+	public static final long				SYSTEM_USER_ID						= 0L;
+	/**
+	 * The name of the system user
+	 */
+	public static final String				SYSTEM_USER_NAME					= "SYSTEM";
+	/**
 	 * bitmask: Administrator
 	 */
 	public static final int					ROLE_ADMIN							= 1;
