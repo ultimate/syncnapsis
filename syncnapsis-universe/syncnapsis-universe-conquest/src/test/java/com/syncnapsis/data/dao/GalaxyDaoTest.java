@@ -17,6 +17,7 @@ package com.syncnapsis.data.dao;
 import java.util.Date;
 import java.util.List;
 
+import com.syncnapsis.constants.ApplicationBaseConstants;
 import com.syncnapsis.data.dao.hibernate.GalaxyDaoHibernate;
 import com.syncnapsis.data.model.Galaxy;
 import com.syncnapsis.data.model.Player;
@@ -80,7 +81,7 @@ public class GalaxyDaoTest extends GenericNameDaoTestCase<Galaxy, Long>
 
 	public void testGetByCreator() throws Exception
 	{
-		Player player = playerDao.getByUsername("admin");
+		Player player = playerDao.getByUsername(ApplicationBaseConstants.SYSTEM_USER_NAME);
 		
 		List<Galaxy> result = galaxyDao.getByCreator(player.getId());
 

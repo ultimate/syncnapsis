@@ -10,139 +10,6 @@
 	- if not, see <http://www.gnu.org/licenses/>. -->
 <!DOCTYPE dataset SYSTEM "dataset.dtd">
 <dataset>
-
-	<table name="parameter">
-		<column>id</column>
-		<column>name</column>
-		<column>value</column>
-		<column>version</column>
-		<row>
-			<value description="id">101</value>
-			<value description="name">match.vendetta.param.default</value>
-			<value description="value">40</value>
-			<value description="version">1</value>
-		</row>
-		<row>
-			<value description="id">102</value>
-			<value description="name">solarsystem.habitability.max</value>
-			<value description="value">1000</value>
-			<value description="version">1</value>
-		</row>
-		<row>
-			<value description="id">103</value>
-			<value description="name">solarsystem.size.max</value>
-			<value description="value">1000</value>
-			<value description="version">1</value>
-		</row>
-		<row>
-			<value description="id">104</value>
-			<value description="name">solarsystem.population.factor</value>
-			<value description="value">1000000</value>
-			<value description="version">1</value>
-		</row>
-		<row>
-			<value description="id">105</value>
-			<value description="name">travel.max.factor</value>
-			<value description="value">10</value>
-			<value description="version">1</value>
-		</row>
-		<row>
-			<value description="id">106</value>
-			<value description="name">travel.exodus.factor</value>
-			<value description="value">20</value>
-			<value description="version">1</value>
-		</row>
-		<row>
-			<value description="id">107</value>
-			<value description="name">travel.speed.max</value>
-			<value description="value">1000</value>
-			<value description="version">1</value>
-		</row>
-		<row>
-			<value description="id">108</value>
-			<value description="name">travel.speed.min</value>
-			<value description="value">100</value>
-			<value description="version">1</value>
-		</row>
-		<row>
-			<value description="id">109</value>
-			<value description="name">match.speed.min</value>
-			<value description="value">0</value>
-			<value description="version">1</value>
-		</row>
-		<row>
-			<value description="id">110</value>
-			<value description="name">match.speed.max</value>
-			<value description="value">5</value>
-			<value description="version">1</value>
-		</row>
-		<row>
-			<value description="id">111</value>
-			<value description="name">factor.build</value>
-			<value description="value">0.08</value>
-			<value description="version">1</value>
-		</row>
-		<row>
-			<value description="id">112</value>
-			<value description="name">factor.attack</value>
-			<value description="value">0.06</value>
-			<value description="version">1</value>
-		</row>
-		<row>
-			<value description="id">113</value>
-			<value description="name">factor.build.randomize</value>
-			<value description="value">1.1</value>
-			<value description="version">1</value>
-		</row>
-		<row>
-			<value description="id">114</value>
-			<value description="name">factor.attack.randomize</value>
-			<value description="value">0.25</value>
-			<value description="version">1</value>
-		</row>
-		<row>
-			<value description="id">115</value>
-			<value description="name">norm.tick.length</value>
-			<value description="value">100</value>
-			<value description="version">1</value>
-		</row>
-		<row>
-			<value description="id">116</value>
-			<value description="name">travel.time.factor</value>
-			<value description="value">0.7</value>
-			<value description="version">1</value>
-		</row>
-		<row>
-			<value description="id">121</value>
-			<value description="name">priority.full</value>
-			<value description="value">1.0</value>
-			<value description="version">1</value>
-		</row>
-		<row>
-			<value description="id">122</value>
-			<value description="name">priority.high</value>
-			<value description="value">0.75</value>
-			<value description="version">1</value>
-		</row>
-		<row>
-			<value description="id">123</value>
-			<value description="name">priority.medium</value>
-			<value description="value">0.5</value>
-			<value description="version">1</value>
-		</row>
-		<row>
-			<value description="id">124</value>
-			<value description="name">priority.low</value>
-			<value description="value">0.25</value>
-			<value description="version">1</value>
-		</row>
-		<row>
-			<value description="id">125</value>
-			<value description="name">priority.none</value>
-			<value description="value">0.0</value>
-			<value description="version">1</value>
-		</row>
-	</table>
 	<table name="galaxy">
 		<column>id</column>
 		<column>version</column>
@@ -494,7 +361,7 @@
 			<value description="activated">1</value>
 			<value description="title">Cube Wars</value>
 			<value description="fkGalaxy">1</value>
-			<value description="fkCreator">1</value>
+			<value description="fkCreator">10</value>
 			<value description="creationDate">2012-01-01</value>
 			<value description="startDate">2012-01-01</value>
 			<null />
@@ -519,7 +386,7 @@
 			<value description="activated">1</value>
 			<value description="title">Cube Wars 2</value>
 			<value description="fkGalaxy">1</value>
-			<value description="fkCreator">1</value>
+			<value description="fkCreator">10</value>
 			<value description="creationDate">2012-01-01</value>
 			<value description="startDate">2012-01-01</value>
 			<value description="finishedDate">2012-02-01</value>
@@ -544,7 +411,7 @@
 			<value description="activated">1</value>
 			<value description="title">Cube planned</value>
 			<value description="fkGalaxy">1</value>
-			<value description="fkCreator">1</value>
+			<value description="fkCreator">10</value>
 			<value description="creationDate">2012-01-01</value>
 			<null />
 			<null />
@@ -569,7 +436,7 @@
 			<value description="activated">1</value>
 			<value description="title">Cube started</value>
 			<value description="fkGalaxy">1</value>
-			<value description="fkCreator">2</value>
+			<value description="fkCreator">20</value>
 			<value description="creationDate">2012-01-01</value>
 			<value description="startDate">2012-01-01</value>
 			<null />
@@ -594,7 +461,7 @@
 			<value description="activated">1</value>
 			<value description="title">Cube finished</value>
 			<value description="fkGalaxy">1</value>
-			<value description="fkCreator">1</value>
+			<value description="fkCreator">10</value>
 			<value description="creationDate">2012-01-01</value>
 			<value description="startDate">2012-01-01</value>
 			<value description="finishedDate">2012-02-01</value>
@@ -619,7 +486,7 @@
 			<value description="activated">1</value>
 			<value description="title">Cube canceled</value>
 			<value description="fkGalaxy">1</value>
-			<value description="fkCreator">1</value>
+			<value description="fkCreator">10</value>
 			<value description="creationDate">2012-01-01</value>
 			<null />
 			<null />
@@ -644,7 +511,7 @@
 			<value description="activated">1</value>
 			<value description="title">Empty planned</value>
 			<value description="fkGalaxy">2</value>
-			<value description="fkCreator">2</value>
+			<value description="fkCreator">20</value>
 			<value description="creationDate">2012-01-01</value>
 			<null />
 			<null />
@@ -669,7 +536,7 @@
 			<value description="activated">1</value>
 			<value description="title">Empty started</value>
 			<value description="fkGalaxy">2</value>
-			<value description="fkCreator">1</value>
+			<value description="fkCreator">10</value>
 			<value description="creationDate">2012-01-01</value>
 			<value description="startDate">2012-01-01</value>
 			<null />
@@ -694,7 +561,7 @@
 			<value description="activated">1</value>
 			<value description="title">Empty finished</value>
 			<value description="fkGalaxy">2</value>
-			<value description="fkCreator">2</value>
+			<value description="fkCreator">20</value>
 			<value description="creationDate">2012-01-01</value>
 			<value description="startDate">2012-01-01</value>
 			<value description="finishedDate">2012-02-01</value>
@@ -719,7 +586,7 @@
 			<value description="activated">1</value>
 			<value description="title">Empty canceled</value>
 			<value description="fkGalaxy">2</value>
-			<value description="fkCreator">2</value>
+			<value description="fkCreator">20</value>
 			<value description="creationDate">2012-01-01</value>
 			<null />
 			<null />
@@ -759,7 +626,7 @@
 			<value description="version">1</value>
 			<value description="activated">1</value>
 			<value description="fkMatch">1</value>
-			<value description="fkEmpire">1</value>
+			<value description="fkEmpire">10</value>
 			<value description="rank">0</value>
 			<value description="rankValue">0</value>
 			<value description="rankDate">2012-01-01</value>
@@ -774,7 +641,7 @@
 			<value description="version">1</value>
 			<value description="activated">1</value>
 			<value description="fkMatch">1</value>
-			<value description="fkEmpire">2</value>
+			<value description="fkEmpire">20</value>
 			<value description="rank">0</value>
 			<value description="rankValue">0</value>
 			<value description="rankDate">2012-01-01</value>
@@ -789,7 +656,7 @@
 			<value description="version">1</value>
 			<value description="activated">1</value>
 			<value description="fkMatch">2</value>
-			<value description="fkEmpire">1</value>
+			<value description="fkEmpire">10</value>
 			<value description="rank">1</value>
 			<value description="rankValue">10</value>
 			<value description="rankDate">2012-01-01</value>
@@ -804,7 +671,7 @@
 			<value description="version">1</value>
 			<value description="activated">1</value>
 			<value description="fkMatch">2</value>
-			<value description="fkEmpire">2</value>
+			<value description="fkEmpire">20</value>
 			<value description="rank">2</value>
 			<value description="rankValue">5</value>
 			<value description="rankDate">2012-02-01</value>
