@@ -371,7 +371,7 @@
 						<!-- for version see global plugin configuration -->
 						<executions>
 						    <execution>
-						        <id>data-base</id>
+						        <id>data-test</id>
 								<phase>process-test-resources</phase>
 								<configuration>
 									<type>INSERT</type>
