@@ -2,7 +2,9 @@ package com.syncnapsis.utils.math;
 
 import com.syncnapsis.tests.LoggerTestCase;
 import com.syncnapsis.tests.annotations.TestCoversMethods;
+import com.syncnapsis.tests.annotations.TestExcludesMethods;
 
+@TestExcludesMethods("invert")
 public class DistributionTest extends LoggerTestCase
 {
 	private void distributionTest(Distribution distribution)

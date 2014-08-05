@@ -18,13 +18,12 @@ import java.lang.reflect.Method;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
-import org.springframework.beans.factory.BeanDefinitionStoreException;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
-import org.springframework.beans.factory.xml.XmlBeanDefinitionReader;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
-import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.support.GenericApplicationContext;
+
+import com.syncnapsis.utils.spring.ContextLoader;
 
 /**
  * Util-Class the allows easy access to the ApplicationContext.<br>
@@ -360,32 +359,13 @@ public class ApplicationContextUtil implements ApplicationContextAware
 
 	/**
 	 * Create a new ApplicationContext from the given Config-Locations.
-	 * If default Config-Locations are used, getDefaultConfigLocations() can be used here.
 	 * 
-	 * @see ApplicationContextUtil#getDefaultConfigLocations()
+	 * @see ContextLoader
 	 * @param locations - the Config-Locations
-	 * @return the new ApplicationContext
+	 * @return the new {@link ApplicationContext}
 	 */
-	public static ConfigurableApplicationContext createApplicationContext(String... locations)
+	public static GenericApplicationContext createApplicationContext(String... locations)
 	{
-		GenericApplicationContext context = new GenericApplicationContext();
-		// GenericXmlApplicationContext context = new GenericXmlApplicationContext();
-		XmlBeanDefinitionReader reader = new XmlBeanDefinitionReader(context);
-		int loaded;
-		for(String location : locations)
-		{
-			try
-			{
-				loaded = reader.loadBeanDefinitions(location);
-				logger.debug(loaded + " bean definitions loaded: '" + location + "'");
-			}
-			catch(BeanDefinitionStoreException e)
-			{
-				logger.error("could not load bean definition: '" + location + "'", e);
-			}
-		}
-		context.refresh();
-		// ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext();
-		return context;
+		return new ContextLoader(locations).loadContext();
 	}
 }
