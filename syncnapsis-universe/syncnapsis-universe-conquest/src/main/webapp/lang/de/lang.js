@@ -32,6 +32,9 @@ lang.error.no_password			= lang.error.error + ": kein Passwort angegeben!";
 lang.error.password_mismatch 	= lang.error.error + ": Nicht-Übereinstimmung der Passwörter!";
 lang.error.username_exists 		= lang.error.error + ": Benutzername ist bereits registriert!";
 
+lang.general = {};
+lang.general.apply_changes		= "Änderungen übernehmen";
+
 lang.message = {};
 lang.message.error				= "Es ist ein Fehler aufgetreten! Bitte versuche es erneut...";
 lang.message.password_failure	= "Passwort-Zurücksetzen fehlgeschlagen! Benuter und/oder e-Mail-Adresse ungültig...";
@@ -50,12 +53,15 @@ lang.menu.forgot_password		= "Passwort vergessen?";
 lang.menu.login 				= "Anmelden";
 lang.menu.login_info			= "Hallo";
 lang.menu.logout 				= "Abmelden";
+lang.menu.match					= "Spiel-Info";
 lang.menu.news 					= "Neuigkeiten";
 lang.menu.pinboard 				= "Pinnwand";
 lang.menu.pinboard_tooltip		= lang.menu.pinboard;
 lang.menu.profile 				= "Profil";
+lang.menu.quick					= "Schnell-Navigation"; 
 lang.menu.register 				= "Registrieren";
 lang.menu.reset_password		= "Passwort zurücksetzen";
+lang.menu.security				= "Sicherheits-Einstellungen";
 lang.menu.stats 				= "Statistik";
 
 lang.log = {};
@@ -67,7 +73,12 @@ lang.profile = {};
 lang.profile.email				= "E-Mail";
 lang.profile.password			= "Passwort";
 lang.profile.password_confirm	= lang.profile.password + " wiederholen";
+lang.profile.password_new		= "Neues " + lang.profile.password;
+lang.profile.password_old		= "Altes " + lang.profile.password;
 lang.profile.username			= "Benutzername";
+
+lang.profile.change_password	= lang.profile.password + " ändern";
+lang.profile.change_email		= lang.profile.email + " ändern";
 
 lang.welcome = {};
 lang.welcome.headLine			= "Neuigkeiten:";

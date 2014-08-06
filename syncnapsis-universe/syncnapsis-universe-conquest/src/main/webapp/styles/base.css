@@ -179,38 +179,44 @@ body, select {
 	overflow: hidden;
 }
 
-.form,
-.largeform,
 form,
+form.small,
 form.large {
 	line-height: 20px;
 }
 
-.form>label,
-form>label,
-#user_login>a {
+form.small>label {
 	width: 100px;
 	display: block;
 	float: left;
 }
 
-.form>input[type=text],
-.form>input[type=password],
-form>input[type=text],
-form>input[type=password],
-#user_login>a+a {
-	width: 130px;
+form>label,
+#user_login>a {
+	width: 140px;
+	display: block;
+	float: left;
 }
 
-.largeform>label,
 form.large>label {
 	width: 150px;
 	display: block;
 	float: left;
 }
 
-.largeform>input[type=text],
-.largeform>input[type=password],
+form.small>input[type=text],
+form.small>input[type=password] {
+	width: 130px;
+	float: right;
+}
+
+form>input[type=text],
+form>input[type=password],
+#user_login>a+a {
+	width: 140px;
+	float: right;
+}
+
 form.large>input[type=text],
 form.large>input[type=password] {
 	width: 230px;
@@ -229,9 +235,14 @@ form.large>input[type=password] {
 	/*top: 107px;*/	
 }
 
+#menu #menu_content form {
+	margin-bottom: 10px;	
+}
+
 #menu #main {
 	/*top: 410px;*/
 }
+
 
 #menu #nav.menu_hidden,
 #menu #menu_content.menu_hidden {
@@ -398,6 +409,11 @@ a * {
 
 h1 {
 	margin-top: 0px;
+}
+
+h3 {
+	margin-top: 5px;
+	margin-bottom: 5px;	
 }
 
 #showWelcome label {

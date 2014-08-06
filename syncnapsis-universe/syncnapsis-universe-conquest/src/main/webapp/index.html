@@ -159,7 +159,7 @@
 		<div id="userbar" class="frame">
 			<div>
 			<div id="user_login">
-				<form onsubmit="javascript: client.uiManager.doLogin(); return false;">
+				<form onsubmit="javascript: client.uiManager.doLogin(); return false;" class="small">
 					<label key="profile.username" for="login_username"></label><input id="login_username" type="text"/><br/>
 					<label key="profile.password" for="login_password"></label><input id="login_password" type="password"/><br/>
 					<a href="javascript: client.uiManager.showRegister();"><label key="menu.register"></label></a>
@@ -182,6 +182,7 @@
 		<div id="menu_content" class="frame">
 			<div>
 			<div id="menu_1" class="selected">
+				<h3><label key="menu.match"></label></h3>
 				foo<br>
 				bar<br>
 				foo<br>
@@ -190,15 +191,44 @@
 				bar<br>
 				foo<br>
 				bar<br>
-			</div>
-			<div id="menu_2" class="">
+				<br>
 				This is menu #2 with a very long text that should automatically wrap to fill this box.<br>
 				As you can see the surrounding container will be automatically resized to fit best for the content.
 			</div>
+			<div id="menu_2" class="">
+				<h3><label key="menu.profile"></label></h3>
+				<form onsubmit="return false;">
+					<label key="profile.username" for="profile_username"></label><input id="profile_username" type="text" disabled=""/><br/>
+					<div id="password_button" class="frame button">
+						<a href="javascript: client.uiManager.changePassword();">
+							<label key="general.apply_changes"></label>
+						</a>
+					</div>
+				</form>
+			</div>
 			<div id="menu_3" class="">
-				blub
+				<h3><label key="menu.security"></label></h3>
+				<form onsubmit="return false;">
+					<label key="profile.password_old" for="profile_password_old"></label><input id="profile_password_old" type="password"/><br/>
+					<label key="profile.password_new" for="profile_password_new"></label><input id="profile_password_new" type="password"/><br/>
+					<label key="profile.password_confirm" for="profile_password_confirm"></label><input id="profile_password_confirm" type="password"/><br/>
+					<div id="password_button" class="frame button">
+						<a href="javascript: client.uiManager.changePassword();">
+							<label key="profile.change_password"></label>
+						</a>
+					</div>
+				</form>
+				<form onsubmit="return false;">
+					<label key="profile.email" for="profile_email"></label><input id="profile_email" type="text"/><br/>
+					<div id="email_button" class="frame button">
+						<a href="javascript: client.uiManager.changeEmail();">
+							<label key="profile.change_email"></label>
+						</a>
+					</div>
+				</form>
 			</div>
 			<div id="menu_4" class="">
+				<h3><label key="menu.stats"></label></h3>
 				Let's stretch the content to max ;-)<br>
 				A lot of options...
 				<ul>

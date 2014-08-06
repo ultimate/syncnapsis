@@ -32,6 +32,9 @@ lang.error.no_password			= lang.error.error + ": no password provided!";
 lang.error.password_mismatch 	= lang.error.error + ": passwords do not match!";
 lang.error.username_exists 		= lang.error.error + ": username is already registered!";
 
+lang.general = {};
+lang.general.apply_changes		= "Apply changes";
+
 lang.message = {};
 lang.message.error				= "An error occurred! Please try again...";
 lang.message.password_failure	= "Password reset failed! User and/or e-mail-address invalid...";
@@ -50,12 +53,15 @@ lang.menu.forgot_password		= "Forgot password?";
 lang.menu.login    				= "Login";
 lang.menu.login_info			= "Hello";
 lang.menu.logout   				= "Logout";
+lang.menu.match					= "Match info";
 lang.menu.news					= "News";
 lang.menu.pinboard 				= "Pinboard";
 lang.menu.pinboard_tooltip		= lang.menu.pinboard;
 lang.menu.profile 				= "Profile";
+lang.menu.quick					= "Quick nav";
 lang.menu.register 				= "Register";
 lang.menu.reset_password		= "Reset password";
+lang.menu.security				= "Security settings";
 lang.menu.stats					= "Stats";
 
 lang.log = {};
@@ -67,7 +73,12 @@ lang.profile = {};
 lang.profile.email				= "E-mail";
 lang.profile.password			= "Password";
 lang.profile.password_confirm	= "Repeat " + lang.profile.password;
+lang.profile.password_new		= "New " + lang.profile.password;
+lang.profile.password_old		= "Old " + lang.profile.password;
 lang.profile.username			= "Username";
+
+lang.profile.change_password	= "Change " + lang.profile.password;
+lang.profile.change_email		= "Change " + lang.profile.email;
 
 lang.welcome = {};
 lang.welcome.headLine			= "News:";
