@@ -39,15 +39,26 @@ UI.constants.REG_PASSWORD2_ID = "reg_password2";
 UI.constants.REG_MESSAGE_ID = "reg_message";
 UI.constants.REG_ERROR_ID = "reg_error";
 UI.constants.REG_BUTTON_ID = "reg_button";
-UI.constants.REG_ACTION = "javascript: client.uiManager.doRegister();";
-UI.constants.REG_VOID = "javascript: return false;";
+//UI.constants.REG_ACTION = "javascript: client.uiManager.doRegister();";
+//UI.constants.REG_VOID = "javascript: return false;";
 UI.constants.FORGOT_USERNAME_ID = "forgot_username";
 UI.constants.FORGOT_EMAIL_ID = "forgot_email";
 UI.constants.FORGOT_MESSAGE_ID = "forgot_message";
 UI.constants.FORGOT_ERROR_ID = "forgot_error";
 UI.constants.FORGOT_BUTTON_ID = "forgot_button";
-UI.constants.FORGOT_ACTION = "javascript: client.uiManager.forgotPassword();";
-UI.constants.FORGOT_VOID = "javascript: return false;";
+//UI.constants.FORGOT_ACTION = "javascript: client.uiManager.forgotPassword();";
+//UI.constants.FORGOT_VOID = "javascript: return false;";
+UI.constants.PROFILE_USERNAME_ID = "profile_username"; 
+UI.constants.PROFILE_MESSAGE_ID = "profile_message"; 
+UI.constants.PROFILE_ERROR_ID = "profile_error"; 
+UI.constants.PROFILE_EMAIL_ID = "profile_email"; 
+UI.constants.PROFILE_EMAIL_MESSAGE_ID = "email_message"; 
+UI.constants.PROFILE_EMAIL_ERROR_ID = "email_error"; 
+UI.constants.PROFILE_PW_OLD_ID = "profile_password_old"; 
+UI.constants.PROFILE_PW_NEW_ID = "profile_password_new"; 
+UI.constants.PROFILE_PW_CONFIRM_ID = "profile_password_confirm"; 
+UI.constants.PROFILE_PW_MESSAGE_ID = "pw_message"; 
+UI.constants.PROFILE_PW_ERROR_ID = "pw_error"; 
 
 UI.constants.LOCALE_CHOOSER_ID = "locale_chooser";
 UI.constants.LOCALE_LABEL_TAGNAME = "label";
@@ -80,8 +91,11 @@ UI.constants.IMAGE_TYPE = ".png";
 UI.constants.FLAGS_PATH = "flags/";
 UI.constants.FLAGS_CLASS = "flag";
 
+UI.constants.NO_ACTION = function(){};
+
 UI.constants.MESSAGE_SHOW_CLASS = "show";
 UI.constants.BUTTON_DISABLED_CLASS = "disabled";
+UI.constants.BUTTON_DISABLED_ACTION = "javascript: UI.constants.NO_ACTION();";
 UI.constants.ERROR_CLASS = "error";
 UI.constants.MENU_HIDDEN_CLASS = "menu_hidden";
 
@@ -251,32 +265,33 @@ UIManager.prototype.onUserLoaded = function(user)
 	}
 };
 
-UIManager.prototype.enableRegisterButton = function(enable)
+UIManager.prototype.disableButton = function(id, duration)
 {
-	if(enable)
+	var button = document.getElementById(id);
+	var action = button.children[0].href;
+	
+	button.action = action;
+	button.children[0].href = UI.constants.BUTTON_DISABLED_ACTION;
+	button.classList.add(UI.constants.BUTTON_DISABLED_CLASS);
+	
+	if(duration)
 	{
-		document.getElementById(UI.constants.REG_BUTTON_ID).children[0].href = UI.constants.REG_ACTION;
-		document.getElementById(UI.constants.REG_BUTTON_ID).classList.remove(UI.constants.BUTTON_DISABLED_CLASS);
-	}
-	else
-	{
-		document.getElementById(UI.constants.REG_BUTTON_ID).children[0].href = UI.constants.REG_VOID;
-		document.getElementById(UI.constants.REG_BUTTON_ID).classList.add(UI.constants.BUTTON_DISABLED_CLASS);
+		setTimeout(function(uiManager) {
+			return function() {
+				uiManager.enableButton(id);
+			}
+		} (this), duration);
 	}
 };
 
-UIManager.prototype.enableForgotButton = function(enable)
+UIManager.prototype.enableButton = function(id)
 {
-	if(enable)
-	{
-		document.getElementById(UI.constants.FORGOT_BUTTON_ID).children[0].href = UI.constants.FORGOT_ACTION;
-		document.getElementById(UI.constants.FORGOT_BUTTON_ID).classList.remove(UI.constants.BUTTON_DISABLED_CLASS);
-	}
-	else
-	{
-		document.getElementById(UI.constants.FORGOT_BUTTON_ID).children[0].href = UI.constants.FORGOT_VOID;
-		document.getElementById(UI.constants.FORGOT_BUTTON_ID).classList.add(UI.constants.BUTTON_DISABLED_CLASS);
-	}
+	var button = document.getElementById(id);
+	var action = button.action;
+	
+	if(action)
+		button.children[0].href = action;
+	button.classList.remove(UI.constants.BUTTON_DISABLED_CLASS);
 };
 
 UIManager.prototype.onRegister = function(player, username, password)
@@ -289,10 +304,10 @@ UIManager.prototype.onRegister = function(player, username, password)
 			server.playerManager.login(username, password);
 		}; } (this), 5000);
 		
-		// enable register button
+		// (re)enable register button
 		setTimeout(function(uiManager) {
 			return function() {
-				uiManager.enableRegisterButton(true);
+				uiManager.enableButton(UI.constants.REG_BUTTON_ID);
 			};
 		} (this), 10000);
 
@@ -321,8 +336,8 @@ UIManager.prototype.onRegister = function(player, username, password)
 			this.showErrorMessage(document.getElementById(UI.constants.REG_PASSWORD2_ID), null);
 		}
 		
-		// enable register button
-		this.enableRegisterButton(true);
+		// (re)enable register button
+		this.enableButton(UI.constants.REG_BUTTON_ID);
 	}
 };
 
@@ -493,7 +508,7 @@ UIManager.prototype.doRegister = function()
 		return;
 
 	// disable register button
-	this.enableRegisterButton(false);
+	this.disableButton(UI.constants.REG_BUTTON_ID, 0);
 
 	// we do not use the default callback, since we want to keep the password for auto-login
 	var callback = function(username, password)
@@ -538,14 +553,30 @@ UIManager.prototype.forgotPassword = function()
 		return;
 
 	// disable forgot button for 5 seconds
-	this.enableForgotButton(false);
-	setTimeout(function(uiManager) {
-		return function() {
-			uiManager.enableForgotButton(true);
-		};
-	} (this), 5000);
+	this.disableButton(UI.constants.FORGOT_BUTTON_ID, 5000);
 
 	server.userManager.requestPasswordReset(username, email);
+};
+
+UIManager.prototype.updateUser = function()
+{
+	// TODO
+};
+
+UIManager.prototype.changePassword = function()
+{
+	// clear errors
+	document.getElementById(UI.constants.FORGOT_ERROR_ID).innerHTML = "";
+	
+	// get input
+	var username = document.getElementById(UI.constants.FORGOT_USERNAME_ID).value;
+	var email = document.getElementById(UI.constants.FORGOT_EMAIL_ID).value;
+	// TODO
+};
+
+UIManager.prototype.changeEmail = function()
+{
+	// TODO
 };
 
 UIManager.prototype.showRegister = function()

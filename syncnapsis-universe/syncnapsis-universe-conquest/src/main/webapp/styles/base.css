@@ -422,22 +422,22 @@ h3 {
 	margin-left: 4px;
 }
 
-#reg_message, #reg_error {
+.form_message, .form_error {
 	border: 1px solid rgba(0,0,0,0);
 	height: 20px;
 	margin-top: 7px;
 }
 
-#reg_error {
+.form_error {
 	margin-top: -22px;
 }
 
-#reg_message.show {
+.form_message.show {
 	border: 1px solid rgba(0,255,255,0.9);
 	background: rgba(0,0,0,0.3);
 }
 
-#reg_error.show {
+.form_error.show {
 	border: 1px solid rgba(0,255,255,0.9);
 	background: rgba(255,40,40,0.9); 
 }

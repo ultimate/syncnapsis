@@ -199,8 +199,12 @@
 				<h3><label key="menu.profile"></label></h3>
 				<form onsubmit="return false;">
 					<label key="profile.username" for="profile_username"></label><input id="profile_username" type="text" disabled=""/><br/>
+					<div id="profile_message" class="form_message">
+					</div>
+					<div id="profile_error" class="form_error">
+					</div>
 					<div id="password_button" class="frame button">
-						<a href="javascript: client.uiManager.changePassword();">
+						<a href="javascript: client.uiManager.updateUser();">
 							<label key="general.apply_changes"></label>
 						</a>
 					</div>
@@ -212,6 +216,10 @@
 					<label key="profile.password_old" for="profile_password_old"></label><input id="profile_password_old" type="password"/><br/>
 					<label key="profile.password_new" for="profile_password_new"></label><input id="profile_password_new" type="password"/><br/>
 					<label key="profile.password_confirm" for="profile_password_confirm"></label><input id="profile_password_confirm" type="password"/><br/>
+					<div id="password_message" class="form_message">
+					</div>
+					<div id="password_error" class="form_error">
+					</div>
 					<div id="password_button" class="frame button">
 						<a href="javascript: client.uiManager.changePassword();">
 							<label key="profile.change_password"></label>
@@ -220,6 +228,10 @@
 				</form>
 				<form onsubmit="return false;">
 					<label key="profile.email" for="profile_email"></label><input id="profile_email" type="text"/><br/>
+					<div id="email_message" class="form_message">
+					</div>
+					<div id="email_error" class="form_error">
+					</div>
 					<div id="email_button" class="frame button">
 						<a href="javascript: client.uiManager.changeEmail();">
 							<label key="profile.change_email"></label>
@@ -335,9 +347,9 @@
 					<label key="profile.email" for="reg_email"></label><input id="reg_email" type="text"/><br/>
 					<label key="profile.password" for="reg_password"></label><input id="reg_password" type="password"/><br/>
 					<label key="profile.password_confirm" for="reg_password2"></label><input id="reg_password2" type="password"/><br/>
-					<div id="reg_message">
+					<div id="reg_message" class="form_message">
 					</div>
-					<div id="reg_error">
+					<div id="reg_error" class="form_error">
 					</div>
 					<div id="reg_button" class="frame button">
 						<a href="javascript: client.uiManager.doRegister();">
@@ -353,9 +365,9 @@
 				<form onsubmit="javascript: client.uiManager.forgotPassword(); return false;" class="large">
 					<label key="profile.username" for="forgot_username"></label><input id="forgot_username" type="text"/><br/>
 					<label key="profile.email" for="forgot_email"></label><input id="forgot_email" type="text"/><br/>
-					<div id="forgot_message">
+					<div id="forgot_message" class="form_message">
 					</div>
-					<div id="forgot_error">
+					<div id="forgot_error" class="form_error">
 					</div>
 					<div id="forgot_button" class="frame button">
 						<a href="javascript: client.uiManager.forgotPassword();">
