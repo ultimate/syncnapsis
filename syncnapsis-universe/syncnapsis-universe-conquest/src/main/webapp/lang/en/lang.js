@@ -36,10 +36,14 @@ lang.general = {};
 lang.general.apply_changes		= "Apply changes";
 
 lang.message = {};
-lang.message.error				= "An error occurred! Please try again...";
-lang.message.password_failure	= "Password reset failed! User and/or e-mail-address invalid...";
-lang.message.password_reset		= "Password reset requested! Please follow the instruction in the e-mail sent to you...";
-lang.message.register			= "Registration successful! You will be logged in automatically...";
+lang.message.error						= "An error occurred! Please try again...";
+lang.message.email_update				= "E-mail-address update requested! Please follow the instruction in the e-mail sent to you...";
+lang.message.email_update_failure		= "E-mail-address update failed! Illegal e-mail-address?";
+lang.message.password_change			= "Password successfully changed!";
+lang.message.password_change_failure	= "Password change failed! Invalid password?";
+lang.message.password_reset				= "Password reset requested! Please follow the instruction in the e-mail sent to you...";
+lang.message.password_reset_failure		= "Password reset failed! User and/or e-mail-address invalid...";
+lang.message.register					= "Registration successful! You will be logged in automatically...";
 
 lang.menu = {};
 lang.menu.about 				= "?";

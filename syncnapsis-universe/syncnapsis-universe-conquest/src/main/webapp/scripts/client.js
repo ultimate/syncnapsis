@@ -51,14 +51,17 @@ UI.constants.FORGOT_BUTTON_ID = "forgot_button";
 UI.constants.PROFILE_USERNAME_ID = "profile_username"; 
 UI.constants.PROFILE_MESSAGE_ID = "profile_message"; 
 UI.constants.PROFILE_ERROR_ID = "profile_error"; 
+UI.constants.PROFILE_BUTTON_ID = "profile_button"; 
 UI.constants.PROFILE_EMAIL_ID = "profile_email"; 
 UI.constants.PROFILE_EMAIL_MESSAGE_ID = "email_message"; 
 UI.constants.PROFILE_EMAIL_ERROR_ID = "email_error"; 
+UI.constants.PROFILE_EMAIL_BUTTON_ID = "email_button"; 
 UI.constants.PROFILE_PW_OLD_ID = "profile_password_old"; 
 UI.constants.PROFILE_PW_NEW_ID = "profile_password_new"; 
 UI.constants.PROFILE_PW_CONFIRM_ID = "profile_password_confirm"; 
-UI.constants.PROFILE_PW_MESSAGE_ID = "pw_message"; 
-UI.constants.PROFILE_PW_ERROR_ID = "pw_error"; 
+UI.constants.PROFILE_PW_MESSAGE_ID = "password_message"; 
+UI.constants.PROFILE_PW_ERROR_ID = "password_error"; 
+UI.constants.PROFILE_PW_BUTTON_ID = "password_button"; 
 
 UI.constants.LOCALE_CHOOSER_ID = "locale_chooser";
 UI.constants.LOCALE_LABEL_TAGNAME = "label";
@@ -566,12 +569,34 @@ UIManager.prototype.updateUser = function()
 UIManager.prototype.changePassword = function()
 {
 	// clear errors
-	document.getElementById(UI.constants.FORGOT_ERROR_ID).innerHTML = "";
+	document.getElementById(UI.constants.PASSWORD_ERROR_ID).innerHTML = "";
 	
 	// get input
-	var username = document.getElementById(UI.constants.FORGOT_USERNAME_ID).value;
-	var email = document.getElementById(UI.constants.FORGOT_EMAIL_ID).value;
-	// TODO
+	var password_old = document.getElementById(UI.constants.PROFILE_PW_OLD_ID).value;
+	var password_new = document.getElementById(UI.constants.PROFILE_PW_NEW_ID).value;
+	var password_confirm = document.getElementById(UI.constants.PROFILE_PW_CONFIRM_ID).value;
+	
+	// validate input
+	var error = false
+	if(!error && (password_old == "" || password_old == null))
+	{
+		this.showErrorMessage(document.getElementById(UI.constants.PROFILE_PW_OLD_ID), document.getElementById(UI.constants.PROFILE_PW_ERROR_ID), "lang.error.no_password");
+		error = true;
+	}
+	if(!error && (password_new == "" || password_new == null ||  password_new != password_confirm))
+	{
+		this.showErrorMessage(null, document.getElementById(UI.constants.PROFILE_PW_ERROR_ID), "error.password_mismatch");
+		this.showErrorMessage(document.getElementById(UI.constants.PROFILE_PW_NEW_ID), null);
+		this.showErrorMessage(document.getElementById(UI.constants.PROFILE_PW_CONFIRM_ID), null);
+		error = true;
+	}
+	if(error)
+		return;
+
+	// disable forgot button for 5 seconds
+	this.disableButton(UI.constants.PROF, 5000);
+
+	server.userManager.changePassword(password_old, password_new, password_confirm);
 };
 
 UIManager.prototype.changeEmail = function()

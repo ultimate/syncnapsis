@@ -36,10 +36,14 @@ lang.general = {};
 lang.general.apply_changes		= "Änderungen übernehmen";
 
 lang.message = {};
-lang.message.error				= "Es ist ein Fehler aufgetreten! Bitte versuche es erneut...";
-lang.message.password_failure	= "Passwort-Zurücksetzen fehlgeschlagen! Benuter und/oder e-Mail-Adresse ungültig...";
-lang.message.password_reset		= "Passwort-Zurücksetzen angefordert! Bitte folge den Anweisungen in der die zugesendeten e-Mail...";
-lang.message.register			= "Registrierung erfolgreich! Du wirst automatisch eingeloggt...";
+lang.message.error						= "Es ist ein Fehler aufgetreten! Bitte versuche es erneut...";
+lang.message.email_update				= "E-Mail-Adress-Änderung angefordert! Bitte folge den Anweisungen in der die zugesendeten e-Mail...";
+lang.message.email_update_failure		= "E-Mail-Adress-Änderung fehlgeschlagen! E-Mail-Adresse ungültig?";
+lang.message.password_change			= "Passwort erfolgreich geändert!";
+lang.message.password_change_failure	= "Passwort-Änderung fehlgeschlagen! Ungültiges Password?";
+lang.message.password_reset				= "Passwort-Zurücksetzen angefordert! Bitte folge den Anweisungen in der die zugesendeten e-Mail...";
+lang.message.password_reset_failure		= "Passwort-Zurücksetzen fehlgeschlagen! Benuter und/oder e-Mail-Adresse ungültig...";
+lang.message.register					= "Registrierung erfolgreich! Du wirst automatisch eingeloggt...";
 
 lang.menu = {};
 lang.menu.about 				= "?";

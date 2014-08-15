@@ -19,7 +19,7 @@ UserManager = function()
 {	
 	this.requestPasswordReset = function(username, email)
 	{
-		// return PLayer
+		// return success
 		return function(result) {
 			if(result == true)
 			{
@@ -28,6 +28,36 @@ UserManager = function()
 			else
 			{
 				client.uiManager.showErrorMessage(null, document.getElementById(UI.constants.FORGOT_ERROR_ID), "message.password_reset_failure");
+			}
+		};
+	};
+	
+	this.changePassword = function(oldPassword, newPassword, newPasswordConfirm)
+	{
+		// return true or false
+		return function(result) {
+			if(result == true)
+			{
+				client.uiManager.showErrorMessage(null, document.getElementById(UI.constants.PROFILE_PW_MESSAGE_ID), "message.password_change");
+			}
+			else
+			{
+				client.uiManager.showErrorMessage(null, document.getElementById(UI.constants.PROFILE_PW_ERROR_ID), "message.password_change_failure");
+			}
+		};
+	};
+	
+	this.updateMailAddress = function(email)
+	{
+		// return true or false
+		return function(result) {
+			if(result == true)
+			{
+				client.uiManager.showErrorMessage(null, document.getElementById(UI.constants.PROFILE_EMAIL_MESSAGE_ID), "message.email_update");
+			}
+			else
+			{
+				client.uiManager.showErrorMessage(null, document.getElementById(UI.constants.PROFILE_EMAIL_ERROR_ID), "message.email_update_failure");
 			}
 		};
 	};
