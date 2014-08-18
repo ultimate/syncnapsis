@@ -569,7 +569,7 @@ UIManager.prototype.updateUser = function()
 UIManager.prototype.changePassword = function()
 {
 	// clear errors
-	document.getElementById(UI.constants.PASSWORD_ERROR_ID).innerHTML = "";
+	document.getElementById(UI.constants.PROFILE_PW_ERROR_ID).innerHTML = "";
 	
 	// get input
 	var password_old = document.getElementById(UI.constants.PROFILE_PW_OLD_ID).value;
@@ -593,15 +593,42 @@ UIManager.prototype.changePassword = function()
 	if(error)
 		return;
 
-	// disable forgot button for 5 seconds
-	this.disableButton(UI.constants.PROF, 5000);
+	// disable button for 5 seconds
+	this.disableButton(UI.constants.PROFILE_PW_BUTTON_ID, 5000);
+	
+	// clear inputs
+	document.getElementById(UI.constants.PROFILE_PW_OLD_ID).value = "";
+	document.getElementById(UI.constants.PROFILE_PW_NEW_ID).value = "";
+	document.getElementById(UI.constants.PROFILE_PW_CONFIRM_ID).value = "";
 
 	server.userManager.changePassword(password_old, password_new, password_confirm);
 };
 
 UIManager.prototype.changeEmail = function()
 {
-	// TODO
+	// clear errors
+	document.getElementById(UI.constants.PROFILE_EMAIL_ERROR_ID).innerHTML = "";
+	
+	// get input
+	var email_new = document.getElementById(UI.constants.PROFILE_EMAIL_ID).value;
+	
+	// validate input
+	var error = false
+	if(!error && (email_new == "" || email_new == null))
+	{
+		this.showErrorMessage(document.getElementById(UI.constants.PROFILE_EMAIL_ID), document.getElementById(UI.constants.PROFILE_PW_ERROR_ID), "lang.error.invalid_email");
+		error = true;
+	}
+	if(error)
+		return;
+
+	// disable button for 5 seconds
+	this.disableButton(UI.constants.PROFILE_EMAIL_BUTTON_ID, 5000);
+	
+	// clear inputs
+	//document.getElementById(UI.constants.PROFILE_EMAIL_ID).value = "";
+
+	server.userManager.updateMailAddress(email_new);
 };
 
 UIManager.prototype.showRegister = function()

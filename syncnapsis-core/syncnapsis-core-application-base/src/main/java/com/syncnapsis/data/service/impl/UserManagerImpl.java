@@ -274,7 +274,7 @@ public class UserManagerImpl extends GenericNameManagerImpl<User, Long> implemen
 	@Override
 	public boolean updateMailAddress(String email)
 	{
-		User user = securityManager.getUserProvider().get();
+		User user = getCurrent();
 		if(user == null)
 			throw new IllegalStateException("no user found");
 		if(securityManager.getMailer() != null)

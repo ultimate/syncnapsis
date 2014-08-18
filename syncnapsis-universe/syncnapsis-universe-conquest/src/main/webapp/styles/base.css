@@ -207,7 +207,7 @@ form.large>label {
 form.small>input[type=text],
 form.small>input[type=password] {
 	width: 130px;
-	float: right;
+	float: left;
 }
 
 form>input[type=text],
