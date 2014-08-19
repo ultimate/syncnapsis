@@ -49,6 +49,14 @@ UI.constants.FORGOT_BUTTON_ID = "forgot_button";
 //UI.constants.FORGOT_ACTION = "javascript: client.uiManager.forgotPassword();";
 //UI.constants.FORGOT_VOID = "javascript: return false;";
 UI.constants.PROFILE_USERNAME_ID = "profile_username"; 
+UI.constants.PROFILE_BIRTHDAY_ID = "profile_birthday"; 
+UI.constants.PROFILE_GENDER_ID = "profile_gender"; 
+UI.constants.PROFILE_DATEFORMAT_ID = "profile_dateFormat"; 
+UI.constants.PROFILE_TIMEZONEID_REGION_ID = "profile_timeZoneID_region"; 
+UI.constants.PROFILE_TIMEZONEID_ID_ID = "profile_timeZoneID_id"; 
+UI.constants.PROFILE_REGISTRATIONDATE_ID = "profile_registrationDate"; 
+UI.constants.PROFILE_ACCOUNTSTATUS_ID = "profile_accountStatus"; 
+UI.constants.PROFILE_ACCOUNTSTATUSEXPIREDATE_ID = "profile_accountStatusExpireDate"; 
 UI.constants.PROFILE_MESSAGE_ID = "profile_message"; 
 UI.constants.PROFILE_ERROR_ID = "profile_error"; 
 UI.constants.PROFILE_BUTTON_ID = "profile_button"; 
@@ -255,6 +263,17 @@ UIManager.prototype.onUserLoaded = function(user)
 		document.getElementById(UI.constants.LABEL_ID_PLAYERNAME).innerHTML = user.username;
 		// change language to users selection
 		this.localeChooser.selectByValue(user.locale);
+		
+		// update user form
+		document.getElementById(UI.constants.PROFILE_USERNAME_ID).value = user.username;
+		document.getElementById(UI.constants.PROFILE_BIRTHDAY_ID).value = user.birthday; 
+		document.getElementById(UI.constants.PROFILE_GENDER_ID).value = user.gender; // TODO use select
+		document.getElementById(UI.constants.PROFILE_DATEFORMAT_ID).value = user.dateFormat; // TODO use select
+		document.getElementById(UI.constants.PROFILE_TIMEZONEID_REGION_ID).value = user.timeZoneID; // TODO use select
+		document.getElementById(UI.constants.PROFILE_TIMEZONEID_ID_ID).value = user.timeZoneID; // TODO use select
+		document.getElementById(UI.constants.PROFILE_REGISTRATIONDATE_ID).value = user.registrationDate; 
+		document.getElementById(UI.constants.PROFILE_ACCOUNTSTATUS_ID).value = user.accountStatus; 
+		document.getElementById(UI.constants.PROFILE_ACCOUNTSTATUSEXPIREDATE_ID).value = user.accountStatusExpireDate; 
 	}
 	else
 	{

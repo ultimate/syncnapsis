@@ -29,6 +29,12 @@ textarea {
 	background: rgba(0,0,0,0.3);
 }
 
+input[type=text]:disabled,
+input[type=password]:disabled,
+textarea:disabled {
+	color: rgb(128,128,128);
+}
+
 input[type=text].error,
 input[type=password].error,
 textarea.error,
