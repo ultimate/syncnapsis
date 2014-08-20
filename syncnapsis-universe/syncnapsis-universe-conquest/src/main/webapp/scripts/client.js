@@ -142,7 +142,6 @@ UIManager = function()
 	}(this);
 	// init the user info with a dummy tab selector (the "door")
 	// dummy is used since we need at least one tab selector
-	// TODO don't make door a tab-selector // just a simple button
 	this.userInfo = new Tabs(null, TABS_HORIZONTAL, UI.constants.USERINFO_CONTENT, TABS_VERTICAL);// , UI.constants.NAV_WIDTH, UI.constants.USERINFO_HEIGHT);
 	// overwrite the door's onSelect to perform the login
 	this.door = document.getElementById(UI.constants.USERINFO_BUTTON).children[0]; // this is the 'a' tag
@@ -164,6 +163,10 @@ UIManager = function()
 		if(newValue != oldValue)
 			server.uiManager.selectLocale(newValue);
 	};
+	
+	// initialize form selects
+	this.genderSelect = new Select(UI.constants.PROFILE_GENDER_ID);
+	this.populateSelect(this.genderSelect, lang.EnumGender);
 
 	console.log("initializing Windows");
 
@@ -269,8 +272,10 @@ UIManager.prototype.onUserLoaded = function(user)
 		document.getElementById(UI.constants.PROFILE_BIRTHDAY_ID).value = user.birthday; 
 		document.getElementById(UI.constants.PROFILE_GENDER_ID).value = user.gender; // TODO use select
 		document.getElementById(UI.constants.PROFILE_DATEFORMAT_ID).value = user.dateFormat; // TODO use select
-		document.getElementById(UI.constants.PROFILE_TIMEZONEID_REGION_ID).value = user.timeZoneID; // TODO use select
-		document.getElementById(UI.constants.PROFILE_TIMEZONEID_ID_ID).value = user.timeZoneID; // TODO use select
+		// split timeZoneID
+		var split = user.timeZoneID.indexOf("/");
+		document.getElementById(UI.constants.PROFILE_TIMEZONEID_REGION_ID).value = user.timeZoneID.substring(0,split); // TODO use select
+		document.getElementById(UI.constants.PROFILE_TIMEZONEID_ID_ID).value = user.timeZoneID.substring(split+1,user.timeZoneID.length); // TODO use select
 		document.getElementById(UI.constants.PROFILE_REGISTRATIONDATE_ID).value = user.registrationDate; 
 		document.getElementById(UI.constants.PROFILE_ACCOUNTSTATUS_ID).value = user.accountStatus; 
 		document.getElementById(UI.constants.PROFILE_ACCOUNTSTATUSEXPIREDATE_ID).value = user.accountStatusExpireDate; 
@@ -371,6 +376,24 @@ UIManager.prototype.hideOverlay = function()
 	{
 		overlay.className += " hidden";
 	}, 3000);
+};
+
+UIManager.prototype.populateSelect = function(select, options, imageClass, imagePath)
+{
+	for(var i in options)
+	{
+		if(typeof (options[i]) == Reflections.type.FUNCTION)
+			continue;
+		option = {};
+		option.value = i;
+		option.title = options[i];
+		if(imageClass)
+			option.imageClass = imageClass;
+		if(imagePath)
+			option.image = UI.constants.IMAGE_PATH + imagePath + i + UI.constants.IMAGE_TYPE;
+		select.options[select.options.length] = option;
+	}
+	select.update();
 };
 
 UIManager.prototype.populateLocaleChooser = function()

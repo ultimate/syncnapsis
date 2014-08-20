@@ -199,10 +199,11 @@
 				<h3><label key="menu.profile"></label></h3>
 				<form onsubmit="return false;">
 					<label key="profile.username" for="profile_username"></label><input id="profile_username" type="text" disabled=""/><br/>
-					<label key="profile.gender" for="profile_gender"></label><input id="profile_gender" type="text"/><br/>
-					<label key="profile.birthday" for="profile_birthday"></label><input id="profile_birthday" type="text"/><br/>
-					<label key="profile.dateFormat" for="profile_dateFormat"></label><input id="profile_dateFormat" type="text"/><br/>
-					<label key="profile.timeZoneID" for="profile_timeZoneID"></label><input id="profile_timeZoneID_region" type="text"/><input id="profile_timeZoneID_id" type="text"/><br/>
+					<label key="profile.gender" for="profile_gender"></label><div id="profile_gender"></div><br/>
+					<!-- <label key="profile.gender" for="profile_gender"></label><input id="profile_gender" type="text"/><br/>-->
+					<label key="profile.birthday" for="profile_birthday"></label><input id="profile_birthday" type="date" disabled=""/><br/> <!-- will enable as soon as FF supports type="date" -->
+					<label key="profile.dateFormat" for="profile_dateFormat"></label><input id="profile_dateFormat" type="text" disabled=""/><br/>
+					<label key="profile.timeZoneID" for="profile_timeZoneID"></label><input id="profile_timeZoneID_region" type="text" disabled=""/><input id="profile_timeZoneID_id" type="text" disabled=""/><br/>
 					<div id="profile_message" class="form_message">
 					</div>
 					<div id="profile_error" class="form_error">

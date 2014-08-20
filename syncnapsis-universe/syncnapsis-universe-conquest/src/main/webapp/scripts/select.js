@@ -85,7 +85,7 @@ Select = function(element)
 			}
 			content.push("'>");
 		}
-		content.push(option.title);
+		content.push(option.title); // TODO use label
 		return content.join("");
 	};
 	this.onselect = function(oldValue, newValue) {};

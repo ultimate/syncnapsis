@@ -21,6 +21,13 @@ lang.EnumLocale = {};
 lang.EnumLocale.EN = "English";
 lang.EnumLocale.DE = "Deutsch";
 
+lang.EnumGender = {};
+lang.EnumGender.female 		= "weiblich";
+lang.EnumGender.machine 	= "Maschine";
+lang.EnumGender.male		= "männlich";
+lang.EnumGender.transsexual	= "transsexuell";
+lang.EnumGender.unknown		= "unbekannt";
+
 lang.error = {};
 lang.error.error				= "Fehler";
 lang.error.email_exists 		= lang.error.error + ": e-Mail-Adresse ist bereits registriert!";
