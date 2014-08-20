@@ -87,6 +87,6 @@
 .select.open>ul {
 	height: auto;
 	position: absolute;
-	margin-top: 0px;
+	margin-top: 16px;
 	margin-left: -1px;
 }

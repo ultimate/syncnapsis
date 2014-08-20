@@ -156,6 +156,11 @@ body, select {
 	width: 34px;
 }
 
+/*fix locale_chooser*/
+#locale_chooser.select.open>ul {
+	margin-top: 0px;
+}
+
 .flag,
 #locale_chooser .flag {
 	width: 16px;
@@ -204,23 +209,52 @@ form.large>label {
 	float: left;
 }
 
-form.small>input[type=text],
-form.small>input[type=password] {
+form.small>input {
 	width: 130px;
 	float: left;
 }
 
-form>input[type=text],
-form>input[type=password],
+form>input,
 #user_login>a+a {
 	width: 140px;
 	float: right;
 }
 
-form.large>input[type=text],
-form.large>input[type=password] {
+form.large>input {
 	width: 230px;
 	float: right;
+}
+
+/* selects require some extra attention */
+
+form.small>.select,
+form.small>.select>* {
+	width: 132px;
+	float: left;
+}
+
+form.small>.select>div>span {
+	width: 130px;
+}
+
+form>.select,
+form>.select>* {
+	width: 142px;
+	float: right;
+}
+
+form>.select>div>span {
+	width: 140px;
+}
+
+form.large>.select,
+form.large>.select>* {
+	width: 232px;
+	float: right;
+}
+
+form.large>.select>div>span {
+	width: 230px;
 }
 
 #menu #nav {
