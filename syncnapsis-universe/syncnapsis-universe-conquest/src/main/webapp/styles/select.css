@@ -64,7 +64,7 @@
 
 .select>ul {
 	height: 0px;
-	margin-top: 0px;
+	margin-top: 16px;
 	margin-left: -0.5px;
 	padding: 0px;
 	overflow: hidden;
@@ -87,6 +87,5 @@
 .select.open>ul {
 	height: auto;
 	position: absolute;
-	margin-top: 16px;
 	margin-left: -1px;
 }

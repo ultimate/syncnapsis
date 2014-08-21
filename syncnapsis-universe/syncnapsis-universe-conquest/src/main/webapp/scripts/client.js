@@ -268,17 +268,19 @@ UIManager.prototype.onUserLoaded = function(user)
 		this.localeChooser.selectByValue(user.locale);
 		
 		// update user form
+		// standard input
 		document.getElementById(UI.constants.PROFILE_USERNAME_ID).value = user.username;
 		document.getElementById(UI.constants.PROFILE_BIRTHDAY_ID).value = user.birthday; 
-		document.getElementById(UI.constants.PROFILE_GENDER_ID).value = user.gender; // TODO use select
 		document.getElementById(UI.constants.PROFILE_DATEFORMAT_ID).value = user.dateFormat; // TODO use select
-		// split timeZoneID
-		var split = user.timeZoneID.indexOf("/");
-		document.getElementById(UI.constants.PROFILE_TIMEZONEID_REGION_ID).value = user.timeZoneID.substring(0,split); // TODO use select
-		document.getElementById(UI.constants.PROFILE_TIMEZONEID_ID_ID).value = user.timeZoneID.substring(split+1,user.timeZoneID.length); // TODO use select
 		document.getElementById(UI.constants.PROFILE_REGISTRATIONDATE_ID).value = user.registrationDate; 
 		document.getElementById(UI.constants.PROFILE_ACCOUNTSTATUS_ID).value = user.accountStatus; 
 		document.getElementById(UI.constants.PROFILE_ACCOUNTSTATUSEXPIREDATE_ID).value = user.accountStatusExpireDate; 
+		// selects
+		this.genderSelect.selectByValue(user.gender); // TODO use select
+		// timeZoneID split into region and ID
+		var split = user.timeZoneID.indexOf("/");
+		document.getElementById(UI.constants.PROFILE_TIMEZONEID_REGION_ID).value = user.timeZoneID.substring(0,split); // TODO use select
+		document.getElementById(UI.constants.PROFILE_TIMEZONEID_ID_ID).value = user.timeZoneID.substring(split+1,user.timeZoneID.length); // TODO use select
 	}
 	else
 	{
@@ -380,6 +382,9 @@ UIManager.prototype.hideOverlay = function()
 
 UIManager.prototype.populateSelect = function(select, options, imageClass, imagePath)
 {
+	// clear all previous options
+	select.options.length = 0;
+	// add new options
 	for(var i in options)
 	{
 		if(typeof (options[i]) == Reflections.type.FUNCTION)
@@ -393,33 +398,14 @@ UIManager.prototype.populateSelect = function(select, options, imageClass, image
 			option.image = UI.constants.IMAGE_PATH + imagePath + i + UI.constants.IMAGE_TYPE;
 		select.options[select.options.length] = option;
 	}
+	// update DOM element
 	select.update();
 };
 
 UIManager.prototype.populateLocaleChooser = function()
 {
-	// clear children
-	this.localeChooser.options.length = 0;
-	// add options
-	var option, img, text;
-	var selected = 0;
-	var index = 0;
-	for( var i in lang.EnumLocale)
-	{
-		if(typeof (lang.EnumLocale[i]) == Reflections.type.FUNCTION)
-			continue;
-		option = {
-			value : i,
-			image : UI.constants.IMAGE_PATH + UI.constants.FLAGS_PATH + i + UI.constants.IMAGE_TYPE,
-			imageClass : UI.constants.FLAGS_CLASS,
-			title : lang.EnumLocale[i]
-		};
-		if(("EnumLocale." + i) == lang.current)
-			selected = index;
-		this.localeChooser.options[this.localeChooser.options.length] = option;
-		index++;
-	}
-	this.localeChooser.update();
+	this.populateSelect(this.localeChooser, lang.EnumLocale, UI.constants.FLAGS_CLASS, UI.constants.FLAGS_PATH);
+	// select current locale
 	this.localeChooser.selectByValue(lang.current.substring(11), true);
 };
 
@@ -605,7 +591,29 @@ UIManager.prototype.forgotPassword = function()
 
 UIManager.prototype.updateUser = function()
 {
-	// TODO
+	// clear errors
+	document.getElementById(UI.constants.PROFILE_ERROR_ID).innerHTML = "";
+	
+	// get input
+	var gender = genderSelect.value;
+	
+	// validate input
+	var error = false
+//	if(!error && (password_old == "" || password_old == null))
+//	{
+//		this.showErrorMessage(document.getElementById(UI.constants.PROFILE_PW_OLD_ID), document.getElementById(UI.constants.PROFILE_PW_ERROR_ID), "lang.error.no_password");
+//		error = true;
+//	}
+	if(error)
+		return;
+	
+	// update user from input
+	this.currentPlayer.user.gender = gender;
+
+	// disable button for 5 seconds
+	this.disableButton(UI.constants.PROFILE_BUTTON_ID, 5000);
+	
+	server.userManager.save(this.currentPlayer.user);
 };
 
 UIManager.prototype.changePassword = function()

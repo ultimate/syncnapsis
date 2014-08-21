@@ -157,7 +157,7 @@ body, select {
 }
 
 /*fix locale_chooser*/
-#locale_chooser.select.open>ul {
+#locale_chooser.select>ul {
 	margin-top: 0px;
 }
 
@@ -190,14 +190,14 @@ form.large {
 	line-height: 20px;
 }
 
-form.small>label {
+form.small>label,
+#user_login>a {
 	width: 100px;
 	display: block;
 	float: left;
 }
 
-form>label,
-#user_login>a {
+form>label {
 	width: 140px;
 	display: block;
 	float: left;
@@ -209,13 +209,17 @@ form.large>label {
 	float: left;
 }
 
-form.small>input {
+form.small>input,
+#user_login>a+a {
 	width: 130px;
 	float: left;
 }
 
-form>input,
-#user_login>a+a {
+form.small>input.half {
+	width: 65px;
+}
+
+form>input {
 	width: 140px;
 	float: right;
 }
@@ -267,6 +271,11 @@ form.large>.select>div>span {
 	overflow: hidden;
 	height: 300px;
 	/*top: 107px;*/	
+}
+
+#menu #menu_content>div,
+#menu #menu_content>div>div {
+	overflow: hidden;
 }
 
 #menu #menu_content form {

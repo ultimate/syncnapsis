@@ -162,10 +162,10 @@
 				<form onsubmit="javascript: client.uiManager.doLogin(); return false;" class="small">
 					<label key="profile.username" for="login_username"></label><input id="login_username" type="text"/><br/>
 					<label key="profile.password" for="login_password"></label><input id="login_password" type="password"/><br/>
-					<a href="javascript: client.uiManager.showRegister();"><label key="menu.register"></label></a>
-					<a href="javascript: client.uiManager.showForgot();"><label key="menu.forgot_password"></label></a>
 				    <input type="submit" style="display: none;"/>
 				</form>
+				<a href="javascript: client.uiManager.showRegister();"><label key="menu.register"></label></a>
+				<a href="javascript: client.uiManager.showForgot();"><label key="menu.forgot_password"></label></a>
 			</div>
 			<div id="user_loggedin">
 				<label key="menu.login_info"></label>&nbsp;<b id="userbar_playername"></b>!
@@ -203,7 +203,7 @@
 					<!-- <label key="profile.gender" for="profile_gender"></label><input id="profile_gender" type="text"/><br/>-->
 					<label key="profile.birthday" for="profile_birthday"></label><input id="profile_birthday" type="date" disabled=""/><br/> <!-- will enable as soon as FF supports type="date" -->
 					<label key="profile.dateFormat" for="profile_dateFormat"></label><input id="profile_dateFormat" type="text" disabled=""/><br/>
-					<label key="profile.timeZoneID" for="profile_timeZoneID"></label><input id="profile_timeZoneID_region" type="text" disabled=""/><input id="profile_timeZoneID_id" type="text" disabled=""/><br/>
+					<label key="profile.timeZoneID" for="profile_timeZoneID"></label><input id="profile_timeZoneID_region" type="text" class="half" disabled=""/><input id="profile_timeZoneID_id" class="half" type="text" disabled=""/><br/>
 					<div id="profile_message" class="form_message">
 					</div>
 					<div id="profile_error" class="form_error">
@@ -213,6 +213,12 @@
 							<label key="general.apply_changes"></label>
 						</a>
 					</div>
+				</form>
+				<h4><label key="menu.account_status"></label></h4>
+				<form onsubmit="return false;">
+					<label key="profile.registrationDate" for="profile_registrationDate"></label><input id="profile_registrationDate" type="text" disabled=""/><br/>
+					<label key="profile.accountStatus" for="profile_accountStatus"></label><input id="profile_accountStatus" type="text" disabled=""/><br/>
+					<label key="profile.accountStatusExpireDate" for="profile_accountStatusExpireDate"></label><input id="profile_accountStatusExpireDate" type="text" disabled=""/><br/>
 				</form>
 			</div>
 			<div id="menu_3" class="">
@@ -244,12 +250,6 @@
 							<label key="profile.change_email"></label>
 						</a>
 					</div>
-				</form>
-				<h4><label key="menu.account_status"></label></h4>
-				<form onsubmit="return false;">
-					<label key="profile.registrationDate" for="profile_registrationDate"></label><input id="profile_registrationDate" type="text" disabled=""/><br/>
-					<label key="profile.accountStatus" for="profile_accountStatus"></label><input id="profile_accountStatus" type="text" disabled=""/><br/>
-					<label key="profile.accountStatusExpireDate" for="profile_accountStatusExpireDate"></label><input id="profile_accountStatusExpireDate" type="text" disabled=""/><br/>
 				</form>
 			</div>
 			<div id="menu_4" class="">

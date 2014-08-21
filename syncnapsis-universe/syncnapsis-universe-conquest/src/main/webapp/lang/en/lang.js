@@ -84,6 +84,8 @@ lang.log.pinboard				= "Pinboard";
 lang.log.match					= "Match";
 	
 lang.profile = {};
+lang.profile.accountStatus		= "Status";
+lang.profile.accountStatusExpireDate = "Status expires";
 lang.profile.birthday			= "Birthday";
 lang.profile.dateFormat			= "Date format";
 lang.profile.email				= "E-mail";
@@ -92,6 +94,7 @@ lang.profile.password			= "Password";
 lang.profile.password_confirm	= "Repeat " + lang.profile.password;
 lang.profile.password_new		= "New " + lang.profile.password;
 lang.profile.password_old		= "Old " + lang.profile.password;
+lang.profile.registrationDate	= "Registered since";
 lang.profile.timeZoneID			= "Timezone";
 lang.profile.username			= "Username";
 

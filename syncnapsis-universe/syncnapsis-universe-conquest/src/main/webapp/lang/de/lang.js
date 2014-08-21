@@ -55,7 +55,7 @@ lang.message.register					= "Registrierung erfolgreich! Du wirst automatisch ein
 lang.menu = {};
 lang.menu.about 				= "?";
 lang.menu.about_tooltip 		= "Über syncnapsis";
-lang.menu.account_status		= "Account-Status";
+lang.menu.account_status		= "Konto-Status";
 lang.menu.cancel				= "Abbrechen";
 lang.menu.contact 				= "Kontakt";
 lang.menu.contact_tooltip 		= "Kontaktinformationen / Impressum";
@@ -84,6 +84,8 @@ lang.log.pinboard				= "Pinnwand";
 lang.log.match					= "Spiel";
 
 lang.profile = {};
+lang.profile.accountStatus		= "Status";
+lang.profile.accountStatusExpireDate = "Status läuft ab";
 lang.profile.birthday			= "Geburtstag";
 lang.profile.dateFormat			= "Datums-Format";
 lang.profile.email				= "E-Mail";
@@ -92,6 +94,7 @@ lang.profile.password			= "Passwort";
 lang.profile.password_confirm	= lang.profile.password + " wiederholen";
 lang.profile.password_new		= "Neues " + lang.profile.password;
 lang.profile.password_old		= "Altes " + lang.profile.password;
+lang.profile.registrationDate	= "Registriert seit";
 lang.profile.timeZoneID			= "Zeitzone";
 lang.profile.username			= "Benutzername";
 
