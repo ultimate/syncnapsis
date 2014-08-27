@@ -201,8 +201,9 @@ public class DataMapper extends BaseMapper
 	}
 
 	/**
-	 * Simple extension of ThreadLocal providing additionl increase(..) and decrease(..)
-	 * functionality.
+	 * Simple extension of ThreadLocal providing additionl functionality:<br>	 * 
+	 * Since we cannot add additional recursively used parameters to prepare(..) we use a
+	 * ThreadLocal to store protocol parameters during mapping for the current process.<br>
 	 * 
 	 * @author ultimate
 	 */
