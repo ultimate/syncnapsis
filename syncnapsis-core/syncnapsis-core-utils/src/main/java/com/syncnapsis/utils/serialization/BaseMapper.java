@@ -523,12 +523,15 @@ public class BaseMapper implements Mapper, InitializingBean
 			Object oldValue;
 			for(String key : map.keySet())
 			{
-				oldValue = null;
+				if(map.containsKey(key)) // only merge property if new map contains the key
+				{
+					oldValue = null;
 
-				if(((Map) entity).containsKey(key))
-					oldValue = ((Map) entity).get(key);
-
-				((Map) entity).put(key, merge(oldValue, map.get(key), authorities));
+					if(((Map) entity).containsKey(key))
+						oldValue = ((Map) entity).get(key);
+					
+					((Map) entity).put(key, merge(oldValue, map.get(key), authorities));
+				}
 			}
 		}
 		else
@@ -541,27 +544,30 @@ public class BaseMapper implements Mapper, InitializingBean
 				{
 					try
 					{
-						oldValue = field.get(entity);
-						// logger.trace("setting '" + entity.getClass().getName() + "." +
-						// field.getName() + "' to '" + map.get(field.getName()) + "'");
-						if(field.getField() != null)
-						{
-							newValue = merge(field.getField().getGenericType(), oldValue, map.get(field.getName()), authorities);
+						if(map.containsKey(field.getName())) // only merge property if new map contains the key
+						{	
+							oldValue = field.get(entity);
+							// logger.trace("setting '" + entity.getClass().getName() + "." +
+							// field.getName() + "' to '" + map.get(field.getName()) + "'");
+							if(field.getField() != null)
+							{
+								newValue = merge(field.getField().getGenericType(), oldValue, map.get(field.getName()), authorities);
+							}
+							else if(field.getGetter() != null)
+							{
+								newValue = merge(field.getGetter().getGenericReturnType(), oldValue, map.get(field.getName()), authorities);
+							}
+							else if(field.getSetter() != null)
+							{
+								newValue = merge(field.getSetter().getTypeParameters()[0], oldValue, map.get(field.getName()), authorities);
+							}
+							else
+							{
+								// Type unknown
+								newValue = merge(oldValue, map.get(field.getName()), authorities);
+							}
+							field.set(entity, newValue);
 						}
-						else if(field.getGetter() != null)
-						{
-							newValue = merge(field.getGetter().getGenericReturnType(), oldValue, map.get(field.getName()), authorities);
-						}
-						else if(field.getSetter() != null)
-						{
-							newValue = merge(field.getSetter().getTypeParameters()[0], oldValue, map.get(field.getName()), authorities);
-						}
-						else
-						{
-							// Type unknown
-							newValue = merge(oldValue, map.get(field.getName()), authorities);
-						}
-						field.set(entity, newValue);
 					}
 					catch(IllegalAccessException e)
 					{
