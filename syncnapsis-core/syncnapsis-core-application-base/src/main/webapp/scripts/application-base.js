@@ -123,35 +123,36 @@ EntityManager = function(server)
 				(callback)(entity);
 		}
 	};
+	
+	this.save = function(entity, callback)
+	{
+		// assure entity-functionality
+		this.extend(entity);
+		// get the type of the entity
+		var type = this.getType(entity);
+		// get the id of the entity
+		var id = entity.id;
+		// get the corresponding manager-name
+		var manager = this.getManagerNameForType(type);
+		if(_server[manager] == null)
+			throw new Error("required manager '" + manager + "' not found for type '" + type + "'");
+		
+		// TODO reduce entity to updated fields, ID and type only
+		
+		// save the entity with the manager
+		_server[manager].save(entity, function(entityManager) {
+			return function(result) {
+				entity.merge(result);
+				entityManager.set(entity);
+				if(callback != undefined)
+					(callback)(entity);
+			}
+		}(this));
+	};
 };
 
 // unused and experimental!!!
 /*
-// the ApplicationBase-Object
-ApplicationBase = function()
-{
-	// manager functions will be filled be proxy
-	this.userManager = function()
-	{
-		this.login = function(username, password)
-		{
-		};
-		this.logout = function()
-		{
-		};
-		this.register = function(username, email, password, password2)
-		{
-		};
-		this.isNameAvailable = function(username)
-		{
-		};
-		this.getOrderedByName = function()
-		{
-		};
-	};
-	// TODO more managers
-};
-
 if(!config)
 {
 	console.error("No application configuration provided! Please add global 'config'-variable!");
