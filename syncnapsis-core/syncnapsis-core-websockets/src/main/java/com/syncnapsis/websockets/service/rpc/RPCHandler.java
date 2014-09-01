@@ -31,6 +31,9 @@ public interface RPCHandler
 	 * Do the method call with the given arguments.
 	 * 
 	 * @param call - the RPCCall
+	 * @param authorities - the authorities used for transforming the input arguments
+	 * 
+	 * @return the resut of the RPC
 	 */
 	public Object doRPC(RPCCall call, Object... authorities) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException;
 
