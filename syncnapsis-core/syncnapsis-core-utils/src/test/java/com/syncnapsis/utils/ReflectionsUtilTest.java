@@ -940,7 +940,7 @@ public class ReflectionsUtilTest extends LoggerTestCase
 
 	public static interface ProxyI2 extends ProxyI<Entity>
 	{
-
+		
 	}
 
 	public static class Entity implements Identifiable<Integer>, Mapable<Entity>
