@@ -13,7 +13,6 @@ package com.syncnapsis.websockets.service.rpc;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -67,8 +66,6 @@ public class RPCHandlerTest extends BaseDaoTestCase
 		
 		assertNotNull(m);
 		assertEquals(targetMethod, m.getName());
-		
-//		logger.info("args: " + Arrays.asList(args));
 		
 		// check the conversion of the user
 		assertNotNull(args[0]);
