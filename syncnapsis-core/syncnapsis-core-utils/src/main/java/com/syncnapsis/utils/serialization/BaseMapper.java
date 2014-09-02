@@ -529,7 +529,7 @@ public class BaseMapper implements Mapper, InitializingBean
 
 					if(((Map) entity).containsKey(key))
 						oldValue = ((Map) entity).get(key);
-					
+
 					((Map) entity).put(key, merge(oldValue, map.get(key), authorities));
 				}
 			}
@@ -540,12 +540,18 @@ public class BaseMapper implements Mapper, InitializingBean
 			Object oldValue, newValue;
 			for(Field field : fields)
 			{
-				if(isWritable(entity, field, authorities))
+				if(isExcluded(entity, field, authorities))
+				{
+					// exclusion for fields managed by sub-classes
+					continue;
+				}
+				else if(isWritable(entity, field, authorities))
 				{
 					try
 					{
-						if(map.containsKey(field.getName())) // only merge property if new map contains the key
-						{	
+						if(map.containsKey(field.getName())) // only merge property if new map
+																// contains the key
+						{
 							oldValue = field.get(entity);
 							// logger.trace("setting '" + entity.getClass().getName() + "." +
 							// field.getName() + "' to '" + map.get(field.getName()) + "'");
@@ -584,6 +590,14 @@ public class BaseMapper implements Mapper, InitializingBean
 		return entity;
 	}
 
+	/**
+	 * Is the given entity invariant.<br>
+	 * This means the entity cannot be merged, because it does not contain any properties to be
+	 * copied, but instead is a value itself.
+	 * 
+	 * @param entity - the entity to check
+	 * @return true for invariant, false otherwise
+	 */
 	protected boolean isInvariant(Object entity)
 	{
 		if(entity == null)
@@ -601,6 +615,14 @@ public class BaseMapper implements Mapper, InitializingBean
 		return false;
 	}
 
+	/**
+	 * Is the field readable for the entity and the given authorities.
+	 * 
+	 * @param entity - the entity to read the field from
+	 * @param field - the field to read
+	 * @param authorities - the authorities given
+	 * @return true for readable, false otherwise
+	 */
 	protected boolean isReadable(Object entity, Field field, Object... authorities)
 	{
 		if(this.securityManager == null)
@@ -609,12 +631,34 @@ public class BaseMapper implements Mapper, InitializingBean
 			return this.securityManager.getAccessController(Field.class).isAccessible(field, AccessController.READ, entity, authorities);
 	}
 
+	/**
+	 * Is the field writable for the entity and the given authorities.
+	 * 
+	 * @param entity - the entity to write the field from
+	 * @param field - the field to write
+	 * @param authorities - the authorities given
+	 * @return true for writable, false otherwise
+	 */
 	protected boolean isWritable(Object entity, Field field, Object... authorities)
 	{
 		if(this.securityManager == null)
 			return true;
 		else
 			return this.securityManager.getAccessController(Field.class).isAccessible(field, AccessController.WRITE, entity, authorities);
+	}
+
+	/**
+	 * Is the field excluded for the entity and the given authorities.<br>
+	 * Defaults to <code>false</code>. Intended for overriding in extending sub-classes if necessary.
+	 * 
+	 * @param entity - the entity the field is from
+	 * @param field - the field to check for exclusion
+	 * @param authorities - the authorities given
+	 * @return true for excluded, false otherwise
+	 */
+	protected boolean isExcluded(Object entity, Field field, Object... authorities)
+	{
+		return false;
 	}
 
 	// @formatter:off

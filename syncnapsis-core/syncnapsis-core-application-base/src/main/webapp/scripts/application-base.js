@@ -12,7 +12,7 @@
  * You should have received a copy of the GNU General Plublic License along with this program;
  * if not, see <http://www.gnu.org/licenses/>.
  */
-//@requires("RPCSocket")
+// @requires("RPCSocket")
 
 Types = {};
 Types.Action = "com.syncnapsis.data.model.Action";
@@ -88,6 +88,22 @@ EntityManager = function(server)
 				return this;
 			};			
 		}
+		
+		if(entity.diff == undefined)
+		{
+			entity.diff = function(other)
+			{
+				var diff = {};
+				for(var prop in other)
+				{
+					if(typeof other[prop] == Reflections.TYPE_FUNCTION)
+						continue;
+					if(this[prop] != other[prop])
+						diff[prop] = other[prop];
+				}
+				return diff;
+			};			
+		}
 	};
 	
 	this.load = function(entity, callback, force)
@@ -136,8 +152,12 @@ EntityManager = function(server)
 		var manager = this.getManagerNameForType(type);
 		if(_server[manager] == null)
 			throw new Error("required manager '" + manager + "' not found for type '" + type + "'");
-		
-		// TODO reduce entity to updated fields, ID and type only
+	
+		// TODO reduce entity to updated fields, ID and type only ?
+		// if the entity from the cache is manipulated it is not possible to detect updates on it
+		// -> hence reducint entity to updated fields, ID and type only is not possible
+		// alternatively a second level cache could be introduced, that keeps copies (not references!)
+		// of the entities in order to be able to compare them
 		
 		// save the entity with the manager
 		_server[manager].save(entity, function(entityManager) {
@@ -153,9 +173,6 @@ EntityManager = function(server)
 
 // unused and experimental!!!
 /*
-if(!config)
-{
-	console.error("No application configuration provided! Please add global 'config'-variable!");
-	throw new Error("No application configuration provided! Please add global 'config'-variable!");
-}
-*/
+ * if(!config) { console.error("No application configuration provided! Please add global 'config'-variable!"); throw new Error("No application configuration provided! Please add global
+ * 'config'-variable!"); }
+ */
