@@ -22,7 +22,7 @@ lang.EnumLocale.EN = "English";
 lang.EnumLocale.DE = "Deutsch";
 
 lang.EnumGender = {};
-lang.EnumGender.female 		= "femal";
+lang.EnumGender.female 		= "female";
 lang.EnumGender.machine 	= "machine";
 lang.EnumGender.male		= "male";
 lang.EnumGender.transsexual	= "transsexual";

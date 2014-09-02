@@ -1,13 +1,16 @@
 /**
  * Syncnapsis Framework - Copyright (c) 2012 ultimate
  * 
- * This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the
- * License, or any later version.
+ * This program is free software; you can redistribute it and/or modify it under the terms of
+ * the GNU General Public License as published by the Free Software Foundation; either version
+ * 3 of the License, or any later version.
  * 
- * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MECHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
- * General Public License for more details.
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+ * without even the implied warranty of MECHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU General Public License for more details.
  * 
- * You should have received a copy of the GNU General Plublic License along with this program; if not, see <http://www.gnu.org/licenses/>.
+ * You should have received a copy of the GNU General Plublic License along with this program;
+ * if not, see <http://www.gnu.org/licenses/>.
  */
 //@requires("Styles")
 //@requires("Events")
@@ -450,6 +453,7 @@ UIManager.prototype.updateLabels = function(parent)
 		if(elements[i].getAttribute("type") == "button")
 			elements[i].value = this.getString(elements[i].getAttribute(UI.constants.LOCALE_KEY_ATTRIBUTE));
 	}
+	// TODO selects
 	// static pages
 	document.getElementById(UI.constants.STATIC_FRAME_ID).contentWindow.location.reload(true)
 };
@@ -593,9 +597,17 @@ UIManager.prototype.updateUser = function()
 {
 	// clear errors
 	document.getElementById(UI.constants.PROFILE_ERROR_ID).innerHTML = "";
+	document.getElementById(UI.constants.PROFILE_MESSAGE_ID).innerHTML = "";
 	
-	// get input
-	var gender = genderSelect.value;
+	var user_update = {
+		// type and ID
+		j_type: Types.User,
+		id: this.currentPlayer.user.id,
+		// get updated fields from form
+		gender: this.genderSelect.value,
+	}; 
+	
+	console.log("setting user.gender -> " + user_update.gender);
 	
 	// validate input
 	var error = false
@@ -608,18 +620,21 @@ UIManager.prototype.updateUser = function()
 		return;
 	
 	// update user from input
-	this.currentPlayer.user.gender = gender;
+//	this.currentPlayer.user.gender = gender;
 
 	// disable button for 5 seconds
 	this.disableButton(UI.constants.PROFILE_BUTTON_ID, 5000);
 	
-	server.userManager.save(this.currentPlayer.user);
+	// use entityManager instead of userManager
+	server.entityManager.save(user_update, Events.wrapEventHandler(this, this.onUserLoaded));
+	//server.userManager.save(this.currentPlayer.user);
 };
 
 UIManager.prototype.changePassword = function()
 {
 	// clear errors
 	document.getElementById(UI.constants.PROFILE_PW_ERROR_ID).innerHTML = "";
+	document.getElementById(UI.constants.PROFILE_PW_MESSAGE_ID).innerHTML = "";
 	
 	// get input
 	var password_old = document.getElementById(UI.constants.PROFILE_PW_OLD_ID).value;
@@ -658,6 +673,7 @@ UIManager.prototype.changeEmail = function()
 {
 	// clear errors
 	document.getElementById(UI.constants.PROFILE_EMAIL_ERROR_ID).innerHTML = "";
+	document.getElementById(UI.constants.PROFILE_EMAIL_MESSAGE_ID).innerHTML = "";
 	
 	// get input
 	var email_new = document.getElementById(UI.constants.PROFILE_EMAIL_ID).value;
