@@ -1,5 +1,5 @@
 /**
- * Syncnapsis Framework - Copyright (c) 2012 ultimate
+ * Syncnapsis Framework - Copyright (c) 2012-2014 ultimate
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms of
  * the GNU General Public License as published by the Free Software Foundation; either version
@@ -35,10 +35,10 @@ import com.syncnapsis.enums.EnumNewsType;
 /**
  * Model-Klasse "Neuigkeit/Nachricht"
  * Neuigkeiten/Nachrichten werden von Moderatoren oder Admins erstellt und sind
- * für alle Benutzer/Spieler sichtbar. Damit die Nachrichten in mehreren
- * Sprachen erfasst werden können gibt es zusätzlich zur ID eine NewsID, welche
+ * fï¿½r alle Benutzer/Spieler sichtbar. Damit die Nachrichten in mehreren
+ * Sprachen erfasst werden kï¿½nnen gibt es zusï¿½tzlich zur ID eine NewsID, welche
  * unter alle sprachvarianten einer Nachricht gleich ist, um deren
- * Zusammengehörigkeit zu definieren.
+ * Zusammengehï¿½rigkeit zu definieren.
  * 
  * @author ultimate
  */
@@ -47,7 +47,7 @@ import com.syncnapsis.enums.EnumNewsType;
 public class News extends BaseObject<Long>
 {
 	/**
-	 * Die NewsID für die Definition der Zusammengehörigkeit mehrere
+	 * Die NewsID fï¿½r die Definition der Zusammengehï¿½rigkeit mehrere
 	 * sprachvarianten einer Nachricht.
 	 */
 	private String			newsId;
@@ -57,7 +57,7 @@ public class News extends BaseObject<Long>
 	private EnumLocale		locale;
 	/**
 	 * Das maximale Alter, mit dem diese Nachricht noch angezeigt werden soll.
-	 * Wichtigere Nachrichten werden nach ihrem Erscheinen noch länger
+	 * Wichtigere Nachrichten werden nach ihrem Erscheinen noch lï¿½nger
 	 * angezeigt.
 	 */
 	private EnumNewsAge		maxAge;
@@ -67,7 +67,7 @@ public class News extends BaseObject<Long>
 	 */
 	private EnumNewsType	type;
 	/**
-	 * Ist die Nachricht von hoher Priorität (z.B. Server-Shutdown)
+	 * Ist die Nachricht von hoher Prioritï¿½t (z.B. Server-Shutdown)
 	 */
 	private boolean			highPriority;
 	/**
@@ -95,7 +95,7 @@ public class News extends BaseObject<Long>
 	}
 
 	/**
-	 * Die NewsID für die Definition der Zusammengehörigkeit mehrere
+	 * Die NewsID fï¿½r die Definition der Zusammengehï¿½rigkeit mehrere
 	 * sprachvarianten einer Nachricht.
 	 * 
 	 * @return newsId
@@ -120,7 +120,7 @@ public class News extends BaseObject<Long>
 
 	/**
 	 * Das maximale Alter, mit dem diese Nachricht noch angezeigt werden soll.
-	 * Wichtigere Nachrichten werden nach ihrem Erscheinen noch länger
+	 * Wichtigere Nachrichten werden nach ihrem Erscheinen noch lï¿½nger
 	 * angezeigt.
 	 * 
 	 * @return maxAge
@@ -145,7 +145,7 @@ public class News extends BaseObject<Long>
 	}
 
 	/**
-	 * Ist die Nachricht von hoher Priorität (z.B. Server-Shutdown)
+	 * Ist die Nachricht von hoher Prioritï¿½t (z.B. Server-Shutdown)
 	 * 
 	 * @return highPriority
 	 */
@@ -202,7 +202,7 @@ public class News extends BaseObject<Long>
 	}
 
 	/**
-	 * Die NewsId für die Definition der Zusammengehörigkeit mehrere
+	 * Die NewsId fï¿½r die Definition der Zusammengehï¿½rigkeit mehrere
 	 * sprachvarianten einer Nachricht.
 	 * 
 	 * @param newsId - die NewsID
@@ -224,7 +224,7 @@ public class News extends BaseObject<Long>
 
 	/**
 	 * Das maximale Alter, mit dem diese Nachricht noch angezeigt werden soll.
-	 * Wichtigere Nachrichten werden nach ihrem Erscheinen noch länger
+	 * Wichtigere Nachrichten werden nach ihrem Erscheinen noch lï¿½nger
 	 * angezeigt.
 	 * 
 	 * @param maxAge - das maximale Alter
@@ -245,7 +245,7 @@ public class News extends BaseObject<Long>
 	}
 
 	/**
-	 * Ist die Nachricht von hoher Priorität (z.B. Server-Shutdown)
+	 * Ist die Nachricht von hoher Prioritï¿½t (z.B. Server-Shutdown)
 	 * 
 	 * @param highPriority - true oder false
 	 */

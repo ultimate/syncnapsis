@@ -1,5 +1,5 @@
 /**
- * Syncnapsis Framework - Copyright (c) 2012 ultimate
+ * Syncnapsis Framework - Copyright (c) 2012-2014 ultimate
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms of
  * the GNU General Public License as published by the Free Software Foundation; either version
@@ -26,32 +26,32 @@ import com.syncnapsis.data.service.UserManager;
 import org.springframework.util.Assert;
 
 /**
- * Manager-Implementierung für den Zugriff auf MenuQuickLaunchItem.
+ * Manager-Implementierung fï¿½r den Zugriff auf MenuQuickLaunchItem.
  * 
  * @author ultimate
  */
 public class MenuQuickLaunchItemManagerImpl extends GenericManagerImpl<MenuQuickLaunchItem, Long> implements MenuQuickLaunchItemManager
 {
 	/**
-	 * MenuQuickLaunchItemDao für den Datenbankzugriff
+	 * MenuQuickLaunchItemDao fï¿½r den Datenbankzugriff
 	 */
 	private MenuQuickLaunchItemDao			menuQuickLaunchItemDao;
 	
 	/**
-	 * MenuItemManager für den Datenbankzugriff
+	 * MenuItemManager fï¿½r den Datenbankzugriff
 	 */
 	private MenuItemManager			menuItemManager;
 	/**
-	 * UserManager für den Datenbankzugriff
+	 * UserManager fï¿½r den Datenbankzugriff
 	 */
 	private UserManager					userManager;
 
 	/**
 	 * Standard Constructor, der die DAOs speichert.
 	 * 
-	 * @param menuQuickLaunchItemDao - MenuQuickLaunchItemDao für den Datenbankzugriff
-	 * @param menuItemManager - MenuItemManager für den Datenbankzugriff
-	 * @param userManager - UserManager für den Datenbankzugriff
+	 * @param menuQuickLaunchItemDao - MenuQuickLaunchItemDao fï¿½r den Datenbankzugriff
+	 * @param menuItemManager - MenuItemManager fï¿½r den Datenbankzugriff
+	 * @param userManager - UserManager fï¿½r den Datenbankzugriff
 	 */
 	public MenuQuickLaunchItemManagerImpl(MenuQuickLaunchItemDao menuQuickLaunchItemDao, MenuItemManager menuItemManager, UserManager userManager)
 	{
@@ -144,18 +144,18 @@ public class MenuQuickLaunchItemManagerImpl extends GenericManagerImpl<MenuQuick
 
 		if(qlPosTo < qlPosFrom)
 		{
-			// element an neuer Stelle einfügen
+			// element an neuer Stelle einfï¿½gen
 			quickLaunchMenu.add(qlPosTo, quickLaunchMenu.get(qlPosFrom));
-			// altes element löschen
+			// altes element lï¿½schen
 			quickLaunchMenu.remove(qlPosFrom + 1);
 		}
 		else if(qlPosTo == qlPosFrom)
 			return quickLaunchMenu;
 		else
 		{
-			// element an neuer Stelle einfügen
+			// element an neuer Stelle einfï¿½gen
 			quickLaunchMenu.add(qlPosTo + 1, quickLaunchMenu.get(qlPosFrom));
-			// altes element löschen
+			// altes element lï¿½schen
 			quickLaunchMenu.remove(qlPosFrom);
 		}
 

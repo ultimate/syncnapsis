@@ -1,5 +1,5 @@
 /**
- * Syncnapsis Framework - Copyright (c) 2012 ultimate
+ * Syncnapsis Framework - Copyright (c) 2012-2014 ultimate
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms of
  * the GNU General Public License as published by the Free Software Foundation; either version
@@ -35,14 +35,14 @@ import com.syncnapsis.enums.EnumMenuItemType;
 import com.syncnapsis.utils.graphs.GenericTreeNode;
 
 /**
- * Model-Klasse "Menü-Eintrag"
- * Diese Klasse repräsentiert einen Menü-Eintrag, der im Hauptmenü der Anwendung
- * dargestellt wird. Die Menü-Einträge sind dabei in einer Baumstruktur
- * organisiert und repräsentieren dessen Knoten.
- * Über die Verknüpfung durch die Klasse MenuQuickLaunchItem zu einem Benutzer
- * können die gleichen Menü-Einträge auch im Schnellstart-Menü angezeigt werden.
- * Die Klasse implementiert GenericTreeNode für die dynamische Erstellung des
- * Menüs.
+ * Model-Klasse "Menï¿½-Eintrag"
+ * Diese Klasse reprï¿½sentiert einen Menï¿½-Eintrag, der im Hauptmenï¿½ der Anwendung
+ * dargestellt wird. Die Menï¿½-Eintrï¿½ge sind dabei in einer Baumstruktur
+ * organisiert und reprï¿½sentieren dessen Knoten.
+ * ï¿½ber die Verknï¿½pfung durch die Klasse MenuQuickLaunchItem zu einem Benutzer
+ * kï¿½nnen die gleichen Menï¿½-Eintrï¿½ge auch im Schnellstart-Menï¿½ angezeigt werden.
+ * Die Klasse implementiert GenericTreeNode fï¿½r die dynamische Erstellung des
+ * Menï¿½s.
  * 
  * @author ultimate
  */
@@ -52,7 +52,7 @@ import com.syncnapsis.utils.graphs.GenericTreeNode;
 public class MenuItem extends BaseObject<String> implements GenericTreeNode<MenuItem>, Cloneable
 {
 	/**
-	 * Schlüssel für die Sprachabhängige Ausgabe des Titels des Menü-Eintrags
+	 * Schlï¿½ssel fï¿½r die Sprachabhï¿½ngige Ausgabe des Titels des Menï¿½-Eintrags
 	 */
 	private String					titleKey;
 	/**
@@ -68,51 +68,51 @@ public class MenuItem extends BaseObject<String> implements GenericTreeNode<Menu
 	 */
 	private String					dynamicSubType;
 	/**
-	 * URL für die Anzeige eines Bildes
+	 * URL fï¿½r die Anzeige eines Bildes
 	 */
 	private String					imageURL;
 	/**
-	 * Kann dieser Menü-Eintrag im Schnellstart-Menü verwendet werden?
+	 * Kann dieser Menï¿½-Eintrag im Schnellstart-Menï¿½ verwendet werden?
 	 */
 	private boolean					quickLaunchEnabled;
 	/**
-	 * Ist dieser Menü-Eintrag nur bei erweitertem Menü sichtbar?
+	 * Ist dieser Menï¿½-Eintrag nur bei erweitertem Menï¿½ sichtbar?
 	 */
 	private boolean					advancedItem;
 	/**
-	 * An welcher Stelle steht dieser Menü-Eintrag unter allern Kindern des
+	 * An welcher Stelle steht dieser Menï¿½-Eintrag unter allern Kindern des
 	 * Elternknotens
 	 */
 	private int						position;
 
 	/**
-	 * Die GUIAction, die bei einem Klick ausgeführt wird
+	 * Die GUIAction, die bei einem Klick ausgefï¿½hrt wird
 	 */
 	private GUIAction				action;
 	/**
-	 * Name des ggf. notwendigen Parameters zur Übergabe an die GUIAction
+	 * Name des ggf. notwendigen Parameters zur ï¿½bergabe an die GUIAction
 	 */
 	private String					parameterName;
 	/**
-	 * Wert des ggf. notwendigen Parameters zur Übergabe an die GUIAction
+	 * Wert des ggf. notwendigen Parameters zur ï¿½bergabe an die GUIAction
 	 */
 	private String					parameterValueString;
 	/**
-	 * Wert des ggf. notwendigen Parameters zur Übergabe an die GUIAction
+	 * Wert des ggf. notwendigen Parameters zur ï¿½bergabe an die GUIAction
 	 */
 	private Long					parameterValueLong;
 	/**
-	 * Ist der Menü-Eintrag inaktiv
-	 * (temporärer Wert)
+	 * Ist der Menï¿½-Eintrag inaktiv
+	 * (temporï¿½rer Wert)
 	 */
 	private boolean					disabled;
 
 	/**
-	 * Der übergeordnete Menü-Eintrag
+	 * Der ï¿½bergeordnete Menï¿½-Eintrag
 	 */
 	private MenuItem				parent;
 	/**
-	 * Liste aller untergeordneten Menü-Einträge
+	 * Liste aller untergeordneten Menï¿½-Eintrï¿½ge
 	 */
 	private List<MenuItem>			children;
 
@@ -124,9 +124,9 @@ public class MenuItem extends BaseObject<String> implements GenericTreeNode<Menu
 	}
 
 	/**
-	 * Schlüssel für die Sprachabhängige Ausgabe des Titels des Menü-Eintrags
+	 * Schlï¿½ssel fï¿½r die Sprachabhï¿½ngige Ausgabe des Titels des Menï¿½-Eintrags
 	 * 
-	 * @return titleKey - der Schlüssel
+	 * @return titleKey - der Schlï¿½ssel
 	 */
 	@Column(nullable = true, length = LENGTH_LANGUAGE_KEY)
 	public String getTitleKey()
@@ -169,7 +169,7 @@ public class MenuItem extends BaseObject<String> implements GenericTreeNode<Menu
 	}
 
 	/**
-	 * URL für die Anzeige eines Bildes
+	 * URL fï¿½r die Anzeige eines Bildes
 	 * 
 	 * @return imageURL
 	 */
@@ -180,7 +180,7 @@ public class MenuItem extends BaseObject<String> implements GenericTreeNode<Menu
 	}
 
 	/**
-	 * Kann dieser Menü-Eintrag im Schnellstart-Menü verwendet werden?
+	 * Kann dieser Menï¿½-Eintrag im Schnellstart-Menï¿½ verwendet werden?
 	 * 
 	 * @return quickLaunchEnabled
 	 */
@@ -191,7 +191,7 @@ public class MenuItem extends BaseObject<String> implements GenericTreeNode<Menu
 	}
 
 	/**
-	 * Ist dieser Menü-Eintrag nur bei erweitertem Menü sichtbar?
+	 * Ist dieser Menï¿½-Eintrag nur bei erweitertem Menï¿½ sichtbar?
 	 * 
 	 * @return advancedItem
 	 */
@@ -202,7 +202,7 @@ public class MenuItem extends BaseObject<String> implements GenericTreeNode<Menu
 	}
 
 	/**
-	 * Die GUIAction, die bei einem Klick ausgeführt wird
+	 * Die GUIAction, die bei einem Klick ausgefï¿½hrt wird
 	 * 
 	 * @return position
 	 */
@@ -213,7 +213,7 @@ public class MenuItem extends BaseObject<String> implements GenericTreeNode<Menu
 	}
 
 	/**
-	 * Die GUIAction, die bei einem Klick ausgeführt wird
+	 * Die GUIAction, die bei einem Klick ausgefï¿½hrt wird
 	 * 
 	 * @return action
 	 */
@@ -225,7 +225,7 @@ public class MenuItem extends BaseObject<String> implements GenericTreeNode<Menu
 	}
 
 	/**
-	 * Name des ggf. notwendigen Parameters zur Übergabe an die GUIAction
+	 * Name des ggf. notwendigen Parameters zur ï¿½bergabe an die GUIAction
 	 * 
 	 * @return parameterName
 	 */
@@ -238,7 +238,7 @@ public class MenuItem extends BaseObject<String> implements GenericTreeNode<Menu
 	}
 
 	/**
-	 * Wert des ggf. notwendigen Parameters zur Übergabe an die GUIAction
+	 * Wert des ggf. notwendigen Parameters zur ï¿½bergabe an die GUIAction
 	 * 
 	 * @return parameterValueString
 	 */
@@ -249,7 +249,7 @@ public class MenuItem extends BaseObject<String> implements GenericTreeNode<Menu
 	}
 
 	/**
-	 * Wert des ggf. notwendigen Parameters zur Übergabe an die GUIAction
+	 * Wert des ggf. notwendigen Parameters zur ï¿½bergabe an die GUIAction
 	 * 
 	 * @return parameterValueLong
 	 */
@@ -260,8 +260,8 @@ public class MenuItem extends BaseObject<String> implements GenericTreeNode<Menu
 	}
 
 	/**
-	 * Wert des ggf. notwendigen Parameters zur Übergabe an die GUIAction
-	 * Gibt den gesetzten ParameterValue zurück. Entweder String oder Long
+	 * Wert des ggf. notwendigen Parameters zur ï¿½bergabe an die GUIAction
+	 * Gibt den gesetzten ParameterValue zurï¿½ck. Entweder String oder Long
 	 * 
 	 * @return parameterValue
 	 */
@@ -310,7 +310,7 @@ public class MenuItem extends BaseObject<String> implements GenericTreeNode<Menu
 	}
 
 	/**
-	 * Schlüssel für die Sprachabhängige Ausgabe des Titels des Menü-Eintrags
+	 * Schlï¿½ssel fï¿½r die Sprachabhï¿½ngige Ausgabe des Titels des Menï¿½-Eintrags
 	 * 
 	 * @param titleKey
 	 */
@@ -350,7 +350,7 @@ public class MenuItem extends BaseObject<String> implements GenericTreeNode<Menu
 	}
 
 	/**
-	 * URL für die Anzeige eines Bildes
+	 * URL fï¿½r die Anzeige eines Bildes
 	 * 
 	 * @param imageURL - die URL
 	 */
@@ -360,7 +360,7 @@ public class MenuItem extends BaseObject<String> implements GenericTreeNode<Menu
 	}
 
 	/**
-	 * Kann dieser Menü-Eintrag im Schnellstart-Menü verwendet werden?
+	 * Kann dieser Menï¿½-Eintrag im Schnellstart-Menï¿½ verwendet werden?
 	 * 
 	 * @param quickLaunchEnabled - true oder false
 	 */
@@ -370,7 +370,7 @@ public class MenuItem extends BaseObject<String> implements GenericTreeNode<Menu
 	}
 
 	/**
-	 * Ist dieser Menü-Eintrag nur bei erweitertem Menü sichtbar?
+	 * Ist dieser Menï¿½-Eintrag nur bei erweitertem Menï¿½ sichtbar?
 	 * 
 	 * @param advancedItem - true oder false
 	 */
@@ -380,7 +380,7 @@ public class MenuItem extends BaseObject<String> implements GenericTreeNode<Menu
 	}
 
 	/**
-	 * Die GUIAction, die bei einem Klick ausgeführt wird
+	 * Die GUIAction, die bei einem Klick ausgefï¿½hrt wird
 	 * 
 	 * @param position - die Position
 	 */
@@ -390,7 +390,7 @@ public class MenuItem extends BaseObject<String> implements GenericTreeNode<Menu
 	}
 
 	/**
-	 * Die GUIAction, die bei einem Klick ausgeführt wird
+	 * Die GUIAction, die bei einem Klick ausgefï¿½hrt wird
 	 * 
 	 * @param action - die GUIAction
 	 */
@@ -400,7 +400,7 @@ public class MenuItem extends BaseObject<String> implements GenericTreeNode<Menu
 	}
 
 	/**
-	 * Name des ggf. notwendigen Parameters zur Übergabe an die GUIAction
+	 * Name des ggf. notwendigen Parameters zur ï¿½bergabe an die GUIAction
 	 * 
 	 * @param parameterName - der Name
 	 */
@@ -410,7 +410,7 @@ public class MenuItem extends BaseObject<String> implements GenericTreeNode<Menu
 	}
 
 	/**
-	 * Wert des ggf. notwendigen Parameters zur Übergabe an die GUIAction
+	 * Wert des ggf. notwendigen Parameters zur ï¿½bergabe an die GUIAction
 	 * 
 	 * @param parameterValueString - der Wert
 	 */
@@ -420,7 +420,7 @@ public class MenuItem extends BaseObject<String> implements GenericTreeNode<Menu
 	}
 
 	/**
-	 * Wert des ggf. notwendigen Parameters zur Übergabe an die GUIAction als Long
+	 * Wert des ggf. notwendigen Parameters zur ï¿½bergabe an die GUIAction als Long
 	 * 
 	 * @param parameterValueLong - der Wert
 	 */
@@ -430,7 +430,7 @@ public class MenuItem extends BaseObject<String> implements GenericTreeNode<Menu
 	}
 
 	/**
-	 * Wert des ggf. notwendigen Parameters zur Übergabe an die GUIAction
+	 * Wert des ggf. notwendigen Parameters zur ï¿½bergabe an die GUIAction
 	 * 
 	 * @param parameterValue - der Wert
 	 */

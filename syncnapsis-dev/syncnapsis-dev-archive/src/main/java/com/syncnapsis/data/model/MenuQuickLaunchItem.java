@@ -1,5 +1,5 @@
 /**
- * Syncnapsis Framework - Copyright (c) 2012 ultimate
+ * Syncnapsis Framework - Copyright (c) 2012-2014 ultimate
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms of
  * the GNU General Public License as published by the Free Software Foundation; either version
@@ -25,10 +25,10 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 import com.syncnapsis.data.model.base.BaseObject;
 
 /**
- * Model-Klasse "Schnellstart-Menü-Eintrag"
- * Die Klasse repräsentiert eine Verknüpfung zwischen MenuItem und Benutzer um
+ * Model-Klasse "Schnellstart-Menï¿½-Eintrag"
+ * Die Klasse reprï¿½sentiert eine Verknï¿½pfung zwischen MenuItem und Benutzer um
  * festzulegen, an welcher Stelle und mit welchen ggf. notwendigen Parametern
- * ein Menü-Eintrag zusätzlich auch im Schnellstart-Menü angezeigt wird.
+ * ein Menï¿½-Eintrag zusï¿½tzlich auch im Schnellstart-Menï¿½ angezeigt wird.
  * 
  * @author ultimate
  */
@@ -37,23 +37,23 @@ import com.syncnapsis.data.model.base.BaseObject;
 public class MenuQuickLaunchItem extends BaseObject<Long>
 {
 	/**
-	 * Der Benutzer für den das Schnellstart-Menü gilt
+	 * Der Benutzer fï¿½r den das Schnellstart-Menï¿½ gilt
 	 */
 	private User		user;
 	/**
-	 * Der Menü-Eintrag, der angezeigt werden soll
+	 * Der Menï¿½-Eintrag, der angezeigt werden soll
 	 */
 	private MenuItem	menuItem;
 	/**
-	 * Position des Menü-Eintrags im Schnellstart-Menü
+	 * Position des Menï¿½-Eintrags im Schnellstart-Menï¿½
 	 */
 	private int			position;
 	/**
-	 * Ggf. notwendiger Parameter-Wert für die Action des Menu-Eintrags
+	 * Ggf. notwendiger Parameter-Wert fï¿½r die Action des Menu-Eintrags
 	 */
 	private String		parameterValueString;
 	/**
-	 * Wert des ggf. notwendigen Parameters zur Übergabe an die GUIAction
+	 * Wert des ggf. notwendigen Parameters zur ï¿½bergabe an die GUIAction
 	 */
 	private Long		parameterValueLong;
 
@@ -65,7 +65,7 @@ public class MenuQuickLaunchItem extends BaseObject<Long>
 	}
 
 	/**
-	 * Der Benutzer für den das Schnellstart-Menü gilt
+	 * Der Benutzer fï¿½r den das Schnellstart-Menï¿½ gilt
 	 * 
 	 * @return user
 	 */
@@ -77,7 +77,7 @@ public class MenuQuickLaunchItem extends BaseObject<Long>
 	}
 
 	/**
-	 * Der Menü-Eintrag, der angezeigt werden soll
+	 * Der Menï¿½-Eintrag, der angezeigt werden soll
 	 * 
 	 * @return menuItem
 	 */
@@ -89,7 +89,7 @@ public class MenuQuickLaunchItem extends BaseObject<Long>
 	}
 
 	/**
-	 * Position des Menü-Eintrags im Schnellstart-Menü
+	 * Position des Menï¿½-Eintrags im Schnellstart-Menï¿½
 	 * 
 	 * @return position
 	 */
@@ -100,7 +100,7 @@ public class MenuQuickLaunchItem extends BaseObject<Long>
 	}
 
 	/**
-	 * Wert des ggf. notwendigen Parameters zur Übergabe an die GUIAction
+	 * Wert des ggf. notwendigen Parameters zur ï¿½bergabe an die GUIAction
 	 * 
 	 * @return parameterValueString
 	 */
@@ -111,7 +111,7 @@ public class MenuQuickLaunchItem extends BaseObject<Long>
 	}
 
 	/**
-	 * Wert des ggf. notwendigen Parameters zur Übergabe an die GUIAction
+	 * Wert des ggf. notwendigen Parameters zur ï¿½bergabe an die GUIAction
 	 * 
 	 * @return parameterValueLong
 	 */
@@ -122,8 +122,8 @@ public class MenuQuickLaunchItem extends BaseObject<Long>
 	}
 
 	/**
-	 * Wert des ggf. notwendigen Parameters zur Übergabe an die GUIAction
-	 * Gibt den gesetzten ParameterValue zurück. Entweder String oder Long
+	 * Wert des ggf. notwendigen Parameters zur ï¿½bergabe an die GUIAction
+	 * Gibt den gesetzten ParameterValue zurï¿½ck. Entweder String oder Long
 	 * 
 	 * @return parameterValue
 	 */
@@ -138,7 +138,7 @@ public class MenuQuickLaunchItem extends BaseObject<Long>
 	}
 
 	/**
-	 * Der Benutzer für den das Schnellstart-Menü gilt
+	 * Der Benutzer fï¿½r den das Schnellstart-Menï¿½ gilt
 	 * 
 	 * @param user - der Benutzer
 	 */
@@ -148,9 +148,9 @@ public class MenuQuickLaunchItem extends BaseObject<Long>
 	}
 
 	/**
-	 * Der Menü-Eintrag, der angezeigt werden soll
+	 * Der Menï¿½-Eintrag, der angezeigt werden soll
 	 * 
-	 * @param menuItem - der Menü-Eintrag
+	 * @param menuItem - der Menï¿½-Eintrag
 	 */
 	public void setMenuItem(MenuItem menuItem)
 	{
@@ -158,7 +158,7 @@ public class MenuQuickLaunchItem extends BaseObject<Long>
 	}
 
 	/**
-	 * Position des Menü-Eintrags im Schnellstart-Menü
+	 * Position des Menï¿½-Eintrags im Schnellstart-Menï¿½
 	 * 
 	 * @param position - die Position
 	 */
@@ -168,7 +168,7 @@ public class MenuQuickLaunchItem extends BaseObject<Long>
 	}
 
 	/**
-	 * Wert des ggf. notwendigen Parameters zur Übergabe an die GUIAction
+	 * Wert des ggf. notwendigen Parameters zur ï¿½bergabe an die GUIAction
 	 * 
 	 * @param parameterValueString - der Wert
 	 */
@@ -178,7 +178,7 @@ public class MenuQuickLaunchItem extends BaseObject<Long>
 	}
 
 	/**
-	 * Wert des ggf. notwendigen Parameters zur Übergabe an die GUIAction als
+	 * Wert des ggf. notwendigen Parameters zur ï¿½bergabe an die GUIAction als
 	 * Long geparst
 	 * 
 	 * @param parameterValueLong - der Wert
@@ -189,7 +189,7 @@ public class MenuQuickLaunchItem extends BaseObject<Long>
 	}
 
 	/**
-	 * Wert des ggf. notwendigen Parameters zur Übergabe an die GUIAction
+	 * Wert des ggf. notwendigen Parameters zur ï¿½bergabe an die GUIAction
 	 * 
 	 * @param parameterValue - der Wert
 	 */

@@ -1,5 +1,5 @@
 /**
- * Syncnapsis Framework - Copyright (c) 2012 ultimate
+ * Syncnapsis Framework - Copyright (c) 2012-2014 ultimate
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms of
  * the GNU General Public License as published by the Free Software Foundation; either version
@@ -22,7 +22,7 @@ import com.syncnapsis.enums.EnumLocale;
 import com.syncnapsis.enums.EnumNewsAge;
 
 /**
- * Dao-Interface für den Zugriff auf News
+ * Dao-Interface fï¿½r den Zugriff auf News
  * 
  * @author ultimate
  */
@@ -41,7 +41,7 @@ public interface NewsDao extends GenericDao<News, Long>
 
 	/**
 	 * Lade ein News-Objekt anhand einer NewsId und einer vorgegebene Sprache.
-	 * Zu jeder NewsId kann es ein News-Objekt in jeder verfügbaren Sprache
+	 * Zu jeder NewsId kann es ein News-Objekt in jeder verfï¿½gbaren Sprache
 	 * geben, sofern diese vom Verfasser der Nachricht angelegt wurden.
 	 * 
 	 * @param newsId - die NewsId

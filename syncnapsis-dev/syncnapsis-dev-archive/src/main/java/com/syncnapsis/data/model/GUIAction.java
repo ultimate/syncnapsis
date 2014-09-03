@@ -1,5 +1,5 @@
 /**
- * Syncnapsis Framework - Copyright (c) 2012 ultimate
+ * Syncnapsis Framework - Copyright (c) 2012-2014 ultimate
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms of
  * the GNU General Public License as published by the Free Software Foundation; either version
@@ -24,12 +24,12 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 import com.syncnapsis.data.model.base.BaseObject;
 
 /**
- * Model-Klasse "Action für die GUI"
- * Actions sind durch eine Aktion des Benutzers (Klick, etc.) ausgelöste
+ * Model-Klasse "Action fï¿½r die GUI"
+ * Actions sind durch eine Aktion des Benutzers (Klick, etc.) ausgelï¿½ste
  * Aktionen auf dem Server. Es wird dabei zwischen Actions unterschieden, die
- * ein Fenster öffnen, und solchen, die dies nicht tun. Bei Actions, die ein
- * Fenster öffnen steht das Attribut "action" für den Name der im Fenster
- * anzuzeigenden Seite. Bei Actions, die kein Fenster öffnen, ist dies ein
+ * ein Fenster ï¿½ffnen, und solchen, die dies nicht tun. Bei Actions, die ein
+ * Fenster ï¿½ffnen steht das Attribut "action" fï¿½r den Name der im Fenster
+ * anzuzeigenden Seite. Bei Actions, die kein Fenster ï¿½ffnen, ist dies ein
  * Methodenname in der Klasse com.syncnapsis.ui.Actions
  * 
  * @author ultimate
@@ -41,26 +41,26 @@ public class GUIAction extends BaseObject<Long>
 	/**
 	 * Name der GUIAction
 	 * Die Action ist dabei entweder der Name einer zul-Seite oder eine Methode
-	 * der Klasse Actions. Im ersten Fall wird bei Ausführung automatisch ein
+	 * der Klasse Actions. Im ersten Fall wird bei Ausfï¿½hrung automatisch ein
 	 * Fenster mit der entsprechenden Seite als Inhalt angezeigt.
 	 */
 	private String			action;
 	/**
-	 * Optionale Id des zu öffnenen Fensters. Existiert bereits ein Fenster mit
-	 * dieser Id, wird dieses aktualisiert, anstatt ein neues Fenster zu öffnen.
+	 * Optionale Id des zu ï¿½ffnenen Fensters. Existiert bereits ein Fenster mit
+	 * dieser Id, wird dieses aktualisiert, anstatt ein neues Fenster zu ï¿½ffnen.
 	 */
 	private String			windowId;
 	/**
-	 * Schlüssel für die sprachabhängige Beschriftung im Titel des Fensters
+	 * Schlï¿½ssel fï¿½r die sprachabhï¿½ngige Beschriftung im Titel des Fensters
 	 */
 	private String			titleKey;
 
 	/**
-	 * Öffnet diese GUIAction ein Fenster?
+	 * ï¿½ffnet diese GUIAction ein Fenster?
 	 */
 	private boolean			windowAction;
 	/**
-	 * Optionale GUIWindowParams für die Übergabe an das zu erstellende Fenster
+	 * Optionale GUIWindowParams fï¿½r die ï¿½bergabe an das zu erstellende Fenster
 	 */
 	private GUIWindowParams	windowParams;
 
@@ -74,7 +74,7 @@ public class GUIAction extends BaseObject<Long>
 	/**
 	 * Name der GUIAction
 	 * Die Action ist dabei entweder der Name einer zul-Seite oder eine Methode
-	 * der Klasse Actions. Im ersten Fall wird bei Ausführung automatisch ein
+	 * der Klasse Actions. Im ersten Fall wird bei Ausfï¿½hrung automatisch ein
 	 * Fenster mit der entsprechenden Seite als Inhalt angezeigt.
 	 * 
 	 * @return action
@@ -86,8 +86,8 @@ public class GUIAction extends BaseObject<Long>
 	}
 
 	/**
-	 * Optionale Id des zu öffnenen Fensters. Existiert bereits ein Fenster mit
-	 * dieser Id, wird dieses aktualisiert, anstatt ein neues Fenster zu öffnen.
+	 * Optionale Id des zu ï¿½ffnenen Fensters. Existiert bereits ein Fenster mit
+	 * dieser Id, wird dieses aktualisiert, anstatt ein neues Fenster zu ï¿½ffnen.
 	 * 
 	 * @return windowId
 	 */
@@ -98,7 +98,7 @@ public class GUIAction extends BaseObject<Long>
 	}
 
 	/**
-	 * Schlüssel für die sprachabhängige Beschriftung im Titel des Fensters
+	 * Schlï¿½ssel fï¿½r die sprachabhï¿½ngige Beschriftung im Titel des Fensters
 	 * 
 	 * @return titleKey
 	 */
@@ -109,7 +109,7 @@ public class GUIAction extends BaseObject<Long>
 	}
 
 	/**
-	 * Öffnet diese GUIAction ein Fenster?
+	 * ï¿½ffnet diese GUIAction ein Fenster?
 	 * 
 	 * @return windowAction
 	 */
@@ -120,7 +120,7 @@ public class GUIAction extends BaseObject<Long>
 	}
 
 	/**
-	 * Optionale GUIWindowParams für die Übergabe an das zu erstellende Fenster
+	 * Optionale GUIWindowParams fï¿½r die ï¿½bergabe an das zu erstellende Fenster
 	 * 
 	 * @return windowParams
 	 */
@@ -134,7 +134,7 @@ public class GUIAction extends BaseObject<Long>
 	/**
 	 * Name der GUIAction
 	 * Die Action ist dabei entweder der Name einer zul-Seite oder eine Methode
-	 * der Klasse Actions. Im ersten Fall wird bei Ausführung automatisch ein
+	 * der Klasse Actions. Im ersten Fall wird bei Ausfï¿½hrung automatisch ein
 	 * Fenster mit der entsprechenden Seite als Inhalt angezeigt.
 	 * 
 	 * @param action - der Name
@@ -145,8 +145,8 @@ public class GUIAction extends BaseObject<Long>
 	}
 
 	/**
-	 * Optionale ID des zu öffnenen Fensters. Existiert bereits ein Fenster mit
-	 * dieser ID, wird dieses aktualisiert, anstatt ein neues Fenster zu öffnen.
+	 * Optionale ID des zu ï¿½ffnenen Fensters. Existiert bereits ein Fenster mit
+	 * dieser ID, wird dieses aktualisiert, anstatt ein neues Fenster zu ï¿½ffnen.
 	 * 
 	 * @param windowId - die ID
 	 */
@@ -156,9 +156,9 @@ public class GUIAction extends BaseObject<Long>
 	}
 
 	/**
-	 * Schlüssel für die sprachabhängige Beschriftung im Titel des Fensters
+	 * Schlï¿½ssel fï¿½r die sprachabhï¿½ngige Beschriftung im Titel des Fensters
 	 * 
-	 * @param titleKey - der Schlüssel
+	 * @param titleKey - der Schlï¿½ssel
 	 */
 	public void setTitleKey(String titleKey)
 	{
@@ -166,7 +166,7 @@ public class GUIAction extends BaseObject<Long>
 	}
 
 	/**
-	 * Öffnet diese GUIAction ein Fenster?
+	 * ï¿½ffnet diese GUIAction ein Fenster?
 	 * 
 	 * @param windowAction - true oder false
 	 */
@@ -176,7 +176,7 @@ public class GUIAction extends BaseObject<Long>
 	}
 
 	/**
-	 * Optionale GUIWindowParams für die Übergabe an das zu erstellende Fenster
+	 * Optionale GUIWindowParams fï¿½r die ï¿½bergabe an das zu erstellende Fenster
 	 * 
 	 * @param windowParams - die Fenstereigenschaften
 	 */

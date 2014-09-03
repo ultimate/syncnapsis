@@ -1,5 +1,5 @@
 /**
- * Syncnapsis Framework - Copyright (c) 2012 ultimate
+ * Syncnapsis Framework - Copyright (c) 2012-2014 ultimate
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms of
  * the GNU General Public License as published by the Free Software Foundation; either version
@@ -28,26 +28,26 @@ import com.syncnapsis.enums.EnumNewsAge;
 import com.syncnapsis.utils.SortUtil;
 
 /**
- * Manager-Implementierung für den Zugriff auf News.
+ * Manager-Implementierung fï¿½r den Zugriff auf News.
  * 
  * @author ultimate
  */
 public class NewsManagerImpl extends GenericManagerImpl<News, Long> implements NewsManager
 {
 	/**
-	 * NewsDao für den Datenbankzugriff
+	 * NewsDao fï¿½r den Datenbankzugriff
 	 */
 	protected NewsDao			newsDao;
 	/**
-	 * ParameterManager für den Datenbankzugriff
+	 * ParameterManager fï¿½r den Datenbankzugriff
 	 */
 	protected ParameterManager	parameterManager;
 
 	/**
 	 * Standard Constructor, der die DAOs speichert.
 	 * 
-	 * @param dao - NewsDao für den Datenbankzugriff
-	 * @param parameterDao - ParameterDao für den Datenbankzugriff
+	 * @param dao - NewsDao fï¿½r den Datenbankzugriff
+	 * @param parameterDao - ParameterDao fï¿½r den Datenbankzugriff
 	 */
 	public NewsManagerImpl(NewsDao newsDao, ParameterManager parameterManager)
 	{

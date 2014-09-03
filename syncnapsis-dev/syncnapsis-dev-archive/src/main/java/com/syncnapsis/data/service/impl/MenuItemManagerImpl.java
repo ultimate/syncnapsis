@@ -1,5 +1,5 @@
 /**
- * Syncnapsis Framework - Copyright (c) 2012 ultimate
+ * Syncnapsis Framework - Copyright (c) 2012-2014 ultimate
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms of
  * the GNU General Public License as published by the Free Software Foundation; either version
@@ -32,7 +32,7 @@ import com.syncnapsis.utils.ApplicationContextUtil;
 import com.syncnapsis.utils.graphs.GenericTreeModel;
 
 /**
- * Manager-Implementierung für den Zugriff auf MenuItem.
+ * Manager-Implementierung fï¿½r den Zugriff auf MenuItem.
  * 
  * @author ultimate
  */
@@ -42,11 +42,11 @@ public class MenuItemManagerImpl extends GenericManagerImpl<MenuItem, String> im
 	protected UserProvider				userProvider	= ApplicationContextUtil.getBean(UserProvider.class);
 
 	/**
-	 * MenuItemDao für den Datenbankzugriff
+	 * MenuItemDao fï¿½r den Datenbankzugriff
 	 */
 	private MenuItemDao					menuItemDao;
 	/**
-	 * UserManager für den Datenbankzugriff
+	 * UserManager fï¿½r den Datenbankzugriff
 	 */
 	private UserManager					userManager;
 
@@ -58,8 +58,8 @@ public class MenuItemManagerImpl extends GenericManagerImpl<MenuItem, String> im
 	/**
 	 * Standard Constructor, der die Beans speichert.
 	 * 
-	 * @param menuItemDao - MenuItemDao für den Datenbankzugriff
-	 * @param userManager - UserManager für den Datenbankzugriff
+	 * @param menuItemDao - MenuItemDao fï¿½r den Datenbankzugriff
+	 * @param userManager - UserManager fï¿½r den Datenbankzugriff
 	 */
 	public MenuItemManagerImpl(MenuItemDao menuItemDao, UserManager userManager)
 	{
@@ -71,11 +71,11 @@ public class MenuItemManagerImpl extends GenericManagerImpl<MenuItem, String> im
 	}
 
 	/**
-	 * Setzt eine Liste aus MenuItemOptionHandler-Klassen für die Behandlung der Erstellung von
-	 * Submenüs
+	 * Setzt eine Liste aus MenuItemOptionHandler-Klassen fï¿½r die Behandlung der Erstellung von
+	 * Submenï¿½s
 	 * 
 	 * @param optionHandlerClasses - die Liste der Klassen
-	 * @throws ClassNotFoundException - wenn die Klasse ungültig ist
+	 * @throws ClassNotFoundException - wenn die Klasse ungï¿½ltig ist
 	 */
 	@SuppressWarnings("unchecked")
 	public void setOptionHandlerClasses(List<String> optionHandlerClasses) throws ClassNotFoundException

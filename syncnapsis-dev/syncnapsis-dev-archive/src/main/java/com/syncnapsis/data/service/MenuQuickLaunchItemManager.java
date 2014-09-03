@@ -1,5 +1,5 @@
 /**
- * Syncnapsis Framework - Copyright (c) 2012 ultimate
+ * Syncnapsis Framework - Copyright (c) 2012-2014 ultimate
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms of
  * the GNU General Public License as published by the Free Software Foundation; either version
@@ -19,7 +19,7 @@ import java.util.List;
 import com.syncnapsis.data.model.MenuQuickLaunchItem;
 
 /**
- * Manager-Interface für den Zugriff auf MenuQuickLaunchItem.
+ * Manager-Interface fï¿½r den Zugriff auf MenuQuickLaunchItem.
  * 
  * @author ultimate
  */
@@ -27,44 +27,44 @@ public interface MenuQuickLaunchItemManager extends GenericManager<MenuQuickLaun
 {
 
 	/**
-	 * Lade eine Liste aller Schnellstart-Menüeinträge für einen Benutzer.
+	 * Lade eine Liste aller Schnellstart-Menï¿½eintrï¿½ge fï¿½r einen Benutzer.
 	 * 
 	 * @param userId - die ID des Benutzers
-	 * @return die Liste der Schnellstart-Menüeinträge
+	 * @return die Liste der Schnellstart-Menï¿½eintrï¿½ge
 	 */
 	public List<MenuQuickLaunchItem> getByUser(Long userId);
 
 	/**
-	 * Fügt einen Menüeintrag in das Schnellstartmenü eines Benutzers an einer
+	 * Fï¿½gt einen Menï¿½eintrag in das Schnellstartmenï¿½ eines Benutzers an einer
 	 * bestimmten Position ein.
 	 * 
-	 * @param userId - der Primärschlüssel des Benutzers
-	 * @param miId - der Primärschlüssel des Menüeintrags
-	 * @param qlPosTo - die Position für den Menüeintrag
-	 * @return das aktualisierte Schnellstartmenü des Benutzers
+	 * @param userId - der Primï¿½rschlï¿½ssel des Benutzers
+	 * @param miId - der Primï¿½rschlï¿½ssel des Menï¿½eintrags
+	 * @param qlPosTo - die Position fï¿½r den Menï¿½eintrag
+	 * @return das aktualisierte Schnellstartmenï¿½ des Benutzers
 	 */
 	public List<MenuQuickLaunchItem> addQuickLaunchItem(Long userId, String miId, int qlPosTo);
 
 	/**
-	 * Löscht einen Menüeintrag aus dem Schnellstartmenü eines Benutzers von
+	 * Lï¿½scht einen Menï¿½eintrag aus dem Schnellstartmenï¿½ eines Benutzers von
 	 * einer bestimmten Position
 	 * 
-	 * @param userId - der Primärschlüssel des Benutzers
-	 * @param qlPosFrom - die Position des zu löschenden Menüeintrags
-	 * @return das aktualisierte Schnellstartmenü des Benutzers
+	 * @param userId - der Primï¿½rschlï¿½ssel des Benutzers
+	 * @param qlPosFrom - die Position des zu lï¿½schenden Menï¿½eintrags
+	 * @return das aktualisierte Schnellstartmenï¿½ des Benutzers
 	 */
 	public List<MenuQuickLaunchItem> removeQuickLaunchItem(Long userId, int qlPosFrom);
 
 	/**
-	 * Verschiebt einen Menüeintrag im Schnellstartmenü eines Benutzers von
+	 * Verschiebt einen Menï¿½eintrag im Schnellstartmenï¿½ eines Benutzers von
 	 * einer Position an eine andere
 	 * 
-	 * @param userId - der Primärschlüssel des Benutzers
-	 * @param qlPosFrom - die Position von der der Menüeintrag entfernt werden
+	 * @param userId - der Primï¿½rschlï¿½ssel des Benutzers
+	 * @param qlPosFrom - die Position von der der Menï¿½eintrag entfernt werden
 	 *            soll
-	 * @param qlPosTo - die neue Position an der der Menüeintrag eingefügt
+	 * @param qlPosTo - die neue Position an der der Menï¿½eintrag eingefï¿½gt
 	 *            werden soll
-	 * @return das aktualisierte Schnellstartmenü des Benutzers
+	 * @return das aktualisierte Schnellstartmenï¿½ des Benutzers
 	 */
 	public List<MenuQuickLaunchItem> moveQuickLaunchItem(Long userId, int qlPosFrom, int qlPosTo);
 }

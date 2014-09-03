@@ -1,5 +1,5 @@
 /**
- * Syncnapsis Framework - Copyright (c) 2012 ultimate
+ * Syncnapsis Framework - Copyright (c) 2012-2014 ultimate
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms of
  * the GNU General Public License as published by the Free Software Foundation; either version
@@ -21,14 +21,14 @@ import com.syncnapsis.ui.menu.MenuItemOptionHandler;
 import com.syncnapsis.utils.graphs.GenericTreeModel;
 
 /**
- * Manager-Interface für den Zugriff auf MenuItem.
+ * Manager-Interface fï¿½r den Zugriff auf MenuItem.
  * 
  * @author ultimate
  */
 public interface MenuItemManager extends GenericManager<MenuItem, String>
 {
 	/**
-	 * Fügt einen MenuItemOptionHandler zur Liste hinzu
+	 * Fï¿½gt einen MenuItemOptionHandler zur Liste hinzu
 	 * 
 	 * @param optionHandler - der MenuItemOptionHandler
 	 */
@@ -42,55 +42,55 @@ public interface MenuItemManager extends GenericManager<MenuItem, String>
 	public List<MenuItemOptionHandler> getOptionHandlers();
 	
 	/**
-	 * Lädt eine Liste aller Untermenüeinträge zu einem Menüeintrag
+	 * Lï¿½dt eine Liste aller Untermenï¿½eintrï¿½ge zu einem Menï¿½eintrag
 	 * 
-	 * @param parentId - der Primärschlüssel des Elternmenüeintrags
-	 * @param includeAdvanced - sollen auch erweiterte Einträge geladen werden
+	 * @param parentId - der Primï¿½rschlï¿½ssel des Elternmenï¿½eintrags
+	 * @param includeAdvanced - sollen auch erweiterte Eintrï¿½ge geladen werden
 	 * @return - die Liste
 	 */
 	public List<MenuItem> getChildren(String parentId, boolean includeAdvanced);
 	
 	/**
-	 * Lädt einen vollständigen Menü-Baum, ausgehend von einem Menüeintrag
+	 * Lï¿½dt einen vollstï¿½ndigen Menï¿½-Baum, ausgehend von einem Menï¿½eintrag
 	 * 
-	 * @param id - der Primärschlüssel des obersten Menüeintrags
-	 * @param includeAdvanced - sollen auch erweiterte Einträge geladen werden
-	 * @return der oberste Menüeintrag mit allen Kindern
+	 * @param id - der Primï¿½rschlï¿½ssel des obersten Menï¿½eintrags
+	 * @param includeAdvanced - sollen auch erweiterte Eintrï¿½ge geladen werden
+	 * @return der oberste Menï¿½eintrag mit allen Kindern
 	 */
 	public MenuItem getFullMenu(String id, boolean includeAdvanced);
 	
 	/**
-	 * Lädt eine Liste aller Untermenüeinträge zu einem Menüeintrag und hängt
-	 * diese an den Menüeintrag an.
-	 * Es werden hierbei dynamische Menüeinträge behandelt und ggf. mehrfach
-	 * eingefügt
+	 * Lï¿½dt eine Liste aller Untermenï¿½eintrï¿½ge zu einem Menï¿½eintrag und hï¿½ngt
+	 * diese an den Menï¿½eintrag an.
+	 * Es werden hierbei dynamische Menï¿½eintrï¿½ge behandelt und ggf. mehrfach
+	 * eingefï¿½gt
 	 * 
-	 * @param parent - der Elternmenüeintrags
-	 * @param includeAdvanced - sollen auch erweiterte Einträge geladen werden
+	 * @param parent - der Elternmenï¿½eintrags
+	 * @param includeAdvanced - sollen auch erweiterte Eintrï¿½ge geladen werden
 	 */
 	public void attachChildren(MenuItem parent, boolean includeAdvanced);
 	
 	/**
-	 * Lädt einen vollständigen Menü-Baum, ausgehend von einem Menüeintrag und
-	 * gibt diesen als TreeModel zurück. inculdeAdvanced wird dabei aus den
+	 * Lï¿½dt einen vollstï¿½ndigen Menï¿½-Baum, ausgehend von einem Menï¿½eintrag und
+	 * gibt diesen als TreeModel zurï¿½ck. inculdeAdvanced wird dabei aus den
 	 * Benutzereinstellungen des aktuellen Benutzers geladen
 	 * 
 	 * @see com.syncnapsis.data.service.MenuManager#getFullMenu(String, boolean)
-	 * @param id - der Primärschlüssel des obersten Menüeintrags
+	 * @param id - der Primï¿½rschlï¿½ssel des obersten Menï¿½eintrags
 	 * @param userId - der Benutzer
-	 * @return der oberste Menüeintrag mit allen Kindern
+	 * @return der oberste Menï¿½eintrag mit allen Kindern
 	 */
 	public GenericTreeModel<MenuItem> getMenuAsTree(String key);
 	
 	/**
-	 * Lade einen Menüeintrag anhand des Primärschlüssels und löst diesen ggf.
+	 * Lade einen Menï¿½eintrag anhand des Primï¿½rschlï¿½ssels und lï¿½st diesen ggf.
 	 * aus dem Hibernate-Cache
 	 * 
 	 * @see com.syncnapsis.service.GenericManager#get(java.io.Serializable)
-	 * @param id - der Primärschlüssels
-	 * @param evict - soll der Menüeintrag aus dem Hibernate-Chache gelöst
+	 * @param id - der Primï¿½rschlï¿½ssels
+	 * @param evict - soll der Menï¿½eintrag aus dem Hibernate-Chache gelï¿½st
 	 *            werden
-	 * @return der Menüeintrag
+	 * @return der Menï¿½eintrag
 	 */
 	public MenuItem get(String id, boolean evict);
 }

@@ -1,5 +1,5 @@
 /**
- * Syncnapsis Framework - Copyright (c) 2012 ultimate
+ * Syncnapsis Framework - Copyright (c) 2012-2014 ultimate
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms of
  * the GNU General Public License as published by the Free Software Foundation; either version
@@ -28,7 +28,7 @@ import com.syncnapsis.utils.ApplicationContextUtil;
 import com.syncnapsis.utils.SortUtil;
 
 /**
- * MenuItemOptionHandler für Benutzer
+ * MenuItemOptionHandler fï¿½r Benutzer
  * 
  * @author ultimate
  */
@@ -37,7 +37,7 @@ import com.syncnapsis.utils.SortUtil;
 //	protected UserProvider userProvider = ApplicationContextUtil.getBean(UserProvider.class);
 //
 //	/**
-//	 * Konstante für MenuItem.dynamicSubType
+//	 * Konstante fï¿½r MenuItem.dynamicSubType
 //	 */
 //	public static final String			DYNAMIC_SUB_TYPE	= "user";
 //

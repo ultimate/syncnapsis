@@ -1,5 +1,5 @@
 /**
- * Syncnapsis Framework - Copyright (c) 2012 ultimate
+ * Syncnapsis Framework - Copyright (c) 2012-2014 ultimate
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms of
  * the GNU General Public License as published by the Free Software Foundation; either version
@@ -19,7 +19,7 @@ import java.util.List;
 import com.syncnapsis.data.model.MenuItem;
 
 /**
- * Klasse, die die Erstellung von Submenüs für bestimmte Typen behandelt.
+ * Klasse, die die Erstellung von Submenï¿½s fï¿½r bestimmte Typen behandelt.
  * 
  * @author ultimate
  */
@@ -34,23 +34,23 @@ public interface MenuItemOptionHandler
 	public boolean applies(String dynamicSubType);
 
 	/**
-	 * Behandelt die Erstellung des Submenüs
+	 * Behandelt die Erstellung des Submenï¿½s
 	 * 
-	 * @param menuItem - der Menüeintrag für das Submenü
-	 * @return die Liste der erstellen Menüpunkte
+	 * @param menuItem - der Menï¿½eintrag fï¿½r das Submenï¿½
+	 * @return die Liste der erstellen Menï¿½punkte
 	 */
 	public List<MenuItem> createOptions(MenuItem menuItem);
 
 	/**
-	 * Behandelt die Erstellung eines ausgewählten Eintrags
+	 * Behandelt die Erstellung eines ausgewï¿½hlten Eintrags
 	 * 
-	 * @param menuItem - der Menüeintrag für das Submenü
-	 * @return die Liste der erstellen Menüpunkte
+	 * @param menuItem - der Menï¿½eintrag fï¿½r das Submenï¿½
+	 * @return die Liste der erstellen Menï¿½punkte
 	 */
 	public List<MenuItem> createCurrent(MenuItem menuItem);
 
 	/**
-	 * Gibt die Bezeichnung für einen Menüeintrag zurück
+	 * Gibt die Bezeichnung fï¿½r einen Menï¿½eintrag zurï¿½ck
 	 * 
 	 * @param menuItem - der Menueintrag
 	 * @return die Bezeichnung

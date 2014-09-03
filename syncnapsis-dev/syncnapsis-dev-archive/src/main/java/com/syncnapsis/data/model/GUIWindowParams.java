@@ -1,5 +1,5 @@
 /**
- * Syncnapsis Framework - Copyright (c) 2012 ultimate
+ * Syncnapsis Framework - Copyright (c) 2012-2014 ultimate
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms of
  * the GNU General Public License as published by the Free Software Foundation; either version
@@ -22,10 +22,10 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 import com.syncnapsis.data.model.base.BaseObject;
 
 /**
- * Model-Klasse "Fenster-Parameter für die GUI"
- * Wenn ein neues Fenster erzeugt wird und für die aufgerufene GUIAction eine
+ * Model-Klasse "Fenster-Parameter fï¿½r die GUI"
+ * Wenn ein neues Fenster erzeugt wird und fï¿½r die aufgerufene GUIAction eine
  * GUIWindowParams-Objekt existiert, so werden die in dieser Klasse gesetzten
- * Attribute an das Fenster übergeben. Alle hier definierten Attribute sind an
+ * Attribute an das Fenster ï¿½bergeben. Alle hier definierten Attribute sind an
  * GUIWindow orientiert.
  * 
  * @author ultimate

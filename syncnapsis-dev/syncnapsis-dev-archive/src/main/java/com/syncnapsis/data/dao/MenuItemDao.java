@@ -1,5 +1,5 @@
 /**
- * Syncnapsis Framework - Copyright (c) 2012 ultimate
+ * Syncnapsis Framework - Copyright (c) 2012-2014 ultimate
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms of
  * the GNU General Public License as published by the Free Software Foundation; either version
@@ -19,29 +19,29 @@ import java.util.List;
 import com.syncnapsis.data.model.MenuItem;
 
 /**
- * Dao-Interface für den Zugriff auf MenuItem
+ * Dao-Interface fï¿½r den Zugriff auf MenuItem
  * 
  * @author ultimate
  */
 public interface MenuItemDao extends GenericDao<MenuItem, String>
 {
 	/**
-	 * Lädt einen Menüeintrag und löst diesen ggf. von der Session, damit er
-	 * manipulierbar ist, ohne gespeichert werden zu müssen.
+	 * Lï¿½dt einen Menï¿½eintrag und lï¿½st diesen ggf. von der Session, damit er
+	 * manipulierbar ist, ohne gespeichert werden zu mï¿½ssen.
 	 * 
-	 * @param id - die ID des Menüeintrags
-	 * @param evict - soll das MenuItem-Objekt von der Session gelöst werden?
+	 * @param id - die ID des Menï¿½eintrags
+	 * @param evict - soll das MenuItem-Objekt von der Session gelï¿½st werden?
 	 * @return das MenuItem-Objekt
 	 */
 	public MenuItem get(String id, boolean evict);
 
 	/**
-	 * Lädt die Submenüeinträge zu einem übergeordneten Menüeintrag.
+	 * Lï¿½dt die Submenï¿½eintrï¿½ge zu einem ï¿½bergeordneten Menï¿½eintrag.
 	 * 
-	 * @param parentId - die ID des übergeordneten Menüeintrags
-	 * @param includeAdvanced - sollen erweiterte Menueinträge mit geladen
+	 * @param parentId - die ID des ï¿½bergeordneten Menï¿½eintrags
+	 * @param includeAdvanced - sollen erweiterte Menueintrï¿½ge mit geladen
 	 *            werden?
-	 * @return die Liste der Submenüeinträge
+	 * @return die Liste der Submenï¿½eintrï¿½ge
 	 */
 	public List<MenuItem> getChildren(String parentId, boolean includeAdvanced);
 }

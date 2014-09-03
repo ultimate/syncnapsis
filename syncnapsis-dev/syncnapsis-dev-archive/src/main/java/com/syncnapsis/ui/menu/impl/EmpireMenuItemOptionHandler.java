@@ -1,5 +1,5 @@
 /**
- * Syncnapsis Framework - Copyright (c) 2012 ultimate
+ * Syncnapsis Framework - Copyright (c) 2012-2014 ultimate
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms of
  * the GNU General Public License as published by the Free Software Foundation; either version
@@ -29,7 +29,7 @@ import com.syncnapsis.utils.ApplicationContextUtil;
 import com.syncnapsis.utils.SortUtil;
 
 /**
- * MenuItemOptionHandler für Imperien
+ * MenuItemOptionHandler fï¿½r Imperien
  * 
  * @author ultimate
  */
@@ -40,12 +40,12 @@ import com.syncnapsis.utils.SortUtil;
 //	protected UserProvider userProvider = ApplicationContextUtil.getBean(UserProvider.class);
 //
 //	/**
-//	 * Konstante für MenuItem.dynamicSubType
+//	 * Konstante fï¿½r MenuItem.dynamicSubType
 //	 */
 //	public static final String			DYNAMIC_SUB_TYPE	= "empire";
 //
 //	/**
-//	 * Konstante für den Title-Key "empires.current"
+//	 * Konstante fï¿½r den Title-Key "empires.current"
 //	 */
 //	public static final String			CURRENT_TITLE_KEY	= "empire.current";
 //
@@ -96,7 +96,7 @@ import com.syncnapsis.utils.SortUtil;
 //		List<MenuItem> processedChildren = new ArrayList<MenuItem>();
 //		MenuItem tmpItem;
 //
-//		// es zählt hier nicht immer der echte aktuelle User, da um den Besitzer der Imperien geht,
+//		// es zï¿½hlt hier nicht immer der echte aktuelle User, da um den Besitzer der Imperien geht,
 //		// und das kann auch ein gesitteter sein!
 //		Long currentUserId = sessionProvider.getCurrentUserId();
 //		if(menuItem.getParent().getParameterName() != null && menuItem.getParent().getParameterName().equals(BaseGameConstants.REQUEST_USER_ID_KEY))

@@ -1,5 +1,5 @@
 /**
- * Syncnapsis Framework - Copyright (c) 2012 ultimate
+ * Syncnapsis Framework - Copyright (c) 2012-2014 ultimate
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms of
  * the GNU General Public License as published by the Free Software Foundation; either version
@@ -19,20 +19,20 @@ import com.syncnapsis.data.model.GUIAction;
 import com.syncnapsis.data.service.GUIActionManager;
 
 /**
- * Manager-Implementierung für den Zugriff auf GUIAction.
+ * Manager-Implementierung fï¿½r den Zugriff auf GUIAction.
  * 
  * @author ultimate
  */
 public class GUIActionManagerImpl extends GenericNameManagerImpl<GUIAction, Long> implements GUIActionManager
 {
 	/**
-	 * GUIActionDao für den Datenbankzugriff
+	 * GUIActionDao fï¿½r den Datenbankzugriff
 	 */
 	private GUIActionDao guiActionDao;
 	
 	/**
 	 * Standard-Constructor
-	 * @param guiActionDao - GUIActionDao für den Datenbankzugriff
+	 * @param guiActionDao - GUIActionDao fï¿½r den Datenbankzugriff
 	 */
 	public GUIActionManagerImpl(GUIActionDao guiActionDao)
 	{

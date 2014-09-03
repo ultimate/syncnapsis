@@ -1,5 +1,5 @@
 /**
- * Syncnapsis Framework - Copyright (c) 2012 ultimate
+ * Syncnapsis Framework - Copyright (c) 2012-2014 ultimate
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms of
  * the GNU General Public License as published by the Free Software Foundation; either version
@@ -19,17 +19,17 @@ import java.util.List;
 import com.syncnapsis.data.model.MenuQuickLaunchItem;
 
 /**
- * Dao-Interface für den Zugriff auf MenuQuickLaunchItem
+ * Dao-Interface fï¿½r den Zugriff auf MenuQuickLaunchItem
  * 
  * @author ultimate
  */
 public interface MenuQuickLaunchItemDao extends GenericDao<MenuQuickLaunchItem, Long>
 {
 	/**
-	 * Lade eine Liste aller Schnellstart-Menüeinträge für einen Benutzer.
+	 * Lade eine Liste aller Schnellstart-Menï¿½eintrï¿½ge fï¿½r einen Benutzer.
 	 * 
 	 * @param userId - die ID des Benutzers
-	 * @return die Liste der Schnellstart-Menüeinträge
+	 * @return die Liste der Schnellstart-Menï¿½eintrï¿½ge
 	 */
 	public List<MenuQuickLaunchItem> getByUser(Long userId);
 }

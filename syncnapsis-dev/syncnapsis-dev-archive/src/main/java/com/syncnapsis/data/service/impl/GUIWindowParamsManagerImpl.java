@@ -1,5 +1,5 @@
 /**
- * Syncnapsis Framework - Copyright (c) 2012 ultimate
+ * Syncnapsis Framework - Copyright (c) 2012-2014 ultimate
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms of
  * the GNU General Public License as published by the Free Software Foundation; either version
@@ -19,21 +19,21 @@ import com.syncnapsis.data.model.GUIWindowParams;
 import com.syncnapsis.data.service.GUIWindowParamsManager;
 
 /**
- * Manager-Implementierung für den Zugriff auf GUIWindowParams.
+ * Manager-Implementierung fï¿½r den Zugriff auf GUIWindowParams.
  * 
  * @author ultimate
  */
 public class GUIWindowParamsManagerImpl extends GenericManagerImpl<GUIWindowParams, Long> implements GUIWindowParamsManager
 {
 	/**
-	 * GUIWindowParamsDao für den Datenbankzugriff
+	 * GUIWindowParamsDao fï¿½r den Datenbankzugriff
 	 */
 	@SuppressWarnings("unused")
 	private GUIWindowParamsDao guiWindowParamsDao;
 	
 	/**
 	 * Standard-Constructor
-	 * @param guiWindowParamsDao - GUIWindowParamsDao für den Datenbankzugriff
+	 * @param guiWindowParamsDao - GUIWindowParamsDao fï¿½r den Datenbankzugriff
 	 */
 	public GUIWindowParamsManagerImpl(GUIWindowParamsDao guiWindowParamsDao)
 	{

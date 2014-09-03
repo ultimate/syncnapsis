@@ -1,5 +1,5 @@
 /**
- * Syncnapsis Framework - Copyright (c) 2012 ultimate
+ * Syncnapsis Framework - Copyright (c) 2012-2014 ultimate
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms of
  * the GNU General Public License as published by the Free Software Foundation; either version
@@ -30,7 +30,7 @@ import org.slf4j.LoggerFactory;
 
 
 /**
- * Provider-Klasse für das statische Abrufen von Texten anhand von Schlüsseln
+ * Provider-Klasse fï¿½r das statische Abrufen von Texten anhand von Schlï¿½sseln
  * aus den i3-label*.properties
  * 
  * @author ultimate
@@ -62,11 +62,11 @@ public class LabelProvider extends ParameterizedProvider<String, String>
 	}
 
 	/**
-	 * Gibt den Text zum gegebenen Schlüssel zurück.
-	 * Falls der Schlüssel nicht existiert, wird ???key??? zurückgegeben.
+	 * Gibt den Text zum gegebenen Schlï¿½ssel zurï¿½ck.
+	 * Falls der Schlï¿½ssel nicht existiert, wird ???key??? zurï¿½ckgegeben.
 	 * 
 	 * @see org.zkoss.util.resource.impl.LabelLoader#getLabel(String)
-	 * @param key - der Schlüssel
+	 * @param key - der Schlï¿½ssel
 	 * @return der Text
 	 */
 	public String get(String key)
@@ -85,13 +85,13 @@ public class LabelProvider extends ParameterizedProvider<String, String>
 	}
 
 	/**
-	 * Gibt den Text zum gegebenen Schlüssel zurück.
-	 * Falls der Schlüssel nicht existiert, wird ???key??? zurückgegeben.
-	 * In der Nachricht werden zusätzlich Platzhalter durch die Argumente in
+	 * Gibt den Text zum gegebenen Schlï¿½ssel zurï¿½ck.
+	 * Falls der Schlï¿½ssel nicht existiert, wird ???key??? zurï¿½ckgegeben.
+	 * In der Nachricht werden zusï¿½tzlich Platzhalter durch die Argumente in
 	 * args ersetzt.
 	 * 
 	 * @see org.zkoss.util.resource.impl.LabelLoader#getLabel(String)
-	 * @param key - der Schlüssel
+	 * @param key - der Schlï¿½ssel
 	 * @param args - die Argumente
 	 * @return der Text
 	 */
@@ -102,11 +102,11 @@ public class LabelProvider extends ParameterizedProvider<String, String>
 	}
 
 	/**
-	 * Gibt den Text zum gegebenen Schlüssel zurück.
-	 * Falls der Schlüssel nicht existiert, wird defValue zurückgegeben.
+	 * Gibt den Text zum gegebenen Schlï¿½ssel zurï¿½ck.
+	 * Falls der Schlï¿½ssel nicht existiert, wird defValue zurï¿½ckgegeben.
 	 * 
 	 * @see org.zkoss.util.resource.impl.LabelLoader#getLabel(String)
-	 * @param key - der Schlüssel
+	 * @param key - der Schlï¿½ssel
 	 * @param defValue - der Default-Wert
 	 * @return der Text
 	 */
@@ -117,13 +117,13 @@ public class LabelProvider extends ParameterizedProvider<String, String>
 	}
 
 	/**
-	 * Gibt den Text zum gegebenen Schlüssel zurück.
-	 * Falls der Schlüssel nicht existiert, wird defValue zurückgegeben.
-	 * In der Nachricht werden zusätzlich Platzhalter durch die Argumente in
+	 * Gibt den Text zum gegebenen Schlï¿½ssel zurï¿½ck.
+	 * Falls der Schlï¿½ssel nicht existiert, wird defValue zurï¿½ckgegeben.
+	 * In der Nachricht werden zusï¿½tzlich Platzhalter durch die Argumente in
 	 * args ersetzt.
 	 * 
 	 * @see org.zkoss.util.resource.impl.LabelLoader#getLabel(String)
-	 * @param key - der Schlüssel
+	 * @param key - der Schlï¿½ssel
 	 * @param defValue - der Default-Wert
 	 * @param args - die Argumente
 	 * @return der Text

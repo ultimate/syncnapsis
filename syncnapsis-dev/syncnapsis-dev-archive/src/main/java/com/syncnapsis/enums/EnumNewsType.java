@@ -1,5 +1,5 @@
 /**
- * Syncnapsis Framework - Copyright (c) 2012 ultimate
+ * Syncnapsis Framework - Copyright (c) 2012-2014 ultimate
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms of
  * the GNU General Public License as published by the Free Software Foundation; either version
@@ -15,9 +15,9 @@
 package com.syncnapsis.enums;
 
 /**
- * Enum für die Spezifizierung der Kategorie eines News-Objektes. Je nach
- * Kategorie einer News, wird dies besonders hervorgehoben oder ist für
- * den Benutzer besonders wichtig. News sind Nachrichten, die für alle 
+ * Enum fï¿½r die Spezifizierung der Kategorie eines News-Objektes. Je nach
+ * Kategorie einer News, wird dies besonders hervorgehoben oder ist fï¿½r
+ * den Benutzer besonders wichtig. News sind Nachrichten, die fï¿½r alle 
  * Spieler gelten.
  * 
  * @author ultimate
@@ -28,7 +28,7 @@ public enum EnumNewsType
 	/**
 	 * Systemneuigkeiten:
 	 * - Serverwartung
-	 * - Serverausfälle
+	 * - Serverausfï¿½lle
 	 * - ...
 	 */
 	system,
@@ -36,7 +36,7 @@ public enum EnumNewsType
 	 * Neuigkeiten zum Entwicklungsstand des Spiels:
 	 * - neue Features
 	 * - Bug-Fixes
-	 * - Versionsänderungen
+	 * - Versionsï¿½nderungen
 	 * - ...
 	 */
 	development,
@@ -57,7 +57,7 @@ public enum EnumNewsType
 	trade,
 	/**
 	 * Besonders wichtige diplomatische Neuigkeiten:
-	 * - Diplomatische Änderungen zwischen den größten Allianzen oder Spielern
+	 * - Diplomatische ï¿½nderungen zwischen den grï¿½ï¿½ten Allianzen oder Spielern
 	 * - ...
 	 */
 	diplomacy, 
@@ -70,7 +70,7 @@ public enum EnumNewsType
 	awards,
 	/**
 	 * Sonstige lustige Neuigkeiten:
-	 * - Spaßnachrichten
+	 * - Spaï¿½nachrichten
 	 * - Witze
 	 * - ...
 	 */
