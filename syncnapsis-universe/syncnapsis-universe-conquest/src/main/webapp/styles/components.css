@@ -38,7 +38,7 @@ textarea:disabled {
 }
 
 input[type=text].error,
-input[type=password].error,,
+input[type=password].error,
 input.error, /*too many future type*/
 textarea.error,
 .error {

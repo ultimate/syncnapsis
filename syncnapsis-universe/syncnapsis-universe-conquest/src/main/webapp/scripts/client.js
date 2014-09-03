@@ -224,7 +224,7 @@ UIManager = function()
 
 UIManager.prototype.onLogin = function(player)
 {
-	if(player != null)
+	if(player != null && player.j_type == Types.Player)
 	{
 		// clear password field
 		document.getElementById(UI.constants.LOGIN_PASSWORD_ID).value = "";
