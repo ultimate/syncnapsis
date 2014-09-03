@@ -342,11 +342,16 @@ public class UserManagerImpl extends GenericNameManagerImpl<User, Long> implemen
 		if(user == null)
 			throw new UserUpdateFailedException(ApplicationBaseConstants.ERROR_USERNAME_INVALID);
 		
+		// user may have been updated meanwhile
+		user = get(user.getId());
+		
 		if(!securityManager.validatePassword(oldPassword, user.getPassword()))
 			throw new UserUpdateFailedException(ApplicationBaseConstants.ERROR_PASSWORD_MISMATCH);
 
 		user.setPassword(securityManager.hashPassword(newPassword));
-		save(user);
+		user = save(user);
+		
+		securityManager.getUserProvider().set(user);
 
 		return true;
 	}
