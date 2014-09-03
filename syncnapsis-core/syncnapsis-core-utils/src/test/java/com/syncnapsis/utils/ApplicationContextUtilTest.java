@@ -1,5 +1,5 @@
 /**
- * Syncnapsis Framework - Copyright (c) 2012 ultimate
+ * Syncnapsis Framework - Copyright (c) 2012-2014 ultimate
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms of
  * the GNU General Public License as published by the Free Software Foundation; either version
@@ -23,7 +23,7 @@ public class ApplicationContextUtilTest extends BaseSpringContextTestCase
 {
 	public ApplicationContextUtilTest()
 	{
-		// so wird verhindert, dass für dieses Object automatisch autowire angewandt wird
+		// so wird verhindert, dass fï¿½r dieses Object automatisch autowire angewandt wird
 		this.autowired = true;
 		initApplicationContext();
 	}

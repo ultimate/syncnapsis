@@ -1,5 +1,5 @@
 /**
- * Syncnapsis Framework - Copyright (c) 2012 ultimate
+ * Syncnapsis Framework - Copyright (c) 2012-2014 ultimate
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms of
  * the GNU General Public License as published by the Free Software Foundation; either version
@@ -21,7 +21,7 @@ import com.syncnapsis.exceptions.UserContactExistsException;
 import com.syncnapsis.exceptions.UserSelectionInvalidException;
 
 /**
- * Manager-Interface für den Zugriff auf UserRole.
+ * Manager-Interface fï¿½r den Zugriff auf UserRole.
  * 
  * @author ultimate
  */
@@ -36,8 +36,8 @@ public interface UserContactManager extends GenericManager<UserContact, Long>
 	public List<UserContact> getByUser(Long userId);
 
 	/**
-	 * Lädt einen UserContact anhand der beiden User. Die Reigenfolge der User muss nicht mit dem
-	 * UserContact übereinstimmen.
+	 * Lï¿½dt einen UserContact anhand der beiden User. Die Reigenfolge der User muss nicht mit dem
+	 * UserContact ï¿½bereinstimmen.
 	 * 
 	 * @param userId1 - der erste User
 	 * @param userId2 - der zweite User
@@ -46,7 +46,7 @@ public interface UserContactManager extends GenericManager<UserContact, Long>
 	public UserContact getUserContact(Long userId1, Long userId2);
 
 	/**
-	 * Erstellt einen neuen UserContact, bei dem User1 bestätigt ist, User2 jedoch noch nicht.
+	 * Erstellt einen neuen UserContact, bei dem User1 bestï¿½tigt ist, User2 jedoch noch nicht.
 	 * 
 	 * @param userId1 - der erste User
 	 * @param userId2 - der zweite User
@@ -55,11 +55,11 @@ public interface UserContactManager extends GenericManager<UserContact, Long>
 	public UserContact addUserContact(Long userId1, Long userId2) throws UserContactExistsException, UserSelectionInvalidException;
 
 	/**
-	 * Bestätigt einen UserContact. Da vom erstellenden bereits immer eine Bestätigung vorliegt
-	 * braucht kein User übergeben werden. Es werden beide Flags auf true gesetzt.
+	 * Bestï¿½tigt einen UserContact. Da vom erstellenden bereits immer eine Bestï¿½tigung vorliegt
+	 * braucht kein User ï¿½bergeben werden. Es werden beide Flags auf true gesetzt.
 	 * 
 	 * @param userContactId
-	 * @return der bestätigte UserContact
+	 * @return der bestï¿½tigte UserContact
 	 */
 	public UserContact approveUserContact(Long userContactId);
 }

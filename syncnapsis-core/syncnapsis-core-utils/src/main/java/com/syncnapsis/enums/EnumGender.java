@@ -1,5 +1,5 @@
 /**
- * Syncnapsis Framework - Copyright (c) 2012 ultimate
+ * Syncnapsis Framework - Copyright (c) 2012-2014 ultimate
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms of
  * the GNU General Public License as published by the Free Software Foundation; either version
@@ -15,11 +15,11 @@
 package com.syncnapsis.enums;
 
 /**
- * Enum für die Spezifizierung des Geschlechts eines Users. Es können hier
- * sowohl echte Angaben, als auch Spaß-Angaben gemacht werden. Ggf. kann die
+ * Enum fï¿½r die Spezifizierung des Geschlechts eines Users. Es kï¿½nnen hier
+ * sowohl echte Angaben, als auch Spaï¿½-Angaben gemacht werden. Ggf. kann die
  * Liste der Geschlechter auch noch erweitert werden, in Anlehnung an das
  * Spiel...
- * Die Geschlechtsnamen sind selbsterklärend...
+ * Die Geschlechtsnamen sind selbsterklï¿½rend...
  * 
  * @author ultimate
  */
@@ -30,7 +30,7 @@ public enum EnumGender
 	 */
 	unknown,
 	/**
-	 * männlich
+	 * mï¿½nnlich
 	 */
 	male,
 	/**
@@ -47,7 +47,7 @@ public enum EnumGender
 	machine;
 
 	/**
-	 * Gibt das default Geschlect zurück: unknown
+	 * Gibt das default Geschlect zurï¿½ck: unknown
 	 * 
 	 * @return das default Geschlect
 	 */

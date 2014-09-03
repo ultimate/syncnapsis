@@ -1,5 +1,5 @@
 /**
- * Syncnapsis Framework - Copyright (c) 2012 ultimate
+ * Syncnapsis Framework - Copyright (c) 2012-2014 ultimate
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms of
  * the GNU General Public License as published by the Free Software Foundation; either version
@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.Queue;
 
 /**
- * Einfache FIFO-Queue, die eine limitierte Länge hat. Wird die Länge überschritten wird das
+ * Einfache FIFO-Queue, die eine limitierte Lï¿½nge hat. Wird die Lï¿½nge ï¿½berschritten wird das
  * erste Element rausgeschmissen.
  * 
  * @author ultimate
@@ -30,7 +30,7 @@ import java.util.Queue;
 public class LimitedQueue<E> implements Queue<E>
 {
 	/**
-	 * Die Länge dieser Queue
+	 * Die Lï¿½nge dieser Queue
 	 */
 	private int					limit;
 	/**
@@ -39,9 +39,9 @@ public class LimitedQueue<E> implements Queue<E>
 	private List<E>				list				= new LinkedList<E>();
 
 	/**
-	 * Constructor mit vorgegebener Länge
+	 * Constructor mit vorgegebener Lï¿½nge
 	 * 
-	 * @param limit - Die Länge dieser Queue
+	 * @param limit - Die Lï¿½nge dieser Queue
 	 */
 	public LimitedQueue(int limit)
 	{

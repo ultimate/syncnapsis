@@ -1,5 +1,5 @@
 /**
- * Syncnapsis Framework - Copyright (c) 2012 ultimate
+ * Syncnapsis Framework - Copyright (c) 2012-2014 ultimate
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms of
  * the GNU General Public License as published by the Free Software Foundation; either version
@@ -21,10 +21,10 @@ import com.syncnapsis.data.model.base.Identifiable;
 
 /**
  * Generischer Manager, der die Standard CRUD-Operationen (Create, Retrieve,
- * Update, Delete) generisch für alle Model-Klassen zur Verfügung stellt.
+ * Update, Delete) generisch fï¿½r alle Model-Klassen zur Verfï¿½gung stellt.
  * 
  * @param <T> die Model-Klasse
- * @param <PK> die Klasse des Primärschlüssels
+ * @param <PK> die Klasse des Primï¿½rschlï¿½ssels
  * @author ultimate
  */
 public interface GenericManager<T extends Identifiable<PK>, PK extends Serializable>
@@ -37,7 +37,7 @@ public interface GenericManager<T extends Identifiable<PK>, PK extends Serializa
 	public List<T> getAll();
 
 	/**
-	 * Generische Methode um alle Objekte eines Typs zu laden. Es kann gewählt
+	 * Generische Methode um alle Objekte eines Typs zu laden. Es kann gewï¿½hlt
 	 * werden, ob nur aktivierte oder aktiviert und deaktiviert Objekte geladen
 	 * werden sollen.
 	 * 
@@ -46,41 +46,41 @@ public interface GenericManager<T extends Identifiable<PK>, PK extends Serializa
 	public List<T> getAll(boolean returnOnlyActivated);
 
 	/**
-	 * Generische Methode um ein Objekt anhand seines Promärschlüssels zu laden.
+	 * Generische Methode um ein Objekt anhand seines Promï¿½rschlï¿½ssels zu laden.
 	 * 
-	 * @param id - der Primärschlüssel des Objektes
+	 * @param id - der Primï¿½rschlï¿½ssel des Objektes
 	 * @return das Objekt
 	 */
 	public T get(PK id);
 
 	/**
-	 * Generische Methode um anhand einer Liste von Primärschlüsseln die
-	 * dazugehörigen Objekte zu laden. Die dazugehörigen Objekte befinden sich
-	 * in der Ergebnisliste an der gleichen Stelle, wie ihr Primärschlüssel in
-	 * der übergeben Liste. Wird zu einem Primärschlüssel kein Objekt gefunden,
-	 * so enthält die Liste an dieser Stelle null.
+	 * Generische Methode um anhand einer Liste von Primï¿½rschlï¿½sseln die
+	 * dazugehï¿½rigen Objekte zu laden. Die dazugehï¿½rigen Objekte befinden sich
+	 * in der Ergebnisliste an der gleichen Stelle, wie ihr Primï¿½rschlï¿½ssel in
+	 * der ï¿½bergeben Liste. Wird zu einem Primï¿½rschlï¿½ssel kein Objekt gefunden,
+	 * so enthï¿½lt die Liste an dieser Stelle null.
 	 * 
-	 * @param idList - die Liste der Primärschlüssel
-	 * @return die Liste der Objekte der Model-Klasse zu den übergebenen
-	 *         Primärschlüsseln
+	 * @param idList - die Liste der Primï¿½rschlï¿½ssel
+	 * @return die Liste der Objekte der Model-Klasse zu den ï¿½bergebenen
+	 *         Primï¿½rschlï¿½sseln
 	 */
 	public List<T> getByIdList(List<PK> idList);
 
 	/**
-	 * Prüft, ob ein Objekt dieser Modell-Klasse zu dem gegeben Primärschlüssel
+	 * Prï¿½ft, ob ein Objekt dieser Modell-Klasse zu dem gegeben Primï¿½rschlï¿½ssel
 	 * existiert.
 	 * 
-	 * @param id - der zu prüfende Primärschlüssel
+	 * @param id - der zu prï¿½fende Primï¿½rschlï¿½ssel
 	 * @return true oder false
 	 */
 	public boolean exists(PK id);
 
 	/**
 	 * Generische Methode um ein Objekt der Modell-Klasse zu speichern. Es
-	 * können sowohl neue Objekte, als auch Veränderungen an existieren Objekten
-	 * gespeichert werden. Nach dem Speichervorgang wird das geänderte Objekt
-	 * zurückgegeben. Es enthält eine neue Versionsnummer und bei
-	 * Neu-Speicherung den zugewiesenen Primärschlüssel.
+	 * kï¿½nnen sowohl neue Objekte, als auch Verï¿½nderungen an existieren Objekten
+	 * gespeichert werden. Nach dem Speichervorgang wird das geï¿½nderte Objekt
+	 * zurï¿½ckgegeben. Es enthï¿½lt eine neue Versionsnummer und bei
+	 * Neu-Speicherung den zugewiesenen Primï¿½rschlï¿½ssel.
 	 * 
 	 * @param object - das zu speichernde Objekt
 	 * @return das gespeichert Objekt
@@ -88,12 +88,12 @@ public interface GenericManager<T extends Identifiable<PK>, PK extends Serializa
 	public T save(T object);
 
 	/**
-	 * Generische Methode um eine Objekt der Modell-Klasse zu löschen. Handelt
+	 * Generische Methode um eine Objekt der Modell-Klasse zu lï¿½schen. Handelt
 	 * es sich bei der Modell-Klasse um eine Subklasse von ActivatableInstance,
-	 * so wird das Objekt deaktiviert anstatt gelöscht zu werden.
+	 * so wird das Objekt deaktiviert anstatt gelï¿½scht zu werden.
 	 * 
-	 * @param object - das zu löschende Objekt
-	 * @return "deleted", wenn das Objekt gelöscht wurde, "deactivated", wenn es
+	 * @param object - das zu lï¿½schende Objekt
+	 * @return "deleted", wenn das Objekt gelï¿½scht wurde, "deactivated", wenn es
 	 *         deaktiviert wurde
 	 */
 	public String remove(T object);

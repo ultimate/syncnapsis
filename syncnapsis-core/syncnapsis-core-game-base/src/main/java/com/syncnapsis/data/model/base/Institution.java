@@ -1,5 +1,5 @@
 /**
- * Syncnapsis Framework - Copyright (c) 2012 ultimate
+ * Syncnapsis Framework - Copyright (c) 2012-2014 ultimate
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms of
  * the GNU General Public License as published by the Free Software Foundation; either version
@@ -26,7 +26,7 @@ import javax.persistence.TemporalType;
 public abstract class Institution<PK extends Serializable> extends ActivatableInstance<PK>
 {
 	/**
-	 * Kurzname bzw. Abkürzung des Imperiums. Muss einmalig sein.
+	 * Kurzname bzw. Abkï¿½rzung des Imperiums. Muss einmalig sein.
 	 */
 	protected String	shortName;
 	/**
@@ -62,7 +62,7 @@ public abstract class Institution<PK extends Serializable> extends ActivatableIn
 	protected Date		dissolutionDate;
 
 	/**
-	 * Kurzname bzw. Abkürzung des Imperiums. Muss einmalig sein.
+	 * Kurzname bzw. Abkï¿½rzung des Imperiums. Muss einmalig sein.
 	 * 
 	 * @return shortName
 	 */
@@ -152,7 +152,7 @@ public abstract class Institution<PK extends Serializable> extends ActivatableIn
 	}
 
 	/**
-	 * Kurzname bzw. Abkürzung des Imperiums. Muss einmalig sein.
+	 * Kurzname bzw. Abkï¿½rzung des Imperiums. Muss einmalig sein.
 	 * 
 	 * @param shortName - der Kurzname
 	 */

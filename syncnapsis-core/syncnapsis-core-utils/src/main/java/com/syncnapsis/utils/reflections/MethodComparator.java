@@ -1,5 +1,5 @@
 /**
- * Syncnapsis Framework - Copyright (c) 2012 ultimate
+ * Syncnapsis Framework - Copyright (c) 2012-2014 ultimate
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms of
  * the GNU General Public License as published by the Free Software Foundation; either version
@@ -24,7 +24,7 @@ import org.springframework.util.Assert;
 
 /**
  * Comparator, der zwei Objekte anhand einer bestimmten Methode vergleicht. Die
- * Methode wird dabei über ihren Namen angegeben. Durch eine Zusätzliche
+ * Methode wird dabei ï¿½ber ihren Namen angegeben. Durch eine Zusï¿½tzliche
  * Orientierung kann zwischen auf- und absteigend gewechselt werden.
  * 
  * @author ultimate
@@ -33,13 +33,13 @@ import org.springframework.util.Assert;
 public class MethodComparator<T> implements Comparator<T>, Serializable
 {
 	/**
-	 * Orientierung für aufsteigende Sortierung
+	 * Orientierung fï¿½r aufsteigende Sortierung
 	 * 
 	 * @see com.syncnapsis.utils.SortUtil#ASCENDING
 	 */
 	public static final int		ASCENDING			= SortUtil.ASCENDING;
 	/**
-	 * Orientierung für absteigende Sortierung
+	 * Orientierung fï¿½r absteigende Sortierung
 	 * 
 	 * @see com.syncnapsis.utils.SortUtil#DESCENDING
 	 */
@@ -51,13 +51,13 @@ public class MethodComparator<T> implements Comparator<T>, Serializable
 	private static final long	serialVersionUID	= 1L;
 
 	/**
-	 * Name der Methode für den Vergleich
+	 * Name der Methode fï¿½r den Vergleich
 	 */
 	private String				methodName;
 	/**
 	 * Die Orientierung.
 	 * Es sind ASCENDING und DESCENDING empfehlenswert, es sind jedoch auch
-	 * andere Faktoren möglich. 0 ist nicht möglich, da sonst das Ergebnis immer
+	 * andere Faktoren mï¿½glich. 0 ist nicht mï¿½glich, da sonst das Ergebnis immer
 	 * 0 ist.
 	 * 
 	 * @see com.syncnapsis.utils.SortUtil#ASCENDING
@@ -68,7 +68,7 @@ public class MethodComparator<T> implements Comparator<T>, Serializable
 	/**
 	 * Erstellt einen neuen Comparator mit Methodenname und Orientierung
 	 * 
-	 * @param methodName - Name der Methode für den Vergleich
+	 * @param methodName - Name der Methode fï¿½r den Vergleich
 	 * @param orientation - die Orientierung
 	 */
 	public MethodComparator(String methodName, int orientation)
@@ -80,7 +80,7 @@ public class MethodComparator<T> implements Comparator<T>, Serializable
 
 	/**
 	 * Vergleicht die zwei gegebenen Objekte anhand der definierten Methode. Die
-	 * Objekte selbst dürfen nicht null sein, der Rückgabewert der Methode
+	 * Objekte selbst dï¿½rfen nicht null sein, der Rï¿½ckgabewert der Methode
 	 * dagegen darf null sein.
 	 */
 	@SuppressWarnings("unchecked")

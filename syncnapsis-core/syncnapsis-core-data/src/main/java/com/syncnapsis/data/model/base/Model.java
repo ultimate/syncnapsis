@@ -1,5 +1,5 @@
 /**
- * Syncnapsis Framework - Copyright (c) 2012 ultimate
+ * Syncnapsis Framework - Copyright (c) 2012-2014 ultimate
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms of
  * the GNU General Public License as published by the Free Software Foundation; either version
@@ -16,10 +16,10 @@ package com.syncnapsis.data.model.base;
 
 /**
  * Interface zur Indentifizierung von Model-Klassen. Auf diese Weise sind in
- * allen Model-Klassen die unten definierten Konstanten für die Spaltenlängen in
+ * allen Model-Klassen die unten definierten Konstanten fï¿½r die Spaltenlï¿½ngen in
  * der Datenbank bekannt.
- * Desweiteren können so in den Tests Model-Klassen von anderen Klassen
- * unterschieden werden. Bei der Vollständigkeitsprüfung der Tests werden die
+ * Desweiteren kï¿½nnen so in den Tests Model-Klassen von anderen Klassen
+ * unterschieden werden. Bei der Vollstï¿½ndigkeitsprï¿½fung der Tests werden die
  * Model-Klassen ausgeschlossen.
  * 
  * @author ultimate
@@ -27,71 +27,71 @@ package com.syncnapsis.data.model.base;
 public interface Model
 {
 	/**
-	 * Standard-Länge für kurze Namen
+	 * Standard-Lï¿½nge fï¿½r kurze Namen
 	 */
 	public static final int	LENGTH_NAME_SHORT		= 10;
 	/**
-	 * Standard-Länge für normale Namen
+	 * Standard-Lï¿½nge fï¿½r normale Namen
 	 */
 	public static final int	LENGTH_NAME_NORMAL		= 30;
 	/**
-	 * Standard-Länge für lange Namen
+	 * Standard-Lï¿½nge fï¿½r lange Namen
 	 */
 	public static final int	LENGTH_NAME_LONG		= 100;
 	/**
-	 * Standard-Länge für lange Namen
+	 * Standard-Lï¿½nge fï¿½r lange Namen
 	 */
 	public static final int	LENGTH_NAME_VERYLONG	= 200;
 
 	/**
-	 * Standard-Länge für Passwörter
+	 * Standard-Lï¿½nge fï¿½r Passwï¿½rter
 	 */
 	public static final int	LENGTH_PASSWORD			= 200;
 	/**
-	 * Standard-Länge für e-Mail-Adressen
+	 * Standard-Lï¿½nge fï¿½r e-Mail-Adressen
 	 */
 	public static final int	LENGTH_EMAIL			= 200;
 	/**
-	 * Standard-Länge für URLs
+	 * Standard-Lï¿½nge fï¿½r URLs
 	 */
 	public static final int	LENGTH_URL				= 200;
 	/**
-	 * Standard-Länge für Beschreibungen
+	 * Standard-Lï¿½nge fï¿½r Beschreibungen
 	 */
 	public static final int	LENGTH_DESCRIPTION		= 2000;
 	/**
-	 * Standard-Länge für freie Titel
+	 * Standard-Lï¿½nge fï¿½r freie Titel
 	 */
 	public static final int	LENGTH_TITLE			= 200;
 	/**
-	 * Standard-Länge für freie Texte
+	 * Standard-Lï¿½nge fï¿½r freie Texte
 	 */
 	public static final int	LENGTH_TEXT				= 2000;
 
 	/**
-	 * Standard-Länge für ID
+	 * Standard-Lï¿½nge fï¿½r ID
 	 */
 	public static final int	LENGTH_ID				= 50;
 	/**
-	 * Standard-Länge für Action-Namen
+	 * Standard-Lï¿½nge fï¿½r Action-Namen
 	 */
 	public static final int	LENGTH_ACTION			= 50;
 	/**
-	 * Standard-Länge für Parameter-Namen
+	 * Standard-Lï¿½nge fï¿½r Parameter-Namen
 	 */
 	public static final int	LENGTH_PARAMETER		= 50;
 	/**
-	 * Standard-Länge für Parameter-Werte
+	 * Standard-Lï¿½nge fï¿½r Parameter-Werte
 	 */
 	public static final int	LENGTH_PARAMETERVALUE	= 50;
 
 	/**
-	 * Standard-Länge für Enum-Werte
+	 * Standard-Lï¿½nge fï¿½r Enum-Werte
 	 */
 	public static final int	LENGTH_ENUM				= 50;
 
 	/**
-	 * Standard-Länge für Sprach-Schlüssel
+	 * Standard-Lï¿½nge fï¿½r Sprach-Schlï¿½ssel
 	 */
 	public static final int	LENGTH_LANGUAGE_KEY		= 100;
 }

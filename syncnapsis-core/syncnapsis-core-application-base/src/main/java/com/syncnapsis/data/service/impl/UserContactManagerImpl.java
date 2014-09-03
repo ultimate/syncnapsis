@@ -1,5 +1,5 @@
 /**
- * Syncnapsis Framework - Copyright (c) 2012 ultimate
+ * Syncnapsis Framework - Copyright (c) 2012-2014 ultimate
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms of
  * the GNU General Public License as published by the Free Software Foundation; either version
@@ -25,25 +25,25 @@ import com.syncnapsis.exceptions.UserContactExistsException;
 import com.syncnapsis.exceptions.UserSelectionInvalidException;
 
 /**
- * Manager-Implementierung für den Zugriff auf UserContact.
+ * Manager-Implementierung fï¿½r den Zugriff auf UserContact.
  * 
  * @author ultimate
  */
 public class UserContactManagerImpl extends GenericManagerImpl<UserContact, Long> implements UserContactManager
 {
 	/**
-	 * UserContactDao für den Datenbankzugriff
+	 * UserContactDao fï¿½r den Datenbankzugriff
 	 */
 	protected UserContactDao userContactDao;
 	/**
-	 * UserManager für den Datenbankzugriff
+	 * UserManager fï¿½r den Datenbankzugriff
 	 */
 	protected UserManager userManager;
 	
 	/**
 	 * Standard-Constructor
-	 * @param userContactDao - UserContactDao für den Datenbankzugriff
-	 * @param userManager - UserManager für den Datenbankzugriff 
+	 * @param userContactDao - UserContactDao fï¿½r den Datenbankzugriff
+	 * @param userManager - UserManager fï¿½r den Datenbankzugriff 
 	 */
 	public UserContactManagerImpl(UserContactDao userContactDao, UserManager userManager)
 	{

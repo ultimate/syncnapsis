@@ -1,5 +1,5 @@
 /**
- * Syncnapsis Framework - Copyright (c) 2012 ultimate
+ * Syncnapsis Framework - Copyright (c) 2012-2014 ultimate
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms of
  * the GNU General Public License as published by the Free Software Foundation; either version
@@ -17,7 +17,7 @@ package com.syncnapsis.exceptions;
 /**
  * Exception, die geworfen wird, falls versucht wird einen neuen Benutzer mit
  * bereits vorhandenem Benutzernamen oder vorhandener e-Mail-Adresse zu
- * speichern. Ein Benutzername gilt auch unter Ignorierung der Groß- und
+ * speichern. Ein Benutzername gilt auch unter Ignorierung der Groï¿½- und
  * Kleinschreibung als vorhanden.
  * 
  * @author ultimate

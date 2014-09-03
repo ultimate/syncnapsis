@@ -1,5 +1,5 @@
 /**
- * Syncnapsis Framework - Copyright (c) 2012 ultimate
+ * Syncnapsis Framework - Copyright (c) 2012-2014 ultimate
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms of
  * the GNU General Public License as published by the Free Software Foundation; either version
@@ -16,8 +16,8 @@ package com.syncnapsis.exceptions;
 
 
 /**
- * Exception, die geworfen wird, wenn für z.B bei der Erstellung eines UserContacts ein User
- * ausgewählt wird, zu dem bereits ein UserContact mit dem anderen User existiert.
+ * Exception, die geworfen wird, wenn fï¿½r z.B bei der Erstellung eines UserContacts ein User
+ * ausgewï¿½hlt wird, zu dem bereits ein UserContact mit dem anderen User existiert.
  * 
  * @author ultimate
  */

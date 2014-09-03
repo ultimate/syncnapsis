@@ -1,5 +1,5 @@
 /**
- * Syncnapsis Framework - Copyright (c) 2012 ultimate
+ * Syncnapsis Framework - Copyright (c) 2012-2014 ultimate
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms of
  * the GNU General Public License as published by the Free Software Foundation; either version
@@ -40,11 +40,11 @@ import com.syncnapsis.enums.EnumGender;
 
 /**
  * Model-Klasse "Benutzer"
- * Um am Spiel teilzunehmen muss man sich als Benutzer für die Anwendung
- * registrieren. Über die dem Benutzerkonto zugewiesene Benutzerrolle werden
- * dann alle Zugriffsrechte, sowie Beschränkungen in der Anwendung geregelt.
- * Darüber hinaus enthält das User-Objekt die meisten wichtigen oder unwichtigen
- * Informationen über den Benutzer (wie z.B. Spitzname, Beschreibung,
+ * Um am Spiel teilzunehmen muss man sich als Benutzer fï¿½r die Anwendung
+ * registrieren. ï¿½ber die dem Benutzerkonto zugewiesene Benutzerrolle werden
+ * dann alle Zugriffsrechte, sowie Beschrï¿½nkungen in der Anwendung geregelt.
+ * Darï¿½ber hinaus enthï¿½lt das User-Objekt die meisten wichtigen oder unwichtigen
+ * Informationen ï¿½ber den Benutzer (wie z.B. Spitzname, Beschreibung,
  * Geburtsdatum, etc.) Dabei sind die meisten Angaben jedoch freiwillig.
  * 
  * @author ultimate
@@ -55,18 +55,18 @@ public class User extends ActivatableInstance<Long>
 {
 	/**
 	 * Benutzername:
-	 * Dieser Name muss einmalig ohne Berücksichtigung der Groß- und
+	 * Dieser Name muss einmalig ohne Berï¿½cksichtigung der Groï¿½- und
 	 * Kleinschreibung sein!
 	 */
 	protected String					username;
 	/**
 	 * E-Mail-Adresse:
-	 * Muss einmalig sein. Kann i.d.R. nicht geändert werden.
+	 * Muss einmalig sein. Kann i.d.R. nicht geï¿½ndert werden.
 	 */
 	protected String					email;
 
 	/**
-	 * Passwort (wird verschlüsselt in der DB gespeichert)
+	 * Passwort (wird verschlï¿½sselt in der DB gespeichert)
 	 */
 	protected String					password;
 
@@ -75,7 +75,7 @@ public class User extends ActivatableInstance<Long>
 	 */
 	protected UserRole					role;
 	/**
-	 * Datum, zu dem die Benutzerrolle für diesen Benutzer/Spieler abläuft
+	 * Datum, zu dem die Benutzerrolle fï¿½r diesen Benutzer/Spieler ablï¿½uft
 	 * Wenn die Benutzerrolle abgelaufen ist, wird der Spieler wieder zum
 	 * 'NORMAL_USER'
 	 */
@@ -86,7 +86,7 @@ public class User extends ActivatableInstance<Long>
 	 */
 	protected Date						registrationDate;
 	/**
-	 * Datum der Löschung des Kontos
+	 * Datum der Lï¿½schung des Kontos
 	 */
 	protected Date						deleteDate;
 	/**
@@ -94,7 +94,7 @@ public class User extends ActivatableInstance<Long>
 	 */
 	protected EnumAccountStatus			accountStatus;
 	/**
-	 * Datum, zu dem der Kontostatus abläuft
+	 * Datum, zu dem der Kontostatus ablï¿½uft
 	 * Wenn der Kontostatus abgelaufen ist, wird der Kontostatus wieder auf
 	 * 'active' gesetzt.
 	 */
@@ -148,11 +148,11 @@ public class User extends ActivatableInstance<Long>
 	protected EnumDateFormat			dateFormat;
 
 	/**
-	 * Spieleinstellung: Werden erweiterte Menüs verwendet?
+	 * Spieleinstellung: Werden erweiterte Menï¿½s verwendet?
 	 */
 	protected boolean					usingAdvancedMenu;
 	/**
-	 * Spieleinstellung: Sollen spielerklärende Tooltips gezeigt werden?
+	 * Spieleinstellung: Sollen spielerklï¿½rende Tooltips gezeigt werden?
 	 */
 	protected boolean					usingTooltips;
 	/**
@@ -166,7 +166,7 @@ public class User extends ActivatableInstance<Long>
 	 */
 	protected int						sessionTimeout;
 	/**
-	 * Datum der letzten Aktivität
+	 * Datum der letzten Aktivitï¿½t
 	 */
 	protected Date						lastActiveDate;
 
@@ -190,7 +190,7 @@ public class User extends ActivatableInstance<Long>
 	 */
 	protected List<UserContact>			userContacts2;
 	/**
-	 * Temporäre zusammengesetzte Liste aus userContacts1 & userContacts2
+	 * Temporï¿½re zusammengesetzte Liste aus userContacts1 & userContacts2
 	 */
 	protected List<UserContact>			userContacts;
 
@@ -203,7 +203,7 @@ public class User extends ActivatableInstance<Long>
 
 	/**
 	 * Benutzername:
-	 * Dieser Name muss einmalig ohne Berücksichtigung der Groß- und
+	 * Dieser Name muss einmalig ohne Berï¿½cksichtigung der Groï¿½- und
 	 * Kleinschreibung sein!
 	 * 
 	 * @return username
@@ -216,7 +216,7 @@ public class User extends ActivatableInstance<Long>
 
 	/**
 	 * E-Mail-Adresse:
-	 * Muss einmalig sein. Kann i.d.R. nicht geändert werden.
+	 * Muss einmalig sein. Kann i.d.R. nicht geï¿½ndert werden.
 	 * 
 	 * @return email
 	 */
@@ -227,7 +227,7 @@ public class User extends ActivatableInstance<Long>
 	}
 
 	/**
-	 * Passwort (wird verschlüsselt in der DB gespeichert)
+	 * Passwort (wird verschlï¿½sselt in der DB gespeichert)
 	 * 
 	 * @return password
 	 */
@@ -250,7 +250,7 @@ public class User extends ActivatableInstance<Long>
 	}
 
 	/**
-	 * Datum, zu dem die Benutzerrolle für diesen Benutzer abläuft
+	 * Datum, zu dem die Benutzerrolle fï¿½r diesen Benutzer ablï¿½uft
 	 * Wenn die Benutzerrolle abgelaufen ist, wird der Benutzer wieder zum
 	 * 'NORMAL_USER'
 	 * 
@@ -276,7 +276,7 @@ public class User extends ActivatableInstance<Long>
 	}
 
 	/**
-	 * Datum der Löschung des Kontos
+	 * Datum der Lï¿½schung des Kontos
 	 * 
 	 * @return deleteDate
 	 */
@@ -300,7 +300,7 @@ public class User extends ActivatableInstance<Long>
 	}
 
 	/**
-	 * Datum, zu dem der Kontostatus abläuft
+	 * Datum, zu dem der Kontostatus ablï¿½uft
 	 * Wenn der Kontostatus abgelaufen ist, wird der Kontostatus wieder auf
 	 * 'active' gesetzt.
 	 * 
@@ -440,7 +440,7 @@ public class User extends ActivatableInstance<Long>
 	}
 
 	/**
-	 * Spieleinstellung: Werden erweiterte Menüs verwendet?
+	 * Spieleinstellung: Werden erweiterte Menï¿½s verwendet?
 	 * 
 	 * @return usingAdvancedMenu
 	 */
@@ -451,7 +451,7 @@ public class User extends ActivatableInstance<Long>
 	}
 
 	/**
-	 * Spieleinstellung: Sollen spielerklärende Tooltips gezeigt werden?
+	 * Spieleinstellung: Sollen spielerklï¿½rende Tooltips gezeigt werden?
 	 * 
 	 * @return usingTooltips
 	 */
@@ -486,7 +486,7 @@ public class User extends ActivatableInstance<Long>
 	}
 
 	/**
-	 * Datum der letzten Aktivität
+	 * Datum der letzten Aktivitï¿½t
 	 * 
 	 * @return lastActiveDate
 	 */
@@ -543,7 +543,7 @@ public class User extends ActivatableInstance<Long>
 	}
 
 	/**
-	 * Temporäre zusammengesetzte Liste aus userContacts1 & userContacts2
+	 * Temporï¿½re zusammengesetzte Liste aus userContacts1 & userContacts2
 	 * 
 	 * @return userContacts
 	 */
@@ -561,7 +561,7 @@ public class User extends ActivatableInstance<Long>
 
 	/**
 	 * Benutzername:
-	 * Dieser Name muss einmalig ohne Berücksichtigung der Groß- und
+	 * Dieser Name muss einmalig ohne Berï¿½cksichtigung der Groï¿½- und
 	 * Kleinschreibung sein!
 	 * 
 	 * @param username - der Benutzername
@@ -573,7 +573,7 @@ public class User extends ActivatableInstance<Long>
 
 	/**
 	 * E-Mail-Adresse:
-	 * Muss einmalig sein. Kann i.d.R. nicht geändert werden.
+	 * Muss einmalig sein. Kann i.d.R. nicht geï¿½ndert werden.
 	 * 
 	 * @param email - die e-Mail-Adresse
 	 */
@@ -583,9 +583,9 @@ public class User extends ActivatableInstance<Long>
 	}
 
 	/**
-	 * Passwort (wird verschlüsselt in der DB gespeichert)
+	 * Passwort (wird verschlï¿½sselt in der DB gespeichert)
 	 * 
-	 * @param password - das Passwort (verschlüsselt)
+	 * @param password - das Passwort (verschlï¿½sselt)
 	 */
 	public void setPassword(String password)
 	{
@@ -603,7 +603,7 @@ public class User extends ActivatableInstance<Long>
 	}
 
 	/**
-	 * Datum, zu dem die Benutzerrolle für diesen Benutzer abläuft
+	 * Datum, zu dem die Benutzerrolle fï¿½r diesen Benutzer ablï¿½uft
 	 * Wenn die Benutzerrolle abgelaufen ist, wird der Benutzer wieder zum
 	 * 'NORMAL_USER'
 	 * 
@@ -625,7 +625,7 @@ public class User extends ActivatableInstance<Long>
 	}
 
 	/**
-	 * Datum der Löschung des Kontos
+	 * Datum der Lï¿½schung des Kontos
 	 * 
 	 * @param deleteDate - das Datum
 	 */
@@ -645,7 +645,7 @@ public class User extends ActivatableInstance<Long>
 	}
 
 	/**
-	 * Datum, zu dem der Kontostatus abläuft
+	 * Datum, zu dem der Kontostatus ablï¿½uft
 	 * Wenn der Kontostatus abgelaufen ist, wird der Kontostatus wieder auf
 	 * 'active' gesetzt.
 	 * 
@@ -770,7 +770,7 @@ public class User extends ActivatableInstance<Long>
 	}
 
 	/**
-	 * Spieleinstellung: Werden erweiterte Menüs verwendet?
+	 * Spieleinstellung: Werden erweiterte Menï¿½s verwendet?
 	 * 
 	 * @param usingAdvancedMenu - true oder false
 	 */
@@ -780,7 +780,7 @@ public class User extends ActivatableInstance<Long>
 	}
 
 	/**
-	 * Spieleinstellung: Sollen spielerklärende Tooltips gezeigt werden?
+	 * Spieleinstellung: Sollen spielerklï¿½rende Tooltips gezeigt werden?
 	 * 
 	 * @param usingTooltips - true oder false
 	 */
@@ -812,7 +812,7 @@ public class User extends ActivatableInstance<Long>
 	}
 
 	/**
-	 * Datum der letzten Aktivität
+	 * Datum der letzten Aktivitï¿½t
 	 * 
 	 * @param lastActiveDate - das Datum
 	 */

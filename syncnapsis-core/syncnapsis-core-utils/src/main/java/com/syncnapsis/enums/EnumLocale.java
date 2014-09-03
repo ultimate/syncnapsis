@@ -1,5 +1,5 @@
 /**
- * Syncnapsis Framework - Copyright (c) 2012 ultimate
+ * Syncnapsis Framework - Copyright (c) 2012-2014 ultimate
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms of
  * the GNU General Public License as published by the Free Software Foundation; either version
@@ -17,13 +17,13 @@ package com.syncnapsis.enums;
 import java.util.Locale;
 
 /**
- * Enum für die Spezifizierung der Sprache für die Darstellung der Oberfläche.
- * Jeder User kann seine Sprache aus dieser Liste auswählen. Auf diese Weise ist
- * man nicht von der Locale-Einstellung des Browsers abhängig und es wird
- * zugleich garantiert, dass nur Sprachen ausgewählt werden können, für die auch
- * eine Übersetzung existiert.
- * Für die Korrekte Benutzung von valueOfIgnoreCase(String name), sollten alle
- * Namen der Enum-Werte nur aus Großbuchstaben bestehen.
+ * Enum fï¿½r die Spezifizierung der Sprache fï¿½r die Darstellung der Oberflï¿½che.
+ * Jeder User kann seine Sprache aus dieser Liste auswï¿½hlen. Auf diese Weise ist
+ * man nicht von der Locale-Einstellung des Browsers abhï¿½ngig und es wird
+ * zugleich garantiert, dass nur Sprachen ausgewï¿½hlt werden kï¿½nnen, fï¿½r die auch
+ * eine ï¿½bersetzung existiert.
+ * Fï¿½r die Korrekte Benutzung von valueOfIgnoreCase(String name), sollten alle
+ * Namen der Enum-Werte nur aus Groï¿½buchstaben bestehen.
  * 
  * @author ultimate
  */
@@ -52,10 +52,10 @@ public enum EnumLocale
 	/**
 	 * Eine Variante von Enum.valueOf(String name), nur case-insensitiv. Dazu
 	 * wird der Name nach Upper-Case transformiert, da in dieser Klasse alle
-	 * Werte nur aus Großbuchstaben bestehen.
+	 * Werte nur aus Groï¿½buchstaben bestehen.
 	 * 
 	 * @param name - der nachzuschlagende Name der EnumLocale
-	 * @return das zugehörige Enum zum gegebenen Namen
+	 * @return das zugehï¿½rige Enum zum gegebenen Namen
 	 */
 	public static EnumLocale valueOfIgnoreCase(String name)
 	{
@@ -63,7 +63,7 @@ public enum EnumLocale
 	}
 
 	/**
-	 * Gibt die default Locale zurück: EN
+	 * Gibt die default Locale zurï¿½ck: EN
 	 * 
 	 * @return die default Locale
 	 */

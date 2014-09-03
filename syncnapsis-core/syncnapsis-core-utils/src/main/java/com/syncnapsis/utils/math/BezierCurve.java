@@ -1,5 +1,5 @@
 /**
- * Syncnapsis Framework - Copyright (c) 2012 ultimate
+ * Syncnapsis Framework - Copyright (c) 2012-2014 ultimate
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms of
  * the GNU General Public License as published by the Free Software Foundation; either version
@@ -19,13 +19,13 @@ import java.awt.geom.PathIterator;
 import org.springframework.util.Assert;
 
 /**
- * Klasse für die Repräsentation und Berechnung einer Bezierkurve.<br/>
- * Die Bezierkurve lässt sich je nach Grad (linear, quadratisch oder kubisch) in
+ * Klasse fï¿½r die Reprï¿½sentation und Berechnung einer Bezierkurve.<br/>
+ * Die Bezierkurve lï¿½sst sich je nach Grad (linear, quadratisch oder kubisch) in
  * jeder Koordinate durch ein Polynom des entsprechenden Grades berechnen. Dazu
  * kann getCoordsAt(...) mit einem Parameter zwischen 0 und 1 aufgerufen werden.
- * Die Koeffizienten der Polynome werden aus den übergebenen Punkten berechnet.
- * Dabei stehen in coords jeweils gerade Indizes (0,2,4,6) für die x-Koordinaten
- * der bis zu 6 Punkte und die ungeraden Indizes (1,3,5,7) für die
+ * Die Koeffizienten der Polynome werden aus den ï¿½bergebenen Punkten berechnet.
+ * Dabei stehen in coords jeweils gerade Indizes (0,2,4,6) fï¿½r die x-Koordinaten
+ * der bis zu 6 Punkte und die ungeraden Indizes (1,3,5,7) fï¿½r die
  * y-Koordinaten.
  * 
  * @author ultimate
@@ -33,20 +33,20 @@ import org.springframework.util.Assert;
 public class BezierCurve
 {
 	/**
-	 * Konstante für eine Gerade. Es sind 2 Punkte für die Definition notwendig.
+	 * Konstante fï¿½r eine Gerade. Es sind 2 Punkte fï¿½r die Definition notwendig.
 	 * 
 	 * @see PathIterator#SEG_LINETO
 	 */
 	public static final int	LINEAR	= PathIterator.SEG_LINETO;
 	/**
-	 * Konstante für einer quadratischen Funktion. Es sind 3 Punkte für die
+	 * Konstante fï¿½r einer quadratischen Funktion. Es sind 3 Punkte fï¿½r die
 	 * Definition notwendig.
 	 * 
 	 * @see PathIterator#SEG_QUADTO
 	 */
 	public static final int	QUADRIC	= PathIterator.SEG_QUADTO;
 	/**
-	 * Konstante für eine kubischen Funktion. Es sind 4 Punkte für die
+	 * Konstante fï¿½r eine kubischen Funktion. Es sind 4 Punkte fï¿½r die
 	 * Definition notwendig.
 	 * 
 	 * @see PathIterator#SEG_CUBICTO
@@ -62,11 +62,11 @@ public class BezierCurve
 	 */
 	private double[]		coords;
 	/**
-	 * Koeffizienten des Polynoms für die x-Koordinate
+	 * Koeffizienten des Polynoms fï¿½r die x-Koordinate
 	 */
 	private double[]		factorsX;
 	/**
-	 * Koeffizienten des Polynoms für die y-Koordinate
+	 * Koeffizienten des Polynoms fï¿½r die y-Koordinate
 	 */
 	private double[]		factorsY;
 
@@ -129,7 +129,7 @@ public class BezierCurve
 	}
 
 	/**
-	 * Koeffizienten des Polynoms für die x-Koordinate
+	 * Koeffizienten des Polynoms fï¿½r die x-Koordinate
 	 * 
 	 * @return factorsX
 	 */
@@ -139,7 +139,7 @@ public class BezierCurve
 	}
 
 	/**
-	 * Koeffizienten des Polynoms für die y-Koordinate
+	 * Koeffizienten des Polynoms fï¿½r die y-Koordinate
 	 * 
 	 * @return factorsY
 	 */
@@ -150,10 +150,10 @@ public class BezierCurve
 
 	/**
 	 * Berechnet die Koordinaten der Bezierkurve an einer bestimmten Stelle t.
-	 * Für t=0 ergibt sich dabei der erste Punkt von coords, für t=1 der letzte
+	 * Fï¿½r t=0 ergibt sich dabei der erste Punkt von coords, fï¿½r t=1 der letzte
 	 * Punkt von coords.
 	 * 
-	 * @param t - die Stelle für die Berechnung der Koordinaten
+	 * @param t - die Stelle fï¿½r die Berechnung der Koordinaten
 	 * @return die Koordinaten x und y
 	 */
 	public double[] getCoordsAt(double t)

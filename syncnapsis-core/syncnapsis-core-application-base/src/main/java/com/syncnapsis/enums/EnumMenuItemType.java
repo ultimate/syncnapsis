@@ -1,5 +1,5 @@
 /**
- * Syncnapsis Framework - Copyright (c) 2012 ultimate
+ * Syncnapsis Framework - Copyright (c) 2012-2014 ultimate
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms of
  * the GNU General Public License as published by the Free Software Foundation; either version
@@ -15,7 +15,7 @@
 package com.syncnapsis.enums;
 
 /**
- * Enum für die Spezifizierung der Haupttypen der Knoten eines Menu-Baums. Die
+ * Enum fï¿½r die Spezifizierung der Haupttypen der Knoten eines Menu-Baums. Die
  * Knoten werden beim Rendern des Baumes gesondert behandelt und auf
  * verschiedene Weise dargestellt.
  * 
@@ -24,16 +24,16 @@ package com.syncnapsis.enums;
 public enum EnumMenuItemType
 {
 	/**
-	 * Wurzelknoten. Dient als Ausgangspunkt für das Laden eines Baumes
+	 * Wurzelknoten. Dient als Ausgangspunkt fï¿½r das Laden eines Baumes
 	 */
 	root,
 	/**
-	 * Knoten. Gewöhnliches Element innerhalb des Baumes
+	 * Knoten. Gewï¿½hnliches Element innerhalb des Baumes
 	 */
 	node,
 	/**
 	 * Trennelement. Dient der Formatierung des Baumes und der optischen
-	 * Trennung mehrere Menübereiche der gleichen Ebene von einander.
+	 * Trennung mehrere Menï¿½bereiche der gleichen Ebene von einander.
 	 */
 	separator;
 }

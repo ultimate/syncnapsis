@@ -1,5 +1,5 @@
 /**
- * Syncnapsis Framework - Copyright (c) 2012 ultimate
+ * Syncnapsis Framework - Copyright (c) 2012-2014 ultimate
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms of
  * the GNU General Public License as published by the Free Software Foundation; either version
@@ -19,21 +19,21 @@ import com.syncnapsis.data.model.PlayerRole;
 import com.syncnapsis.data.service.PlayerRoleManager;
 
 /**
- * Manager-Implementierung für den Zugriff auf PlayerRole.
+ * Manager-Implementierung fï¿½r den Zugriff auf PlayerRole.
  * 
  * @author ultimate
  */
 public class PlayerRoleManagerImpl extends GenericNameManagerImpl<PlayerRole, Long> implements PlayerRoleManager
 {
 	/**
-	 * UserRoleDao für den Datenbankzugriff
+	 * UserRoleDao fï¿½r den Datenbankzugriff
 	 */
 	private PlayerRoleDao	playerRoleDao;
 
 	/**
 	 * Standard Constructor
 	 * 
-	 * @param playerRoleDao - PlayerRoleDao für den Datenbankzugriff
+	 * @param playerRoleDao - PlayerRoleDao fï¿½r den Datenbankzugriff
 	 */
 	public PlayerRoleManagerImpl(PlayerRoleDao playerRoleDao)
 	{

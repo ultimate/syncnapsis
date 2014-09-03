@@ -1,5 +1,5 @@
 /**
- * Syncnapsis Framework - Copyright (c) 2012 ultimate
+ * Syncnapsis Framework - Copyright (c) 2012-2014 ultimate
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms of
  * the GNU General Public License as published by the Free Software Foundation; either version
@@ -21,20 +21,20 @@ import com.syncnapsis.data.model.MessengerContact;
 import com.syncnapsis.data.service.MessengerContactManager;
 
 /**
- * Manager-Implementierung für den Zugriff auf MessengerContact.
+ * Manager-Implementierung fï¿½r den Zugriff auf MessengerContact.
  * 
  * @author ultimate
  */
 public class MessengerContactManagerImpl extends GenericManagerImpl<MessengerContact, Long> implements MessengerContactManager
 {
 	/**
-	 * MessengerContactDao für den Datenbankzugriff
+	 * MessengerContactDao fï¿½r den Datenbankzugriff
 	 */
 	protected MessengerContactDao messengerContactDao;
 	
 	/**
 	 * Standard-Constructor
-	 * @param messengerContactDao - MessengerContactDao für den Datenbankzugriff
+	 * @param messengerContactDao - MessengerContactDao fï¿½r den Datenbankzugriff
 	 */
 	public MessengerContactManagerImpl(MessengerContactDao messengerContactDao)
 	{

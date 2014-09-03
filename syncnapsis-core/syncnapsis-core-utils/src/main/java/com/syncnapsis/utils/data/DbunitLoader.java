@@ -1,5 +1,5 @@
 /**
- * Syncnapsis Framework - Copyright (c) 2012 ultimate
+ * Syncnapsis Framework - Copyright (c) 2012-2014 ultimate
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms of
  * the GNU General Public License as published by the Free Software Foundation; either version
@@ -41,7 +41,7 @@ import org.dbunit.dataset.xml.XmlDataSetWriter;
 import org.dbunit.operation.DatabaseOperation;
 
 /**
- * Klasse um über Dbunit die Datenbank zu exportieren, oder um Daten in die
+ * Klasse um ï¿½ber Dbunit die Datenbank zu exportieren, oder um Daten in die
  * Datenbank zu importieren
  * 
  * @author ultimate
@@ -51,12 +51,12 @@ public class DbunitLoader
 	/**
 	 * Herstellen einer Dbunit Datenbankverbindung.
 	 * 
-	 * @param driverClass - Treiber-Klasse für die DB-Verbindung
-	 * @param jdbcConnection - JDBC-URL für die DB-Verbindung
-	 * @param username - Benutzername für die DB-Verbindung (kann null sein)
-	 * @param password - Password für die DB-Verbindung (kann mit username
+	 * @param driverClass - Treiber-Klasse fï¿½r die DB-Verbindung
+	 * @param jdbcConnection - JDBC-URL fï¿½r die DB-Verbindung
+	 * @param username - Benutzername fï¿½r die DB-Verbindung (kann null sein)
+	 * @param password - Password fï¿½r die DB-Verbindung (kann mit username
 	 *            zusammen null sein)
-	 * @return eine IDatabaseConnection für die Verwendung in Dbunit
+	 * @return eine IDatabaseConnection fï¿½r die Verwendung in Dbunit
 	 * @throws ClassNotFoundException - wenn der Treiber nicht gefunden wird
 	 * @throws SQLException - wenn keine Verbindung zur DB hergestellt werden
 	 *             kann
@@ -80,12 +80,12 @@ public class DbunitLoader
 	 * {@link DbunitLoader#getConnection(String, String, String, String)} und ruft
 	 * {@link DbunitLoader#fullDatabaseImport(IDatabaseConnection, File, String...)} auf.
 	 * 
-	 * @param driverClass - Treiber-Klasse für die DB-Verbindung
-	 * @param jdbcConnection - JDBC-URL für die DB-Verbindung
-	 * @param username - Benutzername für die DB-Verbindung (kann null sein)
-	 * @param password - Password für die DB-Verbindung (kann mit username
+	 * @param driverClass - Treiber-Klasse fï¿½r die DB-Verbindung
+	 * @param jdbcConnection - JDBC-URL fï¿½r die DB-Verbindung
+	 * @param username - Benutzername fï¿½r die DB-Verbindung (kann null sein)
+	 * @param password - Password fï¿½r die DB-Verbindung (kann mit username
 	 *            zusammen null sein)
-	 * @param file - die Eingabeatei für den Import
+	 * @param file - die Eingabeatei fï¿½r den Import
 	 * @param flat - use flat xml format?
 	 * @param excludeTableNames - eine optionale Liste der ausgeschlossenen
 	 *            Tabellennamen. Wenn sie leer ist werden alle Tabellen
@@ -94,7 +94,7 @@ public class DbunitLoader
 	 * @throws SQLException - wenn keine Verbindung zur DB hergestellt werden
 	 *             kann
 	 * @throws DatabaseUnitException - wenn ein Fehler beim Import auftritt
-	 * @throws IOException - wenn die Importdatei ungültig ist oder nicht
+	 * @throws IOException - wenn die Importdatei ungï¿½ltig ist oder nicht
 	 *             gelesen werden kann
 	 */
 	public static void fullDatabaseImport(String driverClass, String jdbcConnection, String username, String password, File file, boolean flat,
@@ -104,20 +104,20 @@ public class DbunitLoader
 	}
 
 	/**
-	 * Löscht alle existierenden Daten aus denen in der Eingabeatei enthaltenen
-	 * Tabellen und fügt die neuen Daten ein.
+	 * Lï¿½scht alle existierenden Daten aus denen in der Eingabeatei enthaltenen
+	 * Tabellen und fï¿½gt die neuen Daten ein.
 	 * 
-	 * @param connection - eine IDatabaseConnection für die Verwendung in Dbunit
-	 * @param file - die Eingabeatei für den Import
+	 * @param connection - eine IDatabaseConnection fï¿½r die Verwendung in Dbunit
+	 * @param file - die Eingabeatei fï¿½r den Import
 	 * @param flat - use flat xml format?
 	 * @param excludeTableNames - eine optionale Liste der ausgeschlossenen
 	 *            Tabellennamen. Wenn sie leer ist werden alle Tabellen
 	 *            behandelt.
-	 * @throws IOException - wenn die Importdatei ungültig ist oder nicht
+	 * @throws IOException - wenn die Importdatei ungï¿½ltig ist oder nicht
 	 *             gelesen werden kann
 	 * @throws DatabaseUnitException - wenn ein Fehler beim Import auftritt
 	 * @throws SQLException - wenn keine Verbindung zur DB hergestellt werden
-	 *             kann oder der Import schief läuft
+	 *             kann oder der Import schief lï¿½uft
 	 */
 	public static void fullDatabaseImport(IDatabaseConnection connection, File file, boolean flat, String... excludeTableNames) throws IOException,
 			DatabaseUnitException, SQLException
@@ -153,21 +153,21 @@ public class DbunitLoader
 	 * {@link DbunitLoader#getConnection(String, String, String, String)} und ruft
 	 * {@link DbunitLoader#cleanDatabase(IDatabaseConnection, File, String...)} auf.
 	 * 
-	 * @param driverClass - Treiber-Klasse für die DB-Verbindung
-	 * @param jdbcConnection - JDBC-URL für die DB-Verbindung
-	 * @param username - Benutzername für die DB-Verbindung (kann null sein)
-	 * @param password - Password für die DB-Verbindung (kann mit username
+	 * @param driverClass - Treiber-Klasse fï¿½r die DB-Verbindung
+	 * @param jdbcConnection - JDBC-URL fï¿½r die DB-Verbindung
+	 * @param username - Benutzername fï¿½r die DB-Verbindung (kann null sein)
+	 * @param password - Password fï¿½r die DB-Verbindung (kann mit username
 	 *            zusammen null sein)
-	 * @param file - die Eingabeatei für den Import
+	 * @param file - die Eingabeatei fï¿½r den Import
 	 * @param flat - use flat xml format?
 	 * @param excludeTableNames - eine optionale Liste der ausgeschlossenen
 	 *            Tabellennamen. Wenn sie leer ist werden alle Tabellen
 	 *            behandelt.
-	 * @throws IOException - wenn die Importdatei ungültig ist oder nicht
+	 * @throws IOException - wenn die Importdatei ungï¿½ltig ist oder nicht
 	 *             gelesen werden kann
 	 * @throws DatabaseUnitException - wenn ein Fehler beim Import auftritt
 	 * @throws SQLException - wenn keine Verbindung zur DB hergestellt werden
-	 *             kann oder der Import schief läuft
+	 *             kann oder der Import schief lï¿½uft
 	 * @throws ClassNotFoundException
 	 */
 	public static void cleanDatabase(String driverClass, String jdbcConnection, String username, String password, File file,
@@ -177,20 +177,20 @@ public class DbunitLoader
 	}
 
 	/**
-	 * Löscht alle existierenden Daten aus denen in der Eingabeatei enthaltenen
+	 * Lï¿½scht alle existierenden Daten aus denen in der Eingabeatei enthaltenen
 	 * Tabellen.
 	 * 
-	 * @param connection - eine IDatabaseConnection für die Verwendung in Dbunit
-	 * @param file - die Eingabeatei für den Import
+	 * @param connection - eine IDatabaseConnection fï¿½r die Verwendung in Dbunit
+	 * @param file - die Eingabeatei fï¿½r den Import
 	 * @param flat - use flat xml format?
 	 * @param excludeTableNames - eine optionale Liste der ausgeschlossenen
 	 *            Tabellennamen. Wenn sie leer ist werden alle Tabellen
 	 *            behandelt.
-	 * @throws IOException - wenn die Importdatei ungültig ist oder nicht
+	 * @throws IOException - wenn die Importdatei ungï¿½ltig ist oder nicht
 	 *             gelesen werden kann
 	 * @throws DatabaseUnitException - wenn ein Fehler beim Import auftritt
 	 * @throws SQLException - wenn keine Verbindung zur DB hergestellt werden
-	 *             kann oder der Import schief läuft
+	 *             kann oder der Import schief lï¿½uft
 	 */
 	public static void cleanDatabase(IDatabaseConnection connection, File file, String... excludeTableNames) throws IOException,
 			DatabaseUnitException, SQLException
@@ -214,12 +214,12 @@ public class DbunitLoader
 	 * {@link DbunitLoader#getConnection(String, String, String, String)} und ruft
 	 * {@link DbunitLoader#fullDatabaseExport(IDatabaseConnection, File, String, String...)} auf.
 	 * 
-	 * @param driverClass - Treiber-Klasse für die DB-Verbindung
-	 * @param jdbcConnection - JDBC-URL für die DB-Verbindung
-	 * @param username - Benutzername für die DB-Verbindung (kann null sein)
-	 * @param password - Password für die DB-Verbindung (kann mit username
+	 * @param driverClass - Treiber-Klasse fï¿½r die DB-Verbindung
+	 * @param jdbcConnection - JDBC-URL fï¿½r die DB-Verbindung
+	 * @param username - Benutzername fï¿½r die DB-Verbindung (kann null sein)
+	 * @param password - Password fï¿½r die DB-Verbindung (kann mit username
 	 *            zusammen null sein)
-	 * @param file - die Ausgabedatei für den Export
+	 * @param file - die Ausgabedatei fï¿½r den Export
 	 * @param docTypeSystemId - eine optionale Angabe einer DTD
 	 * @param flat - use flat xml format?
 	 * @param excludeTableNames - eine optionale Liste der ausgeschlossenen
@@ -228,7 +228,7 @@ public class DbunitLoader
 	 * @throws ClassNotFoundException - wenn der Treiber nicht gefunden wird
 	 * @throws SQLException - wenn keine Verbindung zur DB hergestellt werden
 	 *             kann
-	 * @throws IOException - wenn die Exportdatei ungültig ist oder nicht
+	 * @throws IOException - wenn die Exportdatei ungï¿½ltig ist oder nicht
 	 *             geschrieben werden kann
 	 * @throws DatabaseUnitException - wenn keine Dbunit Verbindung zur DB
 	 *             hergestellt werden kann
@@ -241,11 +241,11 @@ public class DbunitLoader
 	}
 
 	/**
-	 * Speichert alle in der Datenbank vorhandenen Datensätze im xml-Format in
+	 * Speichert alle in der Datenbank vorhandenen Datensï¿½tze im xml-Format in
 	 * der Ausgabedatei.
 	 * 
-	 * @param connection - eine IDatabaseConnection für die Verwendung in Dbunit
-	 * @param file - die Ausgabedatei für den Export
+	 * @param connection - eine IDatabaseConnection fï¿½r die Verwendung in Dbunit
+	 * @param file - die Ausgabedatei fï¿½r den Export
 	 * @param docTypeSystemId - eine optionale Angabe einer DTD
 	 * @param flat - use flat xml format?
 	 * @param excludeTableNames - eine optionale Liste der ausgeschlossenen
@@ -253,8 +253,8 @@ public class DbunitLoader
 	 *            behandelt.
 	 * @throws DataSetException - wenn ein Fehler beim Export auftritt
 	 * @throws SQLException - wenn keine Verbindung zur DB hergestellt werden
-	 *             kann oder der Export schief läuft
-	 * @throws IOException - wenn die Exportdatei ungültig ist oder nicht
+	 *             kann oder der Export schief lï¿½uft
+	 * @throws IOException - wenn die Exportdatei ungï¿½ltig ist oder nicht
 	 *             geschrieben werden kann
 	 */
 	public static void fullDatabaseExport(IDatabaseConnection connection, File file, String docTypeSystemId, boolean flat,

@@ -1,5 +1,5 @@
 /**
- * Syncnapsis Framework - Copyright (c) 2012 ultimate
+ * Syncnapsis Framework - Copyright (c) 2012-2014 ultimate
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms of
  * the GNU General Public License as published by the Free Software Foundation; either version
@@ -24,18 +24,18 @@ import com.syncnapsis.utils.math.BezierCurve;
 import com.syncnapsis.utils.math.Vector;
 
 /**
- * Util-Klasse für die Berechnung mathematischer Formeln und Funktionen
+ * Util-Klasse fï¿½r die Berechnung mathematischer Formeln und Funktionen
  * 
  * @author ultimate
  */
 public abstract class MathUtil
 {
 	/**
-	 * Normale Schrittgröße für die Approximation einer Bezierkurve
+	 * Normale Schrittgrï¿½ï¿½e fï¿½r die Approximation einer Bezierkurve
 	 */
 	private static double	stepSize		= 0.05;
 	/**
-	 * Feinere Schrittgröße für die Approximation einer Bezierkurve
+	 * Feinere Schrittgrï¿½ï¿½e fï¿½r die Approximation einer Bezierkurve
 	 */
 	private static double	stepSizeSmall	= 0.005;
 
@@ -85,11 +85,11 @@ public abstract class MathUtil
 
 	/**
 	 * Berechnung des Abstands eines Punktes p zu einer Linie. Die Linie wird durch die Punkte p1
-	 * und p2 definiert. Über das Array nearest kann der nächste Punkt n zum Punkt p auf der Geraden
-	 * zurückgegeben werden (Schnittpunkt aus Lot und Linie). Der zurückgegeben Abstand entspricht
+	 * und p2 definiert. ï¿½ber das Array nearest kann der nï¿½chste Punkt n zum Punkt p auf der Geraden
+	 * zurï¿½ckgegeben werden (Schnittpunkt aus Lot und Linie). Der zurï¿½ckgegeben Abstand entspricht
 	 * dem Abstand des Punkte p zum Punkt n. Bei der Berechnung des Abstands wird dabei die Linie
-	 * als endlich betrachtet. Liegt der Schnittpunkt des Lotes mit der Linie außerhalb der Linie,
-	 * so ist einer der Endpunkt der nächste Punkt n zu p.
+	 * als endlich betrachtet. Liegt der Schnittpunkt des Lotes mit der Linie auï¿½erhalb der Linie,
+	 * so ist einer der Endpunkt der nï¿½chste Punkt n zu p.
 	 * 
 	 * @param x - die x-Koordinate des zu untersuchenden Punkts
 	 * @param y - die y-Koordinate des zu untersuchenden Punkts
@@ -97,7 +97,7 @@ public abstract class MathUtil
 	 * @param y1 - die y-Koordinate des Startpunkts der Linie
 	 * @param x2 - die x-Koordinate des Endpunkts der Linie
 	 * @param y2 - die y-Koordinate des Endpunkts der Linie
-	 * @param nearest - ein Array für die Rückgabe des nächsten Punktes auf der Linie
+	 * @param nearest - ein Array fï¿½r die Rï¿½ckgabe des nï¿½chsten Punktes auf der Linie
 	 * @return der Abstand des Punktes p zur Linie bzw. zum Punkt n
 	 */
 	public static double distanceToLine(double x, double y, double x1, double y1, double x2, double y2, double[] nearest)
@@ -160,17 +160,17 @@ public abstract class MathUtil
 	}
 
 	/**
-	 * Berechnet den Abstand eines Punktes p zu einem Shape und den nächsten Punkt n auf dem Shape.
-	 * Es werden dazu alle Teilstücke des Shapes geprüft und der geringste Abstand ermittelt. Bei
-	 * den Teilstücken kann es sich um Linien oder Bezierkurven handeln. Es kann der nächste Punkt
-	 * n, sowie der Winkel und Abstand zu diesem Punkt in Arrays zurückgegeben werden.
+	 * Berechnet den Abstand eines Punktes p zu einem Shape und den nï¿½chsten Punkt n auf dem Shape.
+	 * Es werden dazu alle Teilstï¿½cke des Shapes geprï¿½ft und der geringste Abstand ermittelt. Bei
+	 * den Teilstï¿½cken kann es sich um Linien oder Bezierkurven handeln. Es kann der nï¿½chste Punkt
+	 * n, sowie der Winkel und Abstand zu diesem Punkt in Arrays zurï¿½ckgegeben werden.
 	 * 
 	 * @see MathUtil#distanceToLine(double, double, double, double, double, double, double[])
 	 * @see MathUtil#distanceToBezier(BezierCurve, double, double, double[], double[], boolean)
 	 * @param shape - der Shape
 	 * @param x - die x-Koordinate des zu untersuchenden Punkts
 	 * @param y - die y-Koordinate des zu untersuchenden Punkts
-	 * @param nearest - der nächste Punkt n zum Punkt p auf dem Shape
+	 * @param nearest - der nï¿½chste Punkt n zum Punkt p auf dem Shape
 	 * @param distanceAndAngle - der Abstand zwischen p und der Winkel zwischen dem Lot und dem
 	 *            Shape im Punkt n
 	 * @return der Abstand des Punktes p zum Shape bzw. zum Punkt n
@@ -248,20 +248,20 @@ public abstract class MathUtil
 	}
 
 	/**
-	 * Berechnet den Abstand eines Punktes p zu einer Bezierkurve und den nächsten Punkt n auf der
-	 * Kurve. Dazu wird die Bezierkurve numerisch approximiert und in definierten Schrittabständen
-	 * berechnet. Es kann der nächste Punkt n, sowie der Winkel und Abstand zu diesem Punkt in
-	 * Arrays zurückgegeben werden.
+	 * Berechnet den Abstand eines Punktes p zu einer Bezierkurve und den nï¿½chsten Punkt n auf der
+	 * Kurve. Dazu wird die Bezierkurve numerisch approximiert und in definierten Schrittabstï¿½nden
+	 * berechnet. Es kann der nï¿½chste Punkt n, sowie der Winkel und Abstand zu diesem Punkt in
+	 * Arrays zurï¿½ckgegeben werden.
 	 * 
 	 * @see MathUtil#stepSize
 	 * @see MathUtil#stepSizeSmall
 	 * @param b - die Bezierkurve
 	 * @param x - die x-Koordinate des zu untersuchenden Punkts
 	 * @param y - die y-Koordinate des zu untersuchenden Punkts
-	 * @param nearest - der nächste Punkt n zum Punkt p auf dem Shape
+	 * @param nearest - der nï¿½chste Punkt n zum Punkt p auf dem Shape
 	 * @param distanceAndAngle - der Abstand zwischen p und der Winkel zwischen dem Lot und der
 	 *            Kurve im Punkt n
-	 * @param highPrecision - soll die Bezierkurve mit feinerer Schrittgröße approximiert werden?
+	 * @param highPrecision - soll die Bezierkurve mit feinerer Schrittgrï¿½ï¿½e approximiert werden?
 	 * @return der Abstand des Punktes p zum Shape bzw. zum Punkt n
 	 */
 	public static double distanceToBezier(BezierCurve b, double x, double y, double[] nearest, double[] distanceAndAngle, boolean highPrecision)

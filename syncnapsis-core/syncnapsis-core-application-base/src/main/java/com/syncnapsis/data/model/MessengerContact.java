@@ -1,5 +1,5 @@
 /**
- * Syncnapsis Framework - Copyright (c) 2012 ultimate
+ * Syncnapsis Framework - Copyright (c) 2012-2014 ultimate
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms of
  * the GNU General Public License as published by the Free Software Foundation; either version
@@ -31,7 +31,7 @@ import com.syncnapsis.security.Ownable;
 
 /**
  * Model-Klasse "Messenger-Kontakt/Adresse"
- * Relation zwischen User und Messenger, die die Messenger-Adresse/ID enthält.
+ * Relation zwischen User und Messenger, die die Messenger-Adresse/ID enthï¿½lt.
  * 
  * @author ultimate
  */
@@ -45,11 +45,11 @@ public class MessengerContact extends BaseObject<Long> implements Ownable<User>
 	protected String		address;
 
 	/**
-	 * Der Benutzer zu dem die Adresse/ID gehört
+	 * Der Benutzer zu dem die Adresse/ID gehï¿½rt
 	 */
 	protected User		user;
 	/**
-	 * Der Messenger zu dem die Adresse/ID gehört
+	 * Der Messenger zu dem die Adresse/ID gehï¿½rt
 	 */
 	protected Messenger	messenger;
 
@@ -72,7 +72,7 @@ public class MessengerContact extends BaseObject<Long> implements Ownable<User>
 	}
 
 	/**
-	 * Der Benutzer zu dem die Adresse/ID gehört
+	 * Der Benutzer zu dem die Adresse/ID gehï¿½rt
 	 * 
 	 * @return user
 	 */
@@ -84,7 +84,7 @@ public class MessengerContact extends BaseObject<Long> implements Ownable<User>
 	}
 
 	/**
-	 * Der Messenger zu dem die Adresse/ID gehört
+	 * Der Messenger zu dem die Adresse/ID gehï¿½rt
 	 * 
 	 * @return messenger
 	 */
@@ -106,7 +106,7 @@ public class MessengerContact extends BaseObject<Long> implements Ownable<User>
 	}
 
 	/**
-	 * Der Benutzer zu dem die Adresse/ID gehört
+	 * Der Benutzer zu dem die Adresse/ID gehï¿½rt
 	 * 
 	 * @param user - der Benutzer
 	 */
@@ -116,7 +116,7 @@ public class MessengerContact extends BaseObject<Long> implements Ownable<User>
 	}
 
 	/**
-	 * Der Messenger zu dem die Adresse/ID gehört
+	 * Der Messenger zu dem die Adresse/ID gehï¿½rt
 	 * 
 	 * @param messenger - der Messenger
 	 */

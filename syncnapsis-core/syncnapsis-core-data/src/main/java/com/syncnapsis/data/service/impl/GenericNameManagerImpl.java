@@ -1,5 +1,5 @@
 /**
- * Syncnapsis Framework - Copyright (c) 2012 ultimate
+ * Syncnapsis Framework - Copyright (c) 2012-2014 ultimate
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms of
  * the GNU General Public License as published by the Free Software Foundation; either version
@@ -25,8 +25,8 @@ import com.syncnapsis.data.service.GenericNameManager;
 import com.syncnapsis.security.Validator;
 
 /**
- * Manager-Implementierung für den generischen Zugriff auf beliebige
- * Modell-Klassen über GenericDao.
+ * Manager-Implementierung fï¿½r den generischen Zugriff auf beliebige
+ * Modell-Klassen ï¿½ber GenericDao.
  * 
  * @author ultimate
  */
@@ -35,7 +35,7 @@ public class GenericNameManagerImpl<T extends Identifiable<PK>, PK extends Seria
 		GenericNameManager<T, PK>
 {
 	/**
-	 * GenericNameDao für den Datenbankzugriff.
+	 * GenericNameDao fï¿½r den Datenbankzugriff.
 	 */
 	protected GenericNameDao<T, PK>	genericNameDao;
 
@@ -49,7 +49,7 @@ public class GenericNameManagerImpl<T extends Identifiable<PK>, PK extends Seria
 	/**
 	 * Standard Constructor, der die DAOs speichert.
 	 * 
-	 * @param genericDao - GenericDao für den Datenbankzugriff
+	 * @param genericDao - GenericDao fï¿½r den Datenbankzugriff
 	 */
 	public GenericNameManagerImpl(final GenericNameDao<T, PK> genericNameDao)
 	{

@@ -1,5 +1,5 @@
 /**
- * Syncnapsis Framework - Copyright (c) 2012 ultimate
+ * Syncnapsis Framework - Copyright (c) 2012-2014 ultimate
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms of
  * the GNU General Public License as published by the Free Software Foundation; either version
@@ -20,31 +20,31 @@ import java.util.List;
 import com.syncnapsis.data.model.base.Identifiable;
 
 /**
- * Generische DAO (Data Access Object), die erweiterte Operationen nach Name zur Verfügung stellt.
+ * Generische DAO (Data Access Object), die erweiterte Operationen nach Name zur Verfï¿½gung stellt.
  * 
  * @param <T> die Model-Klasse
- * @param <PK> die Klasse des Primärschlüssels
+ * @param <PK> die Klasse des Primï¿½rschlï¿½ssels
  * @author ultimate
  */
 public interface GenericNameDao<T extends Identifiable<PK>, PK extends Serializable> extends GenericDao<T, PK>
 {
 	/**
-	 * Lade eine Liste aller Einträge, sortiert nach Name
+	 * Lade eine Liste aller Eintrï¿½ge, sortiert nach Name
 	 * 
-	 * @param returnOnlyActivated - sollen nur aktivierte Einträge zurückgegeben
+	 * @param returnOnlyActivated - sollen nur aktivierte Eintrï¿½ge zurï¿½ckgegeben
 	 *            werden?
-	 * @return die Liste aller Einträge
+	 * @return die Liste aller Eintrï¿½ge
 	 */
 	public List<T> getOrderedByName(boolean returnOnlyActivated);
 	
 	/**
-	 * Lade eine Liste aller Einträge, sortiert nach Name mit eingeschränktem Präfix des Namens
+	 * Lade eine Liste aller Eintrï¿½ge, sortiert nach Name mit eingeschrï¿½nktem Prï¿½fix des Namens
 	 * 
 	 * @param prefix - die Anfangsbuchstaben des Namens
-	 * @param nRows - die maximale Anzahl an zurückzugebenen Ergebnisses (negativ = alle)
-	 * @param returnOnlyActivated - sollen nur aktivierte Einträge zurückgegeben
+	 * @param nRows - die maximale Anzahl an zurï¿½ckzugebenen Ergebnisses (negativ = alle)
+	 * @param returnOnlyActivated - sollen nur aktivierte Eintrï¿½ge zurï¿½ckgegeben
 	 *            werden?
-	 * @return die Liste aller Einträge
+	 * @return die Liste aller Eintrï¿½ge
 	 */
 	public List<T> getByPrefix(String prefix, int nRows, boolean returnOnlyActivated);
 	
@@ -57,9 +57,9 @@ public interface GenericNameDao<T extends Identifiable<PK>, PK extends Serializa
 	public T getByName(String name);
 
 	/**
-	 * Prüft, ob ein gewünschter Name für diese Klasse noch verfügbar ist.
+	 * Prï¿½ft, ob ein gewï¿½nschter Name fï¿½r diese Klasse noch verfï¿½gbar ist.
 	 * 
-	 * @param name - der zu prüfende Name
+	 * @param name - der zu prï¿½fende Name
 	 * @return true oder false
 	 */
 	public boolean isNameAvailable(String name);

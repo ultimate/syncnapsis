@@ -1,5 +1,5 @@
 /**
- * Syncnapsis Framework - Copyright (c) 2012 ultimate
+ * Syncnapsis Framework - Copyright (c) 2012-2014 ultimate
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms of
  * the GNU General Public License as published by the Free Software Foundation; either version
@@ -124,13 +124,13 @@ public class UniversalDaoHibernate extends Bean implements UniversalDao
 
 	/**
 	 * Universelle Methode um eine HQL-Abfrage unter der Verwendung von
-	 * Parametern zu erstellen. Die übergebenen Parameter ersetzen im Query
+	 * Parametern zu erstellen. Die ï¿½bergebenen Parameter ersetzen im Query
 	 * verwendeten ?-Platzhalter.<br>
 	 * Bsp: createQuery("from TABLE_1 where COL_1 = ?", value)
 	 * 
 	 * @param query - die Abfrage in HQL
 	 * @param values - die einzusetzenden Parameter
-	 * @return das Query-Objekt zum Ausführen der Abfrage
+	 * @return das Query-Objekt zum Ausfï¿½hren der Abfrage
 	 */
 	protected Query createQuery(String query, Object... values)
 	{
@@ -146,7 +146,7 @@ public class UniversalDaoHibernate extends Bean implements UniversalDao
 	}
 
 	/**
-	 * Gibt aus einer Ergebnisliste den ersten Eintrag zurück, falls sie nicht leer ist, ansonsten
+	 * Gibt aus einer Ergebnisliste den ersten Eintrag zurï¿½ck, falls sie nicht leer ist, ansonsten
 	 * null.
 	 * 
 	 * @param <T> - der Typ des Ergebnisses

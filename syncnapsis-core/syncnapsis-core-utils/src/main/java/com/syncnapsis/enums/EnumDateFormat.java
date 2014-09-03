@@ -1,5 +1,5 @@
 /**
- * Syncnapsis Framework - Copyright (c) 2012 ultimate
+ * Syncnapsis Framework - Copyright (c) 2012-2014 ultimate
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms of
  * the GNU General Public License as published by the Free Software Foundation; either version
@@ -21,7 +21,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 /**
- * Enum für die Spezifizierung des Datumsformats eines Users.
+ * Enum fï¿½r die Spezifizierung des Datumsformats eines Users.
  * 
  * @author ultimate
  */
@@ -85,7 +85,7 @@ public enum EnumDateFormat
 	yMd12_minus;
 
 	/**
-	 * Gibt das default Datumsformat zurück: yMd24_minus
+	 * Gibt das default Datumsformat zurï¿½ck: yMd24_minus
 	 * 
 	 * @return das default Datumsformat
 	 */

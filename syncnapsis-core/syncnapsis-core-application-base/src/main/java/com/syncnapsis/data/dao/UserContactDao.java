@@ -1,5 +1,5 @@
 /**
- * Syncnapsis Framework - Copyright (c) 2012 ultimate
+ * Syncnapsis Framework - Copyright (c) 2012-2014 ultimate
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms of
  * the GNU General Public License as published by the Free Software Foundation; either version
@@ -19,7 +19,7 @@ import java.util.List;
 import com.syncnapsis.data.model.UserContact;
 
 /**
- * Dao-Interface für den Zugriff auf UserContact
+ * Dao-Interface fï¿½r den Zugriff auf UserContact
  * 
  * @author ultimate
  */
@@ -34,8 +34,8 @@ public interface UserContactDao extends GenericDao<UserContact, Long>
 	public List<UserContact> getByUser(Long userId);
 	
 	/**
-	 * Lädt einen UserContact anhand der beiden User. Die Reigenfolge der User muss nicht mit dem
-	 * UserContact übereinstimmen.
+	 * Lï¿½dt einen UserContact anhand der beiden User. Die Reigenfolge der User muss nicht mit dem
+	 * UserContact ï¿½bereinstimmen.
 	 * 
 	 * @param userId1 - der erste User
 	 * @param userId2 - der zweite User

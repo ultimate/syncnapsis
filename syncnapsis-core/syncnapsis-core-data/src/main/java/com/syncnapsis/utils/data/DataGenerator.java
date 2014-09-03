@@ -1,5 +1,5 @@
 /**
- * Syncnapsis Framework - Copyright (c) 2012 ultimate
+ * Syncnapsis Framework - Copyright (c) 2012-2014 ultimate
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms of
  * the GNU General Public License as published by the Free Software Foundation; either version
@@ -135,11 +135,11 @@ public abstract class DataGenerator implements InitializingBean
 			connection = DbunitLoader.getConnection(driverClass, jdbcConnection, username, password);
 			connection.getConfig().setProperty(DatabaseConfig.PROPERTY_DATATYPE_FACTORY, new PostgresqlDataTypeFactory());
 
-			// Backup der zu verändernden Tabellen
+			// Backup der zu verï¿½ndernden Tabellen
 			logger.info("creating dbunit-database-backup...");
 			DbunitLoader.fullDatabaseExport(connection, tmp, docTypeSystemId, flat, excludeTableList);
 
-			// Leeren der zu verändernden Tabellen
+			// Leeren der zu verï¿½ndernden Tabellen
 			logger.info("deleting database content...");
 			DbunitLoader.cleanDatabase(connection, tables, excludeTableList);
 
@@ -153,11 +153,11 @@ public abstract class DataGenerator implements InitializingBean
 				generateDummyData(Integer.parseInt(testDataProperties.getProperty("dummyData.amount")));
 				transaction1.commit();
 
-				// Exportieren der veränderten Tabellen mit Dbunit
+				// Exportieren der verï¿½nderten Tabellen mit Dbunit
 				logger.info("exporting testdata...");
 				DbunitLoader.fullDatabaseExport(connection, dummy, docTypeSystemId, flat, excludeTableList);
 
-				// Leeren der zu verändernden Tabellen
+				// Leeren der zu verï¿½ndernden Tabellen
 				logger.info("deleting database content...");
 				DbunitLoader.cleanDatabase(connection, tables, excludeTableList);
 			}
@@ -169,12 +169,12 @@ public abstract class DataGenerator implements InitializingBean
 				generateTestData(testDataProperties);
 				transaction2.commit();
 
-				// Exportieren der veränderten Tabellen mit Dbunit
+				// Exportieren der verï¿½nderten Tabellen mit Dbunit
 				logger.info("exporting testdata...");
 				DbunitLoader.fullDatabaseExport(connection, generated, docTypeSystemId, flat, excludeTableList);
 			}
 
-			// Wiederherstellung der veränderten Tabellen
+			// Wiederherstellung der verï¿½nderten Tabellen
 			logger.info("restoring dbunit-database-backup...");
 			DbunitLoader.fullDatabaseImport(connection, tmp, flat, excludeTableList);
 		}
@@ -200,11 +200,11 @@ public abstract class DataGenerator implements InitializingBean
 		}
 		finally
 		{
-			// Löschen der Backup-Datei
+			// Lï¿½schen der Backup-Datei
 			logger.info("deleting dbunit-database-backup-file...");
 			tmp.delete();
 
-			// Schließen der Verbindung
+			// Schlieï¿½en der Verbindung
 			if(connection != null)
 			{
 				try

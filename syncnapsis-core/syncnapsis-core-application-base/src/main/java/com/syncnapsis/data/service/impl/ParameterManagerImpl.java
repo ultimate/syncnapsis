@@ -1,5 +1,5 @@
 /**
- * Syncnapsis Framework - Copyright (c) 2012 ultimate
+ * Syncnapsis Framework - Copyright (c) 2012-2014 ultimate
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms of
  * the GNU General Public License as published by the Free Software Foundation; either version
@@ -23,21 +23,21 @@ import com.syncnapsis.data.service.ParameterManager;
 import com.syncnapsis.enums.EnumDateFormat;
 
 /**
- * Manager-Implementierung für den Zugriff auf Parameter.
+ * Manager-Implementierung fï¿½r den Zugriff auf Parameter.
  * 
  * @author ultimate
  */
 public class ParameterManagerImpl extends GenericNameManagerImpl<Parameter, Long> implements ParameterManager
 {
 	/**
-	 * ParameterDao für den Datenbankzugriff
+	 * ParameterDao fï¿½r den Datenbankzugriff
 	 */
 	protected ParameterDao	parameterDao;
 
 	/**
 	 * Standard Constructor, der die DAOs speichert.
 	 * 
-	 * @param parameterDao - ParameterDao für den Datenbankzugriff
+	 * @param parameterDao - ParameterDao fï¿½r den Datenbankzugriff
 	 */
 	public ParameterManagerImpl(ParameterDao parameterDao)
 	{

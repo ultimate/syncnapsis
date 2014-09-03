@@ -1,5 +1,5 @@
 /**
- * Syncnapsis Framework - Copyright (c) 2012 ultimate
+ * Syncnapsis Framework - Copyright (c) 2012-2014 ultimate
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms of
  * the GNU General Public License as published by the Free Software Foundation; either version
@@ -23,16 +23,16 @@ import com.syncnapsis.security.AccessRule;
 import com.syncnapsis.security.annotations.Accessible;
 
 /**
- * Abstrakte Klasse als Basis für alle Instanzen, die nicht gelöscht, sondern
- * deaktiviert werden. Beim Löschen eines solchen Objektes wird dann
- * automatische setActivated(false) aufgerufen und das Objekt anschließend
- * deaktiviert gespeichert, anstatt dies endgültig zu löschen.
+ * Abstrakte Klasse als Basis fï¿½r alle Instanzen, die nicht gelï¿½scht, sondern
+ * deaktiviert werden. Beim Lï¿½schen eines solchen Objektes wird dann
+ * automatische setActivated(false) aufgerufen und das Objekt anschlieï¿½end
+ * deaktiviert gespeichert, anstatt dies endgï¿½ltig zu lï¿½schen.
  * Deaktivierte Instanzen bleiben demnach in der Datenbank vorhanden. Dies ist
- * insbesondere für Fremschlüsselverknüpfungen hilfreich, oder wenn die Daten
- * für spätere Zwecke noch abrufbar sein sollen.
+ * insbesondere fï¿½r Fremschlï¿½sselverknï¿½pfungen hilfreich, oder wenn die Daten
+ * fï¿½r spï¿½tere Zwecke noch abrufbar sein sollen.
  * 
  * @author ultimate
- * @param <PK> - die Klasse für den Primärschlüssel
+ * @param <PK> - die Klasse fï¿½r den Primï¿½rschlï¿½ssel
  */
 @MappedSuperclass
 public abstract class ActivatableInstance<PK extends Serializable> extends BaseObject<PK>

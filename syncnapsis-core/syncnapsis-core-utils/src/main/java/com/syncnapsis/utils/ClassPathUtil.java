@@ -1,5 +1,5 @@
 /**
- * Syncnapsis Framework - Copyright (c) 2012 ultimate
+ * Syncnapsis Framework - Copyright (c) 2012-2014 ultimate
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms of
  * the GNU General Public License as published by the Free Software Foundation; either version
@@ -25,7 +25,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Hilfsklasse um nachträglich Ressourcen dem Classpath hinzuzufügen
+ * Hilfsklasse um nachtrï¿½glich Ressourcen dem Classpath hinzuzufï¿½gen
  */
 public abstract class ClassPathUtil
 {
@@ -35,16 +35,16 @@ public abstract class ClassPathUtil
 	private static final Logger logger = LoggerFactory.getLogger(ClassPathUtil.class);
 
 	/**
-	 * Hilfsvariable für URLClassLoader.class.getDeclaredMethod("addURL", parameters);
+	 * Hilfsvariable fï¿½r URLClassLoader.class.getDeclaredMethod("addURL", parameters);
 	 */
 	@SuppressWarnings("rawtypes")
 	private static final Class[]	parameters	= new Class[] { URL.class };
 
 	/**
-	 * Füge eine Datei per Pfad zum Classpath hinzu
+	 * Fï¿½ge eine Datei per Pfad zum Classpath hinzu
 	 * 
 	 * @param file - der Dateipfad
-	 * @throws IOException - wenn die Datei nicht existiert oder der Dateiname ungültig ist
+	 * @throws IOException - wenn die Datei nicht existiert oder der Dateiname ungï¿½ltig ist
 	 */
 	public static void addFileToClassPath(String file) throws IOException
 	{
@@ -52,10 +52,10 @@ public abstract class ClassPathUtil
 	}
 
 	/**
-	 * Füge eine Datei per File zum Classpath hinzu
+	 * Fï¿½ge eine Datei per File zum Classpath hinzu
 	 * 
 	 * @param file - die Datei
-	 * @throws IOException - wenn die Datei nicht existiert oder der Dateiname ungültig ist
+	 * @throws IOException - wenn die Datei nicht existiert oder der Dateiname ungï¿½ltig ist
 	 */
 	public static void addFileToClassPath(File f) throws IOException
 	{
@@ -63,10 +63,10 @@ public abstract class ClassPathUtil
 	}
 
 	/**
-	 * Füge eine Ressource per URL zum Classpath hinzu
+	 * Fï¿½ge eine Ressource per URL zum Classpath hinzu
 	 * 
 	 * @param u - die Ressource als URL
-	 * @throws IOException - wenn die Ressource nicht existiert oder ungültig ist
+	 * @throws IOException - wenn die Ressource nicht existiert oder ungï¿½ltig ist
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public static void addURLToClassPath(URL u) throws IOException

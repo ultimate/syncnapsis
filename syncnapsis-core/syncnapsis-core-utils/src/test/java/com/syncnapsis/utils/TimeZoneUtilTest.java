@@ -1,5 +1,5 @@
 /**
- * Syncnapsis Framework - Copyright (c) 2012 ultimate
+ * Syncnapsis Framework - Copyright (c) 2012-2014 ultimate
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms of
  * the GNU General Public License as published by the Free Software Foundation; either version
@@ -30,7 +30,7 @@ public class TimeZoneUtilTest extends BaseSpringContextTestCase
 		for(String currentRegion : TimeZoneUtil.getRegions())
 		{
 			logger.debug("checking timezone-region... " + currentRegion);
-			// sortierung der regionen prüfen
+			// sortierung der regionen prï¿½fen
 			assertTrue(currentRegion.compareToIgnoreCase(lastRegion) > 0);
 
 			assertNotNull(TimeZoneUtil.getIdsByRegions(currentRegion));
@@ -38,7 +38,7 @@ public class TimeZoneUtilTest extends BaseSpringContextTestCase
 			String lastId = "";
 			for(String currentId : TimeZoneUtil.getIdsByRegions(currentRegion))
 			{
-				// sortierung der ids der region prüfen
+				// sortierung der ids der region prï¿½fen
 				assertTrue(currentId.compareToIgnoreCase(lastId) > 0);
 			}
 			logger.debug("-> timezone contains " + TimeZoneUtil.getIdsByRegions(currentRegion).size() + " ids");

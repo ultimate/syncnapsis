@@ -1,5 +1,5 @@
 /**
- * Syncnapsis Framework - Copyright (c) 2012 ultimate
+ * Syncnapsis Framework - Copyright (c) 2012-2014 ultimate
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms of
  * the GNU General Public License as published by the Free Software Foundation; either version
@@ -24,10 +24,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Util-Klasse, die einen vereinfachten Zugriff auf die von Java zur Verfügung gestellten TimeZones
- * ermöglicht. Dazu werden die in TimeZone vorhanden Zeitzonen nach Regionen aufgegliedert (Teil vor
- * dem '/'). Auf diese Weise ist später an der Oberfläche für den Benutzer eine differenzierte
- * Auswahl seiner Zeitzone möglich.
+ * Util-Klasse, die einen vereinfachten Zugriff auf die von Java zur Verfï¿½gung gestellten TimeZones
+ * ermï¿½glicht. Dazu werden die in TimeZone vorhanden Zeitzonen nach Regionen aufgegliedert (Teil vor
+ * dem '/'). Auf diese Weise ist spï¿½ter an der Oberflï¿½che fï¿½r den Benutzer eine differenzierte
+ * Auswahl seiner Zeitzone mï¿½glich.
  * 
  * @author ultimate
  */
@@ -39,13 +39,13 @@ public abstract class TimeZoneUtil
 	protected static transient final Logger			logger		= LoggerFactory.getLogger(TimeZoneUtil.class);
 
 	/**
-	 * Map, die zu jeder Region die darin enthalten IDs enthält.
-	 * Die Map wird einmalig initialisiert um später schneller abrufbar zu sein.
+	 * Map, die zu jeder Region die darin enthalten IDs enthï¿½lt.
+	 * Die Map wird einmalig initialisiert um spï¿½ter schneller abrufbar zu sein.
 	 */
 	private static TreeMap<String, List<String>>	sortedIds;
 	/**
 	 * Die Liste aller Regionen.
-	 * Die Liste wird einmalig initialisiert um später schneller abrufbar zu sein.
+	 * Die Liste wird einmalig initialisiert um spï¿½ter schneller abrufbar zu sein.
 	 */
 	private static List<String>						regions;
 	/**
@@ -54,7 +54,7 @@ public abstract class TimeZoneUtil
 	private static boolean							initialized	= false;
 
 	/**
-	 * Gibt eine Zeitzone zur gegebene timeZoneId zurück.
+	 * Gibt eine Zeitzone zur gegebene timeZoneId zurï¿½ck.
 	 * Entspricht TimeZone.getTimeZone(timeZoneId)
 	 * 
 	 * @param timeZoneId - die ID der Zeitzone
@@ -66,8 +66,8 @@ public abstract class TimeZoneUtil
 	}
 
 	/**
-	 * Gibt eine Zeitzone zur gegebene Region und ID zurück.
-	 * Kurzform für getTimeZone(region + "/" + id)
+	 * Gibt eine Zeitzone zur gegebene Region und ID zurï¿½ck.
+	 * Kurzform fï¿½r getTimeZone(region + "/" + id)
 	 * 
 	 * @param region - die Region
 	 * @param id - die ID innerhalb der Region
@@ -91,7 +91,7 @@ public abstract class TimeZoneUtil
 	}
 
 	/**
-	 * Gibt alle IDs zu einer Region zurück, die in der Map gespeichert sind.
+	 * Gibt alle IDs zu einer Region zurï¿½ck, die in der Map gespeichert sind.
 	 * 
 	 * @param region - die Region
 	 * @return die Liste (unmodifizierbar)
@@ -116,8 +116,8 @@ public abstract class TimeZoneUtil
 	}
 
 	/**
-	 * Initialisiert die Liste der Regionen und die Map der IDs für die weitere Benutzung.
-	 * Es werden dafür alle verfügbaren timeZondIds aus TimeZone analysiert. Der Teil der timeZoneId
+	 * Initialisiert die Liste der Regionen und die Map der IDs fï¿½r die weitere Benutzung.
+	 * Es werden dafï¿½r alle verfï¿½gbaren timeZondIds aus TimeZone analysiert. Der Teil der timeZoneId
 	 * vor '/' wird als Region interpretiert, der Teil dahinter als ID innerhalb der Region.
 	 * TimeZoneIds ohne '/' werden ignoriert, da dies allgemeine Zeitzonen sind, welche zu den
 	 * anderen vorhanden redundant sind.

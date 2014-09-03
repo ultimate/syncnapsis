@@ -1,5 +1,5 @@
 /**
- * Syncnapsis Framework - Copyright (c) 2012 ultimate
+ * Syncnapsis Framework - Copyright (c) 2012-2014 ultimate
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms of
  * the GNU General Public License as published by the Free Software Foundation; either version
@@ -22,7 +22,7 @@ import com.syncnapsis.data.dao.EmpireDao;
 import com.syncnapsis.data.model.Empire;
 
 /**
- * Dao-Implementierung für Hibernate für den Zugriff auf AllianceAllianceContactGroup
+ * Dao-Implementierung fï¿½r Hibernate fï¿½r den Zugriff auf AllianceAllianceContactGroup
  * 
  * @author ultimate
  */

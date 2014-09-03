@@ -1,5 +1,5 @@
 /**
- * Syncnapsis Framework - Copyright (c) 2012 ultimate
+ * Syncnapsis Framework - Copyright (c) 2012-2014 ultimate
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms of
  * the GNU General Public License as published by the Free Software Foundation; either version
@@ -19,14 +19,14 @@ import java.util.Date;
 import com.syncnapsis.data.model.Parameter;
 
 /**
- * Manager-Interface für den Zugriff auf Parameter.
+ * Manager-Interface fï¿½r den Zugriff auf Parameter.
  * 
  * @author ultimate
  */
 public interface ParameterManager extends GenericNameManager<Parameter, Long>
 {
 	/**
-	 * Lädt den Wert eines Parameters als String
+	 * Lï¿½dt den Wert eines Parameters als String
 	 * 
 	 * @param name - der Name des Parameters
 	 * @return der Parameter als String
@@ -34,7 +34,7 @@ public interface ParameterManager extends GenericNameManager<Parameter, Long>
 	public String getString(String name);
 
 	/**
-	 * Lädt den Wert eines Parameters als Long
+	 * Lï¿½dt den Wert eines Parameters als Long
 	 * 
 	 * @param name - der Name des Parameters
 	 * @return der Parameter als Long
@@ -42,7 +42,7 @@ public interface ParameterManager extends GenericNameManager<Parameter, Long>
 	public Long getLong(String name);
 
 	/**
-	 * Lädt den Wert eines Parameters als Integer
+	 * Lï¿½dt den Wert eines Parameters als Integer
 	 * 
 	 * @param name - der Name des Parameters
 	 * @return der Parameter als Integer
@@ -50,7 +50,7 @@ public interface ParameterManager extends GenericNameManager<Parameter, Long>
 	public Integer getInteger(String name);
 
 	/**
-	 * Lädt den Wert eines Parameters als Short
+	 * Lï¿½dt den Wert eines Parameters als Short
 	 * 
 	 * @param name - der Name des Parameters
 	 * @return der Parameter als Short
@@ -58,7 +58,7 @@ public interface ParameterManager extends GenericNameManager<Parameter, Long>
 	public Short getShort(String name);
 
 	/**
-	 * Lädt den Wert eines Parameters als Byte
+	 * Lï¿½dt den Wert eines Parameters als Byte
 	 * 
 	 * @param name - der Name des Parameters
 	 * @return der Parameter als Byte
@@ -66,7 +66,7 @@ public interface ParameterManager extends GenericNameManager<Parameter, Long>
 	public Byte getByte(String name);
 
 	/**
-	 * Lädt den Wert eines Parameters als Double
+	 * Lï¿½dt den Wert eines Parameters als Double
 	 * 
 	 * @param name - der Name des Parameters
 	 * @return der Parameter als Double
@@ -74,7 +74,7 @@ public interface ParameterManager extends GenericNameManager<Parameter, Long>
 	public Double getDouble(String name);
 
 	/**
-	 * Lädt den Wert eines Parameters als Float
+	 * Lï¿½dt den Wert eines Parameters als Float
 	 * 
 	 * @param name - der Name des Parameters
 	 * @return der Parameter als Float
@@ -82,7 +82,7 @@ public interface ParameterManager extends GenericNameManager<Parameter, Long>
 	public Float getFloat(String name);
 
 	/**
-	 * Lädt den Wert eines Parameters als Boolean
+	 * Lï¿½dt den Wert eines Parameters als Boolean
 	 * 
 	 * @param name - der Name des Parameters
 	 * @return der Parameter als Boolean
@@ -90,7 +90,7 @@ public interface ParameterManager extends GenericNameManager<Parameter, Long>
 	public Boolean getBoolean(String name);
 
 	/**
-	 * Lädt den Wert eines Parameters als Date
+	 * Lï¿½dt den Wert eines Parameters als Date
 	 * 
 	 * @param name - der Name des Parameters
 	 * @return der Parameter als Date

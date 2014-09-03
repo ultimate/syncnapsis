@@ -1,5 +1,5 @@
 /**
- * Syncnapsis Framework - Copyright (c) 2012 ultimate
+ * Syncnapsis Framework - Copyright (c) 2012-2014 ultimate
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms of
  * the GNU General Public License as published by the Free Software Foundation; either version
@@ -19,21 +19,21 @@ import com.syncnapsis.data.model.UserRole;
 import com.syncnapsis.data.service.UserRoleManager;
 
 /**
- * Manager-Implementierung für den Zugriff auf UserRole.
+ * Manager-Implementierung fï¿½r den Zugriff auf UserRole.
  * 
  * @author ultimate
  */
 public class UserRoleManagerImpl extends GenericNameManagerImpl<UserRole, Long> implements UserRoleManager
 {
 	/**
-	 * UserRoleDao für den Datenbankzugriff
+	 * UserRoleDao fï¿½r den Datenbankzugriff
 	 */
 	protected UserRoleDao			userRoleDao;
 
 	/**
 	 * Standard Constructor
 	 * 
-	 * @param userRoleDao - UserRoleDao für den Datenbankzugriff
+	 * @param userRoleDao - UserRoleDao fï¿½r den Datenbankzugriff
 	 */
 	public UserRoleManagerImpl(UserRoleDao userRoleDao)
 	{

@@ -1,5 +1,5 @@
 /**
- * Syncnapsis Framework - Copyright (c) 2012 ultimate
+ * Syncnapsis Framework - Copyright (c) 2012-2014 ultimate
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms of
  * the GNU General Public License as published by the Free Software Foundation; either version
@@ -25,7 +25,7 @@ import java.util.jar.JarFile;
 
 /**
  * Util-Klasse, die das Suchen von Klassen innerhalb eines Packages anhand einer
- * gegebenen Superklasse ermöglicht. Dies ist z.B. hilfreich um entweder alle
+ * gegebenen Superklasse ermï¿½glicht. Dies ist z.B. hilfreich um entweder alle
  * Klassen oder nur Klassen eines bestimmten Typs herauszufinden. Die Suche
  * arbeitet dabei auf dem Dateisystem und durchsucht alle *.class-Dateien.
  * 
@@ -35,7 +35,7 @@ public abstract class ClassUtil
 {
 	/**
 	 * Sucht alle Subklassen von 'superClass' im gegebenen Package an der durch
-	 * die URL spezifizierten Ressource. Auf diese Weise können auch jar-Archive
+	 * die URL spezifizierten Ressource. Auf diese Weise kï¿½nnen auch jar-Archive
 	 * durchsucht werden.
 	 * 
 	 * @param <T> - der Typ der Superklasse
@@ -116,7 +116,7 @@ public abstract class ClassUtil
 
 	/**
 	 * Sucht alle Subklassen von 'superClass' im gegebenen Package. Dabei wird
-	 * die Default-Ressource für das Package nachgeschlagen.
+	 * die Default-Ressource fï¿½r das Package nachgeschlagen.
 	 * 
 	 * @see ClassUtil#findClasses(URL, String, Class)
 	 * @param <T> - der Typ der Superklasse
@@ -200,11 +200,11 @@ public abstract class ClassUtil
 	}
 
 	/**
-	 * Prüft, ob eine Klasse Subklasse einer anderen Klasse ist.
+	 * Prï¿½ft, ob eine Klasse Subklasse einer anderen Klasse ist.
 	 * 
 	 * @see Class#isAssignableFrom(Class)
 	 * @param superClass - die Superklasse
-	 * @param cls - die zu prüfende Klasse
+	 * @param cls - die zu prï¿½fende Klasse
 	 * @return true oder false
 	 */
 	public static boolean isSubclass(Class<?> superClass, Class<?> cls)
@@ -240,9 +240,9 @@ public abstract class ClassUtil
 	}
 
 	/**
-	 * Lädt eine Klasse mit Class.forName(..) anhand eines Dateipfads. Dabei
-	 * wird der Pfad zunächst in einem Packagenamen umgewandelt. Die Methode
-	 * gibt null zurück, wenn die Klasse nicht geladen werden konnte.
+	 * Lï¿½dt eine Klasse mit Class.forName(..) anhand eines Dateipfads. Dabei
+	 * wird der Pfad zunï¿½chst in einem Packagenamen umgewandelt. Die Methode
+	 * gibt null zurï¿½ck, wenn die Klasse nicht geladen werden konnte.
 	 * 
 	 * @param <T> - der Typ der Klasse
 	 * @param path - der Pfad zur Class-Datei

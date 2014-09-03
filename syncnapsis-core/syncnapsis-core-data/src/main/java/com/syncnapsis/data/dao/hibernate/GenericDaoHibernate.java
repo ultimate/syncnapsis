@@ -1,5 +1,5 @@
 /**
- * Syncnapsis Framework - Copyright (c) 2012 ultimate
+ * Syncnapsis Framework - Copyright (c) 2012-2014 ultimate
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms of
  * the GNU General Public License as published by the Free Software Foundation; either version
@@ -29,7 +29,7 @@ import com.syncnapsis.data.model.base.Identifiable;
 import com.syncnapsis.utils.HibernateUtil;
 
 /**
- * Dao-Implementierung für Hibernate für den generischen Zugriff auf beliebige
+ * Dao-Implementierung fï¿½r Hibernate fï¿½r den generischen Zugriff auf beliebige
  * Modell-Klassen
  * 
  * @author ultimate
@@ -42,7 +42,7 @@ public class GenericDaoHibernate<T extends Identifiable<PK>, PK extends Serializ
 	protected Class<? extends T>	persistentClass;
 	/**
 	 * Soll beim initialen Speichern eines Objektes die autmatisch vergebene ID
-	 * durch eine Vorgabe überschrieben werden?
+	 * durch eine Vorgabe ï¿½berschrieben werden?
 	 */
 	protected boolean				idOverwrite;
 	/**
@@ -87,7 +87,7 @@ public class GenericDaoHibernate<T extends Identifiable<PK>, PK extends Serializ
 	 * @param deleteEnabled - enable true DELETE for {@link ActivatableInstance}s via
 	 *            {@link GenericDaoHibernate#delete(Object)}
 	 * @param idOverwrite - Soll beim initialen Speichern eines Objektes die
-	 *            autmatisch vergebene ID durch eine Vorgabe überschrieben
+	 *            autmatisch vergebene ID durch eine Vorgabe ï¿½berschrieben
 	 *            werden?
 	 */
 	@Deprecated
@@ -105,7 +105,7 @@ public class GenericDaoHibernate<T extends Identifiable<PK>, PK extends Serializ
 	 * @param deleteEnabled - enable true DELETE for {@link ActivatableInstance}s via
 	 *            {@link GenericDaoHibernate#delete(Object)}
 	 * @param idOverwrite - Soll beim initialen Speichern eines Objektes die
-	 *            autmatisch vergebene ID durch eine Vorgabe überschrieben
+	 *            autmatisch vergebene ID durch eine Vorgabe ï¿½berschrieben
 	 *            werden?
 	 */
 	public GenericDaoHibernate(SessionFactory sessionFactory, final Class<? extends T> persistentClass, boolean deleteEnabled, boolean idOverwrite)
@@ -287,13 +287,13 @@ public class GenericDaoHibernate<T extends Identifiable<PK>, PK extends Serializ
 	}
 
 	/**
-	 * Überschreibt den Primärschlüssel eines Objektes. Diese Operation ist nur
-	 * bei nicht referenzierten Objekten möglich und sollte nur beim Speichern
-	 * von neuen Objekten ausgeführt werden.
+	 * ï¿½berschreibt den Primï¿½rschlï¿½ssel eines Objektes. Diese Operation ist nur
+	 * bei nicht referenzierten Objekten mï¿½glich und sollte nur beim Speichern
+	 * von neuen Objekten ausgefï¿½hrt werden.
 	 * 
-	 * @param object - das Objekt, dessen Primärschlüssel geändert werden soll.
-	 * @param newId - der neue Primärschlüssel
-	 * @return das geänderte Objekt mit neuem Primärschlüssel
+	 * @param object - das Objekt, dessen Primï¿½rschlï¿½ssel geï¿½ndert werden soll.
+	 * @param newId - der neue Primï¿½rschlï¿½ssel
+	 * @return das geï¿½nderte Objekt mit neuem Primï¿½rschlï¿½ssel
 	 */
 	protected T overwriteId(T object, PK newId)
 	{

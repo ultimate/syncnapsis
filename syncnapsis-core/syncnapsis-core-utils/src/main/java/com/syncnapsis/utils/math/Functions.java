@@ -1,5 +1,5 @@
 /**
- * Syncnapsis Framework - Copyright (c) 2012 ultimate
+ * Syncnapsis Framework - Copyright (c) 2012-2014 ultimate
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms of
  * the GNU General Public License as published by the Free Software Foundation; either version
@@ -18,19 +18,19 @@ import com.syncnapsis.utils.MathUtil;
 import org.springframework.util.Assert;
 
 /**
- * Hilfs-Klasse für die Berechnung mathematischer Funktionen
+ * Hilfs-Klasse fï¿½r die Berechnung mathematischer Funktionen
  * 
  * @author ultimate
  */
 public abstract class Functions
 {
 	/**
-	 * Mathematischen Funktion z.B. für die Verwendung als Gradient.
+	 * Mathematischen Funktion z.B. fï¿½r die Verwendung als Gradient.
 	 * Die Funktion ist symmetrisch: f(-param) = f(param)
-	 * Die Funktion erfüllt die Bedingungen f(0) = 1; f(1) = 0
+	 * Die Funktion erfï¿½llt die Bedingungen f(0) = 1; f(1) = 0
 	 * Geradengleichung: f(param > 0) = 1 - param
 	 * 
-	 * @param param - der Parameter für die Funktion
+	 * @param param - der Parameter fï¿½r die Funktion
 	 * @return der Funktionswert
 	 */
 	public static double linear(double param)
@@ -42,12 +42,12 @@ public abstract class Functions
 	}
 
 	/**
-	 * Mathematischen Funktion z.B. für die Verwendung als Gradient.
+	 * Mathematischen Funktion z.B. fï¿½r die Verwendung als Gradient.
 	 * Die Funktion ist symmetrisch: f(-param) = f(param)
-	 * Die Funktion erfüllt die Bedingungen f(0) = 1; f(1) = 0
+	 * Die Funktion erfï¿½llt die Bedingungen f(0) = 1; f(1) = 0
 	 * Geradengleichung mit "Kreissegment an der Spitze"
 	 * 
-	 * @param param - der Parameter für die Funktion
+	 * @param param - der Parameter fï¿½r die Funktion
 	 * @return der Funktionswert
 	 */
 	public static double linearSoft(double param)
@@ -58,13 +58,13 @@ public abstract class Functions
 	}
 
 	/**
-	 * Mathematischen Funktion z.B. für die Verwendung als Gradient.
+	 * Mathematischen Funktion z.B. fï¿½r die Verwendung als Gradient.
 	 * Die Funktion ist symmetrisch: f(-param) = f(param)
-	 * Die Funktion erfüllt die Bedingungen f(0) = 1; f(1) = 0
+	 * Die Funktion erfï¿½llt die Bedingungen f(0) = 1; f(1) = 0
 	 * Geradengleichung mit "Kreissegment an der Spitze"
 	 * 
-	 * @param param - der Parameter für die Funktion
-	 * @param softness - wie groß soll das Kreissegment sein?
+	 * @param param - der Parameter fï¿½r die Funktion
+	 * @param softness - wie groï¿½ soll das Kreissegment sein?
 	 * @return der Funktionswert
 	 */
 	public static double linearSoft(double param, double softness)
@@ -75,13 +75,13 @@ public abstract class Functions
 	}
 
 	/**
-	 * Mathematischen Funktion z.B. für die Verwendung als Gradient.
+	 * Mathematischen Funktion z.B. fï¿½r die Verwendung als Gradient.
 	 * Die Funktion ist symmetrisch: f(-param) = f(param)
-	 * Die Funktion erfüllt die Bedingungen f(0) = 1; f(1) = 0 NICHT
+	 * Die Funktion erfï¿½llt die Bedingungen f(0) = 1; f(1) = 0 NICHT
 	 * Geradengleichung mit "Kreissegment an der Spitze"
 	 * 
-	 * @param param - der Parameter für die Funktion
-	 * @param softness - wie groß soll das Kreissegment sein?
+	 * @param param - der Parameter fï¿½r die Funktion
+	 * @param softness - wie groï¿½ soll das Kreissegment sein?
 	 * @return der Funktionswert
 	 */
 	public static double linearSoft2(double param, double softness)
@@ -100,12 +100,12 @@ public abstract class Functions
 	}
 
 	/**
-	 * Mathematischen Funktion z.B. für die Verwendung als Gradient.
+	 * Mathematischen Funktion z.B. fï¿½r die Verwendung als Gradient.
 	 * Die Funktion ist symmetrisch: f(-param) = f(param)
-	 * Die Funktion erfüllt die Bedingungen: f(0) = 1; f(1) = 0
+	 * Die Funktion erfï¿½llt die Bedingungen: f(0) = 1; f(1) = 0
 	 * Parabelgleichung f(param) = 1 - param^2
 	 * 
-	 * @param param - der Parameter für die Funktion
+	 * @param param - der Parameter fï¿½r die Funktion
 	 * @return der Funktionswert
 	 */
 	public static double quad(double param)
@@ -114,12 +114,12 @@ public abstract class Functions
 	}
 
 	/**
-	 * Mathematischen Funktion z.B. für die Verwendung als Gradient.
+	 * Mathematischen Funktion z.B. fï¿½r die Verwendung als Gradient.
 	 * Die Funktion ist symmetrisch: f(-param) = f(param)
-	 * Die Funktion erfüllt die Bedingungen f(0) = 1; f(1) = 0
+	 * Die Funktion erfï¿½llt die Bedingungen f(0) = 1; f(1) = 0
 	 * Kubische Gleichung f(param > 0) = 1 - param^3
 	 * 
-	 * @param param - der Parameter für die Funktion
+	 * @param param - der Parameter fï¿½r die Funktion
 	 * @return der Funktionswert
 	 */
 	public static double cubic(double param)
@@ -128,12 +128,12 @@ public abstract class Functions
 	}
 
 	/**
-	 * Mathematischen Funktion z.B. für die Verwendung als Gradient.
+	 * Mathematischen Funktion z.B. fï¿½r die Verwendung als Gradient.
 	 * Die Funktion ist symmetrisch: f(-param) = f(param)
-	 * Die Funktion erfüllt die Bedingungen: f(0) = 1; f(1) = 0
+	 * Die Funktion erfï¿½llt die Bedingungen: f(0) = 1; f(1) = 0
 	 * Einheitskreis f(param) = sqrt(1 - param^2)
 	 * 
-	 * @param param - der Parameter für die Funktion
+	 * @param param - der Parameter fï¿½r die Funktion
 	 * @return der Funktionswert
 	 */
 	public static double circularUnit(double param)
@@ -142,12 +142,12 @@ public abstract class Functions
 	}
 
 	/**
-	 * Mathematischen Funktion z.B. für die Verwendung als Gradient.
+	 * Mathematischen Funktion z.B. fï¿½r die Verwendung als Gradient.
 	 * Die Funktion ist symmetrisch: f(-param) = f(param)
-	 * Die Funktion erfüllt die Bedingungen f(0) = r; f(r) = 0
+	 * Die Funktion erfï¿½llt die Bedingungen f(0) = r; f(r) = 0
 	 * Kreisgleichung f(param) = sqrt(r^2 - param^2)
 	 * 
-	 * @param param - der Parameter für die Funktion
+	 * @param param - der Parameter fï¿½r die Funktion
 	 * @param r - der Radius des Kreises
 	 * @return der Funktionswert
 	 */
@@ -160,12 +160,12 @@ public abstract class Functions
 	}
 
 	/**
-	 * Mathematischen Funktion z.B. für die Verwendung als Gradient.
+	 * Mathematischen Funktion z.B. fï¿½r die Verwendung als Gradient.
 	 * Die Funktion ist symmetrisch: f(-param) = f(param)
-	 * Die Funktion erfüllt die Bedingungen: f(0) = ry; f(rx) = 0
+	 * Die Funktion erfï¿½llt die Bedingungen: f(0) = ry; f(rx) = 0
 	 * Ellipsengleichung f(param) = ry * sqrt(1 - param^2/rx^2)
 	 * 
-	 * @param param - der Parameter für die Funktion
+	 * @param param - der Parameter fï¿½r die Funktion
 	 * @param rx - der halbe Durchmesser der Ellipse in x-Richtung
 	 * @param ry - der halbe Durchmesser der Ellipse in y-Richtung
 	 * @return der Funktionswert
@@ -181,12 +181,12 @@ public abstract class Functions
 	}
 
 	/**
-	 * Mathematischen Funktion z.B. für die Verwendung als Gradient.
+	 * Mathematischen Funktion z.B. fï¿½r die Verwendung als Gradient.
 	 * Die Funktion ist symmetrisch: f(-param) = f(param)
 	 * Gaussglocke mit sigma = 0.3 & normalize = true
 	 * 
 	 * @see MathUtil#gauss(double, double, boolean)
-	 * @param param - der Parameter für die Funktion
+	 * @param param - der Parameter fï¿½r die Funktion
 	 * @return der Funktionswert
 	 */
 	public static double gauss(double param)
@@ -196,14 +196,14 @@ public abstract class Functions
 	}
 
 	/**
-	 * Mathematischen Funktion z.B. für die Verwendung als Gradient.
+	 * Mathematischen Funktion z.B. fï¿½r die Verwendung als Gradient.
 	 * Die Funktion ist symmetrisch: f(-param) = f(param)
-	 * Die Funktion erfüllt die Bedingungen f(0) = 1; f(1) = 0, wenn normalize = true
+	 * Die Funktion erfï¿½llt die Bedingungen f(0) = 1; f(1) = 0, wenn normalize = true
 	 * Bei Normalisierung gilt f_norm = (f(x) - f(1)) / (f(0) - f(1))
 	 * Gaussglocke mit sigma beliebig & mu = 0
 	 * 
-	 * @param param - der Parameter für die Funktion
-	 * @param sigma - der Sigma-Wert für die Gaussglocke
+	 * @param param - der Parameter fï¿½r die Funktion
+	 * @param sigma - der Sigma-Wert fï¿½r die Gaussglocke
 	 * @param normalize - soll die Funktion Normalisiert werden (f(0) = 1; f(rx) = 0)
 	 * @return der Funktionswert
 	 */
@@ -220,12 +220,12 @@ public abstract class Functions
 	}
 
 	/**
-	 * Mathematischen Funktion z.B. für die Verwendung als Gradient.
+	 * Mathematischen Funktion z.B. fï¿½r die Verwendung als Gradient.
 	 * Die Funktion ist symmetrisch: f(-param) = f(param)
 	 * Modifizierte Gaussglocke mit bound = 0.4, gradient = 0.125 & sigma = 0.4
 	 * 
 	 * @see MathUtil#gaussModified(double, double, double, double)
-	 * @param param - der Parameter für die Funktion
+	 * @param param - der Parameter fï¿½r die Funktion
 	 * @return der Funktionswert
 	 */
 	public static double gaussModified(double param)
@@ -238,17 +238,17 @@ public abstract class Functions
 	}
 
 	/**
-	 * Mathematischen Funktion z.B. für die Verwendung als Gradient.
+	 * Mathematischen Funktion z.B. fï¿½r die Verwendung als Gradient.
 	 * Die Funktion ist symmetrisch: f(-param) = f(param)
-	 * Die Funktion erfüllt die Bedingungen f(1) = 0; f(0) = 1
-	 * Modifizierte Gaussglocke mit beliebigen Werten für bound, gradient & sigma.
+	 * Die Funktion erfï¿½llt die Bedingungen f(1) = 0; f(0) = 1
+	 * Modifizierte Gaussglocke mit beliebigen Werten fï¿½r bound, gradient & sigma.
 	 * param < bound
-	 * f(param) = "Geringfügig angepasste Gaussglocke, so dass f in bound stetig ist und f(0) = 1"
+	 * f(param) = "Geringfï¿½gig angepasste Gaussglocke, so dass f in bound stetig ist und f(0) = 1"
 	 * param > bound
 	 * f(param) = gradient - gradient*param
 	 * 
 	 * @see MathUtil#gauss(double, double, boolean)
-	 * @param param - der Parameter für die Funktion
+	 * @param param - der Parameter fï¿½r die Funktion
 	 * @return der Funktionswert
 	 */
 	public static double gaussModified(double param, double bound, double gradient, double sigma)
@@ -275,13 +275,13 @@ public abstract class Functions
 	}
 
 	/**
-	 * Mathematischen Funktion z.B. für die Verwendung als Gradient.
+	 * Mathematischen Funktion z.B. fï¿½r die Verwendung als Gradient.
 	 * Die Funktion ist symmetrisch: f(-param) = f(param)
-	 * Die Funktion erfüllt die Bedingungen f(1) = 0; f(0) = 1
+	 * Die Funktion erfï¿½llt die Bedingungen f(1) = 0; f(0) = 1
 	 * "Funktion, die rotiert wie eine Scheibe aussieht" mit discHeight = 1
 	 * 
 	 * @see MathUtil#disc(double, double)
-	 * @param param - der Parameter für die Funktion
+	 * @param param - der Parameter fï¿½r die Funktion
 	 * @return der Funktionswert
 	 */
 	public static double disc(double param)
@@ -291,14 +291,14 @@ public abstract class Functions
 	}
 
 	/**
-	 * Mathematischen Funktion z.B. für die Verwendung als Gradient.
+	 * Mathematischen Funktion z.B. fï¿½r die Verwendung als Gradient.
 	 * Die Funktion ist symmetrisch: f(-param) = f(param)
-	 * Die Funktion erfüllt die Bedingungen f(1) = 0; f(0) = discHeight
+	 * Die Funktion erfï¿½llt die Bedingungen f(1) = 0; f(0) = discHeight
 	 * "Funktion, die rotiert wie eine Scheibe aussieht"
 	 * f(param) = discHeight * (1 - param)^0.25
 	 * 
 	 * @see MathUtil#gauss(double, double, boolean)
-	 * @param param - der Parameter für die Funktion
+	 * @param param - der Parameter fï¿½r die Funktion
 	 * @return der Funktionswert
 	 */
 	public static double disc(double param, double discHeight)

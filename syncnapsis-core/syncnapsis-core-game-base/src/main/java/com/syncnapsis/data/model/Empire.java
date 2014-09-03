@@ -1,5 +1,5 @@
 /**
- * Syncnapsis Framework - Copyright (c) 2012 ultimate
+ * Syncnapsis Framework - Copyright (c) 2012-2014 ultimate
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms of
  * the GNU General Public License as published by the Free Software Foundation; either version
@@ -30,10 +30,10 @@ import com.syncnapsis.security.Ownable;
 
 /**
  * Model-Klasse "Imperium"
- * Ein Spieler kann mehrere Imperien besitzen, die er beherrscht und über die er
- * am Spiel teilnehmen kann. Imperien können Mitglieder in Allianzen sein und
+ * Ein Spieler kann mehrere Imperien besitzen, die er beherrscht und ï¿½ber die er
+ * am Spiel teilnehmen kann. Imperien kï¿½nnen Mitglieder in Allianzen sein und
  * diplomatische Beziehungen aufbauen.
- * Über ein Imperium kann der Spieler Kolonien, Schiffe und Gebäude bauen, und
+ * ï¿½ber ein Imperium kann der Spieler Kolonien, Schiffe und Gebï¿½ude bauen, und
  * im Universum expandieren.
  * 
  * @author ultimate
@@ -43,7 +43,7 @@ import com.syncnapsis.security.Ownable;
 public class Empire extends Institution<Long> implements Ownable<Player>
 {
 	/**
-	 * Der Benutzer dem dieses Imperium gehört
+	 * Der Benutzer dem dieses Imperium gehï¿½rt
 	 */
 	protected Player	player;
 
@@ -55,7 +55,7 @@ public class Empire extends Institution<Long> implements Ownable<Player>
 	}
 
 	/**
-	 * Der Spieler dem dieses Imperium gehört
+	 * Der Spieler dem dieses Imperium gehï¿½rt
 	 * 
 	 * @return player
 	 */
@@ -67,7 +67,7 @@ public class Empire extends Institution<Long> implements Ownable<Player>
 	}
 
 	/**
-	 * Der Spieler dem dieses Imperium gehört
+	 * Der Spieler dem dieses Imperium gehï¿½rt
 	 * 
 	 * @param player - der Benutzer
 	 */

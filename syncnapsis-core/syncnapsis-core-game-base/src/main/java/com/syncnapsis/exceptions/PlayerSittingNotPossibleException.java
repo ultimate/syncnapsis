@@ -1,5 +1,5 @@
 /**
- * Syncnapsis Framework - Copyright (c) 2012 ultimate
+ * Syncnapsis Framework - Copyright (c) 2012-2014 ultimate
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms of
  * the GNU General Public License as published by the Free Software Foundation; either version
@@ -30,7 +30,7 @@ public class PlayerSittingNotPossibleException extends RuntimeException
 	private static final long	serialVersionUID	= 1L;
 
 	/**
-	 * Der betroffene Player, bei dem die Plätze nicht mehr ausreichen
+	 * Der betroffene Player, bei dem die Plï¿½tze nicht mehr ausreichen
 	 */
 	private Player			player;
 
@@ -38,7 +38,7 @@ public class PlayerSittingNotPossibleException extends RuntimeException
 	 * Erzeugt eine neue RuntimeException mit gegebener Nachricht
 	 * 
 	 * @param message - die Nachricht
-	 * @param player - Der betroffene Player, bei dem die Plätze nicht mehr ausreichen
+	 * @param player - Der betroffene Player, bei dem die Plï¿½tze nicht mehr ausreichen
 	 */
 	public PlayerSittingNotPossibleException(String message, Player player)
 	{
@@ -47,7 +47,7 @@ public class PlayerSittingNotPossibleException extends RuntimeException
 	}
 
 	/**
-	 * Der betroffene Player, bei dem die Plätze nicht mehr ausreichen
+	 * Der betroffene Player, bei dem die Plï¿½tze nicht mehr ausreichen
 	 * 
 	 * @return player
 	 */

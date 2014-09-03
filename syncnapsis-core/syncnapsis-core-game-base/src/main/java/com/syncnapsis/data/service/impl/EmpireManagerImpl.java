@@ -1,5 +1,5 @@
 /**
- * Syncnapsis Framework - Copyright (c) 2012 ultimate
+ * Syncnapsis Framework - Copyright (c) 2012-2014 ultimate
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms of
  * the GNU General Public License as published by the Free Software Foundation; either version
@@ -28,14 +28,14 @@ import com.syncnapsis.data.service.EmpireManager;
 import com.syncnapsis.security.BaseGameManager;
 
 /**
- * Manager-Implementierung für den Zugriff auf Empire.
+ * Manager-Implementierung fï¿½r den Zugriff auf Empire.
  * 
  * @author ultimate
  */
 public class EmpireManagerImpl extends GenericNameManagerImpl<Empire, Long> implements EmpireManager, InitializingBean
 {
 	/**
-	 * EmpireDao für den Datenbankzugriff
+	 * EmpireDao fï¿½r den Datenbankzugriff
 	 */
 	private EmpireDao			empireDao;
 	/**
@@ -46,7 +46,7 @@ public class EmpireManagerImpl extends GenericNameManagerImpl<Empire, Long> impl
 	/**
 	 * Standard-Constructor
 	 * 
-	 * @param empireDao - EmpireDao für den Datenbankzugriff
+	 * @param empireDao - EmpireDao fï¿½r den Datenbankzugriff
 	 */
 	public EmpireManagerImpl(EmpireDao empireDao)
 	{

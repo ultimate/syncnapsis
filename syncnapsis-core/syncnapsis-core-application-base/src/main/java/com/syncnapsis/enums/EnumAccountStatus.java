@@ -1,5 +1,5 @@
 /**
- * Syncnapsis Framework - Copyright (c) 2012 ultimate
+ * Syncnapsis Framework - Copyright (c) 2012-2014 ultimate
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms of
  * the GNU General Public License as published by the Free Software Foundation; either version
@@ -15,7 +15,7 @@
 package com.syncnapsis.enums;
 
 /**
- * Enum für die Spezifizierung des Accountsstatus eines Users.
+ * Enum fï¿½r die Spezifizierung des Accountsstatus eines Users.
  * 
  * @author ultimate
  */
@@ -26,7 +26,7 @@ public enum EnumAccountStatus
 	 */
 	active,
 	/**
-	 * User ist gesperrt (wegen Regelverstoß oder nach Neuanmeldung bis zum Freischalten)
+	 * User ist gesperrt (wegen Regelverstoï¿½ oder nach Neuanmeldung bis zum Freischalten)
 	 */
 	locked,
 	/**
@@ -34,7 +34,7 @@ public enum EnumAccountStatus
 	 */
 	vacation,
 	/**
-	 * User ist inaktiv bzw. gelöscht
+	 * User ist inaktiv bzw. gelï¿½scht
 	 */
 	inactive;
 }

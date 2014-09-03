@@ -1,5 +1,5 @@
 /**
- * Syncnapsis Framework - Copyright (c) 2012 ultimate
+ * Syncnapsis Framework - Copyright (c) 2012-2014 ultimate
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms of
  * the GNU General Public License as published by the Free Software Foundation; either version
@@ -19,7 +19,7 @@ import java.util.List;
 import com.syncnapsis.data.model.Empire;
 
 /**
- * Dao-Interface für den Zugriff auf Empire
+ * Dao-Interface fï¿½r den Zugriff auf Empire
  * 
  * @author ultimate
  */

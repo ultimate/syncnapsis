@@ -1,5 +1,5 @@
 /**
- * Syncnapsis Framework - Copyright (c) 2012 ultimate
+ * Syncnapsis Framework - Copyright (c) 2012-2014 ultimate
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms of
  * the GNU General Public License as published by the Free Software Foundation; either version
@@ -31,7 +31,7 @@ package com.syncnapsis.websockets.security;
 //import org.springframework.util.Assert;
 //
 //
-//// TODO Funktionen aus dem Security-Paket, die zukünftig in die WebSocket-Unterstützung integriert
+//// TODO Funktionen aus dem Security-Paket, die zukï¿½nftig in die WebSocket-Unterstï¿½tzung integriert
 //// werden sollen, werden hier zwischenzeitlich gelagert...
 //public class SecuritySupport
 //{
@@ -43,12 +43,12 @@ package com.syncnapsis.websockets.security;
 //	private class LoginFilter implements InitializingBean
 //	{
 //		/**
-//		 * Die Länge der Queue für die Speicherung der letzten Logins
+//		 * Die Lï¿½nge der Queue fï¿½r die Speicherung der letzten Logins
 //		 */
 //		private int					loginQueueSize							= 5;
 //		/**
-//		 * Das Zeitlimit für die Queue für die Speicherung der letzten Logins. Innerhalb dieser Zeit
-//		 * dürfen maximal loginQueueSize Logins stattgefunden haben.
+//		 * Das Zeitlimit fï¿½r die Queue fï¿½r die Speicherung der letzten Logins. Innerhalb dieser Zeit
+//		 * dï¿½rfen maximal loginQueueSize Logins stattgefunden haben.
 //		 */
 //		private int					loginQueueTime							= 300;
 //
@@ -58,9 +58,9 @@ package com.syncnapsis.websockets.security;
 //		public static final String	AUTHENTICATE_LOGGED_IN_TOO_FREQUENTLY	= "Logged in too frequently!";
 //
 //		/**
-//		 * Die Länge der Queue für die Speicherung der letzten Logins
+//		 * Die Lï¿½nge der Queue fï¿½r die Speicherung der letzten Logins
 //		 * 
-//		 * @param loginQueueSize - die Größe
+//		 * @param loginQueueSize - die Grï¿½ï¿½e
 //		 */
 //		public void setLoginQueueSize(int loginQueueSize)
 //		{
@@ -68,8 +68,8 @@ package com.syncnapsis.websockets.security;
 //		}
 //
 //		/**
-//		 * Das Zeitlimit für die Queue für die Speicherung der letzten Logins. Innerhalb dieser Zeit
-//		 * dürfen maximal loginQueueSize Logins stattgefunden haben.
+//		 * Das Zeitlimit fï¿½r die Queue fï¿½r die Speicherung der letzten Logins. Innerhalb dieser Zeit
+//		 * dï¿½rfen maximal loginQueueSize Logins stattgefunden haben.
 //		 * 
 //		 * @see LoginFilter#setLoginQueueSize
 //		 * @param loginQueueTime - die Zeit in Sekunden
@@ -80,7 +80,7 @@ package com.syncnapsis.websockets.security;
 //		}
 //
 //		/**
-//		 * Prüfung von loginQueueSize und loginQueueTime auf > 0.
+//		 * Prï¿½fung von loginQueueSize und loginQueueTime auf > 0.
 //		 */
 //		@Override
 //		protected void afterPropertiesSet() throws Exception
@@ -107,7 +107,7 @@ package com.syncnapsis.websockets.security;
 //			}
 //
 //			// wenn Queue voll (d.h. es haben schon mind. loginQueueSize Logins stattgefunden),
-//			// dann prüfe ob der erste von den Logins länger als loginQueueTime Sekunden her ist
+//			// dann prï¿½fe ob der erste von den Logins lï¿½nger als loginQueueTime Sekunden her ist
 //			if((loginQueue.size() == this.loginQueueSize) && (loginQueue.peek() < now - loginQueueTime * 1000))
 //			{
 //				// logged in too frequently

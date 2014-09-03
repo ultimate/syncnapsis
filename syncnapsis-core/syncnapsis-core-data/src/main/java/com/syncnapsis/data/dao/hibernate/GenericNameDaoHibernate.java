@@ -1,5 +1,5 @@
 /**
- * Syncnapsis Framework - Copyright (c) 2012 ultimate
+ * Syncnapsis Framework - Copyright (c) 2012-2014 ultimate
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms of
  * the GNU General Public License as published by the Free Software Foundation; either version
@@ -25,7 +25,7 @@ import com.syncnapsis.data.model.base.Identifiable;
 import com.syncnapsis.exceptions.ObjectNotFoundException;
 
 /**
- * Dao-Implementierung für Hibernate für den generischen Zugriff auf beliebige
+ * Dao-Implementierung fï¿½r Hibernate fï¿½r den generischen Zugriff auf beliebige
  * Modell-Klassen
  * 
  * @author ultimate
@@ -73,7 +73,7 @@ public class GenericNameDaoHibernate<T extends Identifiable<PK>, PK extends Seri
 	 * @param nameField - Das Feld nach dem gesucht/sortiert werden soll
 	 * @param deleteEnabled - enable true DELETE for {@link ActivatableInstance}s via {@link GenericDaoHibernate#delete(Object)}
 	 * @param idOverwrite - Soll beim initialen Speichern eines Objektes die
-	 *            autmatisch vergebene ID durch eine Vorgabe überschrieben
+	 *            autmatisch vergebene ID durch eine Vorgabe ï¿½berschrieben
 	 *            werden?
 	 */
 	@Deprecated
@@ -91,7 +91,7 @@ public class GenericNameDaoHibernate<T extends Identifiable<PK>, PK extends Seri
 	 * @param nameField - Das Feld nach dem gesucht/sortiert werden soll
 	 * @param deleteEnabled - enable true DELETE for {@link ActivatableInstance}s via {@link GenericDaoHibernate#delete(Object)}
 	 * @param idOverwrite - Soll beim initialen Speichern eines Objektes die
-	 *            autmatisch vergebene ID durch eine Vorgabe überschrieben
+	 *            autmatisch vergebene ID durch eine Vorgabe ï¿½berschrieben
 	 *            werden?
 	 */
 	public GenericNameDaoHibernate(SessionFactory sessionFactory, final Class<T> persistentClass, String nameField, boolean deleteEnabled, boolean idOverwrite)

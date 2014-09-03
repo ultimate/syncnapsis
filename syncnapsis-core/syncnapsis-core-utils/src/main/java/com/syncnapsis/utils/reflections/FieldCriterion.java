@@ -1,5 +1,5 @@
 /**
- * Syncnapsis Framework - Copyright (c) 2012 ultimate
+ * Syncnapsis Framework - Copyright (c) 2012-2014 ultimate
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms of
  * the GNU General Public License as published by the Free Software Foundation; either version
@@ -26,20 +26,20 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
 /**
- * Interface zum prüfen von Fields in ReflectionsUtil.findFields.
- * Anhand der Methode isValidField kann geprüft werden, ob es sich um ein gültiges Field handelt. Im
- * Normalfall müssten dazu Getter und Setter vorhanden sein.
+ * Interface zum prï¿½fen von Fields in ReflectionsUtil.findFields.
+ * Anhand der Methode isValidField kann geprï¿½ft werden, ob es sich um ein gï¿½ltiges Field handelt. Im
+ * Normalfall mï¿½ssten dazu Getter und Setter vorhanden sein.
  * 
  * @author ultimate
  */
 public abstract class FieldCriterion
 {
 	/**
-	 * Prüft obe ein Field gültig ist. Es werden die gefundenen Getter und Setter übergeben um
-	 * prüfen zu können, ob diese vorhanden sind oder z.B. geforderte Annotations aufweisen.
+	 * Prï¿½ft obe ein Field gï¿½ltig ist. Es werden die gefundenen Getter und Setter ï¿½bergeben um
+	 * prï¿½fen zu kï¿½nnen, ob diese vorhanden sind oder z.B. geforderte Annotations aufweisen.
 	 * 
 	 * @see FieldCriterion#isValidField(com.syncnapsis.utils.reflections.Field)
-	 * @param field - das Field das Field, Getter und Setter enthält
+	 * @param field - das Field das Field, Getter und Setter enthï¿½lt
 	 * @return true oder false
 	 */
 	public boolean isValidField(com.syncnapsis.utils.reflections.Field field)
@@ -48,8 +48,8 @@ public abstract class FieldCriterion
 	}
 
 	/**
-	 * Prüft obe ein Field gültig ist. Es werden die gefundenen Getter und Setter übergeben um
-	 * prüfen zu können, ob diese vorhanden sind oder z.B. geforderte Annotations aufweisen.
+	 * Prï¿½ft obe ein Field gï¿½ltig ist. Es werden die gefundenen Getter und Setter ï¿½bergeben um
+	 * prï¿½fen zu kï¿½nnen, ob diese vorhanden sind oder z.B. geforderte Annotations aufweisen.
 	 * 
 	 * @param field - das Field
 	 * @param getter - die Get-Methode
@@ -59,7 +59,7 @@ public abstract class FieldCriterion
 	public abstract boolean isValidField(Field field, Method getter, Method setter);
 
 	/**
-	 * Default FieldCriterion, das nur prüft ob Get- und Set-Methode vorhanden sind.
+	 * Default FieldCriterion, das nur prï¿½ft ob Get- und Set-Methode vorhanden sind.
 	 */
 	public static final FieldCriterion	DEFAULT	= new FieldCriterion() {
 													/*
@@ -81,7 +81,7 @@ public abstract class FieldCriterion
 												};
 
 	/**
-	 * FieldCriterion, das prüft ob typische Annotations für Spalten in einer Entity vorhanden sind:
+	 * FieldCriterion, das prï¿½ft ob typische Annotations fï¿½r Spalten in einer Entity vorhanden sind:
 	 * 
 	 * @see Column
 	 * @see OneToMany

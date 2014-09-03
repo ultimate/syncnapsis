@@ -1,5 +1,5 @@
 /**
- * Syncnapsis Framework - Copyright (c) 2012 ultimate
+ * Syncnapsis Framework - Copyright (c) 2012-2014 ultimate
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms of
  * the GNU General Public License as published by the Free Software Foundation; either version
@@ -31,18 +31,18 @@ import com.syncnapsis.security.AccessRule;
 import com.syncnapsis.security.annotations.Accessible;
 
 /**
- * Abstrakte Oberklasse als Basis für alle Model-Klassen und somit alle
- * Objekttypen, die als über Tabellen in der Datenbank gespeichert werden.
+ * Abstrakte Oberklasse als Basis fï¿½r alle Model-Klassen und somit alle
+ * Objekttypen, die als ï¿½ber Tabellen in der Datenbank gespeichert werden.
  * In dieser Klasse sind die immer notwendigen Felder/Spalten "ID" und "Version"
- * definiert, so dass alle Subklassen über diese Eigenschaften verfügen. Diese
- * Eigenschaften sind nicht nur für die Verwendung von Hibernate, sondern auch
- * für die grundlegende Identifizierung und Unterscheidung von Objekten einer
+ * definiert, so dass alle Subklassen ï¿½ber diese Eigenschaften verfï¿½gen. Diese
+ * Eigenschaften sind nicht nur fï¿½r die Verwendung von Hibernate, sondern auch
+ * fï¿½r die grundlegende Identifizierung und Unterscheidung von Objekten einer
  * Klasse hilfreich.
- * Desweiteren definiert diese Klasse eine PELogger-Instanz, für die Verwendung
+ * Desweiteren definiert diese Klasse eine PELogger-Instanz, fï¿½r die Verwendung
  * in den Subklassen.
  * 
  * @author ultimate
- * @param <PK> - die Klasse für den Primärschlüssel
+ * @param <PK> - die Klasse fï¿½r den Primï¿½rschlï¿½ssel
  */
 @MappedSuperclass
 public abstract class BaseObject<PK extends Serializable> implements Model, Identifiable<PK>
@@ -53,7 +53,7 @@ public abstract class BaseObject<PK extends Serializable> implements Model, Iden
 	protected final Logger	logger	= LoggerFactory.getLogger(getClass());
 
 	/**
-	 * Der Primärschlüssel des Objektes
+	 * Der Primï¿½rschlï¿½ssel des Objektes
 	 */
 	protected PK			id;
 	/**
@@ -69,7 +69,7 @@ public abstract class BaseObject<PK extends Serializable> implements Model, Iden
 	}
 
 	/**
-	 * Der Primärschlüssel des Objektes
+	 * Der Primï¿½rschlï¿½ssel des Objektes
 	 * 
 	 * @return id
 	 */
@@ -96,9 +96,9 @@ public abstract class BaseObject<PK extends Serializable> implements Model, Iden
 	}
 
 	/**
-	 * Der Primärschlüssel des Objektes
+	 * Der Primï¿½rschlï¿½ssel des Objektes
 	 * 
-	 * @param id - der Primärschlüssel
+	 * @param id - der Primï¿½rschlï¿½ssel
 	 */
 	@Accessible(by = AccessRule.NOBODY)
 	public void setId(PK id)

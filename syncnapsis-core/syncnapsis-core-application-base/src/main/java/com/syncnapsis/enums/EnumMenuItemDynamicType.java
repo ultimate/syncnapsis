@@ -1,5 +1,5 @@
 /**
- * Syncnapsis Framework - Copyright (c) 2012 ultimate
+ * Syncnapsis Framework - Copyright (c) 2012-2014 ultimate
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms of
  * the GNU General Public License as published by the Free Software Foundation; either version
@@ -15,24 +15,24 @@
 package com.syncnapsis.enums;
 
 /**
- * Enum für die Spezifizierung der dynamischen Knoten eines Menu-Baums. Die
+ * Enum fï¿½r die Spezifizierung der dynamischen Knoten eines Menu-Baums. Die
  * dynamischen Knoten werden beim Rendern des Baumes gesondert behandelt und mit
- * Parametern versehen und ggf. mehrfach mit verschiedenen Werten eingefügt.
+ * Parametern versehen und ggf. mehrfach mit verschiedenen Werten eingefï¿½gt.
  * 
  * @author ultimate
  */
 public enum EnumMenuItemDynamicType
 {
 	/**
-	 * Elternknoten für eine Liste aus Spezialeinträgen (Imperien/Allianzen etc.)
+	 * Elternknoten fï¿½r eine Liste aus Spezialeintrï¿½gen (Imperien/Allianzen etc.)
 	 */
 	list,
 	/**
-	 * Knoten für ein Eintrag innerhalb einer Liste
+	 * Knoten fï¿½r ein Eintrag innerhalb einer Liste
 	 */
 	option,
 	/**
-	 * Knoten für ein Eintrag innerhalb einer Liste, der gleichzeitig wieder eine Liste ist
+	 * Knoten fï¿½r ein Eintrag innerhalb einer Liste, der gleichzeitig wieder eine Liste ist
 	 * @see EnumMenuItemDynamicType#list
 	 */
 	option_list,
@@ -41,7 +41,7 @@ public enum EnumMenuItemDynamicType
 	 */
 	choice,
 	/**
-	 * Knoten mit einem aktuell ausgewählten Element als Parameter
+	 * Knoten mit einem aktuell ausgewï¿½hlten Element als Parameter
 	 */
 	current;
 }

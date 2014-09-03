@@ -1,5 +1,5 @@
 /**
- * Syncnapsis Framework - Copyright (c) 2012 ultimate
+ * Syncnapsis Framework - Copyright (c) 2012-2014 ultimate
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms of
  * the GNU General Public License as published by the Free Software Foundation; either version
@@ -15,10 +15,10 @@
 package com.syncnapsis.constants;
 
 /**
- * Klasse für das Festhalten von Konstanten, die für die gesamte Applikation
- * gültig sind.<br/>
+ * Klasse fï¿½r das Festhalten von Konstanten, die fï¿½r die gesamte Applikation
+ * gï¿½ltig sind.<br/>
  * Durch die Verwendung von Konstanten, statt z.B. ausgeschriebener String
- * können Auswirkungen von Tippfehlern vermieden werden.
+ * kï¿½nnen Auswirkungen von Tippfehlern vermieden werden.
  * 
  * @author ultimate
  */
@@ -37,11 +37,11 @@ public class GameBaseConstants
 	 */
 	public static final int ROLE_DEMO_PLAYER			= 2048;
 	/**
-	 * Schlüssel für die Spieler-ID in der Session
+	 * Schlï¿½ssel fï¿½r die Spieler-ID in der Session
 	 */
 	public static final String	SESSION_PLAYER_KEY			= "j_player";
 	/**
-	 * Schlüssel für die Imperiums-ID in der Session
+	 * Schlï¿½ssel fï¿½r die Imperiums-ID in der Session
 	 */
 	public static final String	SESSION_EMPIRE_KEY			= "j_empire";
 	/**

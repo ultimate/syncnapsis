@@ -1,5 +1,5 @@
 /**
- * Syncnapsis Framework - Copyright (c) 2012 ultimate
+ * Syncnapsis Framework - Copyright (c) 2012-2014 ultimate
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms of
  * the GNU General Public License as published by the Free Software Foundation; either version
@@ -29,17 +29,17 @@ import com.syncnapsis.utils.reflections.MethodComparator;
 public abstract class SortUtil
 {
 	/**
-	 * Orientierung für aufsteigende Sortierung
+	 * Orientierung fï¿½r aufsteigende Sortierung
 	 */
 	public static final int	ASCENDING	= 1;
 	/**
-	 * Orientierung für abfsteigende Sortierung
+	 * Orientierung fï¿½r abfsteigende Sortierung
 	 */
 	public static final int	DESCENDING	= -1;
 
 	/**
-	 * Sortiert eine Liste aufsteigend. Die übergebene Liste wird direkt sortiert und für die
-	 * einfachere Verwendung zusätzlich zurückgegeben.
+	 * Sortiert eine Liste aufsteigend. Die ï¿½bergebene Liste wird direkt sortiert und fï¿½r die
+	 * einfachere Verwendung zusï¿½tzlich zurï¿½ckgegeben.
 	 * 
 	 * @see com.syncnapsis.utils.reflections.MethodComparator
 	 * @param <T> - der Typ der Liste
@@ -53,8 +53,8 @@ public abstract class SortUtil
 	}
 
 	/**
-	 * Sortiert eine Liste absteigend. Die übergebene Liste wird direkt sortiert und für die
-	 * einfachere Verwendung zusätzlich zurückgegeben.
+	 * Sortiert eine Liste absteigend. Die ï¿½bergebene Liste wird direkt sortiert und fï¿½r die
+	 * einfachere Verwendung zusï¿½tzlich zurï¿½ckgegeben.
 	 * 
 	 * @see SortUtil#ASCENDING
 	 * @see SortUtil#DESCENDING
@@ -70,8 +70,8 @@ public abstract class SortUtil
 	}
 
 	/**
-	 * Sortiert eine Liste auf oder absteigend. Die übergebene Liste wird direkt sortiert und für
-	 * die einfachere Verwendung zusätzlich zurückgegeben.
+	 * Sortiert eine Liste auf oder absteigend. Die ï¿½bergebene Liste wird direkt sortiert und fï¿½r
+	 * die einfachere Verwendung zusï¿½tzlich zurï¿½ckgegeben.
 	 * 
 	 * @see com.syncnapsis.utils.reflections.MethodComparator
 	 * @param <T> - der Typ der Liste

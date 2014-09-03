@@ -1,5 +1,5 @@
 /**
- * Syncnapsis Framework - Copyright (c) 2012 ultimate
+ * Syncnapsis Framework - Copyright (c) 2012-2014 ultimate
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms of
  * the GNU General Public License as published by the Free Software Foundation; either version
@@ -31,7 +31,7 @@ import com.syncnapsis.security.Ownable;
 
 /**
  * Model-Klasse "Kontakt-/Freundschaftszuordnung"
- * Diese Klasse repräsentiert die Kontakt-/Freundschaftszuordnung zwischen 2
+ * Diese Klasse reprï¿½sentiert die Kontakt-/Freundschaftszuordnung zwischen 2
  * Benutzern. Sie ist nicht zu verwechseln mit den diplomatischen Beziehungen
  * zwischen 2 Imperien.
  * 
@@ -42,19 +42,19 @@ import com.syncnapsis.security.Ownable;
 public class UserContact extends BaseObject<Long> implements Ownable<User>
 {
 	/**
-	 * Der 1. Benutzer für die Kontakt-/Freundschaftszuordnung
+	 * Der 1. Benutzer fï¿½r die Kontakt-/Freundschaftszuordnung
 	 */
 	protected User	user1;
 	/**
-	 * Der 2. Benutzer für die Kontakt-/Freundschaftszuordnung
+	 * Der 2. Benutzer fï¿½r die Kontakt-/Freundschaftszuordnung
 	 */
 	protected User	user2;
 	/**
-	 * Hat der 1. Benutzer die Kontakt-/Freundschaftszuordnung bestätigt?
+	 * Hat der 1. Benutzer die Kontakt-/Freundschaftszuordnung bestï¿½tigt?
 	 */
 	protected boolean	approvedByUser1;
 	/**
-	 * Hat der 2. Benutzer die Kontakt-/Freundschaftszuordnung bestätigt?
+	 * Hat der 2. Benutzer die Kontakt-/Freundschaftszuordnung bestï¿½tigt?
 	 */
 	protected boolean	approvedByUser2;
 
@@ -66,7 +66,7 @@ public class UserContact extends BaseObject<Long> implements Ownable<User>
 	}
 
 	/**
-	 * Der 1. Benutzer für die Kontakt-/Freundschaftszuordnung
+	 * Der 1. Benutzer fï¿½r die Kontakt-/Freundschaftszuordnung
 	 * 
 	 * @return user1
 	 */
@@ -78,7 +78,7 @@ public class UserContact extends BaseObject<Long> implements Ownable<User>
 	}
 
 	/**
-	 * Der 2. Benutzer für die Kontakt-/Freundschaftszuordnung
+	 * Der 2. Benutzer fï¿½r die Kontakt-/Freundschaftszuordnung
 	 * 
 	 * @return user2
 	 */
@@ -90,7 +90,7 @@ public class UserContact extends BaseObject<Long> implements Ownable<User>
 	}
 
 	/**
-	 * Hat der 1. Benutzer die Kontakt-/Freundschaftszuordnung bestätigt?
+	 * Hat der 1. Benutzer die Kontakt-/Freundschaftszuordnung bestï¿½tigt?
 	 * 
 	 * @return approvedByUser1
 	 */
@@ -101,7 +101,7 @@ public class UserContact extends BaseObject<Long> implements Ownable<User>
 	}
 
 	/**
-	 * Hat der 2. Benutzer die Kontakt-/Freundschaftszuordnung bestätigt?
+	 * Hat der 2. Benutzer die Kontakt-/Freundschaftszuordnung bestï¿½tigt?
 	 * 
 	 * @return approvedByUser2
 	 */
@@ -112,7 +112,7 @@ public class UserContact extends BaseObject<Long> implements Ownable<User>
 	}
 
 	/**
-	 * Gibt den anderen Benutzer zurück
+	 * Gibt den anderen Benutzer zurï¿½ck
 	 * 
 	 * @param user - der eine Benutzer
 	 * @return den anderen Benutzer
@@ -128,8 +128,8 @@ public class UserContact extends BaseObject<Long> implements Ownable<User>
 	}
 
 	/**
-	 * Prüft, ob der andere Benutzer die Kontakt-/Freundschaftszuordnung
-	 * bestätigt hat
+	 * Prï¿½ft, ob der andere Benutzer die Kontakt-/Freundschaftszuordnung
+	 * bestï¿½tigt hat
 	 * 
 	 * @param user - einer der beiden Benutzer
 	 * @return approvedByUser 'OtherThanX'
@@ -145,8 +145,8 @@ public class UserContact extends BaseObject<Long> implements Ownable<User>
 	}
 
 	/**
-	 * Prüft, ob der gegebene Benutzer die Kontakt-/Freundschaftszuordnung
-	 * bestätigt hat
+	 * Prï¿½ft, ob der gegebene Benutzer die Kontakt-/Freundschaftszuordnung
+	 * bestï¿½tigt hat
 	 * 
 	 * @param user - einer der beiden Benutzer
 	 * @return approvedByUser 'X'
@@ -162,7 +162,7 @@ public class UserContact extends BaseObject<Long> implements Ownable<User>
 	}
 
 	/**
-	 * Der 1. Benutzer für die Kontakt-/Freundschaftszuordnung
+	 * Der 1. Benutzer fï¿½r die Kontakt-/Freundschaftszuordnung
 	 * 
 	 * @param user1 - der 1. Benutzer
 	 */
@@ -172,7 +172,7 @@ public class UserContact extends BaseObject<Long> implements Ownable<User>
 	}
 
 	/**
-	 * Der 2. Benutzer für die Kontakt-/Freundschaftszuordnung
+	 * Der 2. Benutzer fï¿½r die Kontakt-/Freundschaftszuordnung
 	 * 
 	 * @param user2 - der 2. Benutzer
 	 */
@@ -182,7 +182,7 @@ public class UserContact extends BaseObject<Long> implements Ownable<User>
 	}
 
 	/**
-	 * Hat der 1. Benutzer die Kontakt-/Freundschaftszuordnung bestätigt?
+	 * Hat der 1. Benutzer die Kontakt-/Freundschaftszuordnung bestï¿½tigt?
 	 * 
 	 * @param approvedByUser1 - true oder false
 	 */
@@ -192,7 +192,7 @@ public class UserContact extends BaseObject<Long> implements Ownable<User>
 	}
 
 	/**
-	 * Hat der 2. Benutzer die Kontakt-/Freundschaftszuordnung bestätigt?
+	 * Hat der 2. Benutzer die Kontakt-/Freundschaftszuordnung bestï¿½tigt?
 	 * 
 	 * @param approvedByUser2 - true oder false
 	 */

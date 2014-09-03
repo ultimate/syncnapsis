@@ -1,5 +1,5 @@
 /**
- * Syncnapsis Framework - Copyright (c) 2012 ultimate
+ * Syncnapsis Framework - Copyright (c) 2012-2014 ultimate
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms of
  * the GNU General Public License as published by the Free Software Foundation; either version
@@ -519,7 +519,7 @@ public class Array3D implements Cloneable, Serializable
 	}
 
 	/**
-	 * "Normiert" diese Matrix so, dass anschließend gilt:
+	 * "Normiert" diese Matrix so, dass anschlieï¿½end gilt:
 	 * normedSumOfProbabilies(expectedNumberOfResults) = 1
 	 * und
 	 * sumOfProbabilities() = expectedNumberOfResults
@@ -536,8 +536,8 @@ public class Array3D implements Cloneable, Serializable
 
 	/**
 	 * Die Summe aller Wahrscheinlichkeiten dieser Matrix.
-	 * Lässt man eine Zufallssequenz über diese Matrix laufen, dann ist die
-	 * Anzahl der Einträge mit p(x,y,z) > Zufallszahl so groß wie
+	 * Lï¿½sst man eine Zufallssequenz ï¿½ber diese Matrix laufen, dann ist die
+	 * Anzahl der Eintrï¿½ge mit p(x,y,z) > Zufallszahl so groï¿½ wie
 	 * sumOfProbabilities() * weight
 	 * 
 	 * @see Array3D#normedSumOfProbabilities(long)

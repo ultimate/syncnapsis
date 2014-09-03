@@ -1,5 +1,5 @@
 /**
- * Syncnapsis Framework - Copyright (c) 2012 ultimate
+ * Syncnapsis Framework - Copyright (c) 2012-2014 ultimate
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms of
  * the GNU General Public License as published by the Free Software Foundation; either version
@@ -28,9 +28,9 @@ import com.syncnapsis.data.model.base.BitMask;
 
 /**
  * Model-Klasse "Benutzerrolle"
- * Benutzerrollen dienen der Rechtevergabe im Spiel. Über sie ist geregelt, was
- * ein Benutzer/Spieler darf oder nicht. Sie legen außerdem bestimmte Grenzen
- * und Parameter für Benutzer/Spieler dieser Rolle fest.
+ * Benutzerrollen dienen der Rechtevergabe im Spiel. ï¿½ber sie ist geregelt, was
+ * ein Benutzer/Spieler darf oder nicht. Sie legen auï¿½erdem bestimmte Grenzen
+ * und Parameter fï¿½r Benutzer/Spieler dieser Rolle fest.
  * 
  * @author ultimate
  */

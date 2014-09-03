@@ -1,5 +1,5 @@
 /**
- * Syncnapsis Framework - Copyright (c) 2012 ultimate
+ * Syncnapsis Framework - Copyright (c) 2012-2014 ultimate
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms of
  * the GNU General Public License as published by the Free Software Foundation; either version
@@ -24,7 +24,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * Universelle Manager-Implementierung für den Zugriff auf beliebige Klassen
+ * Universelle Manager-Implementierung fï¿½r den Zugriff auf beliebige Klassen
  * 
  * @author ultimate
  */
@@ -32,19 +32,19 @@ import org.springframework.transaction.annotation.Transactional;
 public class UniversalManagerImpl implements UniversalManager
 {
 	/**
-	 * Logger-Instanz für die Benutzung in allen Subklassen.
+	 * Logger-Instanz fï¿½r die Benutzung in allen Subklassen.
 	 */
 	protected final Logger	logger	= LoggerFactory.getLogger(getClass());
 
 	/**
-	 * UniversalDao für den Datenbankzugriff.
+	 * UniversalDao fï¿½r den Datenbankzugriff.
 	 */
 	protected UniversalDao	universalDao;
 
 	/**
 	 * Standard Constructor, der die DAOs speichert.
 	 * 
-	 * @param universalDao - UniversalDao für den Datenbankzugriff
+	 * @param universalDao - UniversalDao fï¿½r den Datenbankzugriff
 	 */
 	public UniversalManagerImpl(final UniversalDao universalDao)
 	{

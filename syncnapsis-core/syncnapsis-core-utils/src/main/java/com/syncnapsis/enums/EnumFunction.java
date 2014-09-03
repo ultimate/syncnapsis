@@ -1,5 +1,5 @@
 /**
- * Syncnapsis Framework - Copyright (c) 2012 ultimate
+ * Syncnapsis Framework - Copyright (c) 2012-2014 ultimate
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms of
  * the GNU General Public License as published by the Free Software Foundation; either version
@@ -17,9 +17,9 @@ package com.syncnapsis.enums;
 import com.syncnapsis.utils.math.Functions;
 
 /**
- * Enum für die Spezifizierung und Verwendung von Funktionen. Die Funktion
- * werden für die Modellierung bzw. Berechnung von Verläufen benutzt.
- * Für die Berechnung der Verläufe kann sowohl der Funktionswert selbst, als
+ * Enum fï¿½r die Spezifizierung und Verwendung von Funktionen. Die Funktion
+ * werden fï¿½r die Modellierung bzw. Berechnung von Verlï¿½ufen benutzt.
+ * Fï¿½r die Berechnung der Verlï¿½ufe kann sowohl der Funktionswert selbst, als
  * auch der Gradient (die Steigung) verwendet werden:
  * - 3D-Effekt mit Fase: LINEAR -> Gradient wird berechnet -> Schatteneffekt
  * - Sanfter Auslauf: LINEAR -> Funktionswert wird verwendet
@@ -60,7 +60,7 @@ public enum EnumFunction
 	GAUSS;
 
 	/**
-	 * Berechnet den Funktionswert an der Stelle param mit zusätzlichen default
+	 * Berechnet den Funktionswert an der Stelle param mit zusï¿½tzlichen default
 	 * Parametern.
 	 * 
 	 * @param param - die Stelle, an der der Funktionswert berechnet werden soll
@@ -75,7 +75,7 @@ public enum EnumFunction
 	 * Berechnet den Funktionswert an der Stelle param und weiteren Parametern.
 	 * 
 	 * @param param - die Stelle, an der der Funktionswert berechnet werden soll
-	 * @param softness - wenn die Funktion softness unterstütz, gibt dieser
+	 * @param softness - wenn die Funktion softness unterstï¿½tz, gibt dieser
 	 *            Parameter den Grad der Weichheit an, andernfalls wird er
 	 *            ignoriert
 	 * @param scale - die Skalierung der Funktion. Der Funktionswert wird mit

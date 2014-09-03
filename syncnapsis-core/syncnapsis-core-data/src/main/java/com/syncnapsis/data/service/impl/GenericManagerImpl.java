@@ -1,5 +1,5 @@
 /**
- * Syncnapsis Framework - Copyright (c) 2012 ultimate
+ * Syncnapsis Framework - Copyright (c) 2012-2014 ultimate
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms of
  * the GNU General Public License as published by the Free Software Foundation; either version
@@ -27,8 +27,8 @@ import com.syncnapsis.data.service.GenericManager;
 import com.syncnapsis.utils.spring.Bean;
 
 /**
- * Manager-Implementierung für den generischen Zugriff auf beliebige
- * Modell-Klassen über GenericDao.
+ * Manager-Implementierung fï¿½r den generischen Zugriff auf beliebige
+ * Modell-Klassen ï¿½ber GenericDao.
  * 
  * @author ultimate
  */
@@ -36,18 +36,18 @@ import com.syncnapsis.utils.spring.Bean;
 public class GenericManagerImpl<T extends Identifiable<PK>, PK extends Serializable> extends Bean implements GenericManager<T, PK>
 {
 	/**
-	 * Logger-Instanz für die Benutzung in allen Subklassen.
+	 * Logger-Instanz fï¿½r die Benutzung in allen Subklassen.
 	 */
 	protected final Logger		logger	= LoggerFactory.getLogger(getClass());
 	/**
-	 * GenericDao für den Datenbankzugriff.
+	 * GenericDao fï¿½r den Datenbankzugriff.
 	 */
 	protected GenericDao<T, PK>	genericDao;
 
 	/**
 	 * Standard Constructor, der die DAOs speichert.
 	 * 
-	 * @param genericDao - GenericDao für den Datenbankzugriff
+	 * @param genericDao - GenericDao fï¿½r den Datenbankzugriff
 	 */
 	public GenericManagerImpl(final GenericDao<T, PK> genericDao)
 	{

@@ -1,5 +1,5 @@
 /**
- * Syncnapsis Framework - Copyright (c) 2012 ultimate
+ * Syncnapsis Framework - Copyright (c) 2012-2014 ultimate
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms of
  * the GNU General Public License as published by the Free Software Foundation; either version
@@ -42,7 +42,7 @@ import com.syncnapsis.security.Ownable;
 /**
  * Model-Klasse "Benutzer/Spieler"
  * Nur mit besitz eines Benutzerkontos kann ein Spieler noch nicht am Spiel
- * teilnehmen. Dazu muss erst ein Imperium gegründet werden, welches der Spieler
+ * teilnehmen. Dazu muss erst ein Imperium gegrï¿½ndet werden, welches der Spieler
  * beherrschen kann und mit dem am Spielgeschehen teilgenommen werden kann.
  * 
  * @author ultimate
@@ -60,7 +60,7 @@ public class Player extends ActivatableInstance<Long> implements Ownable<User>
 	 */
 	protected PlayerRole		role;
 	/**
-	 * Datum, zu dem die Benutzerrolle für diesen Benutzer/Spieler abläuft
+	 * Datum, zu dem die Benutzerrolle fï¿½r diesen Benutzer/Spieler ablï¿½uft
 	 * Wenn die Benutzerrolle abgelaufen ist, wird der Spieler wieder zum
 	 * 'NORMAL_USER'
 	 */
@@ -71,7 +71,7 @@ public class Player extends ActivatableInstance<Long> implements Ownable<User>
 	 */
 	protected EnumAccountStatus	accountStatus;
 	/**
-	 * Datum, zu dem der Kontostatus abläuft
+	 * Datum, zu dem der Kontostatus ablï¿½uft
 	 * Wenn der Kontostatus abgelaufen ist, wird der Kontostatus wieder auf
 	 * 'active' gesetzt.
 	 */
@@ -132,7 +132,7 @@ public class Player extends ActivatableInstance<Long> implements Ownable<User>
 	}
 
 	/**
-	 * Datum, zu dem die Benutzerrolle für diesen Benutzer/Spieler abläuft
+	 * Datum, zu dem die Benutzerrolle fï¿½r diesen Benutzer/Spieler ablï¿½uft
 	 * Wenn die Benutzerrolle abgelaufen ist, wird der Spieler wieder zum
 	 * 'NORMAL_USER'
 	 * 
@@ -158,7 +158,7 @@ public class Player extends ActivatableInstance<Long> implements Ownable<User>
 	}
 
 	/**
-	 * Datum, zu dem der Kontostatus abläuft
+	 * Datum, zu dem der Kontostatus ablï¿½uft
 	 * Wenn der Kontostatus abgelaufen ist, wird der Kontostatus wieder auf
 	 * 'active' gesetzt.
 	 * 
@@ -250,7 +250,7 @@ public class Player extends ActivatableInstance<Long> implements Ownable<User>
 	}
 
 	/**
-	 * Datum, zu dem die Benutzerrolle für diesen Benutzer/Spieler abläuft
+	 * Datum, zu dem die Benutzerrolle fï¿½r diesen Benutzer/Spieler ablï¿½uft
 	 * Wenn die Benutzerrolle abgelaufen ist, wird der Spieler wieder zum
 	 * 'NORMAL_USER'
 	 * 
@@ -272,7 +272,7 @@ public class Player extends ActivatableInstance<Long> implements Ownable<User>
 	}
 
 	/**
-	 * Datum, zu dem der Kontostatus abläuft
+	 * Datum, zu dem der Kontostatus ablï¿½uft
 	 * Wenn der Kontostatus abgelaufen ist, wird der Kontostatus wieder auf
 	 * 'active' gesetzt.
 	 * 
