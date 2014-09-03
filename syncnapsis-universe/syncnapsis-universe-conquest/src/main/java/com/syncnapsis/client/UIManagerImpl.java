@@ -92,6 +92,8 @@ public class UIManagerImpl extends BaseClientManager implements UIManager
 		{
 			logger.debug("saving user locale");
 			User user = securityManager.getUserProvider().get();
+			// user could have been updated meanwhile
+			user = userManager.get(user.getId());
 			user.setLocale(locale);
 			user = userManager.save(user);
 			securityManager.getUserProvider().set(user);
