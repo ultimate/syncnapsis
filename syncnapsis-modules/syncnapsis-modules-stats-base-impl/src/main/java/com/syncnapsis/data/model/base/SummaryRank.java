@@ -1,5 +1,5 @@
 /**
- * Syncnapsis Framework - Copyright (c) 2012 ultimate
+ * Syncnapsis Framework - Copyright (c) 2012-2014 ultimate
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms of
  * the GNU General Public License as published by the Free Software Foundation; either version
@@ -20,7 +20,7 @@ import javax.persistence.MappedSuperclass;
 import com.syncnapsis.data.model.annotations.RankCriterion;
 
 /**
- * Übergeordnete Klasse für die Darstellung von Rängen für Instanzen, die mehrere Imperien enthalten
+ * ï¿½bergeordnete Klasse fï¿½r die Darstellung von Rï¿½ngen fï¿½r Instanzen, die mehrere Imperien enthalten
  * und deren Rang zusammenfassen (z.B. User und Alliance)
  * 
  * @author ultimate
@@ -29,7 +29,7 @@ import com.syncnapsis.data.model.annotations.RankCriterion;
 @MappedSuperclass
 public class SummaryRank<E extends BaseObject<?>> extends Rank<E>
 {
-	// TODO anzahl kolonien und anzahl blöcke plus durchschnitt
+	// TODO anzahl kolonien und anzahl blï¿½cke plus durchschnitt
 	
 	/**
 	 * Die Anzahl der Imperien
@@ -38,7 +38,7 @@ public class SummaryRank<E extends BaseObject<?>> extends Rank<E>
 	protected int	numberOfEmpires;
 
 	/**
-	 * Die Punktbewertung der wirtschaftlichen Stärke der Oberinstanz
+	 * Die Punktbewertung der wirtschaftlichen Stï¿½rke der Oberinstanz
 	 */
 	@RankCriterion
 	protected int	economy;
@@ -49,18 +49,18 @@ public class SummaryRank<E extends BaseObject<?>> extends Rank<E>
 	protected int	averageEconomy;
 
 	/**
-	 * Die Punktbewertung der militärischen Stärke des Oberinstanz
+	 * Die Punktbewertung der militï¿½rischen Stï¿½rke des Oberinstanz
 	 */
 	@RankCriterion
 	protected int	military;
 	/**
-	 * Die durchschnittliche militärische Punktzahl pro Imperium
+	 * Die durchschnittliche militï¿½rische Punktzahl pro Imperium
 	 */
 	@RankCriterion(averageFor = "military")
 	protected int	averageMilitary;
 
 	/**
-	 * Die Punktbewertung der wissenschaftlichen Stärke der Oberinstanz
+	 * Die Punktbewertung der wissenschaftlichen Stï¿½rke der Oberinstanz
 	 */
 	@RankCriterion
 	protected int	science;
@@ -93,7 +93,7 @@ public class SummaryRank<E extends BaseObject<?>> extends Rank<E>
 	}
 
 	/**
-	 * Die Punktbewertung der wirtschaftlichen Stärke der Oberinstanz
+	 * Die Punktbewertung der wirtschaftlichen Stï¿½rke der Oberinstanz
 	 * 
 	 * @return die Wirtschaftspunkte
 	 */
@@ -115,9 +115,9 @@ public class SummaryRank<E extends BaseObject<?>> extends Rank<E>
 	}
 
 	/**
-	 * Die Punktbewertung der militärischen Stärke der Oberinstanz
+	 * Die Punktbewertung der militï¿½rischen Stï¿½rke der Oberinstanz
 	 * 
-	 * @return die Militärpunkte
+	 * @return die Militï¿½rpunkte
 	 */
 	@Column(nullable = false)
 	public int getMilitary()
@@ -126,9 +126,9 @@ public class SummaryRank<E extends BaseObject<?>> extends Rank<E>
 	}
 
 	/**
-	 * Die durchschnittliche militärische Punktzahl pro Imperium
+	 * Die durchschnittliche militï¿½rische Punktzahl pro Imperium
 	 * 
-	 * @return die durchschnittlichen Militärpunkte
+	 * @return die durchschnittlichen Militï¿½rpunkte
 	 */
 	@Column(nullable = false)
 	public int getAverageMilitary()
@@ -137,7 +137,7 @@ public class SummaryRank<E extends BaseObject<?>> extends Rank<E>
 	}
 
 	/**
-	 * Die Punktbewertung der wissenschaftlichen Stärke der Oberinstanz
+	 * Die Punktbewertung der wissenschaftlichen Stï¿½rke der Oberinstanz
 	 * 
 	 * @return die Wissenschaftspunkte
 	 */
@@ -191,7 +191,7 @@ public class SummaryRank<E extends BaseObject<?>> extends Rank<E>
 	}
 
 	/**
-	 * Die Punktbewertung der wirtschaftlichen Stärke der Oberinstanz
+	 * Die Punktbewertung der wirtschaftlichen Stï¿½rke der Oberinstanz
 	 * 
 	 * @param economy - die Wirtschaftspunkte
 	 */
@@ -211,9 +211,9 @@ public class SummaryRank<E extends BaseObject<?>> extends Rank<E>
 	}
 
 	/**
-	 * Die Punktbewertung der militärischen Stärke der Oberinstanz
+	 * Die Punktbewertung der militï¿½rischen Stï¿½rke der Oberinstanz
 	 * 
-	 * @param military - die Militärpunkte
+	 * @param military - die Militï¿½rpunkte
 	 */
 	public void setMilitary(int military)
 	{
@@ -221,9 +221,9 @@ public class SummaryRank<E extends BaseObject<?>> extends Rank<E>
 	}
 
 	/**
-	 * Die durchschnittliche militärische Punktzahl pro Imperium
+	 * Die durchschnittliche militï¿½rische Punktzahl pro Imperium
 	 * 
-	 * @param averageMilitary - die durchschnittlichen Militärpunkte
+	 * @param averageMilitary - die durchschnittlichen Militï¿½rpunkte
 	 */
 	public void setAverageMilitary(int averageMilitary)
 	{
@@ -231,7 +231,7 @@ public class SummaryRank<E extends BaseObject<?>> extends Rank<E>
 	}
 
 	/**
-	 * Die Punktbewertung der wissenschaftlichen Stärke der Oberinstanz
+	 * Die Punktbewertung der wissenschaftlichen Stï¿½rke der Oberinstanz
 	 * 
 	 * @param science - die Wissenschaftspunkte
 	 */

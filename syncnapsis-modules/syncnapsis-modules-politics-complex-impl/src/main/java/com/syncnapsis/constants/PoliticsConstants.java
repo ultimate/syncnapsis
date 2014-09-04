@@ -1,5 +1,5 @@
 /**
- * Syncnapsis Framework - Copyright (c) 2012 ultimate
+ * Syncnapsis Framework - Copyright (c) 2012-2014 ultimate
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms of
  * the GNU General Public License as published by the Free Software Foundation; either version
@@ -15,7 +15,7 @@
 package com.syncnapsis.constants;
 
 /**
- * Klasse für das Festhalten von Konstanten, die für das gesamte Model diplomacy-complex-impl
+ * Klasse fï¿½r das Festhalten von Konstanten, die fï¿½r das gesamte Model diplomacy-complex-impl
  * gelten.
  * 
  * @author ultimate
@@ -23,7 +23,7 @@ package com.syncnapsis.constants;
 public class PoliticsConstants
 {
 	/**
-	 * Schlüssel für eine übergebene AllianceId
+	 * Schlï¿½ssel fï¿½r eine ï¿½bergebene AllianceId
 	 */
 	public static final String	REQUEST_ALLIANCE_ID_KEY								= "allianceId";
 

@@ -1,5 +1,5 @@
 /**
- * Syncnapsis Framework - Copyright (c) 2012 ultimate
+ * Syncnapsis Framework - Copyright (c) 2012-2014 ultimate
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms of
  * the GNU General Public License as published by the Free Software Foundation; either version
@@ -26,27 +26,27 @@ import javax.persistence.Transient;
 import com.syncnapsis.security.Ownable;
 
 /**
- * Abstrakte Klasse als generische Grundlage für die Beziehungen zwischen:
+ * Abstrakte Klasse als generische Grundlage fï¿½r die Beziehungen zwischen:
  * - Allianz & Allianz
  * - Allianz & Imperium
  * - Imperium & Allianz
  * - Imperium & Imperium
- * Über die Kontaktzuordnung werden beiden Parteien Kontakt-Rechte zugeordnet.
- * Desweiteren bietet diese Klasse die Möglichkeit den derzeitigen Zustand der
- * Bestätigung beider Parteien zu erfassen, sowie Änderungen vorzuschlagen und
- * diese erneut zu bestätigen.
+ * ï¿½ber die Kontaktzuordnung werden beiden Parteien Kontakt-Rechte zugeordnet.
+ * Desweiteren bietet diese Klasse die Mï¿½glichkeit den derzeitigen Zustand der
+ * Bestï¿½tigung beider Parteien zu erfassen, sowie ï¿½nderungen vorzuschlagen und
+ * diese erneut zu bestï¿½tigen.
  * 
  * @author ultimate
- * @param <C1> - die Klasse für die eine Seite der Kontaktzuordnung
- * @param <C2> - die Klasse für die andere Seite der Kontaktzuordnung
- * @param <R> - die Klasse für die Rechte, die vergeben werden
+ * @param <C1> - die Klasse fï¿½r die eine Seite der Kontaktzuordnung
+ * @param <C2> - die Klasse fï¿½r die andere Seite der Kontaktzuordnung
+ * @param <R> - die Klasse fï¿½r die Rechte, die vergeben werden
  */
 @MappedSuperclass
 public abstract class Contact<C1 extends BaseObject<?>, C2 extends BaseObject<?>, A extends Authorities> extends BaseObject<Long> implements
 		Ownable<BaseObject<?>>
 {
 	/**
-	 * Ist diese Kontaktzuordnung grundsätzlich gleichberechtigt für beide
+	 * Ist diese Kontaktzuordnung grundsï¿½tzlich gleichberechtigt fï¿½r beide
 	 * Parteien? Es wird in diesem Fall nur ein ContactAuthorities-Objekt verwaltet.
 	 */
 	private boolean	equalContactAuthorities;
@@ -60,15 +60,15 @@ public abstract class Contact<C1 extends BaseObject<?>, C2 extends BaseObject<?>
 	 */
 	private A		contactAuthorities1;
 	/**
-	 * Ein möglicher Änderungsvorschlag für die Rechte der 1. Partei
+	 * Ein mï¿½glicher ï¿½nderungsvorschlag fï¿½r die Rechte der 1. Partei
 	 */
 	private A		changedContactAuthorities1;
 	/**
-	 * Wurde die Zuordnung von der 1. Partei bestätigt?
+	 * Wurde die Zuordnung von der 1. Partei bestï¿½tigt?
 	 */
 	private boolean	approvedByContact1;
 	/**
-	 * Wurden die gemachten Änderungen von der 1. Partei bestätigt?
+	 * Wurden die gemachten ï¿½nderungen von der 1. Partei bestï¿½tigt?
 	 */
 	private boolean	changesApprovedByContact1;
 	/**
@@ -85,15 +85,15 @@ public abstract class Contact<C1 extends BaseObject<?>, C2 extends BaseObject<?>
 	 */
 	private A		contactAuthorities2;
 	/**
-	 * Ein möglicher Änderungsvorschlag für die Rechte der 2. Partei
+	 * Ein mï¿½glicher ï¿½nderungsvorschlag fï¿½r die Rechte der 2. Partei
 	 */
 	private A		changedContactAuthorities2;
 	/**
-	 * Wurde die Zuordnung von der 2. Partei bestätigt?
+	 * Wurde die Zuordnung von der 2. Partei bestï¿½tigt?
 	 */
 	private boolean	approvedByContact2;
 	/**
-	 * Wurden die gemachten Änderungen von der 2. Partei bestätigt?
+	 * Wurden die gemachten ï¿½nderungen von der 2. Partei bestï¿½tigt?
 	 */
 	private boolean	changesApprovedByContact2;
 	/**
@@ -109,7 +109,7 @@ public abstract class Contact<C1 extends BaseObject<?>, C2 extends BaseObject<?>
 	}
 
 	/**
-	 * Ist diese Kontaktzuordnung grundsätzlich gleichberechtigt für beide
+	 * Ist diese Kontaktzuordnung grundsï¿½tzlich gleichberechtigt fï¿½r beide
 	 * Parteien? Es wird in diesem Fall nur ein ContactAuthorities-Objekt verwaltet.
 	 * 
 	 * @return equalContactAuthorities
@@ -145,7 +145,7 @@ public abstract class Contact<C1 extends BaseObject<?>, C2 extends BaseObject<?>
 	}
 
 	/**
-	 * Ein möglicher Änderungsvorschlag für die Rechte der 1. Partei
+	 * Ein mï¿½glicher ï¿½nderungsvorschlag fï¿½r die Rechte der 1. Partei
 	 * 
 	 * @return changedContactAuthorities1
 	 */
@@ -157,7 +157,7 @@ public abstract class Contact<C1 extends BaseObject<?>, C2 extends BaseObject<?>
 	}
 
 	/**
-	 * Wurde die Zuordnung von der 1. Partei bestätigt?
+	 * Wurde die Zuordnung von der 1. Partei bestï¿½tigt?
 	 * 
 	 * @return approvedByContact1
 	 */
@@ -168,7 +168,7 @@ public abstract class Contact<C1 extends BaseObject<?>, C2 extends BaseObject<?>
 	}
 
 	/**
-	 * Wurden die gemachten Änderungen von der 1. Partei bestätigt?
+	 * Wurden die gemachten ï¿½nderungen von der 1. Partei bestï¿½tigt?
 	 * 
 	 * @return changesApprovedByContact1
 	 */
@@ -214,7 +214,7 @@ public abstract class Contact<C1 extends BaseObject<?>, C2 extends BaseObject<?>
 	}
 
 	/**
-	 * Ein möglicher Änderungsvorschlag für die Rechte der 2. Partei
+	 * Ein mï¿½glicher ï¿½nderungsvorschlag fï¿½r die Rechte der 2. Partei
 	 * 
 	 * @return changedContactAuthorities2
 	 */
@@ -226,7 +226,7 @@ public abstract class Contact<C1 extends BaseObject<?>, C2 extends BaseObject<?>
 	}
 
 	/**
-	 * Wurde die Zuordnung von der 2. Partei bestätigt?
+	 * Wurde die Zuordnung von der 2. Partei bestï¿½tigt?
 	 * 
 	 * @return approvedByContact2
 	 */
@@ -237,7 +237,7 @@ public abstract class Contact<C1 extends BaseObject<?>, C2 extends BaseObject<?>
 	}
 
 	/**
-	 * Wurden die gemachten Änderungen von der 2. Partei bestätigt?
+	 * Wurden die gemachten ï¿½nderungen von der 2. Partei bestï¿½tigt?
 	 * 
 	 * @return changesApprovedByContact2
 	 */
@@ -270,7 +270,7 @@ public abstract class Contact<C1 extends BaseObject<?>, C2 extends BaseObject<?>
 	}
 
 	/**
-	 * Ist diese Kontaktzuordnung grundsätzlich gleichberechtigt für beide
+	 * Ist diese Kontaktzuordnung grundsï¿½tzlich gleichberechtigt fï¿½r beide
 	 * Parteien? Es wird in diesem Fall nur ein ContactAuthorities-Objekt verwaltet.
 	 * 
 	 * @param equalContactAuthorities - true oder false
@@ -301,7 +301,7 @@ public abstract class Contact<C1 extends BaseObject<?>, C2 extends BaseObject<?>
 	}
 
 	/**
-	 * Ein möglicher Änderungsvorschlag für die Rechte der 1. Partei
+	 * Ein mï¿½glicher ï¿½nderungsvorschlag fï¿½r die Rechte der 1. Partei
 	 * 
 	 * @param changedContactAuthorities1 - die Rechte
 	 */
@@ -311,7 +311,7 @@ public abstract class Contact<C1 extends BaseObject<?>, C2 extends BaseObject<?>
 	}
 
 	/**
-	 * Wurde die Zuordnung von der 1. Partei bestätigt?
+	 * Wurde die Zuordnung von der 1. Partei bestï¿½tigt?
 	 * 
 	 * @param approvedByContact1 - true oder false
 	 */
@@ -321,7 +321,7 @@ public abstract class Contact<C1 extends BaseObject<?>, C2 extends BaseObject<?>
 	}
 
 	/**
-	 * Wurden die gemachten Änderungen von der 1. Partei bestätigt?
+	 * Wurden die gemachten ï¿½nderungen von der 1. Partei bestï¿½tigt?
 	 * 
 	 * @param changesApprovedByContact1 - true oder false
 	 */
@@ -361,7 +361,7 @@ public abstract class Contact<C1 extends BaseObject<?>, C2 extends BaseObject<?>
 	}
 
 	/**
-	 * Ein möglicher Änderungsvorschlag für die Rechte der 2. Partei
+	 * Ein mï¿½glicher ï¿½nderungsvorschlag fï¿½r die Rechte der 2. Partei
 	 * 
 	 * @param changedContactAuthorities2 - die Rechte
 	 */
@@ -371,7 +371,7 @@ public abstract class Contact<C1 extends BaseObject<?>, C2 extends BaseObject<?>
 	}
 
 	/**
-	 * Wurde die Zuordnung von der 2. Partei bestätigt?
+	 * Wurde die Zuordnung von der 2. Partei bestï¿½tigt?
 	 * 
 	 * @param approvedByContact2 - true oder false
 	 */
@@ -381,7 +381,7 @@ public abstract class Contact<C1 extends BaseObject<?>, C2 extends BaseObject<?>
 	}
 
 	/**
-	 * Wurden die gemachten Änderungen von der 2. Partei bestätigt?
+	 * Wurden die gemachten ï¿½nderungen von der 2. Partei bestï¿½tigt?
 	 * 
 	 * @param changesApprovedByContact2 - true oder false
 	 */

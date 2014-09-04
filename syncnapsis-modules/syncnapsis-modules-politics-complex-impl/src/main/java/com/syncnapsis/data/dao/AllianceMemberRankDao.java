@@ -1,5 +1,5 @@
 /**
- * Syncnapsis Framework - Copyright (c) 2012 ultimate
+ * Syncnapsis Framework - Copyright (c) 2012-2014 ultimate
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms of
  * the GNU General Public License as published by the Free Software Foundation; either version
@@ -19,19 +19,19 @@ import java.util.List;
 import com.syncnapsis.data.model.AllianceMemberRank;
 
 /**
- * Dao-Interface für den Zugriff auf AllianceMemberRank
+ * Dao-Interface fï¿½r den Zugriff auf AllianceMemberRank
  * 
  * @author ultimate
  */
 public interface AllianceMemberRankDao extends GenericDao<AllianceMemberRank, Long>
 {
 	/**
-	 * Lade alle Allianzränge zu einem Imperium.<br/>
+	 * Lade alle Allianzrï¿½nge zu einem Imperium.<br/>
 	 * Im gegensatz zu AllianceDao.getByEmpire(...) findet hier keine Filterung
-	 * statt und es werden auch mehrfache Ränge zu einer Allianz zurückgegeben.
+	 * statt und es werden auch mehrfache Rï¿½nge zu einer Allianz zurï¿½ckgegeben.
 	 * 
 	 * @param empireId - die ID des Imperiums
-	 * @return die Liste der Allianz-Ränge
+	 * @return die Liste der Allianz-Rï¿½nge
 	 */
 	public List<AllianceMemberRank> getByEmpire(Long empireId);
 }

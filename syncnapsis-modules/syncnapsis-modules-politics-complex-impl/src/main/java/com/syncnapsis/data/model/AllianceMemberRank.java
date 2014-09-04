@@ -1,5 +1,5 @@
 /**
- * Syncnapsis Framework - Copyright (c) 2012 ultimate
+ * Syncnapsis Framework - Copyright (c) 2012-2014 ultimate
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms of
  * the GNU General Public License as published by the Free Software Foundation; either version
@@ -30,14 +30,14 @@ import com.syncnapsis.data.model.base.BaseObject;
 
 /**
  * Model-Klasse "Allianz-Rang"
- * Diese Klasse definiert Posten bzw. Ränge innerhalb einer Allianz. Über diese
- * Ränge sind Imperien der Allianz zugeordnet. Der Spieler, dem das zugeordnete
- * Imperium gehört bekleidet diesen Rang und verfügt über die dem Rang
- * zugeordneten Rechte für die Verwaltung bzw. Führung der Allianz. Die Ränge
+ * Diese Klasse definiert Posten bzw. Rï¿½nge innerhalb einer Allianz. ï¿½ber diese
+ * Rï¿½nge sind Imperien der Allianz zugeordnet. Der Spieler, dem das zugeordnete
+ * Imperium gehï¿½rt bekleidet diesen Rang und verfï¿½gt ï¿½ber die dem Rang
+ * zugeordneten Rechte fï¿½r die Verwaltung bzw. Fï¿½hrung der Allianz. Die Rï¿½nge
  * einer Allianz bilden eine hierarchische Struktur ab, in dem jedem Rang ein
- * übergeordneter Rang zugewiesen werden kann. So ist gewährleistet, dass
- * mögliche Beförderungen nur innerhalb von Teilhierarchien erlaubt sind und
- * eine Führungstruktur für die Allianz aufgebaut werden kann.
+ * ï¿½bergeordneter Rang zugewiesen werden kann. So ist gewï¿½hrleistet, dass
+ * mï¿½gliche Befï¿½rderungen nur innerhalb von Teilhierarchien erlaubt sind und
+ * eine Fï¿½hrungstruktur fï¿½r die Allianz aufgebaut werden kann.
  * 
  * @author ultimate
  */
@@ -46,12 +46,12 @@ import com.syncnapsis.data.model.base.BaseObject;
 public class AllianceMemberRank extends BaseObject<Long>
 {
 	/**
-	 * Der Name des Ranges. Es sind hier auch Platzhalter möglich um einen
-	 * sprachabhängigen Namen verwenden zu können.
+	 * Der Name des Ranges. Es sind hier auch Platzhalter mï¿½glich um einen
+	 * sprachabhï¿½ngigen Namen verwenden zu kï¿½nnen.
 	 */
 	private String						rankName;
 	/**
-	 * Ist dieser Rang für Nicht-Mitglieder sichtbar?
+	 * Ist dieser Rang fï¿½r Nicht-Mitglieder sichtbar?
 	 */
 	private boolean						visible;
 	/**
@@ -60,7 +60,7 @@ public class AllianceMemberRank extends BaseObject<Long>
 	private int							voteWeight;
 
 	/**
-	 * Die Allianz, zu der dieser Rang gehört.
+	 * Die Allianz, zu der dieser Rang gehï¿½rt.
 	 */
 	private Alliance					alliance;
 	/**
@@ -75,11 +75,11 @@ public class AllianceMemberRank extends BaseObject<Long>
 	private List<Empire>				empires;
 
 	/**
-	 * Ein optionaler übergeordneter Rang.
+	 * Ein optionaler ï¿½bergeordneter Rang.
 	 */
 	private AllianceMemberRank			parent;
 	/**
-	 * Die Liste aller Ränge, denen dieser Rang als übergeordneter Rang
+	 * Die Liste aller Rï¿½nge, denen dieser Rang als ï¿½bergeordneter Rang
 	 * zugeordnet ist.
 	 */
 	private List<AllianceMemberRank>	children;
@@ -92,8 +92,8 @@ public class AllianceMemberRank extends BaseObject<Long>
 	}
 
 	/**
-	 * Der Name des Ranges. Es sind hier auch Platzhalter möglich um einen
-	 * sprachabhängigen Namen verwenden zu können.
+	 * Der Name des Ranges. Es sind hier auch Platzhalter mï¿½glich um einen
+	 * sprachabhï¿½ngigen Namen verwenden zu kï¿½nnen.
 	 * 
 	 * @return rankName
 	 */
@@ -104,7 +104,7 @@ public class AllianceMemberRank extends BaseObject<Long>
 	}
 
 	/**
-	 * Ist dieser Rang für Nicht-Mitglieder sichtbar?
+	 * Ist dieser Rang fï¿½r Nicht-Mitglieder sichtbar?
 	 * 
 	 * @return visible
 	 */
@@ -126,7 +126,7 @@ public class AllianceMemberRank extends BaseObject<Long>
 	}
 
 	/**
-	 * Die Allianz, zu der dieser Rang gehört.
+	 * Die Allianz, zu der dieser Rang gehï¿½rt.
 	 * 
 	 * @return alliance
 	 */
@@ -163,7 +163,7 @@ public class AllianceMemberRank extends BaseObject<Long>
 	}
 
 	/**
-	 * Ein optionaler übergeordneter Rang.
+	 * Ein optionaler ï¿½bergeordneter Rang.
 	 * 
 	 * @return parent
 	 */
@@ -175,7 +175,7 @@ public class AllianceMemberRank extends BaseObject<Long>
 	}
 
 	/**
-	 * Die Liste aller Ränge, denen dieser Rang als übergeordneter Rang
+	 * Die Liste aller Rï¿½nge, denen dieser Rang als ï¿½bergeordneter Rang
 	 * zugeordnet ist.
 	 * 
 	 * @return children
@@ -187,8 +187,8 @@ public class AllianceMemberRank extends BaseObject<Long>
 	}
 
 	/**
-	 * Der Name des Ranges. Es sind hier auch Platzhalter möglich um einen
-	 * sprachabhängigen Namen verwenden zu können.
+	 * Der Name des Ranges. Es sind hier auch Platzhalter mï¿½glich um einen
+	 * sprachabhï¿½ngigen Namen verwenden zu kï¿½nnen.
 	 * 
 	 * @param rankName - der Name
 	 */
@@ -198,7 +198,7 @@ public class AllianceMemberRank extends BaseObject<Long>
 	}
 
 	/**
-	 * Ist dieser Rang für Nicht-Mitglieder sichtbar?
+	 * Ist dieser Rang fï¿½r Nicht-Mitglieder sichtbar?
 	 * 
 	 * @param visible - true oder false
 	 */
@@ -218,7 +218,7 @@ public class AllianceMemberRank extends BaseObject<Long>
 	}
 
 	/**
-	 * Die Allianz, zu der dieser Rang gehört.
+	 * Die Allianz, zu der dieser Rang gehï¿½rt.
 	 * 
 	 * @param alliance - die Allianz
 	 */
@@ -249,7 +249,7 @@ public class AllianceMemberRank extends BaseObject<Long>
 	}
 
 	/**
-	 * Ein optionaler übergeordneter Rang.
+	 * Ein optionaler ï¿½bergeordneter Rang.
 	 * 
 	 * @param parent - der Rang
 	 */
@@ -259,7 +259,7 @@ public class AllianceMemberRank extends BaseObject<Long>
 	}
 
 	/**
-	 * Die Liste aller Ränge, denen dieser Rang als übergeordneter Rang
+	 * Die Liste aller Rï¿½nge, denen dieser Rang als ï¿½bergeordneter Rang
 	 * zugeordnet ist.
 	 * 
 	 * @param children - die Liste

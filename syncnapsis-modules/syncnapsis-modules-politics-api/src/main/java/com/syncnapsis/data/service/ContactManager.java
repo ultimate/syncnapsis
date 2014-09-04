@@ -1,5 +1,5 @@
 /**
- * Syncnapsis Framework - Copyright (c) 2012 ultimate
+ * Syncnapsis Framework - Copyright (c) 2012-2014 ultimate
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms of
  * the GNU General Public License as published by the Free Software Foundation; either version
@@ -19,14 +19,14 @@ import com.syncnapsis.data.model.base.Contact;
 import com.syncnapsis.data.model.base.Authorities;
 
 /**
- * Manager-Interface für den Zugriff auf Kontakt-Zuordnungen.
+ * Manager-Interface fï¿½r den Zugriff auf Kontakt-Zuordnungen.
  * 
  * @author ultimate
  */
 public interface ContactManager<C1 extends BaseObject<?>, C2 extends BaseObject<?>, A extends Authorities>
 {
 	/**
-	 * Gibt die Kontaktzuordnung zwischen zwei Parteien zurück
+	 * Gibt die Kontaktzuordnung zwischen zwei Parteien zurï¿½ck
 	 * @param contactId1 - die erste Partei
 	 * @param contactId2 - die zweite Partei
 	 * @return die Kontaktzuordnung
@@ -34,7 +34,7 @@ public interface ContactManager<C1 extends BaseObject<?>, C2 extends BaseObject<
 	public Contact<C1, C2, A> getContact(Long contactId1, Long contactId2);
 	
 	/**
-	 * Gibt die Kontaktrechte zurück, die Partei 1 in Bezug auf Partei 2 hat
+	 * Gibt die Kontaktrechte zurï¿½ck, die Partei 1 in Bezug auf Partei 2 hat
 	 * @param contactId1 - die erste Partei
 	 * @param contactId2 - die zweite Partei
 	 * @return die Kontaktrechte
@@ -42,7 +42,7 @@ public interface ContactManager<C1 extends BaseObject<?>, C2 extends BaseObject<
 	public A getAuthoritiesForContact1(Long contactId1, Long contactId2);
 	
 	/**
-	 * Gibt die Kontaktrechte zurück, die Partei 2 in Bezug auf Partei 1 hat
+	 * Gibt die Kontaktrechte zurï¿½ck, die Partei 2 in Bezug auf Partei 1 hat
 	 * @param contactId1 - die erste Partei
 	 * @param contactId2 - die zweite Partei
 	 * @return die Kontaktrechte

@@ -1,5 +1,5 @@
 /**
- * Syncnapsis Framework - Copyright (c) 2012 ultimate
+ * Syncnapsis Framework - Copyright (c) 2012-2014 ultimate
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms of
  * the GNU General Public License as published by the Free Software Foundation; either version
@@ -29,10 +29,10 @@ import com.syncnapsis.security.Ownable;
 
 /**
  * Model-Klasse "Allianz"
- * Allianzen sind Bündnisse verschieder Imperien. Imperien können Mitglieder in
- * beliebig vielen Allianzen sein. Für Allianzen gibt es die gleichen
- * diplomatischen Möglichkeiten, wie für Imperien. Imperien einer Allianz teilen
- * in Abhängigkeit ihres Ranges z.B. gemeinsame Sichtbarkeiten oder Armeen.
+ * Allianzen sind Bï¿½ndnisse verschieder Imperien. Imperien kï¿½nnen Mitglieder in
+ * beliebig vielen Allianzen sein. Fï¿½r Allianzen gibt es die gleichen
+ * diplomatischen Mï¿½glichkeiten, wie fï¿½r Imperien. Imperien einer Allianz teilen
+ * in Abhï¿½ngigkeit ihres Ranges z.B. gemeinsame Sichtbarkeiten oder Armeen.
  * 
  * @author ultimate
  */
@@ -41,7 +41,7 @@ import com.syncnapsis.security.Ownable;
 public class Alliance extends Institution<Long> implements Ownable<Empire>
 {
 	/**
-	 * Liste aller Allianz-Ränge, über die der Allianz Mitglieder zugeordnet
+	 * Liste aller Allianz-Rï¿½nge, ï¿½ber die der Allianz Mitglieder zugeordnet
 	 * werden.
 	 */
 	private List<AllianceMemberRank>	allianceMemberRanks;
@@ -54,7 +54,7 @@ public class Alliance extends Institution<Long> implements Ownable<Empire>
 	}
 
 	/**
-	 * Liste aller Allianz-Ränge, über die der Allianz Mitglieder zugeordnet
+	 * Liste aller Allianz-Rï¿½nge, ï¿½ber die der Allianz Mitglieder zugeordnet
 	 * werden.
 	 * 
 	 * @return allianceMemberRanks
@@ -66,10 +66,10 @@ public class Alliance extends Institution<Long> implements Ownable<Empire>
 	}
 
 	/**
-	 * Liste aller Allianz-Ränge, über die der Allianz Mitglieder zugeordnet
+	 * Liste aller Allianz-Rï¿½nge, ï¿½ber die der Allianz Mitglieder zugeordnet
 	 * werden.
 	 * 
-	 * @param allianceMemberRanks - die Liste der Allianz-Ränge
+	 * @param allianceMemberRanks - die Liste der Allianz-Rï¿½nge
 	 */
 	public void setAllianceMemberRanks(List<AllianceMemberRank> allianceMemberRanks)
 	{

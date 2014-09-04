@@ -1,5 +1,5 @@
 /**
- * Syncnapsis Framework - Copyright (c) 2012 ultimate
+ * Syncnapsis Framework - Copyright (c) 2012-2014 ultimate
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms of
  * the GNU General Public License as published by the Free Software Foundation; either version
@@ -29,15 +29,15 @@ import com.syncnapsis.data.model.base.BaseObject;
 /**
  * Model-Klasse "Kontaktgruppe"
  * Kontaktgruppen dienen der Gruppierung von Kontakten eines Imperiums oder
- * einer Allianz zu anderen Imperien bzw. Allianzen. So ist für den Spieler
+ * einer Allianz zu anderen Imperien bzw. Allianzen. So ist fï¿½r den Spieler
  * schneller ersichtlich, welche Beziehungen "Freunde" oder "Feinde" sind.
- * Desweiteren können die Kontaktgruppen für andere Spieler sichtbar gemacht
+ * Desweiteren kï¿½nnen die Kontaktgruppen fï¿½r andere Spieler sichtbar gemacht
  * oder verborgen werden, wobei diese dann nur den Namen der Kontaktgruppe und
- * die darüber zugeordneten Imperium, nicht aber die Details der Abkommen sehen
- * können. Die Kontaktzuordnungen innerhalb einer Kontaktgruppe müssen nicht die
- * gleichen Berechtigungen für die gegenseitigen Beziehungen enthalten. Jede der
+ * die darï¿½ber zugeordneten Imperium, nicht aber die Details der Abkommen sehen
+ * kï¿½nnen. Die Kontaktzuordnungen innerhalb einer Kontaktgruppe mï¿½ssen nicht die
+ * gleichen Berechtigungen fï¿½r die gegenseitigen Beziehungen enthalten. Jede der
  * Kontaktzuordnung definiert ihre eigenen rechtlichen Grundlagen. Jedem
- * Imperium werden bei der Gründung automatisch standard Kontakgruppen wie
+ * Imperium werden bei der Grï¿½ndung automatisch standard Kontakgruppen wie
  * ("Freundschaft", "Nicht-Angriffspakt" oder "Krieg" etc.) zugeordnet.
  * 
  * @author ultimate
@@ -47,8 +47,8 @@ import com.syncnapsis.data.model.base.BaseObject;
 public class ContactGroup extends BaseObject<Long>
 {
 	/**
-	 * Name der Kontaktgruppe. Es sind hier auch Platzhalter möglich um einen
-	 * sprachabhängigen Namen verwenden zu können.
+	 * Name der Kontaktgruppe. Es sind hier auch Platzhalter mï¿½glich um einen
+	 * sprachabhï¿½ngigen Namen verwenden zu kï¿½nnen.
 	 */
 	private String			name;
 	/**
@@ -57,9 +57,9 @@ public class ContactGroup extends BaseObject<Long>
 	private String			description;
 
 	/**
-	 * Sind die Kontaktzuordnungen dieser Kontaktgruppe per default sichtbar für
+	 * Sind die Kontaktzuordnungen dieser Kontaktgruppe per default sichtbar fï¿½r
 	 * andere Spieler? Dieses Attribut kann von jeder Kontaktgruppe einzeln oder
-	 * gesondert für bestimmte Allianzen und Imperien überschrieben werden.
+	 * gesondert fï¿½r bestimmte Allianzen und Imperien ï¿½berschrieben werden.
 	 */
 	private boolean			defaultVisible;
 
@@ -75,13 +75,13 @@ public class ContactGroup extends BaseObject<Long>
 	private Empire			ownerEmpire;
 
 	/**
-	 * Eine temporär Liste aller Allianzen, die über Kontakte dieser
+	 * Eine temporï¿½r Liste aller Allianzen, die ï¿½ber Kontakte dieser
 	 * Kontaktgruppe zugeordnet sind.
 	 */
 	private List<Alliance>	allianceContacts;
 
 	/**
-	 * Eine temporär Liste aller Imperien, die über Kontakte dieser
+	 * Eine temporï¿½r Liste aller Imperien, die ï¿½ber Kontakte dieser
 	 * Kontaktgruppe zugeordnet sind.
 	 */
 	private List<Empire>	empireContacts;
@@ -94,8 +94,8 @@ public class ContactGroup extends BaseObject<Long>
 	}
 
 	/**
-	 * Name der Kontaktgruppe. Es sind hier auch Platzhalter möglich um einen
-	 * sprachabhängigen Namen verwenden zu können.
+	 * Name der Kontaktgruppe. Es sind hier auch Platzhalter mï¿½glich um einen
+	 * sprachabhï¿½ngigen Namen verwenden zu kï¿½nnen.
 	 * 
 	 * @return name
 	 */
@@ -117,9 +117,9 @@ public class ContactGroup extends BaseObject<Long>
 	}
 
 	/**
-	 * Sind die Kontaktzuordnungen dieser Kontaktgruppe per default sichtbar für
+	 * Sind die Kontaktzuordnungen dieser Kontaktgruppe per default sichtbar fï¿½r
 	 * andere Spieler? Dieses Attribut kann von jeder Kontaktgruppe einzeln oder
-	 * gesondert für bestimmte Allianzen und Imperien überschrieben werden.
+	 * gesondert fï¿½r bestimmte Allianzen und Imperien ï¿½berschrieben werden.
 	 * 
 	 * @return defaultVisible
 	 */
@@ -156,7 +156,7 @@ public class ContactGroup extends BaseObject<Long>
 	}
 
 	/**
-	 * Eine temporär Liste aller Allianzen, die über Kontakte dieser
+	 * Eine temporï¿½r Liste aller Allianzen, die ï¿½ber Kontakte dieser
 	 * Kontaktgruppe zugeordnet sind.
 	 * 
 	 * @return allianceContacts
@@ -168,7 +168,7 @@ public class ContactGroup extends BaseObject<Long>
 	}
 
 	/**
-	 * Eine temporär Liste aller Imperien, die über Kontakte dieser
+	 * Eine temporï¿½r Liste aller Imperien, die ï¿½ber Kontakte dieser
 	 * Kontaktgruppe zugeordnet sind.
 	 * 
 	 * @return empireContacts
@@ -180,8 +180,8 @@ public class ContactGroup extends BaseObject<Long>
 	}
 
 	/**
-	 * Name der Kontaktgruppe. Es sind hier auch Platzhalter möglich um einen
-	 * sprachabhängigen Namen verwenden zu können.
+	 * Name der Kontaktgruppe. Es sind hier auch Platzhalter mï¿½glich um einen
+	 * sprachabhï¿½ngigen Namen verwenden zu kï¿½nnen.
 	 * 
 	 * @param name - der Name
 	 */
@@ -201,9 +201,9 @@ public class ContactGroup extends BaseObject<Long>
 	}
 
 	/**
-	 * Sind die Kontaktzuordnungen dieser Kontaktgruppe per default sichtbar für
+	 * Sind die Kontaktzuordnungen dieser Kontaktgruppe per default sichtbar fï¿½r
 	 * andere Spieler? Dieses Attribut kann von jeder Kontaktgruppe einzeln oder
-	 * gesondert für bestimmte Allianzen und Imperien überschrieben werden.
+	 * gesondert fï¿½r bestimmte Allianzen und Imperien ï¿½berschrieben werden.
 	 * 
 	 * @param defaultVisible - true oder false
 	 */
@@ -235,7 +235,7 @@ public class ContactGroup extends BaseObject<Long>
 	}
 
 	/**
-	 * Eine temporär Liste aller Allianzen, die über Kontakte dieser
+	 * Eine temporï¿½r Liste aller Allianzen, die ï¿½ber Kontakte dieser
 	 * Kontaktgruppe zugeordnet sind.
 	 * 
 	 * @param allianceContacts - die Liste
@@ -246,7 +246,7 @@ public class ContactGroup extends BaseObject<Long>
 	}
 
 	/**
-	 * Eine temporär Liste aller Imperien, die über Kontakte dieser
+	 * Eine temporï¿½r Liste aller Imperien, die ï¿½ber Kontakte dieser
 	 * Kontaktgruppe zugeordnet sind.
 	 * 
 	 * @param empireContacts - die Liste

@@ -1,5 +1,5 @@
 /**
- * Syncnapsis Framework - Copyright (c) 2012 ultimate
+ * Syncnapsis Framework - Copyright (c) 2012-2014 ultimate
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms of
  * the GNU General Public License as published by the Free Software Foundation; either version
@@ -21,20 +21,20 @@ import com.syncnapsis.data.model.ContactGroup;
 import com.syncnapsis.data.service.ContactGroupManager;
 
 /**
- * Manager-Implementierung für den Zugriff auf ContactGroup.
+ * Manager-Implementierung fï¿½r den Zugriff auf ContactGroup.
  * 
  * @author ultimate
  */
 public class ContactGroupManagerImpl extends GenericManagerImpl<ContactGroup, Long> implements ContactGroupManager
 {
 	/**
-	 * ContactGroupDao für den Datenbankzugriff
+	 * ContactGroupDao fï¿½r den Datenbankzugriff
 	 */
 	private ContactGroupDao	contactGroupDao;
 
 	/**
 	 * Standard-Constructor
-	 * @param contactGroupDao - ContactGroupDao für den Datenbankzugriff
+	 * @param contactGroupDao - ContactGroupDao fï¿½r den Datenbankzugriff
 	 */
 	public ContactGroupManagerImpl(ContactGroupDao contactGroupDao)
 	{

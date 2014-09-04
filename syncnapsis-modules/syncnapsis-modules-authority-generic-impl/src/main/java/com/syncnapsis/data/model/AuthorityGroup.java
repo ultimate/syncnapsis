@@ -1,5 +1,5 @@
 /**
- * Syncnapsis Framework - Copyright (c) 2012 ultimate
+ * Syncnapsis Framework - Copyright (c) 2012-2014 ultimate
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms of
  * the GNU General Public License as published by the Free Software Foundation; either version
@@ -24,7 +24,7 @@ import javax.persistence.Table;
 import com.syncnapsis.data.model.base.BaseObject;
 
 /**
- * Klasse, die Gruppen für die Zusammenfassung von einzelnen Rechten definiert.
+ * Klasse, die Gruppen fï¿½r die Zusammenfassung von einzelnen Rechten definiert.
  * 
  * @author ultimate
  */
@@ -37,7 +37,7 @@ public class AuthorityGroup extends BaseObject<Long>
 	 */
 	protected String	name;
 	/**
-	 * Die Liste der dazugehörigen Authority-Namen
+	 * Die Liste der dazugehï¿½rigen Authority-Namen
 	 */
 	protected List<Authority> authorities;
 
@@ -59,7 +59,7 @@ public class AuthorityGroup extends BaseObject<Long>
 	}
 
 	/** 
-	 * Die Liste der dazugehörigen Authority-Namen
+	 * Die Liste der dazugehï¿½rigen Authority-Namen
 	 * 
 	 * @return authorities
 	 */
@@ -79,7 +79,7 @@ public class AuthorityGroup extends BaseObject<Long>
 	}
 
 	/**
-	 * Die Liste der dazugehörigen Authority-Namen
+	 * Die Liste der dazugehï¿½rigen Authority-Namen
 	 * 
 	 * @param authorities
 	 */

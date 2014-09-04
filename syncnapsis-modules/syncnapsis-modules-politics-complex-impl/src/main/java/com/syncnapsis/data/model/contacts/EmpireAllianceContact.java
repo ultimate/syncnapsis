@@ -1,5 +1,5 @@
 /**
- * Syncnapsis Framework - Copyright (c) 2012 ultimate
+ * Syncnapsis Framework - Copyright (c) 2012-2014 ultimate
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms of
  * the GNU General Public License as published by the Free Software Foundation; either version
@@ -28,7 +28,7 @@ import com.syncnapsis.data.model.Empire;
 import com.syncnapsis.data.model.base.ContactExtension;
 
 /**
- * Klasse für die Kontaktzuordnung zwischen Imperium und Allianz.
+ * Klasse fï¿½r die Kontaktzuordnung zwischen Imperium und Allianz.
  * Basiert auf ContactExtension<Empire, Alliance>
  * 
  * @author ultimate

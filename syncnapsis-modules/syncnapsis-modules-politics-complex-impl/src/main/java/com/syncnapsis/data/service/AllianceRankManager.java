@@ -1,5 +1,5 @@
 /**
- * Syncnapsis Framework - Copyright (c) 2012 ultimate
+ * Syncnapsis Framework - Copyright (c) 2012-2014 ultimate
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms of
  * the GNU General Public License as published by the Free Software Foundation; either version
@@ -18,7 +18,7 @@ import com.syncnapsis.data.model.Alliance;
 import com.syncnapsis.data.model.AllianceRank;
 
 /**
- * Manager-Interface für den Zugriff auf AllianceRank.
+ * Manager-Interface fï¿½r den Zugriff auf AllianceRank.
  * 
  * @author ultimate
  */

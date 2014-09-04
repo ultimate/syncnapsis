@@ -1,5 +1,5 @@
 /**
- * Syncnapsis Framework - Copyright (c) 2012 ultimate
+ * Syncnapsis Framework - Copyright (c) 2012-2014 ultimate
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms of
  * the GNU General Public License as published by the Free Software Foundation; either version
@@ -28,7 +28,7 @@ import com.syncnapsis.data.model.base.Authorities;
 
 /**
  * Klasse, die die einzelnen Rechte zusammenfasst, damit diese von woanders als "Paket" referenziert
- * werden können.
+ * werden kï¿½nnen.
  * 
  * @author ultimate
  */
@@ -174,11 +174,11 @@ public class AuthoritiesGenericImpl extends Authorities
 	}
 	
 	/**
-	 * Entfernt eine Authority aus der einen Liste und fügt sie in die andere ein.
+	 * Entfernt eine Authority aus der einen Liste und fï¿½gt sie in die andere ein.
 	 * 
 	 * @param authorityName - der Name der zu wechselnden Authority
-	 * @param fromList - die Liste aus der die Authority zu löschen ist
-	 * @param toList - die Liste in die die Authority einzufügen ist 
+	 * @param fromList - die Liste aus der die Authority zu lï¿½schen ist
+	 * @param toList - die Liste in die die Authority einzufï¿½gen ist 
 	 * @return war die Authority in der fromList enthalten
 	 */
 	@Transient

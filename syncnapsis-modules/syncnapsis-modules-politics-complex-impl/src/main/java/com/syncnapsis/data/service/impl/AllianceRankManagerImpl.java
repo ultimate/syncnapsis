@@ -1,5 +1,5 @@
 /**
- * Syncnapsis Framework - Copyright (c) 2012 ultimate
+ * Syncnapsis Framework - Copyright (c) 2012-2014 ultimate
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms of
  * the GNU General Public License as published by the Free Software Foundation; either version
@@ -20,14 +20,14 @@ import com.syncnapsis.data.model.AllianceRank;
 import com.syncnapsis.data.service.AllianceRankManager;
 
 /**
- * Manager-Implementierung für den Zugriff auf AllianceRank.
+ * Manager-Implementierung fï¿½r den Zugriff auf AllianceRank.
  * 
  * @author ultimate
  */
 public class AllianceRankManagerImpl extends GenericRankManagerImpl<AllianceRank, Alliance, Long> implements AllianceRankManager
 {
 	/**
-	 * AllianceRankDao für den Datenbankzugriff
+	 * AllianceRankDao fï¿½r den Datenbankzugriff
 	 */
 	@SuppressWarnings("unused")
 	private AllianceRankDao allianceRankDao;

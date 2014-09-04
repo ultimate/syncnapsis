@@ -1,5 +1,5 @@
 /**
- * Syncnapsis Framework - Copyright (c) 2012 ultimate
+ * Syncnapsis Framework - Copyright (c) 2012-2014 ultimate
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms of
  * the GNU General Public License as published by the Free Software Foundation; either version
@@ -19,21 +19,21 @@ import java.util.List;
 import com.syncnapsis.data.model.ContactGroup;
 
 /**
- * Dao-Interface für den Zugriff auf ContactGroup
+ * Dao-Interface fï¿½r den Zugriff auf ContactGroup
  * 
  * @author ultimate
  */
 public interface ContactGroupDao extends GenericDao<ContactGroup, Long>
 {
 	/**
-	 * Gibt eine Liste der Kontaktgruppen zu einem Imperium zurück
+	 * Gibt eine Liste der Kontaktgruppen zu einem Imperium zurï¿½ck
 	 * @param empireId - das Imperium
 	 * @return die Liste
 	 */
 	public List<ContactGroup> getByEmpire(Long empireId);
 	
 	/**
-	 * Gibt eine Liste der Kontaktgruppen zu einer Allianz zurück
+	 * Gibt eine Liste der Kontaktgruppen zu einer Allianz zurï¿½ck
 	 * @param allianceId - das Allianz
 	 * @return die Liste
 	 */

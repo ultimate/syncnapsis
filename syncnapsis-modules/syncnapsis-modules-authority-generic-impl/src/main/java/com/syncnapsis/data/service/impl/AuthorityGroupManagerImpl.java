@@ -1,5 +1,5 @@
 /**
- * Syncnapsis Framework - Copyright (c) 2012 ultimate
+ * Syncnapsis Framework - Copyright (c) 2012-2014 ultimate
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms of
  * the GNU General Public License as published by the Free Software Foundation; either version
@@ -19,14 +19,14 @@ import com.syncnapsis.data.model.AuthorityGroup;
 import com.syncnapsis.data.service.AuthorityGroupManager;
 
 /**
- * Manager-Implementierung für den Zugriff auf AuthorityGroup.
+ * Manager-Implementierung fï¿½r den Zugriff auf AuthorityGroup.
  * 
  * @author ultimate
  */
 public class AuthorityGroupManagerImpl extends GenericNameManagerImpl<AuthorityGroup, Long> implements AuthorityGroupManager
 {
 	/**
-	 * AuthorityGroupDao für den Datenbankzugriff
+	 * AuthorityGroupDao fï¿½r den Datenbankzugriff
 	 */
 	@SuppressWarnings("unused")
 	private AuthorityGroupDao authorityGroupDao;

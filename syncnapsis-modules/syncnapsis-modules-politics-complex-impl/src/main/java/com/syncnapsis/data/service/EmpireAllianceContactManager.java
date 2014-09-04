@@ -1,5 +1,5 @@
 /**
- * Syncnapsis Framework - Copyright (c) 2012 ultimate
+ * Syncnapsis Framework - Copyright (c) 2012-2014 ultimate
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms of
  * the GNU General Public License as published by the Free Software Foundation; either version
@@ -20,7 +20,7 @@ import com.syncnapsis.data.model.AuthoritiesGenericImpl;
 import com.syncnapsis.data.model.contacts.EmpireAllianceContact;
 
 /**
- * Manager-Interface für den Zugriff auf EmpireAllianceContact
+ * Manager-Interface fï¿½r den Zugriff auf EmpireAllianceContact
  * 
  * @author ultimate
  */

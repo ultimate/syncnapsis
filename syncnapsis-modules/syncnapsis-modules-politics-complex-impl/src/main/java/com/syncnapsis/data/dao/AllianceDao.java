@@ -1,5 +1,5 @@
 /**
- * Syncnapsis Framework - Copyright (c) 2012 ultimate
+ * Syncnapsis Framework - Copyright (c) 2012-2014 ultimate
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms of
  * the GNU General Public License as published by the Free Software Foundation; either version
@@ -19,7 +19,7 @@ import java.util.List;
 import com.syncnapsis.data.model.Alliance;
 
 /**
- * Dao-Interface für den Zugriff auf Alliance
+ * Dao-Interface fï¿½r den Zugriff auf Alliance
  * 
  * @author ultimate
  */
@@ -27,9 +27,9 @@ public interface AllianceDao extends GenericNameDao<Alliance, Long>
 {
 	/**
 	 * Lade alle Allianzen zu einem Imperium.<br/>
-	 * Da die Verknüpfung von Imperium und Allianz über Allianzränge geschieht,
+	 * Da die Verknï¿½pfung von Imperium und Allianz ï¿½ber Allianzrï¿½nge geschieht,
 	 * muss hier eine Filterung erfolgen, die verhindert, dass eine Allianz, zu
-	 * der ein Imperium mehrere Ränge hat, doppelt zurück gegeben wird.
+	 * der ein Imperium mehrere Rï¿½nge hat, doppelt zurï¿½ck gegeben wird.
 	 * 
 	 * @param empireId - die ID des Imperiums
 	 * @return eine Liste aller Allianzen des Imperiums

@@ -1,5 +1,5 @@
 /**
- * Syncnapsis Framework - Copyright (c) 2012 ultimate
+ * Syncnapsis Framework - Copyright (c) 2012-2014 ultimate
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms of
  * the GNU General Public License as published by the Free Software Foundation; either version
@@ -19,14 +19,14 @@ import com.syncnapsis.data.model.Authority;
 import com.syncnapsis.data.service.AuthorityManager;
 
 /**
- * Manager-Implementierung für den Zugriff auf Authority.
+ * Manager-Implementierung fï¿½r den Zugriff auf Authority.
  * 
  * @author ultimate
  */
 public class AuthorityManagerImpl extends GenericNameManagerImpl<Authority, Long> implements AuthorityManager
 {
 	/**
-	 * AuthorityDao für den Datenbankzugriff
+	 * AuthorityDao fï¿½r den Datenbankzugriff
 	 */
 	@SuppressWarnings("unused")
 	private AuthorityDao authorityDao;

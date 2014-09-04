@@ -1,5 +1,5 @@
 /**
- * Syncnapsis Framework - Copyright (c) 2012 ultimate
+ * Syncnapsis Framework - Copyright (c) 2012-2014 ultimate
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms of
  * the GNU General Public License as published by the Free Software Foundation; either version
@@ -20,7 +20,7 @@ import javax.persistence.Table;
 import com.syncnapsis.data.model.base.SummaryRank;
 
 /**
- * Rang-Objekt für die Bewertung von Spielern auf Basis von GenericRank.
+ * Rang-Objekt fï¿½r die Bewertung von Spielern auf Basis von GenericRank.
  * 
  * @author ultimate
  */

@@ -1,5 +1,5 @@
 /**
- * Syncnapsis Framework - Copyright (c) 2012 ultimate
+ * Syncnapsis Framework - Copyright (c) 2012-2014 ultimate
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms of
  * the GNU General Public License as published by the Free Software Foundation; either version
@@ -22,7 +22,7 @@ import com.syncnapsis.data.model.annotations.RankCriterion;
 import com.syncnapsis.data.model.base.Rank;
 
 /**
- * Rang-Objekt für die Bewertung von Imperien auf Basis von GenericRank.
+ * Rang-Objekt fï¿½r die Bewertung von Imperien auf Basis von GenericRank.
  * 
  * @author ultimate
  */
@@ -30,22 +30,22 @@ import com.syncnapsis.data.model.base.Rank;
 @Table(name = "empirerank")
 public class EmpireRank extends Rank<Empire>
 {
-	// TODO anzahl kolonien und anzahl blöcke
+	// TODO anzahl kolonien und anzahl blï¿½cke
 	
 	/**
-	 * Die Punktbewertung der wirtschaftlichen Stärke des Imperiums
+	 * Die Punktbewertung der wirtschaftlichen Stï¿½rke des Imperiums
 	 */
 	@RankCriterion
 	private int economy;
 
 	/**
-	 * Die Punktbewertung der militärischen Stärke des Imperiums
+	 * Die Punktbewertung der militï¿½rischen Stï¿½rke des Imperiums
 	 */
 	@RankCriterion
 	private int military;
 
 	/**
-	 * Die Punktbewertung der wissenschaftlichen Stärke des Imperiums
+	 * Die Punktbewertung der wissenschaftlichen Stï¿½rke des Imperiums
 	 */
 	@RankCriterion
 	private int science;
@@ -57,7 +57,7 @@ public class EmpireRank extends Rank<Empire>
 	private int total;
 
 	/**
-	 * Die Punktbewertung der wirtschaftlichen Stärke des Imperiums
+	 * Die Punktbewertung der wirtschaftlichen Stï¿½rke des Imperiums
 	 * 
 	 * @return die Wirtschaftspunkte
 	 */
@@ -68,9 +68,9 @@ public class EmpireRank extends Rank<Empire>
 	}
 
 	/**
-	 * Die Punktbewertung der militärischen Stärke des Imperiums
+	 * Die Punktbewertung der militï¿½rischen Stï¿½rke des Imperiums
 	 * 
-	 * @return die Militärpunkte
+	 * @return die Militï¿½rpunkte
 	 */
 	@Column(nullable = false)
 	public int getMilitary()
@@ -79,7 +79,7 @@ public class EmpireRank extends Rank<Empire>
 	}
 
 	/**
-	 * Die Punktbewertung der wissenschaftlichen Stärke des Imperiums
+	 * Die Punktbewertung der wissenschaftlichen Stï¿½rke des Imperiums
 	 * 
 	 * @return die Wissenschaftspunkte
 	 */
@@ -101,7 +101,7 @@ public class EmpireRank extends Rank<Empire>
 	}
 
 	/**
-	 * Die Punktbewertung der wirtschaftlichen Stärke des Imperiums
+	 * Die Punktbewertung der wirtschaftlichen Stï¿½rke des Imperiums
 	 * 
 	 * @param economy - die Wirtschaftspunkte
 	 */
@@ -111,9 +111,9 @@ public class EmpireRank extends Rank<Empire>
 	}
 
 	/**
-	 * Die Punktbewertung der militärischen Stärke des Imperiums
+	 * Die Punktbewertung der militï¿½rischen Stï¿½rke des Imperiums
 	 * 
-	 * @param military - die Militärpunkte
+	 * @param military - die Militï¿½rpunkte
 	 */
 	public void setMilitary(int military)
 	{
@@ -121,7 +121,7 @@ public class EmpireRank extends Rank<Empire>
 	}
 
 	/**
-	 * Die Punktbewertung der wissenschaftlichen Stärke des Imperiums
+	 * Die Punktbewertung der wissenschaftlichen Stï¿½rke des Imperiums
 	 * 
 	 * @param science - die Wissenschaftspunkte
 	 */

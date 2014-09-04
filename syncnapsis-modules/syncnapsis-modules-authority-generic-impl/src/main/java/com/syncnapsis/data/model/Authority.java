@@ -1,5 +1,5 @@
 /**
- * Syncnapsis Framework - Copyright (c) 2012 ultimate
+ * Syncnapsis Framework - Copyright (c) 2012-2014 ultimate
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms of
  * the GNU General Public License as published by the Free Software Foundation; either version
@@ -23,7 +23,7 @@ import javax.persistence.Table;
 import com.syncnapsis.data.model.base.BaseObject;
 
 /**
- * Klasse, die die einzelnen möglichen Rechte definiert. Sie dient nur als Lookup-Table und enthält
+ * Klasse, die die einzelnen mï¿½glichen Rechte definiert. Sie dient nur als Lookup-Table und enthï¿½lt
  * quasi nur die Namen der Rechte.
  * 
  * @author ultimate

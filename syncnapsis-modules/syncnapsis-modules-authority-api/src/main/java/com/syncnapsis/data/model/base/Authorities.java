@@ -1,5 +1,5 @@
 /**
- * Syncnapsis Framework - Copyright (c) 2012 ultimate
+ * Syncnapsis Framework - Copyright (c) 2012-2014 ultimate
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms of
  * the GNU General Public License as published by the Free Software Foundation; either version
@@ -20,8 +20,8 @@ import javax.persistence.MappedSuperclass;
 import javax.persistence.Transient;
 
 /**
- * Abstrakte Oberklasse für alle Rechte-Objekte.
- * Rechte können auf verschiedene Weise implementiert und somit strukturiert werden.
+ * Abstrakte Oberklasse fï¿½r alle Rechte-Objekte.
+ * Rechte kï¿½nnen auf verschiedene Weise implementiert und somit strukturiert werden.
  * 
  * @author ultimate
  */
@@ -29,7 +29,7 @@ import javax.persistence.Transient;
 public abstract class Authorities extends BaseObject<Long>
 {
 	/**
-	 * Schaltet ein Recht frei, sofern es für dieses Authorities-Objekt gültig ist
+	 * Schaltet ein Recht frei, sofern es fï¿½r dieses Authorities-Objekt gï¿½ltig ist
 	 * 
 	 * @param authorityName - das freizuschaltende Recht
 	 * @return der vorherige Zustand: freigeschaltet oder nicht
@@ -38,7 +38,7 @@ public abstract class Authorities extends BaseObject<Long>
 	public abstract boolean grantAuthority(String authorityName);
 
 	/**
-	 * Entzieht ein Recht, sofern es für dieses Authorities-Objekt gültig ist
+	 * Entzieht ein Recht, sofern es fï¿½r dieses Authorities-Objekt gï¿½ltig ist
 	 * 
 	 * @param authorityName - das zu entziehende Recht
 	 * @return der vorherige Zustand: freigeschaltet oder nicht
@@ -47,16 +47,16 @@ public abstract class Authorities extends BaseObject<Long>
 	public abstract boolean withdrawAuthority(String authorityName);
 
 	/**
-	 * Prüft ob ein bestimmtes Recht freigeschaltet ist oder nicht
+	 * Prï¿½ft ob ein bestimmtes Recht freigeschaltet ist oder nicht
 	 * 
-	 * @param authorityName - das zu prüfende Recht
+	 * @param authorityName - das zu prï¿½fende Recht
 	 * @return der Zustand: freigeschaltet oder nicht
 	 */
 	@Transient
 	public abstract boolean isAuthorityGranted(String authorityName);
 
 	/**
-	 * Gibt die Liste der freigeschalteten Rechte zurück
+	 * Gibt die Liste der freigeschalteten Rechte zurï¿½ck
 	 * 
 	 * @return die Liste
 	 */
@@ -64,7 +64,7 @@ public abstract class Authorities extends BaseObject<Long>
 	public abstract List<String> getAuthorityNamesGranted();
 
 	/**
-	 * Gibt die Liste der nicht freigeschalteten Rechte zurück
+	 * Gibt die Liste der nicht freigeschalteten Rechte zurï¿½ck
 	 * 
 	 * @return die Liste
 	 */

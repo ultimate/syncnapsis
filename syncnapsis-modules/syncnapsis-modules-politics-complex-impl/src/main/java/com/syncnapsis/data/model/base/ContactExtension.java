@@ -1,5 +1,5 @@
 /**
- * Syncnapsis Framework - Copyright (c) 2012 ultimate
+ * Syncnapsis Framework - Copyright (c) 2012-2014 ultimate
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms of
  * the GNU General Public License as published by the Free Software Foundation; either version
@@ -24,11 +24,11 @@ import com.syncnapsis.data.model.ContactGroup;
 import com.syncnapsis.data.model.AuthoritiesGenericImpl;
 
 /**
- * Erweiterung der abstrakten Klasse Contact für die Zuordnung zu ContactGroups
+ * Erweiterung der abstrakten Klasse Contact fï¿½r die Zuordnung zu ContactGroups
  * 
  * @author ultimate
- * @param <C1> - die Klasse für die eine Seite der Kontaktzuordnung
- * @param <C2> - die Klasse für die andere Seite der Kontaktzuordnung
+ * @param <C1> - die Klasse fï¿½r die eine Seite der Kontaktzuordnung
+ * @param <C2> - die Klasse fï¿½r die andere Seite der Kontaktzuordnung
  */
 @MappedSuperclass
 public abstract class ContactExtension<C1 extends BaseObject<?>, C2 extends BaseObject<?>> extends Contact<C1, C2, AuthoritiesGenericImpl>
@@ -36,14 +36,14 @@ public abstract class ContactExtension<C1 extends BaseObject<?>, C2 extends Base
 
 	/**
 	 * Die Liste der Kontaktgruppen, denen diese Kontaktzuordnung zugeordnet
-	 * ist. Eine Kontaktzuordnung kann grundsätzlich in mehreren Kontaktgruppen
+	 * ist. Eine Kontaktzuordnung kann grundsï¿½tzlich in mehreren Kontaktgruppen
 	 * enthalten sein.
 	 */
 	private List<ContactGroup>	contactGroups;
 
 	/**
 	 * Die Liste der Kontaktgruppen, denen diese Kontaktzuordnung zugeordnet
-	 * ist. Eine Kontaktzuordnung kann grundsätzlich in mehreren Kontaktgruppen
+	 * ist. Eine Kontaktzuordnung kann grundsï¿½tzlich in mehreren Kontaktgruppen
 	 * enthalten sein.
 	 * 
 	 * @return contactGroups
@@ -57,7 +57,7 @@ public abstract class ContactExtension<C1 extends BaseObject<?>, C2 extends Base
 
 	/**
 	 * Die Liste der Kontaktgruppen, denen diese Kontaktzuordnung zugeordnet
-	 * ist. Eine Kontaktzuordnung kann grundsätzlich in mehreren Kontaktgruppen
+	 * ist. Eine Kontaktzuordnung kann grundsï¿½tzlich in mehreren Kontaktgruppen
 	 * enthalten sein.
 	 * 
 	 * @param contactGroups - die Liste

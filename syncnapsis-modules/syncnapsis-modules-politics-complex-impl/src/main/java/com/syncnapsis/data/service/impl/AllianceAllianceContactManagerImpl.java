@@ -1,5 +1,5 @@
 /**
- * Syncnapsis Framework - Copyright (c) 2012 ultimate
+ * Syncnapsis Framework - Copyright (c) 2012-2014 ultimate
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms of
  * the GNU General Public License as published by the Free Software Foundation; either version
@@ -20,21 +20,21 @@ import com.syncnapsis.data.model.contacts.AllianceAllianceContact;
 import com.syncnapsis.data.service.AllianceAllianceContactManager;
 
 /**
- * Manager-Implementierung für den Zugriff auf AllianceAllianceContact.
+ * Manager-Implementierung fï¿½r den Zugriff auf AllianceAllianceContact.
  * 
  * @author ultimate
  */
 public class AllianceAllianceContactManagerImpl extends GenericManagerImpl<AllianceAllianceContact, Long> implements AllianceAllianceContactManager
 {
 	/**
-	 * AllianceAllianceContactDao für den Datenbankzugriff
+	 * AllianceAllianceContactDao fï¿½r den Datenbankzugriff
 	 */
 	@SuppressWarnings("unused")
 	private AllianceAllianceContactDao	allianceAllianceContactDao;
 
 	/**
 	 * Standard-Constructor
-	 * @param allianceAllianceContactDao - AllianceAllianceContactDao für den Datenbankzugriff
+	 * @param allianceAllianceContactDao - AllianceAllianceContactDao fï¿½r den Datenbankzugriff
 	 */
 	public AllianceAllianceContactManagerImpl(AllianceAllianceContactDao allianceAllianceContactDao)
 	{
