@@ -1,5 +1,5 @@
 /**
- * Syncnapsis Framework - Copyright (c) 2012 ultimate
+ * Syncnapsis Framework - Copyright (c) 2012-2014 ultimate
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms of
  * the GNU General Public License as published by the Free Software Foundation; either version
@@ -25,5 +25,5 @@ var templateQuickLaunchContext = ''+
 '<div style="position:absolute; width:200px; height:6px; background-image:url({imagepath}{skinname}/contextmenu/top.png)"></div>'+
 '<div style="position:absolute; width:200px; bottom:5px; top:6px; background-image:url({imagepath}{skinname}/contextmenu/middle.png)"></div>'+
 '<div style="position:absolute; width:200px; bottom:0px; height:5px; background-image:url({imagepath}{skinname}/contextmenu/bottom.png)"></div>'+
-'<div id="quicklaunch_menupunkt1" onclick="quicklaunch_remove_button();" onmouseout="context_highlight_off(this);" onmouseover="context_highlight_on(this);" style="position:absolute; top:4px; left:4px; width:192px; height:24px; color:#0293c9; font-size:14px; background-image:url({imagepath}{skinname}/contextmenu/menupunkt_normal.png);"><div style="position:absolute; top:3px; left:6px; cursor:default;">Menüpunkt entfernen</div></div>'+
+'<div id="quicklaunch_menupunkt1" onclick="quicklaunch_remove_button();" onmouseout="context_highlight_off(this);" onmouseover="context_highlight_on(this);" style="position:absolute; top:4px; left:4px; width:192px; height:24px; color:#0293c9; font-size:14px; background-image:url({imagepath}{skinname}/contextmenu/menupunkt_normal.png);"><div style="position:absolute; top:3px; left:6px; cursor:default;">Menï¿½punkt entfernen</div></div>'+
 '</div>';

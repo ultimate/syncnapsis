@@ -1,5 +1,5 @@
 /**
- * Syncnapsis Framework - Copyright (c) 2012 ultimate
+ * Syncnapsis Framework - Copyright (c) 2012-2014 ultimate
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms of
  * the GNU General Public License as published by the Free Software Foundation; either version
@@ -48,7 +48,7 @@ function loadAutoCompleter2(keys, action, fieldId, fieldName)
 function updateAutoCompleter(counter, fieldId, content) 
 { 
     // um zu verhindern, dass von einen verlagsamten alten request neue ergebnisse ersetzt werden 
-    //   wird eine überprüfung der letzten version durchgeführt. 
+    //   wird eine ï¿½berprï¿½fung der letzten version durchgefï¿½hrt. 
     if(!autoCompleterCounterSet[fieldId] || counter > autoCompleterCounterSet[fieldId]) 
     { 
         autoCompleterCounterSet[fieldId]=counter; 

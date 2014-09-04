@@ -1,5 +1,5 @@
 /**
- * Syncnapsis Framework - Copyright (c) 2012 ultimate
+ * Syncnapsis Framework - Copyright (c) 2012-2014 ultimate
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms of
  * the GNU General Public License as published by the Free Software Foundation; either version
@@ -204,7 +204,7 @@ function newWindowIsMinimized() {
 function newWindowMouseDownOnTitleBar(e) {
 	var win = newWindowGetWindow(getSrcElement(e));
 	
-	// mouseDown auf die Buttons ausschließen
+	// mouseDown auf die Buttons ausschlieï¿½en
 	if(getSrcElement(e) == win.titleBar || getSrcElement(e) == win.titleBar.titleText) {
 		addListener(document, "mousemove", newWindowMouseMoveOnTitleBar);
 		addListener(document, "mouseup", newWindowMouseUpOnTitleBar);
@@ -220,7 +220,7 @@ function newWindowMouseUpOnTitleBar(e) {
 
 	document.newWindowMovingWindow.windowParams.xPosition = getX(document.newWindowMovingWindow);
 	document.newWindowMovingWindow.windowParams.yPosition = getY(document.newWindowMovingWindow);	
-	// TODO änderung der position an die datenbank übergeben	
+	// TODO ï¿½nderung der position an die datenbank ï¿½bergeben	
 }
 function newWindowMouseMoveOnTitleBar(e) {
 	var x = getMouseX(e);

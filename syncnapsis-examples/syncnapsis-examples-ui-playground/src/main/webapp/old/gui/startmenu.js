@@ -1,5 +1,5 @@
 /**
- * Syncnapsis Framework - Copyright (c) 2012 ultimate
+ * Syncnapsis Framework - Copyright (c) 2012-2014 ultimate
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms of
  * the GNU General Public License as published by the Free Software Foundation; either version
@@ -23,7 +23,7 @@ function c_menu() {
 	this.parentNode;
 	this.length = 0;
 	
-	// fügt dem menu ein item hinzu
+	// fï¿½gt dem menu ein item hinzu
 	// wird nur von c_menuItem aufgerufen
 	this.add = function (mItem) {
 		var ids = mItem.div.id.split(".");
@@ -31,7 +31,7 @@ function c_menu() {
 		this.menuItems[ids[ids.length-1]] = mItem;
 	}
 	
-	// liefert den menüpunkt mit dem entsprechenden indices
+	// liefert den menï¿½punkt mit dem entsprechenden indices
 	this.getNode = function(indexes) {
 		if(indexes.length == 1) return this.menuItems[indexes[0]];
 		index = indexes.shift();
@@ -49,7 +49,7 @@ function c_menuItem(div,template) {
 	this.display = function() {
 		
 	}
-	// fügt dem entsprechenden submenu ein item hinzu
+	// fï¿½gt dem entsprechenden submenu ein item hinzu
 	this.addSubMenuItem = function(mItem) {
 		if(this.subMenu == null) {
 			this.subMenu = new c_menu();

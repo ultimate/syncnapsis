@@ -1,5 +1,5 @@
 /**
- * Syncnapsis Framework - Copyright (c) 2012 ultimate
+ * Syncnapsis Framework - Copyright (c) 2012-2014 ultimate
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms of
  * the GNU General Public License as published by the Free Software Foundation; either version
@@ -123,7 +123,7 @@ function Viewport(posX, posY, posZ, width, height, color, parentElement)
 			}
 		}
 		
-		// ieworkaround damit die letzt fläche nicht fehlt ...
+		// ieworkaround damit die letzt flï¿½che nicht fehlt ...
 		this.ctx.fillStyle = "rgba(1,1,1,0)";
 		this.ctx.fillRect(0,0,0,0);	
 	};

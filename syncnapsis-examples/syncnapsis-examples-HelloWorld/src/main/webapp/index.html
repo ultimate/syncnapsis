@@ -1,4 +1,18 @@
 <html>
+<!--
+ - Syncnapsis Framework - Copyright (c) 2012-2014 ultimate
+ - 
+ - This program is free software; you can redistribute it and/or modify it under the terms of
+ - the GNU General Public License as published by the Free Software Foundation; either version
+ - 3 of the License, or any later version.
+ - 
+ - This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+ - without even the implied warranty of MECHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ - See the GNU General Public License for more details.
+ - 
+ - You should have received a copy of the GNU General Plublic License along with this program;
+ - if not, see <http://www.gnu.org/licenses/>.
+-->
 <head>
 <script type="text/javascript" src="scripts/util/Requests.js"></script>
 
@@ -71,15 +85,15 @@
 			
 			/*
 			Bei Aufruf dieser Methode durch den Server sollte ein Fenster entsprechend
-			der übergebenen Parameter aktualisiert werden.
+			der Ã¼bergebenen Parameter aktualisiert werden.
 			Das kannst du entweder hier direkt machen, oder durch Weiterleitung auf
 			deine eigenen Funktionen.
 			
 			Wenn auf Client-Seite ein Event durch Verschieben eines Fensters aufgerufen
 			wird, dann solltest du wiederum serverWindowManager.updateWindow(...)
-			aufrufen, um dem Server die Änderungen mitzuteilen. Dieser wird dann die
-			Änderungen an alle Clients raussenden (auch an den, der die Änderung verursacht
-			hat, so hat man gleich eine Bestätigung)
+			aufrufen, um dem Server die Ã„nderungen mitzuteilen. Dieser wird dann die
+			Ã„nderungen an alle Clients raussenden (auch an den, der die Ã„nderung verursacht
+			hat, so hat man gleich eine BestÃ¤tigung)
 			*/			
 		};
 
@@ -93,17 +107,17 @@
 			
 			/*
 			Bei Aufruf dieser Methode durch den Server sollte auf dem Client ein neues
-			Fenster erzeugt werden (zunächst mit Standard-Eigenschaften). Der Server
-			wird anschließend updateWindow(...) aufrufen um das Fenster ggf. zu verändern.
+			Fenster erzeugt werden (zunÃ¤chst mit Standard-Eigenschaften). Der Server
+			wird anschlieÃŸend updateWindow(...) aufrufen um das Fenster ggf. zu verÃ¤ndern.
 			
-			Wenn auf Client-Seite ein Event für Erstellung eines Fensters ausgelöst wird, 
+			Wenn auf Client-Seite ein Event fÃ¼r Erstellung eines Fensters ausgelÃ¶st wird, 
 			so sollte serverWindowManager.createWindow(null) aufgerufen werden, anstatt 
 			direkt ein Fenster zu erzeugen (das Vorgeben einer ID durch den Client ist
-			nicht möglich). Der Server legt dann ein neues Fenster an, 
-			vergibt eine ID und schickt anschließend an alle Clients den Befehl zur 
-			Erstellung des Fensters. Damit bekommt auch der auslösende Client eine 
-			Rückmeldung und kann dann in dieser Method wie oben beschrieben das Fenster
-			anlegen (sollte ja keine große Verzögerung geben).
+			nicht mÃ¶glich). Der Server legt dann ein neues Fenster an, 
+			vergibt eine ID und schickt anschlieÃŸend an alle Clients den Befehl zur 
+			Erstellung des Fensters. Damit bekommt auch der auslÃ¶sende Client eine 
+			RÃ¼ckmeldung und kann dann in dieser Method wie oben beschrieben das Fenster
+			anlegen (sollte ja keine groÃŸe VerzÃ¶gerung geben).
 			*/
 		};
 
@@ -119,11 +133,11 @@
 			Bei Aufruf dieser Methode durch der Server sollte das entsprechende Fenster
 			auf dem Client geschlossen werden.
 			
-			Wenn auf Client-Seite ein Event für das Schließen eines Fensters ausgelöst
+			Wenn auf Client-Seite ein Event fÃ¼r das SchlieÃŸen eines Fensters ausgelÃ¶st
 			wird sollte analog zum Erstellen eines Fensters verfahren werden. Anstatt
-			das Fenster direkt zu schließen sollte hier serverWindowManager.removeWindow(id)
-			aufgerufen werden. Der Server löscht dann das Fenster und verteilt den Befehl
-			weiter an alle Clients. So wird auch auf dem auslösenden Client das Fenster 
+			das Fenster direkt zu schlieÃŸen sollte hier serverWindowManager.removeWindow(id)
+			aufgerufen werden. Der Server lÃ¶scht dann das Fenster und verteilt den Befehl
+			weiter an alle Clients. So wird auch auf dem auslÃ¶senden Client das Fenster 
 			geschlossen.
 			*/
 		};
