@@ -615,7 +615,9 @@
 		<column>fkEmpire</column>
 		<column>rank</column>
 		<column>rankValue</column>
+		<column>rankRawValue</column>
 		<column>rankDate</column>
+		<column>rankVictoryDate</column>
 		<column>rankFinal</column>
 		<column>joinedDate</column>
 		<column>destructionDate</column>
@@ -629,7 +631,9 @@
 			<value description="fkEmpire">10</value>
 			<value description="rank">0</value>
 			<value description="rankValue">0</value>
+			<value description="rankRawValue">0</value>
 			<value description="rankDate">2012-01-01</value>
+			<null/>
 			<value description="rankFinal">0</value>
 			<value description="joinedDate">2012-01-01</value>
 			<null />
@@ -644,7 +648,9 @@
 			<value description="fkEmpire">20</value>
 			<value description="rank">0</value>
 			<value description="rankValue">0</value>
+			<value description="rankRawValue">0</value>
 			<value description="rankDate">2012-01-01</value>
+			<null/>
 			<value description="rankFinal">0</value>
 			<value description="joinedDate">2012-01-01</value>
 			<null />
@@ -659,7 +665,9 @@
 			<value description="fkEmpire">10</value>
 			<value description="rank">1</value>
 			<value description="rankValue">10</value>
+			<value description="rankRawValue">10</value>
 			<value description="rankDate">2012-01-01</value>
+			<null/>
 			<value description="rankFinal">0</value>
 			<value description="joinedDate">2012-01-01</value>
 			<null />
@@ -674,7 +682,9 @@
 			<value description="fkEmpire">20</value>
 			<value description="rank">2</value>
 			<value description="rankValue">5</value>
+			<value description="rankRawValue">5</value>
 			<value description="rankDate">2012-02-01</value>
+			<null/>
 			<value description="rankFinal">0</value>
 			<value description="joinedDate">2012-01-01</value>
 			<value description="destructionDate">2012-02-01</value>

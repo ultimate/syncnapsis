@@ -66,14 +66,25 @@ public class Participant extends ActivatableInstance<Long> implements Ownable<Em
 
 	/**
 	 * The current value being used to determine the rank of this participant/empire within the
-	 * match.
+	 * match expressed in percent.
 	 */
 	protected int							rankValue;
+	
+	/**
+	 * THe current value being used to determine the rank of this participant/empire within the
+	 * match as a raw value.
+	 */
+	protected long 							rankRawValue;
 
 	/**
 	 * The date the rank was last calculated
 	 */
 	protected Date							rankDate;
+	
+	/**
+	 * The date the rank value reached the victory condition
+	 */
+	protected Date							rankVictoryDate;
 
 	/**
 	 * Is the calculated rank final (not modifiable any more)? The flag will be set on calculation
@@ -157,7 +168,7 @@ public class Participant extends ActivatableInstance<Long> implements Ownable<Em
 
 	/**
 	 * The current value being used to determine the rank of this participant/empire within the
-	 * match.
+	 * match expressend in percent
 	 * 
 	 * @return rankValue
 	 */
@@ -165,6 +176,18 @@ public class Participant extends ActivatableInstance<Long> implements Ownable<Em
 	public int getRankValue()
 	{
 		return rankValue;
+	}
+
+	/**
+	 * The current value being used to determine the rank of this participant/empire within the
+	 * match as a raw value.
+	 * 
+	 * @return rankRawValue
+	 */
+	@Column(nullable = false)
+	public long getRankRawValue()
+	{
+		return rankRawValue;
 	}
 
 	/**
@@ -180,6 +203,18 @@ public class Participant extends ActivatableInstance<Long> implements Ownable<Em
 	}
 
 	/**
+	 * The date the rank value reached the victory condition
+	 * 
+	 * @return rankVictoryDate
+	 */
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(nullable = true)
+	public Date getRankVictoryDate()
+	{
+		return rankVictoryDate;
+	}
+
+	/**
 	 * Is the calculated rank final (not modifiable any more)? The flag will be set on calculation
 	 * when the player is destroyed.
 	 * 
@@ -189,17 +224,6 @@ public class Participant extends ActivatableInstance<Long> implements Ownable<Em
 	public boolean isRankFinal()
 	{
 		return rankFinal;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * @see com.syncnapsis.security.Ownable#getOwners()
-	 */
-	@Transient
-	@Override
-	public List<Empire> getOwners()
-	{
-		return Collections.nCopies(1, getEmpire());
 	}
 
 	/**
@@ -274,6 +298,17 @@ public class Participant extends ActivatableInstance<Long> implements Ownable<Em
 	{
 		return populations;
 	}
+	
+	/*
+	 * (non-Javadoc)
+	 * @see com.syncnapsis.security.Ownable#getOwners()
+	 */
+	@Transient
+	@Override
+	public List<Empire> getOwners()
+	{
+		return Collections.nCopies(1, getEmpire());
+	}
 
 	// public List<SolarSystemInfrastructure> getSystemsOwned()
 	// {
@@ -317,13 +352,24 @@ public class Participant extends ActivatableInstance<Long> implements Ownable<Em
 
 	/**
 	 * The current value being used to determine the rank of this participant/empire within the
-	 * match.
+	 * match expressed in percent.
 	 * 
 	 * @param rankValue - the rank value
 	 */
 	public void setRankValue(int rankValue)
 	{
 		this.rankValue = rankValue;
+	}
+
+	/**
+	 * The current value being used to determine the rank of this participant/empire within the
+	 * match as a raw value.
+	 * 
+	 * @param rankRawValue - the rank raw value
+	 */
+	public void setRankRawValue(long rankRawValue)
+	{
+		this.rankRawValue = rankRawValue;
 	}
 
 	/**
@@ -334,6 +380,16 @@ public class Participant extends ActivatableInstance<Long> implements Ownable<Em
 	public void setRankDate(Date rankDate)
 	{
 		this.rankDate = rankDate;
+	}
+
+	/**
+	 * The date the rank value reached the victory condition
+	 * 
+	 * @param rankVictoryDate - the date and time
+	 */
+	public void setRankVictoryDate(Date rankVictoryDate)
+	{
+		this.rankVictoryDate = rankVictoryDate;
 	}
 
 	/**
@@ -437,6 +493,7 @@ public class Participant extends ActivatableInstance<Long> implements Ownable<Em
 		result = prime * result + rank;
 		result = prime * result + ((rankDate == null) ? 0 : rankDate.hashCode());
 		result = prime * result + (rankFinal ? 1231 : 1237);
+		result = prime * result + (int) (rankRawValue ^ (rankRawValue >>> 32));
 		result = prime * result + rankValue;
 		result = prime * result + startSystemsSelected;
 		return result;
@@ -496,6 +553,8 @@ public class Participant extends ActivatableInstance<Long> implements Ownable<Em
 		else if(!rankDate.equals(other.rankDate))
 			return false;
 		if(rankFinal != other.rankFinal)
+			return false;
+		if(rankRawValue != other.rankRawValue)
 			return false;
 		if(rankValue != other.rankValue)
 			return false;
