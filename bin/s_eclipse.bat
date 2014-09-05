@@ -1,5 +1,5 @@
 @REM
-@REM Syncnapsis Framework - Copyright (c) 2012 ultimate
+@REM Syncnapsis Framework - Copyright (c) 2012-2014 ultimate
 @REM 
 @REM This program is free software; you can redistribute it and/or modify it under the terms of
 @REM the GNU General Public License as published by the Free Software Foundation; either version

@@ -6,7 +6,7 @@ main-syncnapsis project containing all sub-projects and modules
 License
 =======
 
-Syncnapsis Framework - Copyright (c) 2012 ultimate
+Syncnapsis Framework - Copyright (c) 2012-2014 ultimate
 
 This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the License, or any later version.
 
