@@ -1,5 +1,5 @@
 /**
- * Syncnapsis Framework - Copyright (c) 2012 ultimate
+ * Syncnapsis Framework - Copyright (c) 2012-2014 ultimate
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms of
  * the GNU General Public License as published by the Free Software Foundation; either version
@@ -177,7 +177,7 @@ public class UniverseEvolutionDataGenerator extends GameBaseDataGenerator
 
 		// TODO colonies & blocks
 
-		// TODO später durch echte Berechnung ersetzen
+		// TODO spï¿½ter durch echte Berechnung ersetzen
 		int points = (int) (level * 100 * (Math.random() / 5 + 1));
 		EmpireRank empireRank = statsDataGenerator.createRankSimple(EmpireRank.class, empire, points);
 		empireRank = (EmpireRank) empireRankManager.save(empireRank);

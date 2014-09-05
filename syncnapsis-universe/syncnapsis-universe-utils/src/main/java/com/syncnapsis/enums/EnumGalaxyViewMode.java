@@ -1,5 +1,5 @@
 /**
- * Syncnapsis Framework - Copyright (c) 2012 ultimate
+ * Syncnapsis Framework - Copyright (c) 2012-2014 ultimate
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms of
  * the GNU General Public License as published by the Free Software Foundation; either version
@@ -15,7 +15,7 @@
 package com.syncnapsis.enums;
 
 /**
- * Enum für die Spezifizierung der Sichtweise auf die Galaxie für die
+ * Enum fï¿½r die Spezifizierung der Sichtweise auf die Galaxie fï¿½r die
  * Darstellung einer Galaxie im GalaxyViewFrame.
  * 
  * @author ultimate

@@ -1,5 +1,5 @@
 /**
- * Syncnapsis Framework - Copyright (c) 2012 ultimate
+ * Syncnapsis Framework - Copyright (c) 2012-2014 ultimate
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms of
  * the GNU General Public License as published by the Free Software Foundation; either version
@@ -15,8 +15,8 @@
 package com.syncnapsis.enums;
 
 /**
- * Enum für die Spezifizierung eines Galaxie-Typs. Die Galaxie-Typen sind den
- * folgenden Quellen entnommen. 'x' steht dabei für einen Platzhalter, der bei
+ * Enum fï¿½r die Spezifizierung eines Galaxie-Typs. Die Galaxie-Typen sind den
+ * folgenden Quellen entnommen. 'x' steht dabei fï¿½r einen Platzhalter, der bei
  * der Generierung durch Parameter ersetzt wird.
  * http://de.wikipedia.org/wiki/Galaxie
  * http://upload.wikimedia.org/wikipedia/commons/8/8a/Hubble_sequence_photo.png
@@ -30,11 +30,11 @@ public enum EnumGalaxyType
 	 */
 	Ex,
 	/**
-	 * Lentikuläre (linsenförmige) Galaxien
+	 * Lentikulï¿½re (linsenfï¿½rmige) Galaxien
 	 */
 	S0,
 	/**
-	 * Balkengalaxien (als Grundlage für SBx)
+	 * Balkengalaxien (als Grundlage fï¿½r SBx)
 	 */
 	SB0,
 	/**
@@ -46,11 +46,11 @@ public enum EnumGalaxyType
 	 */
 	SBx,
 	/**
-	 * Irreguläre (unregelmäßige) Galaxien
+	 * Irregulï¿½re (unregelmï¿½ï¿½ige) Galaxien
 	 */
 	Rx,
 	/**
-	 * zusätzliche Bogensegmente für die Gestaltung von Galaxien
+	 * zusï¿½tzliche Bogensegmente fï¿½r die Gestaltung von Galaxien
 	 */
 	Ax;
 }

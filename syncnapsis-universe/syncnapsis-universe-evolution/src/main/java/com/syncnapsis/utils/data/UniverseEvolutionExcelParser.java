@@ -1,5 +1,5 @@
 /**
- * Syncnapsis Framework - Copyright (c) 2012 ultimate
+ * Syncnapsis Framework - Copyright (c) 2012-2014 ultimate
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms of
  * the GNU General Public License as published by the Free Software Foundation; either version
@@ -64,7 +64,7 @@ public class UniverseEvolutionExcelParser
 	 * Liest die in der Konfiguration angegebene Excel-Datei ein und erstellt
 	 * daraus Testdaten.
 	 * 
-	 * @param properties - die Einstellungen für das Erstellen der Testdaten
+	 * @param properties - die Einstellungen fï¿½r das Erstellen der Testdaten
 	 */
 	public static void createDataFromExcel(Properties properties) throws IOException
 	{
@@ -91,16 +91,16 @@ public class UniverseEvolutionExcelParser
 	}
 
 	/**
-	 * Laden der Spalten für die Kontakt-Rechte
+	 * Laden der Spalten fï¿½r die Kontakt-Rechte
 	 * 
 	 * @param workbook - das Workbook
-	 * @param key_sheet_authorities_c - der Key für das Sheet
+	 * @param key_sheet_authorities_c - der Key fï¿½r das Sheet
 	 */
 	public static void parseContactAuthorities(HSSFWorkbook workbook, String key_sheet_authorities_c)
 	{
 		HSSFSheet sheet_authorities_c = workbook.getSheet(key_sheet_authorities_c);
 
-		// sheet_authorities_c -> Laden der Spalten für die Kontakt-Rechte
+		// sheet_authorities_c -> Laden der Spalten fï¿½r die Kontakt-Rechte
 		HSSFRow row = sheet_authorities_c.getRow(0);
 		for(int i = 1; i < 255; i++)
 		{
@@ -138,16 +138,16 @@ public class UniverseEvolutionExcelParser
 	}
 
 	/**
-	 * Laden der Spalten für die Allianz-Rechte
+	 * Laden der Spalten fï¿½r die Allianz-Rechte
 	 * 
 	 * @param workbook - das Workbook
-	 * @param key_sheet_authorities_a - der Key für das Sheet
+	 * @param key_sheet_authorities_a - der Key fï¿½r das Sheet
 	 */
 	public static void parseAllianceAuthorities(HSSFWorkbook workbook, String key_sheet_authorities_a)
 	{
 		HSSFSheet sheet_authorities_a = workbook.getSheet(key_sheet_authorities_a);
 
-		// sheet_authorities_a -> Laden der Spalten für die Allianz-Rechte
+		// sheet_authorities_a -> Laden der Spalten fï¿½r die Allianz-Rechte
 		HSSFRow row = sheet_authorities_a.getRow(0);
 		for(int i = 3; i < 255; i++)
 		{
@@ -200,7 +200,7 @@ public class UniverseEvolutionExcelParser
 	 * Erstellen aller Benutzer
 	 * 
 	 * @param workbook - das Workbook
-	 * @param key_sheet_players - der Key für das Sheet
+	 * @param key_sheet_players - der Key fï¿½r das Sheet
 	 */
 	public static void parseUsers(HSSFWorkbook workbook, String key_sheet_players)
 	{
@@ -315,7 +315,7 @@ public class UniverseEvolutionExcelParser
 	 * Erstellen aller Imperien
 	 * 
 	 * @param workbook - das Workbook
-	 * @param key_sheet_empires - der Key für das Sheet
+	 * @param key_sheet_empires - der Key fï¿½r das Sheet
 	 */
 	public static void parseEmpires(HSSFWorkbook workbook, String key_sheet_empires)
 	{
@@ -371,7 +371,7 @@ public class UniverseEvolutionExcelParser
 	 * Erstellen aller Allianzen und der Mitgliedschaften
 	 * 
 	 * @param workbook - das Workbook
-	 * @param key_sheet_allianceMemberships - der Key für das Sheet
+	 * @param key_sheet_allianceMemberships - der Key fï¿½r das Sheet
 	 */
 	public static void parseAlliancesMemberships(HSSFWorkbook workbook, String key_sheet_allianceMemberships)
 	{
@@ -404,7 +404,7 @@ public class UniverseEvolutionExcelParser
 
 				members = new LinkedList<Empire>();
 
-				// Mitglieder den Rängen zuweisen
+				// Mitglieder den Rï¿½ngen zuweisen
 				rowNum = 1;
 				while((row = sheet_allianceMemberships.getRow(rowNum++)) != null)
 				{
@@ -467,7 +467,7 @@ public class UniverseEvolutionExcelParser
 	 * Erstellen der Diplomatie zwischen Allianz und Allianz
 	 * 
 	 * @param workbook - das Workbook
-	 * @param key_sheet_diplomacy_aa - der Key für das Sheet
+	 * @param key_sheet_diplomacy_aa - der Key fï¿½r das Sheet
 	 */
 	public static void parseDiplomacy_AA(HSSFWorkbook workbook, String key_sheet_diplomacy_aa)
 	{
@@ -536,7 +536,7 @@ public class UniverseEvolutionExcelParser
 	 * Erstellen der Diplomatie zwischen Allianz und Imperium
 	 * 
 	 * @param workbook - das Workbook
-	 * @param key_sheet_diplomacy_ae - der Key für das Sheet
+	 * @param key_sheet_diplomacy_ae - der Key fï¿½r das Sheet
 	 */
 	public static void parseDiplomacy_AE(HSSFWorkbook workbook, String key_sheet_diplomacy_ae)
 	{
@@ -602,7 +602,7 @@ public class UniverseEvolutionExcelParser
 	 * Erstellen der Diplomatie zwischen Imperium und Imperium
 	 * 
 	 * @param workbook - das Workbook
-	 * @param key_sheet_diplomacy_ee - der Key für das Sheet
+	 * @param key_sheet_diplomacy_ee - der Key fï¿½r das Sheet
 	 */
 	public static void parseDiplomacy_EE(HSSFWorkbook workbook, String key_sheet_diplomacy_ee)
 	{

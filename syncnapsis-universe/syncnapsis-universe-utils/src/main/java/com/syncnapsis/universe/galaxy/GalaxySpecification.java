@@ -1,5 +1,5 @@
 /**
- * Syncnapsis Framework - Copyright (c) 2012 ultimate
+ * Syncnapsis Framework - Copyright (c) 2012-2014 ultimate
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms of
  * the GNU General Public License as published by the Free Software Foundation; either version
@@ -32,14 +32,14 @@ import com.syncnapsis.utils.math.Functions;
 import com.syncnapsis.utils.math.Array3D;
 
 /**
- * Diese Klasse repräsentiert die Definition und Spezifikation einer Galaxie.
+ * Diese Klasse reprï¿½sentiert die Definition und Spezifikation einer Galaxie.
  * Die
  * Galaxy kann dabei aus verschiedenen Typen zusammen gesetzt werden und kann
  * auf diese Weise sehr komplexe Formen annehmen. Aus der
- * Wahrscheinlichkeitsverteilung für Systeme in diesen Galaxietypen wird so eine
- * Wahrscheinlichkeitsmatrix für diese Galaxie errechnet, aus der eine Liste von
- * Sektoren bzw. Systemen generiert werden kann. Der Galaxie können über die
- * Methoden addType* Galaxietypen hinzugefügt werden.
+ * Wahrscheinlichkeitsverteilung fï¿½r Systeme in diesen Galaxietypen wird so eine
+ * Wahrscheinlichkeitsmatrix fï¿½r diese Galaxie errechnet, aus der eine Liste von
+ * Sektoren bzw. Systemen generiert werden kann. Der Galaxie kï¿½nnen ï¿½ber die
+ * Methoden addType* Galaxietypen hinzugefï¿½gt werden.
  * 
  * @see Array3D
  * @author ultimate
@@ -57,19 +57,19 @@ public class GalaxySpecification implements Serializable
 	protected transient final Logger			logger				= LoggerFactory.getLogger(getClass());
 
 	/**
-	 * Die Größe in x-Richtung
+	 * Die Grï¿½ï¿½e in x-Richtung
 	 * 
 	 * @see Array3D#getXSize()
 	 */
 	protected int								xSize;
 	/**
-	 * Die Größe in y-Richtung
+	 * Die Grï¿½ï¿½e in y-Richtung
 	 * 
 	 * @see Array3D#getYSize()
 	 */
 	protected int								ySize;
 	/**
-	 * Die Größe in z-Richtung
+	 * Die Grï¿½ï¿½e in z-Richtung
 	 * 
 	 * @see Array3D#getZSize()
 	 */
@@ -86,30 +86,30 @@ public class GalaxySpecification implements Serializable
 	protected ArrayList<Array3D>		matrixes;
 
 	/**
-	 * Liste der Threads für die parallele Berechnung der
+	 * Liste der Threads fï¿½r die parallele Berechnung der
 	 * Wahrscheinlichkeitsmatrizen
 	 */
 	protected ArrayList<GalaxyGenerationThread>	threads;
 
 	/**
-	 * Eine optionale Gittergröße, mit der die Galaxie nach der Berechnung
+	 * Eine optionale Gittergrï¿½ï¿½e, mit der die Galaxie nach der Berechnung
 	 * skaliert wird.
-	 * Es sind so auch größere Galaxien möglich, ohne das die Laufzeit der
+	 * Es sind so auch grï¿½ï¿½ere Galaxien mï¿½glich, ohne das die Laufzeit der
 	 * Berechnung darunter leidet.
 	 */
 	protected int								gridSize;
 
 	/**
-	 * Die endgültige berechnete Wahrscheinlichkeitsmatrix
+	 * Die endgï¿½ltige berechnete Wahrscheinlichkeitsmatrix
 	 */
 	protected Array3D					pm;
 
 	/**
 	 * Erzeugt eine neue (noch leere) Galaxie.
 	 * 
-	 * @param xSize - Die Größe in x-Richtung
-	 * @param ySize - Die Größe in y-Richtung
-	 * @param zSize - Die Größe in z-Richtung
+	 * @param xSize - Die Grï¿½ï¿½e in x-Richtung
+	 * @param ySize - Die Grï¿½ï¿½e in y-Richtung
+	 * @param zSize - Die Grï¿½ï¿½e in z-Richtung
 	 * @param density - die zu erwartende Dichte der Galaxie zur Berechnung der
 	 *            zu erwartenden Zahl an Sektoren bzw. Systemen
 	 */
@@ -128,9 +128,9 @@ public class GalaxySpecification implements Serializable
 	/**
 	 * Erzeugt eine neue (noch leere) Galaxie.
 	 * 
-	 * @param xSize - Die Größe in x-Richtung
-	 * @param ySize - Die Größe in y-Richtung
-	 * @param zSize - Die Größe in z-Richtung
+	 * @param xSize - Die Grï¿½ï¿½e in x-Richtung
+	 * @param ySize - Die Grï¿½ï¿½e in y-Richtung
+	 * @param zSize - Die Grï¿½ï¿½e in z-Richtung
 	 * @param sectors - Die zu erwartende Anzahl von Sektoren bzw. Systemen in
 	 *            dieser Galaxie
 	 */
@@ -149,12 +149,12 @@ public class GalaxySpecification implements Serializable
 	/**
 	 * Erzeugt eine neue (noch leere) Galaxie.
 	 * 
-	 * @param xSize - Die Größe in x-Richtung
-	 * @param ySize - Die Größe in y-Richtung
-	 * @param zSize - Die Größe in z-Richtung
+	 * @param xSize - Die Grï¿½ï¿½e in x-Richtung
+	 * @param ySize - Die Grï¿½ï¿½e in y-Richtung
+	 * @param zSize - Die Grï¿½ï¿½e in z-Richtung
 	 * @param density - die zu erwartende Dichte der Galaxie zur Berechnung der
 	 *            zu erwartenden Zahl an Sektoren bzw. Systemen
-	 * @param gridSize - Eine optionale Gittergröße, mit der die Galaxie nach
+	 * @param gridSize - Eine optionale Gittergrï¿½ï¿½e, mit der die Galaxie nach
 	 *            der Berechnung skaliert wird.
 	 */
 	public GalaxySpecification(int xSize, int ySize, int zSize, double density, int gridSize)
@@ -172,12 +172,12 @@ public class GalaxySpecification implements Serializable
 	/**
 	 * Erzeugt eine neue (noch leere) Galaxie.
 	 * 
-	 * @param xSize - Die Größe in x-Richtung
-	 * @param ySize - Die Größe in y-Richtung
-	 * @param zSize - Die Größe in z-Richtung
+	 * @param xSize - Die Grï¿½ï¿½e in x-Richtung
+	 * @param ySize - Die Grï¿½ï¿½e in y-Richtung
+	 * @param zSize - Die Grï¿½ï¿½e in z-Richtung
 	 * @param sectors - Die zu erwartende Anzahl von Sektoren bzw. Systemen in
 	 *            dieser Galaxie
-	 * @param gridSize - Eine optionale Gittergröße, mit der die Galaxie nach
+	 * @param gridSize - Eine optionale Gittergrï¿½ï¿½e, mit der die Galaxie nach
 	 *            der Berechnung skaliert wird.
 	 */
 	public GalaxySpecification(int xSize, int ySize, int zSize, int sectors, int gridSize)
@@ -193,7 +193,7 @@ public class GalaxySpecification implements Serializable
 	}
 
 	/**
-	 * Die Größe in x-Richtung
+	 * Die Grï¿½ï¿½e in x-Richtung
 	 * 
 	 * @return xSize
 	 */
@@ -203,7 +203,7 @@ public class GalaxySpecification implements Serializable
 	}
 
 	/**
-	 * Die Größe in y-Richtung
+	 * Die Grï¿½ï¿½e in y-Richtung
 	 * 
 	 * @return ySize
 	 */
@@ -213,7 +213,7 @@ public class GalaxySpecification implements Serializable
 	}
 
 	/**
-	 * Die Größe in z-Richtung
+	 * Die Grï¿½ï¿½e in z-Richtung
 	 * 
 	 * @return zSize
 	 */
@@ -223,8 +223,8 @@ public class GalaxySpecification implements Serializable
 	}
 
 	/**
-	 * Dietatsächliche Größe in x-Richtung unter Berücksichtigung der
-	 * Gittergröße
+	 * Dietatsï¿½chliche Grï¿½ï¿½e in x-Richtung unter Berï¿½cksichtigung der
+	 * Gittergrï¿½ï¿½e
 	 * 
 	 * @return xSize * gridSize
 	 */
@@ -234,8 +234,8 @@ public class GalaxySpecification implements Serializable
 	}
 
 	/**
-	 * Dietatsächliche Größe in y-Richtung unter Berücksichtigung der
-	 * Gittergröße
+	 * Dietatsï¿½chliche Grï¿½ï¿½e in y-Richtung unter Berï¿½cksichtigung der
+	 * Gittergrï¿½ï¿½e
 	 * 
 	 * @return ySize * gridSize
 	 */
@@ -245,8 +245,8 @@ public class GalaxySpecification implements Serializable
 	}
 
 	/**
-	 * Dietatsächliche Größe in z-Richtung unter Berücksichtigung der
-	 * Gittergröße
+	 * Dietatsï¿½chliche Grï¿½ï¿½e in z-Richtung unter Berï¿½cksichtigung der
+	 * Gittergrï¿½ï¿½e
 	 * 
 	 * @return zSize * gridSize
 	 */
@@ -266,8 +266,8 @@ public class GalaxySpecification implements Serializable
 	}
 
 	/**
-	 * Das Volumen der Galaxie repräsentiert durch das Volumen des die Galaxie
-	 * umschließenden Ellipsoids
+	 * Das Volumen der Galaxie reprï¿½sentiert durch das Volumen des die Galaxie
+	 * umschlieï¿½enden Ellipsoids
 	 * 
 	 * @return das Volumen
 	 */
@@ -288,7 +288,7 @@ public class GalaxySpecification implements Serializable
 	}
 
 	/**
-	 * Fügt eine Wahrscheinlichkeitsmatrix zu der Liste der gespeicherte
+	 * Fï¿½gt eine Wahrscheinlichkeitsmatrix zu der Liste der gespeicherte
 	 * Matrizen hinzu
 	 * 
 	 * @param m - die Matrix
@@ -299,7 +299,7 @@ public class GalaxySpecification implements Serializable
 	}
 
 	/**
-	 * Fügt eine Liste aus Wahrscheinlichkeitsmatrizen zu der Liste der
+	 * Fï¿½gt eine Liste aus Wahrscheinlichkeitsmatrizen zu der Liste der
 	 * gespeicherte Matrizen hinzu
 	 * 
 	 * @param ms - die Matrizen
@@ -320,8 +320,8 @@ public class GalaxySpecification implements Serializable
 	}
 
 	/**
-	 * Generiert eine zufällige Liste von Sektoren bzw. Systemen auf Basis der
-	 * Wahrscheinlichkeitsmatrix. Die Liste enthält in etwa so viele Einträge,
+	 * Generiert eine zufï¿½llige Liste von Sektoren bzw. Systemen auf Basis der
+	 * Wahrscheinlichkeitsmatrix. Die Liste enthï¿½lt in etwa so viele Eintrï¿½ge,
 	 * wie numberOfSectors. Abweichungen entstehen durch Rundungsfehler.
 	 * 
 	 * @return die Liste von Sektoren bzw. Systemen
@@ -422,7 +422,7 @@ public class GalaxySpecification implements Serializable
 
 	/**
 	 * Aktualisiert bzw. berechnet die Wahrscheinlichkeitsmatrix unter
-	 * Berücksichtigung aller seit der letzten Berechnung hinzugefügten
+	 * Berï¿½cksichtigung aller seit der letzten Berechnung hinzugefï¿½gten
 	 * Galaxietypen.
 	 * 
 	 * @return die Wahrscheinlichkeistmatrix
@@ -456,15 +456,15 @@ public class GalaxySpecification implements Serializable
 	}
 
 	/**
-	 * Verändert eine Liste von generierten Sektoren bzw. System unter
-	 * Berücksichtigung der Gittergröße. Dabei werden alle Koordinaten zunächste
-	 * um die Gittergröße gestreckt um eine größere Galaxie zu erhalten.
-	 * Anschließend wird für eine "natürlichere" Verteilung jeder Sektor bzw.
-	 * System zufällig um bis zu einer halben Gittergröße in eine beliebige
+	 * Verï¿½ndert eine Liste von generierten Sektoren bzw. System unter
+	 * Berï¿½cksichtigung der Gittergrï¿½ï¿½e. Dabei werden alle Koordinaten zunï¿½chste
+	 * um die Gittergrï¿½ï¿½e gestreckt um eine grï¿½ï¿½ere Galaxie zu erhalten.
+	 * Anschlieï¿½end wird fï¿½r eine "natï¿½rlichere" Verteilung jeder Sektor bzw.
+	 * System zufï¿½llig um bis zu einer halben Gittergrï¿½ï¿½e in eine beliebige
 	 * Richtung verschoben.
 	 * 
 	 * @param sectors - die Liste der Sektoren bzw. Systeme
-	 * @param gridSize - die Gittergröße
+	 * @param gridSize - die Gittergrï¿½ï¿½e
 	 */
 	public void processGridSize(List<int[]> sectors, int gridSize)
 	{
@@ -481,12 +481,12 @@ public class GalaxySpecification implements Serializable
 	}
 
 	/**
-	 * Berechnet die Wahrscheinlichkeitsmatrix für den Galaxietyp Ex
+	 * Berechnet die Wahrscheinlichkeitsmatrix fï¿½r den Galaxietyp Ex
 	 * 
 	 * @see EnumGalaxyType#Ex
 	 * @param weight - die Gewichtung dieses Galaxietyps innerhalb dieser
 	 *            Galaxie
-	 * @param sizeLimitation - eine Größenbeschränkung für den Galaxietyp
+	 * @param sizeLimitation - eine Grï¿½ï¿½enbeschrï¿½nkung fï¿½r den Galaxietyp
 	 * @return die Wahrscheinlichkeitsmatrix
 	 */
 	protected Array3D generateTypeEx(double weight, double sizeLimitation)
@@ -514,13 +514,13 @@ public class GalaxySpecification implements Serializable
 	}
 
 	/**
-	 * Berechnet die Wahrscheinlichkeitsmatrix für den Galaxietyp S0
+	 * Berechnet die Wahrscheinlichkeitsmatrix fï¿½r den Galaxietyp S0
 	 * 
 	 * @see EnumGalaxyType#S0
 	 * @param weight - die Gewichtung dieses Galaxietyps innerhalb dieser
 	 *            Galaxie
 	 * @param thickness - die Dicke der Linse
-	 * @param sizeLimitation - eine Größenbeschränkung für den Galaxietyp
+	 * @param sizeLimitation - eine Grï¿½ï¿½enbeschrï¿½nkung fï¿½r den Galaxietyp
 	 * @return die Wahrscheinlichkeitsmatrix
 	 */
 	protected Array3D generateTypeS0(double weight, double thickness, double sizeLimitation)
@@ -563,13 +563,13 @@ public class GalaxySpecification implements Serializable
 	}
 
 	/**
-	 * Berechnet die Wahrscheinlichkeitsmatrix für den Galaxietyp SB0
+	 * Berechnet die Wahrscheinlichkeitsmatrix fï¿½r den Galaxietyp SB0
 	 * 
 	 * @see EnumGalaxyType#SB0
 	 * @param weight - die Gewichtung dieses Galaxietyps innerhalb dieser
 	 *            Galaxie
 	 * @param thickness - die Dicke der Linse
-	 * @param sizeLimitation - eine Größenbeschränkung für den Galaxietyp
+	 * @param sizeLimitation - eine Grï¿½ï¿½enbeschrï¿½nkung fï¿½r den Galaxietyp
 	 * @return die Wahrscheinlichkeitsmatrix
 	 * @param rotationOffset - der Drehoffset
 	 */
@@ -617,13 +617,13 @@ public class GalaxySpecification implements Serializable
 	}
 
 	/**
-	 * Berechnet die Wahrscheinlichkeitsmatrix für den Galaxietyp Sx
+	 * Berechnet die Wahrscheinlichkeitsmatrix fï¿½r den Galaxietyp Sx
 	 * 
 	 * @see EnumGalaxyType#Sx
 	 * @param weight - die Gewichtung dieses Galaxietyps innerhalb dieser
 	 *            Galaxie
 	 * @param numberOfArms - die Anzahl der Spiralarme
-	 * @param numberOfTurns - die Anzahl der Umdrehungen für jeden Arm
+	 * @param numberOfTurns - die Anzahl der Umdrehungen fï¿½r jeden Arm
 	 * @param direction - die Drehrichtung
 	 * @param rotationOffset - der Drehoffset
 	 * @return die Wahrscheinlichkeitsmatrix
@@ -719,12 +719,12 @@ public class GalaxySpecification implements Serializable
 	}
 
 	/**
-	 * Berechnet die Wahrscheinlichkeitsmatrix für den Galaxietyp SBx
+	 * Berechnet die Wahrscheinlichkeitsmatrix fï¿½r den Galaxietyp SBx
 	 * 
 	 * @see EnumGalaxyType#SBx
 	 * @param weight - die Gewichtung dieses Galaxietyps innerhalb dieser
 	 *            Galaxie
-	 * @param numberOfTurns - die Anzahl der Umdrehungen für jeden Arm
+	 * @param numberOfTurns - die Anzahl der Umdrehungen fï¿½r jeden Arm
 	 * @param direction - die Drehrichtung
 	 * @param rotationOffset - der Drehoffset
 	 * @return die Wahrscheinlichkeitsmatrix
@@ -825,7 +825,7 @@ public class GalaxySpecification implements Serializable
 	}
 
 	/**
-	 * Berechnet die Wahrscheinlichkeitsmatrix für den Galaxietyp Rx
+	 * Berechnet die Wahrscheinlichkeitsmatrix fï¿½r den Galaxietyp Rx
 	 * 
 	 * @see EnumGalaxyType#Rx
 	 * @param weight - die Gewichtung dieses Galaxietyps innerhalb dieser
@@ -910,14 +910,14 @@ public class GalaxySpecification implements Serializable
 	}
 
 	/**
-	 * Berechnet die Wahrscheinlichkeitsmatrix für den Galaxietyp Ax
+	 * Berechnet die Wahrscheinlichkeitsmatrix fï¿½r den Galaxietyp Ax
 	 * 
 	 * @see EnumGalaxyType#Ax
 	 * @param weight - die Gewichtung dieses Galaxietyps innerhalb dieser
 	 *            Galaxie
-	 * @param radius - der Radius für den Bogen
-	 * @param phiStart - der Startwinkel für den Bogen in Rad
-	 * @param phiEnd - der Endwinkel für den Bogen in Rad
+	 * @param radius - der Radius fï¿½r den Bogen
+	 * @param phiStart - der Startwinkel fï¿½r den Bogen in Rad
+	 * @param phiEnd - der Endwinkel fï¿½r den Bogen in Rad
 	 * @return die Wahrscheinlichkeitsmatrix
 	 */
 	protected Array3D generateTypeAx(double weight, double radius, double phiStart, double phiEnd)
@@ -985,7 +985,7 @@ public class GalaxySpecification implements Serializable
 	}
 
 	/**
-	 * Fügt dieser Galaxie den Galaxietyp Ex hinzu (weight = 1, sizeLimitation =
+	 * Fï¿½gt dieser Galaxie den Galaxietyp Ex hinzu (weight = 1, sizeLimitation =
 	 * 1)
 	 * 
 	 * @see EnumGalaxyType#Ex
@@ -996,7 +996,7 @@ public class GalaxySpecification implements Serializable
 	}
 
 	/**
-	 * Fügt dieser Galaxie den Galaxietyp Ex hinzu (sizeLimitation = 1)
+	 * Fï¿½gt dieser Galaxie den Galaxietyp Ex hinzu (sizeLimitation = 1)
 	 * 
 	 * @see EnumGalaxyType#Ex
 	 * @param weight - die Gewichtung dieses Galaxietyps innerhalb dieser
@@ -1008,12 +1008,12 @@ public class GalaxySpecification implements Serializable
 	}
 
 	/**
-	 * Fügt dieser Galaxie den Galaxietyp Ex hinzu
+	 * Fï¿½gt dieser Galaxie den Galaxietyp Ex hinzu
 	 * 
 	 * @see EnumGalaxyType#Ex
 	 * @param weight - die Gewichtung dieses Galaxietyps innerhalb dieser
 	 *            Galaxie
-	 * @param sizeLimitation - eine Größenbeschränkung für den Galaxietyp
+	 * @param sizeLimitation - eine Grï¿½ï¿½enbeschrï¿½nkung fï¿½r den Galaxietyp
 	 */
 	public void addTypeEx(double weight, double sizeLimitation)
 	{
@@ -1023,7 +1023,7 @@ public class GalaxySpecification implements Serializable
 	}
 
 	/**
-	 * Fügt dieser Galaxie den Galaxietyp S0 hinzu (weight = 1, sizeLimitation =
+	 * Fï¿½gt dieser Galaxie den Galaxietyp S0 hinzu (weight = 1, sizeLimitation =
 	 * 1)
 	 * 
 	 * @see EnumGalaxyType#S0
@@ -1035,13 +1035,13 @@ public class GalaxySpecification implements Serializable
 	}
 
 	/**
-	 * Fügt dieser Galaxie den Galaxietyp S0 hinzu
+	 * Fï¿½gt dieser Galaxie den Galaxietyp S0 hinzu
 	 * 
 	 * @see EnumGalaxyType#S0
 	 * @param weight - die Gewichtung dieses Galaxietyps innerhalb dieser
 	 *            Galaxie
 	 * @param thickness - die Dicke der Linse
-	 * @param sizeLimitation - eine Größenbeschränkung für den Galaxietyp
+	 * @param sizeLimitation - eine Grï¿½ï¿½enbeschrï¿½nkung fï¿½r den Galaxietyp
 	 */
 	public void addTypeS0(double weight, double thickness, double sizeLimitation)
 	{
@@ -1052,7 +1052,7 @@ public class GalaxySpecification implements Serializable
 	}
 
 	/**
-	 * Fügt dieser Galaxie den Galaxietyp SB0 hinzu (weight = 1, sizeLimitation
+	 * Fï¿½gt dieser Galaxie den Galaxietyp SB0 hinzu (weight = 1, sizeLimitation
 	 * = 1)
 	 * 
 	 * @see EnumGalaxyType#SB0
@@ -1065,14 +1065,14 @@ public class GalaxySpecification implements Serializable
 	}
 
 	/**
-	 * Fügt dieser Galaxie den Galaxietyp SB0 hinzu (weight = 1, sizeLimitation
+	 * Fï¿½gt dieser Galaxie den Galaxietyp SB0 hinzu (weight = 1, sizeLimitation
 	 * = 1)
 	 * 
 	 * @see EnumGalaxyType#SB0
 	 * @param weight - die Gewichtung dieses Galaxietyps innerhalb dieser
 	 *            Galaxie
 	 * @param thickness - die Dicke der Linse
-	 * @param sizeLimitation - eine Größenbeschränkung für den Galaxietyp
+	 * @param sizeLimitation - eine Grï¿½ï¿½enbeschrï¿½nkung fï¿½r den Galaxietyp
 	 * @param rotationOffset - der Drehoffset
 	 */
 	public void addTypeSB0(double weight, double thickness, double sizeLimitation, double rotationOffset)
@@ -1084,11 +1084,11 @@ public class GalaxySpecification implements Serializable
 	}
 
 	/**
-	 * Fügt dieser Galaxie den Galaxietyp Sx hinzu (weight = 1)
+	 * Fï¿½gt dieser Galaxie den Galaxietyp Sx hinzu (weight = 1)
 	 * 
 	 * @see EnumGalaxyType#Sx
 	 * @param numberOfArms - die Anzahl der Spiralarme
-	 * @param numberOfTurns - die Anzahl der Umdrehungen für jeden Arm
+	 * @param numberOfTurns - die Anzahl der Umdrehungen fï¿½r jeden Arm
 	 * @param direction - die Drehrichtung
 	 * @param rotationOffset - der Drehoffset
 	 */
@@ -1098,13 +1098,13 @@ public class GalaxySpecification implements Serializable
 	}
 
 	/**
-	 * Fügt dieser Galaxie den Galaxietyp Sx hinzu
+	 * Fï¿½gt dieser Galaxie den Galaxietyp Sx hinzu
 	 * 
 	 * @see EnumGalaxyType#Sx
 	 * @param weight - die Gewichtung dieses Galaxietyps innerhalb dieser
 	 *            Galaxie
 	 * @param numberOfArms - die Anzahl der Spiralarme
-	 * @param numberOfTurns - die Anzahl der Umdrehungen für jeden Arm
+	 * @param numberOfTurns - die Anzahl der Umdrehungen fï¿½r jeden Arm
 	 * @param direction - die Drehrichtung
 	 * @param rotationOffset - der Drehoffset
 	 */
@@ -1117,10 +1117,10 @@ public class GalaxySpecification implements Serializable
 	}
 
 	/**
-	 * Fügt dieser Galaxie den Galaxietyp SBx hinzu (weight = 1)
+	 * Fï¿½gt dieser Galaxie den Galaxietyp SBx hinzu (weight = 1)
 	 * 
 	 * @see EnumGalaxyType#SBx
-	 * @param numberOfTurns - die Anzahl der Umdrehungen für jeden Arm
+	 * @param numberOfTurns - die Anzahl der Umdrehungen fï¿½r jeden Arm
 	 * @param direction - die Drehrichtung
 	 * @param rotationOffset - der Drehoffset
 	 */
@@ -1130,12 +1130,12 @@ public class GalaxySpecification implements Serializable
 	}
 
 	/**
-	 * Fügt dieser Galaxie den Galaxietyp SBx hinzu
+	 * Fï¿½gt dieser Galaxie den Galaxietyp SBx hinzu
 	 * 
 	 * @see EnumGalaxyType#SBx
 	 * @param weight - die Gewichtung dieses Galaxietyps innerhalb dieser
 	 *            Galaxie
-	 * @param numberOfTurns - die Anzahl der Umdrehungen für jeden Arm
+	 * @param numberOfTurns - die Anzahl der Umdrehungen fï¿½r jeden Arm
 	 * @param direction - die Drehrichtung
 	 * @param rotationOffset - der Drehoffset
 	 */
@@ -1149,7 +1149,7 @@ public class GalaxySpecification implements Serializable
 	}
 
 	/**
-	 * Fügt dieser Galaxie den Galaxietyp Rx hinzu (weight = 1)
+	 * Fï¿½gt dieser Galaxie den Galaxietyp Rx hinzu (weight = 1)
 	 * 
 	 * @see EnumGalaxyType#Rx
 	 * @param numberOfRings - die Anzahl der Ringe
@@ -1160,7 +1160,7 @@ public class GalaxySpecification implements Serializable
 	}
 
 	/**
-	 * Fügt dieser Galaxie den Galaxietyp Rx hinzu
+	 * Fï¿½gt dieser Galaxie den Galaxietyp Rx hinzu
 	 * 
 	 * @see EnumGalaxyType#Rx
 	 * @param weight - die Gewichtung dieses Galaxietyps innerhalb dieser
@@ -1176,12 +1176,12 @@ public class GalaxySpecification implements Serializable
 	}
 
 	/**
-	 * Fügt dieser Galaxie den Galaxietyp Ax hinzu (weight = 1)
+	 * Fï¿½gt dieser Galaxie den Galaxietyp Ax hinzu (weight = 1)
 	 * 
 	 * @see EnumGalaxyType#Ax
-	 * @param radius - der Radius für den Bogen
-	 * @param phiStart - der Startwinkel für den Bogen in Rad
-	 * @param phiEnd - der Endwinkel für den Bogen in Rad
+	 * @param radius - der Radius fï¿½r den Bogen
+	 * @param phiStart - der Startwinkel fï¿½r den Bogen in Rad
+	 * @param phiEnd - der Endwinkel fï¿½r den Bogen in Rad
 	 */
 	public void addTypeAx(double radius, double phiStart, double phiEnd)
 	{
@@ -1189,14 +1189,14 @@ public class GalaxySpecification implements Serializable
 	}
 
 	/**
-	 * Fügt dieser Galaxie den Galaxietyp Ax hinzu
+	 * Fï¿½gt dieser Galaxie den Galaxietyp Ax hinzu
 	 * 
 	 * @see EnumGalaxyType#Ax
 	 * @param weight - die Gewichtung dieses Galaxietyps innerhalb dieser
 	 *            Galaxie
-	 * @param radius - der Radius für den Bogen
-	 * @param phiStart - der Startwinkel für den Bogen in Rad
-	 * @param phiEnd - der Endwinkel für den Bogen in Rad
+	 * @param radius - der Radius fï¿½r den Bogen
+	 * @param phiStart - der Startwinkel fï¿½r den Bogen in Rad
+	 * @param phiEnd - der Endwinkel fï¿½r den Bogen in Rad
 	 */
 	public void addTypeAx(double weight, double radius, double phiStart, double phiEnd)
 	{
@@ -1220,11 +1220,11 @@ public class GalaxySpecification implements Serializable
 	}
 
 	/**
-	 * Interne Thread-Klasse für die Berechnung der Wahrscheinlichkeitsmatrix
-	 * eines Galaxietyps. Auf diese Weise können mehrere Galaxietypen
-	 * hinzugefügt werden ohne, dass nach jedem Schritt auf die Berechnung
+	 * Interne Thread-Klasse fï¿½r die Berechnung der Wahrscheinlichkeitsmatrix
+	 * eines Galaxietyps. Auf diese Weise kï¿½nnen mehrere Galaxietypen
+	 * hinzugefï¿½gt werden ohne, dass nach jedem Schritt auf die Berechnung
 	 * gewartet werden muss. Die Threads werden in einer Liste gespeichert,
-	 * damit sie gejoint werden können, sobald ihr Ergebnis für weitere
+	 * damit sie gejoint werden kï¿½nnen, sobald ihr Ergebnis fï¿½r weitere
 	 * Berechnungen notwendig ist.
 	 * 
 	 * @author ultimate
@@ -1249,7 +1249,7 @@ public class GalaxySpecification implements Serializable
 		 */
 		private double						weight;
 		/**
-		 * Die für die Berechnung notwendigen zusätzlichen Parameter
+		 * Die fï¿½r die Berechnung notwendigen zusï¿½tzlichen Parameter
 		 * Siehe generateType*(..) und addType*(..)
 		 */
 		private double[]					params;
@@ -1258,7 +1258,7 @@ public class GalaxySpecification implements Serializable
 		 * Erzeugt einen neuen Thread
 		 * 
 		 * @param type - Der zu generierende Galaxietype
-		 * @param params - Die für die Berechnung notwendigen zusätzlichen
+		 * @param params - Die fï¿½r die Berechnung notwendigen zusï¿½tzlichen
 		 *            Parameter
 		 */
 		public GalaxyGenerationThread(EnumGalaxyType type, double... params)
@@ -1286,7 +1286,7 @@ public class GalaxySpecification implements Serializable
 		}
 
 		/**
-		 * Führt die Berechnung mit Hilfe von generateType*(..) durch.
+		 * Fï¿½hrt die Berechnung mit Hilfe von generateType*(..) durch.
 		 * 
 		 * @see java.lang.Thread#run()
 		 */
@@ -1332,7 +1332,7 @@ public class GalaxySpecification implements Serializable
 
 		/**
 		 * Gibt nach der Berechnung die berechnete Wahrscheinlichkeitsmatrix
-		 * zurück
+		 * zurï¿½ck
 		 * 
 		 * @return die berechnete Wahrscheinlichkeitsmatrix
 		 */
