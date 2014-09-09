@@ -225,22 +225,50 @@ public class CalculatorImplTest extends LoggerTestCase
 
 		system1.setCoords(new Vector.Integer(0, 0, 0));
 
-		long stdTime = (long) (125000000L * UniverseConquestConstants.PARAM_TRAVEL_TIME_FACTOR.asDouble());
-
 		long travelTime;
 		long expected;
 		for(int travelSpeed = minSpeed; travelSpeed <= maxSpeed; travelSpeed += minSpeed)
 		{
+			long stdTravelTime = calculator.calculateStandardTravelTime(match, travelSpeed);
+
 			for(int dist = stepSize; dist <= maxGap * 10; dist += stepSize)
 			{
 				system2.setCoords(new Vector.Integer(dist, 0, 0));
 
-				expected = (long) (stdTime / ((double) travelSpeed / maxSpeed) * ((double) dist / maxGap));
+				expected = (long) (((double) dist / maxGap) * stdTravelTime);
 				travelTime = calculator.calculateTravelTime(origin, target, travelSpeed);
 				logger.debug("dist = " + dist + " speed = " + travelSpeed + " travel time = " + travelTime + " (" + StringUtil.toString(travelTime)
 						+ ") expected = " + expected);
 				assertTrue(Math.abs(expected - travelTime) <= 1);
 			}
+		}
+	}
+	
+	public void testCalculateStandardTravelTime() throws Exception
+	{
+
+		int minSpeed = UniverseConquestConstants.PARAM_TRAVEL_SPEED_MIN.asInt();
+		int maxSpeed = UniverseConquestConstants.PARAM_TRAVEL_SPEED_MAX.asInt();
+
+		int maxGap = 50;
+
+		Galaxy galaxy = new Galaxy();
+		galaxy.setMaxGap(maxGap);
+
+		Match match = new Match();
+		match.setSpeed(0);
+		
+		long stdTime = (long) (125000000L * UniverseConquestConstants.PARAM_TRAVEL_TIME_FACTOR.asDouble());
+		
+		long travelTime;
+		long expected;
+		for(int travelSpeed = minSpeed; travelSpeed <= maxSpeed; travelSpeed += minSpeed)
+		{
+				expected = (long) (stdTime / ((double) travelSpeed / maxSpeed));
+				travelTime = calculator.calculateStandardTravelTime(match, travelSpeed);
+				logger.debug("speed = " + travelSpeed + " travel time = " + travelTime + " (" + StringUtil.toString(travelTime)
+						+ ") expected = " + expected);
+				assertTrue(Math.abs(expected - travelTime) <= 1);
 		}
 	}
 

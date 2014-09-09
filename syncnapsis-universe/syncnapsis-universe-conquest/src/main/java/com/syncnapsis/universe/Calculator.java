@@ -18,6 +18,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.syncnapsis.data.model.Galaxy;
+import com.syncnapsis.data.model.Match;
 import com.syncnapsis.data.model.SolarSystemInfrastructure;
 import com.syncnapsis.data.model.SolarSystemPopulation;
 import com.syncnapsis.data.model.help.Vector;
@@ -132,6 +133,17 @@ public interface Calculator
 	 * @return the time needed for traveling the whole distance with the given speed in ms
 	 */
 	public long calculateTravelTime(SolarSystemInfrastructure origin, SolarSystemInfrastructure target, int travelSpeed);
+
+	/**
+	 * Calculate the time needed to travel the standard distance with the given speed.
+	 * Therefore the match is used to determine additional information like the standard distance or
+	 * match speed.
+	 * 
+	 * @param match - the match to calculate the time for
+	 * @param travelSpeed - the speed for travelling
+	 * @return the time needed for traveling the whole distance with the given speed in ms
+	 */
+	public long calculateStandardTravelTime(Match match, int travelSpeed);
 
 	/**
 	 * Calculate the attack strength for the given amount of population

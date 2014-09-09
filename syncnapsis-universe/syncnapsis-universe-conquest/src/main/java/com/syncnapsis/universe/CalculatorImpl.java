@@ -23,6 +23,7 @@ import org.slf4j.LoggerFactory;
 
 import com.syncnapsis.constants.UniverseConquestConstants;
 import com.syncnapsis.data.model.Galaxy;
+import com.syncnapsis.data.model.Match;
 import com.syncnapsis.data.model.Parameter;
 import com.syncnapsis.data.model.SolarSystemInfrastructure;
 import com.syncnapsis.data.model.SolarSystemPopulation;
@@ -354,6 +355,20 @@ public class CalculatorImpl implements Calculator
 	@Override
 	public long calculateTravelTime(SolarSystemInfrastructure origin, SolarSystemInfrastructure target, int travelSpeed)
 	{
+		long stdTravelTime = calculateStandardTravelTime(origin.getMatch(), travelSpeed);
+		
+		double dist = MathUtil.distance(origin.getSolarSystem().getCoords(), target.getSolarSystem().getCoords());
+		int stdDist = getStandardTravelDistance(origin.getSolarSystem().getGalaxy());
+
+		return (long) ((dist / stdDist) * stdTravelTime); 
+	}
+	
+	/*
+	 * (non-Javadoc)
+	 * @see com.syncnapsis.universe.Calculator#calculateStandardTravelTime(com.syncnapsis.data.model.Match, int)
+	 */
+	public long calculateStandardTravelTime(Match match, int travelSpeed)
+	{
 		double minSpeed = UniverseConquestConstants.PARAM_TRAVEL_SPEED_MIN.asDouble();
 		double maxSpeed = UniverseConquestConstants.PARAM_TRAVEL_SPEED_MAX.asDouble();
 		double facBuild = UniverseConquestConstants.PARAM_FACTOR_BUILD.asDouble();
@@ -362,17 +377,14 @@ public class CalculatorImpl implements Calculator
 		if(travelSpeed < minSpeed || travelSpeed > maxSpeed)
 			throw new IllegalArgumentException("travelSpeed out of bounds: [" + minSpeed + ", " + maxSpeed + "]");
 
-		double speedFac = getSpeedFactor(origin.getMatch().getSpeed());
-		double dist = MathUtil.distance(origin.getSolarSystem().getCoords(), target.getSolarSystem().getCoords());
-		int stdDist = getStandardTravelDistance(origin.getSolarSystem().getGalaxy());
-
+		double speedFac = getSpeedFactor(match.getSpeed());
+		
 		double timeBase = getMaxPopulation() / facBuild;
 		double travelTime = travelTimeFactor * timeBase / CORRECTION_TRAVEL_TIME;
-		travelTime *= (dist / stdDist); // ratio of dist to std. dist
 		travelTime /= (travelSpeed / maxSpeed); // speed in percent
-		travelTime /= speedFac; // match sped
+		travelTime /= speedFac; // match speed
 
-		return (long) travelTime;
+		return (long) travelTime;		
 	}
 
 	/**
