@@ -31,8 +31,19 @@ PlayerManager = function()
 	
 	this.register = function(username, email, password, passwordConfirm)
 	{
-		// return PLayer
+		// return Player
 		return function(player) { client.uiManager.onRegister(player); };
+	};
+	
+	this.getCurrent = function()
+	{
+		// return Player
+		return function(player) {
+			if(player != null)
+				client.uiManager.onLogin(player);
+			else
+				client.uiManager.onLogout(true);
+		};
 	};
 };
 

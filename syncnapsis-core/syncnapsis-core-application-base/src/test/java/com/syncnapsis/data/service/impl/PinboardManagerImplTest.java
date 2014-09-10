@@ -181,4 +181,136 @@ public class PinboardManagerImplTest extends GenericNameManagerImplTestCase<Pinb
 		}
 		
 	}
+	
+	public void testCheckPostPermission() throws Exception
+	{
+		User creator = userManager.getAll().get(0);
+		User other = userManager.getAll().get(1);
+
+		Pinboard pinboard = new Pinboard();
+		pinboard.setCreator(creator);
+		
+		// check different cases for creator
+		{
+			pinboard.setHidden(false);
+			pinboard.setLocked(false);
+			assertTrue(mockManager.checkPostPermission(pinboard, creator));
+
+			pinboard.setHidden(false);
+			pinboard.setLocked(true);
+			assertTrue(mockManager.checkPostPermission(pinboard, creator));
+			
+			pinboard.setHidden(true);
+			pinboard.setLocked(false);
+			assertTrue(mockManager.checkPostPermission(pinboard, creator));
+			
+			pinboard.setHidden(true);
+			pinboard.setLocked(true);
+			assertTrue(mockManager.checkPostPermission(pinboard, creator));
+		}
+		
+		// check different cases for other user
+		{
+			pinboard.setHidden(false);
+			pinboard.setLocked(false);
+			assertTrue(mockManager.checkPostPermission(pinboard, other));
+			
+			pinboard.setHidden(false);
+			pinboard.setLocked(true);
+			assertFalse(mockManager.checkPostPermission(pinboard, other));
+			
+			pinboard.setHidden(true);
+			pinboard.setLocked(false);
+			assertFalse(mockManager.checkPostPermission(pinboard, other));
+			
+			pinboard.setHidden(true);
+			pinboard.setLocked(true);
+			assertFalse(mockManager.checkPostPermission(pinboard, other));
+		}
+		
+		// check different cases for no user
+		{
+			pinboard.setHidden(false);
+			pinboard.setLocked(false);
+			assertTrue(mockManager.checkPostPermission(pinboard, null));
+			
+			pinboard.setHidden(false);
+			pinboard.setLocked(true);
+			assertFalse(mockManager.checkPostPermission(pinboard, null));
+			
+			pinboard.setHidden(true);
+			pinboard.setLocked(false);
+			assertFalse(mockManager.checkPostPermission(pinboard, null));
+			
+			pinboard.setHidden(true);
+			pinboard.setLocked(true);
+			assertFalse(mockManager.checkPostPermission(pinboard, null));
+		}
+	}
+	
+	public void testCheckReadPermission() throws Exception
+	{
+		User creator = userManager.getAll().get(0);
+		User other = userManager.getAll().get(1);
+		
+		Pinboard pinboard = new Pinboard();
+		pinboard.setCreator(creator);
+		
+		// check different cases for creator
+		{
+			pinboard.setHidden(false);
+			pinboard.setLocked(false);
+			assertTrue(mockManager.checkReadPermission(pinboard, creator));
+			
+			pinboard.setHidden(false);
+			pinboard.setLocked(true);
+			assertTrue(mockManager.checkReadPermission(pinboard, creator));
+			
+			pinboard.setHidden(true);
+			pinboard.setLocked(false);
+			assertTrue(mockManager.checkReadPermission(pinboard, creator));
+			
+			pinboard.setHidden(true);
+			pinboard.setLocked(true);
+			assertTrue(mockManager.checkReadPermission(pinboard, creator));
+		}
+		
+		// check different cases for other user
+		{
+			pinboard.setHidden(false);
+			pinboard.setLocked(false);
+			assertTrue(mockManager.checkReadPermission(pinboard, other));
+			
+			pinboard.setHidden(false);
+			pinboard.setLocked(true);
+			assertTrue(mockManager.checkReadPermission(pinboard, other));
+			
+			pinboard.setHidden(true);
+			pinboard.setLocked(false);
+			assertFalse(mockManager.checkReadPermission(pinboard, other));
+			
+			pinboard.setHidden(true);
+			pinboard.setLocked(true);
+			assertFalse(mockManager.checkReadPermission(pinboard, other));
+		}
+		
+		// check different cases for no user
+		{
+			pinboard.setHidden(false);
+			pinboard.setLocked(false);
+			assertTrue(mockManager.checkReadPermission(pinboard, null));
+			
+			pinboard.setHidden(false);
+			pinboard.setLocked(true);
+			assertTrue(mockManager.checkReadPermission(pinboard, null));
+			
+			pinboard.setHidden(true);
+			pinboard.setLocked(false);
+			assertFalse(mockManager.checkReadPermission(pinboard, null));
+			
+			pinboard.setHidden(true);
+			pinboard.setLocked(true);
+			assertFalse(mockManager.checkReadPermission(pinboard, null));
+		}
+	}
 }

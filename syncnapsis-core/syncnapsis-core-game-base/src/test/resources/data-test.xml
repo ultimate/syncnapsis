@@ -15,56 +15,6 @@
 -->
 <!DOCTYPE dataset SYSTEM "dataset.dtd">
 <dataset>
-
-	<table name="playerrole">
-		<column>id</column>
-		<column>version</column>
-		<column>rolename</column>
-		<column>maxEmpires</column>
-		<column>maxSitters</column>
-		<column>maxSitted</column>
-		<column>mask</column>
-		<row>
-			<value description="id">1</value>
-			<value description="version">1</value>
-			<value description="rolename">PREMIUM_PLAYER</value>
-			<value description="maxEmpires">5</value>
-			<value description="maxSitters">5</value>
-			<value description="maxSitted">5</value>
-			<value description="mask">512</value>
-		</row>
-		<row>
-			<value description="id">2</value>
-			<value description="version">1</value>
-			<value description="rolename">NORMAL_PLAYER</value>
-			<value description="maxEmpires">2</value>
-			<value description="maxSitters">2</value>
-			<value description="maxSitted">2</value>
-			<value description="mask">1024</value>
-		</row>
-		<row>
-			<value description="id">3</value>
-			<value description="version">1</value>
-			<value description="rolename">DEMO_PLAYER</value>
-			<value description="maxEmpires">1</value>
-			<value description="maxSitters">0</value>
-			<value description="maxSitted">0</value>
-			<value description="mask">2048</value>
-		</row>
-	</table>
-
-	<table name="playerrole_fallback">
-		<column>fkRole</column>
-		<column>fkFallbackRole</column>
-		<row>
-			<value description="fkRole">1</value>
-			<value description="fkFallbackRole">2</value>
-		</row>
-		<row>
-			<value description="fkRole">2</value>
-			<value description="fkFallbackRole">3</value>
-		</row>
-	</table>
 	
 	<table name="player">
 		<column>id</column>
@@ -77,21 +27,10 @@
 		<column>accountStatusExpireDate</column>
 		<column>bot</column>
 		<row>
-			<value description="id">0</value>
+			<value description="id">10</value>
 			<value description="version">0</value>
 			<value description="activated">1</value>
-			<value description="fkUser">0</value>
-			<value description="fkPlayerrole">1</value>
-			<null />
-			<value description="accountStatus">active</value>
-			<null />
-			<value description="bot">0</value>
-		</row>
-		<row>
-			<value description="id">1</value>
-			<value description="version">0</value>
-			<value description="activated">1</value>
-			<value description="fkUser">1</value>
+			<value description="fkUser">10</value>
 			<value description="fkPlayerrole">2</value>
 			<null />
 			<value description="accountStatus">active</value>
@@ -99,10 +38,10 @@
 			<value description="bot">0</value>
 		</row>
 		<row>
-			<value description="id">2</value>
+			<value description="id">20</value>
 			<value description="version">0</value>
 			<value description="activated">1</value>
-			<value description="fkUser">2</value>
+			<value description="fkUser">20</value>
 			<value description="fkPlayerrole">3</value>
 			<null />
 			<value description="accountStatus">active</value>
@@ -125,27 +64,13 @@
 		<column>foundationDate</column>
 		<column>dissolutionDate</column>
 		<row>
-			<value description="id">0</value>
+			<value description="id">10</value>
 			<value description="version">0</value>
 			<value description="activated">1</value>
-			<value description="fkPlayer">0</value>
-			<value description="shortName">E0</value>
-			<value description="fullName">Empire #0</value>
-			<value description="description">The admins empire</value>
-			<null/>
-			<value description="primaryColor">#000000</value>
-			<value description="secondaryColor">#000000</value>
-			<value description="foundationDate">2008-01-01</value>
-			<null />
-		</row>
-		<row>
-			<value description="id">1</value>
-			<value description="version">0</value>
-			<value description="activated">1</value>
-			<value description="fkPlayer">1</value>
+			<value description="fkPlayer">10</value>
 			<value description="shortName">E1</value>
 			<value description="fullName">Empire #1</value>
-			<value description="description">The empire of user #1</value>
+			<value description="description">The empire of user2</value>
 			<null/>
 			<value description="primaryColor">#FF0000</value>
 			<value description="secondaryColor">#FF0000</value>
@@ -153,13 +78,13 @@
 			<null />
 		</row>
 		<row>
-			<value description="id">2</value>
+			<value description="id">20</value>
 			<value description="version">0</value>
 			<value description="activated">1</value>
-			<value description="fkPlayer">2</value>
+			<value description="fkPlayer">20</value>
 			<value description="shortName">E2</value>
 			<value description="fullName">Empire #2</value>
-			<value description="description">The empire of user #2</value>
+			<value description="description">The empire of user2</value>
 			<null/>
 			<value description="primaryColor">#00FF00</value>
 			<value description="secondaryColor">#00FF00</value>
@@ -172,8 +97,8 @@
 		<column>fkPlayer</column>
 		<column>fkSitter</column>
 		<row>
-			<value description="fkPlayer">1</value>
-			<value description="fkSitter">0</value>
+			<value description="fkPlayer">10</value>
+			<value description="fkSitter">1</value>
 		</row>
 	</table>
 	
@@ -181,16 +106,12 @@
 		<column>fkPlayer</column>
 		<column>fkEmpire</column>
 		<row>
-			<value description="fkPlayer">0</value>
-			<value description="fkEmpire">0</value>
+			<value description="fkPlayer">10</value>
+			<value description="fkEmpire">10</value>
 		</row>
 		<row>
-			<value description="fkPlayer">1</value>
-			<value description="fkEmpire">1</value>
-		</row>
-		<row>
-			<value description="fkPlayer">2</value>
-			<value description="fkEmpire">2</value>
+			<value description="fkPlayer">20</value>
+			<value description="fkEmpire">20</value>
 		</row>
 	</table>
 

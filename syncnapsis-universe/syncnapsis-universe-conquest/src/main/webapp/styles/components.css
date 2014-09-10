@@ -24,13 +24,22 @@
 
 input[type=text],
 input[type=password],
+input, /*too many future type*/
 textarea {
 	border: 1px solid rgba(0,255,255,0.9);
 	background: rgba(0,0,0,0.3);
 }
 
+input[type=text]:disabled,
+input[type=password]:disabled,
+input:disabled, /*too many future type*/
+textarea:disabled {
+	color: rgb(128,128,128);
+}
+
 input[type=text].error,
-input[type=password].error,
+input[type=password].error,,
+input.error, /*too many future type*/
 textarea.error,
 .error {
 	border: 1px solid rgba(0,255,255,0.9);

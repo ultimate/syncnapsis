@@ -36,6 +36,7 @@ public class PlayerRoleExistsExceptionTest extends BaseDaoTestCase
 		BeanUtils.copyProperties(playerRole, playerRole2);
 		playerRole2.setId(10000L);
 		playerRole2.setVersion(null);
+		playerRole2.setMask(65536);
 
 		// try saving as new playerRole, this should fail b/c of unique keys
 		try

@@ -14,6 +14,7 @@
  */
 package com.syncnapsis.websockets.service.rpc;
 
+import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
@@ -53,6 +54,11 @@ public class RPCCall implements Mapable<RPCCall>
 	 * The arguments to pass to the method
 	 */
 	private Object[]					args;
+
+	/**
+	 * Information on the invoked {@link Method} and Object
+	 */
+	private transient InvocationInfo	invocationInfo;
 
 	/**
 	 * Empty-Default Constructor for Instantiation before using fromMap
@@ -108,6 +114,27 @@ public class RPCCall implements Mapable<RPCCall>
 	public Object[] getArgs()
 	{
 		return args;
+	}
+
+	/**
+	 * Get the {@link InvocationInfo} for this {@link RPCCall} if available. {@link InvocationInfo}
+	 * must manually be set using {@link RPCCall#setInvocationInfo(InvocationInfo)}
+	 * 
+	 * @return the invocationInfo
+	 */
+	public InvocationInfo getInvocationInfo()
+	{
+		return invocationInfo;
+	}
+
+	/**
+	 * Add an {@link InvocationInfo} for this {@link RPCCall}
+	 * 
+	 * @param invocationInfo - the info object
+	 */
+	public void setInvocationInfo(InvocationInfo invocationInfo)
+	{
+		this.invocationInfo = invocationInfo;
 	}
 
 	/*

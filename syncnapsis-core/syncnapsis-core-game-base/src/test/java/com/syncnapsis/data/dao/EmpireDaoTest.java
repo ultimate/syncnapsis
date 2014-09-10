@@ -36,7 +36,7 @@ public class EmpireDaoTest extends GenericNameDaoTestCase<Empire, Long>
 	{
 		super.setUp();
 
-		String existingName = "E0";
+		String existingName = empireDao.getAll().get(0).getShortName();
 		Long existingId = empireDao.getByName(existingName).getId();
 
 		Empire empire = new Empire();

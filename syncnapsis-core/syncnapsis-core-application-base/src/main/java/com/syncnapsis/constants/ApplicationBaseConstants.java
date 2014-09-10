@@ -18,10 +18,10 @@ import com.syncnapsis.utils.constants.Constant;
 import com.syncnapsis.utils.constants.StringConstant;
 
 /**
- * Klasse für das Festhalten von Konstanten, die für die gesamte Applikation
- * gültig sind.<br/>
+ * Klasse fï¿½r das Festhalten von Konstanten, die fï¿½r die gesamte Applikation
+ * gï¿½ltig sind.<br/>
  * Durch die Verwendung von Konstanten, statt z.B. ausgeschriebener String
- * können Auswirkungen von Tippfehlern vermieden werden.
+ * kï¿½nnen Auswirkungen von Tippfehlern vermieden werden.
  * 
  * @author ultimate
  */
@@ -30,7 +30,7 @@ public class ApplicationBaseConstants
 	/**
 	 * Application configuration via DB: key for "length for generated action codes"
 	 */
-	public static final Constant<String>	PARAM_ACTION_CODE_LENGTH			= new StringConstant("action.code.length");
+	public static final Constant<String>	PARAM_ACTION_CODE_LENGTH			= new StringConstant("action.code.length", "50");
 	/**
 	 * Application configuration via DB: key for "default session timeout"
 	 */
@@ -48,17 +48,33 @@ public class ApplicationBaseConstants
 	 */
 	public static final Constant<String>	PARAM_EMAIL_CHANGE_TIME_TO_VERIFY	= new StringConstant("email.change.timeToVerify");
 	/**
+	 * Application configuration via DB: key for "time to verfiy a password reset after request"
+	 */
+	public static final Constant<String>	PARAM_PASSWORD_RESET_TIME_TO_VERIFY	= new StringConstant("password.reset.timeToVerify", "8");
+	/**
+	 * Application configuration via DB: key for "the length for generated passwords"
+	 */
+	public static final Constant<String>	PARAM_PASSWORD_GENERATED_LENGTH		= new StringConstant("password.generated.length");
+	/**
 	 * Namen der Spielparameter: Maximale Anzahl angezeigter News
 	 */
 	@Deprecated
 	public static final Constant<String>	PARAM_NEWS_MAXITEMS					= new StringConstant("news.maxItems");
 	/**
-	 * Namen der Spielparameter: Maximales Alter der News mit Platzhalter für
+	 * Namen der Spielparameter: Maximales Alter der News mit Platzhalter fï¿½r
 	 * Abstufungen
 	 */
 	@Deprecated
 	public static final Constant<String>	PARAM_NEWS_MAXAGE					= new StringConstant("news.%L.maxAge");
 
+	/**
+	 * The ID of the system user
+	 */
+	public static final long				SYSTEM_USER_ID						= 0L;
+	/**
+	 * The name of the system user
+	 */
+	public static final String				SYSTEM_USER_NAME					= "SYSTEM";
 	/**
 	 * bitmask: Administrator
 	 */
@@ -77,29 +93,29 @@ public class ApplicationBaseConstants
 	public static final int					ROLE_DEMO_USER						= 8;
 
 	/**
-	 * Schlüssel für die User-ID in der Session
+	 * Schlï¿½ssel fï¿½r die User-ID in der Session
 	 */
 	public static final String				SESSION_USER_KEY					= "j_user";
 	/**
-	 * Schlüssel für den Infinite-Status in der Session. Dieser gibt an, ob die
-	 * Session des Benutzers niemals abläuft.
+	 * Schlï¿½ssel fï¿½r den Infinite-Status in der Session. Dieser gibt an, ob die
+	 * Session des Benutzers niemals ablï¿½uft.
 	 */
 	public static final String				SESSION_INFINITE_KEY				= "j_infinite";
 	/**
-	 * Schlüssel für den Timeout der Session. Dieser gibt an, wann ein Relogin fällig ist, falls die
+	 * Schlï¿½ssel fï¿½r den Timeout der Session. Dieser gibt an, wann ein Relogin fï¿½llig ist, falls die
 	 * Session nicht "infinite" ist.
 	 */
 	public static final String				SESSION_TIMEOUT_KEY					= "j_timeout";
 	/**
-	 * Schlüssel für die Queue der letzten Logins.
+	 * Schlï¿½ssel fï¿½r die Queue der letzten Logins.
 	 */
 	public static final String				SESSION_LAST_LOGINS_KEY				= "j_last_logins";
 	/**
-	 * Schlüssel für die Locale in der Session
+	 * Schlï¿½ssel fï¿½r die Locale in der Session
 	 */
 	public static final String				SESSION_LOCALE_KEY					= "j_locale";
 	/**
-	 * Schlüssel für die Refresh-Status in der Session. Der Refresh-Status gibt
+	 * Schlï¿½ssel fï¿½r die Refresh-Status in der Session. Der Refresh-Status gibt
 	 * an, ob derzeit das Passwort neu eigegeben werden muss, weil die Session
 	 * des Benutzers abgelaufen ist.
 	 */

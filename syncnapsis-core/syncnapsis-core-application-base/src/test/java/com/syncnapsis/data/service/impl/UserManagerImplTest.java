@@ -19,6 +19,7 @@ import java.util.Date;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMessage.RecipientType;
 
+import org.jmock.Expectations;
 import org.springframework.mock.web.MockHttpSession;
 import org.subethamail.wiser.Wiser;
 
@@ -69,6 +70,8 @@ public class UserManagerImplTest extends GenericNameManagerImplTestCase<User, Lo
 				return "mockManager";
 			}
 		});
+
+		((UserManagerImpl) mockManager).setSecurityManager(securityManager);
 	}
 
 	@TestCoversMethods({ "login", "logout" })
@@ -117,6 +120,17 @@ public class UserManagerImplTest extends GenericNameManagerImplTestCase<User, Lo
 		}
 	}
 
+	public void testGetCurrent() throws Exception
+	{
+		sessionProvider.set(new MockHttpSession());
+
+		User user = new User();
+
+		userProvider.set(user);
+
+		assertSame(user, userManager.getCurrent());
+	}
+
 	@TestCoversMethods({ "register", "verifyRegistration" })
 	public void testRegister() throws Exception
 	{
@@ -155,7 +169,7 @@ public class UserManagerImplTest extends GenericNameManagerImplTestCase<User, Lo
 			assertEquals(email, m.getRecipients(RecipientType.TO)[0].toString());
 
 			String message = (String) m.getContent();
-			int codeIndex = message.indexOf("/activate/") + "/activate/".length();
+			int codeIndex = message.indexOf("/action/") + "/action/".length();
 			String code = message.substring(codeIndex, codeIndex + ApplicationBaseConstants.PARAM_ACTION_CODE_LENGTH.asInt());
 			logger.debug("'" + code + "'");
 			assertNotNull(actionManager.getByCode(code));
@@ -275,13 +289,14 @@ public class UserManagerImplTest extends GenericNameManagerImplTestCase<User, Lo
 			assertEquals(email, m.getRecipients(RecipientType.TO)[0].toString());
 
 			String message = (String) m.getContent();
-			int codeIndex = message.indexOf("/activate/") + "/activate/".length();
+			int codeIndex = message.indexOf("/action/") + "/action/".length();
 			String code = message.substring(codeIndex, codeIndex + ApplicationBaseConstants.PARAM_ACTION_CODE_LENGTH.asInt());
 			logger.debug("'" + code + "'");
 			assertNotNull(actionManager.getByCode(code));
 			RPCCall rpcCall = actionManager.getRPCCall(code);
 			assertNotNull(rpcCall);
-
+			assertEquals(2, rpcCall.getArgs().length);
+			
 			logger.debug(rpcCall.getObject());
 			logger.debug(rpcCall.getMethod());
 			logger.debug("" + rpcCall.getArgs()[0]);
@@ -294,6 +309,114 @@ public class UserManagerImplTest extends GenericNameManagerImplTestCase<User, Lo
 
 			user = userManager.get(user.getId());
 			assertEquals(email, user.getEmail());
+		}
+		finally
+		{
+			w.stop();
+		}
+	}
+
+	public void testChangePassword() throws Exception
+	{
+		final User user = userManager.getByName("admin");
+
+		MockHttpSession session = new MockHttpSession();
+		session.setAttribute(ServletUtil.ATTRIBUTE_REMOTE_ADDR, "localhost");
+		session.setAttribute(ServletUtil.ATTRIBUTE_USER_AGENT, "testcase");
+		sessionProvider.set(session);
+
+		userProvider.set(user);
+
+		String oldHash = user.getPassword();
+
+		String oldPassword = "admin";
+		String newPassword = "abc123";
+
+		assertTrue(securityManager.validatePassword(oldPassword, oldHash));
+		assertFalse(securityManager.validatePassword(newPassword, oldHash));
+
+		mockContext.checking(new Expectations() {
+			{
+				oneOf(mockDao).save(user);
+				will(returnValue(user));
+			}
+		});
+
+		mockManager.changePassword(oldPassword, newPassword, newPassword);
+
+		String newHash = user.getPassword();
+
+		assertNotNull(newHash);
+
+		assertFalse(securityManager.validatePassword(oldPassword, newHash));
+		assertTrue(securityManager.validatePassword(newPassword, newHash));
+
+		assertFalse(oldHash.equals(newHash));
+	}
+
+	@TestCoversMethods({ "requestPasswordReset", "performPasswordReset" })
+	public void testResetPassword() throws Exception
+	{
+		User user = userManager.getByName("admin");
+
+		String oldHash = user.getPassword();
+		String newHash;
+
+		MockHttpSession session = new MockHttpSession();
+		session.setAttribute(ServletUtil.ATTRIBUTE_REMOTE_ADDR, "localhost");
+		session.setAttribute(ServletUtil.ATTRIBUTE_USER_AGENT, "testcase");
+		sessionProvider.set(session);
+		
+		Wiser w = new Wiser();
+		MimeMessage m;
+		String message;
+		try
+		{
+			w.start();
+
+			assertTrue(userManager.requestPasswordReset(user.getUsername(), user.getEmail()));
+
+			HibernateUtil.currentSession().flush();
+
+			assertEquals(1, w.getMessages().size());
+
+			m = w.getMessages().get(0).getMimeMessage();
+			assertEquals(1, m.getRecipients(RecipientType.TO).length);
+			assertEquals(user.getEmail(), m.getRecipients(RecipientType.TO)[0].toString());
+
+			message = (String) m.getContent();
+			int codeIndex = message.indexOf("/action/") + "/action/".length();
+			String code = message.substring(codeIndex, codeIndex + ApplicationBaseConstants.PARAM_ACTION_CODE_LENGTH.asInt());
+			logger.debug("'" + code + "'");
+			assertNotNull(actionManager.getByCode(code));
+			RPCCall rpcCall = actionManager.getRPCCall(code);
+			assertNotNull(rpcCall);
+			assertEquals(1, rpcCall.getArgs().length);
+
+			logger.debug(rpcCall.getObject());
+			logger.debug(rpcCall.getMethod());
+			logger.debug("" + rpcCall.getArgs()[0]);
+
+			String result = (String) rpcHandler.doRPC(rpcCall, new Object[] {});
+			assertEquals("ok", result);
+
+			// HibernateUtil.currentSession().flush();
+
+			assertEquals(2, w.getMessages().size());
+
+			m = w.getMessages().get(1).getMimeMessage();
+			assertEquals(1, m.getRecipients(RecipientType.TO).length);
+			assertEquals(user.getEmail(), m.getRecipients(RecipientType.TO)[0].toString());
+
+			message = (String) m.getContent();
+			int passwordIndex = message.indexOf(":\r\n") + ":\r\n".length();
+			String newPassword = message.substring(passwordIndex, passwordIndex + ApplicationBaseConstants.PARAM_PASSWORD_GENERATED_LENGTH.asInt());
+			logger.debug("'" + newPassword + "'");
+
+			newHash = user.getPassword();
+
+			assertFalse(oldHash.equals(newHash));
+			assertTrue(securityManager.validatePassword(newPassword, newHash));
 		}
 		finally
 		{

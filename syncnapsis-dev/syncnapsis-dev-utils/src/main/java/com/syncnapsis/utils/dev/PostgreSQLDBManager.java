@@ -14,13 +14,10 @@
  */
 package com.syncnapsis.utils.dev;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
-
-import com.syncnapsis.utils.PropertiesUtil;
 
 public class PostgreSQLDBManager extends DBManager
 {
@@ -93,14 +90,7 @@ public class PostgreSQLDBManager extends DBManager
 		
 		try
 		{
-			File propertiesFile = new File(properties);
-			if(!propertiesFile.exists())
-				propertiesFile = new File("target/classes/" + properties);
-			if(!propertiesFile.exists())
-				propertiesFile = new File("target/test-classes/" + properties);
-			if(!propertiesFile.exists())
-				throw new IOException("Neither '" + properties + "' nor 'target/classes/" + properties + "' nor 'target/test-classes/" + properties + "' found!");
-			execute(argsList, new PostgreSQLDBManager(PropertiesUtil.loadProperties(propertiesFile)));
+			execute(argsList, new PostgreSQLDBManager(DBManager.loadProperties(properties)));
 		}
 		catch(ClassNotFoundException e)
 		{

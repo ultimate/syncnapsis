@@ -19,9 +19,9 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * Klasse, die Konstanten als Defaultwerte für die Generierung zufälliger Werte
+ * Klasse, die Konstanten als Defaultwerte fï¿½r die Generierung zufï¿½lliger Werte
  * durch RandomData bereitstellt.
- * Die Bezeichner sollten selbsterklärend sein, wenn nicht, einen kurzen Blick
+ * Die Bezeichner sollten selbsterklï¿½rend sein, wenn nicht, einen kurzen Blick
  * auf den Inhalt werfen...
  * 
  * @author ultimate
@@ -32,7 +32,7 @@ public abstract class DefaultData
 	public static final String			STRING_ASCII_LETTERS_LOWER					= "abcdefghijklmnopqrstuvwxyz";
 	public static final String			STRING_ASCII_LETTERS_UPPER					= "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 	public static final String			STRING_ASCII_NUMBERS						= "0123456789";
-	public static final String			STRING_ASCII_SYMBOLS_1						= " !\"#$%&'()*+,/";
+	public static final String			STRING_ASCII_SYMBOLS_1						= " !\"#$%&'()*+,-./";
 	public static final String			STRING_ASCII_SYMBOLS_2						= ":;<=>?@";
 	public static final String			STRING_ASCII_SYMBOLS_3						= "[\\]^_`";
 	public static final String			STRING_ASCII_SYMBOLS_4						= "{|}~";
@@ -67,7 +67,7 @@ public abstract class DefaultData
 	public static final String			REGEXP_DOMAIN_OLD							= "(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?\\.)+(?:[a-zA-Z]{2}|"
 																							+ STRING_TOP_LEVEL_DOMAIN_EXTENSIONS + ")";
 	public static final String			REGEXP_DOMAIN								= "(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?\\.)+[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?";
-	public static final String			REGEXP_EMAIL								= "[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+)*@"
+	public static final String			REGEXP_EMAIL								= "[a-zA-Z0-9" + STRING_EMAIL_SYMBOLS + "]+(?:\\.[a-zA-Z0-9" + STRING_EMAIL_SYMBOLS + "]+)*@"
 																							+ REGEXP_DOMAIN;
 
 	public static final int				INT											= 1234567890;

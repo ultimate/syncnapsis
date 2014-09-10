@@ -12,4 +12,4 @@
 @REM You should have received a copy of the GNU General Plublic License along with this program;
 @REM if not, see <http://www.gnu.org/licenses/>.
 @REM
-mvn resources:testResources hibernate3:hbm2ddl dbunit:operation
+mvn process-test-resources -Pdb-hibernate,db-base,db-test

@@ -42,15 +42,11 @@ public class AuthorityGenericImplDataGeneratorTest extends BaseDaoTestCase
 	public void testCreateAuthorities() throws Exception
 	{
 		Map<String, Boolean> authoritiesMap = new HashMap<String, Boolean>();
-		authoritiesMap.put("allowedToFlyIntoTerritory", true);
-		authoritiesMap.put("allowedToSeeEconomy", false);
-		authoritiesMap.put("allowedToSeeOnlineStatus", true);
-		authoritiesMap.put("allowedToSeeReports", false);
-		authoritiesMap.put("allowedToSeeSpecialOffersInMarketPlace", true);
-		authoritiesMap.put("allowedToSeeTroops", false);
-		authoritiesMap.put("allowedToUseScanners", true);
-		authoritiesMap.put("allowedToUseStargates", false);
-		authoritiesMap.put("notAllowedToAttack", true);
+		authoritiesMap.put("auth101", true);
+		authoritiesMap.put("auth102", false);
+		authoritiesMap.put("auth103", true);
+		authoritiesMap.put("auth201", false);
+		authoritiesMap.put("auth202", true);
 
 		AuthoritiesGenericImpl auth = gen.createAuthorities(authoritiesMap);
 

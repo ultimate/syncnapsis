@@ -107,6 +107,9 @@ public class MessageManagerImpl extends BaseClientManager implements MessageMana
 	public void postPinboardMessage(Long pinboardId, String title, String message)
 	{
 		PinboardMessage pinboardMessage = pinboardManager.postMessage(pinboardId, title, message);
+		
+		if(pinboardMessage == null)
+			return; // no post permission
 
 		List<PinboardMessage> messages = new ArrayList<PinboardMessage>(1);
 		messages.add(pinboardMessage);
@@ -115,6 +118,9 @@ public class MessageManagerImpl extends BaseClientManager implements MessageMana
 
 		for(Connection connection : connections)
 		{
+			// check read permission
+			if(!pinboardManager.checkReadPermission(pinboardMessage.getPinboard(), getConnectionUser(connection)))
+				continue; // no read permission
 			((MessageManager) getClientInstance(getBeanName(), connection)).updatePinboard(pinboardId, messages);
 		}
 	}
@@ -140,7 +146,7 @@ public class MessageManagerImpl extends BaseClientManager implements MessageMana
 		List<PinboardMessage> messages = pinboardMessageManager.getByPinboard(pinboardId, messageCount);
 		((MessageManager) getClientInstance(getBeanName(), getConnectionProvider().get())).updatePinboard(pinboardId, messages);
 	}
-	
+
 	/*
 	 * (non-Javadoc)
 	 * @see com.syncnapsis.client.MessageManager#requestPinboardUpdate(java.lang.Long, int, int)

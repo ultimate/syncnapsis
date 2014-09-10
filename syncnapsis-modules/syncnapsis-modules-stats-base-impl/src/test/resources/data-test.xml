@@ -27,17 +27,6 @@
 		<column>science</column>
 		<column>total</column>
 		<row>
-			<value description="id">0</value>
-			<value description="version">1</value>
-			<value description="fkEntity">0</value>
-			<value description="timeOfCalculation">2012-01-01</value>
-			<value description="actual">1</value>
-			<value description="economy">100</value>
-			<value description="military">100</value>
-			<value description="science">100</value>
-			<value description="total">300</value>
-		</row>
-		<row>
 			<value description="id">1</value>
 			<value description="version">1</value>
 			<value description="fkEntity">1</value>
@@ -49,9 +38,20 @@
 			<value description="total">300</value>
 		</row>
 		<row>
-			<value description="id">2</value>
+			<value description="id">10</value>
 			<value description="version">1</value>
-			<value description="fkEntity">2</value>
+			<value description="fkEntity">10</value>
+			<value description="timeOfCalculation">2012-01-01</value>
+			<value description="actual">1</value>
+			<value description="economy">100</value>
+			<value description="military">100</value>
+			<value description="science">100</value>
+			<value description="total">300</value>
+		</row>
+		<row>
+			<value description="id">20</value>
+			<value description="version">1</value>
+			<value description="fkEntity">20</value>
 			<value description="timeOfCalculation">2012-01-01</value>
 			<value description="actual">1</value>
 			<value description="economy">100</value>
@@ -77,22 +77,6 @@
 		<column>averageTotal</column>
 		<column>total</column>
 		<row>
-			<value description="id">0</value>
-			<value description="version">1</value>
-			<value description="fkEntity">0</value>
-			<value description="timeOfCalculation">2012-01-01</value>
-			<value description="actual">1</value>
-			<value description="numberOfEmpires">1</value>
-			<value description="economy">100</value>
-			<value description="averageEconomy">100</value>
-			<value description="military">100</value>
-			<value description="averageMilitary">100</value>
-			<value description="science">100</value>
-			<value description="averageScience">100</value>
-			<value description="total">300</value>
-			<value description="averageTotal">300</value>
-		</row>
-		<row>
 			<value description="id">1</value>
 			<value description="version">1</value>
 			<value description="fkEntity">1</value>
@@ -109,9 +93,25 @@
 			<value description="averageTotal">300</value>
 		</row>
 		<row>
-			<value description="id">2</value>
+			<value description="id">10</value>
 			<value description="version">1</value>
-			<value description="fkEntity">2</value>
+			<value description="fkEntity">10</value>
+			<value description="timeOfCalculation">2012-01-01</value>
+			<value description="actual">1</value>
+			<value description="numberOfEmpires">1</value>
+			<value description="economy">100</value>
+			<value description="averageEconomy">100</value>
+			<value description="military">100</value>
+			<value description="averageMilitary">100</value>
+			<value description="science">100</value>
+			<value description="averageScience">100</value>
+			<value description="total">300</value>
+			<value description="averageTotal">300</value>
+		</row>
+		<row>
+			<value description="id">20</value>
+			<value description="version">1</value>
+			<value description="fkEntity">20</value>
 			<value description="timeOfCalculation">2012-01-01</value>
 			<value description="actual">1</value>
 			<value description="numberOfEmpires">1</value>

@@ -6,7 +6,10 @@ import java.util.List;
 import org.jmock.Expectations;
 import org.springframework.mock.web.MockHttpSession;
 
+import com.syncnapsis.constants.ApplicationBaseConstants;
+import com.syncnapsis.data.model.Pinboard;
 import com.syncnapsis.data.model.PinboardMessage;
+import com.syncnapsis.data.model.User;
 import com.syncnapsis.data.service.PinboardManager;
 import com.syncnapsis.data.service.PinboardMessageManager;
 import com.syncnapsis.providers.ConnectionProvider;
@@ -47,22 +50,41 @@ public class MessageManagerImplTest extends BaseSpringContextTestCase
 		messageManager.setSecurityManager(securityManager);
 		messageManager.setBeanName(beanName);
 
-		sessionProvider.set(new MockHttpSession());
+		final int connectionCount = 5;
+		final User[] users = new User[connectionCount];
+		final List<Connection> connections = new ArrayList<Connection>(connectionCount);
+
+		for(int i = 0; i < connectionCount; i++)
+		{
+			users[i] = new User();
+			users[i].setId((long) i);
+
+			final Connection connection = new HttpConnection("test");
+			connection.setSession(new MockHttpSession());
+			connection.getSession().setAttribute(ApplicationBaseConstants.SESSION_USER_KEY, users[i]);
+
+			connections.add(connection);
+		}
+
+		sessionProvider.set(connections.get(0).getSession());
+		final User creator = users[0];
 
 		final Long pinboardId = 1L;
+		final Pinboard pinboard = new Pinboard();
+		pinboard.setId(pinboardId);
+		pinboard.setCreator(creator);
+
 		final String title = "title";
 		final String content = "content";
+
 		final PinboardMessage pinboardMessage = new PinboardMessage();
+		pinboardMessage.setPinboard(pinboard);
+		pinboardMessage.setContent(content);
+		pinboardMessage.setTitle(title);
+		pinboardMessage.setCreator(creator);
 
 		final List<PinboardMessage> messages = new ArrayList<PinboardMessage>(1);
 		messages.add(pinboardMessage);
-
-		final Connection connection = new HttpConnection("test");
-
-		final int connectionCount = 5;
-		final List<Connection> connections = new ArrayList<Connection>(connectionCount);
-		for(int i = 0; i < connectionCount; i++)
-			connections.add(connection);
 
 		final RPCService mockRPCService = mockContext.mock(RPCService.class);
 		messageManager.setRpcService(mockRPCService);
@@ -86,17 +108,30 @@ public class MessageManagerImplTest extends BaseSpringContextTestCase
 				will(returnValue(connections));
 			}
 		});
-		mockContext.checking(new Expectations() {
+		for(int i = 0; i < connectionCount; i++)
+		{
+			final int fi = i;
+			mockContext.checking(new Expectations() {
+				{
+					oneOf(mockPinboardManager).checkReadPermission(pinboard, users[fi]);
+					will(returnValue(fi == 0));
+				}
+			});
+			if(fi == 0)
 			{
-				exactly(connectionCount).of(mockRPCService).getClientInstance(messageManagerName, connection);
-				will(returnValue(clientMessageManager));
+				mockContext.checking(new Expectations() {
+					{
+						oneOf(mockRPCService).getClientInstance(messageManagerName, connections.get(fi));
+						will(returnValue(clientMessageManager));
+					}
+				});
+				mockContext.checking(new Expectations() {
+					{
+						oneOf(clientMessageManager).updatePinboard(pinboardId, messages);
+					}
+				});
 			}
-		});
-		mockContext.checking(new Expectations() {
-			{
-				exactly(connectionCount).of(clientMessageManager).updatePinboard(pinboardId, messages);
-			}
-		});
+		}
 
 		messageManager.postPinboardMessage(pinboardId, title, content);
 

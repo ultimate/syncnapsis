@@ -78,4 +78,34 @@
 			<value description="version">0</value>
 		</row>
 	</table>
+	
+	<table name="authoritiesGranted">
+		<column>fkAuthorities</column>
+		<column>fkAuthority</column>
+		<row>
+			<value description="fkAuthorities">1</value>
+			<value description="fkAuthority">9101</value>
+		</row>
+		<row>
+			<value description="fkAuthorities">1</value>
+			<value description="fkAuthority">9103</value>
+		</row>
+		<row>
+			<value description="fkAuthorities">1</value>
+			<value description="fkAuthority">9202</value>
+		</row>
+	</table>
+	
+	<table name="authoritiesNotGranted">
+		<column>fkAuthorities</column>
+		<column>fkAuthority</column>
+		<row>
+			<value description="fkAuthorities">1</value>
+			<value description="fkAuthority">9102</value>
+		</row>
+		<row>
+			<value description="fkAuthorities">1</value>
+			<value description="fkAuthority">9201</value>
+		</row>
+	</table>
 </dataset>

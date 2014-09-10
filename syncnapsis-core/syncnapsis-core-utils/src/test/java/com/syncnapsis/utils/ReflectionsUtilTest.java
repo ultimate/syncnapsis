@@ -15,8 +15,10 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Field;
 import java.lang.reflect.GenericArrayType;
+import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Proxy;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
 import java.util.ArrayList;
@@ -30,6 +32,7 @@ import javax.servlet.ServletContext;
 
 import org.jmock.Expectations;
 
+import com.syncnapsis.data.model.base.Identifiable;
 import com.syncnapsis.exceptions.ConversionException;
 import com.syncnapsis.mock.MockSetAndGetEntity;
 import com.syncnapsis.security.annotations.Accessible;
@@ -39,6 +42,7 @@ import com.syncnapsis.tests.annotations.TestCoversMethods;
 import com.syncnapsis.tests.annotations.TestExcludesMethods;
 import com.syncnapsis.utils.reflections.FieldCriterion;
 import com.syncnapsis.utils.serialization.BaseMapper;
+import com.syncnapsis.utils.serialization.Mapable;
 import com.syncnapsis.utils.serialization.Mapper;
 import com.syncnapsis.utils.spring.BeanProxy;
 
@@ -260,6 +264,51 @@ public class ReflectionsUtilTest extends LoggerTestCase
 		assertNull(ReflectionsUtil.findMethodAndConvertArgs(cls, expected.getName(), new Object[] { im, p }, mapper));
 		assertNull(ReflectionsUtil.findMethodAndConvertArgs(cls, expected.getName(), new Object[] { im, null }, mapper));
 		assertNull(ReflectionsUtil.findMethodAndConvertArgs(cls, expected.getName(), new Object[] { im, pm }, mapper));
+	}
+
+	public void testFindMethodAndConvertArgs_withGenerics() throws Exception
+	{
+		Mapper mapper = new BaseMapper();
+
+		ProxyI2 tmp = new ProxyI2() {
+			// @formatter:off
+			public void doSomethingGeneric(Entity e) {	}
+			// @formatter:on
+		};
+		Class<?> cls = tmp.getClass();
+
+		ProxyI2 proxy = (ProxyI2) Proxy.newProxyInstance(getClass().getClassLoader(), new Class<?>[] { ProxyI2.class }, new InvocationHandler() {
+			// @formatter:off
+			public Object invoke(Object arg0, Method arg1, Object[] arg2) throws Throwable { return null; }
+			// @formatter:on
+		});
+
+		Class<?> pcls = proxy.getClass();
+
+		Entity e = new Entity(1, "an entity");
+		Map<String, Object> em = mapper.toMap(e);
+		assertEquals(e.getId(), em.get("id"));
+		assertEquals(e.getDescription(), em.get("description"));
+
+		String methodName = "doSomethingGeneric";
+		Method expected_normal = cls.getMethod(methodName, Entity.class);
+		Method expected_proxy = ProxyI.class.getMethod(methodName, Identifiable.class);
+
+		// valid
+		Object[] args;
+		
+		args = new Object[] { em };
+		assertEquals(expected_normal, ReflectionsUtil.findMethodAndConvertArgs(cls, methodName, args, mapper));
+		assertNotSame(em, args[0]);
+		assertFalse(args[0] instanceof Map);
+		assertTrue(args[0] instanceof Entity);
+		
+		args = new Object[] { em };
+		assertEquals(expected_proxy, ReflectionsUtil.findMethodAndConvertArgs(pcls, methodName, args, mapper));
+		assertNotSame(em, args[0]);
+		assertFalse(args[0] instanceof Map);
+		assertTrue(args[0] instanceof Entity);
+
 	}
 
 	public void testConvert() throws Exception
@@ -675,6 +724,37 @@ public class ReflectionsUtilTest extends LoggerTestCase
 		assertEquals("annotated2", ((TestExcludesMethods) annotations[0]).value()[0]);
 		assertEquals("annotated1", ((TestExcludesMethods) annotations[1]).value()[0]);
 	}
+	
+	public void testGetActualParameterType() throws Exception
+	{
+		ProxyI2 tmp = new ProxyI2() {
+			// @formatter:off
+			public void doSomethingGeneric(Entity e) {	}
+			// @formatter:on
+		};
+		Class<?> cls = tmp.getClass();
+
+		ProxyI2 proxy = (ProxyI2) Proxy.newProxyInstance(getClass().getClassLoader(), new Class<?>[] { ProxyI2.class }, new InvocationHandler() {
+			// @formatter:off
+			public Object invoke(Object arg0, Method arg1, Object[] arg2) throws Throwable { return null; }
+			// @formatter:on
+		});
+
+		Class<?> pcls = proxy.getClass();
+
+		String methodName = "doSomethingGeneric";
+		Method expected_normal = cls.getMethod(methodName, Entity.class);
+		Method expected_proxy = ProxyI.class.getMethod(methodName, Identifiable.class);
+		
+		assertEquals(Entity.class, expected_normal.getParameterTypes()[0]);
+		assertEquals(Entity.class, ReflectionsUtil.getActualParameterType(expected_normal, cls, 0));
+		
+		assertEquals(Identifiable.class, expected_proxy.getParameterTypes()[0]);
+		assertEquals(Entity.class, ReflectionsUtil.getActualParameterType(expected_proxy, cls, 0));
+
+		assertEquals(Identifiable.class, expected_proxy.getParameterTypes()[0]);
+		assertEquals(Entity.class, ReflectionsUtil.getActualParameterType(expected_proxy, pcls, 0));
+	}
 
 	public void testGetClassForType() throws Exception
 	{
@@ -850,6 +930,71 @@ public class ReflectionsUtilTest extends LoggerTestCase
 		public void method()
 		{
 
+		}
+	}
+
+	public static interface ProxyI<I extends Identifiable<?>>
+	{
+		public void doSomethingGeneric(I i);
+	}
+
+	public static interface ProxyI2 extends ProxyI<Entity>
+	{
+		
+	}
+
+	public static class Entity implements Identifiable<Integer>, Mapable<Entity>
+	{
+		private Integer	id;
+		private String	description;
+
+		public Entity()
+		{
+
+		}
+
+		public Entity(Integer id, String description)
+		{
+			super();
+			this.id = id;
+			this.description = description;
+		}
+
+		public Integer getId()
+		{
+			return id;
+		}
+
+		public void setId(Integer id)
+		{
+			this.id = id;
+		}
+
+		public String getDescription()
+		{
+			return description;
+		}
+
+		public void setDescription(String description)
+		{
+			this.description = description;
+		}
+
+		@Override
+		public Map<String, ?> toMap(Object... authorities)
+		{
+			HashMap<String, Object> m = new HashMap<String, Object>();
+			m.put("id", this.id);
+			m.put("description", this.description);
+			return m;
+		}
+
+		@Override
+		public Entity fromMap(Map<String, ?> map, Object... authorities)
+		{
+			this.id = (Integer) map.get("id");
+			this.description = (String) map.get("description");
+			return this;
 		}
 	}
 }

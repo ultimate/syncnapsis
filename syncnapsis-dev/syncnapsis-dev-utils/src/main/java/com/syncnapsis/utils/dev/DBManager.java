@@ -14,6 +14,8 @@
  */
 package com.syncnapsis.utils.dev;
 
+import java.io.File;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -26,6 +28,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.Assert;
 
+import com.syncnapsis.utils.PropertiesUtil;
 import com.syncnapsis.utils.StringUtil;
 
 public abstract class DBManager
@@ -277,5 +280,21 @@ public abstract class DBManager
 		{
 			dbm.updateSequence();
 		}
+	}
+	
+	public static Properties loadProperties(String properties) throws IOException
+	{
+		File propertiesFile = new File(properties);
+		if(!propertiesFile.exists())
+			propertiesFile = new File("classpath*:" + properties);
+		if(!propertiesFile.exists())
+			propertiesFile = new File("target/classes/" + properties);
+		if(!propertiesFile.exists())
+			propertiesFile = new File("target/test-classes/" + properties);
+		if(!propertiesFile.exists())
+			propertiesFile = new File(DBManager.class.getResource("/" + properties).getFile());
+		if(!propertiesFile.exists())
+			throw new IOException("Neither '" + properties + "' nor 'target/classes/" + properties + "' nor 'target/test-classes/" + properties + "' found!");
+		return PropertiesUtil.loadProperties(propertiesFile); 
 	}
 }

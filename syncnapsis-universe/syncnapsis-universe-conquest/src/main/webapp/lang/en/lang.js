@@ -15,10 +15,18 @@
 var lang = {};
 
 lang.current = "EnumLocale.EN";
+lang.unicode_test = "ÄäÖöÜüßÁáÀàÂâÉéÈèÊêÍíÌìÎîÓóÒòÔôÚúÙùÛû";
 
 lang.EnumLocale = {};
 lang.EnumLocale.EN = "English";
 lang.EnumLocale.DE = "Deutsch";
+
+lang.EnumGender = {};
+lang.EnumGender.female 		= "female";
+lang.EnumGender.machine 	= "machine";
+lang.EnumGender.male		= "male";
+lang.EnumGender.transsexual	= "transsexual";
+lang.EnumGender.unknown		= "unknown";
 
 lang.error = {};
 lang.error.error				= "Error";
@@ -31,26 +39,43 @@ lang.error.no_password			= lang.error.error + ": no password provided!";
 lang.error.password_mismatch 	= lang.error.error + ": passwords do not match!";
 lang.error.username_exists 		= lang.error.error + ": username is already registered!";
 
+lang.general = {};
+lang.general.apply_changes		= "Apply changes";
+
 lang.message = {};
-lang.message.register			= "Registration successful! You will be logged in automatically...";
+lang.message.error						= "An error occurred! Please try again...";
+lang.message.email_update				= "E-mail-address update requested! Please follow the instruction in the e-mail sent to you...";
+lang.message.email_update_failure		= "E-mail-address update failed! Illegal e-mail-address?";
+lang.message.password_change			= "Password successfully changed!";
+lang.message.password_change_failure	= "Password change failed! Invalid password?";
+lang.message.password_reset				= "Password reset requested! Please follow the instruction in the e-mail sent to you...";
+lang.message.password_reset_failure		= "Password reset failed! User and/or e-mail-address invalid...";
+lang.message.register					= "Registration successful! You will be logged in automatically...";
 
 lang.menu = {};
 lang.menu.about 				= "?";
 lang.menu.about_tooltip 		= "About syncnapsis";
+lang.menu.account_status		= "Account status";
 lang.menu.cancel				= "Cancel";
 lang.menu.contact 				= "Contact";
 lang.menu.contact_tooltip 		= "Contact informationen / Site notice";
 lang.menu.disclaimer 			= "Legal Stuff";
 lang.menu.disclaimer_tooltip 	= "Site policy / Disclaimer";
+lang.menu.email					= "E-mail-address";
 lang.menu.forgot_password		= "Forgot password?";
 lang.menu.login    				= "Login";
 lang.menu.login_info			= "Hello";
 lang.menu.logout   				= "Logout";
+lang.menu.match					= "Match info";
 lang.menu.news					= "News";
+lang.menu.password				= "Password";
 lang.menu.pinboard 				= "Pinboard";
 lang.menu.pinboard_tooltip		= lang.menu.pinboard;
 lang.menu.profile 				= "Profile";
+lang.menu.quick					= "Quick nav";
 lang.menu.register 				= "Register";
+lang.menu.reset_password		= "Reset password";
+lang.menu.security				= "Security settings";
 lang.menu.stats					= "Stats";
 
 lang.log = {};
@@ -59,10 +84,22 @@ lang.log.pinboard				= "Pinboard";
 lang.log.match					= "Match";
 	
 lang.profile = {};
+lang.profile.accountStatus		= "Status";
+lang.profile.accountStatusExpireDate = "Status expires";
+lang.profile.birthday			= "Birthday";
+lang.profile.dateFormat			= "Date format";
 lang.profile.email				= "E-mail";
+lang.profile.gender				= "Gender";
 lang.profile.password			= "Password";
 lang.profile.password_confirm	= "Repeat " + lang.profile.password;
+lang.profile.password_new		= "New " + lang.profile.password;
+lang.profile.password_old		= "Old " + lang.profile.password;
+lang.profile.registrationDate	= "Registered since";
+lang.profile.timeZoneID			= "Timezone";
 lang.profile.username			= "Username";
+
+lang.profile.change_password	= "Change " + lang.profile.password;
+lang.profile.change_email		= "Change " + lang.profile.email;
 
 lang.welcome = {};
 lang.welcome.headLine			= "News:";

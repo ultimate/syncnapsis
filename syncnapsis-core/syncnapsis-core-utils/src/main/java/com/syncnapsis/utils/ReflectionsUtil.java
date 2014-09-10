@@ -20,6 +20,7 @@ import java.lang.reflect.GenericArrayType;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Proxy;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
 import java.security.AccessController;
@@ -644,9 +645,52 @@ public class ReflectionsUtil
 	 */
 	public static Method findMethodAndConvertArgs(Class<?> cls, String method, Object[] args, Mapper mapper, Object... authorities)
 	{
-		logger.trace("looking for " + method);
+		logger.trace("looking for " + method + " in class " + cls);
+		Method m;
+		// when class is a proxy class, looking at the interfaces is more precise!
+		if(Proxy.isProxyClass(cls))
+		{
+			logger.trace("class is proxy with interfaces " + Arrays.asList(cls.getInterfaces()));
+			for(Class<?> iface : cls.getInterfaces())
+			{
+				logger.trace("looking in " + iface.getName());
+				m = findMethodAndConvertArgs(cls, iface, method, args, mapper, authorities);
+				if(m != null)
+					return m;
+				// continue with next interface if no method found
+			}
+		}
+		// lookup the class itself
+		logger.trace("looking in " + cls.getName());
+		m = findMethodAndConvertArgs(cls, cls, method, args, mapper, authorities);
+		return m;
+	}
+
+	/**
+	 * Find a suitable method for the given method name and an array of arguments, that should be
+	 * passed to the method.<br>
+	 * In difference to {@link ReflectionsUtil#findMethod(Class, String, Object...)} arguments are
+	 * converted if necessary using special conversion rules (e.g. for primitives and numbers) or
+	 * using the given mapper (e.g. for entities).<br>
+	 * <b>Warning:</b> If a suitable method is found, the argument array will be modified and filled
+	 * with the converted arguments!
+	 * 
+	 * @see ReflectionsUtil#checkAndConvertArgs(Method, Object[], Mapper, Object...)
+	 * @param targetClass - the class that contains the method
+	 * @param lookupClass - the class in which to look for the method (e.g. a super class or
+	 *            interface)
+	 * @param method - the name of the method to find
+	 * @param args - the arguments to pass to the method
+	 * @param mapper - an optional mapper used for merging, if no other conversion rules is found
+	 * @param authorities - the authorities to pass to merge(..)
+	 * @return the method found, or null if no method was suitable
+	 */
+	public static Method findMethodAndConvertArgs(Class<?> targetClass, Class<?> lookupClass, String method, Object[] args, Mapper mapper,
+			Object... authorities)
+	{
 		// when Generics are present getMethod won't work well!
-		for(Method m : cls.getMethods())
+		// so finding the method by name from the array is more effective
+		for(Method m : lookupClass.getMethods())
 		{
 			logger.trace("  comparing " + m.getName());
 			if(m.getName().equals(method))
@@ -654,7 +698,7 @@ public class ReflectionsUtil
 				// check if the given args are suitable for the Method
 				// also check for var args and convertable types...
 				Object[] tmp = Arrays.copyOf(args, args.length);
-				if(checkAndConvertArgs(m, tmp, mapper, authorities))
+				if(checkAndConvertArgs(targetClass, lookupClass, m, tmp, mapper, authorities))
 				{
 					// tmp has been modified
 					// copy changes back to args
@@ -681,7 +725,7 @@ public class ReflectionsUtil
 	 * @return true if all arguments passed the check and have been converted (if necessary),
 	 *         otherwise false
 	 */
-	public static boolean checkAndConvertArgs(Method m, Object[] args, Mapper mapper, Object... authorities)
+	public static boolean checkAndConvertArgs(Class<?> targetClass, Class<?> lookupClass, Method m, Object[] args, Mapper mapper, Object... authorities)
 	{
 		int params = m.getParameterTypes().length;
 		logger.trace(params + (m.isVarArgs() ? "(varArgs)" : "") + " vs. " + args.length);
@@ -695,6 +739,9 @@ public class ReflectionsUtil
 			return false;
 		}
 
+		logger.info("targetClass vs. declaringClass ? " + targetClass.getName() + " vs. " + lookupClass.getName());
+		Map<Type, Map<TypeVariable<?>, Type>> targetClassTypeArgs = resolveTypeArguments(lookupClass);
+
 		// check each type to the given argument
 		// if possible (and necessary) convert the arg to the type (e.g. Long to int)
 		Class<?> type = null;
@@ -704,17 +751,25 @@ public class ReflectionsUtil
 			// if we have more args than params, we have varArgs X[]
 			// --> every additional arg must be of type X
 			// for the arg at the varArg Position both X[] is only suitable if no more args follow
-			logger.trace("  " + m.getParameterTypes()[i >= params ? params - 1 : i] + " vs. " + args[i]);
+			logger.info("  " + m.getParameterTypes()[i >= params ? params - 1 : i] + " vs. " + (args[i] == null ? null : args[i].getClass()));
+			logger.info("  " + getActualParameterType(lookupClass, m, targetClassTypeArgs, i >= params ? params - 1 : i) + " vs. " + (args[i] == null ? null : args[i].getClass()));
+
 			if(i < params - 1)
 			{
-				type = m.getParameterTypes()[i];
+				if(m.getParameterTypes()[i] == m.getGenericParameterTypes()[i])
+					type = m.getParameterTypes()[i];
+				else
+					type = getActualParameterType(lookupClass, m, targetClassTypeArgs, i);
 				if(checkAndConvertArg(type, i, args, mapper, authorities))
 					continue;
 				return false;
 			}
 			else if(i == params - 1)
 			{
-				type = m.getParameterTypes()[i];
+				if(m.getParameterTypes()[i] == m.getGenericParameterTypes()[i])
+					type = m.getParameterTypes()[i];
+				else
+					type = getActualParameterType(lookupClass, m, targetClassTypeArgs, i);
 				if(checkAndConvertArg(type, i, args, mapper, authorities))
 				{
 					// if arg is null it may be X[] or X, but only if X is not primitive
@@ -921,6 +976,9 @@ public class ReflectionsUtil
 				return (T) original;
 			else if(mapper != null)
 			{
+				logger.info("requiredType: " + requiredType);
+				logger.info("originalType: " + original.getClass());
+				logger.info("original: " + original);
 				T tmp = mapper.merge(requiredType, original, authorities);
 				if(tmp == null)
 				{
@@ -1360,6 +1418,39 @@ public class ReflectionsUtil
 			typeArgs.put(cls, m);
 			resolveTypeArguments(cls, typeArgs);
 		}
+	}
+
+	/**
+	 * Get the actual parameter type for the given method if the method has generic parameters.
+	 * 
+	 * @param m - the method to observe
+	 * @param targetClass - the true target class the method should be used for
+	 * @param index - the index of the parameter
+	 * @return the acutal (non-generic) parameter type
+	 */
+	public static Class<?> getActualParameterType(Method m, Class<?> targetClass, int index)
+	{
+		return getActualParameterType(m.getDeclaringClass(), m, resolveTypeArguments(targetClass), index);
+	}
+
+	/**
+	 * Get the actual parameter type for the given method if the method has generic parameters.<br>
+	 * The actual parameter type therefore is being looked up in the given type argument map for the
+	 * target class.
+	 * 
+	 * @see ReflectionsUtil#resolveTypeArguments(Type) to obtain the type argument map
+	 * 
+	 * @param m - the method to observe
+	 * @param targetClassTypeArguments - the type argument map for the target class
+	 * @param index - the index of the parameter
+	 * @return the acutal (non-generic) parameter type
+	 */
+	public static Class<?> getActualParameterType(Class<?> lookupClass, Method m, Map<Type, Map<TypeVariable<?>, Type>> targetClassTypeArguments, int index)
+	{
+		Type realType = targetClassTypeArguments.get(m.getDeclaringClass()).get(m.getGenericParameterTypes()[index]);
+		if(realType instanceof Class)
+			return (Class<?>) realType;
+		return m.getParameterTypes()[index];
 	}
 
 	/**

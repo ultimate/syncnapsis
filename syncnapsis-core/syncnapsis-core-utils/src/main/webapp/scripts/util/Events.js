@@ -20,6 +20,7 @@ var Events = {};
 Events.CLICK = "click";
 Events.KEYUP = "keyup";
 Events.KEYDOWN = "keydown";
+Events.KEYPRESS = "keypress";
 Events.ONRESIZE = "resize";
 Events.MOUSEDOWN = "mousedown";
 Events.MOUSEUP = "mouseup";
@@ -37,6 +38,7 @@ if(!document.addEventListener)
 Events.KEY_ALT = (1 << 0);
 Events.KEY_CTRL = (1 << 1);
 Events.KEY_SHIFT = (1 << 2);
+Events.KEY_ENTER = 13;
 // Event-Mouse-Buttons
 Events.BUTTON_LEFT = 0;
 Events.BUTTON_CENTER = 1;

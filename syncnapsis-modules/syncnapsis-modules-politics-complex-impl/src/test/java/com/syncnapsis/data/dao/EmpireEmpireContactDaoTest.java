@@ -34,8 +34,8 @@ public class EmpireEmpireContactDaoTest extends GenericDaoTestCase<EmpireEmpireC
 		Long existingId = empireEmpireContactDao.getAll().get(0).getId();
 
 		EmpireEmpireContact empireEmpireContact = new EmpireEmpireContact();
-		empireEmpireContact.setContact1(empireDao.get(0L));
-		empireEmpireContact.setContact2(empireDao.get(1L));
+		empireEmpireContact.setContact1(empireDao.get(10L));
+		empireEmpireContact.setContact2(empireDao.get(20L));
 		empireEmpireContact.setContactAuthorities1(authoritiesDao.get(1L));
 		empireEmpireContact.setContactAuthorities2(authoritiesDao.get(1L));
 		empireEmpireContact.setApprovedByContact1(true);

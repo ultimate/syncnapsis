@@ -1,13 +1,16 @@
 /**
  * Syncnapsis Framework - Copyright (c) 2012 ultimate
  * 
- * This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the
- * License, or any later version.
+ * This program is free software; you can redistribute it and/or modify it under the terms of
+ * the GNU General Public License as published by the Free Software Foundation; either version
+ * 3 of the License, or any later version.
  * 
- * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MECHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
- * General Public License for more details.
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+ * without even the implied warranty of MECHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU General Public License for more details.
  * 
- * You should have received a copy of the GNU General Plublic License along with this program; if not, see <http://www.gnu.org/licenses/>.
+ * You should have received a copy of the GNU General Plublic License along with this program;
+ * if not, see <http://www.gnu.org/licenses/>.
  */
 //@requires("Styles")
 //@requires("Events")
@@ -39,8 +42,37 @@ UI.constants.REG_PASSWORD2_ID = "reg_password2";
 UI.constants.REG_MESSAGE_ID = "reg_message";
 UI.constants.REG_ERROR_ID = "reg_error";
 UI.constants.REG_BUTTON_ID = "reg_button";
-UI.constants.REG_ACTION = "javascript: client.uiManager.doRegister();";
-UI.constants.REG_VOID = "javascript: return false;";
+//UI.constants.REG_ACTION = "javascript: client.uiManager.doRegister();";
+//UI.constants.REG_VOID = "javascript: return false;";
+UI.constants.FORGOT_USERNAME_ID = "forgot_username";
+UI.constants.FORGOT_EMAIL_ID = "forgot_email";
+UI.constants.FORGOT_MESSAGE_ID = "forgot_message";
+UI.constants.FORGOT_ERROR_ID = "forgot_error";
+UI.constants.FORGOT_BUTTON_ID = "forgot_button";
+//UI.constants.FORGOT_ACTION = "javascript: client.uiManager.forgotPassword();";
+//UI.constants.FORGOT_VOID = "javascript: return false;";
+UI.constants.PROFILE_USERNAME_ID = "profile_username"; 
+UI.constants.PROFILE_BIRTHDAY_ID = "profile_birthday"; 
+UI.constants.PROFILE_GENDER_ID = "profile_gender"; 
+UI.constants.PROFILE_DATEFORMAT_ID = "profile_dateFormat"; 
+UI.constants.PROFILE_TIMEZONEID_REGION_ID = "profile_timeZoneID_region"; 
+UI.constants.PROFILE_TIMEZONEID_ID_ID = "profile_timeZoneID_id"; 
+UI.constants.PROFILE_REGISTRATIONDATE_ID = "profile_registrationDate"; 
+UI.constants.PROFILE_ACCOUNTSTATUS_ID = "profile_accountStatus"; 
+UI.constants.PROFILE_ACCOUNTSTATUSEXPIREDATE_ID = "profile_accountStatusExpireDate"; 
+UI.constants.PROFILE_MESSAGE_ID = "profile_message"; 
+UI.constants.PROFILE_ERROR_ID = "profile_error"; 
+UI.constants.PROFILE_BUTTON_ID = "profile_button"; 
+UI.constants.PROFILE_EMAIL_ID = "profile_email"; 
+UI.constants.PROFILE_EMAIL_MESSAGE_ID = "email_message"; 
+UI.constants.PROFILE_EMAIL_ERROR_ID = "email_error"; 
+UI.constants.PROFILE_EMAIL_BUTTON_ID = "email_button"; 
+UI.constants.PROFILE_PW_OLD_ID = "profile_password_old"; 
+UI.constants.PROFILE_PW_NEW_ID = "profile_password_new"; 
+UI.constants.PROFILE_PW_CONFIRM_ID = "profile_password_confirm"; 
+UI.constants.PROFILE_PW_MESSAGE_ID = "password_message"; 
+UI.constants.PROFILE_PW_ERROR_ID = "password_error"; 
+UI.constants.PROFILE_PW_BUTTON_ID = "password_button"; 
 
 UI.constants.LOCALE_CHOOSER_ID = "locale_chooser";
 UI.constants.LOCALE_LABEL_TAGNAME = "label";
@@ -56,6 +88,7 @@ UI.constants.NAV_CONTENT = "menu_content";
 UI.constants.LOG_TABS = "log";
 UI.constants.LOG_CONTENT = "log_content";
 UI.constants.LOG_FRAME = "bar_bottom";
+UI.constants.LOG_TOGGLE_ARROW = "log_toggle_arrow";
 UI.constants.USERINFO_BUTTON = "door";
 UI.constants.USERINFO_CONTENT = "userbar";
 UI.constants.USERINFO_INDEX_LOGGEDOUT = 0;
@@ -72,8 +105,12 @@ UI.constants.IMAGE_TYPE = ".png";
 UI.constants.FLAGS_PATH = "flags/";
 UI.constants.FLAGS_CLASS = "flag";
 
+UI.constants.NO_ACTION = function(){};
+
 UI.constants.MESSAGE_SHOW_CLASS = "show";
 UI.constants.BUTTON_DISABLED_CLASS = "disabled";
+UI.constants.BUTTON_DISABLED_ACTION = "javascript: UI.constants.NO_ACTION();";
+UI.constants.ERROR_CLASS = "error";
 UI.constants.MENU_HIDDEN_CLASS = "menu_hidden";
 
 UI.constants.DEFAULT_DATE_FORMAT = "yyyy-MM-dd HH:mm:ss";
@@ -108,7 +145,6 @@ UIManager = function()
 	}(this);
 	// init the user info with a dummy tab selector (the "door")
 	// dummy is used since we need at least one tab selector
-	// TODO don't make door a tab-selector // just a simple button
 	this.userInfo = new Tabs(null, TABS_HORIZONTAL, UI.constants.USERINFO_CONTENT, TABS_VERTICAL);// , UI.constants.NAV_WIDTH, UI.constants.USERINFO_HEIGHT);
 	// overwrite the door's onSelect to perform the login
 	this.door = document.getElementById(UI.constants.USERINFO_BUTTON).children[0]; // this is the 'a' tag
@@ -130,6 +166,10 @@ UIManager = function()
 		if(newValue != oldValue)
 			server.uiManager.selectLocale(newValue);
 	};
+	
+	// initialize form selects
+	this.genderSelect = new Select(UI.constants.PROFILE_GENDER_ID);
+	this.populateSelect(this.genderSelect, lang.EnumGender);
 
 	console.log("initializing Windows");
 
@@ -137,6 +177,11 @@ UIManager = function()
 	this.window_register.setSize(400, 193);
 	this.window_register.center();
 	this.window_register.setMovable(false);
+
+	this.window_forgot = new Styles.Window("forgot", "menu.reset_password", "content_forgot_password");
+	this.window_forgot.setSize(400, 150);
+	this.window_forgot.center();
+	this.window_forgot.setMovable(false);
 
 	this.window_welcome = new Styles.Window("welcome", "welcome.title", "content_welcome");
 	this.window_welcome.setSize(500, 500);
@@ -153,9 +198,9 @@ UIManager = function()
 	
 	console.log("creating pinboard(s)");
 	this.pinboards = [];
-	this.pinboards.push(new Pinboard(document.getElementById(UI.constants.PINBOARD_NEWS), "testboard", "blog", "frame", false, true));
-	this.pinboards.push(new Pinboard(document.getElementById(UI.constants.PINBOARD_CHAT), "testboard", "chat", null, false, false));
-	this.pinboards.push(new Pinboard(document.getElementById(UI.constants.PINBOARD_EVENTS), "testboard", "eventlog", null, false, true));
+	this.pinboards.push(new Pinboard(document.getElementById(UI.constants.PINBOARD_NEWS), "testboard", "blog", "frame", PINBOARD_INPUT_NONE, false));
+	this.pinboards.push(new Pinboard(document.getElementById(UI.constants.PINBOARD_CHAT), "testboard", "chat", null, PINBOARD_INPUT_SINGLE_LINE, false));
+	this.pinboards.push(new Pinboard(document.getElementById(UI.constants.PINBOARD_EVENTS), "testboard", "eventlog", null, PINBOARD_INPUT_NONE, false));
 
 	console.log("showing UI");
 
@@ -169,6 +214,10 @@ UIManager = function()
 	this.updateShowWelcomeOnLoad(false);
 	if(this.showWelcomeOnLoad)
 		this.showWelcome();
+	
+	// check for the current user
+	server.playerManager.getCurrent();
+	// will login if user found 
 
 	this.hideOverlay();
 };
@@ -220,6 +269,21 @@ UIManager.prototype.onUserLoaded = function(user)
 		document.getElementById(UI.constants.LABEL_ID_PLAYERNAME).innerHTML = user.username;
 		// change language to users selection
 		this.localeChooser.selectByValue(user.locale);
+		
+		// update user form
+		// standard input
+		document.getElementById(UI.constants.PROFILE_USERNAME_ID).value = user.username;
+		document.getElementById(UI.constants.PROFILE_BIRTHDAY_ID).value = user.birthday; 
+		document.getElementById(UI.constants.PROFILE_DATEFORMAT_ID).value = user.dateFormat; // TODO use select
+		document.getElementById(UI.constants.PROFILE_REGISTRATIONDATE_ID).value = user.registrationDate; 
+		document.getElementById(UI.constants.PROFILE_ACCOUNTSTATUS_ID).value = user.accountStatus; 
+		document.getElementById(UI.constants.PROFILE_ACCOUNTSTATUSEXPIREDATE_ID).value = user.accountStatusExpireDate; 
+		// selects
+		this.genderSelect.selectByValue(user.gender); // TODO use select
+		// timeZoneID split into region and ID
+		var split = user.timeZoneID.indexOf("/");
+		document.getElementById(UI.constants.PROFILE_TIMEZONEID_REGION_ID).value = user.timeZoneID.substring(0,split); // TODO use select
+		document.getElementById(UI.constants.PROFILE_TIMEZONEID_ID_ID).value = user.timeZoneID.substring(split+1,user.timeZoneID.length); // TODO use select
 	}
 	else
 	{
@@ -233,18 +297,33 @@ UIManager.prototype.onUserLoaded = function(user)
 	}
 };
 
-UIManager.prototype.enableRegisterButton = function(enable)
+UIManager.prototype.disableButton = function(id, duration)
 {
-	if(enable)
+	var button = document.getElementById(id);
+	var action = button.children[0].href;
+	
+	button.action = action;
+	button.children[0].href = UI.constants.BUTTON_DISABLED_ACTION;
+	button.classList.add(UI.constants.BUTTON_DISABLED_CLASS);
+	
+	if(duration)
 	{
-		document.getElementById(UI.constants.REG_BUTTON_ID).children[0].href = UI.constants.REG_ACTION;
-		document.getElementById(UI.constants.REG_BUTTON_ID).classList.remove(UI.constants.BUTTON_DISABLED_CLASS);
+		setTimeout(function(uiManager) {
+			return function() {
+				uiManager.enableButton(id);
+			}
+		} (this), duration);
 	}
-	else
-	{
-		document.getElementById(UI.constants.REG_BUTTON_ID).children[0].href = UI.constants.REG_VOID;
-		document.getElementById(UI.constants.REG_BUTTON_ID).classList.add(UI.constants.BUTTON_DISABLED_CLASS);
-	}
+};
+
+UIManager.prototype.enableButton = function(id)
+{
+	var button = document.getElementById(id);
+	var action = button.action;
+	
+	if(action)
+		button.children[0].href = action;
+	button.classList.remove(UI.constants.BUTTON_DISABLED_CLASS);
 };
 
 UIManager.prototype.onRegister = function(player, username, password)
@@ -257,15 +336,15 @@ UIManager.prototype.onRegister = function(player, username, password)
 			server.playerManager.login(username, password);
 		}; } (this), 5000);
 		
-		// enable register button
+		// (re)enable register button
 		setTimeout(function(uiManager) {
 			return function() {
-				uiManager.enableRegisterButton(true);
+				uiManager.enableButton(UI.constants.REG_BUTTON_ID);
 			};
 		} (this), 10000);
 
-		// TODO show success message
-		this.showErrorMessage(null, document.getElementById(UI.constants.REG_MESSAGE_ID), "welcome.title");
+		// show success message
+		this.showErrorMessage(null, document.getElementById(UI.constants.REG_MESSAGE_ID), "message.register");
 	}
 	else if(player != null && player.exceptionClass != null)
 	{
@@ -289,8 +368,8 @@ UIManager.prototype.onRegister = function(player, username, password)
 			this.showErrorMessage(document.getElementById(UI.constants.REG_PASSWORD2_ID), null);
 		}
 		
-		// enable register button
-		this.enableRegisterButton(true);
+		// (re)enable register button
+		this.enableButton(UI.constants.REG_BUTTON_ID);
 	}
 };
 
@@ -304,30 +383,32 @@ UIManager.prototype.hideOverlay = function()
 	}, 3000);
 };
 
+UIManager.prototype.populateSelect = function(select, options, imageClass, imagePath)
+{
+	// clear all previous options
+	select.options.length = 0;
+	// add new options
+	for(var i in options)
+	{
+		if(typeof (options[i]) == Reflections.type.FUNCTION)
+			continue;
+		option = {};
+		option.value = i;
+		option.title = options[i];
+		if(imageClass)
+			option.imageClass = imageClass;
+		if(imagePath)
+			option.image = UI.constants.IMAGE_PATH + imagePath + i + UI.constants.IMAGE_TYPE;
+		select.options[select.options.length] = option;
+	}
+	// update DOM element
+	select.update();
+};
+
 UIManager.prototype.populateLocaleChooser = function()
 {
-	// clear children
-	this.localeChooser.options.length = 0;
-	// add options
-	var option, img, text;
-	var selected = 0;
-	var index = 0;
-	for( var i in lang.EnumLocale)
-	{
-		if(typeof (lang.EnumLocale[i]) == Reflections.type.FUNCTION)
-			continue;
-		option = {
-			value : i,
-			image : UI.constants.IMAGE_PATH + UI.constants.FLAGS_PATH + i + UI.constants.IMAGE_TYPE,
-			imageClass : UI.constants.FLAGS_CLASS,
-			title : lang.EnumLocale[i]
-		};
-		if(("EnumLocale." + i) == lang.current)
-			selected = index;
-		this.localeChooser.options[this.localeChooser.options.length] = option;
-		index++;
-	}
-	this.localeChooser.update();
+	this.populateSelect(this.localeChooser, lang.EnumLocale, UI.constants.FLAGS_CLASS, UI.constants.FLAGS_PATH);
+	// select current locale
 	this.localeChooser.selectByValue(lang.current.substring(11), true);
 };
 
@@ -372,6 +453,7 @@ UIManager.prototype.updateLabels = function(parent)
 		if(elements[i].getAttribute("type") == "button")
 			elements[i].value = this.getString(elements[i].getAttribute(UI.constants.LOCALE_KEY_ATTRIBUTE));
 	}
+	// TODO selects
 	// static pages
 	document.getElementById(UI.constants.STATIC_FRAME_ID).contentWindow.location.reload(true)
 };
@@ -380,7 +462,8 @@ UIManager.prototype.showLog = function()
 {
 	if(this.logOpen)
 		return;
-	document.getElementById(UI.constants.LOG_FRAME).className += " open";
+	document.getElementById(UI.constants.LOG_FRAME).classList.add("open");
+	document.getElementById(UI.constants.LOG_TOGGLE_ARROW).classList.remove("flip-vertical");
 	this.logOpen = true;
 };
 
@@ -388,7 +471,8 @@ UIManager.prototype.hideLog = function()
 {
 	if(!this.logOpen)
 		return;
-	document.getElementById(UI.constants.LOG_FRAME).className = this.logCls;
+	document.getElementById(UI.constants.LOG_FRAME).classList.remove("open");
+	document.getElementById(UI.constants.LOG_TOGGLE_ARROW).classList.add("flip-vertical");
 	this.logOpen = false;
 };
 
@@ -405,7 +489,7 @@ UIManager.prototype.doLogin = function()
 	var username = document.getElementById(UI.constants.LOGIN_USERNAME_ID).value;
 	var password = document.getElementById(UI.constants.LOGIN_PASSWORD_ID).value;
 
-	var error = false
+	var error = false;
 	if(username == "" || username == null)
 	{
 		this.showErrorMessage(document.getElementById(UI.constants.LOGIN_USERNAME_ID), null);
@@ -417,9 +501,11 @@ UIManager.prototype.doLogin = function()
 		error = true;
 	}
 	if(error)
-		return;
+		return false;
 	console.log("login as: " + username + ":" + password);
 	server.playerManager.login(username, password);
+	
+	return false;
 };
 
 UIManager.prototype.doRegister = function()
@@ -457,7 +543,7 @@ UIManager.prototype.doRegister = function()
 		return;
 
 	// disable register button
-	this.enableRegisterButton(false);
+	this.disableButton(UI.constants.REG_BUTTON_ID, 0);
 
 	// we do not use the default callback, since we want to keep the password for auto-login
 	var callback = function(username, password)
@@ -476,6 +562,141 @@ UIManager.prototype.doLogout = function()
 	server.playerManager.logout();
 };
 
+UIManager.prototype.forgotPassword = function()
+{
+	// clear errors
+	document.getElementById(UI.constants.FORGOT_ERROR_ID).innerHTML = "";
+	document.getElementById(UI.constants.FORGOT_MESSAGE_ID).innerHTML = "";
+
+	// get input
+	var username = document.getElementById(UI.constants.FORGOT_USERNAME_ID).value;
+	var email = document.getElementById(UI.constants.FORGOT_EMAIL_ID).value;
+	
+	// validate input
+	var error = false
+	if(!error && (username == "" || username == null))
+	{
+		this.showErrorMessage(document.getElementById(UI.constants.FORGOT_USERNAME_ID), document.getElementById(UI.constants.FORGOT_ERROR_ID), "error.invalid_username");
+		error = true;
+	}
+	if(!error && (email == "" || email == null))
+	{
+		this.showErrorMessage(document.getElementById(UI.constants.FORGOT_EMAIL_ID), document.getElementById(UI.constants.FORGOT_ERROR_ID), "error.invalid_email");
+		error = true;
+	}
+	if(error)
+		return;
+
+	// disable forgot button for 5 seconds
+	this.disableButton(UI.constants.FORGOT_BUTTON_ID, 5000);
+
+	server.userManager.requestPasswordReset(username, email);
+};
+
+UIManager.prototype.updateUser = function()
+{
+	// clear errors
+	document.getElementById(UI.constants.PROFILE_ERROR_ID).innerHTML = "";
+	document.getElementById(UI.constants.PROFILE_MESSAGE_ID).innerHTML = "";
+	
+	var user_update = {
+		// type and ID
+		j_type: Types.User,
+		id: this.currentPlayer.user.id,
+		// get updated fields from form
+		gender: this.genderSelect.value,
+	}; 
+	
+	console.log("setting user.gender -> " + user_update.gender);
+	
+	// validate input
+	var error = false
+//	if(!error && (password_old == "" || password_old == null))
+//	{
+//		this.showErrorMessage(document.getElementById(UI.constants.PROFILE_PW_OLD_ID), document.getElementById(UI.constants.PROFILE_PW_ERROR_ID), "lang.error.no_password");
+//		error = true;
+//	}
+	if(error)
+		return;
+	
+	// update user from input
+//	this.currentPlayer.user.gender = gender;
+
+	// disable button for 5 seconds
+	this.disableButton(UI.constants.PROFILE_BUTTON_ID, 5000);
+	
+	// use entityManager instead of userManager
+	server.entityManager.save(user_update, Events.wrapEventHandler(this, this.onUserLoaded));
+	//server.userManager.save(this.currentPlayer.user);
+};
+
+UIManager.prototype.changePassword = function()
+{
+	// clear errors
+	document.getElementById(UI.constants.PROFILE_PW_ERROR_ID).innerHTML = "";
+	document.getElementById(UI.constants.PROFILE_PW_MESSAGE_ID).innerHTML = "";
+	
+	// get input
+	var password_old = document.getElementById(UI.constants.PROFILE_PW_OLD_ID).value;
+	var password_new = document.getElementById(UI.constants.PROFILE_PW_NEW_ID).value;
+	var password_confirm = document.getElementById(UI.constants.PROFILE_PW_CONFIRM_ID).value;
+	
+	// validate input
+	var error = false
+	if(!error && (password_old == "" || password_old == null))
+	{
+		this.showErrorMessage(document.getElementById(UI.constants.PROFILE_PW_OLD_ID), document.getElementById(UI.constants.PROFILE_PW_ERROR_ID), "lang.error.no_password");
+		error = true;
+	}
+	if(!error && (password_new == "" || password_new == null ||  password_new != password_confirm))
+	{
+		this.showErrorMessage(null, document.getElementById(UI.constants.PROFILE_PW_ERROR_ID), "error.password_mismatch");
+		this.showErrorMessage(document.getElementById(UI.constants.PROFILE_PW_NEW_ID), null);
+		this.showErrorMessage(document.getElementById(UI.constants.PROFILE_PW_CONFIRM_ID), null);
+		error = true;
+	}
+	if(error)
+		return;
+
+	// disable button for 5 seconds
+	this.disableButton(UI.constants.PROFILE_PW_BUTTON_ID, 5000);
+	
+	// clear inputs
+	document.getElementById(UI.constants.PROFILE_PW_OLD_ID).value = "";
+	document.getElementById(UI.constants.PROFILE_PW_NEW_ID).value = "";
+	document.getElementById(UI.constants.PROFILE_PW_CONFIRM_ID).value = "";
+
+	server.userManager.changePassword(password_old, password_new, password_confirm);
+};
+
+UIManager.prototype.changeEmail = function()
+{
+	// clear errors
+	document.getElementById(UI.constants.PROFILE_EMAIL_ERROR_ID).innerHTML = "";
+	document.getElementById(UI.constants.PROFILE_EMAIL_MESSAGE_ID).innerHTML = "";
+	
+	// get input
+	var email_new = document.getElementById(UI.constants.PROFILE_EMAIL_ID).value;
+	
+	// validate input
+	var error = false
+	if(!error && (email_new == "" || email_new == null))
+	{
+		this.showErrorMessage(document.getElementById(UI.constants.PROFILE_EMAIL_ID), document.getElementById(UI.constants.PROFILE_PW_ERROR_ID), "lang.error.invalid_email");
+		error = true;
+	}
+	if(error)
+		return;
+
+	// disable button for 5 seconds
+	this.disableButton(UI.constants.PROFILE_EMAIL_BUTTON_ID, 5000);
+	
+	// clear inputs
+	//document.getElementById(UI.constants.PROFILE_EMAIL_ID).value = "";
+
+	server.userManager.updateMailAddress(email_new);
+};
+
 UIManager.prototype.showRegister = function()
 {
 	this.window_register.setVisible(true);
@@ -484,6 +705,16 @@ UIManager.prototype.showRegister = function()
 UIManager.prototype.hideRegister = function()
 {
 	this.window_register.setVisible(false);
+};
+
+UIManager.prototype.showForgot = function()
+{
+	this.window_forgot.setVisible(true);
+};
+
+UIManager.prototype.hideForgot = function()
+{
+	this.window_forgot.setVisible(false);
 };
 
 UIManager.prototype.showWelcome = function()
@@ -526,17 +757,20 @@ UIManager.prototype.showErrorMessage = function(inputfield, messagefield, messag
 {
 	if(inputfield != null)
 	{
-		var cls = inputfield.className;
-		inputfield.className = cls + " error";
+		inputfield.classList.add(UI.constants.ERROR_CLASS);
 		setTimeout(function()
 		{
-			inputfield.className = cls;
+			inputfield.classList.remove(UI.constants.ERROR_CLASS);
 		}, 3000);
 	}
 	if(messagefield != null)
 	{
 		if(message)
-			messagefield.innerHTML = this.getString(message);
+		{
+			while(messagefield.firstChild)
+				messagefield.removeChild(messagefield.firstChild);
+			messagefield.appendChild(document.createTextNode(this.getString(message)));
+		}
 		
 		messagefield.classList.add(UI.constants.MESSAGE_SHOW_CLASS);
 		setTimeout(function()

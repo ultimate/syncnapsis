@@ -78,7 +78,7 @@ public class MatchDaoTest extends GenericNameDaoTestCase<Match, Long>
 	@TestCoversMethods({ "getByCreator", "getBy" })
 	public void testGetByCreator() throws Exception
 	{
-		Long creator = 2L;
+		Long creator = 20L;
 		Date refDate1 = dateFormat.get().parse("2012-01-15 00:00:00");
 		Date refDate2 = dateFormat.get().parse("2012-02-15 00:00:00");
 
@@ -100,7 +100,7 @@ public class MatchDaoTest extends GenericNameDaoTestCase<Match, Long>
 	@TestCoversMethods({ "getByPlayer", "getBy" })
 	public void testGetByPlayer() throws Exception
 	{
-		Long player = 1L;
+		Long player = 10L;
 		Date refDate1 = dateFormat.get().parse("2012-01-15 00:00:00");
 		Date refDate2 = dateFormat.get().parse("2012-02-15 00:00:00");
 

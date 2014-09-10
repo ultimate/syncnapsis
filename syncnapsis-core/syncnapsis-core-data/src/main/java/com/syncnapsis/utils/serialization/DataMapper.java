@@ -23,6 +23,7 @@ import org.springframework.util.Assert;
 import com.syncnapsis.data.model.base.BaseObject;
 import com.syncnapsis.data.model.base.Identifiable;
 import com.syncnapsis.data.service.UniversalManager;
+import com.syncnapsis.utils.reflections.Field;
 
 /**
  * 
@@ -199,10 +200,24 @@ public class DataMapper extends BaseMapper
 		}
 		return super.fromMap(entity, map, authorities);
 	}
+	
+	/*
+	 * (non-Javadoc)
+	 * @see com.syncnapsis.utils.serialization.BaseMapper#isExcluded(java.lang.Object, com.syncnapsis.utils.reflections.Field, java.lang.Object[])
+	 */
+	@Override
+	protected boolean isExcluded(Object entity, Field field, Object... authorities)
+	{
+		// ignore ID for BaseObjects that have been preloaded
+		if(entity instanceof BaseObject && field.getName().equals(KEY_ID))
+			return true;
+		return false;
+	}
 
 	/**
-	 * Simple extension of ThreadLocal providing additionl increase(..) and decrease(..)
-	 * functionality.
+	 * Simple extension of ThreadLocal providing additionl functionality:<br>	 * 
+	 * Since we cannot add additional recursively used parameters to prepare(..) we use a
+	 * ThreadLocal to store protocol parameters during mapping for the current process.<br>
 	 * 
 	 * @author ultimate
 	 */

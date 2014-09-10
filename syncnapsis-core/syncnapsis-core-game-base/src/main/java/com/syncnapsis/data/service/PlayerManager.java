@@ -20,9 +20,10 @@ import com.syncnapsis.exceptions.PlayerSelectionInvalidException;
 import com.syncnapsis.exceptions.PlayerSittingExistsException;
 import com.syncnapsis.exceptions.PlayerSittingNotPossibleException;
 import com.syncnapsis.exceptions.UserNotFoundException;
+import com.syncnapsis.security.annotations.LogFilter;
 
 /**
- * Manager-Interface für den Zugriff auf Player.
+ * Manager-Interface fï¿½r den Zugriff auf Player.
  * 
  * @author ultimate
  */
@@ -37,6 +38,7 @@ public interface PlayerManager extends GenericManager<Player, Long>
 	 * @return the player just logged in
 	 * @throws UserNotFoundException - if the login failed (wrong username or password)
 	 */
+	@LogFilter(filteredArgs = { 1 })
 	public Player login(String username, String password);
 
 	/**
@@ -46,6 +48,13 @@ public interface PlayerManager extends GenericManager<Player, Long>
 	 * @return if the logout has successfully been performed
 	 */
 	public boolean logout();
+
+	/**
+	 * Get the player currently logged in.
+	 * 
+	 * @return the player logged in
+	 */
+	public Player getCurrent();
 
 	/**
 	 * Perform the registration process for a new Player.<br>
@@ -59,6 +68,7 @@ public interface PlayerManager extends GenericManager<Player, Long>
 	 * @return the new Player
 	 * @throws PlayerRegistrationFailedException if registration fails
 	 */
+	@LogFilter(filteredArgs = { 0, 1, 2 })
 	public Player register(String username, String email, String password, String passwordConfirm) throws PlayerRegistrationFailedException;
 
 	/**
@@ -78,7 +88,7 @@ public interface PlayerManager extends GenericManager<Player, Long>
 	public Player getByUsername(String username);
 
 	/**
-	 * Fügt eine Sittingverbindung zwischen zwei Benutzern hinzu.
+	 * Fï¿½gt eine Sittingverbindung zwischen zwei Benutzern hinzu.
 	 * 
 	 * @param playerSittedId - der gesittete Benutzer
 	 * @param playerSitterId - der sittende Benutzer
@@ -88,7 +98,7 @@ public interface PlayerManager extends GenericManager<Player, Long>
 			PlayerSittingNotPossibleException;
 
 	/**
-	 * Löscht eine Sittingverbindung zwischen zwei Benutzern.
+	 * Lï¿½scht eine Sittingverbindung zwischen zwei Benutzern.
 	 * 
 	 * @param playerSittedId - der gesittete Benutzer
 	 * @param playerSitterId - der sittende Benutzer
@@ -97,7 +107,7 @@ public interface PlayerManager extends GenericManager<Player, Long>
 	public Player removeSitter(Long playerSittedId, Long playerSitterId);
 
 	/**
-	 * Prüft, ob ein Sitter noch freie Plätze für Gesittete hat oder nicht
+	 * Prï¿½ft, ob ein Sitter noch freie Plï¿½tze fï¿½r Gesittete hat oder nicht
 	 * 
 	 * @param player - der
 	 * @return true oder false
@@ -105,7 +115,7 @@ public interface PlayerManager extends GenericManager<Player, Long>
 	public boolean checkSitter(Player player);
 
 	/**
-	 * Prüft, ob ein Gesitteter noch freie Plätze für Sitter hat oder nicht
+	 * Prï¿½ft, ob ein Gesitteter noch freie Plï¿½tze fï¿½r Sitter hat oder nicht
 	 * 
 	 * @param player - der
 	 * @return true oder false

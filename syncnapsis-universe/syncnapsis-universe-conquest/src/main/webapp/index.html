@@ -55,6 +55,7 @@
 	// register services
 	DependencyManager.register("GenericManager", "service/GenericManager.js");
 	DependencyManager.register("PlayerManager", "service/PlayerManager.js");
+	DependencyManager.register("UserManager", "service/UserManager.js");
 	// additional module libraries 
 	DependencyManager.register("application-base", "application-base.js");
 	DependencyManager.register("game-base", "game-base.js");
@@ -100,21 +101,6 @@
 			init();
 		document.getElementById("debug_load").disabled = "disabled";
 	};
-	var clsName;
-	openLog = function()
-	{
-		if(clsName)
-		{
-			document.getElementById("bar_bottom").className = clsName;
-			clsName = null;
-		}
-		else
-		{
-			clsName = document.getElementById("bar_bottom").className;
-			document.getElementById("bar_bottom").className += " open";
-		}
-	};
-
 </script>
 </head>
 <body onload="DependencyManager.registrationDone();">
@@ -141,14 +127,11 @@
 			<span class="inner"><label key="log.title"></label>:</span>
 		</div>
 		<div id="log" class="transparent_frame menubar centered_x log_bar">
-			<a id="log_1"><div class="frame"><label key="log.pinboard"></label> (<span id="log_1_count">1</span>)</div></a>
-			<a id="log_2"><div class="frame"><label key="log.match"></label> (<span id="log_2_count">7</span>)</div></a>
-			<!--
-			<a id="log_3"><div class="frame">Test (<span id="log_3_count">0</span>)</div></a>
-			-->
+			<a id="log_1"><div class="frame"><label key="log.pinboard"></label></div></a>
+			<a id="log_2"><div class="frame"><label key="log.match"></label></div></a>
 		</div>
 		<div id="log_menu" class="frame log_bar">
-			<span class="inner">aaaaa</span>
+			<span class="log_toggle" onclick="javascript: client.uiManager.toggleLog();"><img id="log_toggle_arrow" class="flip-vertical" src="images/arrow-down.png" /></span>
 		</div>
 		<div id="log_content" class="frame atbottom">
 			<div>
@@ -175,16 +158,14 @@
 		</div>
 		<div id="userbar" class="frame">
 			<div>
-			<div id="user_login" class="form">
-				<label key="profile.username" for="login_username"></label><input id="login_username" type="text"/><br/>
-				<label key="profile.password" for="login_password"></label><input id="login_password" type="password"/><br/>
+			<div id="user_login">
+				<form onsubmit="javascript: client.uiManager.doLogin(); return false;" class="small">
+					<label key="profile.username" for="login_username"></label><input id="login_username" type="text"/><br/>
+					<label key="profile.password" for="login_password"></label><input id="login_password" type="password"/><br/>
+				    <input type="submit" style="display: none;"/>
+				</form>
 				<a href="javascript: client.uiManager.showRegister();"><label key="menu.register"></label></a>
-				<a href=""><label key="menu.forgot_password"></label></a>
-				<!-- 
-					<input type="button" key="menu.login" onclick="client.uiManager.doLogin();" />
-					<input type="button" key="menu.cancel" onclick="client.uiManager.hideLogin();" />
-					<input type="button" key="menu.register" onclick="client.uiManager.showRegister();" />
-				 -->
+				<a href="javascript: client.uiManager.showForgot();"><label key="menu.forgot_password"></label></a>
 			</div>
 			<div id="user_loggedin">
 				<label key="menu.login_info"></label>&nbsp;<b id="userbar_playername"></b>!
@@ -201,6 +182,7 @@
 		<div id="menu_content" class="frame">
 			<div>
 			<div id="menu_1" class="selected">
+				<h3><label key="menu.match"></label></h3>
 				foo<br>
 				bar<br>
 				foo<br>
@@ -209,15 +191,69 @@
 				bar<br>
 				foo<br>
 				bar<br>
-			</div>
-			<div id="menu_2" class="">
+				<br>
 				This is menu #2 with a very long text that should automatically wrap to fill this box.<br>
 				As you can see the surrounding container will be automatically resized to fit best for the content.
 			</div>
+			<div id="menu_2" class="">
+				<h3><label key="menu.profile"></label></h3>
+				<form onsubmit="return false;">
+					<label key="profile.username" for="profile_username"></label><input id="profile_username" type="text" disabled=""/><br/>
+					<label key="profile.gender" for="profile_gender"></label><div id="profile_gender"></div><br/>
+					<!-- <label key="profile.gender" for="profile_gender"></label><input id="profile_gender" type="text"/><br/>-->
+					<label key="profile.birthday" for="profile_birthday"></label><input id="profile_birthday" type="date" disabled=""/><br/> <!-- will enable as soon as FF supports type="date" -->
+					<label key="profile.dateFormat" for="profile_dateFormat"></label><input id="profile_dateFormat" type="text" disabled=""/><br/>
+					<label key="profile.timeZoneID" for="profile_timeZoneID"></label><input id="profile_timeZoneID_region" type="text" class="half" disabled=""/><input id="profile_timeZoneID_id" class="half" type="text" disabled=""/><br/>
+					<div id="profile_message" class="form_message">
+					</div>
+					<div id="profile_error" class="form_error">
+					</div>
+					<div id="profile_button" class="frame button">
+						<a href="javascript: client.uiManager.updateUser();">
+							<label key="general.apply_changes"></label>
+						</a>
+					</div>
+				</form>
+				<h4><label key="menu.account_status"></label></h4>
+				<form onsubmit="return false;">
+					<label key="profile.registrationDate" for="profile_registrationDate"></label><input id="profile_registrationDate" type="text" disabled=""/><br/>
+					<label key="profile.accountStatus" for="profile_accountStatus"></label><input id="profile_accountStatus" type="text" disabled=""/><br/>
+					<label key="profile.accountStatusExpireDate" for="profile_accountStatusExpireDate"></label><input id="profile_accountStatusExpireDate" type="text" disabled=""/><br/>
+				</form>
+			</div>
 			<div id="menu_3" class="">
-				blub
+				<h3><label key="menu.security"></label></h3>
+				<h4><label key="menu.password"></label></h4>
+				<form onsubmit="return false;">
+					<label key="profile.password_old" for="profile_password_old"></label><input id="profile_password_old" type="password"/><br/>
+					<label key="profile.password_new" for="profile_password_new"></label><input id="profile_password_new" type="password"/><br/>
+					<label key="profile.password_confirm" for="profile_password_confirm"></label><input id="profile_password_confirm" type="password"/><br/>
+					<div id="password_message" class="form_message">
+					</div>
+					<div id="password_error" class="form_error">
+					</div>
+					<div id="password_button" class="frame button">
+						<a href="javascript: client.uiManager.changePassword();">
+							<label key="profile.change_password"></label>
+						</a>
+					</div>
+				</form>
+				<h4><label key="menu.email"></label></h4>
+				<form onsubmit="return false;">
+					<label key="profile.email" for="profile_email"></label><input id="profile_email" type="text"/><br/>
+					<div id="email_message" class="form_message">
+					</div>
+					<div id="email_error" class="form_error">
+					</div>
+					<div id="email_button" class="frame button">
+						<a href="javascript: client.uiManager.changeEmail();">
+							<label key="profile.change_email"></label>
+						</a>
+					</div>
+				</form>
 			</div>
 			<div id="menu_4" class="">
+				<h3><label key="menu.stats"></label></h3>
 				Let's stretch the content to max ;-)<br>
 				A lot of options...
 				<ul>
@@ -318,20 +354,41 @@
 			</div>
 		</div>
 		<div id="content_register">
-			<div id="user_register" class="largeform">
-				<label key="profile.username" for="reg_username"></label><input id="reg_username" type="text"/><br/>
-				<label key="profile.email" for="reg_email"></label><input id="reg_email" type="text"/><br/>
-				<label key="profile.password" for="reg_password"></label><input id="reg_password" type="password"/><br/>
-				<label key="profile.password_confirm" for="reg_password2"></label><input id="reg_password2" type="password"/><br/>
-				<div id="reg_message">
-				</div>
-				<div id="reg_error">
-				</div>
-				<div id="reg_button" class="frame button">
-					<a href="javascript: client.uiManager.doRegister();">
-						<label key="menu.register"></label>
-					</a>
-				</div>
+			<div id="user_register">
+				<form onsubmit="javascript: client.uiManager.doRegister(); return false;" class="large">
+					<label key="profile.username" for="reg_username"></label><input id="reg_username" type="text"/><br/>
+					<label key="profile.email" for="reg_email"></label><input id="reg_email" type="text"/><br/>
+					<label key="profile.password" for="reg_password"></label><input id="reg_password" type="password"/><br/>
+					<label key="profile.password_confirm" for="reg_password2"></label><input id="reg_password2" type="password"/><br/>
+					<div id="reg_message" class="form_message">
+					</div>
+					<div id="reg_error" class="form_error">
+					</div>
+					<div id="reg_button" class="frame button">
+						<a href="javascript: client.uiManager.doRegister();">
+							<label key="menu.register"></label>
+						</a>
+					</div>
+				    <input type="submit" style="display: none;"/>
+				</form>
+			</div>
+		</div>
+		<div id="content_forgot_password">
+			<div>
+				<form onsubmit="javascript: client.uiManager.forgotPassword(); return false;" class="large">
+					<label key="profile.username" for="forgot_username"></label><input id="forgot_username" type="text"/><br/>
+					<label key="profile.email" for="forgot_email"></label><input id="forgot_email" type="text"/><br/>
+					<div id="forgot_message" class="form_message">
+					</div>
+					<div id="forgot_error" class="form_error">
+					</div>
+					<div id="forgot_button" class="frame button">
+						<a href="javascript: client.uiManager.forgotPassword();">
+							<label key="menu.reset_password"></label>
+						</a>
+					</div>
+				    <input type="submit" style="display: none;"/>
+				</form>
 			</div>
 		</div>
 	</div>
@@ -339,7 +396,6 @@
 	<div id="debug">
 		debug...<br>
 		<input id="debug_load" type="button" value="load" onclick="load(0);" /><br/>
-		<input id="debug_open" type="button" value="open/close log" onclick="client.uiManager.toggleLog();" /><br/>
 		<div id="debug_container">
 		</div>
 	</div>

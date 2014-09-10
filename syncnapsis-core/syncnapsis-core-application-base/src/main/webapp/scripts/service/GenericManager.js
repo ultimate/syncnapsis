@@ -25,10 +25,11 @@ GenericManager = function()
 		// return all entities		
 	};
 	
-//	this.save = function(entity)
-//	{
-//		// result callback must be passed as argument! no return here!		
-//	};
+	this.save = function(entity)
+	{
+		// returns updated entity
+		// result callback must be passed as argument! no return here!		
+	};
 	
 //	this.delete = function(entity)
 //	{

@@ -156,6 +156,11 @@ body, select {
 	width: 34px;
 }
 
+/*fix locale_chooser*/
+#locale_chooser.select>ul {
+	margin-top: 0px;
+}
+
 .flag,
 #locale_chooser .flag {
 	width: 16px;
@@ -179,34 +184,81 @@ body, select {
 	overflow: hidden;
 }
 
-.form,
-.largeform {
+form,
+form.small,
+form.large {
 	line-height: 20px;
 }
 
-.form>label,
+form.small>label,
 #user_login>a {
 	width: 100px;
 	display: block;
 	float: left;
 }
 
-.form>input[type=text],
-.form>input[type=password],
-#user_login>a+a {
-	width: 130px;
+form>label {
+	width: 140px;
+	display: block;
+	float: left;
 }
 
-.largeform>label {
+form.large>label {
 	width: 150px;
 	display: block;
 	float: left;
 }
 
-.largeform>input[type=text],
-.largeform>input[type=password] {
+form.small>input,
+#user_login>a+a {
+	width: 130px;
+	float: left;
+}
+
+form.small>input.half {
+	width: 65px;
+}
+
+form>input {
+	width: 140px;
+	float: right;
+}
+
+form.large>input {
 	width: 230px;
 	float: right;
+}
+
+/* selects require some extra attention */
+
+form.small>.select,
+form.small>.select>* {
+	width: 132px;
+	float: left;
+}
+
+form.small>.select>div>span {
+	width: 130px;
+}
+
+form>.select,
+form>.select>* {
+	width: 142px;
+	float: right;
+}
+
+form>.select>div>span {
+	width: 140px;
+}
+
+form.large>.select,
+form.large>.select>* {
+	width: 232px;
+	float: right;
+}
+
+form.large>.select>div>span {
+	width: 230px;
 }
 
 #menu #nav {
@@ -221,9 +273,19 @@ body, select {
 	/*top: 107px;*/	
 }
 
+#menu #menu_content>div,
+#menu #menu_content>div>div {
+	overflow: hidden;
+}
+
+#menu #menu_content form {
+	margin-bottom: 10px;	
+}
+
 #menu #main {
 	/*top: 410px;*/
 }
+
 
 #menu #nav.menu_hidden,
 #menu #menu_content.menu_hidden {
@@ -234,7 +296,7 @@ body, select {
 }
 
 #bar_top,#bar_bottom {
-	width: 400px;
+	width: 500px;
 	margin-top: 1px;
 	margin-bottom: 1px;
 }
@@ -245,7 +307,7 @@ body, select {
 }
 
 #bar_bottom {
-	height: 33px;
+	height: 34px;
 	line-height: 2.6em;
 	margin-bottom: 1px;
 	overflow: hidden;
@@ -253,7 +315,7 @@ body, select {
 }
 
 #bar_bottom.open {
-	height: 130px;
+	height: 230px;
 }
 
 #bar_bottom>.log_bar {
@@ -264,20 +326,29 @@ body, select {
 }
 
 #bar_bottom #log_title {
-	width: 85px;
+	width: 110px;
 	position: absolute;
 	left: 0px;
 }
 
 #bar_bottom>#log {
 	position: absolute;
-	width: 224px;
+	width: 274px;
 }
 
 #bar_bottom #log_menu {
-	width: 85px;
+	width: 110px;
 	position: absolute;
 	right: 0px;
+}
+
+#bar_bottom .log_toggle {
+	position: absolute;
+	right: 0px;
+	cursor: pointer;
+	width: 20px;
+	heigth: 20px;
+	padding-top: 4px;
 }
 
 #bar_bottom .inner {
@@ -293,9 +364,8 @@ body, select {
 	position: absolute;
 	top: 34px;
 	bottom: 0px;
-	overflow-x: hidden;
-	overflow-y: auto;
-	width: 398px;
+	overflow: hidden;
+	width: 499px;
 }
 
 .frame {
@@ -384,28 +454,33 @@ h1 {
 	margin-top: 0px;
 }
 
+h3 {
+	margin-top: 5px;
+	margin-bottom: 5px;	
+}
+
 #showWelcome label {
 	position: relative;
 	bottom: 3px;
 	margin-left: 4px;
 }
 
-#reg_message, #reg_error {
+.form_message, .form_error {
 	border: 1px solid rgba(0,0,0,0);
 	height: 20px;
 	margin-top: 7px;
 }
 
-#reg_error {
+.form_error {
 	margin-top: -22px;
 }
 
-#reg_message.show {
+.form_message.show {
 	border: 1px solid rgba(0,255,255,0.9);
 	background: rgba(0,0,0,0.3);
 }
 
-#reg_error.show {
+.form_error.show {
 	border: 1px solid rgba(0,255,255,0.9);
 	background: rgba(255,40,40,0.9); 
 }
@@ -416,6 +491,7 @@ h1 {
 
 #pinboard_chat,
 #pinboard_events {
-	height: 150px;
+	height: 185px;
+	width: 490px;
 	line-height: 1em;
 }

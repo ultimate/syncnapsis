@@ -17,9 +17,11 @@ package com.syncnapsis.data.service;
 import com.syncnapsis.data.model.User;
 import com.syncnapsis.exceptions.UserNotFoundException;
 import com.syncnapsis.exceptions.UserRegistrationFailedException;
+import com.syncnapsis.exceptions.UserUpdateFailedException;
+import com.syncnapsis.security.annotations.LogFilter;
 
 /**
- * Manager-Interface für den Zugriff auf User.
+ * Manager-Interface fï¿½r den Zugriff auf User.
  * 
  * @author ultimate
  */
@@ -28,11 +30,15 @@ public interface UserManager extends GenericNameManager<User, Long>
 	/**
 	 * The method name of "verifyRegistration" for RPC
 	 */
-	public static final String	RPC_VERIFY_REGISTRATION	= "verifyRegistration";
+	public static final String	RPC_VERIFY_REGISTRATION		= "verifyRegistration";
 	/**
 	 * The method name of "verifyMailAddress" for RPC
 	 */
-	public static final String	RPC_VERIFY_MAIL_ADDRESS	= "verifyMailAddress";
+	public static final String	RPC_VERIFY_MAIL_ADDRESS		= "verifyMailAddress";
+	/**
+	 * The method name of "performPasswordReset" for RPC
+	 */
+	public static final String	RPC_PERFORM_PASSWORD_RESET	= "performPasswordReset";
 
 	/**
 	 * Load a User by it's email address
@@ -70,6 +76,7 @@ public interface UserManager extends GenericNameManager<User, Long>
 	 * @return the user just logged in
 	 * @throws UserNotFoundException - if the login failed (wrong username or password)
 	 */
+	@LogFilter(filteredArgs = { 1 })
 	public User login(String username, String password);
 
 	/**
@@ -80,6 +87,13 @@ public interface UserManager extends GenericNameManager<User, Long>
 	 * @return if the logout has successfully been performed
 	 */
 	public boolean logout();
+
+	/**
+	 * Get the user currently logged in.
+	 * 
+	 * @return the user logged in
+	 */
+	public User getCurrent();
 
 	/**
 	 * Perform the registration process for a new user.<br>
@@ -98,6 +112,7 @@ public interface UserManager extends GenericNameManager<User, Long>
 	 * @return the new User
 	 * @throws UserRegistrationFailedException if registration failed
 	 */
+	@LogFilter(filteredArgs = { 2, 3 })
 	public User register(String username, String email, String password, String passwordConfirm) throws UserRegistrationFailedException;
 
 	/**
@@ -128,4 +143,34 @@ public interface UserManager extends GenericNameManager<User, Long>
 	 * @return a message representing the result of the operation for action output
 	 */
 	public String verifyMailAddress(Long userId, String email);
+
+	/**
+	 * Set the password for the current user
+	 * 
+	 * @param oldPassword - the old password
+	 * @param newPassword - the new password
+	 * @param newPasswordConfirm - the confirmation of the new password
+	 * @return
+	 */
+	@LogFilter(filteredArgs = { 0, 1, 2 })
+	public boolean changePassword(String oldPassword, String newPassword, String newPasswordConfirm) throws UserUpdateFailedException;
+
+	/**
+	 * Request a password reset for the given user.<br>
+	 * The given email is checked against the user's email for security reasons.<br>
+	 * 
+	 * @param username - the user whose password to reset
+	 * @param email - the email of the user for validation
+	 * @return true if a confirmation is required, false otherwise
+	 */
+	public boolean requestPasswordReset(String username, String email);
+
+	/**
+	 * Perform the password reset for the given user.<br>
+	 * This will generate a random password and send a mail to the user with the new password.
+	 * 
+	 * @param userId - the user whose password to reset
+	 * @return a message representing the result of the operation for action output
+	 */
+	public String performPasswordReset(Long userId);
 }

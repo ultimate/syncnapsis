@@ -31,38 +31,46 @@ import com.syncnapsis.enums.EnumDateFormat;
 import com.syncnapsis.enums.EnumGender;
 import com.syncnapsis.exceptions.UserNotFoundException;
 import com.syncnapsis.exceptions.UserRegistrationFailedException;
+import com.syncnapsis.exceptions.UserUpdateFailedException;
 import com.syncnapsis.security.BaseApplicationManager;
 import com.syncnapsis.utils.TimeZoneUtil;
+import com.syncnapsis.utils.data.DefaultData;
+import com.syncnapsis.utils.data.ExtendedRandom;
 import com.syncnapsis.websockets.service.rpc.RPCCall;
 
 /**
- * Manager-Implementierung für den Zugriff auf User.
+ * Manager-Implementierung fï¿½r den Zugriff auf User.
  * 
  * @author ultimate
  */
 public class UserManagerImpl extends GenericNameManagerImpl<User, Long> implements UserManager, InitializingBean
 {
 	/**
-	 * UserDao für den Datenbankzugriff
+	 * UserDao fï¿½r den Datenbankzugriff
 	 */
-	protected UserDao					userDao;
+	protected UserDao						userDao;
 	/**
 	 * The UserRoleManager
 	 */
-	protected UserRoleManager			userRoleManager;
+	protected UserRoleManager				userRoleManager;
 	/**
 	 * The ActionManager
 	 */
-	protected ActionManager				actionManager;
+	protected ActionManager					actionManager;
 	/**
 	 * The SecurityManager (BaseApplicationManager)
 	 */
-	protected BaseApplicationManager	securityManager;
+	protected BaseApplicationManager		securityManager;
+
+	/**
+	 * A random number generator for local use
+	 */
+	private transient final ExtendedRandom	random	= new ExtendedRandom();
 
 	/**
 	 * Standard Constructor
 	 * 
-	 * @param userDao - UserDao für den Datenbankzugriff
+	 * @param userDao - UserDao fï¿½r den Datenbankzugriff
 	 * @param userRoleManager - the UserRoleManager
 	 * @param actionManager - the ActionManager
 	 */
@@ -113,7 +121,7 @@ public class UserManagerImpl extends GenericNameManagerImpl<User, Long> implemen
 	public User login(String username, String password)
 	{
 		User user = getByName(username);
-		if(securityManager.validatePassword(password, user.getPassword()))
+		if(user != null && securityManager.validatePassword(password, user.getPassword()))
 		{
 			securityManager.getUserProvider().set(user);
 			securityManager.getLocaleProvider().set(user.getLocale());
@@ -136,6 +144,16 @@ public class UserManagerImpl extends GenericNameManagerImpl<User, Long> implemen
 
 	/*
 	 * (non-Javadoc)
+	 * @see com.syncnapsis.data.service.UserManager#getCurrent()
+	 */
+	@Override
+	public User getCurrent()
+	{
+		return securityManager.getUserProvider().get();
+	}
+
+	/*
+	 * (non-Javadoc)
 	 * @see com.syncnapsis.data.service.UserManager#register(java.lang.String, java.lang.String,
 	 * java.lang.String, java.lang.String)
 	 */
@@ -154,9 +172,8 @@ public class UserManagerImpl extends GenericNameManagerImpl<User, Long> implemen
 			throw new UserRegistrationFailedException(ApplicationBaseConstants.ERROR_NO_PASSWORD);
 		if(!password.equals(passwordConfirm))
 			throw new UserRegistrationFailedException(ApplicationBaseConstants.ERROR_PASSWORD_MISMATCH);
-		
-		Date validDate = new Date(securityManager.getTimeProvider().get()
-				+ ApplicationBaseConstants.PARAM_REGISTRATION_TIME_TO_VERIFY.asLong());
+
+		Date validDate = new Date(securityManager.getTimeProvider().get() + ApplicationBaseConstants.PARAM_REGISTRATION_TIME_TO_VERIFY.asLong());
 
 		User user = new User();
 		user.setAccountStatus(EnumAccountStatus.valueOf(ApplicationBaseConstants.PARAM_REGISTRATION_STATUS_DEFAULT.asString()));
@@ -257,7 +274,7 @@ public class UserManagerImpl extends GenericNameManagerImpl<User, Long> implemen
 	@Override
 	public boolean updateMailAddress(String email)
 	{
-		User user = securityManager.getUserProvider().get();
+		User user = getCurrent();
 		if(user == null)
 			throw new IllegalStateException("no user found");
 		if(securityManager.getMailer() != null)
@@ -266,13 +283,12 @@ public class UserManagerImpl extends GenericNameManagerImpl<User, Long> implemen
 
 			RPCCall rpcCall = new RPCCall(getBeanName(), RPC_VERIFY_MAIL_ADDRESS, new Object[] { user.getId(), email });
 
-			Date validDate = new Date(securityManager.getTimeProvider().get()
-					+ ApplicationBaseConstants.PARAM_EMAIL_CHANGE_TIME_TO_VERIFY.asLong());
-			
+			Date validDate = new Date(securityManager.getTimeProvider().get() + ApplicationBaseConstants.PARAM_EMAIL_CHANGE_TIME_TO_VERIFY.asLong());
+
 			Action action = actionManager.createAction(rpcCall, 1, null, validDate);
 
 			securityManager.getMailer().sendVerifyMailAddress(user, email, action);
-			
+
 			return true;
 		}
 		else
@@ -306,6 +322,94 @@ public class UserManagerImpl extends GenericNameManagerImpl<User, Long> implemen
 		User user = get(userId);
 		user.setEmail(email);
 		save(user);
+		return "ok";
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see com.syncnapsis.data.service.UserManager#changePassword(java.lang.String, java.lang.String,
+	 * java.lang.String)
+	 */
+	@Override
+	public boolean changePassword(String oldPassword, String newPassword, String newPasswordConfirm) throws UserUpdateFailedException
+	{
+		if(newPassword == null)
+			throw new UserUpdateFailedException(ApplicationBaseConstants.ERROR_NO_PASSWORD);
+		if(!newPassword.equals(newPasswordConfirm))
+			throw new UserUpdateFailedException(ApplicationBaseConstants.ERROR_PASSWORD_MISMATCH);
+		
+		User user = getCurrent();
+		if(user == null)
+			throw new UserUpdateFailedException(ApplicationBaseConstants.ERROR_USERNAME_INVALID);
+		
+		if(!securityManager.validatePassword(oldPassword, user.getPassword()))
+			throw new UserUpdateFailedException(ApplicationBaseConstants.ERROR_PASSWORD_MISMATCH);
+
+		user.setPassword(securityManager.hashPassword(newPassword));
+		save(user);
+
+		return true;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see com.syncnapsis.data.service.UserManager#requestPasswordReset(java.lang.String,
+	 * java.lang.String)
+	 */
+	@Override
+	public boolean requestPasswordReset(String username, String email)
+	{
+		User user = getByName(username);
+		if(user == null || !user.getEmail().equals(email))
+			return false;
+		if(securityManager.getMailer() != null)
+		{
+			logger.debug("password reset requested for user " + user.getId());
+
+			RPCCall rpcCall = new RPCCall(getBeanName(), RPC_PERFORM_PASSWORD_RESET, new Object[] { user.getId() });
+
+			Date validDate = new Date(securityManager.getTimeProvider().get() + ApplicationBaseConstants.PARAM_PASSWORD_RESET_TIME_TO_VERIFY.asLong());
+
+			Action action = actionManager.createAction(rpcCall, 1, null, validDate);
+
+			securityManager.getMailer().sendVerifyPasswordReset(user, action);
+
+			return true;
+		}
+		else
+		{
+			performPasswordReset(user.getId());
+			return false;
+		}
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see com.syncnapsis.data.service.UserManager#performPasswordReset(java.lang.Long)
+	 */
+	@Override
+	public String performPasswordReset(Long userId)
+	{
+		User user = get(userId);
+		
+		int length = ApplicationBaseConstants.PARAM_PASSWORD_GENERATED_LENGTH.asInt();
+		String source = DefaultData.STRING_ASCII_COMPLETE_NO_CONTROLCHARS;
+		
+		String newPassword = random.nextString(length, source);
+		user.setPassword(securityManager.hashPassword(newPassword));
+		save(user);
+
+		if(securityManager.getMailer() != null)
+		{
+			logger.info("resetted password for user " + userId);
+
+			securityManager.getMailer().sendPasswordResetted(user, newPassword);
+		}
+		else
+		{
+			logger.info("resetted password for user " + userId + " to: " + newPassword);
+		}
+		
 		return "ok";
 	}
 }

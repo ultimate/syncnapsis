@@ -22,9 +22,13 @@
     <!-- =================================================================== -->
     <!-- Utilities					                                         -->
     <!-- =================================================================== -->
+    
+    <bean id="sessionFactoryUtil" class="com.syncnapsis.utils.SessionFactoryUtil" lazy-init="false">
+        <constructor-arg ref="sessionFactory" />
+    </bean>
 
 	<bean id="hibernateUtil" class="com.syncnapsis.utils.HibernateUtil" lazy-init="false">
-		<property name="sessionFactory" ref="sessionFactory" />
+		<property name="sessionFactoryUtil" ref="sessionFactoryUtil" />
 	</bean>
     
     <!-- =================================================================== -->

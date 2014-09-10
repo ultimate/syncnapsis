@@ -88,27 +88,33 @@ public abstract class GenericRPCHandler implements RPCHandler, InitializingBean
 	{
 		Object target = this.getTarget(call.getObject());
 
-		logger.debug("RPCCall (modified):");
-		logger.debug("  Object:          " + call.getObject());
-		logger.debug("  Method:          " + call.getMethod());
-		// logger.debug("  Args:            " + Arrays.asList(call.getArgs()));
-		logger.debug("  Args:");
-		for(Object arg : call.getArgs())
-			logger.debug("                 " + arg + (arg != null ? " (" + arg.getClass() + ")" : ""));
+		Method method = this.getMethod(target, call.getMethod(), call.getArgs(), authorities);
 
-		Method method = ReflectionsUtil.findMethodAndConvertArgs(target.getClass(), call.getMethod(), call.getArgs(), serializer.getMapper(), authorities);
-
-		// logger.debug("  Args (modified): " + Arrays.asList(call.getArgs()));
-		logger.debug("  Args (modified):");
-		for(Object arg : call.getArgs())
-			logger.debug("                 " + arg + (arg != null ? " (" + arg.getClass() + ")" : ""));
-		logger.debug("Method found: " + method);
+//		if(logger.isDebugEnabled())
+//		{
+//			logger.debug("RPCCall (modified):");
+//			logger.debug("  Object:          " + call.getObject());
+//			logger.debug("  Method:          " + call.getMethod());
+//			logger.debug("  Args:");
+//			for(Object arg : call.getArgs())
+//				logger.debug("                 " + arg + (arg != null ? " (" + arg.getClass() + ")" : ""));
+//			logger.debug("  Args (modified):");
+//			for(Object arg : call.getArgs())
+//				logger.debug("                 " + arg + (arg != null ? " (" + arg.getClass() + ")" : ""));
+//			logger.debug("Method found: " + method);
+//		}
+		
+		call.setInvocationInfo(new InvocationInfo(target, method));
 
 		if(isAccessible(target, method, authorities))
 		{
 			Object result = method.invoke(target, call.getArgs());
 			if(method.getReturnType().equals(void.class))
 				return Void.TYPE;
+//				invocationInfo.setResult(Void.TYPE);
+//			else
+//				invocationInfo.setResult(result);
+//			return invocationInfo;
 			return result;
 		}
 		else
@@ -125,6 +131,20 @@ public abstract class GenericRPCHandler implements RPCHandler, InitializingBean
 	 * @return the target or null, if the method to execute is static
 	 */
 	public abstract Object getTarget(String objectName);
+	
+	/**
+	 * Obtain the method to do the RPC on.
+	 * 
+	 * @param target - the target object
+	 * @param method - the method name
+	 * @param args - the RPC arguments
+	 * @param authorities - the authorities used for transforming the input arguments
+	 * @return the method
+	 */
+	public Method getMethod(Object target, String method, Object[] args, Object... authorities)
+	{
+		return ReflectionsUtil.findMethodAndConvertArgs(target.getClass(), method, args, serializer.getMapper(), authorities);
+	}
 
 	/*
 	 * (non-Javadoc)

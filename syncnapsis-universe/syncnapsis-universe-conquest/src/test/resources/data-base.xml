@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- - Syncnapsis Framework - Copyright (c) 2012 ultimate - - This program 
+	is free software; you can redistribute it and/or modify it under the terms 
+	of - the GNU General Public License as published by the Free Software Foundation; 
+	either version - 3 of the License, or any later version. - - This program 
+	is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; 
+	- without even the implied warranty of MECHANTABILITY or FITNESS FOR A PARTICULAR 
+	PURPOSE. - See the GNU General Public License for more details. - - You should 
+	have received a copy of the GNU General Plublic License along with this program; 
+	- if not, see <http://www.gnu.org/licenses/>. -->
+<!DOCTYPE dataset SYSTEM "dataset.dtd">
+<dataset>
+
+	<table name="parameter">
+		<column>id</column>
+		<column>name</column>
+		<column>value</column>
+		<column>version</column>
+		<row>
+			<value description="id">101</value>
+			<value description="name">match.vendetta.param.default</value>
+			<value description="value">40</value>
+			<value description="version">1</value>
+		</row>
+		<row>
+			<value description="id">102</value>
+			<value description="name">solarsystem.habitability.max</value>
+			<value description="value">1000</value>
+			<value description="version">1</value>
+		</row>
+		<row>
+			<value description="id">103</value>
+			<value description="name">solarsystem.size.max</value>
+			<value description="value">1000</value>
+			<value description="version">1</value>
+		</row>
+		<row>
+			<value description="id">104</value>
+			<value description="name">solarsystem.population.factor</value>
+			<value description="value">1000000</value>
+			<value description="version">1</value>
+		</row>
+		<row>
+			<value description="id">105</value>
+			<value description="name">travel.max.factor</value>
+			<value description="value">10</value>
+			<value description="version">1</value>
+		</row>
+		<row>
+			<value description="id">106</value>
+			<value description="name">travel.exodus.factor</value>
+			<value description="value">20</value>
+			<value description="version">1</value>
+		</row>
+		<row>
+			<value description="id">107</value>
+			<value description="name">travel.speed.max</value>
+			<value description="value">1000</value>
+			<value description="version">1</value>
+		</row>
+		<row>
+			<value description="id">108</value>
+			<value description="name">travel.speed.min</value>
+			<value description="value">100</value>
+			<value description="version">1</value>
+		</row>
+		<row>
+			<value description="id">109</value>
+			<value description="name">match.speed.min</value>
+			<value description="value">0</value>
+			<value description="version">1</value>
+		</row>
+		<row>
+			<value description="id">110</value>
+			<value description="name">match.speed.max</value>
+			<value description="value">5</value>
+			<value description="version">1</value>
+		</row>
+		<row>
+			<value description="id">111</value>
+			<value description="name">factor.build</value>
+			<value description="value">0.08</value>
+			<value description="version">1</value>
+		</row>
+		<row>
+			<value description="id">112</value>
+			<value description="name">factor.attack</value>
+			<value description="value">0.06</value>
+			<value description="version">1</value>
+		</row>
+		<row>
+			<value description="id">113</value>
+			<value description="name">factor.build.randomize</value>
+			<value description="value">1.1</value>
+			<value description="version">1</value>
+		</row>
+		<row>
+			<value description="id">114</value>
+			<value description="name">factor.attack.randomize</value>
+			<value description="value">0.25</value>
+			<value description="version">1</value>
+		</row>
+		<row>
+			<value description="id">115</value>
+			<value description="name">norm.tick.length</value>
+			<value description="value">100</value>
+			<value description="version">1</value>
+		</row>
+		<row>
+			<value description="id">116</value>
+			<value description="name">travel.time.factor</value>
+			<value description="value">0.7</value>
+			<value description="version">1</value>
+		</row>
+		<row>
+			<value description="id">121</value>
+			<value description="name">priority.full</value>
+			<value description="value">1.0</value>
+			<value description="version">1</value>
+		</row>
+		<row>
+			<value description="id">122</value>
+			<value description="name">priority.high</value>
+			<value description="value">0.75</value>
+			<value description="version">1</value>
+		</row>
+		<row>
+			<value description="id">123</value>
+			<value description="name">priority.medium</value>
+			<value description="value">0.5</value>
+			<value description="version">1</value>
+		</row>
+		<row>
+			<value description="id">124</value>
+			<value description="name">priority.low</value>
+			<value description="value">0.25</value>
+			<value description="version">1</value>
+		</row>
+		<row>
+			<value description="id">125</value>
+			<value description="name">priority.none</value>
+			<value description="value">0.0</value>
+			<value description="version">1</value>
+		</row>
+	</table>
+
+	<table name="pinboard">
+		<column>id</column>
+		<column>version</column>
+		<column>activated</column>
+		<column>name</column>
+		<column>description</column>
+		<column>fkCreator</column>
+		<column>creationDate</column>
+		<column>locked</column>
+		<column>hidden</column>
+		<column>defaultMessageCount</column>
+		<row>
+			<value description="id">1</value>
+			<value description="version">1</value>
+			<value description="activated">1</value>
+			<value description="name">chat</value>
+			<value description="description"><![CDATA[universe conquest community chat]]></value>
+			<value description="fkCreator">0</value>
+			<value description="creationDate">2012-08-20 00:00:00</value>
+			<value description="locked">0</value>
+			<value description="hidden">0</value>
+			<value description="defaultMessageCount">20</value>
+		</row>
+		<row>
+			<value description="id">2</value>
+			<value description="version">1</value>
+			<value description="activated">1</value>
+			<value description="name">news</value>
+			<value description="description"><![CDATA[universe conquest news and updates]]></value>
+			<value description="fkCreator">0</value>
+			<value description="creationDate">2012-08-20 00:00:00</value>
+			<value description="locked">1</value>
+			<value description="hidden">0</value>
+			<value description="defaultMessageCount">5</value>
+		</row>
+		<row>
+			<value description="id">3</value>
+			<value description="version">1</value>
+			<value description="activated">1</value>
+			<value description="name">blog</value>
+			<value description="description"><![CDATA[syncnapsis development blog]]></value>
+			<value description="fkCreator">0</value> <!-- relink to ultimate when user registered -->
+			<value description="creationDate">2012-08-20 00:00:00</value>
+			<value description="locked">1</value>
+			<value description="hidden">0</value>
+			<value description="defaultMessageCount">5</value>
+		</row>
+	</table>
+
+</dataset>
