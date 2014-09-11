@@ -15,6 +15,7 @@
 package com.syncnapsis.constants;
 
 import com.syncnapsis.data.model.SolarSystemInfrastructure;
+import com.syncnapsis.enums.EnumVictoryCondition;
 import com.syncnapsis.utils.constants.Constant;
 import com.syncnapsis.utils.constants.StringConstant;
 
@@ -28,7 +29,21 @@ public class UniverseConquestConstants
 	/**
 	 * The name for the parameter containing the default percentage for rivals in vendetta mode
 	 */
-	public static final Constant<String>	PARAM_MATCH_VENDETTA_PARAM_DEFAULT		= new StringConstant("match.vendetta.param.default");
+	public static final Constant<String>	PARAM_VICTORY_VENDETTA_PARAM_DEFAULT	= new StringConstant("victory.vendetta.param.default");
+	/**
+	 * The factor for fine-tuning the victory timeout for {@link EnumVictoryCondition#domination}
+	 */
+	public static final Constant<String>	PARAM_VICTORY_DOMINATION_TIMEOUT		= new StringConstant("victory.domination.timeout");
+	/**
+	 * The factor for fine-tuning the victory timeout for {@link EnumVictoryCondition#extermination}
+	 */
+	public static final Constant<String>	PARAM_VICTORY_EXTERMINATION_TIMEOUT		= new StringConstant("victory.extermination.timeout");
+	/**
+	 * The factor for fine-tuning the victory timeout for {@link EnumVictoryCondition#extermination}<br>
+	 * (This param is defined for reasons of completeness only. It is not used, since "vendetta" has
+	 * no timeout!)
+	 */
+	public static final Constant<String>	PARAM_VICTORY_VENDETTA_TIMEOUT			= new StringConstant("victory.vendetta.timeout");
 	/**
 	 * The minimum value for the speed of a match
 	 */

@@ -18,8 +18,26 @@
 		<column>version</column>
 		<row>
 			<value description="id">101</value>
-			<value description="name">match.vendetta.param.default</value>
+			<value description="name">victory.vendetta.param.default</value>
 			<value description="value">40</value>
+			<value description="version">1</value>
+		</row>
+		<row>
+			<value description="id">126</value>
+			<value description="name">victory.vendetta.timeout</value>
+			<value description="value">0</value>
+			<value description="version">1</value>
+		</row>
+		<row>
+			<value description="id">127</value>
+			<value description="name">victory.domination.timeout</value>
+			<value description="value">10</value>
+			<value description="version">1</value>
+		</row>
+		<row>
+			<value description="id">128</value>
+			<value description="name">victory.extermination.timeout</value>
+			<value description="value">15</value>
 			<value description="version">1</value>
 		</row>
 		<row>
