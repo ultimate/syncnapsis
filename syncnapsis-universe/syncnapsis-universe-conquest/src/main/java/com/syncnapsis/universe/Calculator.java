@@ -146,6 +146,15 @@ public interface Calculator
 	public long calculateStandardTravelTime(Match match, int travelSpeed);
 
 	/**
+	 * Calculate the timeout for the match and its victory condition.
+	 * This timeout should be related to the standard travel distance in order to be balancable.
+	 * 
+	 * @param match - the match to calculate the timeout for
+	 * @return the timeout in ms
+	 */
+	public long calculateVictoryTimeout(Match match);
+
+	/**
 	 * Calculate the attack strength for the given amount of population
 	 * 
 	 * @param speedFactor - the speed factor to scale with

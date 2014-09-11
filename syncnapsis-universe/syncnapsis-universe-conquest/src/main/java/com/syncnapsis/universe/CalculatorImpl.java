@@ -367,6 +367,7 @@ public class CalculatorImpl implements Calculator
 	 * (non-Javadoc)
 	 * @see com.syncnapsis.universe.Calculator#calculateStandardTravelTime(com.syncnapsis.data.model.Match, int)
 	 */
+	@Override
 	public long calculateStandardTravelTime(Match match, int travelSpeed)
 	{
 		double minSpeed = UniverseConquestConstants.PARAM_TRAVEL_SPEED_MIN.asDouble();
@@ -385,6 +386,28 @@ public class CalculatorImpl implements Calculator
 		travelTime /= speedFac; // match speed
 
 		return (long) travelTime;		
+	}
+	
+	/*
+	 * (non-Javadoc)
+	 * @see com.syncnapsis.universe.Calculator#calculateVictoryTimeout(com.syncnapsis.data.model.Match)
+	 */
+	@Override
+	public long calculateVictoryTimeout(Match match)
+	{
+		if(match.getVictoryCondition().hasTimeout())
+		{
+			int maxTravelSpeed = UniverseConquestConstants.PARAM_TRAVEL_SPEED_MAX.asInt();
+			double timeoutFactor = match.getVictoryCondition().getTimeoutFactor();
+			
+			long stdTravelTime = calculateStandardTravelTime(match, maxTravelSpeed);
+			
+			return (long) (stdTravelTime * timeoutFactor);
+		}
+		else
+		{
+			return 0;
+		}
 	}
 
 	/**
