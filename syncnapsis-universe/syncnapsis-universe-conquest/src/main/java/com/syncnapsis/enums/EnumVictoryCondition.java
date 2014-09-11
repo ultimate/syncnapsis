@@ -14,6 +14,9 @@
  */
 package com.syncnapsis.enums;
 
+import com.syncnapsis.constants.UniverseConquestConstants;
+import com.syncnapsis.universe.Calculator;
+
 /**
  * Enum representing differing victory conditions for matches.<br>
  * The condition is used to decide when a match is finished and a winner can be determined.
@@ -21,7 +24,7 @@ package com.syncnapsis.enums;
  * @author ultimate
  */
 public enum EnumVictoryCondition
-{
+{	
 	/**
 	 * Rule over xx% of the galaxy for a specified duration
 	 */
@@ -33,6 +36,46 @@ public enum EnumVictoryCondition
 	/**
 	 * Destroy the populations/colonies of your specified randomly chosen rivals
 	 */
-	vendetta,
+	vendetta;
 	// some more?
+	
+	/**
+	 * Is this victory condition bound to a timeout?<br>
+	 * If so, participant wins if condition is met and the specific timeout has passed. Otherwise the participant wins immediately
+	 * 
+	 * @return true or false
+	 */
+	public boolean hasTimeout()
+	{
+		switch(this)
+		{
+			case domination:
+			case extermination:
+				return true;
+			case vendetta:         
+			default:
+				return false;
+		}
+	}
+	
+	/**
+	 * Get the timeout factor for this victory condition.
+	 * 
+	 * @see Calculator#calculateVictoryTimeout(com.syncnapsis.data.model.Match)
+	 * @return the timeout factor
+	 */
+	public double getTimeoutFactor()
+	{
+		switch(this)
+		{
+			case domination:
+				return UniverseConquestConstants.PARAM_VICTORY_DOMINATION_TIMEOUT.asDouble();
+			case extermination:
+				return UniverseConquestConstants.PARAM_VICTORY_EXTERMINATION_TIMEOUT.asDouble();
+			case vendetta:         
+				return UniverseConquestConstants.PARAM_VICTORY_VENDETTA_TIMEOUT.asDouble();
+			default:
+				return 0.0;
+		}
+	}
 }
