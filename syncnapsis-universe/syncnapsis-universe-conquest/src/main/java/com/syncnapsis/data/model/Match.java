@@ -148,11 +148,18 @@ public class Match extends ActivatableInstance<Long> implements Ownable<Player>
 	protected EnumVictoryCondition	victoryCondition;
 
 	/**
-	 * A parameter defining the amount or value for the victoryCondition if necessary
+	 * A parameter defining the amount or value for the victory condition if necessary
 	 * 
 	 * @see Match#victoryCondition
 	 */
 	protected int					victoryParameter;
+
+	/**
+	 * The timeout for the victory condition. It should be set initially from the victory condition
+	 * in order to simplify displaying a countdown on client side and to prevent accidential changes
+	 * during countdown.
+	 */
+	protected long					victoryTimeout;
 
 	/**
 	 * The participants in this match
@@ -392,6 +399,19 @@ public class Match extends ActivatableInstance<Long> implements Ownable<Player>
 	}
 
 	/**
+	 * The timeout for the victory condition. It should be set initially from the victory condition
+	 * in order to simplify displaying a countdown on client side and to prevent accidential changes
+	 * during countdown.
+	 * 
+	 * @return victoryTimeout
+	 */
+	@Column(nullable = false)
+	public long getVictoryTimeout()
+	{
+		return victoryTimeout;
+	}
+	
+	/**
 	 * The participants in this match
 	 * 
 	 * @return participants
@@ -582,7 +602,7 @@ public class Match extends ActivatableInstance<Long> implements Ownable<Player>
 	{
 		this.participantsMin = participantsMin;
 	}
-	
+
 	/**
 	 * The start condition for this match
 	 * 
@@ -613,6 +633,19 @@ public class Match extends ActivatableInstance<Long> implements Ownable<Player>
 	{
 		this.victoryParameter = victoryParameter;
 	}
+
+	/**
+	 * The timeout for the victory condition. It should be set initially from the victory condition
+	 * in order to simplify displaying a countdown on client side and to prevent accidential changes
+	 * during countdown.
+	 * 
+	 * @param victoryTimeout - the timeout in ms
+	 */
+	public void setVictoryTimeout(long victoryTimeout)
+	{
+		this.victoryTimeout = victoryTimeout;
+	}
+
 
 	/**
 	 * The participants in this match
@@ -653,6 +686,7 @@ public class Match extends ActivatableInstance<Long> implements Ownable<Player>
 		result = prime * result + ((title == null) ? 0 : title.hashCode());
 		result = prime * result + ((victoryCondition == null) ? 0 : victoryCondition.hashCode());
 		result = prime * result + victoryParameter;
+		result = prime * result + (int) (victoryTimeout ^ (victoryTimeout >>> 32));
 		return result;
 	}
 
@@ -740,6 +774,8 @@ public class Match extends ActivatableInstance<Long> implements Ownable<Player>
 		if(victoryCondition != other.victoryCondition)
 			return false;
 		if(victoryParameter != other.victoryParameter)
+			return false;
+		if(victoryTimeout != other.victoryTimeout)
 			return false;
 		return true;
 	}
