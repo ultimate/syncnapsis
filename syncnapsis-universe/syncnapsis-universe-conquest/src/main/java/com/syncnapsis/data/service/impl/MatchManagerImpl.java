@@ -41,6 +41,7 @@ import com.syncnapsis.enums.EnumStartCondition;
 import com.syncnapsis.enums.EnumVictoryCondition;
 import com.syncnapsis.security.BaseGameManager;
 import com.syncnapsis.security.accesscontrol.MatchAccessController;
+import com.syncnapsis.universe.Calculator;
 import com.syncnapsis.utils.HibernateUtil;
 import com.syncnapsis.utils.MathUtil;
 import com.syncnapsis.utils.data.ExtendedRandom;
@@ -74,6 +75,10 @@ public class MatchManagerImpl extends GenericNameManagerImpl<Match, Long> implem
 	 * The SolarSystemInfrastructureManager
 	 */
 	protected SolarSystemInfrastructureManager	solarSystemInfrastructureManager;
+	/**
+	 * The {@link Calculator}
+	 */
+	protected Calculator						calculator;
 
 	/**
 	 * The SecurityManager
@@ -107,7 +112,28 @@ public class MatchManagerImpl extends GenericNameManagerImpl<Match, Long> implem
 	@Override
 	public void afterPropertiesSet() throws Exception
 	{
+		Assert.notNull(calculator, "calculator must not be null!");
 		Assert.notNull(securityManager, "securityManager must not be null!");
+	}
+
+	/**
+	 * The {@link Calculator}
+	 * 
+	 * @return calculator
+	 */
+	public Calculator getCalculator()
+	{
+		return calculator;
+	}
+
+	/**
+	 * The {@link Calculator}
+	 * 
+	 * @param calculator - the calculator
+	 */
+	public void setCalculator(Calculator calculator)
+	{
+		this.calculator = calculator;
 	}
 
 	/**
@@ -193,7 +219,8 @@ public class MatchManagerImpl extends GenericNameManagerImpl<Match, Long> implem
 			EnumJoinType startedJoinType)
 	{
 		Assert.isTrue(isAccessible(null, MatchAccessController.OPERATION_CREATE), "no access rights for 'create match'");
-		Assert.isTrue(participantsMax == 0 || participantsMax >= participantsMin, "participantsMax must either be 0 or be greater or equals to participantsMin");
+		Assert.isTrue(participantsMax == 0 || participantsMax >= participantsMin,
+				"participantsMax must either be 0 or be greater or equals to participantsMin");
 		Assert.isTrue(participantsMin > 0);
 
 		Galaxy galaxy = galaxyManager.get(galaxyId);
@@ -356,13 +383,16 @@ public class MatchManagerImpl extends GenericNameManagerImpl<Match, Long> implem
 				break;
 			case extermination:
 				// allways 100%
+				// TODO make selectable with options?
+				// very easy = 80, easy = 90, medium = 95, hard = 99, very hard = 100
 				match.setVictoryParameter(100);
 				break;
 			case vendetta:
 				// TODO make vendetta percentage selectable?
-				match.setVictoryParameter(UniverseConquestConstants.PARAM_MATCH_VENDETTA_PARAM_DEFAULT.asInt());
+				match.setVictoryParameter(UniverseConquestConstants.PARAM_VICTORY_VENDETTA_PARAM_DEFAULT.asInt());
 				break;
 		}
+		match.setVictoryTimeout(calculator.calculateVictoryTimeout(match));
 
 		// create the randon - since this is the second step in randomization, so let's add 1 :-)
 		ExtendedRandom random = new ExtendedRandom(match.getSeed() + 1);
@@ -528,20 +558,39 @@ public class MatchManagerImpl extends GenericNameManagerImpl<Match, Long> implem
 	@Override
 	public boolean isVictoryConditionMet(Match match)
 	{
-		Participant leader = null; // a leader/winner (if existing), must not be the only one
+		// a leader/winner (if existing)
+		// the leader is the participant with the oldest rankVictoryDate
+		Participant leader = null;
+
 		for(Participant p : match.getParticipants())
 		{
-			if(p.getRank() == 1)
+			if(p.getRankVictoryDate() != null)
 			{
-				leader = p;
-				break;
+				if(leader == null)
+					leader = p;
+				else if(p.getRankVictoryDate().before(leader.getRankVictoryDate()))
+					leader = p;
+				else if(p.getRankVictoryDate().equals(leader.getRankVictoryDate()) && p.getRank() < leader.getRank())
+					leader = p;
 			}
 		}
 
-		if(leader == null) // can only happen if ranking has not yet been determined
+		if(leader == null) // no one meets victory condition
 			return false;
 
-		return leader.getRankValue() >= match.getVictoryParameter();
+		long timeout = match.getVictoryTimeout();
+		if(timeout > 0)
+		{
+			// victory condition is bound to a timeout
+			long now = securityManager.getTimeProvider().get();
+			
+			if(leader.getRankVictoryDate().getTime() + timeout <= now)
+				return true; // timeout passed
+			else
+				return false;
+		}
+
+		return true;
 	}
 
 	/*
@@ -551,6 +600,8 @@ public class MatchManagerImpl extends GenericNameManagerImpl<Match, Long> implem
 	@Override
 	public Match updateRanking(Match match)
 	{
+		Date now = new Date(securityManager.getTimeProvider().get());
+
 		long totalPopulation = 0;
 		for(Participant p : match.getParticipants())
 		{
@@ -590,9 +641,20 @@ public class MatchManagerImpl extends GenericNameManagerImpl<Match, Long> implem
 						ref = match.getGalaxy().getSolarSystems().size();
 						for(SolarSystemPopulation pop : p.getPopulations())
 						{
-							// count +1/totalSystems for each existing population
+							// count +1/totalSystems for each existing population if the participant is alone
 							if(pop.getDestructionDate() == null)
-								rankValue++;
+							{
+								int nonDestroyed = 0;
+								// count total non-destroyed pops
+								for(SolarSystemPopulation otherPop: pop.getInfrastructure().getPopulations())
+								{
+									if(otherPop.getDestructionDate() == null)
+										nonDestroyed++;
+								}
+								
+								if(nonDestroyed == 1) // alone
+									rankValue++;
+							}
 						}
 						break;
 					case extermination:
@@ -615,16 +677,30 @@ public class MatchManagerImpl extends GenericNameManagerImpl<Match, Long> implem
 						break;
 				}
 
+				// set raw rank value
+				p.setRankRawValue(rankValue);
+				// scale rank value to have percent
 				rankValue = (int) Math.floor(100.0 * rankValue / ref);
 				p.setRankValue(rankValue);
+
+				// check victory condition
+				if(p.getRankValue() >= match.getVictoryParameter())
+				{
+					// participants rank meets victory condition
+					// set victory date if not yet set
+					if(p.getRankVictoryDate() == null)
+						p.setRankVictoryDate(now);
+				}
+				else
+				{
+					p.setRankVictoryDate(null);
+				}
 
 				updatedParticipants.add(p);
 			}
 		}
 
 		Collections.sort(updatedParticipants, Participant.BY_RANKVALUE);
-
-		Date now = new Date(securityManager.getTimeProvider().get());
 
 		int count = 0;
 		int rank = 0;

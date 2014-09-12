@@ -57,10 +57,11 @@ import com.syncnapsis.security.accesscontrol.MatchAccessController;
 import com.syncnapsis.tests.GenericNameManagerImplTestCase;
 import com.syncnapsis.tests.annotations.TestCoversClasses;
 import com.syncnapsis.tests.annotations.TestExcludesMethods;
+import com.syncnapsis.universe.Calculator;
 import com.syncnapsis.utils.data.ExtendedRandom;
 
 @TestCoversClasses({ MatchManager.class, MatchManagerImpl.class })
-@TestExcludesMethods({ "isAccessible", "*etSecurityManager", "afterPropertiesSet", "getMailer" })
+@TestExcludesMethods({ "isAccessible", "*etSecurityManager", "afterPropertiesSet", "getMailer", "*etCalculator" })
 public class MatchManagerImplTest extends GenericNameManagerImplTestCase<Match, Long, MatchManager, MatchDao>
 {
 	private GalaxyManager						galaxyManager;
@@ -70,6 +71,7 @@ public class MatchManagerImplTest extends GenericNameManagerImplTestCase<Match, 
 	private PlayerManager						playerManager;
 
 	private BaseGameManager						securityManager;
+	private Calculator							calculator;
 
 	private long								referenceTime	= 1234;
 
@@ -474,6 +476,7 @@ public class MatchManagerImplTest extends GenericNameManagerImplTestCase<Match, 
 		MatchManagerImpl mockManager = new MatchManagerImpl(mockDao, galaxyManager, mockParticipantManager, mockSolarSystemPopulationManager,
 				solarSystemInfrastructureManager);
 		mockManager.setSecurityManager(((MatchManagerImpl) this.mockManager).getSecurityManager());
+		mockManager.setCalculator(calculator);
 
 		int participants = 5;
 		final Match match = new Match();
@@ -535,6 +538,7 @@ public class MatchManagerImplTest extends GenericNameManagerImplTestCase<Match, 
 		assertNotNull(match.getStartDate());
 		assertEquals(new Date(referenceTime), match.getStartDate());
 		assertEquals(victoryParameter, match.getVictoryParameter());
+		assertEquals(calculator.calculateVictoryTimeout(match), match.getVictoryTimeout());
 		for(Participant p1 : match.getParticipants())
 		{
 			assertNull(p1.getRivals());
@@ -578,6 +582,7 @@ public class MatchManagerImplTest extends GenericNameManagerImplTestCase<Match, 
 		assertNotNull(match.getStartDate());
 		assertEquals(aStartDate, match.getStartDate());
 		assertEquals(100, match.getVictoryParameter());
+		assertEquals(calculator.calculateVictoryTimeout(match), match.getVictoryTimeout());
 		for(Participant p1 : match.getParticipants())
 		{
 			assertNull(p1.getRivals());
@@ -618,7 +623,8 @@ public class MatchManagerImplTest extends GenericNameManagerImplTestCase<Match, 
 		assertNotNull(match);
 		assertNotNull(match.getStartDate());
 		assertEquals(aStartDate, match.getStartDate());
-		assertEquals(UniverseConquestConstants.PARAM_MATCH_VENDETTA_PARAM_DEFAULT.asInt(), match.getVictoryParameter());
+		assertEquals(UniverseConquestConstants.PARAM_VICTORY_VENDETTA_PARAM_DEFAULT.asInt(), match.getVictoryParameter());
+		assertEquals(calculator.calculateVictoryTimeout(match), match.getVictoryTimeout());
 		int rivals = mockManager.getNumberOfRivals(match);
 		for(Participant p1 : match.getParticipants())
 		{
@@ -887,6 +893,8 @@ public class MatchManagerImplTest extends GenericNameManagerImplTestCase<Match, 
 
 		// now victory condition will be met
 		match.setVictoryParameter((participants - 1) * 10);
+		match.setVictoryTimeout(0);
+		match.getParticipants().get(0).setRankVictoryDate(new Date(0));
 		assertTrue(mockManager.isVictoryConditionMet(match));
 
 		// check with victory condition met
@@ -953,7 +961,6 @@ public class MatchManagerImplTest extends GenericNameManagerImplTestCase<Match, 
 		int participants = 5;
 
 		Match match = new Match();
-		match.setVictoryParameter(participants * 10);
 		match.setParticipants(new ArrayList<Participant>(participants));
 
 		Participant p;
@@ -966,10 +973,34 @@ public class MatchManagerImplTest extends GenericNameManagerImplTestCase<Match, 
 		}
 		Collections.shuffle(match.getParticipants());
 
+		((MatchManagerImpl) mockManager).getSecurityManager().getTimeProvider().set(referenceTime);
+
+		// no participant with victory date
+		match.setVictoryTimeout(0); // no timeout
+		assertFalse(mockManager.isVictoryConditionMet(match));
+		match.setVictoryTimeout(1000); // with timeout
+		assertFalse(mockManager.isVictoryConditionMet(match));
+		match.setVictoryTimeout(10000); // with timeout
 		assertFalse(mockManager.isVictoryConditionMet(match));
 
-		match.setVictoryParameter((participants - 1) * 10);
+		// 1 participant with victory date
+		match.getParticipants().get(0).setRankVictoryDate(new Date(0));
+		match.setVictoryTimeout(0); // no timeout
 		assertTrue(mockManager.isVictoryConditionMet(match));
+		match.setVictoryTimeout(1000); // timeout passed
+		assertTrue(mockManager.isVictoryConditionMet(match));
+		match.setVictoryTimeout(10000); // timeout not passed
+		assertFalse(mockManager.isVictoryConditionMet(match));
+
+		// 2 participants with victory date
+		match.getParticipants().get(0).setRankVictoryDate(new Date(1000));
+		match.getParticipants().get(1).setRankVictoryDate(new Date(0));
+		match.setVictoryTimeout(0); // no timeout
+		assertTrue(mockManager.isVictoryConditionMet(match));
+		match.setVictoryTimeout(1000); // timeout passed
+		assertTrue(mockManager.isVictoryConditionMet(match));
+		match.setVictoryTimeout(10000); // timeout not passed
+		assertFalse(mockManager.isVictoryConditionMet(match));
 	}
 
 	public void testUpdateRanking() throws Exception
@@ -1044,6 +1075,12 @@ public class MatchManagerImplTest extends GenericNameManagerImplTestCase<Match, 
 		match.setVictoryCondition(EnumVictoryCondition.domination);
 		mockManager.updateRanking(match);
 		mockContext.assertIsSatisfied();
+		logger.info("rank: " + match.getParticipants().get(0).getRank() + " final?" + match.getParticipants().get(0).isRankFinal());
+		logger.info("rank: " + match.getParticipants().get(1).getRank() + " final?" + match.getParticipants().get(1).isRankFinal());
+		logger.info("rank: " + match.getParticipants().get(2).getRank() + " final?" + match.getParticipants().get(2).isRankFinal());
+		logger.info("rank: " + match.getParticipants().get(3).getRank() + " final?" + match.getParticipants().get(3).isRankFinal());
+		logger.info("rank: " + match.getParticipants().get(4).getRank() + " final?" + match.getParticipants().get(4).isRankFinal());
+		
 		checkRank(match.getParticipants(), 0, 1, (int) Math.floor(100.0 * 10 / systems), false, false);
 		checkRank(match.getParticipants(), 1, 2, (int) Math.floor(100.0 * 6 / systems), false, false);
 		checkRank(match.getParticipants(), 2, 4, (int) Math.floor(100.0 * 0 / systems), true, false);
@@ -1115,6 +1152,9 @@ public class MatchManagerImplTest extends GenericNameManagerImplTestCase<Match, 
 			population.setPopulation(pop);
 			if(pop == 0)
 				population.setDestructionDate(new Date(referenceTime));
+			population.setInfrastructure(new SolarSystemInfrastructure());
+			population.getInfrastructure().setPopulations(new ArrayList<SolarSystemPopulation>());
+			population.getInfrastructure().getPopulations().add(population);
 			p.getPopulations().add(population);
 		}
 
