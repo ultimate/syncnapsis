@@ -1054,9 +1054,29 @@ public class SolarSystemPopulationManagerImplTest extends
 		{
 			double dist = MathUtil.distance(origin.getSolarSystem().getCoords(), target.getSolarSystem().getCoords());
 			logger.debug("dist=" + dist);
-			long time = (long) (100000.0 * dist / (double) travelSpeed);
+			long time = (long) (dist * calculateStandardTravelTime(origin.getMatch(), travelSpeed));
 			logger.debug("time=" + time);
 			return time;
+		}
+
+		/*
+		 * (non-Javadoc)
+		 * @see com.syncnapsis.universe.Calculator#calculateStandardTravelTime(com.syncnapsis.data.model.Match, int)
+		 */
+		@Override
+		public long calculateStandardTravelTime(Match match, int travelSpeed)
+		{
+			return (long) (100000.0 / travelSpeed);
+		}
+
+		/*
+		 * (non-Javadoc)
+		 * @see com.syncnapsis.universe.Calculator#calculateVictoryTimeout(com.syncnapsis.data.model.Match)
+		 */
+		@Override
+		public long calculateVictoryTimeout(Match match)
+		{
+			return calculateStandardTravelTime(match, 1000);
 		}
 
 		/*

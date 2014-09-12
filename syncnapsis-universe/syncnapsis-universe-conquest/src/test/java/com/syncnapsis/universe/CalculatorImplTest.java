@@ -29,6 +29,7 @@ import com.syncnapsis.data.model.SolarSystemInfrastructure;
 import com.syncnapsis.data.model.SolarSystemPopulation;
 import com.syncnapsis.data.model.help.Vector;
 import com.syncnapsis.enums.EnumPopulationPriority;
+import com.syncnapsis.enums.EnumVictoryCondition;
 import com.syncnapsis.tests.LoggerTestCase;
 import com.syncnapsis.tests.annotations.TestCoversMethods;
 import com.syncnapsis.utils.StringUtil;
@@ -270,6 +271,42 @@ public class CalculatorImplTest extends LoggerTestCase
 						+ ") expected = " + expected);
 				assertTrue(Math.abs(expected - travelTime) <= 1);
 		}
+	}
+	
+	public void testCalculateVictoryTimeout() throws Exception
+	{
+		CalculatorImpl mockCalculator = new CalculatorImpl() {
+			public long calculateStandardTravelTime(Match match, int maxSpeed)
+			{
+				return 1000;
+			}
+		};
+		
+		double dominationFactor = 10.0;
+		double exterminationFactor = 15.0;
+		// define constants here, since this is no DB test and hence parameters are not loaded
+		UniverseConquestConstants.PARAM_VICTORY_DOMINATION_TIMEOUT.define("" + dominationFactor);
+		UniverseConquestConstants.PARAM_VICTORY_EXTERMINATION_TIMEOUT.define("" + exterminationFactor);
+		
+		Match match = new Match();
+		
+		long stdTravelTime = mockCalculator.calculateStandardTravelTime(match, 1000);
+		long timeout;
+		
+		// vendetta => no timeout
+		match.setVictoryCondition(EnumVictoryCondition.vendetta);
+		timeout = mockCalculator.calculateVictoryTimeout(match);
+		assertEquals(0, timeout);
+		
+		// domination => stdTravelTime * 10
+		match.setVictoryCondition(EnumVictoryCondition.domination);
+		timeout = mockCalculator.calculateVictoryTimeout(match);
+		assertEquals((long) (stdTravelTime * dominationFactor), timeout);
+
+		// extermination => stdTravelTime * 10
+		match.setVictoryCondition(EnumVictoryCondition.extermination);
+		timeout = mockCalculator.calculateVictoryTimeout(match);
+		assertEquals((long) (stdTravelTime * exterminationFactor), timeout);
 	}
 
 	public void testGetMaxPopulation() throws Exception
