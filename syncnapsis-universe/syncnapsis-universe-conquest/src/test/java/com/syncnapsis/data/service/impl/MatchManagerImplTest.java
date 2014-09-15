@@ -1075,17 +1075,40 @@ public class MatchManagerImplTest extends GenericNameManagerImplTestCase<Match, 
 		match.setVictoryCondition(EnumVictoryCondition.domination);
 		mockManager.updateRanking(match);
 		mockContext.assertIsSatisfied();
-		logger.info("rank: " + match.getParticipants().get(0).getRank() + " final?" + match.getParticipants().get(0).isRankFinal());
-		logger.info("rank: " + match.getParticipants().get(1).getRank() + " final?" + match.getParticipants().get(1).isRankFinal());
-		logger.info("rank: " + match.getParticipants().get(2).getRank() + " final?" + match.getParticipants().get(2).isRankFinal());
-		logger.info("rank: " + match.getParticipants().get(3).getRank() + " final?" + match.getParticipants().get(3).isRankFinal());
-		logger.info("rank: " + match.getParticipants().get(4).getRank() + " final?" + match.getParticipants().get(4).isRankFinal());
-		
 		checkRank(match.getParticipants(), 0, 1, (int) Math.floor(100.0 * 10 / systems), false, false);
 		checkRank(match.getParticipants(), 1, 2, (int) Math.floor(100.0 * 6 / systems), false, false);
 		checkRank(match.getParticipants(), 2, 4, (int) Math.floor(100.0 * 0 / systems), true, false);
 		checkRank(match.getParticipants(), 3, 5, (int) Math.floor(100.0 * 0 / systems), true, true);
 		checkRank(match.getParticipants(), 4, 3, (int) Math.floor(100.0 * 5 / systems), false, false);
+
+		resetRanks(match.getParticipants(), destroyedParticipant);
+
+		// domination (not all alone)
+		// putting 2 or more populations into the same system --> reduction in count
+		// part 1 & 0 & 4 sharing system
+		setSameSystem(match.getParticipants(), 1, 0, 0, 0); 
+		setSameSystem(match.getParticipants(), 1, 0, 4, 0);
+		// part 1 & 0 sharing (another) system
+		setSameSystem(match.getParticipants(), 1, 1, 0, 1); 
+		// part 1 & 0 sharing (another) system
+		setSameSystem(match.getParticipants(), 1, 2, 0, 2);
+		// --> part 0 => -3
+		// --> part 1 => -3 (-1 Rank)
+		// --> part 4 => -1 (+1 Rank)
+		mockContext.checking(new Expectations() {
+			{
+				oneOf(mockDao).get(null);
+				will(returnValue(match));
+			}
+		});
+		match.setVictoryCondition(EnumVictoryCondition.domination);
+		mockManager.updateRanking(match);
+		mockContext.assertIsSatisfied();
+		checkRank(match.getParticipants(), 0, 1, (int) Math.floor(100.0 * 7 / systems), false, false);
+		checkRank(match.getParticipants(), 1, 3, (int) Math.floor(100.0 * 3 / systems), false, false);
+		checkRank(match.getParticipants(), 2, 4, (int) Math.floor(100.0 * 0 / systems), true, false);
+		checkRank(match.getParticipants(), 3, 5, (int) Math.floor(100.0 * 0 / systems), true, true);
+		checkRank(match.getParticipants(), 4, 2, (int) Math.floor(100.0 * 4 / systems), false, false);
 
 		resetRanks(match.getParticipants(), destroyedParticipant);
 
@@ -1107,6 +1130,24 @@ public class MatchManagerImplTest extends GenericNameManagerImplTestCase<Match, 
 		checkRank(match.getParticipants(), 2, 4, (int) Math.floor(100.0 * 1 / rivals), true, false);
 		checkRank(match.getParticipants(), 3, 5, (int) Math.floor(100.0 * 0 / rivals), true, true);
 		checkRank(match.getParticipants(), 4, 3, (int) Math.floor(100.0 * 0 / rivals), false, false);
+	}
+
+	/**
+	 * Sets the Infrastructure of pop1 as the Infrastructure of pop2 and adds pop2 to the
+	 * infrastructure.
+	 * 
+	 * @param participants
+	 * @param part1
+	 * @param pop1
+	 * @param part2
+	 * @param pop2
+	 */
+	private void setSameSystem(List<Participant> participants, int part1, int pop1, int part2, int pop2)
+	{
+		SolarSystemInfrastructure inf = participants.get(part1).getPopulations().get(pop1).getInfrastructure();
+		SolarSystemPopulation population2 = participants.get(part2).getPopulations().get(pop2);
+		population2.setInfrastructure(inf);
+		inf.getPopulations().add(population2);
 	}
 
 	private void checkRank(List<Participant> participants, int index, int rankExpected, int rankValueExpected, boolean rankFinalExpected,
