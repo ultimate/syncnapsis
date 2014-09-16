@@ -67,6 +67,7 @@ lang.menu.login 				= "Anmelden";
 lang.menu.login_info			= "Hallo";
 lang.menu.logout 				= "Abmelden";
 lang.menu.match					= "Spiel-Info";
+lang.menu.match_select			= "Spiel-Auswahl";
 lang.menu.news 					= "Neuigkeiten";
 lang.menu.password				= "Passwort"
 lang.menu.pinboard 				= "Pinnwand";

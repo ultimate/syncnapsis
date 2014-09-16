@@ -93,6 +93,7 @@ UI.constants.USERINFO_BUTTON = "door";
 UI.constants.USERINFO_CONTENT = "userbar";
 UI.constants.USERINFO_INDEX_LOGGEDOUT = 0;
 UI.constants.USERINFO_INDEX_LOGGEDIN = 1;
+UI.constants.MATCH_SELECT_ID = "match_select";
 
 UI.constants.LOGIN_USERNAME_ID = "login_username";
 UI.constants.LOGIN_PASSWORD_ID = "login_password";
@@ -170,6 +171,10 @@ UIManager = function()
 	// initialize form selects
 	this.genderSelect = new Select(UI.constants.PROFILE_GENDER_ID);
 	this.populateSelect(this.genderSelect, lang.EnumGender);
+	
+	// initialize match select
+	this.matchSelect = new Select(UI.constants.MATCH_SELECT_ID);
+	server.matchManager.getAll(); // load matches
 
 	console.log("initializing Windows");
 
@@ -295,6 +300,26 @@ UIManager.prototype.onUserLoaded = function(user)
 	{
 		this.pinboards[i].setUser(user);
 	}
+};
+
+UIManager.prototype.onMatchesLoaded = function(matches)
+{
+	console.log("list");
+	console.log(matches);
+	var option;
+	for(var i = 0; i < matches.length; i++)
+	{
+		console.log("entry");
+		console.log(matches[i]);
+		option = {};
+		option.value = matches[i].id;
+		option.title = matches[i].title;
+		// option.imageClass = imageClass;
+		// option.image = UI.constants.IMAGE_PATH + imagePath + i + UI.constants.IMAGE_TYPE;
+		this.matchSelect.options[this.matchSelect.options.length] = option;
+	}
+	// update DOM element
+	this.matchSelect.update();
 };
 
 UIManager.prototype.disableButton = function(id, duration)

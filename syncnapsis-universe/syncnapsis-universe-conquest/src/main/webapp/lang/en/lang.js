@@ -67,6 +67,7 @@ lang.menu.login    				= "Login";
 lang.menu.login_info			= "Hello";
 lang.menu.logout   				= "Logout";
 lang.menu.match					= "Match info";
+lang.menu.match_select			= "Match selection";
 lang.menu.news					= "News";
 lang.menu.password				= "Password";
 lang.menu.pinboard 				= "Pinboard";

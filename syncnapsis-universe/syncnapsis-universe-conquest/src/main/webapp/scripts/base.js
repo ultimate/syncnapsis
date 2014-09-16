@@ -17,6 +17,7 @@
 //@requires("RPCSocket")
 //@requires("PlayerManager")
 //@requires("UserManager")
+//@requires("MatchManager")
 //@requires("application-base")
 
 var WSConfiguration = {};
@@ -45,6 +46,7 @@ connect = function()
 		// init server-side managers as proxies (may use same "class/interface") 
 		server.userManager = Proxies.newProxyInstance(UserManager, genericRPCInvocationHandler); // currently GenericManager is sufficient
 		server.playerManager = Proxies.newProxyInstance(PlayerManager, genericRPCInvocationHandler);
+		server.matchManager = Proxies.newProxyInstance(MatchManager, genericRPCInvocationHandler);
 		server.uiManager = Proxies.newProxyInstance(ServerUIManager, genericRPCInvocationHandler);
 		server.messageManager = Proxies.newProxyInstance(ServerMessageManager, genericRPCInvocationHandler);
 		server.pinboardManager = Proxies.newProxyInstance(GenericNameManager, genericRPCInvocationHandler);
