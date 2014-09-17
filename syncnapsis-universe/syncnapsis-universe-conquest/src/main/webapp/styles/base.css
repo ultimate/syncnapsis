@@ -152,10 +152,6 @@ body, select {
 	width: 36px;
 }
 
-#locale_chooser>div>span {
-	width: 34px;
-}
-
 /*fix locale_chooser*/
 #locale_chooser.select>ul {
 	margin-top: 0px;
@@ -237,28 +233,16 @@ form.small>.select>* {
 	float: left;
 }
 
-form.small>.select>div>span {
-	width: 130px;
-}
-
 form>.select,
 form>.select>* {
 	width: 142px;
 	float: right;
 }
 
-form>.select>div>span {
-	width: 140px;
-}
-
 form.large>.select,
 form.large>.select>* {
 	width: 232px;
 	float: right;
-}
-
-form.large>.select>div>span {
-	width: 230px;
 }
 
 #menu #nav {
@@ -333,10 +317,6 @@ form.large>.select>div>span {
 	width: 250px;	
 }
 
-#bar_top #match_select>div>span {
-	width: 248px;
-}
-
 #bar_top #match_select .col_1 {
 	position: absolute;
 	left: 5px;
@@ -349,7 +329,7 @@ form.large>.select>div>span {
 
 #bar_top #match_select .col_3 {
 	position: absolute;
-	left: 150px;
+	left: 250px;
 }
 
 /*fix match_select*/
