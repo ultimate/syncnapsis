@@ -306,6 +306,54 @@ form.large>.select>div>span {
 	line-height: 2.6em;
 }
 
+#bar_top .frame {
+	padding-left: 5px;
+	padding-right: 5px;
+}
+
+#bar_top #bar_top_sub {
+	margin-top: 1px;
+	display: none;
+}
+
+#bar_top #bar_top_sub.open {
+	display: block;
+}
+
+#bar_top #match_select_align {
+	width: 250px;	
+	height: 17px;
+}
+
+#bar_top #match_select,
+#bar_top #match_select>* {
+	width: 250px;	
+}
+
+#bar_top #match_select>div>span {
+	width: 248px;
+}
+
+#bar_top #match_select .col_1 {
+	position: absolute;
+	left: 5px;
+}
+
+#bar_top #match_select .col_2 {
+	position: absolute;
+	left: 30px;
+}
+
+#bar_top #match_select .col_3 {
+	position: absolute;
+	left: 150px;
+}
+
+/*fix match_select*/
+#bar_top #match_select.select>ul {
+	margin-top: 0px;
+}
+
 #bar_bottom {
 	height: 34px;
 	line-height: 2.6em;

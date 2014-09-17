@@ -50,7 +50,7 @@
 .select>div>span {
 	padding-left: 1.5px;
 	white-space: nowrap;
-	position: absolute;
+	position: relative;
 	overflow: hidden;
 }
 
@@ -69,6 +69,7 @@
 	padding: 0px;
 	overflow: hidden;
 	z-index: 10;
+	display: none;
 }
 
 .select>ul>li {
@@ -88,4 +89,5 @@
 	height: auto;
 	position: absolute;
 	margin-left: -1px;
+	display: block;
 }

@@ -307,13 +307,26 @@ UIManager.prototype.onMatchesLoaded = function(matches)
 	console.log("list");
 	console.log(matches);
 	var option;
+	var title;
 	for(var i = 0; i < matches.length; i++)
 	{
 		console.log("entry");
 		console.log(matches[i]);
+		
 		option = {};
 		option.value = matches[i].id;
-		option.title = matches[i].title;
+		
+		title = [];
+		title.push("<span class='col_1'>");
+		title.push(matches[i].id);
+		title.push("</span><span class='col_2'>");
+		title.push(matches[i].title);
+		title.push("</span><span class='col_3'>");
+		title.push("(" + matches[i].state + ")"); // TODO localize
+		title.push("</span>");
+		
+		
+		option.title = title.join("");
 		// option.imageClass = imageClass;
 		// option.image = UI.constants.IMAGE_PATH + imagePath + i + UI.constants.IMAGE_TYPE;
 		this.matchSelect.options[this.matchSelect.options.length] = option;
@@ -419,7 +432,7 @@ UIManager.prototype.populateSelect = function(select, options, imageClass, image
 			continue;
 		option = {};
 		option.value = i;
-		option.title = options[i];
+		option.title = options[i]; // TODO use label
 		if(imageClass)
 			option.imageClass = imageClass;
 		if(imagePath)
