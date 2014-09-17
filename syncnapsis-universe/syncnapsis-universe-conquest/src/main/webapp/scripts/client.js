@@ -89,6 +89,8 @@ UI.constants.LOG_TABS = "log";
 UI.constants.LOG_CONTENT = "log_content";
 UI.constants.LOG_FRAME = "bar_bottom";
 UI.constants.LOG_TOGGLE_ARROW = "log_toggle_arrow";
+UI.constants.TOP_FRAME = "bar_top_sub";
+UI.constants.TOP_TOGGLE_ARROW = "top_toggle_arrow";
 UI.constants.USERINFO_BUTTON = "door";
 UI.constants.USERINFO_CONTENT = "userbar";
 UI.constants.USERINFO_INDEX_LOGGEDOUT = 0;
@@ -520,6 +522,32 @@ UIManager.prototype.toggleLog = function()
 		this.hideLog();
 	else
 		this.showLog();
+};
+
+UIManager.prototype.showTop = function()
+{
+	if(this.logOpen)
+		return;
+	document.getElementById(UI.constants.TOP_FRAME).classList.add("open");
+	document.getElementById(UI.constants.TOP_TOGGLE_ARROW).classList.add("flip-vertical");
+	this.logOpen = true;
+};
+
+UIManager.prototype.hideTop = function()
+{
+	if(!this.logOpen)
+		return;
+	document.getElementById(UI.constants.TOP_FRAME).classList.remove("open");
+	document.getElementById(UI.constants.TOP_TOGGLE_ARROW).classList.remove("flip-vertical");
+	this.logOpen = false;
+};
+
+UIManager.prototype.toggleTop = function()
+{
+	if(this.logOpen)
+		this.hideTop();
+	else
+		this.showTop();
 };
 
 UIManager.prototype.doLogin = function()

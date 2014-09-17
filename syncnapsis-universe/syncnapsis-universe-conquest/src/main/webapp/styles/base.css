@@ -312,12 +312,15 @@ form.large>.select>div>span {
 }
 
 #bar_top #bar_top_sub {
-	margin-top: 1px;
-	display: none;
+	height: 0px;
+	overflow: hidden;
+	border-width: 0px;
 }
 
 #bar_top #bar_top_sub.open {
-	display: block;
+	height: 30px;
+	margin-top: 1px;
+	border-width: 1px;
 }
 
 #bar_top #match_select_align {
@@ -352,6 +355,15 @@ form.large>.select>div>span {
 /*fix match_select*/
 #bar_top #match_select.select>ul {
 	margin-top: 0px;
+}
+
+#bar_top .top_toggle {
+	position: absolute;
+	right: 0px;
+	cursor: pointer;
+	width: 20px;
+	heigth: 20px;
+	padding-top: 4px;
 }
 
 #bar_bottom {
