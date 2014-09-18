@@ -176,6 +176,19 @@ UIManager = function()
 	
 	// initialize match select
 	this.matchSelect = new Select(UI.constants.MATCH_SELECT_ID);
+	// overwrite renderer
+	this.matchSelect.getOptionContent = function(match) {
+		var content = new Array();
+		// TODO image?
+		content.push("<span class='col_1'>");
+		content.push(match.id);
+		content.push("</span><span class='col_2'>");
+		content.push(match.title);
+		content.push("</span><span class='col_3'>");
+		content.push("(" + match.state + ")"); // TODO localize
+		content.push("</span>");
+		return content.join("");
+	};
 	server.matchManager.getAll(); // load matches
 
 	console.log("initializing Windows");
@@ -306,35 +319,15 @@ UIManager.prototype.onUserLoaded = function(user)
 
 UIManager.prototype.onMatchesLoaded = function(matches)
 {
-	console.log("list");
-	console.log(matches);
-	var option;
-	var title;
-	for(var i = 0; i < matches.length; i++)
-	{
-		console.log("entry");
-		console.log(matches[i]);
-		
-		option = {};
-		option.value = matches[i].id;
-		
-		title = [];
-		title.push("<span class='col_1'>");
-		title.push(matches[i].id);
-		title.push("</span><span class='col_2'>");
-		title.push(matches[i].title);
-		title.push("</span><span class='col_3'>");
-		title.push("(" + matches[i].state + ")"); // TODO localize
-		title.push("</span>");
-		
-		
-		option.title = title.join("");
-		// option.imageClass = imageClass;
-		// option.image = UI.constants.IMAGE_PATH + imagePath + i + UI.constants.IMAGE_TYPE;
-		this.matchSelect.options[this.matchSelect.options.length] = option;
-	}
+	// directly use the match list as the option list
+	this.matchSelect.options = matches;
 	// update DOM element
 	this.matchSelect.update();
+};
+
+UIManager.prototype.filterMatches = function()
+{
+	// TODO
 };
 
 UIManager.prototype.disableButton = function(id, duration)
@@ -428,6 +421,7 @@ UIManager.prototype.populateSelect = function(select, options, imageClass, image
 	// clear all previous options
 	select.options.length = 0;
 	// add new options
+	var option;
 	for(var i in options)
 	{
 		if(typeof (options[i]) == Reflections.type.FUNCTION)
