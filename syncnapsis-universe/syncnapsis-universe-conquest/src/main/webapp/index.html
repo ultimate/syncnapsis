@@ -54,6 +54,7 @@
 	DependencyManager.register("Lang", "lang/lang.js", false, true);
 	// register services
 	DependencyManager.register("GenericManager", "service/GenericManager.js");
+	DependencyManager.register("GalaxyManager", "service/GalaxyManager.js");
 	DependencyManager.register("MatchManager", "service/MatchManager.js");
 	DependencyManager.register("PlayerManager", "service/PlayerManager.js");
 	DependencyManager.register("UserManager", "service/UserManager.js");
@@ -127,7 +128,10 @@
 			<span class="top_toggle" onclick="javascript: client.uiManager.toggleTop();"><img id="top_toggle_arrow" class="" src="images/arrow-down.png" /></span>
 		</div>
 		<div id="bar_top_sub" class="frame">
-			some additional content
+			<span class="filter_col">a</span>
+			<span class="filter_col">b</span>
+			<div id="match_filter_galaxy_select"></div>
+			<a href="javascript: client.uiManager.filterMatches();"><label key="menu.match_filter"></label></a>
 		</div>
 	</div>
 	<div id="bar_bottom" class="centered_x atbottom">
@@ -150,9 +154,6 @@
 			<span id="log_content_2">
 				<div id="pinboard_events">
 				</div>
-			</span>
-			<span id="log_content_3">
-				foo bar
 			</span>
 			</div>
 		</div>

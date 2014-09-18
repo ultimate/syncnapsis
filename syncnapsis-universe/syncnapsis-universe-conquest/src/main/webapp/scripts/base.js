@@ -18,6 +18,7 @@
 //@requires("PlayerManager")
 //@requires("UserManager")
 //@requires("MatchManager")
+//@requires("GalaxyManager")
 //@requires("application-base")
 
 var WSConfiguration = {};
@@ -47,6 +48,7 @@ connect = function()
 		server.userManager = Proxies.newProxyInstance(UserManager, genericRPCInvocationHandler); // currently GenericManager is sufficient
 		server.playerManager = Proxies.newProxyInstance(PlayerManager, genericRPCInvocationHandler);
 		server.matchManager = Proxies.newProxyInstance(MatchManager, genericRPCInvocationHandler);
+		server.galaxyManager = Proxies.newProxyInstance(GalaxyManager, genericRPCInvocationHandler);
 		server.uiManager = Proxies.newProxyInstance(ServerUIManager, genericRPCInvocationHandler);
 		server.messageManager = Proxies.newProxyInstance(ServerMessageManager, genericRPCInvocationHandler);
 		server.pinboardManager = Proxies.newProxyInstance(GenericNameManager, genericRPCInvocationHandler);
