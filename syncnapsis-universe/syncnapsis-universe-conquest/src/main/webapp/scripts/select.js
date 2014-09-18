@@ -162,6 +162,15 @@ Select = function(element)
 			}
 		}
 	};
+	this.filter = function(matcher) {
+		for(var i = 0; i < this.options.length; i++)
+		{
+			if(matcher(this.options[i]))
+				this.options[i].element.classList.remove(UI.constants.HIDDEN_CLASS);
+			else
+				this.options[i].element.classList.add(UI.constants.HIDDEN_CLASS);
+		}
+	};
 	this.element.onclick = function(select) {
 		return function(event)
 		{
