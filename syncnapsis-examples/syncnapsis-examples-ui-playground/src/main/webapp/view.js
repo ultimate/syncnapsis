@@ -21,6 +21,10 @@ ViewUtil.INSTANT = Number.MAX_VALUE;
 ViewUtil.INFINITY = new THREE.Vector3(1000000,1000000,1000000);
 ViewUtil.WHITE = new THREE.Color(1,1,1);
 ViewUtil.BLACK = new THREE.Color(0,0,0);
+ViewUtil.RED = new THREE.Color(1,0,0);
+ViewUtil.GREEN = new THREE.Color(0,1,0);
+ViewUtil.BLUE = new THREE.Color(0,0,1);
+ViewUtil.SELECTION_COLOR = new THREE.Color(0,1,1);
 ViewUtil.AMPLITUDE = 500.0;
 
 ViewUtil.SYSTEM_SIZE_MIN = 10;
@@ -160,14 +164,7 @@ ViewUtil.AnimatedColor = function(initialValue, animationSpeed) {
 	};
 };
 
-ViewUtil.ColorModel = {
-	white: {
-		name: "white",
-		getRGB: function(size, heat, radius) {
-			return new THREE.Color(1,1,1);
-		}
-	}
-}; 
+ViewUtil.ColorModel = ColorModel;
 
 ViewUtil.GalaxyInfo = function() {
 	this.reset = function() {
@@ -189,6 +186,8 @@ ViewUtil.GalaxyInfo = function() {
 		if(system.coords.value.z > this.maxZ)	this.maxZ = system.coords.value.z;
 		if(system.radius > this.maxR) 			this.maxR = system.radius;
 	};
+	
+	this.reset();
 };
 
 ViewUtil.GalaxyShader = function(imgPath) {
@@ -241,6 +240,7 @@ ViewUtil.Galaxy = function(systems) {
 	
 	{ // particles for selected system(s)
 		this.selectionShader = new ViewUtil.GalaxyShader("img/circle.png");
+		this.selectionShader.material.blending = THREE.NormalBlending; // marker must always be in front of view
 		
 		this.selectionGeometry = new THREE.Geometry();
 		this.selectionGeometry.vertices = new Array(ViewUtil.SELECTIONS_MAX); // can't change the amount later!!!
@@ -299,7 +299,7 @@ ViewUtil.Galaxy = function(systems) {
 			{				
 				this.selectionGeometry.vertices[s] = this.selections[s].coords.value.clone();
 				this.selectionShader.attributes.size.value[s] = this.selections[s].size.value * 1.5;
-				this.selectionShader.attributes.customColor.value[s] = ViewUtil.WHITE.clone(); // = this.selections[s].customColor.value;
+				this.selectionShader.attributes.customColor.value[s] = ViewUtil.SELECTION_COLOR.clone(); // = this.selections[s].customColor.value;
 			}
 			else
 			{
@@ -329,8 +329,8 @@ ViewUtil.System = function(x, y, z, size, heat) {
 		var x = this.coords.target.x;
 		var y = this.coords.target.y;
 		var z = this.coords.target.z;
-		this.radius = Math.sqrt(x*x + y*y + z*z) / this.galaxy.info.maxR;
-		this.color.target = this.colorModel.getRGB(this.size, this.heat, this.radius);
+		this.radius = Math.sqrt(x*x + y*y + z*z);
+		this.color.target = this.colorModel.getRGB(this.size.target, this.heat.target, this.radius / this.galaxy.info.maxR);
 	};
 	
 	this.animate = function(time) {
@@ -354,6 +354,68 @@ ViewUtil.System = function(x, y, z, size, heat) {
 		
 		this.firstAnimation = false;
 	};
+};
+
+ViewUtil.EventManager = function(view)
+{
+	this.view = view;
+	this.lastX = 0;
+	this.lastY = 0;
+	this.inDragMode = false;
+	this.dragEventCount = 0;
+		
+	this.handleDragStart = function(event) {
+		this.lastX = event.pageX;
+		this.lastY = event.pageY;
+		this.inDragMode = true;
+		this.dragEventCount = 0;
+	};
+		
+	this.handleDragStop = function(event) {
+		this.inDragMode = false;
+		if(this.dragEventCount < 5)
+			//this.handleClick(event);
+			onClick(event);
+	};
+		
+	this.handleDrag = function(event) {
+		if(this.inDragMode)
+		{
+			var x = event.pageX;
+			var y = event.pageY;
+			
+			this.view.camera.sphere_phi.target = camera.sphere_phi.value - (x-this.lastX)/window.innerWidth * Math.PI * 1.5;
+			this.view.camera.sphere_theta.target = camera.sphere_theta.value + (y-this.lastY)/window.innerHeight * Math.PI * 1.5;
+			
+			this.view.camera.sphere_phi.animate(ViewUtil.INSTANT);
+			this.view.camera.sphere_theta.animate(ViewUtil.INSTANT);
+			
+			this.lastX = x;
+			this.lastY = y;
+			
+			this.dragEventCount++;
+		}
+	};
+	
+	this.handleScroll = function(event) {				
+		var event = window.event || event;
+		event.preventDefault();
+		
+		var delta = Math.max(-1, Math.min(1, (event.wheelDelta || -event.detail)));
+
+		this.view.camera.radius.target -= delta * 100;
+		
+		return false;			
+	};
+	
+	this.handleClick = function(event) {
+		// TODO
+	};
+	
+	Events.addEventListener("mousedown", Events.wrapEventHandler(this, this.handleDragStart), this.view.canvas);
+	Events.addEventListener("mousemove", Events.wrapEventHandler(this, this.handleDrag), this.view.canvas);
+	Events.addEventListener("mouseup", Events.wrapEventHandler(this, this.handleDragStop), this.view.canvas);
+	Events.addEventListener("DOMMouseScroll", Events.wrapEventHandler(this, this.handleScroll), this.view.canvas);
 };
 
 // for debugging without Request.js - START
@@ -463,11 +525,12 @@ var View = function(container) {
 		return vec;
 	};
 	
-	this.getScreenSize = function(system) {
-		var p1 = system.coords.value;
+	this.getScreenSize = function(vector, size) { //system) {
+		var p1 = vector; //system.coords.value;
+		//var size = system.size.value;
 		var p2 = this.camera.camera.position;
 		var dist = Math.sqrt((p1.x-p2.x)*(p1.x-p2.x) + (p1.y-p2.y)*(p1.y-p2.y) + (p1.z-p2.z)*(p1.z-p2.z));
-		return system.size.value / (2 * Math.tan((camera.camera.fov * Math.PI / 180) / 2) * dist);
+		return size / (2 * Math.tan((camera.camera.fov * Math.PI / 180) / 2) * dist) * this.container.offsetWidth / 2;
 	};
 	
 	// TODO for debug only
@@ -547,9 +610,11 @@ var View = function(container) {
 		this.galaxy.deselect(selectionIndex);
 	};	
 	
+	this.eventManager = new ViewUtil.EventManager(this);
+	
 	console.log("the camera:    pos=" + this.camera.camera.position.x + "|" + this.camera.camera.position.y + "|" + this.camera.camera.position.z + "    rot=" + this.camera.camera.rotation.x + "|" + this.camera.camera.rotation.y + "|" + this.camera.camera.rotation.z);
 	this.camera.update();
-		
+			
 	Events.addEventListener(Events.ONRESIZE, Events.wrapEventHandler(this, this.updateSize), window);	
 	Events.fireEvent(window, Events.ONRESIZE);	
 }
