@@ -152,11 +152,6 @@ body, select {
 	width: 36px;
 }
 
-/*fix locale_chooser*/
-#locale_chooser.select>ul {
-	margin-top: 0px;
-}
-
 .flag,
 #locale_chooser .flag {
 	width: 16px;
@@ -287,10 +282,10 @@ form.large>.select>* {
 
 #bar_top {
 	height: 30px;
-	line-height: 2.6em;
 }
 
-#bar_top .frame {
+#bar_top #bar_top_main {
+	line-height: 2.6em;
 	padding-left: 5px;
 	padding-right: 5px;
 }
@@ -299,12 +294,20 @@ form.large>.select>* {
 	height: 0px;
 	overflow: hidden;
 	border-width: 0px;
+	line-height: 25px;
 }
 
 #bar_top #bar_top_sub.open {
-	height: 30px;
+	height: 50px;
 	margin-top: 1px;
 	border-width: 1px;
+	padding: 5px;
+}
+
+#bar_top #bar_top_sub_action {
+	float: right;
+	width: 150px;
+	text-align: center;
 }
 
 #bar_top #match_select_align {
@@ -332,9 +335,24 @@ form.large>.select>* {
 	left: 150px;
 }
 
-/*fix match_select*/
-#bar_top #match_select.select>ul {
-	margin-top: 0px;
+#bar_top #match_filter_galaxy_select,
+#bar_top #match_filter_galaxy_select>* {
+	width: 150px;	
+}
+
+#bar_top #match_filter_galaxy_select .col_1 {
+	position: absolute;
+	left: 5px;
+}
+
+#bar_top #match_filter_galaxy_select .col_2 {
+	position: absolute;
+	left: 30px;
+}
+
+#bar_top #match_filter_galaxy_select .col_3 {
+	position: absolute;
+	left: 150px;
 }
 
 #bar_top .top_toggle {

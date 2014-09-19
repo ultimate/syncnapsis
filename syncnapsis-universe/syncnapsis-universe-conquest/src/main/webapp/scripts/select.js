@@ -165,7 +165,7 @@ Select = function(element)
 	this.filter = function(matcher) {
 		for(var i = 0; i < this.options.length; i++)
 		{
-			if(matcher(this.options[i]))
+			if(matcher(this.options[i].value))
 				this.options[i].element.classList.remove(UI.constants.HIDDEN_CLASS);
 			else
 				this.options[i].element.classList.add(UI.constants.HIDDEN_CLASS);

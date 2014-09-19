@@ -96,6 +96,7 @@ UI.constants.USERINFO_CONTENT = "userbar";
 UI.constants.USERINFO_INDEX_LOGGEDOUT = 0;
 UI.constants.USERINFO_INDEX_LOGGEDIN = 1;
 UI.constants.MATCH_SELECT_ID = "match_select";
+UI.constants.MATCH_FILTER_GALAXY_SELECT_ID = "match_filter_galaxy_select";
 
 UI.constants.LOGIN_USERNAME_ID = "login_username";
 UI.constants.LOGIN_PASSWORD_ID = "login_password";
@@ -115,6 +116,7 @@ UI.constants.BUTTON_DISABLED_CLASS = "disabled";
 UI.constants.BUTTON_DISABLED_ACTION = "javascript: UI.constants.NO_ACTION();";
 UI.constants.ERROR_CLASS = "error";
 UI.constants.MENU_HIDDEN_CLASS = "menu_hidden";
+UI.constants.HIDDEN_CLASS = "hidden";
 
 UI.constants.DEFAULT_DATE_FORMAT = "yyyy-MM-dd HH:mm:ss";
 
@@ -162,7 +164,9 @@ UIManager = function()
 		}
 	}(this);
 
+	// initialize locale chooser
 	this.localeChooser = new Select(UI.constants.LOCALE_CHOOSER_ID);
+	// overwrite onselect
 	this.localeChooser.onselect = function(oldValue, newValue)
 	{
 		console.log("changing value from " + oldValue + " -> " + newValue);
@@ -172,12 +176,13 @@ UIManager = function()
 	
 	// initialize form selects
 	this.genderSelect = new Select(UI.constants.PROFILE_GENDER_ID);
-	this.populateSelect(this.genderSelect, lang.EnumGender);
+	this.populateEnumSelect(this.genderSelect, lang.EnumGender);
 	
 	// initialize match select
 	this.matchSelect = new Select(UI.constants.MATCH_SELECT_ID);
 	// overwrite renderer
-	this.matchSelect.getOptionContent = function(match) {
+	this.matchSelect.getOptionContent = function(option) {
+		var match = option.value;
 		var content = new Array();
 		// TODO image?
 		content.push("<span class='col_1'>");
@@ -190,6 +195,23 @@ UIManager = function()
 		return content.join("");
 	};
 	server.matchManager.getAll(); // load matches
+	
+	// initialize galaxy select for match filter
+	this.matchFilterGalaxySelect = new Select(UI.constants.MATCH_FILTER_GALAXY_SELECT_ID);
+	// overwrite renderer
+	this.matchFilterGalaxySelect.getOptionContent = function(option) {
+		var galaxy = option.value;
+		var content = new Array();
+		content.push("<span class='col_1'>");
+		content.push(galaxy.id);
+		content.push("</span><span class='col_2'>");
+		content.push(galaxy.name);
+		content.push("</span><span class='col_3'>");
+		content.push("[" + galaxy.size.x + "x" + galaxy.size.y + "x" + galaxy.size.z + "]");
+		content.push("</span>");
+		return content.join("");
+	};
+	server.galaxyManager.getAll(); // load galaxies
 
 	console.log("initializing Windows");
 
@@ -317,17 +339,57 @@ UIManager.prototype.onUserLoaded = function(user)
 	}
 };
 
+UIManager.prototype.onGalaxiesLoaded = function(galaxies)
+{
+	console.log("galaxies loaded!");
+	this.populateSelect(this.matchFilterGalaxySelect, galaxies);
+};
+
 UIManager.prototype.onMatchesLoaded = function(matches)
 {
-	// directly use the match list as the option list
-	this.matchSelect.options = matches;
-	// update DOM element
-	this.matchSelect.update();
+	console.log("matches loaded!");
+	this.populateSelect(this.matchSelect, matches);
 };
 
 UIManager.prototype.filterMatches = function()
 {
-	// TODO
+	var galaxy = this.matchFilterGalaxySelect.value;
+	var prefix = null;
+	var state = null;
+	var creator = null;
+	var participantID = null;
+	
+	var matcher = function(match)
+	{
+		if(galaxy != null && match.galaxy.id != galaxy.id)
+			return false;
+		if(prefix != null && !match.title.startsWith(prefix))
+			return false;
+		if(state != null && match.state != state)
+			return false;
+		if(creator != null && match.creator.id != creator)
+			return false;
+		if(participantID != null)
+		{
+			var found = false;
+			for(var i = 0; i < match.participants.length; i++)
+			{
+				found = found || (match.participants[i].id == participantID); 
+			}
+		}
+		// TODO other properties
+		return true;
+	};
+	
+	this.matchSelect.filter(matcher);
+};
+
+UIManager.prototype.resetMatchFilters = function()
+{
+	this.matchFilterGalaxySelect.select(null);
+	
+	// do filter with cleared inputs
+	this.filterMatches();
 };
 
 UIManager.prototype.disableButton = function(id, duration)
@@ -409,14 +471,32 @@ UIManager.prototype.onRegister = function(player, username, password)
 UIManager.prototype.hideOverlay = function()
 {
 	var overlay = document.getElementById(UI.constants.OVERLAY_ID);
-	overlay.className += " invisible";
+	overlay.classList.add("invisible");
 	setTimeout(function()
 	{
-		overlay.className += " hidden";
+		overlay.classList.add(UI.constants.HIDDEN_CLASS);
 	}, 3000);
 };
 
-UIManager.prototype.populateSelect = function(select, options, imageClass, imagePath)
+UIManager.prototype.populateSelect = function(select, options)
+{
+	// clear all previous options
+	select.options.length = 0;
+	// add new options
+	var option;
+	for(var i in options)
+	{
+		if(typeof (options[i]) == Reflections.type.FUNCTION)
+			continue;
+		option = {};
+		option.value = options[i];
+		select.options[select.options.length] = option;
+	}
+	// update DOM element
+	select.update();
+};
+
+UIManager.prototype.populateEnumSelect = function(select, options, imageClass, imagePath)
 {
 	// clear all previous options
 	select.options.length = 0;
@@ -441,7 +521,7 @@ UIManager.prototype.populateSelect = function(select, options, imageClass, image
 
 UIManager.prototype.populateLocaleChooser = function()
 {
-	this.populateSelect(this.localeChooser, lang.EnumLocale, UI.constants.FLAGS_CLASS, UI.constants.FLAGS_PATH);
+	this.populateEnumSelect(this.localeChooser, lang.EnumLocale, UI.constants.FLAGS_CLASS, UI.constants.FLAGS_PATH);
 	// select current locale
 	this.localeChooser.selectByValue(lang.current.substring(11), true);
 };

@@ -20,7 +20,7 @@ GalaxyManager = function()
 	this.getAll = function()
 	{
 		// return galaxy-list
-		return function(galacies) { client.uiManager.onGalaxiesLoaded(galaxies); };
+		return function(galaxies) { client.uiManager.onGalaxiesLoaded(galaxies); };
 	};
 };
 

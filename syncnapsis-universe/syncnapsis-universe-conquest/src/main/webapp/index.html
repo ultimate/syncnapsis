@@ -123,15 +123,26 @@
 		<div id="bar_top_main" class="frame">
 			<label key="menu.match_select"></label>:
 			<div id="match_select_align" class="centered_x centered_y">
-				<div id="match_select"></div>
+				<div id="match_select" class="fixedMargin"></div>
 			</div>
 			<span class="top_toggle" onclick="javascript: client.uiManager.toggleTop();"><img id="top_toggle_arrow" class="" src="images/arrow-down.png" /></span>
 		</div>
 		<div id="bar_top_sub" class="frame">
+			<!-- 
+			<form onsubmit="javascript: client.uiManager.filterMatches(); return false;" class="small">
+			    <input type="submit" style="display: none;"/>
+			</form>
+			 -->
 			<span class="filter_col">a</span>
 			<span class="filter_col">b</span>
-			<div id="match_filter_galaxy_select"></div>
-			<a href="javascript: client.uiManager.filterMatches();"><label key="menu.match_filter"></label></a>
+			<div id="match_filter_galaxy_select" class="fixedMargin"></div>
+			
+			<div id="bar_top_sub_action">
+			<div id="match_filter_button" class="frame button">
+				<a href="javascript: client.uiManager.filterMatches();"><label key="menu.match_filter"></label></a>
+			</div>
+			<a href="javascript: client.uiManager.resetMatchFilters();"><label key="menu.match_reset_filters"></label></a>
+			</div>
 		</div>
 	</div>
 	<div id="bar_bottom" class="centered_x atbottom">
@@ -163,7 +174,7 @@
 			<div id="door" class="frame button">
 				<a class="selected">O</a>
 			</div>
-			<div id="locale_chooser"></div>
+			<div id="locale_chooser" class="fixedMargin"></div>
 		</div>
 		<div id="userbar" class="frame">
 			<div>

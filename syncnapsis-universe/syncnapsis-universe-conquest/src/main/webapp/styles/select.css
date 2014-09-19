@@ -72,6 +72,10 @@
 	display: none;
 }
 
+.select.fixedMargin>ul {
+	margin-top: 0px;
+}
+
 .select>ul>li {
 	overflow: hidden;
 	white-space: nowrap;
