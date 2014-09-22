@@ -144,6 +144,7 @@ Select = function(element)
 				this.options[i].element.onclick = function(select, i) {
 					return function(event)
 					{
+						event.preventDefault();
 						select.select(i);
 						select.close(true);// stay active	
 					};
@@ -170,13 +171,21 @@ Select = function(element)
 	this.element.onclick = function(select) {
 		return function(event)
 		{
-			if(select.isOpen)
+			if(Elements.isChildOrSame(select.displayParent, event.target))
 			{
-				select.close(true);
+				if(select.isOpen)
+				{
+					select.close(true);
+				}
+				else
+				{
+					select.open();
+				}
+				
 			}
 			else
 			{
-				select.open();
+				select.close(true);
 			}
 		};
 	} (this);
