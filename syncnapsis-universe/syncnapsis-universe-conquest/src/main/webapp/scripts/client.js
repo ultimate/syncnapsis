@@ -167,13 +167,6 @@ UIManager = function()
 
 	// initialize locale chooser
 	this.localeChooser = new Select(UI.constants.LOCALE_CHOOSER_ID);
-	// overwrite onselect
-	this.localeChooser.onselect = function(oldValue, newValue)
-	{
-		console.log("changing value from " + oldValue + " -> " + newValue);
-		if(newValue != oldValue)
-			server.uiManager.selectLocale(newValue);
-	};
 	
 	// initialize form selects
 	this.genderSelect = new Select(UI.constants.PROFILE_GENDER_ID);
@@ -555,6 +548,14 @@ UIManager.prototype.populateEnumSelect = function(select, options, nullOption, i
 UIManager.prototype.populateLocaleChooser = function()
 {
 	this.populateEnumSelect(this.localeChooser, lang.EnumLocale, false, UI.constants.FLAGS_CLASS, UI.constants.FLAGS_PATH);
+	// overwrite onselect
+	// need to do this after populate, since populate overwrites onselect, too
+	this.localeChooser.onselect = function(oldValue, newValue)
+	{
+		console.log("changing value from " + oldValue + " -> " + newValue);
+		if(newValue != oldValue)
+			server.uiManager.selectLocale(newValue);
+	};
 	// select current locale
 	this.localeChooser.selectByValue(lang.current.substring(11), true);
 };
