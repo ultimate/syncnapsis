@@ -97,6 +97,7 @@ UI.constants.USERINFO_INDEX_LOGGEDOUT = 0;
 UI.constants.USERINFO_INDEX_LOGGEDIN = 1;
 UI.constants.MATCH_SELECT_ID = "match_select";
 UI.constants.MATCH_FILTER_GALAXY_SELECT_ID = "match_filter_galaxy_select";
+UI.constants.MATCH_FILTER_STATE_SELECT_ID = "match_filter_state_select";
 
 UI.constants.LOGIN_USERNAME_ID = "login_username";
 UI.constants.LOGIN_PASSWORD_ID = "login_password";
@@ -176,7 +177,7 @@ UIManager = function()
 	
 	// initialize form selects
 	this.genderSelect = new Select(UI.constants.PROFILE_GENDER_ID);
-	this.populateEnumSelect(this.genderSelect, lang.EnumGender);
+	this.populateEnumSelect(this.genderSelect, lang.EnumGender, false);
 	
 	// initialize match select
 	this.matchSelect = new Select(UI.constants.MATCH_SELECT_ID);
@@ -201,6 +202,8 @@ UIManager = function()
 	// overwrite renderer
 	this.matchFilterGalaxySelect.getOptionContent = function(option) {
 		var galaxy = option.value;
+		if(galaxy == null)
+			return "";
 		var content = new Array();
 		content.push("<span class='col_1'>");
 		content.push(galaxy.id);
@@ -212,6 +215,11 @@ UIManager = function()
 		return content.join("");
 	};
 	server.galaxyManager.getAll(); // load galaxies
+	
+	// initialize state select for match filter
+	this.matchFilterStateSelect = new Select(UI.constants.MATCH_FILTER_STATE_SELECT_ID);
+	// populate with enum
+	this.populateEnumSelect(this.matchFilterStateSelect, lang.EnumMatchState, true);
 
 	console.log("initializing Windows");
 
@@ -342,13 +350,13 @@ UIManager.prototype.onUserLoaded = function(user)
 UIManager.prototype.onGalaxiesLoaded = function(galaxies)
 {
 	console.log("galaxies loaded!");
-	this.populateSelect(this.matchFilterGalaxySelect, galaxies);
+	this.populateSelect(this.matchFilterGalaxySelect, galaxies, true);
 };
 
 UIManager.prototype.onMatchesLoaded = function(matches)
 {
 	console.log("matches loaded!");
-	this.populateSelect(this.matchSelect, matches);
+	this.populateSelect(this.matchSelect, matches, false);
 };
 
 UIManager.prototype.filterMatches = function()
@@ -478,10 +486,17 @@ UIManager.prototype.hideOverlay = function()
 	}, 3000);
 };
 
-UIManager.prototype.populateSelect = function(select, options)
+UIManager.prototype.populateSelect = function(select, options, nullOption)
 {
 	// clear all previous options
 	select.options.length = 0;
+	// add null option
+	if(nullOption == true)
+	{
+		option = {};
+		option.value = null;
+		select.options[select.options.length] = option;
+	}
 	// add new options
 	var option;
 	for(var i in options)
@@ -496,10 +511,26 @@ UIManager.prototype.populateSelect = function(select, options)
 	select.update();
 };
 
-UIManager.prototype.populateEnumSelect = function(select, options, imageClass, imagePath)
+UIManager.prototype.populateEnumSelect = function(select, options, nullOption, imageClass, imagePath)
 {
+	// append an onSelect listener to the select that updates the labels
+	select.onselect = function(uiManager) {
+		return function(oldValue, newValue) {
+			uiManager.updateLabels(this.element);
+		};
+	} (this);
+	// resolve the enum name from the lang variable
+	var name = Reflections.resolveName(options, lang);
 	// clear all previous options
 	select.options.length = 0;
+	// add null option
+	if(nullOption == true)
+	{
+		option = {};
+		option.value = null;
+		option.title = "";
+		select.options[select.options.length] = option;
+	}
 	// add new options
 	var option;
 	for(var i in options)
@@ -508,7 +539,7 @@ UIManager.prototype.populateEnumSelect = function(select, options, imageClass, i
 			continue;
 		option = {};
 		option.value = i;
-		option.title = options[i]; // TODO use label
+		option.title = this.getLabel(name + "." + i);
 		if(imageClass)
 			option.imageClass = imageClass;
 		if(imagePath)
@@ -517,11 +548,13 @@ UIManager.prototype.populateEnumSelect = function(select, options, imageClass, i
 	}
 	// update DOM element
 	select.update();
+	// update labels
+	this.updateLabels(select.element);
 };
 
 UIManager.prototype.populateLocaleChooser = function()
 {
-	this.populateEnumSelect(this.localeChooser, lang.EnumLocale, UI.constants.FLAGS_CLASS, UI.constants.FLAGS_PATH);
+	this.populateEnumSelect(this.localeChooser, lang.EnumLocale, false, UI.constants.FLAGS_CLASS, UI.constants.FLAGS_PATH);
 	// select current locale
 	this.localeChooser.selectByValue(lang.current.substring(11), true);
 };
@@ -542,6 +575,15 @@ UIManager.prototype.reloadLocale = function()
 	// force reload oof the user (since the locale has been saved)
 	if(this.currentPlayer)
 		server.entityManager.load(this.currentPlayer.user, null, true);
+};
+
+UIManager.prototype.getLabel = function(key)
+{
+	var buff = new Array();
+	buff.push("<label key='");
+	buff.push(key);
+	buff.push("'></label>");
+	return buff.join("");
 };
 
 UIManager.prototype.updateLabels = function(parent)

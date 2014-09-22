@@ -28,6 +28,12 @@ lang.EnumGender.male		= "male";
 lang.EnumGender.transsexual	= "transsexual";
 lang.EnumGender.unknown		= "unknown";
 
+lang.EnumMatchState = {};
+lang.EnumMatchState.planned 	= "planned";
+lang.EnumMatchState.active 		= "active";
+lang.EnumMatchState.finished	= "finished";
+lang.EnumMatchState.canceled	= "canceled";
+
 lang.error = {};
 lang.error.error				= "Error";
 lang.error.email_exists 		= lang.error.error + ": e-mail-address is already registered!";

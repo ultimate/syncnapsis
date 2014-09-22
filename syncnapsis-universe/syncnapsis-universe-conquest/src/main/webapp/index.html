@@ -31,6 +31,7 @@
 	// register util-JS
 	DependencyManager.register("Arrays", "util/Arrays.js");
 	DependencyManager.register("Console", "util/Console.js");
+	DependencyManager.register("Elements", "util/Elements.js");
 	DependencyManager.register("Events", "util/Events.js");
 	DependencyManager.register("Proxies", "util/Proxies.js");
 	DependencyManager.register("Reflections", "util/Reflections.js");
@@ -133,8 +134,12 @@
 			    <input type="submit" style="display: none;"/>
 			</form>
 			 -->
-			<span class="filter_col">a</span>
+			<span class="filter_col">
+			<input type="radio" name="" value=""/>
+			<input type="radio" name="" />
+			</span>
 			<span class="filter_col">b</span>
+			<div id="match_filter_state_select" class="fixedMargin"></div>
 			<div id="match_filter_galaxy_select" class="fixedMargin"></div>
 			
 			<div id="bar_top_sub_action">

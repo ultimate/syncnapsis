@@ -10,6 +10,7 @@
  * You should have received a copy of the GNU General Plublic License along with this program; if not, see <http://www.gnu.org/licenses/>.
  */
 // @requires("Events")
+// @requires("Elements")
 	
 var SELECT_OPEN = false;
 
@@ -30,13 +31,8 @@ Select = function(element)
 	this.element.appendChild(this.list);
 	
 	this.element.classList.add("select");
-	//this.element.classList.add("w36");
 	
 	this.options = new Array();
-	
-//	this.display = this.element.children[0];
-//	this.list = this.element.children[1];
-//	this.options = this.element.children[1].children;
 	
 	this.isOpen = false;
 	this.value = null;
@@ -85,7 +81,7 @@ Select = function(element)
 			}
 			content.push("'>");
 		}
-		content.push(option.title); // TODO use label
+		content.push(option.title);
 		return content.join("");
 	};
 	this.onselect = function(oldValue, newValue) {};
@@ -186,7 +182,7 @@ Select = function(element)
 	} (this);
 	Events.addEventListener(Events.CLICK, function(select) {
 		return function(event) {
-			if(event.target != select.element && event.target != select.display && event.target != select.displayParent)
+			if(!Elements.isChildOrSame(select.element, event.target))
 				select.close();
 		};
 	} (this));

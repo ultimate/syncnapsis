@@ -38,6 +38,10 @@
 	line-height: 16px;
 	overflow: hidden;
 	display: inline-block;
+}
+
+.select,
+.select * {
 	cursor: pointer;
 }
 
