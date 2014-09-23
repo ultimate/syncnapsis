@@ -58,6 +58,15 @@
 	overflow: hidden;
 }
 
+.select>div>span>* {
+	position: absolute; /* fixes arrow position on large content*/
+	left: 1.5px;
+}
+
+.select img {
+	vertical-align: middle;
+}
+
 .select>div:after {
 	background: url('../images/arrow-down.png') no-repeat rgba(0,0,0,0);  /*Adds background-image*/
 	background-position: 0px 2px;  /*Position of the background-image*/

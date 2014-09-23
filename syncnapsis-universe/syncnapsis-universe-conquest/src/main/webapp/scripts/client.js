@@ -167,6 +167,14 @@ UIManager = function()
 
 	// initialize locale chooser
 	this.localeChooser = new Select(UI.constants.LOCALE_CHOOSER_ID);
+	// overwrite onselect
+	// need to do this after populate, since populate overwrites onselect, too
+	this.localeChooser.onselect = function(oldValue, newValue)
+	{
+		console.log("changing value from " + oldValue + " -> " + newValue);
+		if(newValue != oldValue)
+			server.uiManager.selectLocale(newValue);
+	};
 	
 	// initialize form selects
 	this.genderSelect = new Select(UI.constants.PROFILE_GENDER_ID);
@@ -482,11 +490,16 @@ UIManager.prototype.hideOverlay = function()
 UIManager.prototype.populateSelect = function(select, options, nullOption)
 {
 	// append an onSelect listener to the select that updates the labels
-	select.onselect = function(uiManager) {
-		return function(oldValue, newValue) {
-			uiManager.updateLabels(this.element);
-		};
-	} (this);
+	if(!select.onselect0)
+	{
+		select.onselect0 = select.onselect;
+		select.onselect = function(uiManager) {
+			return function(oldValue, newValue) {
+				uiManager.updateLabels(this.element);
+				this.onselect0(oldValue, newValue);
+			};
+		} (this);
+	}
 	// clear all previous options
 	select.options.length = 0;
 	// add null option
@@ -515,11 +528,16 @@ UIManager.prototype.populateSelect = function(select, options, nullOption)
 UIManager.prototype.populateEnumSelect = function(select, options, nullOption, imageClass, imagePath)
 {
 	// append an onSelect listener to the select that updates the labels
-	select.onselect = function(uiManager) {
-		return function(oldValue, newValue) {
-			uiManager.updateLabels(this.element);
-		};
-	} (this);
+	if(!select.onselect0)
+	{
+		select.onselect0 = select.onselect;
+		select.onselect = function(uiManager) {
+			return function(oldValue, newValue) {
+				uiManager.updateLabels(this.element);
+				this.onselect0(oldValue, newValue);
+			};
+		} (this);
+	}
 	// resolve the enum name from the lang variable
 	var name = Reflections.resolveName(options, lang);
 	// clear all previous options
@@ -556,14 +574,6 @@ UIManager.prototype.populateEnumSelect = function(select, options, nullOption, i
 UIManager.prototype.populateLocaleChooser = function()
 {
 	this.populateEnumSelect(this.localeChooser, lang.EnumLocale, false, UI.constants.FLAGS_CLASS, UI.constants.FLAGS_PATH);
-	// overwrite onselect
-	// need to do this after populate, since populate overwrites onselect, too
-	this.localeChooser.onselect = function(oldValue, newValue)
-	{
-		console.log("changing value from " + oldValue + " -> " + newValue);
-		if(newValue != oldValue)
-			server.uiManager.selectLocale(newValue);
-	};
 	// select current locale
 	this.localeChooser.selectByValue(lang.current.substring(11), true);
 };

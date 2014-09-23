@@ -156,9 +156,11 @@ body, select {
 #locale_chooser .flag {
 	width: 16px;
 	height: 11px;
-	position: relative;
-	top:  3px;
-	margin-right: 3px;
+	top: 1.5px;
+}
+
+#locale_chooser label {
+	display: none;
 }
 
 #menu #userbar {
@@ -356,6 +358,12 @@ form.large>.select>* {
 	position: absolute;
 	left: 150px;
 }
+
+#bar_top #match_filter_state_select,
+#bar_top #match_filter_state_select>* {
+	width: 100px;	
+}
+
 
 #bar_top .top_toggle {
 	position: absolute;
