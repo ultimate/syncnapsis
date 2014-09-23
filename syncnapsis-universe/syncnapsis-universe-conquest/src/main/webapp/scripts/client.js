@@ -184,7 +184,7 @@ UIManager = function()
 		content.push("</span><span class='col_2'>");
 		content.push(match.title);
 		content.push("</span><span class='col_3'>");
-		content.push("(" + match.state + ")"); // TODO localize
+		content.push("(<label key='EnumMatchState." + match.state + "'></label>)"); // TODO localize
 		content.push("</span>");
 		return content.join("");
 	};
@@ -481,6 +481,12 @@ UIManager.prototype.hideOverlay = function()
 
 UIManager.prototype.populateSelect = function(select, options, nullOption)
 {
+	// append an onSelect listener to the select that updates the labels
+	select.onselect = function(uiManager) {
+		return function(oldValue, newValue) {
+			uiManager.updateLabels(this.element);
+		};
+	} (this);
 	// clear all previous options
 	select.options.length = 0;
 	// add null option
@@ -502,6 +508,8 @@ UIManager.prototype.populateSelect = function(select, options, nullOption)
 	}
 	// update DOM element
 	select.update();
+	// update labels
+	this.updateLabels(select.element);
 };
 
 UIManager.prototype.populateEnumSelect = function(select, options, nullOption, imageClass, imagePath)
