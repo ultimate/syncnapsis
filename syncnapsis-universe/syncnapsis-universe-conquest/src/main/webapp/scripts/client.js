@@ -525,7 +525,7 @@ UIManager.prototype.populateSelect = function(select, options, nullOption)
 	this.updateLabels(select.element);
 };
 
-UIManager.prototype.populateEnumSelect = function(select, options, nullOption, imageClass, imagePath)
+UIManager.prototype.populateEnumSelect = function(select, options, nullOption, imageClass, imagePath, convertImagePathToLowerCase)
 {
 	// append an onSelect listener to the select that updates the labels
 	if(!select.onselect0)
@@ -562,7 +562,11 @@ UIManager.prototype.populateEnumSelect = function(select, options, nullOption, i
 		if(imageClass)
 			option.imageClass = imageClass;
 		if(imagePath)
+		{
 			option.image = UI.constants.IMAGE_PATH + imagePath + i + UI.constants.IMAGE_TYPE;
+			if(convertImagePathToLowerCase)
+				option.image = option.image.toLowerCase();
+		}
 		select.options[select.options.length] = option;
 	}
 	// update DOM element
@@ -573,7 +577,7 @@ UIManager.prototype.populateEnumSelect = function(select, options, nullOption, i
 
 UIManager.prototype.populateLocaleChooser = function()
 {
-	this.populateEnumSelect(this.localeChooser, lang.EnumLocale, false, UI.constants.FLAGS_CLASS, UI.constants.FLAGS_PATH);
+	this.populateEnumSelect(this.localeChooser, lang.EnumLocale, false, UI.constants.FLAGS_CLASS, UI.constants.FLAGS_PATH, true);
 	// select current locale
 	this.localeChooser.selectByValue(lang.current.substring(11), true);
 };

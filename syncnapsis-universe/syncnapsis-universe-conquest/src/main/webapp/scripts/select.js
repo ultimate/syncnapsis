@@ -79,6 +79,8 @@ Select = function(element)
 				content.push("' class='");
 				content.push(option.imageClass);
 			}
+			content.push("' alt='");
+			content.push(option.value);
 			content.push("'>");
 		}
 		content.push(option.title);
