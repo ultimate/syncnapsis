@@ -1,0 +1,39 @@
+<html>
+	<head>
+		<script type="text/javascript">
+		var drag = false;
+		var size = 25;
+		document.onmousedown = function(event)
+		{
+			drag = true;
+		};
+		document.onmouseup = function(event)
+		{
+			drag = false;
+		};
+		document.onmousemove = function(event)
+		{
+			if(drag)
+			{
+				var d = document.getElementById("testDiv");
+				document.body.removeChild(d);
+				d.style.left = event.clientX - size/2;
+				d.style.top = event.clientY - size/2;
+				d.style.width = size + "px";
+				d.style.height = size + "px";
+				d.style.borderRadius = size + "px";
+				document.body.appendChild(d);
+			}
+		};
+		</script>
+	</head>
+	<body>
+		<div id="testDiv" style="position: absolute; border: 2px solid red;"></div>
+		drag me... ==&gt;
+		<script type="text/javascript">
+			drag = true;
+			document.onmousemove({clientX: window.innerWidth/2, clientY: window.innerHeigth/2});
+			drag = false;
+		</script>
+	</body>
+</html>
