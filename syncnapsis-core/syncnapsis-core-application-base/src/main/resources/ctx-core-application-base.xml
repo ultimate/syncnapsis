@@ -177,7 +177,20 @@
 		<property name="mailer" ref="mailer" />
 	</bean>
 	
-	<bean id="nameValidator" class="com.syncnapsis.security.validation.DBBlackListStringValidator" >
+	<bean id="nameValidator" class="com.syncnapsis.security.validation.LogicalValidator" >
+		<constructor-arg value="AND"/>
+		<property name="validators">
+			<list>
+				<ref bean="nameValidator1" />
+				<ref bean="nameValidator2" />
+			</list>
+		</property>
+	</bean>
+	
+	<bean id="nameValidator1" class="com.syncnapsis.security.validation.NameValidator" >
+	</bean>
+	
+	<bean id="nameValidator2" class="com.syncnapsis.security.validation.DBBlackListStringValidator" >
 		<property name="blackListManager" ref="blackListManager" />
 		<property name="blackListEntryManager" ref="blackListEntryManager" />
 		<property name="blackListName" value="name" />

@@ -45,6 +45,7 @@ public abstract class DefaultData
 																							+ STRING_ASCII_COMPLETE_NO_CONTROLCHARS;
 
 	public static final String			STRING_EMAIL_SYMBOLS						= "!#$%&'*+-/=?^_`{|}~";
+	public static final String			STRING_EMAIL_SYMBOLS_REDUCED				= "._%+-";
 
 	public static final String			STRING_EMAIL_COMPLETE_NO_DOT_NO_AT			= STRING_EMAIL_SYMBOLS + STRING_ASCII_LETTERS_LOWER
 																							+ STRING_ASCII_LETTERS_UPPER + STRING_ASCII_NUMBERS;
@@ -67,8 +68,10 @@ public abstract class DefaultData
 	public static final String			REGEXP_DOMAIN_OLD							= "(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?\\.)+(?:[a-zA-Z]{2}|"
 																							+ STRING_TOP_LEVEL_DOMAIN_EXTENSIONS + ")";
 	public static final String			REGEXP_DOMAIN								= "(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?\\.)+[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?";
-	public static final String			REGEXP_EMAIL								= "[a-zA-Z0-9" + STRING_EMAIL_SYMBOLS + "]+(?:\\.[a-zA-Z0-9" + STRING_EMAIL_SYMBOLS + "]+)*@"
-																							+ REGEXP_DOMAIN;
+	public static final String			REGEXP_EMAIL_ID								= "[a-zA-Z0-9" + STRING_EMAIL_SYMBOLS + "]+(?:\\.[a-zA-Z0-9" + STRING_EMAIL_SYMBOLS + "]+)*";
+	public static final String			REGEXP_EMAIL_ID_REDUCED						= "[a-zA-Z0-9" + STRING_EMAIL_SYMBOLS_REDUCED + "]+";
+	public static final String			REGEXP_EMAIL								= REGEXP_EMAIL_ID + "@" + REGEXP_DOMAIN;
+	public static final String			REGEXP_EMAIL_REDUCED						= REGEXP_EMAIL_ID_REDUCED + "@" + REGEXP_DOMAIN;
 
 	public static final int				INT											= 1234567890;
 	public static final long			LONG										= 1234567890123456789L;

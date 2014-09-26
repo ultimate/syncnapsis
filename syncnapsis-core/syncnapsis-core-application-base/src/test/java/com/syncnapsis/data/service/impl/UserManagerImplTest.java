@@ -251,6 +251,22 @@ public class UserManagerImplTest extends GenericNameManagerImplTestCase<User, Lo
 	public void testIsNameValid() throws Exception
 	{
 		assertFalse(userManager.isNameValid(null));
+		
+		// by regexp
+		assertTrue(userManager.isNameValid("somename"));
+		assertTrue(userManager.isNameValid("some_name"));
+		assertTrue(userManager.isNameValid("some-name"));
+		assertTrue(userManager.isNameValid("s0meN4me"));
+		assertTrue(userManager.isNameValid("[s0meN4me]"));
+		assertTrue(userManager.isNameValid("[s0meN4me]"));
+		// invalid chars
+		assertFalse(userManager.isNameValid("some name"));
+		assertFalse(userManager.isNameValid("some,name"));
+		assertFalse(userManager.isNameValid("some;name"));
+		assertFalse(userManager.isNameValid("some\"name"));
+		assertFalse(userManager.isNameValid("some\'name"));
+		
+		// by blacklist
 		assertTrue(userManager.isNameValid("goodguy"));
 		assertFalse(userManager.isNameValid("badguy"));
 	}
