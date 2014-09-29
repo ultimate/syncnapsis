@@ -212,6 +212,10 @@ form.small>input.half {
 	width: 65px;
 }
 
+form.small>input.long {
+	width: 200px;
+}
+
 form>input {
 	width: 140px;
 	float: right;
@@ -227,6 +231,12 @@ form.large>input {
 form.small>.select,
 form.small>.select>* {
 	width: 132px;
+	float: left;
+}
+
+form.small>.select.long,
+form.small>.select.long>* {
+	width: 202px;
 	float: left;
 }
 
@@ -302,10 +312,14 @@ form.large>.select>* {
 }
 
 #bar_top #bar_top_sub.open {
-	height: 50px;
+	height: 78px;
 	margin-top: 1px;
 	border-width: 1px;
 	padding: 5px;
+}
+
+#bar_top #bar_top_sub>form {
+	float: left;
 }
 
 #bar_top #bar_top_sub_action {
@@ -339,11 +353,6 @@ form.large>.select>* {
 	left: 150px;
 }
 
-#bar_top #match_filter_galaxy_select,
-#bar_top #match_filter_galaxy_select>* {
-	width: 150px;	
-}
-
 #bar_top #match_filter_galaxy_select .col_1 {
 	position: absolute;
 	left: 5px;
@@ -356,14 +365,8 @@ form.large>.select>* {
 
 #bar_top #match_filter_galaxy_select .col_3 {
 	position: absolute;
-	left: 150px;
+	left: 250px;
 }
-
-#bar_top #match_filter_state_select,
-#bar_top #match_filter_state_select>* {
-	width: 100px;	
-}
-
 
 #bar_top .top_toggle {
 	position: absolute;
