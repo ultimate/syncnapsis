@@ -44,7 +44,7 @@ public abstract class DefaultData
 	public static final String			STRING_ASCII_COMPLETE_WITH_CONTROLCHARS		= STRING_ASCII_CONTROLCHARS
 																							+ STRING_ASCII_COMPLETE_NO_CONTROLCHARS;
 
-	public static final String			STRING_EMAIL_SYMBOLS						= "!#$%&'*+-/=?^_`{|}~";
+	public static final String			STRING_EMAIL_SYMBOLS						= "!#$%&'*+/=?^_`{|}~-";
 	public static final String			STRING_EMAIL_SYMBOLS_REDUCED				= "._%+-";
 
 	public static final String			STRING_EMAIL_COMPLETE_NO_DOT_NO_AT			= STRING_EMAIL_SYMBOLS + STRING_ASCII_LETTERS_LOWER

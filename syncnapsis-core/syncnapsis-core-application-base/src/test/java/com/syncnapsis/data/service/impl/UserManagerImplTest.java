@@ -257,14 +257,11 @@ public class UserManagerImplTest extends GenericNameManagerImplTestCase<User, Lo
 		assertTrue(userManager.isNameValid("some_name"));
 		assertTrue(userManager.isNameValid("some-name"));
 		assertTrue(userManager.isNameValid("s0meN4me"));
-		assertTrue(userManager.isNameValid("[s0meN4me]"));
-		assertTrue(userManager.isNameValid("[s0meN4me]"));
 		// invalid chars
 		assertFalse(userManager.isNameValid("some name"));
 		assertFalse(userManager.isNameValid("some,name"));
 		assertFalse(userManager.isNameValid("some;name"));
 		assertFalse(userManager.isNameValid("some\"name"));
-		assertFalse(userManager.isNameValid("some\'name"));
 		
 		// by blacklist
 		assertTrue(userManager.isNameValid("goodguy"));
@@ -351,6 +348,12 @@ public class UserManagerImplTest extends GenericNameManagerImplTestCase<User, Lo
 		assertTrue(securityManager.validatePassword(oldPassword, oldHash));
 		assertFalse(securityManager.validatePassword(newPassword, oldHash));
 
+		mockContext.checking(new Expectations() {
+			{
+				oneOf(mockDao).get(user.getId());
+				will(returnValue(user));
+			}
+		});
 		mockContext.checking(new Expectations() {
 			{
 				oneOf(mockDao).save(user);

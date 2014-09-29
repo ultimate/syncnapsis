@@ -14,6 +14,8 @@
  */
 package com.syncnapsis.security.validation;
 
+import java.util.regex.Pattern;
+
 import org.springframework.util.Assert;
 
 import com.syncnapsis.security.Validator;
@@ -28,7 +30,7 @@ public class RegExpValidator implements Validator<String>
 	/**
 	 * The regular expression used to validate the Strings
 	 */
-	protected String	regExp;
+	protected Pattern	pattern;
 
 	/**
 	 * Construct a new RegExpValidator
@@ -38,17 +40,27 @@ public class RegExpValidator implements Validator<String>
 	public RegExpValidator(String regExp)
 	{
 		Assert.notNull(regExp, "regExp must not be null!");
-		this.regExp = regExp;
+		this.pattern = Pattern.compile(regExp);
+	}
+
+	/**
+	 * The pattern compiled from the regular expression defined for this validator
+	 * 
+	 * @return pattern
+	 */
+	public Pattern getPattern()
+	{
+		return pattern;
 	}
 
 	/**
 	 * The regular expression used to validate the Strings
 	 * 
-	 * @return
+	 * @return the original regular expression
 	 */
 	public String getRegExp()
 	{
-		return regExp;
+		return pattern.toString();
 	}
 
 	/*
@@ -58,7 +70,7 @@ public class RegExpValidator implements Validator<String>
 	@Override
 	public boolean isValid(String value)
 	{
-		return value.matches(regExp);
+		return pattern.matcher(value).matches();
 	}
 
 }

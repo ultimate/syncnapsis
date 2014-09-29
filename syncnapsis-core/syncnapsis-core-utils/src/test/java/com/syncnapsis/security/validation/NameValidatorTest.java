@@ -29,14 +29,6 @@ public class NameValidatorTest extends LoggerTestCase
 	public void testIsValid() throws Exception
 	{
 		NameValidator v = new NameValidator();
-
-		System.out.println("some".matches("[a-z]+"));
-		System.out.println("some,name".matches("[a-zA-Z0-9!#$%&'*+-/=?^_`{|}~]+"));
-		System.out.println("some,name,more".matches("[a-zA-Z0-9!#$%&'*+-/=?^_`{|}~]+"));
-		System.out.println("some,name".matches("[a-zA-Z0-9!#$%&'*+-]+"));
-		System.out.println("some,name@abc.com".matches(DefaultData.REGEXP_EMAIL));
-		System.out.println("some,name@abc.com".matches(DefaultData.REGEXP_EMAIL_REDUCED));
-		System.out.println("some,name".matches(DefaultData.REGEXP_EMAIL_ID_REDUCED));
 		
 		assertTrue(v.isValid("somename"));
 		assertTrue(v.isValid("some_name"));
