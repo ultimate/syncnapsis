@@ -312,7 +312,7 @@ form.large>.select>* {
 }
 
 #bar_top #bar_top_sub.open {
-	height: 78px;
+	height: 97px;
 	margin-top: 1px;
 	border-width: 1px;
 	padding: 5px;
@@ -326,6 +326,7 @@ form.large>.select>* {
 	float: right;
 	width: 150px;
 	text-align: center;
+	padding-top: 24px;
 }
 
 #bar_top #match_select_align {

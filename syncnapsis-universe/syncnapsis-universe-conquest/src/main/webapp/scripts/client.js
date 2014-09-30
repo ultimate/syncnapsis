@@ -97,6 +97,7 @@ UI.constants.USERINFO_INDEX_LOGGEDOUT = 0;
 UI.constants.USERINFO_INDEX_LOGGEDIN = 1;
 UI.constants.MATCH_SELECT_ID = "match_select";
 UI.constants.MATCH_FILTER_PREFIX_ID = "match_filter_prefix";
+UI.constants.MATCH_FILTER_CREATOR_ID = "match_filter_creator";
 UI.constants.MATCH_FILTER_PARTICIPANTS_ID = "match_filter_participants";
 UI.constants.MATCH_FILTER_GALAXY_SELECT_ID = "match_filter_galaxy_select";
 UI.constants.MATCH_FILTER_STATE_SELECT_ID = "match_filter_state_select";
@@ -367,7 +368,7 @@ UIManager.prototype.filterMatches = function()
 	var galaxy = this.matchFilterGalaxySelect.value;
 	var prefix = document.getElementById(UI.constants.MATCH_FILTER_PREFIX_ID).value.toLowerCase();
 	var state = this.matchFilterStateSelect.value;
-	var creator = null;
+	var creator = document.getElementById(UI.constants.MATCH_FILTER_CREATOR_ID).value;
 	var participants = document.getElementById(UI.constants.MATCH_FILTER_PARTICIPANTS_ID).value;
 	
 	
@@ -379,7 +380,7 @@ UIManager.prototype.filterMatches = function()
 			return false;
 		if(state != null && match.state != state)
 			return false;
-		if(creator != null && match.creator.id != creator)
+		if(creator != "" && match.creator.id != creator)
 			return false;
 		if(participants != "")
 		{

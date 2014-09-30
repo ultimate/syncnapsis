@@ -53,6 +53,7 @@ lang.general.me					= "Me";
 lang.general.others				= "Others";
 
 lang.match = {};
+lang.match.creator				= "Creator";
 lang.match.galaxy				= "Galaxy";
 lang.match.participants			= "Participants";
 lang.match.state				= "Status";

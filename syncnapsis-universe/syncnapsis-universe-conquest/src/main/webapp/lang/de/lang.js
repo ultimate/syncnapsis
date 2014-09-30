@@ -51,6 +51,7 @@ lang.general.prefix				= "Beginnend mit";
 lang.general.suffix				= "Endend mit";
 
 lang.match = {};
+lang.match.creator				= "Ersteller";
 lang.match.galaxy				= "Galaxie";
 lang.match.participants			= "Mitspieler";
 lang.match.state				= "Status";
