@@ -47,6 +47,15 @@ lang.error.username_exists 		= lang.error.error + ": username is already registe
 
 lang.general = {};
 lang.general.apply_changes		= "Apply changes";
+lang.general.prefix				= "Starting with";
+lang.general.suffix				= "Ending with";
+lang.general.me					= "Me";
+lang.general.others				= "Others";
+
+lang.match = {};
+lang.match.galaxy				= "Galaxy";
+lang.match.participants			= "Participants";
+lang.match.state				= "Status";
 
 lang.message = {};
 lang.message.error						= "An error occurred! Please try again...";

@@ -47,6 +47,13 @@ lang.error.username_exists 		= lang.error.error + ": Benutzername ist bereits re
 
 lang.general = {};
 lang.general.apply_changes		= "Änderungen übernehmen";
+lang.general.prefix				= "Beginnend mit";
+lang.general.suffix				= "Endend mit";
+
+lang.match = {};
+lang.match.galaxy				= "Galaxie";
+lang.match.participants			= "Mitspieler";
+lang.match.state				= "Status";
 
 lang.message = {};
 lang.message.error						= "Es ist ein Fehler aufgetreten! Bitte versuche es erneut...";

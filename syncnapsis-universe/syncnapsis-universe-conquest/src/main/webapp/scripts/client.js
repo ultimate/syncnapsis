@@ -96,6 +96,8 @@ UI.constants.USERINFO_CONTENT = "userbar";
 UI.constants.USERINFO_INDEX_LOGGEDOUT = 0;
 UI.constants.USERINFO_INDEX_LOGGEDIN = 1;
 UI.constants.MATCH_SELECT_ID = "match_select";
+UI.constants.MATCH_FILTER_PREFIX_ID = "match_filter_prefix";
+UI.constants.MATCH_FILTER_PARTICIPANTS_ID = "match_filter_participants";
 UI.constants.MATCH_FILTER_GALAXY_SELECT_ID = "match_filter_galaxy_select";
 UI.constants.MATCH_FILTER_STATE_SELECT_ID = "match_filter_state_select";
 
@@ -363,28 +365,48 @@ UIManager.prototype.onMatchesLoaded = function(matches)
 UIManager.prototype.filterMatches = function()
 {
 	var galaxy = this.matchFilterGalaxySelect.value;
-	var prefix = null;
-	var state = null;
+	var prefix = document.getElementById(UI.constants.MATCH_FILTER_PREFIX_ID).value.toLowerCase();
+	var state = this.matchFilterStateSelect.value;
 	var creator = null;
-	var participantID = null;
+	var participants = document.getElementById(UI.constants.MATCH_FILTER_PARTICIPANTS_ID).value;
+	
 	
 	var matcher = function(match)
 	{
 		if(galaxy != null && match.galaxy.id != galaxy.id)
 			return false;
-		if(prefix != null && !match.title.startsWith(prefix))
+		if(prefix != "" && !match.title.toLowerCase().startsWith(prefix))
 			return false;
 		if(state != null && match.state != state)
 			return false;
 		if(creator != null && match.creator.id != creator)
 			return false;
-		if(participantID != null)
+		if(participants != "")
 		{
-			var found = false;
-			for(var i = 0; i < match.participants.length; i++)
+			// split participants into IDs/names
+			// assuming usernames don't contain the split chars "," and ";" or any whitespace
+			var participantIDs = participants.split(/[\s,;]+/);
+			
+			var allFound = true;
+			for(var p = 0; p < participantIDs.length; p++)
 			{
-				found = found || (match.participants[i].id == participantID); 
+				if(participantIDs[p] == "")
+					continue; // empty token
+				
+				var pFound = false;
+				for(var i = 0; i < match.participants.length; i++)
+				{
+					// by ID
+					pFound = pFound || (match.participants[i].id == participantIDs[p]);
+					// TODO by name (requires preloading of participant.player.user.username)
+					//pFound = pFound || (match.participants[i].player.user.username.toLowerCase() == participantIDs[p].toLowerCase()); 
+				}
+
+				allFound = allFound && pFound;
 			}
+			
+			if(!allFound)
+				return false;
 		}
 		// TODO other properties
 		return true;
