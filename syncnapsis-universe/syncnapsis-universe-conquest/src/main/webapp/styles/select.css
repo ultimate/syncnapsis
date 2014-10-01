@@ -84,9 +84,11 @@
 	margin-top: 16px;
 	margin-left: -0.5px;
 	padding: 0px;
-	overflow: hidden;
+	overflow-x: hidden;
+	overflow-y: auto;
 	z-index: 10;
 	display: none;
+	max-height: 200px;
 }
 
 .select.fixedMargin>ul {

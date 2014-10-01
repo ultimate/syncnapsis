@@ -419,6 +419,11 @@ UIManager.prototype.filterMatches = function()
 UIManager.prototype.resetMatchFilters = function()
 {
 	this.matchFilterGalaxySelect.select(null);
+	this.matchFilterStateSelect.select(null);
+
+	document.getElementById(UI.constants.MATCH_FILTER_PREFIX_ID).value = "";
+	document.getElementById(UI.constants.MATCH_FILTER_CREATOR_ID).value = "";
+	document.getElementById(UI.constants.MATCH_FILTER_PARTICIPANTS_ID).value = "";
 	
 	// do filter with cleared inputs
 	this.filterMatches();
