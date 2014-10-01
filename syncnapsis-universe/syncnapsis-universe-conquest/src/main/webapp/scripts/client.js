@@ -199,6 +199,13 @@ UIManager = function()
 		content.push("</span>");
 		return content.join("");
 	};
+	// overwrite onselect
+	// need to do this after populate, since populate overwrites onselect, too
+	this.matchSelect.onselect = function(oldValue, newValue)
+	{
+		console.log("showing match #" + newValue.id);
+		// TODO update 3D-view
+	};
 	server.matchManager.getAll(); // load matches
 	
 	// initialize galaxy select for match filter
