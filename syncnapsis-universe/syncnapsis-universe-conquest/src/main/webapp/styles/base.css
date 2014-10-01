@@ -159,8 +159,14 @@ body, select {
 	top: 1.5px;
 }
 
+/* choose here whether to display .flag, label or .rawValue */
+#locale_chooser .flag,
 #locale_chooser label {
 	display: none;
+}
+#locale_chooser .rawValue {
+	display: inline;
+	margin-top: 0.5px;
 }
 
 #menu #userbar {

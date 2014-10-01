@@ -83,6 +83,9 @@ Select = function(element)
 			content.push(option.value);
 			content.push("'>");
 		}
+		content.push("<span class='rawValue'>");
+		content.push(option.value);
+		content.push("</span>");
 		content.push(option.title);
 		return content.join("");
 	};
