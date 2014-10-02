@@ -65,6 +65,11 @@ EntityManager = function(server)
 		return this._cache[type][id];
 	};
 	
+	this.merge = function(entity)
+	{
+		console.log("merging: " + entity);
+	};
+	
 	this.clearCache = function()
 	{
 		this._cache = {};
@@ -140,6 +145,22 @@ EntityManager = function(server)
 		}
 	};
 	
+	this.loadList = function(list, callback, force)
+	{
+		var entryCallback = function(callback, entries) {
+			return function(entry) {
+				entries--;
+				if((entries == 0) && (callback != undefined))
+					(callback)(list);
+			};
+		} (callback, list.length);
+		
+		for(var i = 0; i < list.length; i++)
+		{
+			this.load(list[i], entryCallback, force)
+		}
+	};
+	
 	this.save = function(entity, callback)
 	{
 		// assure entity-functionality
@@ -169,6 +190,41 @@ EntityManager = function(server)
 			}
 		}(this));
 	};
+	
+	/*
+	this.interceptResultHandler = function(object, method)
+	{
+		var methodName = Reflections.resolveName(method, object);
+		console.log("method name: " + methodName);
+		object[methodName] = function(originalMethod, originalArguments, entityManager) {
+			return function() { // no need to specify args here
+				var args = new Array();
+				var invocationArgs = new Array();
+				for(var i = 0; i < originalArguments.length; i++)
+				{
+					if(typeof(originalArguments[i]) == Reflections.TYPE_FUNCTION)
+					{
+						console.log("wrapping arg #"+ i);
+						// wrap the resultHandler
+						args[i] = function(result) {
+							entityManager.merge(result);
+							originalArguments[i](result);
+						};
+					}
+					else
+					{
+						args[i] = originalArguments[i];
+					}
+					invocationArgs.push("args[" + i + "]");
+				}
+				var invocation = "originalMethod(" + invocationArgs.join(",") + ")";
+				console.log(invocation);
+				eval(invocation);
+			};
+		} (method, arguments, this);
+		//invocationHandler
+	};
+	*/
 };
 
 // unused and experimental!!!

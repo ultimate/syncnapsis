@@ -311,5 +311,15 @@ WebSockets.rpc.GenericRPCInvocationHandler.prototype.invoke = function(proxy, me
 			args.push(null);
 	}
 
+	// use this.call as a bridge in order to allow overrides
+	//this.call(objectName, methodName, args, resultHandler);
 	this._rpcSocket.call(objectName, methodName, args, resultHandler);
 };
+
+/*
+WebSockets.rpc.GenericRPCInvocationHandler.prototype.call = function(objectName, methodName, args, resultHandler)
+{
+	this._rpcSocket.call(objectName, methodName, args, resultHandler);
+};
+*/
+
