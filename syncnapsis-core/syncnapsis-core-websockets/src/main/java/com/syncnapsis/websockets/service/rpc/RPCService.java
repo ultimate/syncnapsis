@@ -167,9 +167,10 @@ public class RPCService extends BaseService implements InitializingBean, RPCHand
 		}
 		catch(Exception e)
 		{
-			logger.error("Exception doing RPC: " + e.getMessage());
+			logger.error("Exception doing RPC: " + e.getMessage(), e);
+
 			result = new RPCError(e.getCause());
-			
+
 			try
 			{
 				logger.debug("" + e.getCause());
@@ -178,7 +179,7 @@ public class RPCService extends BaseService implements InitializingBean, RPCHand
 				logger.debug("" + serializer.serialize(e.getCause(), getAuthorities()));
 				logger.debug("" + serializer.serialize(result, getAuthorities()));
 			}
-			catch(SerializationException e1)
+			catch(Exception e1)
 			{
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
