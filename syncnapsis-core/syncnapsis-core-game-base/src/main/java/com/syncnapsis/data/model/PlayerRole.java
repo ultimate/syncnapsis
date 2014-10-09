@@ -265,7 +265,7 @@ public class PlayerRole extends BaseObject<Long> implements BitMask
 	public String toString()
 	{
 		ToStringBuilder builder = new ToStringBuilder(this);
-		builder.append("id", id).append("mask", mask).append("rolename", rolename).append("fallbackRole", fallbackRole.getId())
+		builder.append("id", id).append("mask", mask).append("rolename", rolename).append("fallbackRole", fallbackRole == null ? null : fallbackRole.getId())
 				.append("maxEmpires", maxEmpires).append("maxSitters", maxSitters).append("maxSitted", maxSitted);
 		return builder.toString();
 	}
