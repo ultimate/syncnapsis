@@ -147,6 +147,8 @@ EntityManager = function(server)
 	
 	this.loadList = function(list, callback, force)
 	{
+		// create an entryCallback that calls the final callback
+		// when all entries are handled
 		var entryCallback = function(callback, entries) {
 			return function(entry) {
 				entries--;
@@ -155,10 +157,70 @@ EntityManager = function(server)
 			};
 		} (callback, list.length);
 		
+		// load all entries
 		for(var i = 0; i < list.length; i++)
 		{
-			this.load(list[i], entryCallback, force)
+			// prevent message overrun by using a small timeout for each entry
+			setTimeout(function(entityManager, entry, entryCallback) {
+				return function() {
+					entityManager.load(entry, entryCallback, force);
+				};
+			} (this, list[i], entryCallback), 100*i);
 		}
+	};
+	
+	this.loadProperty = function(entity, propertyName, callback, force)
+	{
+		if(entity instanceof Array)
+		{
+			// handle each entry separately
+
+			// create an entryCallback that calls the final callback
+			// when all entries are handled
+			var entryCallback = function(callback, entries) {
+				return function(entry) {
+					entries--;
+					if((entries == 0) && (callback != undefined))
+						(callback)(entity);
+				};
+			} (callback, entity.length);
+			
+			// load all entries
+			for(var i = 0; i < entity.length; i++)
+			{
+				// prevent message overrun by using a small timeout for each entry
+				setTimeout(function(entityManager, entry, entryCallback) {
+					return function() {
+						entityManager.loadProperty(entry, propertyName, entryCallback, force);
+					};
+				} (this, entity[i], entryCallback), 100*i);
+			}
+			return;
+		}
+		
+		// support chained property names like "participants.empire.player.user"
+		var propertyChain = propertyName.split(".");
+		var property;
+		if(propertyChain[0] == "_")
+			property = entity; // load the property itself
+		else
+			property = entity[propertyChain[0]]; // get the first level property
+		propertyChain.removeAt(0); // remove first 
+		var childPropertyName = propertyChain.join(".");
+		
+		if(propertyChain.length > 0)
+		{
+			callback = function(entityManager, newPropertyName, originalCallback, force) {
+				return function(loadedProperty) {
+					entityManager.loadProperty(loadedProperty, newPropertyName, originalCallback, force);
+				};
+			} (this, childPropertyName, callback, force);
+		}
+		
+		if(property instanceof Array)
+			this.loadList(property, callback, force);
+		else
+			this.load(property, callback, force);
 	};
 	
 	this.save = function(entity, callback)
