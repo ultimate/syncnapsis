@@ -26,6 +26,8 @@ Types.User = "com.syncnapsis.data.model.User";
 Types.UserContact = "com.syncnapsis.data.model.UserContact";
 Types.UserRole = "com.syncnapsis.data.model.UserRole";
 
+var LIST_ENTITY_LOAD_DELAY = 1;
+
 EntityManager = function(server)
 {
 	if(server == null)
@@ -147,53 +149,75 @@ EntityManager = function(server)
 	
 	this.loadList = function(list, callback, force)
 	{
-		// create an entryCallback that calls the final callback
-		// when all entries are handled
-		var entryCallback = function(callback, entries) {
-			return function(entry) {
-				entries--;
-				if((entries == 0) && (callback != undefined))
-					(callback)(list);
-			};
-		} (callback, list.length);
-		
-		// load all entries
-		for(var i = 0; i < list.length; i++)
+		if(list.length > 0)
 		{
-			// prevent message overrun by using a small timeout for each entry
-			setTimeout(function(entityManager, entry, entryCallback) {
-				return function() {
-					entityManager.load(entry, entryCallback, force);
-				};
-			} (this, list[i], entryCallback), 100*i);
-		}
-	};
-	
-	this.loadProperty = function(entity, propertyName, callback, force)
-	{
-		if(entity instanceof Array)
-		{
-			// handle each entry separately
-
 			// create an entryCallback that calls the final callback
 			// when all entries are handled
 			var entryCallback = function(callback, entries) {
 				return function(entry) {
 					entries--;
 					if((entries == 0) && (callback != undefined))
-						(callback)(entity);
+						(callback)(list);
 				};
-			} (callback, entity.length);
+			} (callback, list.length);
 			
 			// load all entries
-			for(var i = 0; i < entity.length; i++)
+			for(var i = 0; i < list.length; i++)
 			{
 				// prevent message overrun by using a small timeout for each entry
 				setTimeout(function(entityManager, entry, entryCallback) {
 					return function() {
-						entityManager.loadProperty(entry, propertyName, entryCallback, force);
+						entityManager.load(entry, entryCallback, force);
 					};
-				} (this, entity[i], entryCallback), 100*i);
+				} (this, list[i], entryCallback), LIST_ENTITY_LOAD_DELAY*i);
+			}
+		}
+		else
+		{
+			// no entries to load
+			// call callback immediately
+			if(callback != undefined)
+				(callback)(list);
+		}
+	};
+	
+	this.loadProperty = function(entity, propertyName, callback, force)
+	{
+		//console.log("loading " + propertyName + " for " + entity.j_type + ":" + entity.id);
+		if(entity instanceof Array)
+		{
+			if(entity.length > 0)
+			{
+				// handle each entry separately
+	
+				// create an entryCallback that calls the final callback
+				// when all entries are handled
+				var entryCallback = function(callback, entries) {
+					return function(entry) {
+						entries--;
+						//console.log("entry loaded: remaining = " + entries);
+						if((entries == 0) && (callback != undefined))
+							(callback)(entity);
+					};
+				} (callback, entity.length);
+				
+				// load all entries
+				for(var i = 0; i < entity.length; i++)
+				{
+					// prevent message overrun by using a small timeout for each entry
+					setTimeout(function(entityManager, entry, entryCallback) {
+						return function() {
+							entityManager.loadProperty(entry, propertyName, entryCallback, force);
+						};
+					} (this, entity[i], entryCallback), LIST_ENTITY_LOAD_DELAY*i);
+				}
+			}
+			else
+			{
+				// no entries to load
+				// call callback immediately
+				if(callback != undefined)
+					(callback)(entity);
 			}
 			return;
 		}
