@@ -26,7 +26,9 @@ WSConfiguration.protocol = "rpc";
 WSConfiguration.path = "/ws";
 
 var client = {};
-var server = {};
+var server = {
+	inited: false
+};
 var rpcSocket;
 
 init = function()
@@ -43,20 +45,28 @@ connect = function()
 	var url = WebSockets.getRelativeURL(WSConfiguration.path);
 	rpcSocket = new WebSockets.RPCSocket(url, WSConfiguration.protocol, genericRPCHandler.anonymous(), null, null);
 	rpcSocket.onopen = function() {
-		var genericRPCInvocationHandler = new WebSockets.rpc.GenericRPCInvocationHandler(rpcSocket, server);
-		// init server-side managers as proxies (may use same "class/interface") 
-		server.userManager = Proxies.newProxyInstance(UserManager, genericRPCInvocationHandler); // currently GenericManager is sufficient
-		server.playerManager = Proxies.newProxyInstance(PlayerManager, genericRPCInvocationHandler);
-		server.matchManager = Proxies.newProxyInstance(MatchManager, genericRPCInvocationHandler);
-		server.galaxyManager = Proxies.newProxyInstance(GalaxyManager, genericRPCInvocationHandler);
-		server.uiManager = Proxies.newProxyInstance(ServerUIManager, genericRPCInvocationHandler);
-		server.messageManager = Proxies.newProxyInstance(ServerMessageManager, genericRPCInvocationHandler);
-		server.pinboardManager = Proxies.newProxyInstance(GenericNameManager, genericRPCInvocationHandler);
-		// init additional services
-		server.entityManager = new EntityManager(server);
-		// init client-side managers
-		client.uiManager = new UIManager();
-		client.messageManager = new MessageManager();
+		if(!server.inited)
+		{
+			var genericRPCInvocationHandler = new WebSockets.rpc.GenericRPCInvocationHandler(rpcSocket, server);
+			// init server-side managers as proxies (may use same "class/interface") 
+			server.userManager = Proxies.newProxyInstance(UserManager, genericRPCInvocationHandler); // currently GenericManager is sufficient
+			server.playerManager = Proxies.newProxyInstance(PlayerManager, genericRPCInvocationHandler);
+			server.matchManager = Proxies.newProxyInstance(MatchManager, genericRPCInvocationHandler);
+			server.galaxyManager = Proxies.newProxyInstance(GalaxyManager, genericRPCInvocationHandler);
+			server.uiManager = Proxies.newProxyInstance(ServerUIManager, genericRPCInvocationHandler);
+			server.messageManager = Proxies.newProxyInstance(ServerMessageManager, genericRPCInvocationHandler);
+			server.empireManager = Proxies.newProxyInstance(GenericNameManager, genericRPCInvocationHandler);
+			server.participantManager = Proxies.newProxyInstance(GenericNameManager, genericRPCInvocationHandler);
+			server.pinboardManager = Proxies.newProxyInstance(GenericNameManager, genericRPCInvocationHandler);
+			// init additional services
+			server.entityManager = new EntityManager(server);
+			// init client-side managers
+			client.uiManager = new UIManager();
+			client.messageManager = new MessageManager();
+			
+			// set inited
+			server.inited = true;
+		}
 	};
 };
 
