@@ -446,6 +446,18 @@ form.large>.select>* {
 	width: 499px;
 }
 
+#match_ranking {
+	position: absolute;
+	top: 1px;
+	left: 1px;
+}
+
+#match_ranking table tbody td:nth-child(1),
+#match_ranking table tbody td:nth-child(3),
+#match_ranking table tbody td:nth-child(4) {
+	text-align: right;
+}
+
 .frame {
 	border: 1px solid rgba(0, 255, 255, 0.8);
 	background: rgba(0,86,86,0.9);

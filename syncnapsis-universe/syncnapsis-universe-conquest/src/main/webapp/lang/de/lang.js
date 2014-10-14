@@ -53,6 +53,7 @@ lang.general.suffix				= "Endend mit";
 lang.match = {};
 lang.match.creator				= "Ersteller";
 lang.match.galaxy				= "Galaxie";
+lang.match.participant			= "Mitspieler";
 lang.match.participants			= "Mitspieler";
 lang.match.state				= "Status";
 
@@ -99,6 +100,12 @@ lang.log = {};
 lang.log.title					= "Ereignis-Log";
 lang.log.pinboard				= "Pinnwand";
 lang.log.match					= "Spiel";
+
+lang.participant = {};
+lang.participant.name			= "Spielername";
+lang.participant.rank			= "Rang";
+lang.participant.rankValue		= "%";
+lang.participant.rankRawValue	= "Punkte";
 
 lang.profile = {};
 lang.profile.accountStatus		= "Status";

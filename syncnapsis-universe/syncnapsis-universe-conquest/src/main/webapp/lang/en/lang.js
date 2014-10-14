@@ -55,8 +55,15 @@ lang.general.others				= "Others";
 lang.match = {};
 lang.match.creator				= "Creator";
 lang.match.galaxy				= "Galaxy";
+lang.match.participant			= "Participant";
 lang.match.participants			= "Participants";
 lang.match.state				= "Status";
+
+lang.participant = {};
+lang.participant.name			= "Playername";
+lang.participant.rank			= "Rank";
+lang.participant.rankValue		= "%";
+lang.participant.rankRawValue	= "Points";
 
 lang.message = {};
 lang.message.error						= "An error occurred! Please try again...";
@@ -101,7 +108,7 @@ lang.log = {};
 lang.log.title					= "Event-Log";
 lang.log.pinboard				= "Pinboard";
 lang.log.match					= "Match";
-	
+
 lang.profile = {};
 lang.profile.accountStatus		= "Status";
 lang.profile.accountStatusExpireDate = "Status expires";

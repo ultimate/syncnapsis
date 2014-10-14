@@ -94,16 +94,6 @@
 </script>
 <script type="text/javascript">
 	// debug-js
-	load = function(progress)
-	{
-		setProgress(progress);
-		var time = Math.round(Math.random()*200);
-		if(progress < 100)
-			setTimeout(function() { load(progress+5); }, time);
-		else
-			init();
-		document.getElementById("debug_load").disabled = "disabled";
-	};
 </script>
 </head>
 <body onload="DependencyManager.registrationDone();">
@@ -326,6 +316,39 @@
 			</div>
 		</div>
 	</div>
+	<div id="match_ranking" class="frame">
+		<table id="match_table">
+			<thead>
+				<tr>
+					<td>#</td>
+					<td><label key="participant.name"></label></td>
+					<td><label key="participant.rankRawValue"></label></td>
+					<td><label key="participant.rankValue"></label></td>
+				</tr>
+			</thead>
+			<!-- TMP -->
+			<tbody>
+				<tr>
+					<td>1</td>
+					<td>user1</td>
+					<td>1234567</td>
+					<td>80%</td>
+				</tr>
+				<tr>
+					<td>2</td>
+					<td>Mr.X</td>
+					<td>1000000</td>
+					<td>70%</td>
+				</tr>
+				<tr>
+					<td>3</td>
+					<td>the new guy</td>
+					<td>888888</td>
+					<td>50%</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
 	<div id="overlay" class="centered">
 		<div id="overlay_main" class="main frame centered">
 			<div id="logo_container1" class="logo_container centered">
@@ -411,13 +434,6 @@
 				    <input type="submit" style="display: none;"/>
 				</form>
 			</div>
-		</div>
-	</div>
-	<!-- for debug only -->
-	<div id="debug">
-		debug...<br>
-		<input id="debug_load" type="button" value="load" onclick="load(0);" /><br/>
-		<div id="debug_container">
 		</div>
 	</div>
 </body>
