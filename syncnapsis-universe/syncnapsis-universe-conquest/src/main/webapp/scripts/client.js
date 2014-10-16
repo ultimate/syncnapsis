@@ -471,7 +471,7 @@ UIManager.prototype.updateMatchRankTable = function(match)
 		addCell(tr, match.participants[p].rank);
 		addCell(tr, match.participants[p].empire.player.user.username);
 		addCell(tr, match.participants[p].rankRawValue);
-		addCell(tr, match.participants[p].rankValue);
+		addCell(tr, match.participants[p].rankValue.toFixed(0));
 		
 		newTbody.appendChild(tr);
 	}

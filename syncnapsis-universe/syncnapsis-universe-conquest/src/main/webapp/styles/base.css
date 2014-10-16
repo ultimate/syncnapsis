@@ -452,9 +452,9 @@ form.large>.select>* {
 	left: 1px;
 }
 
-#match_rank_table tbody td:nth-child(1),
-#match_rank_table tbody td:nth-child(3),
-#match_rank_table tbody td:nth-child(4) {
+#match_rank_table /*tbody*/ td:nth-child(1),
+#match_rank_table /*tbody*/ td:nth-child(3),
+#match_rank_table /*tbody*/ td:nth-child(4) {
 	text-align: right;
 }
 
