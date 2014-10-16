@@ -101,6 +101,7 @@ UI.constants.MATCH_FILTER_CREATOR_ID = "match_filter_creator";
 UI.constants.MATCH_FILTER_PARTICIPANTS_ID = "match_filter_participants";
 UI.constants.MATCH_FILTER_GALAXY_SELECT_ID = "match_filter_galaxy_select";
 UI.constants.MATCH_FILTER_STATE_SELECT_ID = "match_filter_state_select";
+UI.constants.MATCH_RANK_TABLE_ID = "match_rank_table";
 
 UI.constants.LOGIN_USERNAME_ID = "login_username";
 UI.constants.LOGIN_PASSWORD_ID = "login_password";
@@ -412,7 +413,7 @@ UIManager.prototype.filterMatches = function()
 				for(var i = 0; i < match.participants.length; i++)
 				{
 					// by ID
-					pFound = pFound || (match.participants[i].id == participantIDs[p]);
+					pFound = pFound || (match.participants[i].empire.player.id == participantIDs[p]);
 					// by name (requires preloading of participant.player.user.username)
 					pFound = pFound || (match.participants[i].empire.player.user.username.toLowerCase() == participantIDs[p].toLowerCase()); 
 				}
@@ -442,6 +443,7 @@ UIManager.prototype.resetMatchFilters = function()
 	// do filter with cleared inputs
 	this.filterMatches();
 };
+
 
 UIManager.prototype.disableButton = function(id, duration)
 {
