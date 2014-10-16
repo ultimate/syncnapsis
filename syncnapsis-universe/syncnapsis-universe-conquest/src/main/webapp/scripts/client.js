@@ -444,6 +444,40 @@ UIManager.prototype.resetMatchFilters = function()
 	this.filterMatches();
 };
 
+UIManager.prototype.updateMatchRankTable = function(match)
+{
+	var table = document.getElementById(UI.constants.MATCH_RANK_TABLE_ID);
+	var oldTbody = table.children[1];
+	var newTbody = document.createElement("tbody");
+	
+	// helper method for adding a single cell to a row
+	var addCell = function(tr, content)
+	{
+		var td = document.createElement("td");
+		td.innerHTML = content;
+		tr.appendChild(td);
+	};
+	
+	// sort participants
+	match.participants.sort(function(p1, p2) {
+		return p1.rank - p2.rank;
+	});
+	
+	var tr, td;
+	for(var p = 0; p < match.participants.length; p++)
+	{
+		tr = document.createElement("tr");
+		
+		addCell(tr, match.participants[p].rank);
+		addCell(tr, match.participants[p].empire.player.user.username);
+		addCell(tr, match.participants[p].rankRawValue);
+		addCell(tr, match.participants[p].rankValue);
+		
+		newTbody.appendChild(tr);
+	}
+	
+	table.replaceChild(newTbody, oldTbody);
+};
 
 UIManager.prototype.disableButton = function(id, duration)
 {
