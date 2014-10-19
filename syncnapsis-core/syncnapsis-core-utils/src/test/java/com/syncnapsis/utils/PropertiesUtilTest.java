@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.util.Properties;
 
 import com.syncnapsis.tests.LoggerTestCase;
+import com.syncnapsis.tests.annotations.TestCoversMethods;
 
 public class PropertiesUtilTest extends LoggerTestCase
 {
@@ -41,5 +42,34 @@ public class PropertiesUtilTest extends LoggerTestCase
 				"http://www.syncnapsis.com/test/activate/{code}\n" + 
 				"Best regards"; 
 		assertEquals(expected, p.getProperty("template.register.text"));
+	}
+	
+	@TestCoversMethods({ "getProperty", "getBoolean", "getInt", "getString" })
+	public void testGetProperty() throws Exception
+	{
+		Properties properties = PropertiesUtil.loadProperties("test.properties");
+
+		String key1 = "test.int";
+		String key2 = "test.boolean";
+
+		// test getString
+		assertEquals("123", PropertiesUtil.getString(properties, key1));
+		assertEquals("true", PropertiesUtil.getString(properties, key2));
+
+		// test getInt
+		assertEquals(123, PropertiesUtil.getInt(properties, key1));
+		try
+		{
+			assertEquals("true", PropertiesUtil.getInt(properties, key2));
+			fail("expected exception not occurred!");
+		}
+		catch(NumberFormatException e)
+		{
+			assertNotNull(e);
+		}
+
+		// test getBoolean
+		assertEquals(false, PropertiesUtil.getBoolean(properties, key1));
+		assertEquals(true, PropertiesUtil.getBoolean(properties, key2));
 	}
 }
