@@ -84,7 +84,7 @@ EntityManager = function(server)
 				{
 					if((Reflections.getTypeMask(typeof other[prop]) & typeMask) != 0)
 					{
-						if(this[prop].merge)
+						if(this[prop] && this[prop].merge)
 							this[prop].merge(other.prop);
 						else
 							this[prop] = other[prop];
