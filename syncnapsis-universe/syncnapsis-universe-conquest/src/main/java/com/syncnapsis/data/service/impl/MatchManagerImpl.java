@@ -221,12 +221,13 @@ public class MatchManagerImpl extends GenericNameManagerImpl<Match, Long> implem
 		Assert.isTrue(isAccessible(null, MatchAccessController.OPERATION_CREATE), "no access rights for 'create match'");
 		Assert.isTrue(participantsMax == 0 || participantsMax >= participantsMin,
 				"participantsMax must either be 0 or be greater or equals to participantsMin");
-		Assert.isTrue(participantsMin > 0);
-
+		Assert.isTrue(participantsMin > 0, "participantsMin must be greater than 0");
 		Assert.isTrue(
 				speed >= UniverseConquestConstants.PARAM_MATCH_SPEED_MIN.asInt() && speed <= UniverseConquestConstants.PARAM_MATCH_SPEED_MAX.asInt(),
 				"speed must be between " + UniverseConquestConstants.PARAM_MATCH_SPEED_MIN.asInt() + " and "
 						+ UniverseConquestConstants.PARAM_MATCH_SPEED_MAX.asInt() + " (inclusive)");
+		Assert.isTrue(startSystemCount > 0, "startSystemCount must be greater than 0");
+		Assert.isTrue(startPopulation > startSystemCount, "startPopulation must be greater than startSystemCount");
 
 		Galaxy galaxy = galaxyManager.get(galaxyId);
 		Assert.notNull(galaxy, "galaxy with ID " + galaxyId + " not found!");

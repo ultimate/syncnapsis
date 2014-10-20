@@ -129,6 +129,9 @@ UI.constants.PINBOARD_NEWS = "pinboard_news";
 UI.constants.PINBOARD_CHAT = "pinboard_chat";
 UI.constants.PINBOARD_EVENTS = "pinboard_events";
 
+UI.constants.PLACEHOLDER = "$";
+UI.constants.PLACEHOLDER_ATTRIBUTES = ["id", "for", "href"];
+
 UIManager = function()
 {
 	this.currentPlayer = null;
@@ -477,6 +480,33 @@ UIManager.prototype.updateMatchRankTable = function(match)
 	}
 	
 	table.replaceChild(newTbody, oldTbody);
+};
+
+UIManager.prototype.createWindowFromTemplate = function(windowId, templateNodeId, titleKey)
+{
+	// clone the template node
+	var clone = document.getElementById(templateNodeId).cloneNode(true);
+	// replace $ with ID
+	this.replacePlaceholder(clone, UI.constants.PLACEHOLDER, windowId, UI.constants.PLACEHOLDER_ATTRIBUTES);
+	// create window with the cloned node as the content
+	return new Styles.Window(windowId, titleKey, clone);
+};
+
+var placeH
+
+UIManager.prototype.replacePlaceholder = function(element, placeholder, value, attributes)
+{
+	for(var i = 0; i < attributes.length; i++)
+	{
+		attributeName = attributes[i];
+		if(element.getAttribute(attributes[i]) != null && typeof(element.getAttribute(attributes[i])) == Reflections.type.STRING)
+			element.setAttribute(attributes[i], element.getAttribute(attributes[i]).replace(placeholder, value));
+	}
+	
+	for(var e = 0; e < element.children.length; e++)
+	{
+		this.replacePlaceholder(element.children[e], placeholder, value, attributes);
+	}
 };
 
 UIManager.prototype.disableButton = function(id, duration)
