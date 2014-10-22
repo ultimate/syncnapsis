@@ -458,6 +458,24 @@ form.large>.select>* {
 	text-align: right;
 }
 
+#manage_match #match_title {
+	width: 400px;
+}
+
+#manage_match .left,
+#manage_match .right {
+	width: 50%;
+	display: inline;
+}
+
+#manage_match .buttons {
+	flex-direction: row;
+}
+
+#manage_match .buttons .button {
+	flex: 1;
+}
+
 .frame {
 	border: 1px solid rgba(0, 255, 255, 0.8);
 	background: rgba(0,86,86,0.9);

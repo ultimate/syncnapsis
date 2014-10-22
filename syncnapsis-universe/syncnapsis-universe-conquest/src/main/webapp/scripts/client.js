@@ -482,17 +482,60 @@ UIManager.prototype.updateMatchRankTable = function(match)
 	table.replaceChild(newTbody, oldTbody);
 };
 
-UIManager.prototype.createWindowFromTemplate = function(windowId, templateNodeId, titleKey)
+UIManager.prototype.showMatch = function(match)
 {
+	var titleKey;
+	if(match == null)
+	{
+		match = {
+			j_type: Types.Match,
+			id: null // new match
+		}; // TODO load from local storage
+		titleKey = "menu.match_create";
+	}
+	else
+	{
+		titleKey = "menu.match_administate";
+	}
+	var win = this.getWindowFromTemplate(match.id, "content_manage_match", titleKey);
+	win.setSize(600,500);
+	win.center();
+	win.setMovable(true);
+	
+	// populate form
+		
+	win.setVisible(true);
+};
+
+UIManager.prototype.getWindowId = function(contentId, templateNodeId)
+{
+	return "win_" + templateNodeId + "_" + contentId;
+};
+
+UIManager.prototype.getWindowFromTemplate = function(contentId, templateNodeId, titleKey)
+{
+	var windowId = this.getWindowId(contentId, templateNodeId);
+	var win = document.getElementById(windowId);
+	if(win == null)
+		win = this.createWindowFromTemplate(contentId, templateNodeId, titleKey);
+	// force label update
+	this.updateLabels(win);
+	
+	
+	return win;
+};
+
+UIManager.prototype.createWindowFromTemplate = function(contentId, templateNodeId, titleKey)
+{
+	// create the windowId
+	var windowId = this.getWindowId(contentId, templateNodeId);
 	// clone the template node
 	var clone = document.getElementById(templateNodeId).cloneNode(true);
 	// replace $ with ID
-	this.replacePlaceholder(clone, UI.constants.PLACEHOLDER, windowId, UI.constants.PLACEHOLDER_ATTRIBUTES);
+	this.replacePlaceholder(clone, UI.constants.PLACEHOLDER, contentId, UI.constants.PLACEHOLDER_ATTRIBUTES);
 	// create window with the cloned node as the content
 	return new Styles.Window(windowId, titleKey, clone);
 };
-
-var placeH
 
 UIManager.prototype.replacePlaceholder = function(element, placeholder, value, attributes)
 {

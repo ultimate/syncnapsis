@@ -419,62 +419,67 @@
 			<div>
 				<form id="manage_match" onsubmit="return false;" class="large">
 					<label key="match.title" for="match_title"></label><input id="match_title" type="text"/><br/>
+					<div class="left">
 					<label key="match.galaxy" for="match_galaxy_select"></label><div id="match_galaxy_select" class="long"></div><br/>
+					<label key="match.seed" for="match_seed"></label><input id="match_seed" type="number"/><br/>
 					<label key="match.speed" for="match_speed_select"></label><div id="match_speed_select" class="long"></div><br/>
-					<label key="match.seed" for="match_seed"></label><input id="match_seed" type="text"/><br/>
+					</div>
+					<div class="right">
+					<label key="match.participants"></label>
+					</div>
+						<!--
+						title
+						galaxyId 
+						speed (select with names and int values) 
+						seed (number, optional)
+						stardCondition (enum)
+						startDate (optional)
+						startSystemSelectionEnabled (checkbox)
+						startSystemCount 
+						startPopulation
+						victoryCondition (enum)
+						victoryParameter (in %, except for vendetta)
+							// select with named options: very easy, easy, medium, hard, very hard
+							// domination:					 40		 50		 60		 70		 80	      TODO ?			 
+							// extermination:			     80      90      95      99     100
+						participantsMax 	>= 2
+						participantsMin		>= 2
+						empireIds (from players)
+						plannedJoinType (enum)
+						startedJoinType (enum)
+						-->
+						<!-- TODO -->
+								
+					<div id="match_message" class="form_message"></div>
+					<div id="match_error" class="form_error"></div>
+					<div class="buttons atbottom centered">
+						<div id="match_create" class="frame button">
+							<a href="javascript: client.uiManager.createMatch();">
+								<label key="menu.create"></label>
+							</a>
+						</div>
+						<div id="match_update" class="frame button">
+							<a href="javascript: client.uiManager.updateMatch();">
+								<label key="menu.apply_changes"></label>
+							</a>
+						</div>
+						<div id="match_start" class="frame button">
+							<a href="javascript: client.uiManager.startMatch();">
+								<label key="menu.start"></label>
+							</a>
+						</div>
+						<div id="match_cancel" class="frame button">
+							<a href="javascript: client.uiManager.cancelMatch();">
+								<label key="menu.cancel"></label>
+							</a>
+						</div>
+						<div id="match_save_as_default" class="frame button">
+							<a href="javascript: client.uiManager.saveForm('manage_match');">
+								<label key="menu.save_as_default"></label>
+							</a>
+						</div>
+					</div>
 					
-					<!--
-					title
-					galaxyId 
-					speed (select with names and int values) 
-					seed (number, optional)
-					stardCondition (enum)
-					startDate (optional)
-					startSystemSelectionEnabled (checkbox)
-					startSystemCount 
-					startPopulation
-					victoryCondition (enum)
-					victoryParameter (in %, except for vendetta)
-						// select with named options: very easy, easy, medium, hard, very hard
-						// domination:					 40		 50		 60		 70		 80	      TODO ?			 
-						// extermination:			     80      90      95      99     100
-					participantsMax 	>= 2
-					participantsMin		>= 2
-					empireIds (from players)
-					plannedJoinType (enum)
-					startedJoinType (enum)
-					-->
-					<!-- TODO -->
-					
-					<div id="match_message" class="form_message">
-					</div>
-					<div id="match_error" class="form_error">
-					</div>
-					<div id="match_create" class="frame button">
-						<a href="javascript: client.uiManager.createMatch();">
-							<label key="menu.create"></label>
-						</a>
-					</div>
-					<div id="match_update" class="frame button">
-						<a href="javascript: client.uiManager.updateMatch();">
-							<label key="menu.apply_changes"></label>
-						</a>
-					</div>
-					<div id="match_start" class="frame button">
-						<a href="javascript: client.uiManager.startMatch();">
-							<label key="menu.start"></label>
-						</a>
-					</div>
-					<div id="match_cancel" class="frame button">
-						<a href="javascript: client.uiManager.cancelMatch();">
-							<label key="menu.cancel"></label>
-						</a>
-					</div>
-					<div id="match_save_as_default" class="frame button">
-						<a href="javascript: client.uiManager.saveForm('manage_match');">
-							<label key="menu.save_as_default"></label>
-						</a>
-					</div>
 				</form>
 			</div>
 		</div>
