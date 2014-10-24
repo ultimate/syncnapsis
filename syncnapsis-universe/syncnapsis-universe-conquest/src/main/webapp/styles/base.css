@@ -468,12 +468,22 @@ form.large>.select>* {
 	display: inline;
 }
 
-#manage_match .buttons {
+#manage_match .buttons_new,
+#manage_match .buttons_existing {
 	flex-direction: row;
+	display: flex;
 }
 
-#manage_match .buttons .button {
-	flex: 1;
+
+#manage_match .buttons_new .button,
+#manage_match .buttons_existing .button {
+	flex-grow: 1;
+	margin: 5px;
+}
+
+#manage_match .button.icon {
+	flex-grow: 0;
+	flex-basis: 20px;
 }
 
 .frame {

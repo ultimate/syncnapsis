@@ -452,34 +452,50 @@
 								
 					<div id="match_message" class="form_message"></div>
 					<div id="match_error" class="form_error"></div>
-					<div class="buttons atbottom centered">
-						<div id="match_create" class="frame button">
-							<a href="javascript: client.uiManager.createMatch();">
-								<label key="menu.create"></label>
+					<div class="buttons_new atbottom centered">
+						<div id="match_plan" class="frame button">
+							<a href="javascript: client.uiManager.createMatch(false);">
+								<label key="menu.match_plan"></label>
+							</a>
+						</div>
+						<div id="match_start" class="frame button">
+							<a href="javascript: client.uiManager.createMatch(true);">
+								<label key="menu.match_start"></label>
+							</a>
+						</div>
+						<div id="match_discard" class="frame button">
+							<a href="javascript: client.uiManager.discardMatch();">
+								<label key="menu.match_discard"></label>
+							</a>
+						</div>
+						<div id="match_save_as_default" class="frame button icon">
+							<a href="javascript: client.uiManager.saveForm('manage_match');">
+								[o]
+							</a>
+						</div>
+					</div>
+					<div class="buttons_existing atbottom centered">
+						<div id="match_start_now" class="frame button">
+							<a href="javascript: client.uiManager.startMatch();">
+								<label key="menu.match_start_now"></label>
 							</a>
 						</div>
 						<div id="match_update" class="frame button">
 							<a href="javascript: client.uiManager.updateMatch();">
-								<label key="menu.apply_changes"></label>
-							</a>
-						</div>
-						<div id="match_start" class="frame button">
-							<a href="javascript: client.uiManager.startMatch();">
-								<label key="menu.start"></label>
+								<label key="general.apply_changes"></label>
 							</a>
 						</div>
 						<div id="match_cancel" class="frame button">
 							<a href="javascript: client.uiManager.cancelMatch();">
-								<label key="menu.cancel"></label>
+								<label key="menu.match_cancel"></label>
 							</a>
 						</div>
-						<div id="match_save_as_default" class="frame button">
+						<div id="match_save_as_default" class="frame button icon">
 							<a href="javascript: client.uiManager.saveForm('manage_match');">
-								<label key="menu.save_as_default"></label>
+								[o]
 							</a>
 						</div>
-					</div>
-					
+					</div>					
 				</form>
 			</div>
 		</div>
