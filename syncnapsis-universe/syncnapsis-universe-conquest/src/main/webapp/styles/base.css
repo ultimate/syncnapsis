@@ -459,13 +459,17 @@ form.large>.select>* {
 }
 
 #manage_match #match_title {
-	width: 400px;
+	width: 446px;
 }
 
-#manage_match .left,
+#manage_match input {
+	float: left;
+}
+
 #manage_match .right {
-	width: 50%;
-	display: inline;
+	position: absolute;
+	right: 5px;
+	width: 45%;
 }
 
 #manage_match .buttons_new,
