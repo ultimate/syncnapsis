@@ -458,34 +458,35 @@ form.large>.select>* {
 	text-align: right;
 }
 
-#manage_match #match_title {
+.manage_match .match_title {
 	width: 446px;
 }
 
-#manage_match input {
+.manage_match input,
+.manage_match .select,
+.manage_match .select > * {
 	float: left;
 }
 
-#manage_match .right {
+.manage_match .right {
 	position: absolute;
 	right: 5px;
 	width: 45%;
 }
 
-#manage_match .buttons_new,
-#manage_match .buttons_existing {
+.manage_match .buttons_new,
+.manage_match .buttons_existing {
 	flex-direction: row;
 	display: flex;
 }
 
-
-#manage_match .buttons_new .button,
-#manage_match .buttons_existing .button {
+.manage_match .buttons_new .button,
+.manage_match .buttons_existing .button {
 	flex-grow: 1;
 	margin: 5px;
 }
 
-#manage_match .button.icon {
+.manage_match .button.icon {
 	flex-grow: 0;
 	flex-basis: 20px;
 }

@@ -102,6 +102,10 @@ UI.constants.MATCH_FILTER_PARTICIPANTS_ID = "match_filter_participants";
 UI.constants.MATCH_FILTER_GALAXY_SELECT_ID = "match_filter_galaxy_select";
 UI.constants.MATCH_FILTER_STATE_SELECT_ID = "match_filter_state_select";
 UI.constants.MATCH_RANK_TABLE_ID = "match_rank_table";
+UI.constants.MATCH_TITLE_ID = "match_title_$";
+UI.constants.MATCH_GALAXY_SELECT_ID = "match_galaxy_select_$";
+UI.constants.MATCH_SEED_ID = "match_seed_$";
+UI.constants.MATCH_SPEED_SELECT_ID = "match_speed_select_$";
 
 UI.constants.LOGIN_USERNAME_ID = "login_username";
 UI.constants.LOGIN_PASSWORD_ID = "login_password";
@@ -365,6 +369,7 @@ UIManager.prototype.onUserLoaded = function(user)
 UIManager.prototype.onGalaxiesLoaded = function(galaxies)
 {
 	console.log("galaxies loaded!");
+	this.galaxies = galaxies;
 	this.populateSelect(this.matchFilterGalaxySelect, galaxies, true);
 };
 
@@ -485,6 +490,7 @@ UIManager.prototype.updateMatchRankTable = function(match)
 UIManager.prototype.showMatch = function(match)
 {
 	var titleKey;
+	var id;
 	if(match == null)
 	{
 		match = {
@@ -492,18 +498,35 @@ UIManager.prototype.showMatch = function(match)
 			id: null // new match
 		}; // TODO load from local storage
 		titleKey = "menu.match_create";
+		id = "new";
 	}
 	else
 	{
 		titleKey = "menu.match_administate";
+		id = match.id;
 	}
-	var win = this.getWindowFromTemplate(match.id, "content_manage_match", titleKey);
+	var win = this.getWindowFromTemplate(id, "content_manage_match", titleKey);
 	win.setSize(600,500);
 	win.center();
 	win.setMovable(true);
 	
+	if(!win.matchGalaxySelect)
+	{
+		win.matchGalaxySelect = new Select(UI.constants.MATCH_GALAXY_SELECT_ID.replace(UI.constants.PLACEHOLDER, id));
+		win.matchGalaxySelect.getOptionContent = this.matchFilterGalaxySelect.getOptionContent; // set renderer
+		this.populateSelect(win.matchGalaxySelect, this.galaxies, false);
+	}
+	if(!win.matchSpeedSelect)
+	{
+		win.matchSpeedSelect = new Select(UI.constants.MATCH_SPEED_SELECT_ID.replace(UI.constants.PLACEHOLDER, id));
+	}
+	
 	// populate form
-		
+	// disable where necessary
+
+	// force label update
+	this.updateLabels(win);
+	// show window
 	win.setVisible(true);
 };
 
