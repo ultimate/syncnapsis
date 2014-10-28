@@ -119,7 +119,7 @@
 			<span class="top_toggle" onclick="javascript: client.uiManager.toggleTop();"><img id="top_toggle_arrow" class="" src="images/arrow-down.png" /></span>
 		</div>
 		<div id="bar_top_sub" class="frame">
-			<form onsubmit="javascript: client.uiManager.filterMatches(); return false;" class="small">
+			<form onsubmit="javascript: client.uiManager.filterMatches(); return false;" class="leftaligned">
 			    <input type="submit" style="display: none;"/>
 				<label key="general.prefix" for="match_filter_prefix"></label><input id="match_filter_prefix" type="text" class="long"/><br/> 
 				<label key="match.state" for="match_filter_state_select"></label><div id="match_filter_state_select" class="long"></div><br/>
@@ -170,7 +170,7 @@
 		<div id="userbar" class="frame">
 			<div>
 			<div id="user_login">
-				<form onsubmit="javascript: client.uiManager.doLogin(); return false;" class="small">
+				<form onsubmit="javascript: client.uiManager.doLogin(); return false;" class="leftaligned">
 					<label key="profile.username" for="login_username"></label><input id="login_username" type="text"/><br/>
 					<label key="profile.password" for="login_password"></label><input id="login_password" type="password"/><br/>
 				    <input type="submit" style="display: none;"/>
@@ -208,12 +208,11 @@
 			</div>
 			<div id="menu_2" class="">
 				<h3><label key="menu.profile"></label></h3>
-				<form onsubmit="return false;">
-					<label key="profile.username" for="profile_username"></label><input id="profile_username" type="text" disabled=""/><br/>
-					<label key="profile.gender" for="profile_gender"></label><div id="profile_gender"></div><br/>
-					<!-- <label key="profile.gender" for="profile_gender"></label><input id="profile_gender" type="text"/><br/>-->
-					<label key="profile.birthday" for="profile_birthday"></label><input id="profile_birthday" type="date" disabled=""/><br/> <!-- will enable as soon as FF supports type="date" -->
-					<label key="profile.dateFormat" for="profile_dateFormat"></label><input id="profile_dateFormat" type="text" disabled=""/><br/>
+				<form onsubmit="return false;" class="rightaligned">
+					<label key="profile.username" for="profile_username"></label><input id="profile_username" type="text" disabled="" class="medium"/><br/>
+					<label key="profile.gender" for="profile_gender"></label><div id="profile_gender" class="medium"></div><br/>
+					<label key="profile.birthday" for="profile_birthday"></label><input id="profile_birthday" type="date" disabled="" class="medium"/><br/> <!-- will enable as soon as FF supports type="date" -->
+					<label key="profile.dateFormat" for="profile_dateFormat"></label><input id="profile_dateFormat" type="text" disabled="" class="medium"/><br/>
 					<label key="profile.timeZoneID" for="profile_timeZoneID"></label><input id="profile_timeZoneID_region" type="text" class="half" disabled=""/><input id="profile_timeZoneID_id" class="half" type="text" disabled=""/><br/>
 					<div id="profile_message" class="form_message">
 					</div>
@@ -226,19 +225,19 @@
 					</div>
 				</form>
 				<h4><label key="menu.account_status"></label></h4>
-				<form onsubmit="return false;">
-					<label key="profile.registrationDate" for="profile_registrationDate"></label><input id="profile_registrationDate" type="text" disabled=""/><br/>
-					<label key="profile.accountStatus" for="profile_accountStatus"></label><input id="profile_accountStatus" type="text" disabled=""/><br/>
-					<label key="profile.accountStatusExpireDate" for="profile_accountStatusExpireDate"></label><input id="profile_accountStatusExpireDate" type="text" disabled=""/><br/>
+				<form onsubmit="return false;" class="rightaligned">
+					<label key="profile.registrationDate" for="profile_registrationDate"></label><input id="profile_registrationDate" type="text" disabled="" class="medium"/><br/>
+					<label key="profile.accountStatus" for="profile_accountStatus"></label><input id="profile_accountStatus" type="text" disabled="" class="medium"/><br/>
+					<label key="profile.accountStatusExpireDate" for="profile_accountStatusExpireDate"></label><input id="profile_accountStatusExpireDate" type="text" disabled="" class="medium"/><br/>
 				</form>
 			</div>
 			<div id="menu_3" class="">
 				<h3><label key="menu.security"></label></h3>
 				<h4><label key="menu.password"></label></h4>
-				<form onsubmit="return false;">
-					<label key="profile.password_old" for="profile_password_old"></label><input id="profile_password_old" type="password"/><br/>
-					<label key="profile.password_new" for="profile_password_new"></label><input id="profile_password_new" type="password"/><br/>
-					<label key="profile.password_confirm" for="profile_password_confirm"></label><input id="profile_password_confirm" type="password"/><br/>
+				<form onsubmit="return false;" class="rightaligned">
+					<label key="profile.password_old" for="profile_password_old"></label><input id="profile_password_old" type="password" class="medium"/><br/>
+					<label key="profile.password_new" for="profile_password_new"></label><input id="profile_password_new" type="password" class="medium"/><br/>
+					<label key="profile.password_confirm" for="profile_password_confirm"></label><input id="profile_password_confirm" type="password" class="medium"/><br/>
 					<div id="password_message" class="form_message">
 					</div>
 					<div id="password_error" class="form_error">
@@ -250,8 +249,8 @@
 					</div>
 				</form>
 				<h4><label key="menu.email"></label></h4>
-				<form onsubmit="return false;">
-					<label key="profile.email" for="profile_email"></label><input id="profile_email" type="text"/><br/>
+				<form onsubmit="return false;" class="rightaligned">
+					<label key="profile.email" for="profile_email"></label><input id="profile_email" type="text" class="medium"/><br/>
 					<div id="email_message" class="form_message">
 					</div>
 					<div id="email_error" class="form_error">
@@ -379,11 +378,11 @@
 		</div>
 		<div id="content_register">
 			<div id="user_register">
-				<form onsubmit="javascript: client.uiManager.doRegister(); return false;" class="large">
-					<label key="profile.username" for="reg_username"></label><input id="reg_username" type="text"/><br/>
-					<label key="profile.email" for="reg_email"></label><input id="reg_email" type="text"/><br/>
-					<label key="profile.password" for="reg_password"></label><input id="reg_password" type="password"/><br/>
-					<label key="profile.password_confirm" for="reg_password2"></label><input id="reg_password2" type="password"/><br/>
+				<form onsubmit="javascript: client.uiManager.doRegister(); return false;" class="rightaligned">
+					<label key="profile.username" for="reg_username"></label><input id="reg_username" type="text" class="long"/><br/>
+					<label key="profile.email" for="reg_email"></label><input id="reg_email" type="text" class="long"/><br/>
+					<label key="profile.password" for="reg_password"></label><input id="reg_password" type="password" class="long"/><br/>
+					<label key="profile.password_confirm" for="reg_password2"></label><input id="reg_password2" type="password" class="long"/><br/>
 					<div id="reg_message" class="form_message">
 					</div>
 					<div id="reg_error" class="form_error">
@@ -399,9 +398,9 @@
 		</div>
 		<div id="content_forgot_password">
 			<div>
-				<form onsubmit="javascript: client.uiManager.forgotPassword(); return false;" class="large">
-					<label key="profile.username" for="forgot_username"></label><input id="forgot_username" type="text"/><br/>
-					<label key="profile.email" for="forgot_email"></label><input id="forgot_email" type="text"/><br/>
+				<form onsubmit="javascript: client.uiManager.forgotPassword(); return false;" class="rightaligned">
+					<label key="profile.username" for="forgot_username"></label><input id="forgot_username" type="text" class="long"/><br/>
+					<label key="profile.email" for="forgot_email"></label><input id="forgot_email" type="text" class="long"/><br/>
 					<div id="forgot_message" class="form_message">
 					</div>
 					<div id="forgot_error" class="form_error">
@@ -417,15 +416,15 @@
 		</div>
 		<div id="content_manage_match">
 			<div>
-				<form id="manage_match_$" onsubmit="return false;" class="manage_match">
+				<form id="manage_match_$" onsubmit="return false;" class="manage_match leftaligned">
 					<input type="hidden" id="match_id_$"/>
 					<label key="match.title" for="match_title_$"></label><input id="match_title_$" type="text" class="match_title"/><br/>
 					<div class="right">
 					<h4><label key="match.participants"></label></h4>
 					</div>
-					<label key="match.galaxy" for="match_galaxy_select_$"></label><div id="match_galaxy_select_$" class="long"></div><br/>
-					<label key="match.seed" for="match_seed_$"></label><input id="match_seed_$" type="text" class="long"/><br/>
-					<label key="match.speed" for="match_speed_select_$"></label><div id="match_speed_select_$" class="long"></div><br/>
+					<label key="match.galaxy" for="match_galaxy_select_$"></label><div id="match_galaxy_select_$" class="match_galaxy_select verylong"></div><br/>
+					<label key="match.seed" for="match_seed_$"></label><input id="match_seed_$" type="text" class="match_seed verylong"/><br/>
+					<label key="match.speed" for="match_speed_select_$"></label><div id="match_speed_select_$" class="match_speed_select verylong"></div><br/>
 						<!--
 						title
 						galaxyId 

@@ -183,79 +183,84 @@ body, select {
 	overflow: hidden;
 }
 
-form,
-form.small,
-form.large {
+form {
 	line-height: 20px;
 }
 
-form.small>label,
+form.leftaligned>label,
 #user_login>a {
 	width: 100px;
 	display: block;
-	float: left;
+	float: left;	
 }
 
-form>label {
+form.leftaligned>label.medium {
 	width: 140px;
-	display: block;
-	float: left;
 }
 
-form.large>label {
+form.leftaligned>label.large {
 	width: 150px;
-	display: block;
+}
+
+form.leftaligned>input,
+form.leftaligned>.select,
+form.leftaligned>.select>*,
+#user_login>a+a {
 	float: left;
 }
 
-form.small>input,
+form.rightaligned>input, 
+form.rightaligned>.select,
+form.rightaligned>.select>*{
+	float:right;
+}
+
+form>input,
 #user_login>a+a {
 	width: 130px;
-	float: left;
 }
 
-form.small>input.half {
-	width: 65px;
+form>input.half {
+	width: 73px;
 }
 
-form.small>input.long {
-	width: 200px;
+form>input.medium {
+	width: 150px;
 }
 
-form>input {
-	width: 140px;
-	float: right;
-}
-
-form.large>input {
+form>input.long{
 	width: 230px;
-	float: right;
+}
+
+form>input.verylong {
+	width: 300px;
 }
 
 /* selects require some extra attention */
 
-form.small>.select,
-form.small>.select>* {
-	width: 132px;
-	float: left;
-}
-
-form.small>.select.long,
-form.small>.select.long>* {
-	width: 202px;
-	float: left;
-}
-
 form>.select,
 form>.select>* {
-	width: 142px;
-	float: right;
+	width: 132px;
 }
 
-form.large>.select,
-form.large>.select>* {
+form>.select.half,
+form>.select.half>* {
+	width: 75px;
+}
+
+form>.select.medium,
+form>.select.medium>* {
+	width: 152px;
+}
+
+form>.select.long,
+form>.select.long>* {
 	width: 232px;
-	float: right;
+}
+
+form>.select.verylong,
+form>.select.verylong>* {
+	width: 302px;
 }
 
 #menu #nav {
@@ -360,17 +365,20 @@ form.large>.select>* {
 	left: 150px;
 }
 
-#bar_top #match_filter_galaxy_select .col_1 {
+#bar_top #match_filter_galaxy_select .col_1,
+.manage_match .match_galaxy_select .col_1 {
 	position: absolute;
 	left: 5px;
 }
 
-#bar_top #match_filter_galaxy_select .col_2 {
+#bar_top #match_filter_galaxy_select .col_2,
+.manage_match .match_galaxy_select .col_2 {
 	position: absolute;
 	left: 30px;
 }
 
-#bar_top #match_filter_galaxy_select .col_3 {
+#bar_top #match_filter_galaxy_select .col_3,
+.manage_match .match_galaxy_select .col_3 {
 	position: absolute;
 	left: 250px;
 }
