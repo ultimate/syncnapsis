@@ -229,11 +229,11 @@ form>input.medium {
 }
 
 form>input.long{
-	width: 230px;
+	width: 200px;
 }
 
 form>input.verylong {
-	width: 300px;
+	width: 250px;
 }
 
 /* selects require some extra attention */
@@ -255,12 +255,12 @@ form>.select.medium>* {
 
 form>.select.long,
 form>.select.long>* {
-	width: 232px;
+	width: 202px;
 }
 
 form>.select.verylong,
 form>.select.verylong>* {
-	width: 302px;
+	width: 252px;
 }
 
 #menu #nav {
@@ -467,7 +467,12 @@ form>.select.verylong>* {
 }
 
 .manage_match .match_title {
-	width: 446px;
+	width: 436px;
+}
+
+.manage_match .match_galaxy_select,
+.manage_match .match_galaxy_select>* {
+	width: 438px;
 }
 
 .manage_match input,
@@ -479,7 +484,11 @@ form>.select.verylong>* {
 .manage_match .right {
 	position: absolute;
 	right: 5px;
-	width: 45%;
+	width: 35%;
+}
+
+.manage_match .right h4 {
+	margin-top: 20px;
 }
 
 .manage_match .buttons_new,

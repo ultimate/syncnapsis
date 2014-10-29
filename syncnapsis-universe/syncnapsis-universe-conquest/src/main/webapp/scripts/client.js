@@ -495,7 +495,8 @@ UIManager.prototype.showMatch = function(match)
 	{
 		match = {
 			j_type: Types.Match,
-			id: null // new match
+			id: null, // new match
+			seed: new Date().getTime(),
 		}; // TODO load from local storage
 		titleKey = "menu.match_create";
 		id = "new";
@@ -519,6 +520,7 @@ UIManager.prototype.showMatch = function(match)
 	if(!win.matchSpeedSelect)
 	{
 		win.matchSpeedSelect = new Select(UI.constants.MATCH_SPEED_SELECT_ID.replace(UI.constants.PLACEHOLDER, id));
+		this.populateEnumSelect(win.matchSpeedSelect, lang.EnumMatchSpeed, false);
 	}
 	
 	// populate form

@@ -34,6 +34,14 @@ lang.EnumMatchState.active 		= "active";
 lang.EnumMatchState.finished	= "finished";
 lang.EnumMatchState.canceled	= "canceled";
 
+lang.EnumMatchSpeed = {};
+lang.EnumMatchSpeed.value0 		= "Slow motion (x1)";
+lang.EnumMatchSpeed.value1 		= "Easy going (x10)";
+lang.EnumMatchSpeed.value2 		= "Normal (x100)";
+lang.EnumMatchSpeed.value3 		= "Frenzy (x1k)";
+lang.EnumMatchSpeed.value4		= "Time lapse (x10k)";
+lang.EnumMatchSpeed.value5		= "Speed of light (x100k)";
+
 lang.error = {};
 lang.error.error				= "Error";
 lang.error.email_exists 		= lang.error.error + ": e-mail-address is already registered!";
@@ -56,6 +64,8 @@ lang.match.creator				= "Creator";
 lang.match.galaxy				= "Galaxy";
 lang.match.participant			= "Participant";
 lang.match.participants			= "Participants";
+lang.match.speed				= "Speed";
+lang.match.seed					= "Seed";
 lang.match.state				= "Status";
 lang.match.title				= "Title";
 

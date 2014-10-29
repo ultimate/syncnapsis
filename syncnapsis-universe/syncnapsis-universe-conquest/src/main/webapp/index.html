@@ -418,16 +418,14 @@
 			<div>
 				<form id="manage_match_$" onsubmit="return false;" class="manage_match leftaligned">
 					<input type="hidden" id="match_id_$"/>
-					<label key="match.title" for="match_title_$"></label><input id="match_title_$" type="text" class="match_title"/><br/>
+					<label key="match.title" for="match_title_$" class="large"></label><input id="match_title_$" type="text" class="match_title"/><br/>
+					<label key="match.galaxy" for="match_galaxy_select_$" class="large"></label><div id="match_galaxy_select_$" class="match_galaxy_select"></div><br/>
 					<div class="right">
 					<h4><label key="match.participants"></label></h4>
 					</div>
-					<label key="match.galaxy" for="match_galaxy_select_$"></label><div id="match_galaxy_select_$" class="match_galaxy_select verylong"></div><br/>
-					<label key="match.seed" for="match_seed_$"></label><input id="match_seed_$" type="text" class="match_seed verylong"/><br/>
-					<label key="match.speed" for="match_speed_select_$"></label><div id="match_speed_select_$" class="match_speed_select verylong"></div><br/>
+					<label key="match.seed" for="match_seed_$" class="large"></label><input id="match_seed_$" type="text" class="match_seed long"/><br/>
+					<label key="match.speed" for="match_speed_select_$" class="large"></label><div id="match_speed_select_$" class="match_speed_select long"></div><br/>
 						<!--
-						title
-						galaxyId 
 						speed (select with names and int values) 
 						seed (number, optional)
 						stardCondition (enum)
