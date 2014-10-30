@@ -28,19 +28,34 @@ lang.EnumGender.male		= "männlich";
 lang.EnumGender.transsexual	= "transsexuell";
 lang.EnumGender.unknown		= "unbekannt";
 
-lang.EnumMatchState = {};
-lang.EnumMatchState.planned 	= "geplant";
-lang.EnumMatchState.active 		= "aktiv";
-lang.EnumMatchState.finished	= "beendet";
-lang.EnumMatchState.canceled	= "abgebrochen";
+lang.EnumJoinType = {};
+lang.EnumJoinType.invitationsOnly 	= "Nur per Einladung";
+lang.EnumJoinType.joiningEnabled	= "Jeder";
+lang.EnumJoinType.none				= "Niemand";
 
-lang.EnumMatchSpeed = {};
+lang.EnumMatchSpeed = {}; // no true enum; for usability only
 lang.EnumMatchSpeed.value0		= "Zeitlupe (x1)";
 lang.EnumMatchSpeed.value1 		= "Entspannt (x10)";
 lang.EnumMatchSpeed.value2 		= "Normal (x100)";
 lang.EnumMatchSpeed.value3 		= "Hektisch (x1k)";
 lang.EnumMatchSpeed.value4		= "Zeiraffer (x10k)";
 lang.EnumMatchSpeed.value5		= "Lichtgeschwindigkeit (x100k)";
+
+lang.EnumMatchState = {};
+lang.EnumMatchState.planned 	= "geplant";
+lang.EnumMatchState.active 		= "aktiv";
+lang.EnumMatchState.finished	= "beendet";
+lang.EnumMatchState.canceled	= "abgebrochen";
+
+lang.EnumStartCondition = {};
+lang.EnumStartCondition.immediately	= "sofort";
+lang.EnumStartCondition.manually 	= "manuell";
+lang.EnumStartCondition.planned		= "geplant";
+
+lang.EnumVictoryCondition = {};
+lang.EnumVictoryCondition.domination 	= "Vorherrschaft";
+lang.EnumVictoryCondition.extermination	= "Vernichtung";
+lang.EnumVictoryCondition.vendetta		= "Vendetta";
 
 lang.error = {};
 lang.error.error				= "Fehler";
@@ -100,10 +115,10 @@ lang.menu.match_cancel			= "Spiel abbrechen";
 lang.menu.match_create 			= "Neues Spiel erstellen";
 lang.menu.match_discard			= "Spiel verwerfen";
 lang.menu.match_filter			= "Spiele filtern";
-lang.menu.match_plan			= "Spiel anlegen und später starten";
+//lang.menu.match_plan			= "Spiel anlegen und später starten";
 lang.menu.match_reset_filters	= "Filter zurücksetzen";
 lang.menu.match_select			= "Spiel-Auswahl";
-lang.menu.match_start			= "Spiel sofort starten";
+//lang.menu.match_start			= "Spiel sofort starten";
 lang.menu.match_start_now		= "Spiel jetzt starten";
 lang.menu.news 					= "Neuigkeiten";
 lang.menu.password				= "Passwort"

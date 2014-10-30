@@ -28,19 +28,34 @@ lang.EnumGender.male		= "male";
 lang.EnumGender.transsexual	= "transsexual";
 lang.EnumGender.unknown		= "unknown";
 
+lang.EnumJoinType = {};
+lang.EnumJoinType.invitationsOnly 	= "Only by invitation";
+lang.EnumJoinType.joiningEnabled	= "Everybody";
+lang.EnumJoinType.none				= "Nobody";
+
+lang.EnumMatchSpeed = {}; // no true enum; for usability only
+lang.EnumMatchSpeed.value0		= "Slow motion (x1)";
+lang.EnumMatchSpeed.value1 		= "Easy going (x10)";
+lang.EnumMatchSpeed.value2 		= "Normal (x100)";
+lang.EnumMatchSpeed.value3 		= "Frenzy (x1k)";
+lang.EnumMatchSpeed.value4		= "Time lapse (x10k)";
+lang.EnumMatchSpeed.value5		= "Speed of light (x100k)";
+
 lang.EnumMatchState = {};
 lang.EnumMatchState.planned 	= "planned";
 lang.EnumMatchState.active 		= "active";
 lang.EnumMatchState.finished	= "finished";
 lang.EnumMatchState.canceled	= "canceled";
 
-lang.EnumMatchSpeed = {};
-lang.EnumMatchSpeed.value0 		= "Slow motion (x1)";
-lang.EnumMatchSpeed.value1 		= "Easy going (x10)";
-lang.EnumMatchSpeed.value2 		= "Normal (x100)";
-lang.EnumMatchSpeed.value3 		= "Frenzy (x1k)";
-lang.EnumMatchSpeed.value4		= "Time lapse (x10k)";
-lang.EnumMatchSpeed.value5		= "Speed of light (x100k)";
+lang.EnumStartCondition = {};
+lang.EnumStartCondition.immediately	= "immediately";
+lang.EnumStartCondition.manually 	= "manually";
+lang.EnumStartCondition.planned		= "planned";
+
+lang.EnumVictoryCondition = {};
+lang.EnumVictoryCondition.domination 	= "Domination";
+lang.EnumVictoryCondition.extermination	= "Extermination";
+lang.EnumVictoryCondition.vendetta		= "Vendetta";
 
 lang.error = {};
 lang.error.error				= "Error";
@@ -100,10 +115,10 @@ lang.menu.match_cancel			= "Cancel match";
 lang.menu.match_create 			= "Create new match";
 lang.menu.match_discard			= "Discard match";
 lang.menu.match_filter			= "Filter matches";
-lang.menu.match_plan			= "Create match and start later";
+//lang.menu.match_plan			= "Create match and start later";
 lang.menu.match_reset_filters	= "Reset filters";
 lang.menu.match_select			= "Match selection";
-lang.menu.match_start			= "Start match immediately";
+//lang.menu.match_start			= "Start match immediately";
 lang.menu.match_start_now		= "Start match now";
 lang.menu.news 					= "News";
 lang.menu.password				= "Password";

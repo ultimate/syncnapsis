@@ -425,11 +425,11 @@
 					</div>
 					<label key="match.seed" for="match_seed_$" class="large"></label><input id="match_seed_$" type="text" class="match_seed long"/><br/>
 					<label key="match.speed" for="match_speed_select_$" class="large"></label><div id="match_speed_select_$" class="match_speed_select long"></div><br/>
+					<!-- ? -->
+					<label key="match.startCondition" for="match_startCondition_select_$" class="large"></label><div id="match_startCondition_select_$" class="match_startCondition_select long"></div><br/>
+					<label key="match.startDate" for="match_startDate_$" class="large"></label><input id="match_startDate_$" type="datetime" class="match_startDate long" disabled=""/><br/>
+					
 						<!--
-						speed (select with names and int values) 
-						seed (number, optional)
-						stardCondition (enum)
-						startDate (optional)
 						startSystemSelectionEnabled (checkbox)
 						startSystemCount 
 						startPopulation
@@ -450,6 +450,12 @@
 					<div id="match_error_$" class="form_error"></div>
 					<div id="match_buttons_new_$" class="buttons_new atbottom centered">
 						<div id="match_plan_$" class="frame button">
+							<a href="javascript: client.uiManager.createMatch('manage_match_$');">
+								<label key="menu.match_create"></label>
+							</a>
+						</div>
+						<!-- 
+						<div id="match_plan_$" class="frame button">
 							<a href="javascript: client.uiManager.createMatch('manage_match_$', false);">
 								<label key="menu.match_plan"></label>
 							</a>
@@ -459,6 +465,7 @@
 								<label key="menu.match_start"></label>
 							</a>
 						</div>
+						 -->
 						<div id="match_discard_$" class="frame button">
 							<a href="javascript: client.uiManager.discardMatch('manage_match_$');">
 								<label key="menu.match_discard"></label>
