@@ -106,6 +106,10 @@ UI.constants.MATCH_TITLE_ID = "match_title_$";
 UI.constants.MATCH_GALAXY_SELECT_ID = "match_galaxy_select_$";
 UI.constants.MATCH_SEED_ID = "match_seed_$";
 UI.constants.MATCH_SPEED_SELECT_ID = "match_speed_select_$";
+UI.constants.MATCH_STARTCONDITION_SELECT_ID = "match_startCondition_select_$";
+UI.constants.MATCH_STARTDATE_ID = "match_startDate_$";
+UI.constants.MATCH_STARTSYSTEMSELECTIONENABLED_SELECT_ID = "match_startSystemSelectionEnabled_select_$";
+UI.constants.MATCH_STARTSYSTEMCOUNT_ID = "match_startSystemCount_$";
 
 UI.constants.LOGIN_USERNAME_ID = "login_username";
 UI.constants.LOGIN_PASSWORD_ID = "login_password";
@@ -521,6 +525,16 @@ UIManager.prototype.showMatch = function(match)
 	{
 		win.matchSpeedSelect = new Select(UI.constants.MATCH_SPEED_SELECT_ID.replace(UI.constants.PLACEHOLDER, id));
 		this.populateEnumSelect(win.matchSpeedSelect, lang.EnumMatchSpeed, false);
+	}
+	if(!win.matchStartConditionSelect)
+	{
+		win.matchStartConditionSelect = new Select(UI.constants.MATCH_STARTCONDITION_SELECT_ID.replace(UI.constants.PLACEHOLDER, id));
+		this.populateEnumSelect(win.matchStartConditionSelect, lang.EnumStartCondition, false);
+	}
+	if(!win.matchStartSystemSelectionEnabledSelect)
+	{
+		win.matchStartSystemSelectionEnabledSelect = new Select(UI.constants.MATCH_STARTSYSTEMSELECTIONENABLED_SELECT_ID.replace(UI.constants.PLACEHOLDER, id));
+		this.populateEnumSelect(win.matchStartSystemSelectionEnabledSelect, lang.EnumManually, false);
 	}
 	
 	// populate form

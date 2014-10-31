@@ -57,6 +57,18 @@ lang.EnumVictoryCondition.domination 	= "Domination";
 lang.EnumVictoryCondition.extermination	= "Extermination";
 lang.EnumVictoryCondition.vendetta		= "Vendetta";
 
+lang.EnumYesNo = {};
+lang.EnumYesNo.value0		= "No";
+lang.EnumYesNo.value1		= "Yes";
+
+lang.EnumEnabled= {};
+lang.EnumEnabled.value0		= "Disabled";
+lang.EnumEnabled.value1		= "Enabled";
+
+lang.EnumManually = {};
+lang.EnumManually.value0	= "Automatic";
+lang.EnumManually.value1	= "Manually";
+
 lang.error = {};
 lang.error.error				= "Error";
 lang.error.email_exists 		= lang.error.error + ": e-mail-address is already registered!";
@@ -75,14 +87,18 @@ lang.general.save_as_default	= "Save as default";
 lang.general.suffix				= "Ending with";
 
 lang.match = {};
-lang.match.creator				= "Creator";
-lang.match.galaxy				= "Galaxy";
-lang.match.participant			= "Participant";
-lang.match.participants			= "Participants";
-lang.match.speed				= "Speed";
-lang.match.seed					= "Seed";
-lang.match.state				= "Status";
-lang.match.title				= "Title";
+lang.match.creator						= "Creator";
+lang.match.galaxy						= "Galaxy";
+lang.match.participant					= "Participant";
+lang.match.participants					= "Participants";
+lang.match.speed						= "Speed";
+lang.match.seed							= "Seed";
+lang.match.startCondition				= "Start condition";
+lang.match.startDate					= "Start date";
+lang.match.startSystemCount				= "Start system count";
+lang.match.startSystemSelectionEnabled	= "Start system selection";
+lang.match.state						= "Status";
+lang.match.title						= "Title";
 
 lang.message = {};
 lang.message.error						= "An error occurred! Please try again...";
