@@ -95,6 +95,7 @@ lang.match.speed						= "Geschwindigkeit";
 lang.match.seed							= "Seed";
 lang.match.startCondition				= "Start-Bedingung";
 lang.match.startDate					= "Start-Datum";
+lang.match.startPopulation				= "Start-Bevölkerung";
 lang.match.startSystemCount				= "Anzahl Start-Systeme";
 lang.match.startSystemSelectionEnabled	= "Start-System-Auswahl";
 lang.match.state						= "Status";
