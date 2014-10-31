@@ -100,6 +100,7 @@ lang.match.startSystemCount				= "Anzahl Start-Systeme";
 lang.match.startSystemSelectionEnabled	= "Start-System-Auswahl";
 lang.match.state						= "Status";
 lang.match.title						= "Titel";
+lang.match.victoryCondition				= "Sieg-Bedingung";
 
 lang.message = {};
 lang.message.error						= "Es ist ein Fehler aufgetreten! Bitte versuche es erneut...";

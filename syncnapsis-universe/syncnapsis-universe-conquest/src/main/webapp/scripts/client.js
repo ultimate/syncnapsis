@@ -110,6 +110,8 @@ UI.constants.MATCH_STARTCONDITION_SELECT_ID = "match_startCondition_select_$";
 UI.constants.MATCH_STARTDATE_ID = "match_startDate_$";
 UI.constants.MATCH_STARTSYSTEMSELECTIONENABLED_SELECT_ID = "match_startSystemSelectionEnabled_select_$";
 UI.constants.MATCH_STARTSYSTEMCOUNT_ID = "match_startSystemCount_$";
+UI.constants.MATCH_STARTPOPULATION_ID = "match_startPopulation_$";
+UI.constants.MATCH_VICTORYCONDITION_SELECT_ID = "match_victoryCondition_select_$";
 
 UI.constants.LOGIN_USERNAME_ID = "login_username";
 UI.constants.LOGIN_PASSWORD_ID = "login_password";
@@ -535,6 +537,11 @@ UIManager.prototype.showMatch = function(match)
 	{
 		win.matchStartSystemSelectionEnabledSelect = new Select(UI.constants.MATCH_STARTSYSTEMSELECTIONENABLED_SELECT_ID.replace(UI.constants.PLACEHOLDER, id));
 		this.populateEnumSelect(win.matchStartSystemSelectionEnabledSelect, lang.EnumManually, false);
+	}
+	if(!win.matchVictoryConditionSelect)
+	{
+		win.matchVictoryConditionSelect = new Select(UI.constants.MATCH_VICTORYCONDITION_SELECT_ID.replace(UI.constants.PLACEHOLDER, id));
+		this.populateEnumSelect(win.matchVictoryConditionSelect, lang.EnumVictoryCondition, false);
 	}
 	
 	// populate form
