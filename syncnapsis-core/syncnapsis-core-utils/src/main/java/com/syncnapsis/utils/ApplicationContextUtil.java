@@ -366,6 +366,6 @@ public class ApplicationContextUtil implements ApplicationContextAware
 	 */
 	public static GenericApplicationContext createApplicationContext(String... locations)
 	{
-		return new ContextLoader(locations).loadContext();
+		return new ContextLoader().load(null, locations);
 	}
 }

@@ -15,8 +15,6 @@
 package com.syncnapsis.utils.spring;
 
 import java.io.File;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Properties;
 
@@ -31,6 +29,8 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.context.support.GenericApplicationContext;
 import org.springframework.core.io.FileSystemResource;
+
+import com.syncnapsis.utils.ApplicationContextUtil;
 
 /**
  * This context loader provides simplified support for creating {@link ApplicationContext}s
@@ -53,45 +53,16 @@ public class ContextLoader
 	private int							ppcCount	= 0;
 
 	/**
-	 * The location {@link List} used for loading beans for this {@link ContextLoader}
-	 */
-	protected List<String>				locations;
-	/**
 	 * Get the {@link GenericApplicationContext} held by this context loader
 	 */
 	protected GenericApplicationContext	context;
 
 	/**
-	 * Create a new {@link ContextLoader} from a location {@link List}
-	 * 
-	 * @param locations - the location {@link List} used for loading beans for this
-	 *            {@link ContextLoader}
+	 * Create a new {@link ContextLoader} 
 	 */
-	public ContextLoader(List<String> locations)
+	public ContextLoader()
 	{
-		this.locations = Collections.unmodifiableList(locations);
 		this.context = null;
-	}
-
-	/**
-	 * Create a new {@link ContextLoader} from a location list as an varargs array
-	 * 
-	 * @param locations - the locations used for loading beans for this {@link ContextLoader} as an
-	 *            varargs array
-	 */
-	public ContextLoader(String... locations)
-	{
-		this(Arrays.asList(locations));
-	}
-
-	/**
-	 * The location {@link List} used for loading beans for this {@link ContextLoader}
-	 * 
-	 * @return the list of locations
-	 */
-	public List<String> getLocations()
-	{
-		return locations;
 	}
 
 	/**
@@ -105,48 +76,26 @@ public class ContextLoader
 	}
 
 	/**
-	 * Method executed by {@link ContextLoader#loadContext()} <b>before</b>
-	 * {@link ContextLoader#loadBeans()} is called.<br>
-	 * Override this method for example if you want to inject beans prior to loading the beans from
-	 * the locations.
-	 */
-	public void beforeLoadBeans()
-	{
-
-	}
-
-	/**
-	 * Method executed by {@link ContextLoader#loadContext()} <b>after</b>
-	 * {@link ContextLoader#loadBeans()} is called.<br>
-	 * Override this method for example if you want to inject beans after to loading the beans from
-	 * the locations or if you want to check the application context for validity / completeness.
-	 */
-	public void afterLoadBeans()
-	{
-
-	}
-
-	/**
 	 * Load the {@link ApplicationContext} from the locations given on initialization with regard to
 	 * {@link ContextLoader#beforeLoadBeans()} and {@link ContextLoader#afterLoadBeans()}
 	 * 
 	 * @return the context created
 	 */
-	public GenericApplicationContext loadContext()
+	public GenericApplicationContext load(ContextConfigurer configurer, String... locations)
 	{
 		if(this.context != null)
 			throw new IllegalStateException("context already initialized!");
 
 		this.context = new GenericApplicationContext();
 
-		// call beforeLoadBeans() for override purposes
-		beforeLoadBeans();
+		// configure the context
+		configurer.beforeLoadBeans(this);
 
 		// load beans from the locations
-		loadBeans();
+		loadBeans(locations);
 
-		// call afterLoadBeans() for override purposes
-		afterLoadBeans();
+		// configure the context
+		configurer.afterLoadBeans(this);
 
 		return getContext();
 	}
@@ -168,13 +117,13 @@ public class ContextLoader
 	 * @see ContextLoader#ContextLoader(List)
 	 * @see ContextLoader#getLocations()
 	 */
-	protected void loadBeans()
+	protected void loadBeans(String... locations)
 	{
 		XmlBeanDefinitionReader reader = new XmlBeanDefinitionReader(this.context);
 		int loaded;
-		if(this.locations != null)
+		if(locations != null)
 		{
-			for(String location : this.locations)
+			for(String location : locations)
 			{
 				try
 				{
@@ -191,16 +140,41 @@ public class ContextLoader
 	}
 
 	/**
-	 * Get a specific bean from the underlying {@link ApplicationContext}
+	 * Gets a Bean by the given ClassName from the underlying {@link ApplicationContext}
 	 * 
-	 * @see ApplicationContext#getBean(String, Class)
-	 * @param name - the name of the bean
-	 * @param type - the type of the bean
-	 * @return the bean
+	 * @see ApplicationContextUtil#getBean(ApplicationContext, Class)
+	 * @param <T> - the type of the Bean
+	 * @param cls - the class of the Bean
+	 * @return the Bean
 	 */
-	protected <T> T getBean(String name, Class<T> type)
+	public <T> T getBean(Class<T> cls)
 	{
-		return this.context.getBean(name, type);
+		return ApplicationContextUtil.getBean(this.context, cls);
+	}
+
+	/**
+	 * Gets a Bean by the given name from the underlying {@link ApplicationContext}
+	 * 
+	 * @see ApplicationContextUtil#getBean(ApplicationContext, String)
+	 * @param name - the name of the Bean
+	 * @return the Bean
+	 */
+	public Object getBean(String name)
+	{
+		return ApplicationContextUtil.getBean(this.context, name);
+	}
+
+	/**
+	 * Gets a Bean by the given name and class from the underlying {@link ApplicationContext}
+	 * 
+	 * @see ApplicationContextUtil#getBean(ApplicationContext, Class)
+	 * @param name - the name of the Bean
+	 * @param cls - the class of the Bean
+	 * @return the Bean
+	 */
+	public <T> T getBean(String name, Class<T> cls)
+	{
+		return ApplicationContextUtil.getBean(this.context, name, cls);
 	}
 
 	/**
@@ -212,7 +186,7 @@ public class ContextLoader
 	 * @param name - the name of the bean to inject
 	 * @param bean - the bean to inject
 	 */
-	protected void injectBean(String name, Object bean)
+	public void injectBean(String name, Object bean)
 	{
 		ConfigurableListableBeanFactory bf = this.context.getBeanFactory();
 		// init & inject bean
@@ -227,7 +201,7 @@ public class ContextLoader
 	 * 
 	 * @param file - the file to use for the {@link FileSystemResource}
 	 */
-	protected void injectPropertyPlaceholderConfigurer(File file)
+	public void injectPropertyPlaceholderConfigurer(File file)
 	{
 		injectPropertyPlaceholderConfigurer(file, false);
 	}
@@ -240,7 +214,7 @@ public class ContextLoader
 	 * @param file - the file to use for the {@link FileSystemResource}
 	 * @param ignoreUnresolvablePlaceholders - ignore unresolvable placeholders (default is false)
 	 */
-	protected void injectPropertyPlaceholderConfigurer(File file, boolean ignoreUnresolvablePlaceholders)
+	public void injectPropertyPlaceholderConfigurer(File file, boolean ignoreUnresolvablePlaceholders)
 	{
 		PropertyPlaceholderConfigurer ppc = new PropertyPlaceholderConfigurer();
 		ppc.setLocation(new FileSystemResource(file));
@@ -257,7 +231,7 @@ public class ContextLoader
 	 * 
 	 * @param properties - the properties to use
 	 */
-	protected void injectPropertyPlaceholderConfigurer(String propertiesBeanName)
+	public void injectPropertyPlaceholderConfigurer(String propertiesBeanName)
 	{
 		injectPropertyPlaceholderConfigurer(propertiesBeanName, false);
 	}
@@ -270,7 +244,7 @@ public class ContextLoader
 	 * @param properties - the properties to use
 	 * @param ignoreUnresolvablePlaceholders - ignore unresolvable placeholders (default is false)
 	 */
-	protected void injectPropertyPlaceholderConfigurer(String propertiesBeanName, boolean ignoreUnresolvablePlaceholders)
+	public void injectPropertyPlaceholderConfigurer(String propertiesBeanName, boolean ignoreUnresolvablePlaceholders)
 	{
 		PropertyPlaceholderConfigurer ppc = new PropertyPlaceholderConfigurer();
 		ppc.setProperties(getBean(propertiesBeanName, Properties.class));
@@ -286,7 +260,7 @@ public class ContextLoader
 	 * @param name - the name for the properties bean
 	 * @param properties - the {@link Properties} to use
 	 */
-	protected void injectProperties(String name, Properties properties)
+	public void injectProperties(String name, Properties properties)
 	{
 		PropertiesFactoryBean bean = new PropertiesFactoryBean();
 		bean.setProperties(properties);
