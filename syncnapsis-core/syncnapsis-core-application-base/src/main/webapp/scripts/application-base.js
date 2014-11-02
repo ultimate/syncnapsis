@@ -67,11 +67,6 @@ EntityManager = function(server)
 		return this._cache[type][id];
 	};
 	
-	this.merge = function(entity)
-	{
-		console.log("merging: " + entity);
-	};
-	
 	this.clearCache = function()
 	{
 		this._cache = {};
@@ -89,7 +84,10 @@ EntityManager = function(server)
 				{
 					if((Reflections.getTypeMask(typeof other[prop]) & typeMask) != 0)
 					{
-						this[prop] = other[prop];
+						if(this[prop].merge)
+							this[prop].merge(other.prop);
+						else
+							this[prop] = other[prop];
 					}
 				}
 				return this;

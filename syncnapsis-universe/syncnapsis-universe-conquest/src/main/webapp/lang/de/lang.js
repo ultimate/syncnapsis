@@ -48,13 +48,16 @@ lang.error.username_exists 		= lang.error.error + ": Benutzername ist bereits re
 lang.general = {};
 lang.general.apply_changes		= "Änderungen übernehmen";
 lang.general.prefix				= "Beginnend mit";
+lang.general.save_as_default	= "Als Standard speichern";
 lang.general.suffix				= "Endend mit";
 
 lang.match = {};
 lang.match.creator				= "Ersteller";
 lang.match.galaxy				= "Galaxie";
+lang.match.participant			= "Mitspieler";
 lang.match.participants			= "Mitspieler";
 lang.match.state				= "Status";
+lang.match.title				= "Titel";
 
 lang.message = {};
 lang.message.error						= "Es ist ein Fehler aufgetreten! Bitte versuche es erneut...";
@@ -73,6 +76,7 @@ lang.menu.account_status		= "Konto-Status";
 lang.menu.cancel				= "Abbrechen";
 lang.menu.contact 				= "Kontakt";
 lang.menu.contact_tooltip 		= "Kontaktinformationen / Impressum";
+lang.menu.create 				= "Erstellen";
 lang.menu.disclaimer 			= "Rechtliches";
 lang.menu.disclaimer_tooltip 	= "Nutzungsbedingungen / Haftungsbeschränkung";
 lang.menu.email					= "E-Mail-Adresse";
@@ -93,12 +97,19 @@ lang.menu.quick					= "Schnell-Navigation";
 lang.menu.register 				= "Registrieren";
 lang.menu.reset_password		= "Passwort zurücksetzen";
 lang.menu.security				= "Sicherheits-Einstellungen";
+lang.menu.start					= "Starten";
 lang.menu.stats 				= "Statistik";
 
 lang.log = {};
 lang.log.title					= "Ereignis-Log";
 lang.log.pinboard				= "Pinnwand";
 lang.log.match					= "Spiel";
+
+lang.participant = {};
+lang.participant.name			= "Spielername";
+lang.participant.rank			= "Rang";
+lang.participant.rankValue		= "%";
+lang.participant.rankRawValue	= "Punkte";
 
 lang.profile = {};
 lang.profile.accountStatus		= "Status";
@@ -126,6 +137,3 @@ lang.welcome.toggle1_active		= lang.menu.register + "!";
 lang.welcome.toggle1_inactive	= "Neu hier?";
 lang.welcome.toggle2_active		= lang.menu.about_tooltip + "!";
 lang.welcome.toggle2_inactive	= "Neugierig?";
-
-
-

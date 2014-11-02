@@ -223,6 +223,11 @@ public class MatchManagerImpl extends GenericNameManagerImpl<Match, Long> implem
 				"participantsMax must either be 0 or be greater or equals to participantsMin");
 		Assert.isTrue(participantsMin > 0);
 
+		Assert.isTrue(
+				speed >= UniverseConquestConstants.PARAM_MATCH_SPEED_MIN.asInt() && speed <= UniverseConquestConstants.PARAM_MATCH_SPEED_MAX.asInt(),
+				"speed must be between " + UniverseConquestConstants.PARAM_MATCH_SPEED_MIN.asInt() + " and "
+						+ UniverseConquestConstants.PARAM_MATCH_SPEED_MAX.asInt() + " (inclusive)");
+
 		Galaxy galaxy = galaxyManager.get(galaxyId);
 		Assert.notNull(galaxy, "galaxy with ID " + galaxyId + " not found!");
 
@@ -583,7 +588,7 @@ public class MatchManagerImpl extends GenericNameManagerImpl<Match, Long> implem
 		{
 			// victory condition is bound to a timeout
 			long now = securityManager.getTimeProvider().get();
-			
+
 			if(leader.getRankVictoryDate().getTime() + timeout <= now)
 				return true; // timeout passed
 			else
@@ -641,17 +646,18 @@ public class MatchManagerImpl extends GenericNameManagerImpl<Match, Long> implem
 						ref = match.getGalaxy().getSolarSystems().size();
 						for(SolarSystemPopulation pop : p.getPopulations())
 						{
-							// count +1/totalSystems for each existing population if the participant is alone
+							// count +1/totalSystems for each existing population if the participant
+							// is alone
 							if(pop.getDestructionDate() == null)
 							{
 								int nonDestroyed = 0;
 								// count total non-destroyed pops
-								for(SolarSystemPopulation otherPop: pop.getInfrastructure().getPopulations())
+								for(SolarSystemPopulation otherPop : pop.getInfrastructure().getPopulations())
 								{
 									if(otherPop.getDestructionDate() == null)
 										nonDestroyed++;
 								}
-								
+
 								if(nonDestroyed == 1) // alone
 									rankValue++;
 							}

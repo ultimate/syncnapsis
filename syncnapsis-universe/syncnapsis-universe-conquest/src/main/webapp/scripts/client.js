@@ -101,6 +101,7 @@ UI.constants.MATCH_FILTER_CREATOR_ID = "match_filter_creator";
 UI.constants.MATCH_FILTER_PARTICIPANTS_ID = "match_filter_participants";
 UI.constants.MATCH_FILTER_GALAXY_SELECT_ID = "match_filter_galaxy_select";
 UI.constants.MATCH_FILTER_STATE_SELECT_ID = "match_filter_state_select";
+UI.constants.MATCH_RANK_TABLE_ID = "match_rank_table";
 
 UI.constants.LOGIN_USERNAME_ID = "login_username";
 UI.constants.LOGIN_PASSWORD_ID = "login_password";
@@ -368,6 +369,14 @@ UIManager.prototype.onMatchesLoaded = function(matches)
 {
 	console.log("matches loaded!");
 	this.populateSelect(this.matchSelect, matches, false);
+	
+	// preload sub-entities for filtering
+	server.entityManager.loadProperty(matches, "participants.empire.player.user", function(matches) {
+		console.log("matches loaded with properties!");
+	});
+	server.entityManager.loadProperty(matches, "creator.user", function(matches) {
+		console.log("match creators loaded!");
+	});
 };
 
 UIManager.prototype.filterMatches = function()
@@ -377,6 +386,9 @@ UIManager.prototype.filterMatches = function()
 	var state = this.matchFilterStateSelect.value;
 	var creator = document.getElementById(UI.constants.MATCH_FILTER_CREATOR_ID).value;
 	var participants = document.getElementById(UI.constants.MATCH_FILTER_PARTICIPANTS_ID).value;
+	// split participants into IDs/names
+	// assuming usernames don't contain the split chars "," and ";" or any whitespace
+	var participantIDs = participants.split(/[\s,;]+/);
 	
 	
 	var matcher = function(match)
@@ -387,14 +399,10 @@ UIManager.prototype.filterMatches = function()
 			return false;
 		if(state != null && match.state != state)
 			return false;
-		if(creator != "" && match.creator.id != creator)
+		if(creator != "" && match.creator.id != creator && match.creator.user.username.toLowerCase() != creator.toLowerCase())
 			return false;
 		if(participants != "")
 		{
-			// split participants into IDs/names
-			// assuming usernames don't contain the split chars "," and ";" or any whitespace
-			var participantIDs = participants.split(/[\s,;]+/);
-			
 			var allFound = true;
 			for(var p = 0; p < participantIDs.length; p++)
 			{
@@ -405,9 +413,9 @@ UIManager.prototype.filterMatches = function()
 				for(var i = 0; i < match.participants.length; i++)
 				{
 					// by ID
-					pFound = pFound || (match.participants[i].id == participantIDs[p]);
-					// TODO by name (requires preloading of participant.player.user.username)
-					//pFound = pFound || (match.participants[i].player.user.username.toLowerCase() == participantIDs[p].toLowerCase()); 
+					pFound = pFound || (match.participants[i].empire.player.id == participantIDs[p]);
+					// by name (requires preloading of participant.player.user.username)
+					pFound = pFound || (match.participants[i].empire.player.user.username.toLowerCase() == participantIDs[p].toLowerCase()); 
 				}
 
 				allFound = allFound && pFound;
@@ -434,6 +442,41 @@ UIManager.prototype.resetMatchFilters = function()
 	
 	// do filter with cleared inputs
 	this.filterMatches();
+};
+
+UIManager.prototype.updateMatchRankTable = function(match)
+{
+	var table = document.getElementById(UI.constants.MATCH_RANK_TABLE_ID);
+	var oldTbody = table.children[1];
+	var newTbody = document.createElement("tbody");
+	
+	// helper method for adding a single cell to a row
+	var addCell = function(tr, content)
+	{
+		var td = document.createElement("td");
+		td.innerHTML = content;
+		tr.appendChild(td);
+	};
+	
+	// sort participants
+	match.participants.sort(function(p1, p2) {
+		return p1.rank - p2.rank;
+	});
+	
+	var tr, td;
+	for(var p = 0; p < match.participants.length; p++)
+	{
+		tr = document.createElement("tr");
+		
+		addCell(tr, match.participants[p].rank);
+		addCell(tr, match.participants[p].empire.player.user.username);
+		addCell(tr, match.participants[p].rankRawValue);
+		addCell(tr, match.participants[p].rankValue.toFixed(0));
+		
+		newTbody.appendChild(tr);
+	}
+	
+	table.replaceChild(newTbody, oldTbody);
 };
 
 UIManager.prototype.disableButton = function(id, duration)

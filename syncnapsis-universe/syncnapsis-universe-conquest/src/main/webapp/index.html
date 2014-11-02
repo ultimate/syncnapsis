@@ -94,16 +94,6 @@
 </script>
 <script type="text/javascript">
 	// debug-js
-	load = function(progress)
-	{
-		setProgress(progress);
-		var time = Math.round(Math.random()*200);
-		if(progress < 100)
-			setTimeout(function() { load(progress+5); }, time);
-		else
-			init();
-		document.getElementById("debug_load").disabled = "disabled";
-	};
 </script>
 </head>
 <body onload="DependencyManager.registrationDone();">
@@ -326,6 +316,19 @@
 			</div>
 		</div>
 	</div>
+	<table id="match_rank_table" class="frame">
+		<thead>
+			<tr>
+				<td>#</td>
+				<td><label key="participant.name"></label></td>
+				<td><label key="participant.rankRawValue"></label></td>
+				<td><label key="participant.rankValue"></label></td>
+			</tr>
+		</thead>
+		<tbody>
+			<!-- populated in UIManager.updateMatchRankTable -->
+		</tbody>
+	</table>
 	<div id="overlay" class="centered">
 		<div id="overlay_main" class="main frame centered">
 			<div id="logo_container1" class="logo_container centered">
@@ -412,12 +415,53 @@
 				</form>
 			</div>
 		</div>
-	</div>
-	<!-- for debug only -->
-	<div id="debug">
-		debug...<br>
-		<input id="debug_load" type="button" value="load" onclick="load(0);" /><br/>
-		<div id="debug_container">
+		<div id="content_manage_match">
+			<div>
+				<form id="manage_match" onsubmit="return false;" class="large">
+					<label key="match.title" for="match_title"></label><input id="match_title" type="text"/><br/>
+					<label key="match.galaxy" for="match_galaxy_select"></label><div id="match_galaxy_select" class="long"></div><br/>
+					<label key="match.speed" for="match_speed_select"></label><div id="match_speed_select" class="long"></div><br/>
+					<label key="match.seed" for="match_seed"></label><input id="match_seed" type="text"/><br/>
+					
+					<!--
+					speed (select with names and int values) 
+					seed (number, optional)
+					stardCondition (enum)
+					stardDate (optional)
+					-->
+					<!-- TODO -->
+					
+					<div id="match_message" class="form_message">
+					</div>
+					<div id="match_error" class="form_error">
+					</div>
+					<div id="match_create" class="frame button">
+						<a href="javascript: client.uiManager.createMatch();">
+							<label key="menu.create"></label>
+						</a>
+					</div>
+					<div id="match_update" class="frame button">
+						<a href="javascript: client.uiManager.updateMatch();">
+							<label key="menu.apply_changes"></label>
+						</a>
+					</div>
+					<div id="match_start" class="frame button">
+						<a href="javascript: client.uiManager.startMatch();">
+							<label key="menu.start"></label>
+						</a>
+					</div>
+					<div id="match_cancel" class="frame button">
+						<a href="javascript: client.uiManager.cancelMatch();">
+							<label key="menu.cancel"></label>
+						</a>
+					</div>
+					<div id="match_save_as_default" class="frame button">
+						<a href="javascript: client.uiManager.saveForm('manage_match');">
+							<label key="menu.save_as_default"></label>
+						</a>
+					</div>
+				</form>
+			</div>
 		</div>
 	</div>
 </body>

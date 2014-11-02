@@ -48,15 +48,16 @@ lang.error.username_exists 		= lang.error.error + ": username is already registe
 lang.general = {};
 lang.general.apply_changes		= "Apply changes";
 lang.general.prefix				= "Starting with";
+lang.general.save_as_default	= "Save as default";
 lang.general.suffix				= "Ending with";
-lang.general.me					= "Me";
-lang.general.others				= "Others";
 
 lang.match = {};
 lang.match.creator				= "Creator";
 lang.match.galaxy				= "Galaxy";
+lang.match.participant			= "Participant";
 lang.match.participants			= "Participants";
 lang.match.state				= "Status";
+lang.match.title				= "Title";
 
 lang.message = {};
 lang.message.error						= "An error occurred! Please try again...";
@@ -75,18 +76,19 @@ lang.menu.account_status		= "Account status";
 lang.menu.cancel				= "Cancel";
 lang.menu.contact 				= "Contact";
 lang.menu.contact_tooltip 		= "Contact informationen / Site notice";
+lang.menu.create 				= "Create";
 lang.menu.disclaimer 			= "Legal Stuff";
 lang.menu.disclaimer_tooltip 	= "Site policy / Disclaimer";
 lang.menu.email					= "E-mail-address";
 lang.menu.forgot_password		= "Forgot password?";
-lang.menu.login    				= "Login";
+lang.menu.login 				= "Login";
 lang.menu.login_info			= "Hello";
-lang.menu.logout   				= "Logout";
+lang.menu.logout 				= "Logout";
 lang.menu.match					= "Match info";
 lang.menu.match_reset_filters	= "Reset filters";
 lang.menu.match_filter			= "Filter matches";
 lang.menu.match_select			= "Match selection";
-lang.menu.news					= "News";
+lang.menu.news 					= "News";
 lang.menu.password				= "Password";
 lang.menu.pinboard 				= "Pinboard";
 lang.menu.pinboard_tooltip		= lang.menu.pinboard;
@@ -95,13 +97,20 @@ lang.menu.quick					= "Quick nav";
 lang.menu.register 				= "Register";
 lang.menu.reset_password		= "Reset password";
 lang.menu.security				= "Security settings";
-lang.menu.stats					= "Stats";
+lang.menu.start					= "Start";
+lang.menu.stats 				= "Stats";
 
 lang.log = {};
 lang.log.title					= "Event-Log";
 lang.log.pinboard				= "Pinboard";
 lang.log.match					= "Match";
-	
+
+lang.participant = {};
+lang.participant.name			= "Playername";
+lang.participant.rank			= "Rank";
+lang.participant.rankValue		= "%";
+lang.participant.rankRawValue	= "Points";
+
 lang.profile = {};
 lang.profile.accountStatus		= "Status";
 lang.profile.accountStatusExpireDate = "Status expires";
