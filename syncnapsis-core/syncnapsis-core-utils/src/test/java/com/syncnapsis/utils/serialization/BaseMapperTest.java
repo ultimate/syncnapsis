@@ -427,6 +427,11 @@ public class BaseMapperTest extends LoggerTestCase
 		assertFalse(mapper.isInvariant(new Object()));
 	}
 
+	public void testIsExcluded() throws Exception
+	{
+		assertFalse(mapper.isExcluded(null, null));
+	}
+
 	public static class POJO1 extends AnnotationAccessControllerTest.Target
 	{
 		private int		x;
