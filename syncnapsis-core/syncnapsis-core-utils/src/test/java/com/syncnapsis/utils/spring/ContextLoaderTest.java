@@ -33,27 +33,28 @@ public class ContextLoaderTest extends LoggerTestCase
 	private static final String	injectedBeanName	= "myBean";
 	private static final String	otherBeanName		= "placeholderConfigurerTarget";
 
-	@TestCoversMethods({ "loadContext", "loadBeans", "*LoadBeans", "closeContext", "getBean" })
+	@TestCoversMethods({ "load", "loadBeans", "*LoadBeans", "closeContext", "getBean" })
 	public void testLoadAndCloseContext() throws Exception
 	{
 		final AtomicBoolean beforeLoadBeansCalled = new AtomicBoolean(false);
 		final AtomicBoolean afterLoadBeansCalled = new AtomicBoolean(false);
 
-		ContextLoader loader = new ContextLoader(ApplicationContextUtil.CONTEXT_LOCATION_TEST) {
+		ContextLoader loader = new ContextLoader();
+		ContextConfigurer configurer = new ContextConfigurer() {
 			@Override
-			public void beforeLoadBeans()
+			public void beforeLoadBeans(ContextLoader loader)
 			{
 				beforeLoadBeansCalled.set(true);
 			}
 
 			@Override
-			public void afterLoadBeans()
+			public void afterLoadBeans(ContextLoader loader)
 			{
 				afterLoadBeansCalled.set(true);
 			}
 		};
 
-		loader.loadContext();
+		loader.load(configurer, ApplicationContextUtil.CONTEXT_LOCATION_TEST);
 
 		assertNotNull(loader.getContext());
 		assertNotNull(loader.getBean(otherBeanName, MockBean.class));
@@ -66,18 +67,18 @@ public class ContextLoaderTest extends LoggerTestCase
 	{
 		final MockBean bean = new MockBean();
 
-		ContextLoader loader = new ContextLoader(new String[0]) // no locations
-		{
+		ContextLoader loader = new ContextLoader();
+		ContextConfigurer configurer = new ContextConfigurer() {
 			@Override
-			public void beforeLoadBeans()
+			public void beforeLoadBeans(ContextLoader loader)
 			{
-				injectBean(injectedBeanName, bean);
+				loader.injectBean(injectedBeanName, bean);
 			}
 
 			@Override
-			public void afterLoadBeans()
+			public void afterLoadBeans(ContextLoader loader)
 			{
-				MockBean resultBean = getBean(injectedBeanName, MockBean.class);
+				MockBean resultBean = loader.getBean(injectedBeanName, MockBean.class);
 
 				assertNotNull(resultBean);
 				assertSame(bean, resultBean);
@@ -86,7 +87,7 @@ public class ContextLoaderTest extends LoggerTestCase
 			}
 		};
 
-		loader.loadContext();
+		loader.load(configurer, new String[0]);
 	}
 
 	public void testInjectProperties() throws Exception
@@ -96,18 +97,18 @@ public class ContextLoaderTest extends LoggerTestCase
 		properties.setProperty("b_key", "b_value");
 		properties.setProperty("c_key.nested", "c_value");
 
-		ContextLoader loader = new ContextLoader(new String[0]) // no locations
-		{
+		ContextLoader loader = new ContextLoader();
+		ContextConfigurer configurer = new ContextConfigurer() {
 			@Override
-			public void beforeLoadBeans()
+			public void beforeLoadBeans(ContextLoader loader)
 			{
-				injectProperties(injectedBeanName, properties);
+				loader.injectProperties(injectedBeanName, properties);
 			}
 
 			@Override
-			public void afterLoadBeans()
+			public void afterLoadBeans(ContextLoader loader)
 			{
-				Properties propertiesBean = getBean(injectedBeanName, Properties.class);
+				Properties propertiesBean = loader.getBean(injectedBeanName, Properties.class);
 
 				assertNotNull(propertiesBean);
 				assertEquals(propertiesBean.getProperty("a_key"), properties.getProperty("a_key"));
@@ -116,7 +117,7 @@ public class ContextLoaderTest extends LoggerTestCase
 			}
 		};
 
-		loader.loadContext();
+		loader.load(configurer, new String[0]);
 	}
 
 	@TestCoversMethods("injectPropertyPlaceholderConfigurer")
@@ -128,18 +129,19 @@ public class ContextLoaderTest extends LoggerTestCase
 		properties.setProperty("hibernate.connection.password", "myPassword");
 		properties.setProperty("testkey", "testvalue");
 
-		ContextLoader loader = new ContextLoader(ApplicationContextUtil.CONTEXT_LOCATION_TEST) {
+		ContextLoader loader = new ContextLoader();
+		ContextConfigurer configurer = new ContextConfigurer() {
 			@Override
-			public void beforeLoadBeans()
+			public void beforeLoadBeans(ContextLoader loader)
 			{
-				injectProperties(injectedBeanName, properties);
-				injectPropertyPlaceholderConfigurer(injectedBeanName);
+				loader.injectProperties(injectedBeanName, properties);
+				loader.injectPropertyPlaceholderConfigurer(injectedBeanName);
 			}
 
 			@Override
-			public void afterLoadBeans()
+			public void afterLoadBeans(ContextLoader loader)
 			{
-				MockBean otherBean = getBean(otherBeanName, MockBean.class);
+				MockBean otherBean = loader.getBean(otherBeanName, MockBean.class);
 
 				assertNotNull(otherBean);
 				assertEquals(properties.getProperty("hibernate.connection.url"), otherBean.getUrl());
@@ -149,7 +151,7 @@ public class ContextLoaderTest extends LoggerTestCase
 			}
 		};
 
-		loader.loadContext();
+		loader.load(configurer, ApplicationContextUtil.CONTEXT_LOCATION_TEST);
 	}
 
 	@TestCoversMethods("injectPropertyPlaceholderConfigurer")
@@ -157,46 +159,48 @@ public class ContextLoaderTest extends LoggerTestCase
 	{
 		final Properties properties = PropertiesUtil.loadProperties(new File(properties_test));
 
-		ContextLoader loader = new ContextLoader(ApplicationContextUtil.CONTEXT_LOCATION_TEST) {
+		ContextLoader loader = new ContextLoader();
+		ContextConfigurer configurer = new ContextConfigurer() {
 			@Override
-			public void beforeLoadBeans()
+			public void beforeLoadBeans(ContextLoader loader)
 			{
-				injectPropertyPlaceholderConfigurer(new File(properties_test), true);
+				loader.injectPropertyPlaceholderConfigurer(new File(properties_test), true);
 			}
 
 			@Override
-			public void afterLoadBeans()
+			public void afterLoadBeans(ContextLoader loader)
 			{
-				MockBean otherBean = getBean(otherBeanName, MockBean.class);
+				MockBean otherBean = loader.getBean(otherBeanName, MockBean.class);
 
 				assertNotNull(otherBean);
 				assertEquals(properties.getProperty("testkey"), otherBean.getValue());
 			}
 		};
 
-		loader.loadContext();
+		loader.load(configurer, ApplicationContextUtil.CONTEXT_LOCATION_TEST);
 	}
 
 	public void testLoadContext_withMissingProperties() throws Exception
 	{
-		ContextLoader loader = new ContextLoader(ApplicationContextUtil.CONTEXT_LOCATION_TEST) {
+		ContextLoader loader = new ContextLoader();
+		ContextConfigurer configurer = new ContextConfigurer() {
 			@Override
-			public void beforeLoadBeans()
+			public void beforeLoadBeans(ContextLoader loader)
 			{
 				// do NOT inject Properties or PropertyPlaceholderConfigurer
 			}
 
 			@Override
-			public void afterLoadBeans()
+			public void afterLoadBeans(ContextLoader loader)
 			{
-				MockBean otherBean = getBean(otherBeanName, MockBean.class);
+				MockBean otherBean = loader.getBean(otherBeanName, MockBean.class);
 
 				assertNotNull(otherBean);
 				assertEquals("${testkey}", otherBean.getValue());
 			}
 		};
 
-		loader.loadContext();
+		loader.load(configurer, ApplicationContextUtil.CONTEXT_LOCATION_TEST);
 	}
 
 	public void testLoadContext_withMissingPropertyPlaceholderConfigurer() throws Exception
@@ -207,25 +211,26 @@ public class ContextLoaderTest extends LoggerTestCase
 		properties.setProperty("hibernate.connection.password", "myPassword");
 		properties.setProperty("testkey", "testvalue");
 
-		ContextLoader loader = new ContextLoader(ApplicationContextUtil.CONTEXT_LOCATION_TEST) {
+		ContextLoader loader = new ContextLoader();
+		ContextConfigurer configurer = new ContextConfigurer() {
 			@Override
-			public void beforeLoadBeans()
+			public void beforeLoadBeans(ContextLoader loader)
 			{
 				// inject Properties
-				injectProperties(injectedBeanName, properties);
+				loader.injectProperties(injectedBeanName, properties);
 				// but do NOT inject PropertyPlaceholderConfigurer
 			}
 
 			@Override
-			public void afterLoadBeans()
+			public void afterLoadBeans(ContextLoader loader)
 			{
-				MockBean otherBean = getBean(otherBeanName, MockBean.class);
+				MockBean otherBean = loader.getBean(otherBeanName, MockBean.class);
 
 				assertNotNull(otherBean);
 				assertEquals("${testkey}", otherBean.getValue());
 			}
 		};
 
-		loader.loadContext();
+		loader.load(configurer, ApplicationContextUtil.CONTEXT_LOCATION_TEST);
 	}
 }
