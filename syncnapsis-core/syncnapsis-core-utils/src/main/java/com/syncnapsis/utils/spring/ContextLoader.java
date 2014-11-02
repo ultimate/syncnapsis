@@ -89,13 +89,15 @@ public class ContextLoader
 		this.context = new GenericApplicationContext();
 
 		// configure the context
-		configurer.beforeLoadBeans(this);
+		if(configurer != null)
+			configurer.beforeLoadBeans(this);
 
 		// load beans from the locations
 		loadBeans(locations);
 
 		// configure the context
-		configurer.afterLoadBeans(this);
+		if(configurer != null)
+			configurer.afterLoadBeans(this);
 
 		return getContext();
 	}
