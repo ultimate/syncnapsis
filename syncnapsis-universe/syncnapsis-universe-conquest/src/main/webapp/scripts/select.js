@@ -40,6 +40,18 @@ Select = function(element)
 	this.highlightIndex = null;
 	this.active = false;
 	
+	var _disabled = false;
+	this.setDisabled = function(disabled) {
+		_disabled = disabled;
+		if(disabled)
+			this.element.classList.add("disabled");
+		else
+			this.element.classList.remove("disabled");
+	};
+	this.isDisabled = function() {
+		return _disabled;
+	};
+	
 	this.unhighlight = function() {
 		for(var i = 0; i < this.options.length; i++)
 			this.options[i].element.classList.remove("active");
@@ -182,7 +194,7 @@ Select = function(element)
 				{
 					select.close(true);
 				}
-				else
+				else if(!select.isDisabled())
 				{
 					select.open();
 				}
@@ -202,7 +214,7 @@ Select = function(element)
 	} (this));
 	Events.addEventListener(Events.KEYDOWN, function(select) {
 		return function(event) {
-			if(select.isActive)
+			if(select.isActive && !select.isDisabled())
 			{
 				switch(event.keyCode) {
 					case 37: // left
