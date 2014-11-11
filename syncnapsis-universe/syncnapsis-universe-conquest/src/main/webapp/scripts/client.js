@@ -112,6 +112,8 @@ UI.constants.MATCH_STARTSYSTEMSELECTIONENABLED_SELECT_ID = "match_startSystemSel
 UI.constants.MATCH_STARTSYSTEMCOUNT_ID = "match_startSystemCount_$";
 UI.constants.MATCH_STARTPOPULATION_ID = "match_startPopulation_$";
 UI.constants.MATCH_VICTORYCONDITION_SELECT_ID = "match_victoryCondition_select_$";
+UI.constants.MATCH_VICTORYPARAMETER_SELECT_ID = "match_victoryParameter_select_$";
+UI.constants.MATCH_VICTORYPARAMETER_CUSTOM_ID = "match_victoryParameter_custom_$";
 
 UI.constants.LOGIN_USERNAME_ID = "login_username";
 UI.constants.LOGIN_PASSWORD_ID = "login_password";
@@ -538,9 +540,58 @@ UIManager.prototype.showMatch = function(match)
 		win.matchStartSystemSelectionEnabledSelect = new Select(UI.constants.MATCH_STARTSYSTEMSELECTIONENABLED_SELECT_ID.replace(UI.constants.PLACEHOLDER, id));
 		this.populateEnumSelect(win.matchStartSystemSelectionEnabledSelect, lang.EnumManually, false);
 	}
+	if(!win.matchVictoryParameterSelect)
+	{
+		win.matchVictoryParameterSelect = new Select(UI.constants.MATCH_VICTORYPARAMETER_SELECT_ID.replace(UI.constants.PLACEHOLDER, id));
+		win.matchVictoryParameterSelect.onselect = function(uiManager) {
+			return function(oldValue, newValue)
+			{
+				console.log(newValue + " == custom ? " + (newValue == "custom"));
+				if(newValue != "custom")
+				{
+					var val = (newValue != null && newValue.length > 5 ? newValue.substring(5) : "");
+					document.getElementById(UI.constants.MATCH_VICTORYPARAMETER_CUSTOM_ID).value = val;
+					document.getElementById(UI.constants.MATCH_VICTORYPARAMETER_CUSTOM_ID).setAttribute("disabled", "disabled");
+				}
+				else
+				{
+					document.getElementById(UI.constants.MATCH_VICTORYPARAMETER_CUSTOM_ID).removeAttribute("disabled");
+				}
+			};
+		} (this);
+		this.populateEnumSelect(win.matchVictoryParameterSelect, lang.EnumDifficulty_domination, false);
+		// don't populate (is populated on victoryCondition select)
+	}
 	if(!win.matchVictoryConditionSelect)
 	{
 		win.matchVictoryConditionSelect = new Select(UI.constants.MATCH_VICTORYCONDITION_SELECT_ID.replace(UI.constants.PLACEHOLDER, id));
+		win.matchVictoryConditionSelect.onselect = function(uiManager) {
+			return function(oldValue, newValue)
+			{
+				console.log(newValue);
+				if(oldValue != newValue)
+				{				
+					if(newValue == "domination")
+					{
+						uiManager.populateEnumSelect(win.matchVictoryParameterSelect, lang.EnumDifficulty_domination, false);
+						win.matchVictoryParameterSelect.setDisabled(false);
+					}
+					else if(newValue == "extermination")
+					{
+						uiManager.populateEnumSelect(win.matchVictoryParameterSelect, lang.EnumDifficulty_extermination, false);
+						win.matchVictoryParameterSelect.setDisabled(false);
+					}
+					else
+					{
+						uiManager.populateEnumSelect(win.matchVictoryParameterSelect, lang.EnumDifficulty_vendetta, false);
+						win.matchVictoryParameterSelect.setDisabled(true);
+					}
+					// the "normal" value is at index 2
+					// select this if possible (otherwise select last value)
+					win.matchVictoryParameterSelect.select(Math.min(2, win.matchVictoryParameterSelect.options.length));
+				}
+			};
+		} (this);
 		this.populateEnumSelect(win.matchVictoryConditionSelect, lang.EnumVictoryCondition, false);
 	}
 	

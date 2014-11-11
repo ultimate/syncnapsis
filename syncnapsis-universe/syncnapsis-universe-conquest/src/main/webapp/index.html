@@ -430,10 +430,11 @@
 					<label key="match.startDate" for="match_startDate_$" class="large"></label><input id="match_startDate_$" type="datetime" class="match_startDate long"/><br/>
 					<label key="match.startSystemSelectionEnabled" for="match_startSystemSelectionEnabled_select_$" class="large"></label><div id="match_startSystemSelectionEnabled_select_$" class="match_startSystemSelectionEnabled_select long"></div><br/>
 					<label key="match.startSystemCount" for="match_startSystemCount_$" class="large"></label><input id="match_startSystemCount_$" type="number" class="match_startSystemCount long" min="1" max="20" value="1"/><br/>
-					<label key="match.startPopulation" for="match_startPopulation_$" class="large"></label><input id="match_startPopulation_$" type="number" class="match_startPopulation long" step="1e9" min="0" max="1e12" value="1e9"/><br/>					 
+					<label key="match.startPopulation" for="match_startPopulation_$" class="large"></label><input id="match_startPopulation_$" type="number" class="match_startPopulation" step="1" min="1" max="1000" value="1"/><label key="number.billion" class="unit"></label><br/>					 
 					<label key="match.victoryCondition" for="match_victoryCondition_select_$" class="large"></label><div id="match_victoryCondition_select_$" class="match_victoryCondition_select long"></div><br/>
+					<label key="match.victoryParameter" for="match_victoryParameter_select_$" class="large"></label><div id="match_victoryParameter_select_$" class="match_victoryParameter_select"></div>
+					<input id="match_victoryParameter_custom_$" type="number" class="match_victoryParameter_custom" step="1" min="0" max="100" value="1"/>&nbsp;<label key="participant.rankValue" class="unit"></label><br/>
 						<!--
-						victoryCondition (enum)
 						victoryParameter (in %, except for vendetta)
 							// select with named options: very easy, easy, medium, hard, very hard
 							// domination:					 40		 50		 60		 70		 80	      TODO ?			 

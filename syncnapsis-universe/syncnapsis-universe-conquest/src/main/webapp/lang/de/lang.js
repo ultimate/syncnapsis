@@ -21,6 +21,27 @@ lang.EnumLocale = {};
 lang.EnumLocale.EN = "English";
 lang.EnumLocale.DE = "Deutsch";
 
+lang.EnumEnabled = {};
+lang.EnumEnabled.value0		= "Deaktiviert";
+lang.EnumEnabled.value1		= "Aktiviert";
+
+lang.EnumDifficulty_domination = {};
+lang.EnumDifficulty_domination.value40		= "40% (Sehr einfach)";
+lang.EnumDifficulty_domination.value50		= "50% (Einfach)";
+lang.EnumDifficulty_domination.value60		= "60% (Normal)";
+lang.EnumDifficulty_domination.value70		= "70% (Schwer)";
+lang.EnumDifficulty_domination.value80		= "80% (Sehr schwer)";
+lang.EnumDifficulty_domination.custom		= "Benutzerdefiniert";
+lang.EnumDifficulty_extermination = {};
+lang.EnumDifficulty_extermination.value80	= "80% (Sehr einfach)";
+lang.EnumDifficulty_extermination.value90	= "90% (Einfach)";
+lang.EnumDifficulty_extermination.value95	= "95% (Normal)";
+lang.EnumDifficulty_extermination.value99	= "99% (Schwer)";
+lang.EnumDifficulty_extermination.value100	= "100% (Sehr schwer)";
+lang.EnumDifficulty_extermination.custom	= "Benutzerdefiniert";
+lang.EnumDifficulty_vendetta = {};
+lang.EnumDifficulty_vendetta.value 			= "automatisch";
+
 lang.EnumGender = {};
 lang.EnumGender.female 		= "weiblich";
 lang.EnumGender.machine 	= "Maschine";
@@ -32,6 +53,10 @@ lang.EnumJoinType = {};
 lang.EnumJoinType.invitationsOnly 	= "Nur per Einladung";
 lang.EnumJoinType.joiningEnabled	= "Jeder";
 lang.EnumJoinType.none				= "Niemand";
+
+lang.EnumManually = {};
+lang.EnumManually.value0	= "Automatisch";
+lang.EnumManually.value1	= "Manuell";
 
 lang.EnumMatchSpeed = {}; // no true enum; for usability only
 lang.EnumMatchSpeed.value0		= "Zeitlupe (x1)";
@@ -60,14 +85,6 @@ lang.EnumVictoryCondition.vendetta		= "Vendetta";
 lang.EnumYesNo = {};
 lang.EnumYesNo.value0		= "Nein";
 lang.EnumYesNo.value1		= "Ja";
-
-lang.EnumEnabled= {};
-lang.EnumEnabled.value0		= "Deaktiviert";
-lang.EnumEnabled.value1		= "Aktiviert";
-
-lang.EnumManually = {};
-lang.EnumManually.value0	= "Automatisch";
-lang.EnumManually.value1	= "Manuell";
 
 lang.error = {};
 lang.error.error				= "Fehler";
@@ -149,6 +166,12 @@ lang.menu.reset_password		= "Passwort zurücksetzen";
 lang.menu.security				= "Sicherheits-Einstellungen";
 lang.menu.start					= "Starten";
 lang.menu.stats 				= "Statistik";
+
+lang.number = {};
+lang.number.hundret 	= "Hundert";
+lang.number.thousand 	= "Tausend";
+lang.number.million 	= "Millionen";
+lang.number.billion 	= "Milliarden";
 
 lang.log = {};
 lang.log.title					= "Ereignis-Log";

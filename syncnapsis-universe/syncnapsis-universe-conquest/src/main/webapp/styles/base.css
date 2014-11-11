@@ -202,6 +202,11 @@ form.leftaligned>label.large {
 	width: 150px;
 }
 
+form > label.unit {
+	margin-left: 10px;
+	width: auto;
+}
+
 form.leftaligned>input,
 form.leftaligned>.select,
 form.leftaligned>.select>*,
@@ -479,6 +484,11 @@ form>.select.verylong>* {
 .manage_match .select,
 .manage_match .select > * {
 	float: left;
+}
+
+.manage_match .match_victoryParameter_custom {
+	width: 40px;
+	margin-left: 10px;
 }
 
 .manage_match .right {
