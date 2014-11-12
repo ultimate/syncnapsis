@@ -543,22 +543,23 @@ UIManager.prototype.showMatch = function(match)
 	if(!win.matchVictoryParameterSelect)
 	{
 		win.matchVictoryParameterSelect = new Select(UI.constants.MATCH_VICTORYPARAMETER_SELECT_ID.replace(UI.constants.PLACEHOLDER, id));
-		win.matchVictoryParameterSelect.onselect = function(uiManager) {
+		win.matchVictoryParameterSelect.onselect = function(uiManager, id) {
 			return function(oldValue, newValue)
 			{
 				console.log(newValue + " == custom ? " + (newValue == "custom"));
+				var paramTF = document.getElementById(UI.constants.MATCH_VICTORYPARAMETER_CUSTOM_ID.replace(UI.constants.PLACEHOLDER, id));
 				if(newValue != "custom")
 				{
 					var val = (newValue != null && newValue.length > 5 ? newValue.substring(5) : "");
-					document.getElementById(UI.constants.MATCH_VICTORYPARAMETER_CUSTOM_ID).value = val;
-					document.getElementById(UI.constants.MATCH_VICTORYPARAMETER_CUSTOM_ID).setAttribute("disabled", "disabled");
+					paramTF.value = val;
+					paramTF.setAttribute("disabled", "disabled");
 				}
 				else
 				{
-					document.getElementById(UI.constants.MATCH_VICTORYPARAMETER_CUSTOM_ID).removeAttribute("disabled");
+					paramTF.removeAttribute("disabled");
 				}
 			};
-		} (this);
+		} (this, id);
 		this.populateEnumSelect(win.matchVictoryParameterSelect, lang.EnumDifficulty_domination, false);
 		// don't populate (is populated on victoryCondition select)
 	}
