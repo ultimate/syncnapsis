@@ -533,6 +533,20 @@ UIManager.prototype.showMatch = function(match)
 	if(!win.matchStartConditionSelect)
 	{
 		win.matchStartConditionSelect = new Select(UI.constants.MATCH_STARTCONDITION_SELECT_ID.replace(UI.constants.PLACEHOLDER, id));
+		win.matchStartConditionSelect.onselect = function(uiManager, id) {
+			return function(oldValue, newValue)
+			{
+				var dateTF = document.getElementById(UI.constants.MATCH_STARTDATE_ID.replace(UI.constants.PLACEHOLDER, id));
+				if(newValue != "planned")
+				{
+					dateTF.setAttribute("disabled", "disabled");
+				}
+				else
+				{
+					dateTF.removeAttribute("disabled");
+				}
+			};
+		} (this, id);
 		this.populateEnumSelect(win.matchStartConditionSelect, lang.EnumStartCondition, false);
 	}
 	if(!win.matchStartSystemSelectionEnabledSelect)
@@ -546,7 +560,6 @@ UIManager.prototype.showMatch = function(match)
 		win.matchVictoryParameterSelect.onselect = function(uiManager, id) {
 			return function(oldValue, newValue)
 			{
-				console.log(newValue + " == custom ? " + (newValue == "custom"));
 				var paramTF = document.getElementById(UI.constants.MATCH_VICTORYPARAMETER_CUSTOM_ID.replace(UI.constants.PLACEHOLDER, id));
 				if(newValue != "custom")
 				{
@@ -569,7 +582,6 @@ UIManager.prototype.showMatch = function(match)
 		win.matchVictoryConditionSelect.onselect = function(uiManager) {
 			return function(oldValue, newValue)
 			{
-				console.log(newValue);
 				if(oldValue != newValue)
 				{				
 					if(newValue == "domination")

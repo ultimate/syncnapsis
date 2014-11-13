@@ -99,6 +99,8 @@ lang.error.username_exists 		= lang.error.error + ": username is already registe
 
 lang.general = {};
 lang.general.apply_changes		= "Apply changes";
+lang.general.max				= "max.";
+lang.general.min				= "min.";
 lang.general.prefix				= "Starting with";
 lang.general.save_as_default	= "Save as default";
 lang.general.suffix				= "Ending with";
@@ -108,6 +110,7 @@ lang.match.creator						= "Creator";
 lang.match.galaxy						= "Galaxy";
 lang.match.participant					= "Participant";
 lang.match.participants					= "Participants";
+lang.match.participants_count			= "Number of participants";
 lang.match.speed						= "Speed";
 lang.match.seed							= "Seed";
 lang.match.startCondition				= "Start condition";
@@ -118,6 +121,7 @@ lang.match.startSystemSelectionEnabled	= "Start system selection";
 lang.match.state						= "Status";
 lang.match.title						= "Title";
 lang.match.victoryCondition				= "Victory condition";
+lang.match.victoryParameter				= "Victory parameter";
 
 lang.message = {};
 lang.message.error						= "An error occurred! Please try again...";

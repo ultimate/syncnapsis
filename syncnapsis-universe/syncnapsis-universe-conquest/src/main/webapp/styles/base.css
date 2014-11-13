@@ -503,6 +503,17 @@ form>.select.verylong>* {
 	margin-left: 10px;
 }
 
+.manage_match label.match_participantsMin,
+.manage_match label.match_participantsMax {
+	width: 33px;
+}
+
+.manage_match input.match_participantsMin,
+.manage_match input.match_participantsMax {
+	width: 60px;
+	margin-right: 10px;
+}
+
 .manage_match .right {
 	position: absolute;
 	right: 5px;

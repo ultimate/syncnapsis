@@ -99,6 +99,8 @@ lang.error.username_exists 		= lang.error.error + ": Benutzername ist bereits re
 
 lang.general = {};
 lang.general.apply_changes		= "Änderungen übernehmen";
+lang.general.max				= "max.";
+lang.general.min				= "min.";
 lang.general.prefix				= "Beginnend mit";
 lang.general.save_as_default	= "Als Standard speichern";
 lang.general.suffix				= "Endend mit";
@@ -108,6 +110,7 @@ lang.match.creator						= "Ersteller";
 lang.match.galaxy						= "Galaxie";
 lang.match.participant					= "Mitspieler";
 lang.match.participants					= "Mitspieler";
+lang.match.participants_count			= "Mitspieler-Anzahl";
 lang.match.speed						= "Geschwindigkeit";
 lang.match.seed							= "Seed";
 lang.match.startCondition				= "Start-Bedingung";
@@ -118,6 +121,7 @@ lang.match.startSystemSelectionEnabled	= "Start-System-Auswahl";
 lang.match.state						= "Status";
 lang.match.title						= "Titel";
 lang.match.victoryCondition				= "Sieg-Bedingung";
+lang.match.victoryParameter				= "Sieg-Parameter";
 
 lang.message = {};
 lang.message.error						= "Es ist ein Fehler aufgetreten! Bitte versuche es erneut...";
