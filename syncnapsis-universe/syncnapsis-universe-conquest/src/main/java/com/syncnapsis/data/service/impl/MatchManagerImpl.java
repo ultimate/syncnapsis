@@ -241,7 +241,9 @@ public class MatchManagerImpl extends GenericNameManagerImpl<Match, Long> implem
 		// match.setParticipants(participants);
 		match.setParticipantsMax(participantsMax);
 		match.setParticipantsMin(participantsMin);
-		match.setPlannedJoinType(plannedJoinType);
+		// set joining enabled here temporarily otherwise adding participants won't work
+		match.setPlannedJoinType(plannedJoinType); 
+		match.setPlannedJoinType(EnumJoinType.joiningEnabled); 
 		match.setSeed(seed);
 		match.setSpeed(speed);
 		match.setStartCondition(startCondition);
@@ -269,6 +271,10 @@ public class MatchManagerImpl extends GenericNameManagerImpl<Match, Long> implem
 			if(participantManager.addParticipant(match, empireId) == null)
 				logger.warn("could not add empire " + empireId + " to match " + match.getId());
 		}
+		
+		// set real join type now...
+		match.setPlannedJoinType(plannedJoinType);
+		match = save(match);
 
 		HibernateUtil.currentSession().flush();
 

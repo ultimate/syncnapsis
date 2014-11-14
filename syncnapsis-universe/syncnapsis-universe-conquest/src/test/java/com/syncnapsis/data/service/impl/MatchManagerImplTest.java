@@ -52,6 +52,7 @@ import com.syncnapsis.enums.EnumMatchState;
 import com.syncnapsis.enums.EnumStartCondition;
 import com.syncnapsis.enums.EnumVictoryCondition;
 import com.syncnapsis.mock.MockTimeProvider;
+import com.syncnapsis.mock.util.ReturnArgAction;
 import com.syncnapsis.security.BaseGameManager;
 import com.syncnapsis.security.accesscontrol.MatchAccessController;
 import com.syncnapsis.tests.GenericNameManagerImplTestCase;
@@ -59,6 +60,7 @@ import com.syncnapsis.tests.annotations.TestCoversClasses;
 import com.syncnapsis.tests.annotations.TestExcludesMethods;
 import com.syncnapsis.universe.Calculator;
 import com.syncnapsis.utils.data.ExtendedRandom;
+import com.syncnapsis.utils.serialization.BaseMapper;
 
 @TestCoversClasses({ MatchManager.class, MatchManagerImpl.class })
 @TestExcludesMethods({ "isAccessible", "*etSecurityManager", "afterPropertiesSet", "getMailer", "*etCalculator" })
@@ -69,7 +71,8 @@ public class MatchManagerImplTest extends GenericNameManagerImplTestCase<Match, 
 	private SolarSystemPopulationManager		solarSystemPopulationManager;
 	private SolarSystemInfrastructureManager	solarSystemInfrastructureManager;
 	private PlayerManager						playerManager;
-
+	
+	private BaseMapper							mapper;
 	private BaseGameManager						securityManager;
 	private Calculator							calculator;
 
@@ -114,46 +117,55 @@ public class MatchManagerImplTest extends GenericNameManagerImplTestCase<Match, 
 
 	public void testCreateMatch() throws Exception
 	{
-		Long galaxyId = 1L;
-		Player creator = playerManager.getByUsername("user1");
-		int participantsMax = 5;
-		int participantsMin = 3;
-		EnumJoinType plannedJoinType = EnumJoinType.invitationsOnly;
-		long seed = 123456789;
-		int speed = 100;
-		EnumStartCondition startCondition = EnumStartCondition.manually;
-		Date startDate = new Date(2345);
-		EnumJoinType startedJoinType = EnumJoinType.none;
-		int startSystemCount = 2;
-		int startPopulation = 1000;
-		boolean startSystemSelectionEnabled = true;
-		String title = "test-battle";
-		EnumVictoryCondition victoryCondition = EnumVictoryCondition.domination;
-		int victoryParameter = 100;
+		final Long matchId = 123L;
+		final Long galaxyId = 1L;
+		final Player creator = playerManager.getByUsername("user1");
+		final int participantsMax = 5;
+		final int participantsMin = 3;
+		final EnumJoinType plannedJoinType = EnumJoinType.invitationsOnly;
+		final long seed = 123456789;
+		final int speed = 2;
+		final EnumStartCondition startCondition = EnumStartCondition.manually;
+		final Date startDate = new Date(2345);
+		final EnumJoinType startedJoinType = EnumJoinType.none;
+		final int startSystemCount = 2;
+		final int startPopulation = 1000;
+		final boolean startSystemSelectionEnabled = true;
+		final String title = "test-battle";
+		final EnumVictoryCondition victoryCondition = EnumVictoryCondition.domination;
+		final int victoryParameter = 100;
 
 		final Galaxy galaxy = galaxyManager.get(galaxyId);
 
-		final Match match = new Match();
-		match.setId(123L);
-		match.setActivated(true);
-		match.setCreationDate(new Date(referenceTime));
-		match.setCreator(creator);
-		match.setFinishedDate(null);
-		match.setGalaxy(galaxy);
-		match.setParticipantsMax(participantsMax);
-		match.setParticipantsMin(participantsMin);
-		match.setPlannedJoinType(plannedJoinType);
-		match.setSeed(seed);
-		match.setSpeed(speed);
-		match.setStartCondition(startCondition);
-		match.setStartDate(startDate);
-		match.setStartedJoinType(startedJoinType);
-		match.setStartPopulation(startPopulation);
-		match.setStartSystemCount(startSystemCount);
-		match.setStartSystemSelectionEnabled(startSystemSelectionEnabled);
-		match.setTitle(title);
-		match.setVictoryCondition(victoryCondition);
-		match.setVictoryParameter(victoryParameter);
+		final Match tmpMatch = new Match();
+		tmpMatch.setActivated(true);
+		tmpMatch.setCreationDate(new Date(referenceTime));
+		tmpMatch.setCreator(creator);
+		tmpMatch.setFinishedDate(null);
+		tmpMatch.setGalaxy(galaxy);
+		tmpMatch.setParticipantsMax(participantsMax);
+		tmpMatch.setParticipantsMin(participantsMin);
+		tmpMatch.setPlannedJoinType(EnumJoinType.joiningEnabled);
+		tmpMatch.setSeed(seed);
+		tmpMatch.setSpeed(speed);
+		tmpMatch.setStartCondition(startCondition);
+		tmpMatch.setStartDate(startDate);
+		tmpMatch.setStartedJoinType(startedJoinType);
+		tmpMatch.setStartPopulation(startPopulation);
+		tmpMatch.setStartSystemCount(startSystemCount);
+		tmpMatch.setStartSystemSelectionEnabled(startSystemSelectionEnabled);
+		tmpMatch.setTitle(title);
+		tmpMatch.setVictoryCondition(victoryCondition);
+		tmpMatch.setVictoryParameter(victoryParameter);
+		
+		// dirty copy match using mapper ;-) 
+		final Match tmpMatch2 = mapper.fromMap(new Match(), mapper.toMap(tmpMatch));
+		tmpMatch2.setId(matchId);
+		
+		// dirty copy match using mapper ;-) 
+		final Match finalMatch = mapper.fromMap(new Match(), mapper.toMap(tmpMatch));
+		finalMatch.setId(matchId);
+		finalMatch.setPlannedJoinType(plannedJoinType);
 
 		final List<Long> playerIds = new ArrayList<Long>();
 		playerIds.add(1L);
@@ -175,14 +187,14 @@ public class MatchManagerImplTest extends GenericNameManagerImplTestCase<Match, 
 		// expectatins are a bit more complicated here...
 		mockContext.checking(new Expectations() {
 			{
+				// first save (with planned join type = joining enabled)
 				oneOf(mockDao).save(with(new BaseMatcher<Match>() {
 					@Override
 					public boolean matches(Object arg0)
 					{
-						if(((Match) arg0).getId() != null)
-							return false;
-						((Match) arg0).setId(match.getId());
-						return match.equals(arg0);
+						boolean match = tmpMatch.equals(arg0);
+						((Match) arg0).setId(matchId);
+						return match;
 					}
 
 					@Override
@@ -190,18 +202,12 @@ public class MatchManagerImplTest extends GenericNameManagerImplTestCase<Match, 
 					{
 					}
 				}));
-				will(returnValue(match));
+				will(new ReturnArgAction());
 			}
 		});
 		mockContext.checking(new Expectations() {
 			{
-				oneOf(mockDao).get(match.getId());
-				will(returnValue(match));
-			}
-		});
-		mockContext.checking(new Expectations() {
-			{
-				exactly(galaxy.getSolarSystems().size()).of(mockInfrastructureManager).initialize(with(equal(match)),
+				exactly(galaxy.getSolarSystems().size()).of(mockInfrastructureManager).initialize(with(equal(tmpMatch2)),
 						with(new BaseMatcher<SolarSystem>() {
 							private List<SolarSystem>	used	= new LinkedList<SolarSystem>();
 
@@ -223,7 +229,7 @@ public class MatchManagerImplTest extends GenericNameManagerImplTestCase<Match, 
 		});
 		mockContext.checking(new Expectations() {
 			{
-				exactly(playerIds.size()).of(mockParticipantManager).addParticipant(with(equal(match)), with(new BaseMatcher<Long>() {
+				exactly(playerIds.size()).of(mockParticipantManager).addParticipant(with(equal(tmpMatch2)), with(new BaseMatcher<Long>() {
 					private List<Long>	used	= new LinkedList<Long>();
 
 					@Override
@@ -242,11 +248,24 @@ public class MatchManagerImplTest extends GenericNameManagerImplTestCase<Match, 
 				will(returnValue(new Participant()));
 			}
 		});
+		mockContext.checking(new Expectations() {
+			{
+				// second save (with updated planned join type)
+				oneOf(mockDao).save(finalMatch);
+				will(new ReturnArgAction());
+			}
+		});
+		mockContext.checking(new Expectations() {
+			{
+				oneOf(mockDao).get(matchId);
+				will(returnValue(finalMatch));
+			}
+		});
 		result = mockManager.createMatch(title, galaxyId, speed, seed, startCondition, startDate, startSystemSelectionEnabled, startSystemCount,
 				startPopulation, victoryCondition, victoryParameter, participantsMax, participantsMin, playerIds, plannedJoinType, startedJoinType);
 		mockContext.assertIsSatisfied();
 		assertNotNull(result);
-		assertEquals(match, result);
+		assertEquals(finalMatch, result);
 	}
 
 	public void testStartMatch() throws Exception
