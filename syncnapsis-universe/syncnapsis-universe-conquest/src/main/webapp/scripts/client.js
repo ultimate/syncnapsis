@@ -114,6 +114,8 @@ UI.constants.MATCH_STARTPOPULATION_ID = "match_startPopulation_$";
 UI.constants.MATCH_VICTORYCONDITION_SELECT_ID = "match_victoryCondition_select_$";
 UI.constants.MATCH_VICTORYPARAMETER_SELECT_ID = "match_victoryParameter_select_$";
 UI.constants.MATCH_VICTORYPARAMETER_CUSTOM_ID = "match_victoryParameter_custom_$";
+UI.constants.MATCH_PLANNEDJOINTYPE_SELECT_ID = "match_plannedJoinType_select_$";
+UI.constants.MATCH_STARTEDJOINTYPE_SELECT_ID = "match_startedJoinType_select_$";
 
 UI.constants.LOGIN_USERNAME_ID = "login_username";
 UI.constants.LOGIN_PASSWORD_ID = "login_password";
@@ -606,6 +608,16 @@ UIManager.prototype.showMatch = function(match)
 			};
 		} (this);
 		this.populateEnumSelect(win.matchVictoryConditionSelect, lang.EnumVictoryCondition, false);
+	}
+	if(!win.matchPlannedJoinTypeSelect)
+	{
+		win.matchPlannedJoinTypeSelect = new Select(UI.constants.MATCH_PLANNEDJOINTYPE_SELECT_ID.replace(UI.constants.PLACEHOLDER, id));
+		this.populateEnumSelect(win.matchPlannedJoinTypeSelect, lang.EnumJoinType, false);
+	}
+	if(!win.matchStartedJoinTypeSelect)
+	{
+		win.matchStartedJoinTypeSelect = new Select(UI.constants.MATCH_STARTEDJOINTYPE_SELECT_ID.replace(UI.constants.PLACEHOLDER, id));
+		this.populateEnumSelect(win.matchStartedJoinTypeSelect, lang.EnumJoinType, false);
 	}
 	
 	// populate form
