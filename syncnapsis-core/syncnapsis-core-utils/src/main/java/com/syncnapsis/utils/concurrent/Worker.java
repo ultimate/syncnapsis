@@ -343,19 +343,35 @@ public abstract class Worker implements Runnable
 	}
 
 	/**
-	 * Start this worker
+	 * Start this worker.<br>
+	 * Exactly like <code>worker.start(false);</code>
 	 * 
+	 * @see Worker#start(boolean)
 	 * @see Worker#isRunning()
 	 * @see Worker#isSuspended()
 	 */
 	public void start()
+	{
+		this.start(false);
+	}
+
+	/**
+	 * Start this worker - if desired in suspended state<br>
+	 * Other than calling {@link Worker#start()} and {@link Worker#suspend()} subsequently this call
+	 * will guarantee suspended state from the beginning without any change of the worker to be
+	 * executed before suspend(..) is called.
+	 * 
+	 * @see Worker#start()
+	 * @see Worker#suspend()
+	 */
+	public void start(boolean suspended)
 	{
 		synchronized(this)
 		{
 			if(this.running)
 				throw new IllegalStateException("Worker already started!");
 			this.running = true;
-			this.suspended = false;
+			this.suspended = suspended;
 			this.clearError();
 			this.clearWarning();
 			this.thread = new Thread(this);
