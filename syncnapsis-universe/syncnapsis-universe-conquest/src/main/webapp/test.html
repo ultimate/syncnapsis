@@ -46,143 +46,143 @@
 </script>
 -->
 <script type="text/javascript">
-	var open = false;
-	toggleSelects = function() {
-		var elems = document.getElementsByClassName("select");
-		for(var i = 0; i < elems.length; i++)
-		{
-			if(open)	
-				elems[i].classList.add("open");
-			else	
-				elems[i].classList.remove("open");
-		}
-		open = !open;
+	var leftID = "left";
+	var rightID = "right";
+	
+	add = function()
+	{
+		move(leftID, rightID);
 	};
-
-	var selects = new Array();
+	
+	remove = function()
+	{
+		move(rightID, leftID);
+	};
+	
+	move = function(from, to)
+	{
+		if(typeof(from) == "string")
+			from = document.getElementById(from);
+		if(typeof(to) == "string")
+			to = document.getElementById(to);
+		
+		for(var i = 0; i < from.children.length; i++)
+		{
+			if(children[i].classList.contains("selected"))
+			{
+				children[i].classList.remove("selected");
+				to.appendChild(children[i]);
+			}
+		}
+	};
+	
+	select = function(element, event)
+	{
+		console.log("select")
+		if(Events.hasModifiers(event, Events.KEY_CTRL))
+		{
+			if(element.classList.contains("selected"))
+				element.classList.remove("selected");
+			else
+				element.classList.add("selected");
+		}
+		else if(Events.hasModifiers(event, Events.KEY_SHIFT))
+		{
+			// select all from last to this
+			var lastFound, thisFound;
+			for(var i = 0; i <= element.parentElement.children.length; i++)
+			{
+				if(element.parentElement.children[i] == element.parentElement.lastSelected)
+					lastFound = true;
+				else if(element.parentElement.children[i] == element)
+					thisFound = true;
+				
+				if(lastFound || thisFound)
+					element.parentElement.children[i].classList.add("selected");
+				else
+					element.parentElement.children[i].classList.remove("selected");
+				
+				if(lastFound && thisFound)
+					break;
+			}
+		}
+		else
+		{
+			// deselect all others
+			for(var i = 0; i < element.parentElement.children.length; i++)
+			{
+				element.parentElement.children[i].classList.remove("selected");
+			}
+			// select this one
+			element.classList.add("selected");
+		}
+		element.parentElement.lastSelected = element;
+	};
+	
 	init = function()
 	{
-		var elems = document.getElementsByClassName("select");
-		for(var i = 0; i < elems.length; i++)
+		var left = document.getElementById(leftID);
+		var right = document.getElementById(rightID);
+		
+		for(var i = 0; i < left.children.length; i++)
 		{
-			selects[i] = new Select(elems[i])
-			for(var x = 0; x < (i+1)*3; x++)
+			left.children[i].onclick = function(event)
 			{
-				selects[i].options[x] = {
-					value: x,
-					title: "Option " + x
-				};
-			}
-			selects[i].update();
+				select(this, event)
+			};
+		}
+		for(var i = 0; i < right.children.length; i++)
+		{
+			right.children[i].onclick = function(event)
+			{
+				select(this, event)
+			};
 		}
 	};
 </script>
 <style type="text/css">
-	.w200 * {
-		width: 200px;
+	.container {
+		flex-direction: row;
+		display: flex;
 	}
-	.w100 * {
-		width: 100px;
+	.container>div {
+		flex-grow: 1;
+		border: 1px solid rgb(0,255,255);
+		background-color: rgba(0,255,255,0.3);
 	}
-	.w50 * {
-		width: 50px;
+	.comboselect {
 	}
+	.comboselect .selected {
+		background-color: rgba(0,255,255,0.9);
+		color: black;
+	}
+
+
 </style>
 </head>
 <body onload="init();">
-<div id="testdiv">aaa</div>
-<a href="javascript: test();">test</a>
-	<!--  -->
-
 	
-<div style="position: absolute; left: 600px; top: 200px; width: 300px; height: 200px">
-	<input type="button" onclick="javascript: toggleSelects();" value="toggle selects">
+<div style="position: absolute; left: 200px; top: 200px; width: 300px; height: 200px" class="container">
+	<div>
+		<!-- left -->
+		<ul class="comboselect" id="left">
+			<li>foo</li>
+			<li>bar</li>
+			<li>baz</li>
+		</ul>
+	</div>
+	<div>
+		<input type="button" onclick="javascript: add();" value="add"><br/>
+		<input type="button" onclick="javascript: remove();" value="remove">
+	</div>
+	<div>
+		<!-- right -->
+		<ul class="comboselect" id="right">
+			<li>one</li>
+			<li>two</li>
+			<li>three</li>
+		</ul>
+	</div>
 </div>
-
-	
-<div style="position: absolute; left: 200px; top: 200px; width: 400px; height: 200px">
-	<input type="text" value="textfield"/><br>
-	<input type="password" value="password"/><br>
-	<br>
-	<select class="w200">
-		<option>option 1</option>
-		<option>option 2</option>
-		<option>option 3</option>
-		<option>option 1</option>
-		<option>option 2</option>
-		<option>option 3</option>
-		<option>option 1</option>
-		<option>option 2</option>
-		<option>option 3</option>
-		<option>option 1</option>
-		<option>option 2</option>
-		<option>option 3</option>
-		<option>option 1</option>
-		<option>option 2</option>
-		<option>option 3</option>
-		<option>option 1</option>
-		<option>option 2</option>
-		<option>option 3</option>
-	</select>&nbsp;
-	<select class="w100">
-		<option>option 1</option>
-		<option>option 2</option>
-		<option>option 3</option>
-	</select>&nbsp;
-	<select class="w50">
-		<option>option 1</option>
-		<option>option 2</option>
-		<option>option 3</option>
-	</select><br>
-	<br>
-	<div class="select w200" id="s200">
-	</div>&nbsp;
-	<div class="select w100" id="s100">
-	</div>&nbsp;
-	<div class="select w50" id="s50">
-	</div><br>
-</div>
-
-<div style="position: absolute; left: 1000px; top: 200px; width: 300px; height: 200px">
-	<form onsubmit="javascript: return submitTest();">
-		<input id="tf_user" type="text" /><br>
-		<input id="tf_pw" type="password" /><br>
-		<textarea id="ta"></textarea>
-	    <input type="submit" value="submit" style="display: none;"/>
-	</form>
-	<script type="text/javascript">
-	submitTest = function()
-	{
-		console.log(document.getElementById("tf_user") + ":" + document.getElementById("tf_pw"));
-		console.log(document.getElementById("ta").value);
-		return false;
-	}
-	
-	var down = false;
-	
-	document.getElementById("ta").onkeypress = function(event) {
-		if(event.keyCode == Events.KEY_ENTER)
-		{
-			if(Events.hasModifiers(event, Events.KEY_CTRL))
-			{
-				this.value = this.value + "\n";
-				this.scrollTop = 9999999; // scroll down
-			}
-			else if(down == false)
-			{
-				document.forms[0].onsubmit();
-			}
-			down = true;
-			return false;
-		}
-		//console.log("p");
-		return true;
-	};
-	document.getElementById("ta").onkeyup = function(event) {
-		down = false;
-	};
-	</script>
-</div>
-
 </body>
 </html>
