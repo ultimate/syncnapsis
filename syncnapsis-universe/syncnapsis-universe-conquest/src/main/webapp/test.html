@@ -18,9 +18,10 @@
 <link rel="stylesheet" type="text/css" href="styles/default.css" />
 <link rel="stylesheet" type="text/css" href="styles/base.css" />
 <link rel="stylesheet" type="text/css" href="styles/components.css" />
-<link rel="stylesheet" type="text/css" href="styles/select.css" />
+<link rel="stylesheet" type="text/css" href="styles/comboselect.css" />
 <script type="text/javascript" src="scripts/util/Events.js"></script>
-<script type="text/javascript" src="scripts/select.js"></script>
+<script type="text/javascript" src="scripts/util/Elements.js"></script>
+<script type="text/javascript" src="scripts/comboselect.js"></script>
 <!--
 <script type="text/javascript" src="scripts/lib/json2.js"></script>
 <script type="text/javascript" src="scripts/util/Requests.js"></script>
@@ -29,32 +30,17 @@
 <script type="text/javascript" src="scripts/util/Strings.js"></script>
 <script type="text/javascript" src="scripts/styles.js"></script>
 <script type="text/javascript" src="scripts/ui.js"></script>
-<script type="text/javascript">
-	var d;
-	var w;
-	test = function()
-	{
-		d = document.createElement("div");
-		d.innerHTML = "Bla bla:<br><ul><li>abc</li><li>abc</li></ul>";
-		
-		w = new Styles.Window(1, "menu.login", d);
-		
-		w.setPosition(100, 100);
-		w.setSize(300,200);
-		w.setVisible(true);
-	}
-</script>
 -->
 <script type="text/javascript">
 	var leftID = "left";
 	var rightID = "right";
 	
-	add = function()
+	moveToRight = function()
 	{
 		move(leftID, rightID);
 	};
 	
-	remove = function()
+	moveToLeft = function()
 	{
 		move(rightID, leftID);
 	};
@@ -68,17 +54,20 @@
 		
 		for(var i = 0; i < from.children.length; i++)
 		{
-			if(children[i].classList.contains("selected"))
+			if(from.children[i].classList.contains("selected"))
 			{
-				children[i].classList.remove("selected");
-				to.appendChild(children[i]);
+				from.children[i].classList.remove("selected");
+				to.appendChild(from.children[i]);
+				i--; // child is immediately removed, hence following indexes are shifted by 1
 			}
 		}
 	};
 	
 	select = function(element, event)
 	{
-		console.log("select")
+		if(event.target != element) //not element itselft, maybe add/remove button
+			return;
+		
 		if(Events.hasModifiers(event, Events.KEY_CTRL))
 		{
 			if(element.classList.contains("selected"))
@@ -119,6 +108,30 @@
 		element.parentElement.lastSelected = element;
 	};
 	
+	createAdd = function()
+	{
+		var elem = document.createElement("span");
+		elem.innerHTML = "+";
+		elem.classList.add("add");
+		elem.onclick = function(event) {
+			this.parentElement.classList.remove("selected");
+			document.getElementById(rightID).appendChild(this.parentElement);
+		};
+		return elem;
+	};
+	
+	createRemove = function()
+	{
+		var elem = document.createElement("span");
+		elem.innerHTML = "x";
+		elem.classList.add("remove");
+		elem.onclick = function(event) {
+			this.parentElement.classList.remove("selected");
+			document.getElementById(leftID).appendChild(this.parentElement);
+		};
+		return elem;
+	};
+	
 	init = function()
 	{
 		var left = document.getElementById(leftID);
@@ -130,6 +143,8 @@
 			{
 				select(this, event)
 			};
+			left.children[i].appendChild(createAdd());
+			left.children[i].appendChild(createRemove());
 		}
 		for(var i = 0; i < right.children.length; i++)
 		{
@@ -137,6 +152,8 @@
 			{
 				select(this, event)
 			};
+			right.children[i].appendChild(createAdd());
+			right.children[i].appendChild(createRemove());
 		}
 	};
 </script>
@@ -150,14 +167,6 @@
 		border: 1px solid rgb(0,255,255);
 		background-color: rgba(0,255,255,0.3);
 	}
-	.comboselect {
-	}
-	.comboselect .selected {
-		background-color: rgba(0,255,255,0.9);
-		color: black;
-	}
-
-
 </style>
 </head>
 <body onload="init();">
@@ -165,19 +174,19 @@
 <div style="position: absolute; left: 200px; top: 200px; width: 300px; height: 200px" class="container">
 	<div>
 		<!-- left -->
-		<ul class="comboselect" id="left">
+		<ul class="comboselect source" id="left">
 			<li>foo</li>
 			<li>bar</li>
 			<li>baz</li>
 		</ul>
 	</div>
 	<div>
-		<input type="button" onclick="javascript: add();" value="add"><br/>
-		<input type="button" onclick="javascript: remove();" value="remove">
+		<input type="button" onclick="javascript: moveToRight();" value="add"><br/>
+		<input type="button" onclick="javascript: moveToLeft();" value="remove">
 	</div>
 	<div>
 		<!-- right -->
-		<ul class="comboselect" id="right">
+		<ul class="comboselect target" id="right">
 			<li>one</li>
 			<li>two</li>
 			<li>three</li>
