@@ -1,0 +1,62 @@
+/**
+ * Syncnapsis Framework - Copyright (c) 2012-2014 ultimate
+ * 
+ * This program is free software; you can redistribute it and/or modify it under the terms of
+ * the GNU General Public License as published by the Free Software Foundation; either version
+ * 3 of the License, or any later version.
+ * 
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+ * without even the implied warranty of MECHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Plublic License along with this program;
+ * if not, see <http://www.gnu.org/licenses/>.
+ */
+ 
+.comboselect {
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+
+.comboselect {
+	padding: 0px;
+	margin-top: 0px;
+	cursor: pointer;			
+	border: 1px solid rgba(0,255,255,0.9);
+	background: rgba(0,60,60,0.9);
+}
+
+.comboselect.disabled {
+	color: rgb(128,128,128);
+}
+
+.comboselect.error {
+	border: 1px solid rgba(0,255,255,0.9);
+	background: rgba(255,239,136,1.0);
+}
+
+.comboselect li {
+ 	list-style: none;
+}
+
+.comboselect.source .add,
+.comboselect.target .remove {
+	float: right;
+	padding-left: 5px;
+	padding-right: 5px;	
+}
+
+.comboselect.source .remove,
+.comboselect.target .add {
+	display: none;
+}
+
+.comboselect .selected,
+.comboselect .active {
+	background: rgba(0, 141, 141, 0.9);
+	color: rgba(0,0,0,0.9);
+}
