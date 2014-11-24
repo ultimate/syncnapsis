@@ -35,126 +35,17 @@
 	var leftID = "left";
 	var rightID = "right";
 	
-	moveToRight = function()
-	{
-		move(leftID, rightID);
-	};
-	
-	moveToLeft = function()
-	{
-		move(rightID, leftID);
-	};
-	
-	move = function(from, to)
-	{
-		if(typeof(from) == "string")
-			from = document.getElementById(from);
-		if(typeof(to) == "string")
-			to = document.getElementById(to);
-		
-		for(var i = 0; i < from.children.length; i++)
-		{
-			if(from.children[i].classList.contains("selected"))
-			{
-				from.children[i].classList.remove("selected");
-				to.appendChild(from.children[i]);
-				i--; // child is immediately removed, hence following indexes are shifted by 1
-			}
-		}
-	};
-	
-	select = function(element, event)
-	{
-		if(event.target != element) //not element itselft, maybe add/remove button
-			return;
-		
-		if(Events.hasModifiers(event, Events.KEY_CTRL))
-		{
-			if(element.classList.contains("selected"))
-				element.classList.remove("selected");
-			else
-				element.classList.add("selected");
-		}
-		else if(Events.hasModifiers(event, Events.KEY_SHIFT))
-		{
-			// select all from last to this
-			var lastFound, thisFound;
-			for(var i = 0; i <= element.parentElement.children.length; i++)
-			{
-				if(element.parentElement.children[i] == element.parentElement.lastSelected)
-					lastFound = true;
-				else if(element.parentElement.children[i] == element)
-					thisFound = true;
-				
-				if(lastFound || thisFound)
-					element.parentElement.children[i].classList.add("selected");
-				else
-					element.parentElement.children[i].classList.remove("selected");
-				
-				if(lastFound && thisFound)
-					break;
-			}
-		}
-		else
-		{
-			// deselect all others
-			for(var i = 0; i < element.parentElement.children.length; i++)
-			{
-				element.parentElement.children[i].classList.remove("selected");
-			}
-			// select this one
-			element.classList.add("selected");
-		}
-		element.parentElement.lastSelected = element;
-	};
-	
-	createAdd = function()
-	{
-		var elem = document.createElement("span");
-		elem.innerHTML = "+";
-		elem.classList.add("add");
-		elem.onclick = function(event) {
-			this.parentElement.classList.remove("selected");
-			document.getElementById(rightID).appendChild(this.parentElement);
-		};
-		return elem;
-	};
-	
-	createRemove = function()
-	{
-		var elem = document.createElement("span");
-		elem.innerHTML = "x";
-		elem.classList.add("remove");
-		elem.onclick = function(event) {
-			this.parentElement.classList.remove("selected");
-			document.getElementById(leftID).appendChild(this.parentElement);
-		};
-		return elem;
-	};
+	var comboselect;
 	
 	init = function()
 	{
-		var left = document.getElementById(leftID);
-		var right = document.getElementById(rightID);
+		comboselect = new ComboSelect(leftID, rightID);
 		
-		for(var i = 0; i < left.children.length; i++)
-		{
-			left.children[i].onclick = function(event)
-			{
-				select(this, event)
-			};
-			left.children[i].appendChild(createAdd());
-			left.children[i].appendChild(createRemove());
-		}
-		for(var i = 0; i < right.children.length; i++)
-		{
-			right.children[i].onclick = function(event)
-			{
-				select(this, event)
-			};
-			right.children[i].appendChild(createAdd());
-			right.children[i].appendChild(createRemove());
-		}
+		comboselect.addOptions( ["foo",
+		                   		"bar",
+		                   		"one",
+		                   		"two",
+		                   		"three" ]);
 	};
 </script>
 <style type="text/css">
@@ -172,25 +63,13 @@
 <body onload="init();">
 	
 <div style="position: absolute; left: 200px; top: 200px; width: 300px; height: 200px" class="container">
-	<div>
-		<!-- left -->
-		<ul class="comboselect source" id="left">
-			<li>foo</li>
-			<li>bar</li>
-			<li>baz</li>
-		</ul>
+	<div id="left">
 	</div>
 	<div>
-		<input type="button" onclick="javascript: moveToRight();" value="add"><br/>
-		<input type="button" onclick="javascript: moveToLeft();" value="remove">
+		<input type="button" onclick="javascript: comboselect.applySource();" value="add"><br/>
+		<input type="button" onclick="javascript: comboselect.applyTarget();" value="remove">
 	</div>
-	<div>
-		<!-- right -->
-		<ul class="comboselect target" id="right">
-			<li>one</li>
-			<li>two</li>
-			<li>three</li>
-		</ul>
+	<div id="right">
 	</div>
 </div>
 </body>
