@@ -514,14 +514,28 @@ form>.select.verylong>* {
 	margin-right: 10px;
 }
 
-.manage_match .right {
+.manage_match .match_participants_target {
 	position: absolute;
 	right: 5px;
 	width: 35%;
 }
 
-.manage_match .right h4 {
+.manage_match .match_participants_target h4 {
 	margin-top: 20px;
+}
+
+.manage_match .match_participants_target ul {
+	height: 286px;
+}
+
+.manage_match .match_participants_source {
+	width: 204px;
+	height: 100px;
+	float: left;
+}
+
+.manage_match .match_participants_source ul {
+	height: 100px;
 }
 
 .manage_match .buttons_new,

@@ -109,6 +109,7 @@ lang.match = {};
 lang.match.creator						= "Creator";
 lang.match.galaxy						= "Galaxy";
 lang.match.participant					= "Participant";
+lang.match.participant_selection		= "Participant selection";
 lang.match.participants					= "Participants";
 lang.match.participants_count			= "Number of participants";
 lang.match.plannedJoinType				= "Joining (before start)";

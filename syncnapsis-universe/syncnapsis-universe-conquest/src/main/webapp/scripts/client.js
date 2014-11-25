@@ -17,6 +17,7 @@
 //@requires("Lang")
 //@requires("Tabs")
 //@requires("Select")
+//@requires("ComboSelect")
 //@requires("Pinboard")
 //@requires("application-base")
 var UI = {};
@@ -116,6 +117,8 @@ UI.constants.MATCH_VICTORYPARAMETER_SELECT_ID = "match_victoryParameter_select_$
 UI.constants.MATCH_VICTORYPARAMETER_CUSTOM_ID = "match_victoryParameter_custom_$";
 UI.constants.MATCH_PLANNEDJOINTYPE_SELECT_ID = "match_plannedJoinType_select_$";
 UI.constants.MATCH_STARTEDJOINTYPE_SELECT_ID = "match_startedJoinType_select_$";
+UI.constants.MATCH_PARTICIPANTS_SOURCE_ID = "match_participants_source_$";
+UI.constants.MATCH_PARTICIPANTS_TARGET_ID = "match_participants_target_$";
 
 UI.constants.LOGIN_USERNAME_ID = "login_username";
 UI.constants.LOGIN_PASSWORD_ID = "login_password";
@@ -618,6 +621,13 @@ UIManager.prototype.showMatch = function(match)
 	{
 		win.matchStartedJoinTypeSelect = new Select(UI.constants.MATCH_STARTEDJOINTYPE_SELECT_ID.replace(UI.constants.PLACEHOLDER, id));
 		this.populateEnumSelect(win.matchStartedJoinTypeSelect, lang.EnumJoinType, false);
+	}
+	if(!win.matchParticipantComboSelect)
+	{
+		var sourceID = UI.constants.MATCH_PARTICIPANTS_SOURCE_ID.replace(UI.constants.PLACEHOLDER, id);
+		var targetID = UI.constants.MATCH_PARTICIPANTS_TARGET_ID.replace(UI.constants.PLACEHOLDER, id);
+		win.matchParticipantComboSelect = new ComboSelect(sourceID, targetID);
+		win.matchParticipantComboSelect.addOptions( [1, 2, 3, 4, 5, 6, 7, 8, 9, 10 ] );
 	}
 	
 	// populate form

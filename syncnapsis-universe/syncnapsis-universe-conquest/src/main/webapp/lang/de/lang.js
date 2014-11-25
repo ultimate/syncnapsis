@@ -109,6 +109,7 @@ lang.match = {};
 lang.match.creator						= "Ersteller";
 lang.match.galaxy						= "Galaxie";
 lang.match.participant					= "Mitspieler";
+lang.match.participant_selection		= "Mitspieler-Auswahl";
 lang.match.participants					= "Mitspieler";
 lang.match.participants_count			= "Mitspieler-Anzahl";
 lang.match.plannedJoinType				= "Beitritt (vor Start)";
