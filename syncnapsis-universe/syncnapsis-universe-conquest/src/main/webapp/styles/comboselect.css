@@ -28,6 +28,7 @@
 	cursor: pointer;			
 	border: 1px solid rgba(0,255,255,0.9);
 	background: rgba(0,60,60,0.9);
+	overflow-y: auto;
 }
 
 .comboselect.disabled {
