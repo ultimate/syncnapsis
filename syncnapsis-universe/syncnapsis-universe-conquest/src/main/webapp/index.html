@@ -22,6 +22,7 @@
 <link rel="stylesheet" type="text/css" href="styles/components.css" />
 <link rel="stylesheet" type="text/css" href="styles/pinboard.css" />
 <link rel="stylesheet" type="text/css" href="styles/select.css" />
+<link rel="stylesheet" type="text/css" href="styles/comboselect.css" />
 <link rel="stylesheet" type="text/css" href="styles/tabs.css" />
 <link rel="stylesheet" type="text/css" href="styles/window.css" />
 <script type="text/javascript" src="scripts/util/Requests.js"></script>
@@ -49,6 +50,7 @@
 	DependencyManager.register("Client", "client.js");
 	DependencyManager.register("Pinboard", "pinboard.js");
 	DependencyManager.register("Select", "select.js");
+	DependencyManager.register("ComboSelect", "comboselect.js");
 	DependencyManager.register("Server", "server.js");
 	DependencyManager.register("Styles", "styles.js");
 	DependencyManager.register("Tabs", "tabs.js");
@@ -444,8 +446,6 @@
 					<label key="match.startedJoinType" for="match_startedJoinType_select_$" class="large"></label><div id="match_startedJoinType_select_$" class="match_startedJoinType_select long"></div><br/>
 						<!--
 						empireIds (from players)
-						plannedJoinType (enum)
-						startedJoinType (enum)
 						-->
 						<!-- TODO -->
 								

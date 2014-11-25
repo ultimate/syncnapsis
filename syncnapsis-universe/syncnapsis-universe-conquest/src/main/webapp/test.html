@@ -21,6 +21,7 @@
 <link rel="stylesheet" type="text/css" href="styles/comboselect.css" />
 <script type="text/javascript" src="scripts/util/Events.js"></script>
 <script type="text/javascript" src="scripts/util/Elements.js"></script>
+<script type="text/javascript" src="scripts/util/Strings.js"></script>
 <script type="text/javascript" src="scripts/comboselect.js"></script>
 <!--
 <script type="text/javascript" src="scripts/lib/json2.js"></script>
@@ -34,6 +35,7 @@
 <script type="text/javascript">
 	var leftID = "left";
 	var rightID = "right";
+	var filterID = "filter";
 	
 	var comboselect;
 	
@@ -46,6 +48,21 @@
 		                   		"one",
 		                   		"two",
 		                   		"three" ]);
+	};
+	
+	filter = function(what)
+	{
+		var filterString = document.getElementById(filterID).value;
+		
+		var matcher = function(value)
+		{
+			return value.startsWith(filterString);
+		};
+		
+		if(what)
+			comboselect.filterTarget(matcher);
+		else
+			comboselect.filterSource(matcher);
 	};
 </script>
 <style type="text/css">
@@ -67,7 +84,10 @@
 	</div>
 	<div>
 		<input type="button" onclick="javascript: comboselect.applySource();" value="add"><br/>
-		<input type="button" onclick="javascript: comboselect.applyTarget();" value="remove">
+		<input type="button" onclick="javascript: comboselect.applyTarget();" value="remove"><br/>
+		<input type="text" id="filter"/><br/>
+		<input type="button" onclick="javascript: filter(0);" value="filter left"><br/>
+		<input type="button" onclick="javascript: filter(1);" value="filter right"><br/>
 	</div>
 	<div id="right">
 	</div>

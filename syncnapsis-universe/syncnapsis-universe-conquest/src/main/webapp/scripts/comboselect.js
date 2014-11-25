@@ -11,6 +11,8 @@
  */
 // @requires("Events")
 // @requires("Elements")
+// @requires("Strings")
+
 	
 ComboSelect = function(sourceElement, targetElement)
 {
@@ -34,6 +36,9 @@ ComboSelect = function(sourceElement, targetElement)
 	this.targetList.classList.add("target");
 	this.targetElement.appendChild(this.targetList);
 	
+	// Note: li.value is occupied for numbers for <ol> lists
+	// -> hence "val" is used instead
+
 	this.highlightIndex = null;
 	
 	var _disabled = false;
@@ -80,7 +85,7 @@ ComboSelect = function(sourceElement, targetElement)
 		// look for a matching value
 		for(var i = 0; i < this.sourceList.children.length; i++)
 		{
-			if(values.indexOf(this.sourceList.children[i].value) != -1)
+			if(values.indexOf(this.sourceList.children[i].val) != -1)
 				this.sourceList.children[i].classList.add("selected");
 			else if(deselectOthers)
 				this.sourceList.children[i].classList.remove("selected");
@@ -99,7 +104,7 @@ ComboSelect = function(sourceElement, targetElement)
 		// look for a matching value
 		for(var i = 0; i < this.targetList.children.length; i++)
 		{
-			if(values.indexOf(this.targetList.children[i].value) != -1)
+			if(values.indexOf(this.targetList.children[i].val) != -1)
 				this.targetList.children[i].classList.add("selected");
 			else if(deselectOthers)
 				this.targetList.children[i].classList.remove("selected");
@@ -117,25 +122,27 @@ ComboSelect = function(sourceElement, targetElement)
 		}
 	};
 	this.applySource = function() {
+		this.unhighlight();
 		_apply(this.sourceList, this.targetList);
 	};
 	this.applyTarget = function() {
+		this.unhighlight();
 		_apply(this.targetList, this.sourceList);
 	};
 	var _filter = function(what, matcher) {
 		for(var i = 0; i < what.children.length; i++)
 		{
-			if(matcher(what.children[i].value))
-				what.children[i].classList.remove(UI.constants.HIDDEN_CLASS);
+			if(matcher(what.children[i].val))
+				what.children[i].classList.remove("hidden");
 			else
-				what.children[i].classList.add(UI.constants.HIDDEN_CLASS);
+				what.children[i].classList.add("hidden");
 		}
 	};
 	this.filterSource = function(matcher) {
-		_filter(this.sourceList);
+		_filter(this.sourceList, matcher);
 	};
 	this.filterTarget = function(matcher) {
-		_filter(this.targetList);
+		_filter(this.targetList, matcher);
 	};
 	this.addOptions = function(options) {
 		for(var o = 0; o < options.length; o++)
@@ -143,7 +150,7 @@ ComboSelect = function(sourceElement, targetElement)
 			console.log("adding option: " + options[o]);
 			
 			var option = document.createElement("li");
-			option.value = options[o];
+			option.val = options[o];
 			option.innerHTML = this.getOptionContent(options[o]);
 			
 			var add = document.createElement("span");
@@ -151,6 +158,7 @@ ComboSelect = function(sourceElement, targetElement)
 			add.classList.add("add");
 			add.onclick = function(comboselect) {
 				return function(event) {
+					comboselect.unhighlight();
 					this.parentElement.classList.remove("selected");
 					comboselect.targetList.appendChild(this.parentElement);
 				};
@@ -162,6 +170,7 @@ ComboSelect = function(sourceElement, targetElement)
 			remove.classList.add("remove");
 			remove.onclick = function(comboselect) {
 				return function(event) {
+					comboselect.unhighlight();
 					this.parentElement.classList.remove("selected");
 					comboselect.sourceList.appendChild(this.parentElement);
 				};

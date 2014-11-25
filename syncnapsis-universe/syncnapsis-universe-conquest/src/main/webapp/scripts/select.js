@@ -180,9 +180,9 @@ Select = function(element)
 		for(var i = 0; i < this.options.length; i++)
 		{
 			if(matcher(this.options[i].value))
-				this.options[i].element.classList.remove(UI.constants.HIDDEN_CLASS);
+				this.options[i].element.classList.remove("hidden");
 			else
-				this.options[i].element.classList.add(UI.constants.HIDDEN_CLASS);
+				this.options[i].element.classList.add("hidden");
 		}
 	};
 	this.element.onclick = function(select) {

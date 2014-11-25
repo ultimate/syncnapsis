@@ -41,13 +41,13 @@
 
 .comboselect li {
  	list-style: none;
+	padding-left: 5px;
+	padding-right: 5px;	
 }
 
 .comboselect.source .add,
 .comboselect.target .remove {
 	float: right;
-	padding-left: 5px;
-	padding-right: 5px;	
 }
 
 .comboselect.source .remove,
