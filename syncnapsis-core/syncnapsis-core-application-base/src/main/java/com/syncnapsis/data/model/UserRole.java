@@ -206,7 +206,7 @@ public class UserRole extends BaseObject<Long> implements BitMask
 	public String toString()
 	{
 		ToStringBuilder builder = new ToStringBuilder(this);
-		builder.append("id", id).append("rolename", rolename).append("mask", mask).append("fallbackRole", fallbackRole.getId())
+		builder.append("id", id).append("rolename", rolename).append("mask", mask).append("fallbackRole", fallbackRole == null ? null : fallbackRole.getId())
 				.append("onlyAllowedToSeeActivated", onlyAllowedToSeeActivated);
 		return builder.toString();
 	}
