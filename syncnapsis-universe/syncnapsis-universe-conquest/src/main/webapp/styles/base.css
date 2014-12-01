@@ -516,26 +516,41 @@ form>.select.verylong>* {
 
 .manage_match .match_participants_target {
 	position: absolute;
-	right: 5px;
-	width: 35%;
+	right: 7px;
+}
+
+.manage_match .match_participants_target,
+.manage_match .match_participants_target ul {
+	width: 220px;
 }
 
 .manage_match .match_participants_target h4 {
-	margin-top: 20px;
+	margin-top: 10px;
+	margin-left: 2px;
+	margin-bottom: 10px;
 }
 
 .manage_match .match_participants_target ul {
-	height: 286px;
+	height: 300px;
 }
 
-.manage_match .match_participants_source {
-	width: 204px;
+.manage_match .match_participants_source,
+.manage_match .match_participants_source ul {
+	width: 202px;
 	height: 100px;
 	float: left;
 }
 
-.manage_match .match_participants_source ul {
-	height: 100px;
+.manage_match .match_participants_source ul .col_1,
+.manage_match .match_participants_target ul .col_1 {
+	position: relative;
+	left: 0px; /* due to padding */
+}
+
+.manage_match .match_participants_source ul .col_2,
+.manage_match .match_participants_target ul .col_2 {
+	position: absolute;
+	left: 30px;
 }
 
 .manage_match .buttons_new,

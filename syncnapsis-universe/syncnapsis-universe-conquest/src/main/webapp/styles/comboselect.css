@@ -29,6 +29,7 @@
 	border: 1px solid rgba(0,255,255,0.9);
 	background: rgba(0,60,60,0.9);
 	overflow-y: auto;
+	position: absolute;
 }
 
 .comboselect.disabled {
@@ -43,7 +44,7 @@
 .comboselect li {
  	list-style: none;
 	padding-left: 5px;
-	padding-right: 5px;	
+	padding-right: 5px;
 }
 
 .comboselect.source .add,
