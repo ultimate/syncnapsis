@@ -227,7 +227,6 @@ UIManager = function()
 		console.log("showing match #" + newValue.id);
 		// TODO update 3D-view
 	};
-	server.matchManager.getAll(); // load matches
 	
 	// initialize galaxy select for match filter
 	this.matchFilterGalaxySelect = new Select(UI.constants.MATCH_FILTER_GALAXY_SELECT_ID);
@@ -246,8 +245,7 @@ UIManager = function()
 		content.push("</span>");
 		return content.join("");
 	};
-	server.galaxyManager.getAll(); // load galaxies
-	
+
 	// initialize state select for match filter
 	this.matchFilterStateSelect = new Select(UI.constants.MATCH_FILTER_STATE_SELECT_ID);
 	// populate with enum
@@ -284,6 +282,10 @@ UIManager = function()
 	this.pinboards.push(new Pinboard(document.getElementById(UI.constants.PINBOARD_CHAT), "testboard", "chat", null, PINBOARD_INPUT_SINGLE_LINE, false));
 	this.pinboards.push(new Pinboard(document.getElementById(UI.constants.PINBOARD_EVENTS), "testboard", "eventlog", null, PINBOARD_INPUT_NONE, false));
 
+	server.matchManager.getAll(); // load matches
+	server.galaxyManager.getAll(); // load galaxies
+	server.empireManager.getAll(); // load empires
+	
 	console.log("showing UI");
 
 	Events.fireEvent(window, Events.ONRESIZE);
@@ -384,6 +386,17 @@ UIManager.prototype.onGalaxiesLoaded = function(galaxies)
 	console.log("galaxies loaded!");
 	this.galaxies = galaxies;
 	this.populateSelect(this.matchFilterGalaxySelect, galaxies, true);
+};
+
+UIManager.prototype.onEmpiresLoaded = function(empires)
+{
+	// Note: load empires instead of users but display them by username anyway
+	// this way pseudo-users/players are not sbown (e.g. system-user)
+	console.log("empires loaded!");
+	this.empires = empires;
+	server.entityManager.loadProperty(empires, "player.user", function(empires) {
+		console.log("empire users loaded!");
+	});
 };
 
 UIManager.prototype.onMatchesLoaded = function(matches)
@@ -627,7 +640,16 @@ UIManager.prototype.showMatch = function(match)
 		var sourceID = UI.constants.MATCH_PARTICIPANTS_SOURCE_ID.replace(UI.constants.PLACEHOLDER, id);
 		var targetID = UI.constants.MATCH_PARTICIPANTS_TARGET_ID.replace(UI.constants.PLACEHOLDER, id);
 		win.matchParticipantComboSelect = new ComboSelect(sourceID, targetID);
-		win.matchParticipantComboSelect.addOptions( [1, 2, 3, 4, 5, 6, 7, 8, 9, 10 ] );
+		win.matchParticipantComboSelect.getOptionContent = function(empire) {
+			var content = new Array();
+			content.push("<span class='col_1'>");
+			content.push(empire.player.user.id);
+			content.push("</span><span class='col_2'>");
+			content.push(empire.player.user.username);
+			content.push("</span>");
+			return content.join("");
+		};
+		win.matchParticipantComboSelect.addOptions( this.empires );
 	}
 	
 	// populate form

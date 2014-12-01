@@ -16,6 +16,7 @@
 //@requires("Server")
 //@requires("RPCSocket")
 //@requires("PlayerManager")
+//@requires("EmpireManager")
 //@requires("UserManager")
 //@requires("MatchManager")
 //@requires("GalaxyManager")
@@ -50,12 +51,12 @@ connect = function()
 			var genericRPCInvocationHandler = new WebSockets.rpc.GenericRPCInvocationHandler(rpcSocket, server);
 			// init server-side managers as proxies (may use same "class/interface") 
 			server.userManager = Proxies.newProxyInstance(UserManager, genericRPCInvocationHandler); // currently GenericManager is sufficient
+			server.empireManager = Proxies.newProxyInstance(EmpireManager, genericRPCInvocationHandler);
 			server.playerManager = Proxies.newProxyInstance(PlayerManager, genericRPCInvocationHandler);
 			server.matchManager = Proxies.newProxyInstance(MatchManager, genericRPCInvocationHandler);
 			server.galaxyManager = Proxies.newProxyInstance(GalaxyManager, genericRPCInvocationHandler);
 			server.uiManager = Proxies.newProxyInstance(ServerUIManager, genericRPCInvocationHandler);
 			server.messageManager = Proxies.newProxyInstance(ServerMessageManager, genericRPCInvocationHandler);
-			server.empireManager = Proxies.newProxyInstance(GenericNameManager, genericRPCInvocationHandler);
 			server.participantManager = Proxies.newProxyInstance(GenericNameManager, genericRPCInvocationHandler);
 			server.pinboardManager = Proxies.newProxyInstance(GenericNameManager, genericRPCInvocationHandler);
 			// init additional services
