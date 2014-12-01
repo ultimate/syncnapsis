@@ -24,8 +24,7 @@
 
 .comboselect {
 	padding: 0px;
-	margin-top: 0px;
-	cursor: pointer;			
+	margin-top: 0px;		
 	border: 1px solid rgba(0,255,255,0.9);
 	background: rgba(0,60,60,0.9);
 	overflow-y: auto;
@@ -45,20 +44,27 @@
  	list-style: none;
 	padding-left: 5px;
 	padding-right: 5px;
+	cursor: pointer;	
 }
 
-.comboselect.source .add,
-.comboselect.target .remove {
+.comboselect li.disabled {
+	color: rgb(128,128,128);
+}	
+
+.comboselect.source li .add,
+.comboselect.target li .remove {
 	float: right;
 }
 
-.comboselect.source .remove,
-.comboselect.target .add {
+.comboselect.source li .remove,
+.comboselect.target li .add,
+.comboselect.source li.disabled .add,
+.comboselect.target li.disabled .remove {
 	display: none;
 }
 
-.comboselect .selected,
-.comboselect .active {
+.comboselect li.selected,
+.comboselect li.active {
 	background: rgba(0, 141, 141, 0.9);
 	color: rgba(0,0,0,0.9);
 }

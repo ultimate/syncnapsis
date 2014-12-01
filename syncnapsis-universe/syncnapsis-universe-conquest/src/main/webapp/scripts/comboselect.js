@@ -186,6 +186,9 @@ ComboSelect = function(sourceElement, targetElement)
 					if(event.target != this) //not element itselft, maybe add/remove button
 						return;
 					
+					if(event.target.classList.contains("disabled"))
+						return;
+					
 					if(Events.hasModifiers(event, Events.KEY_CTRL))
 					{
 						if(this.classList.contains("selected"))
@@ -230,6 +233,8 @@ ComboSelect = function(sourceElement, targetElement)
 				return function(event)
 				{
 					comboselect.unhighlight();
+					if(this.classList.contains("disabled"))
+						return;
 					comboselect.highlight(this);
 				};
 			} (this);
