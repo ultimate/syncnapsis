@@ -102,6 +102,7 @@ UI.constants.MATCH_FILTER_CREATOR_ID = "match_filter_creator";
 UI.constants.MATCH_FILTER_PARTICIPANTS_ID = "match_filter_participants";
 UI.constants.MATCH_FILTER_GALAXY_SELECT_ID = "match_filter_galaxy_select";
 UI.constants.MATCH_FILTER_STATE_SELECT_ID = "match_filter_state_select";
+UI.constants.MATCH_CREATE_BUTTON_ID = "match_create_button";
 UI.constants.MATCH_RANK_TABLE_ID = "match_rank_table";
 UI.constants.MATCH_TITLE_ID = "match_title_$";
 UI.constants.MATCH_GALAXY_SELECT_ID = "match_galaxy_select_$";
@@ -139,6 +140,7 @@ UI.constants.BUTTON_DISABLED_ACTION = "javascript: UI.constants.NO_ACTION();";
 UI.constants.ERROR_CLASS = "error";
 UI.constants.MENU_HIDDEN_CLASS = "menu_hidden";
 UI.constants.HIDDEN_CLASS = "hidden";
+UI.constants.INVISIBLE_CLASS = "hidden";
 
 UI.constants.DEFAULT_DATE_FORMAT = "yyyy-MM-dd HH:mm:ss";
 
@@ -321,6 +323,8 @@ UIManager.prototype.onLogin = function(player)
 		// switch menu to logged-in view
 		document.getElementById(UI.constants.NAV_TABS).classList.remove(UI.constants.MENU_HIDDEN_CLASS);
 		document.getElementById(UI.constants.NAV_CONTENT).classList.remove(UI.constants.MENU_HIDDEN_CLASS);
+		// show some buttons
+		document.getElementById(UI.constants.MATCH_CREATE_BUTTON_ID).classList.remove(UI.constants.INVISIBLE_CLASS);
 		// hide welcome
 		this.hideWelcome();
 	}
@@ -340,6 +344,8 @@ UIManager.prototype.onLogout = function(success)
 	// switch menu to logged-out view
 	document.getElementById(UI.constants.NAV_TABS).classList.add(UI.constants.MENU_HIDDEN_CLASS);
 	document.getElementById(UI.constants.NAV_CONTENT).classList.add(UI.constants.MENU_HIDDEN_CLASS);
+	// hide some buttons
+	document.getElementById(UI.constants.MATCH_CREATE_BUTTON_ID).classList.add(UI.constants.INVISIBLE_CLASS);
 	// "unload" user
 	this.currentPlayer = null;
 	this.onUserLoaded(null);
@@ -522,6 +528,7 @@ UIManager.prototype.showMatch = function(match)
 		match = {
 			j_type: Types.Match,
 			id: null, // new match
+			creator: this.currentPlayer,
 			seed: new Date().getTime(),
 		}; // TODO load from local storage
 		titleKey = "menu.match_create";
