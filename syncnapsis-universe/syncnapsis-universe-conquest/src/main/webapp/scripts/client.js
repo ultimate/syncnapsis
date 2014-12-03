@@ -118,6 +118,8 @@ UI.constants.MATCH_VICTORYPARAMETER_SELECT_ID = "match_victoryParameter_select_$
 UI.constants.MATCH_VICTORYPARAMETER_CUSTOM_ID = "match_victoryParameter_custom_$";
 UI.constants.MATCH_PLANNEDJOINTYPE_SELECT_ID = "match_plannedJoinType_select_$";
 UI.constants.MATCH_STARTEDJOINTYPE_SELECT_ID = "match_startedJoinType_select_$";
+UI.constants.MATCH_PARTICIPANTSMAX_ID = "match_participantsMax_$";
+UI.constants.MATCH_PARTICIPANTSMIN_ID = "match_participantsMin_$";
 UI.constants.MATCH_PARTICIPANTS_SOURCE_ID = "match_participants_source_$";
 UI.constants.MATCH_PARTICIPANTS_TARGET_ID = "match_participants_target_$";
 
@@ -528,8 +530,19 @@ UIManager.prototype.showMatch = function(match)
 		match = {
 			j_type: Types.Match,
 			id: null, // new match
+			title: "",
 			creator: this.currentPlayer,
 			seed: new Date().getTime(),
+			startCondition: "immediately",
+			startDate: 0,
+			startSystemSelectionEnabled: false,
+			startSystemCount: 3,
+			startPopulation: 1e10,
+			victoryCondition: "extermination",
+			participantsMin: 2,
+			participantsMax: 5,
+			plannedJoinType: "invitationsOnly",
+			startedJoinType: "none",
 		}; // TODO load from local storage
 		titleKey = "menu.match_create";
 		id = "new";
@@ -562,13 +575,20 @@ UIManager.prototype.showMatch = function(match)
 			return function(oldValue, newValue)
 			{
 				var dateTF = document.getElementById(UI.constants.MATCH_STARTDATE_ID.replace(UI.constants.PLACEHOLDER, id));
-				if(newValue != "planned")
+				if(newValue == "immediately")
 				{
 					dateTF.setAttribute("disabled", "disabled");
+					win.matchPlannedJoinTypeSelect.setDisabled(true);
 				}
-				else
+				else if(newValue == "manually")
+				{
+					dateTF.setAttribute("disabled", "disabled");
+					win.matchPlannedJoinTypeSelect.setDisabled(false);
+				}
+				else if(newValue == "planned")
 				{
 					dateTF.removeAttribute("disabled");
+					win.matchPlannedJoinTypeSelect.setDisabled(false);
 				}
 			};
 		} (this, id);
@@ -660,12 +680,44 @@ UIManager.prototype.showMatch = function(match)
 	}
 	
 	// populate form
-	// disable where necessary
+	document.getElementById(UI.constants.MATCH_TITLE_ID.replace(UI.constants.PLACEHOLDER, id)).value = match.title;
+	win.matchGalaxySelect.selectByValue(match.galaxy);
+	document.getElementById(UI.constants.MATCH_SEED_ID.replace(UI.constants.PLACEHOLDER, id)).value = match.seed;
+	win.matchSpeedSelect.select(2);
+	win.matchStartConditionSelect.selectByValue(match.startCondition);
+	document.getElementById(UI.constants.MATCH_STARTDATE_ID.replace(UI.constants.PLACEHOLDER, id)).value = match.startDate;
+	win.matchStartSystemSelectionEnabledSelect.selectByValue(match.startSystemSelectionEnabled ? "value1" : "value0");
+	document.getElementById(UI.constants.MATCH_STARTSYSTEMCOUNT_ID.replace(UI.constants.PLACEHOLDER, id)).value = match.startSystemCount;
+	document.getElementById(UI.constants.MATCH_STARTPOPULATION_ID.replace(UI.constants.PLACEHOLDER, id)).value = match.startPopulation / 1e9;
+	win.matchVictoryConditionSelect.selectByValue(match.victoryCondition);
+	document.getElementById(UI.constants.MATCH_PARTICIPANTSMAX_ID.replace(UI.constants.PLACEHOLDER, id)).value = match.participantsMax;
+	document.getElementById(UI.constants.MATCH_PARTICIPANTSMIN_ID.replace(UI.constants.PLACEHOLDER, id)).value = match.participantsMin;
+	win.matchPlannedJoinTypeSelect.selectByValue(match.plannedJoinType);
+	win.matchStartedJoinTypeSelect.selectByValue(match.startedJoinType);
+	
+	/*
+	<label key="match.participant_selection" class="large"></label><div id="match_participants_source_$" class="match_participants_source long"></div><br/>
+	*/
+	
+	if(match.id != null)
+	{
+		// disable all
+	}
+	
+	// disable some future features
+	win.matchStartConditionSelect.setDisabled(true);
+	win.matchStartSystemSelectionEnabledSelect.setDisabled(true);
+	win.matchStartedJoinTypeSelect.setDisabled(true);
 
 	// force label update
 	this.updateLabels(win);
 	// show window
 	win.setVisible(true);
+};
+
+UIManager.prototype.getMatchFromWindow = function(win)
+{
+	// TODO
 };
 
 UIManager.prototype.getWindowId = function(contentId, templateNodeId)
