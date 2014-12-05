@@ -108,7 +108,7 @@ public class TestSomething
 
 			line = line.substring(2, line.indexOf(']'));
 
-			StringTokenizer st = new StringTokenizer(line, ",");
+			StringTokenizer st = new StringTokenizer(line, ", ");
 			int x = Integer.parseInt(st.nextToken());
 			int y = Integer.parseInt(st.nextToken());
 			int z = Integer.parseInt(st.nextToken());
@@ -178,7 +178,7 @@ public class TestSomething
 
 	private static void sortSectors(List<Vector.Integer> sectors)
 	{
-		final Vector.Integer ref = sectors.get(10000);
+		final Vector.Integer ref = sectors.get(sectors.size()/2);
 
 		Collections.sort(sectors, new Comparator<Vector.Integer>() {
 			@Override
