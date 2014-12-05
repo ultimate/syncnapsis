@@ -99,6 +99,33 @@ public interface MatchManager extends GenericNameManager<Match, Long>
 			boolean startSystemSelectionEnabled, int startSystemCount, int startPopulation, EnumVictoryCondition victoryCondition,
 			int victoryParameter, int participantsMax, int participantsMin, List<Long> empireIds, EnumJoinType plannedJoinType,
 			EnumJoinType startedJoinType);
+	
+	/**
+	 * Create a new match and start it if the startCondition demands it.<br>
+	 * 
+	 * @see EnumStartCondition
+	 * @param title - the title of the match
+	 * @param galaxyId - the galaxy for the match
+	 * @param speed - the speed of the match
+	 * @param seed - an optional seed for the match
+	 * @param startCondition - the start condition
+	 * @param startDate - the start date (if required for the start condition)
+	 * @param startSystemSelectionEnabled - is start system selection enabled?
+	 * @param startSystemCount - the number of start systems for each participant
+	 * @param startPopulation - the total population for all start systems
+	 * @param victoryCondition - the victory condition
+	 * @param victoryParameter - the victory parameter
+	 * @param participantsMax - the max number of participants
+	 * @param participantsMin - the min number of participants
+	 * @param empireIds - a list of empire to add as participants
+	 * @param plannedJoinType - the join type before the match is started
+	 * @param startedJoinType - the join type after the match is started
+	 * @return the match created
+	 */
+	public Match createMatch(String title, long galaxyId, int speed, String seed, EnumStartCondition startCondition, Date startDate,
+			boolean startSystemSelectionEnabled, int startSystemCount, int startPopulation, EnumVictoryCondition victoryCondition,
+			int victoryParameter, int participantsMax, int participantsMin, List<Long> empireIds, EnumJoinType plannedJoinType,
+			EnumJoinType startedJoinType);
 
 	/**
 	 * Force the start of the given match no matter if the start condition is met or not.<br>

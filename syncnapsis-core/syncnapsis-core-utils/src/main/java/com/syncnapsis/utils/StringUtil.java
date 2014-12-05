@@ -463,4 +463,22 @@ public abstract class StringUtil
 
 		return y + "y " + d + "d " + h + "h " + m + "m " + s + "s " + ms + "ms";
 	}
+
+	/**
+	 * 64-bit variant of {@link String#hashCode()}<br>
+	 * 
+	 * @see http://stackoverflow.com/a/1660613
+	 * @param s - the string to hash
+	 * @return the 64-bit hash code
+	 */
+	public static long hashCode64(String s)
+	{
+		long h = 1125899906842597L; // prime
+		int len = s.length();
+		for(int i = 0; i < len; i++)
+		{
+			h = 31 * h + s.charAt(i);
+		}
+		return h;
+	}
 }

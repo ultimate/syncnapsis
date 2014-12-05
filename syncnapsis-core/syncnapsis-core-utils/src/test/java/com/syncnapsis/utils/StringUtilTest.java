@@ -15,13 +15,17 @@
 package com.syncnapsis.utils;
 
 import java.text.MessageFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Locale;
 import java.util.Random;
 
 import com.syncnapsis.enums.EnumLocale;
 import com.syncnapsis.tests.LoggerTestCase;
 import com.syncnapsis.tests.annotations.TestCoversMethods;
+import com.syncnapsis.utils.data.DefaultData;
+import com.syncnapsis.utils.data.ExtendedRandom;
 
 public class StringUtilTest extends LoggerTestCase
 {
@@ -270,5 +274,27 @@ public class StringUtilTest extends LoggerTestCase
 		assertEquals("0y 0d 10h 0m 0s 0ms", StringUtil.toString(10L * 60 * 60 * 1000));
 		assertEquals("0y 10d 0h 0m 0s 0ms", StringUtil.toString(10L * 24 * 60 * 60 * 1000));
 		assertEquals("10y 0d 0h 0m 0s 0ms", StringUtil.toString(10L * 365 * 24 * 60 * 60 * 1000));
+	}
+	
+	public void testHashCode64() throws Exception
+	{
+		int samples = 1000;
+		List<Long> hashCodes = new ArrayList<Long>(samples);
+		
+		ExtendedRandom r = new ExtendedRandom();
+		int length;
+		String s;
+		Long hash;
+		for(int i = 0; i < samples; i++)
+		{
+			length = r.nextInt(3,30);
+			s = r.nextString(length, DefaultData.STRING_ASCII_COMPLETE_NO_CONTROLCHARS);
+			hash = StringUtil.hashCode64(s);
+			
+			logger.debug(s + " -> " + hash);
+			
+			assertFalse(hashCodes.contains(hash));
+			hashCodes.add(hash);
+		}
 	}
 }

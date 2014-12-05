@@ -44,6 +44,7 @@ import com.syncnapsis.security.accesscontrol.MatchAccessController;
 import com.syncnapsis.universe.Calculator;
 import com.syncnapsis.utils.HibernateUtil;
 import com.syncnapsis.utils.MathUtil;
+import com.syncnapsis.utils.StringUtil;
 import com.syncnapsis.utils.data.ExtendedRandom;
 import com.syncnapsis.utils.mail.UniverseConquestMailer;
 
@@ -278,7 +279,33 @@ public class MatchManagerImpl extends GenericNameManagerImpl<Match, Long> implem
 
 		HibernateUtil.currentSession().flush();
 
+		
 		return startMatchIfNecessary(get(match.getId()));
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see com.syncnapsis.data.service.MatchManager#createMatch(java.lang.String, long, int, java.lang.String, com.syncnapsis.enums.EnumStartCondition, java.util.Date, boolean, int, int, com.syncnapsis.enums.EnumVictoryCondition, int, int, int, java.util.List, com.syncnapsis.enums.EnumJoinType, com.syncnapsis.enums.EnumJoinType)
+	 */
+	@Override
+	public Match createMatch(String title, long galaxyId, int speed, String seedString, EnumStartCondition startCondition, Date startDate,
+			boolean startSystemSelectionEnabled, int startSystemCount, int startPopulation, EnumVictoryCondition victoryCondition,
+			int victoryParameter, int participantsMax, int participantsMin, List<Long> empireIds, EnumJoinType plannedJoinType,
+			EnumJoinType startedJoinType)
+	{
+		Long seed = null;
+		if(seedString != null)
+		{
+			try
+			{
+				seed = Long.parseLong(seedString);
+			}
+			catch(NumberFormatException e)
+			{
+				seed = StringUtil.hashCode64(seedString);
+			}
+		}
+		return createMatch(title, galaxyId, speed, seed, startCondition, startDate, startSystemSelectionEnabled, startSystemCount, startPopulation, victoryCondition, victoryParameter, participantsMax, participantsMin, empireIds, plannedJoinType, startedJoinType);
 	}
 
 	/*

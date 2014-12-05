@@ -391,14 +391,15 @@ public class ExtendedRandom extends Random
 
 	/**
 	 * Create new random String with random length for the character source
-	 * {@link DefaultData#STRING_ASCII_COMPLETE_NO_CONTROLCHARS}
+	 * {@link DefaultData#STRING_ASCII_COMPLETE_NO_CONTROLCHARS}.<br>
+	 * Length varies from 1 to 20.
 	 * 
 	 * @see ExtendedRandom#nextString(int, String)
 	 * @return a random String
 	 */
 	public String nextString()
 	{
-		return nextString(nextInt(20), DefaultData.STRING_ASCII_COMPLETE_NO_CONTROLCHARS);
+		return nextString(nextInt(1, 20), DefaultData.STRING_ASCII_COMPLETE_NO_CONTROLCHARS);
 	}
 
 	/**
