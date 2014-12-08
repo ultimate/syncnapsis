@@ -388,16 +388,20 @@ form>.select.verylong>* {
 	left: 250px;
 }
 
+#bar_top #match_info_button,
 #bar_top #match_create_button {
-	/* using centered_x centered_y
-	position: absolute;
-	top: 6px;
-	left: 385px;
-	*/
+	/* using centered_x centered_y*/
 	line-height: 16px;
 	width: 20px;
 	height: 16px;
+}
+
+#bar_top #match_info_button {
 	margin-right: 95px;
+}
+
+#bar_top #match_create_button {
+	margin-right: 66px;
 }
 
 #bar_top .top_toggle {

@@ -28,7 +28,8 @@ UI.constants.AD_BORDER = 2;
 UI.constants.BAR_HEIGHT = 24;
 UI.constants.BAR_OUTER_WIDTH = 300;
 
-UI.constants.KEY_SWOW_WELCOME = "showWelcomeOnLoad";
+UI.constants.KEY_SHOW_WELCOME = "showWelcomeOnLoad";
+UI.constants.KEY_LAST_MATCH_SELECTED = "lastMatchSelected";
 
 UI.constants.LABEL_ID_PLAYERNAME = "userbar_playername";
 UI.constants.OVERLAY_ID = "overlay";
@@ -230,6 +231,9 @@ UIManager = function()
 	{
 		console.log("showing match #" + newValue.id);
 		// TODO update 3D-view
+		
+		// save match-ID as last selection
+		localStorage.setItem(UI.constants.KEY_LAST_MATCH_SELECTED, newValue.id);
 	};
 	
 	// initialize galaxy select for match filter
@@ -413,9 +417,25 @@ UIManager.prototype.onMatchesLoaded = function(matches)
 	this.populateSelect(this.matchSelect, matches, false);
 	
 	// preload sub-entities for filtering
-	server.entityManager.loadProperty(matches, "participants.empire.player.user", function(matches) {
-		console.log("matches loaded with properties!");
-	});
+	server.entityManager.loadProperty(matches, "participants.empire.player.user", function(uiManager) {
+		return function(matches) {
+			console.log("matches loaded with properties!");
+			// select last match
+			var matchId = localStorage.getItem(UI.constants.KEY_LAST_MATCH_SELECTED);
+			if(matchId != null)
+				matchId = Number(matchId);
+			var matchIndex = Math.round(Math.random()*uiManager.matchSelect.options.length);
+			for(var o in uiManager.matchSelect.options)
+			{
+				if(uiManager.matchSelect.options[o].id == matchId)
+				{
+					matchIndex = o;
+					break;
+				}
+			}
+			uiManager.matchSelect.select(matchIndex);
+		};
+	} (this));
 	server.entityManager.loadProperty(matches, "creator.user", function(matches) {
 		console.log("match creators loaded!");
 	});
@@ -702,6 +722,19 @@ UIManager.prototype.showMatch = function(match)
 	if(match.id != null)
 	{
 		// disable all
+		document.getElementById(UI.constants.MATCH_TITLE_ID.replace(UI.constants.PLACEHOLDER, id)).disabled = "disabled";
+		win.matchGalaxySelect.setDisabled(true);
+		document.getElementById(UI.constants.MATCH_SEED_ID.replace(UI.constants.PLACEHOLDER, id)).disabled = "disabled";
+		win.matchSpeedSelect.setDisabled(true);
+		win.matchStartConditionSelect.setDisabled(true);
+		document.getElementById(UI.constants.MATCH_STARTDATE_ID.replace(UI.constants.PLACEHOLDER, id)).disabled = "disabled";
+		win.matchStartSystemSelectionEnabledSelect.setDisabled(true);
+		document.getElementById(UI.constants.MATCH_STARTSYSTEMCOUNT_ID.replace(UI.constants.PLACEHOLDER, id)).disabled = "disabled";
+		document.getElementById(UI.constants.MATCH_STARTPOPULATION_ID.replace(UI.constants.PLACEHOLDER, id)).disabled = "disabled";
+		win.matchVictoryConditionSelect.setDisabled(true);
+		document.getElementById(UI.constants.MATCH_PARTICIPANTSMAX_ID.replace(UI.constants.PLACEHOLDER, id)).disabled = "disabled";
+		document.getElementById(UI.constants.MATCH_PARTICIPANTSMIN_ID.replace(UI.constants.PLACEHOLDER, id)).disabled = "disabled";
+		win.matchPlannedJoinTypeSelect.setDisabled(true);
 	}
 	
 	// disable some future features
@@ -1299,11 +1332,11 @@ UIManager.prototype.hideWelcome = function()
 UIManager.prototype.updateShowWelcomeOnLoad = function(toggle)
 {
 	// use eval since localStorage returns string
-	var val = (localStorage.getItem(UI.constants.KEY_SWOW_WELCOME) != "false");
+	var val = (localStorage.getItem(UI.constants.KEY_SHOW_WELCOME) != "false");
 	// toggle
 	if(toggle)
 		val = !val;
-	localStorage.setItem(UI.constants.KEY_SWOW_WELCOME, val);
+	localStorage.setItem(UI.constants.KEY_SHOW_WELCOME, val);
 
 	this.showWelcomeOnLoad = val;
 	document.getElementById(UI.constants.SHOW_WELCOME_ID).checked = val;
