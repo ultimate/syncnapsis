@@ -58,6 +58,8 @@
 
 .comboselect.source li .remove,
 .comboselect.target li .add,
+.comboselect.source.disabled li .add,
+.comboselect.target.disabled li .remove,
 .comboselect.source li.disabled .add,
 .comboselect.target li.disabled .remove {
 	display: none;
