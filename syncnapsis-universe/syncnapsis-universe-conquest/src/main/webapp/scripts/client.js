@@ -211,6 +211,8 @@ UIManager = function()
 	
 	// initialize match select
 	this.matchSelect = new Select(UI.constants.MATCH_SELECT_ID);
+	// disable until matches are loaded
+	this.matchSelect.setDisabled(true);
 	// overwrite renderer
 	this.matchSelect.getOptionContent = function(option) {
 		var match = option.value;
@@ -433,6 +435,7 @@ UIManager.prototype.onMatchesLoaded = function(matches)
 					break;
 				}
 			}
+			uiManager.matchSelect.setDisabled(false);
 			uiManager.matchSelect.select(matchIndex);
 		};
 	} (this));
@@ -710,6 +713,16 @@ UIManager.prototype.showMatch = function(match)
 	document.getElementById(UI.constants.MATCH_STARTSYSTEMCOUNT_ID.replace(UI.constants.PLACEHOLDER, id)).value = match.startSystemCount;
 	document.getElementById(UI.constants.MATCH_STARTPOPULATION_ID.replace(UI.constants.PLACEHOLDER, id)).value = match.startPopulation / 1e9;
 	win.matchVictoryConditionSelect.selectByValue(match.victoryCondition);
+
+	document.getElementById(UI.constants.MATCH_VICTORYPARAMETER_CUSTOM_ID.replace(UI.constants.PLACEHOLDER, id)).value = match.victoryParameter;
+	win.matchVictoryParameterSelect.selectByValue("custom");
+	for(var o = 0; o < win.matchVictoryParameterSelect.options.length; o++)
+	{
+		console.log("value" + match.victoryParameter + " vs. " + win.matchVictoryParameterSelect.options[o].value);
+		if(win.matchVictoryParameterSelect.options[o].value == "value" + match.victoryParameter)
+			win.matchVictoryParameterSelect.selectByValue(win.matchVictoryParameterSelect.options[o].value);
+	}
+	
 	document.getElementById(UI.constants.MATCH_PARTICIPANTSMAX_ID.replace(UI.constants.PLACEHOLDER, id)).value = match.participantsMax;
 	document.getElementById(UI.constants.MATCH_PARTICIPANTSMIN_ID.replace(UI.constants.PLACEHOLDER, id)).value = match.participantsMin;
 	win.matchPlannedJoinTypeSelect.selectByValue(match.plannedJoinType);
@@ -732,9 +745,12 @@ UIManager.prototype.showMatch = function(match)
 		document.getElementById(UI.constants.MATCH_STARTSYSTEMCOUNT_ID.replace(UI.constants.PLACEHOLDER, id)).disabled = "disabled";
 		document.getElementById(UI.constants.MATCH_STARTPOPULATION_ID.replace(UI.constants.PLACEHOLDER, id)).disabled = "disabled";
 		win.matchVictoryConditionSelect.setDisabled(true);
+		win.matchVictoryParameterSelect.setDisabled(true);
+		document.getElementById(UI.constants.MATCH_VICTORYPARAMETER_CUSTOM_ID.replace(UI.constants.PLACEHOLDER, id)).disabled = "disabled";
 		document.getElementById(UI.constants.MATCH_PARTICIPANTSMAX_ID.replace(UI.constants.PLACEHOLDER, id)).disabled = "disabled";
 		document.getElementById(UI.constants.MATCH_PARTICIPANTSMIN_ID.replace(UI.constants.PLACEHOLDER, id)).disabled = "disabled";
 		win.matchPlannedJoinTypeSelect.setDisabled(true);
+		win.matchParticipantComboSelect.setDisabled(true);
 	}
 	
 	// disable some future features
