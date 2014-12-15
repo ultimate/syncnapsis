@@ -134,6 +134,18 @@ Select = function(element)
 		}
 		this.select(null, skipOnselect);
 	};
+	this.selectById = function(id, skipOnselect) {
+		// look for a matching value
+		for(var o = 0; o < this.options.length; o++)
+		{
+			if(this.options[o].value != null && this.options[o].value.id == id)
+			{
+				this.select(o, skipOnselect);
+				return;
+			}
+		}
+		this.select(null, skipOnselect);
+	};
 	this.selectPrevious = function() {
 		if(this.valueIndex != null && this.valueIndex > 0)
 			this.select(this.valueIndex-1);

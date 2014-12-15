@@ -91,6 +91,16 @@ ComboSelect = function(sourceElement, targetElement)
 				this.sourceList.children[i].classList.remove("selected");
 		}
 	};
+	this.selectSourceById = function(ids, deselectOthers) {
+		// look for a matching value
+		for(var i = 0; i < this.sourceList.children.length; i++)
+		{
+			if(this.sourceList.children[i].val != null && ids.indexOf(this.sourceList.children[i].val.id) != -1)
+				this.sourceList.children[i].classList.add("selected");
+			else if(deselectOthers)
+				this.sourceList.children[i].classList.remove("selected");
+		}
+	};
 	this.selectTarget = function(indexes, deselectOthers) {
 		for(var i = 0; i < this.targetList.children.length; i++)
 		{
@@ -105,6 +115,16 @@ ComboSelect = function(sourceElement, targetElement)
 		for(var i = 0; i < this.targetList.children.length; i++)
 		{
 			if(values.indexOf(this.targetList.children[i].val) != -1)
+				this.targetList.children[i].classList.add("selected");
+			else if(deselectOthers)
+				this.targetList.children[i].classList.remove("selected");
+		}
+	};
+	this.selectTargetById = function(ids, deselectOthers) {
+		// look for a matching value
+		for(var i = 0; i < this.targetList.children.length; i++)
+		{
+			if(this.targetList.children[i].val != null && ids.indexOf(this.targetList.children[i].val.id) != -1)
 				this.targetList.children[i].classList.add("selected");
 			else if(deselectOthers)
 				this.targetList.children[i].classList.remove("selected");
