@@ -555,6 +555,7 @@ UIManager.prototype.showMatch = function(match)
 			id: null, // new match
 			title: "",
 			creator: this.currentPlayer,
+			speed: 2,
 			seed: new Date().getTime(),
 			startCondition: "immediately",
 			startDate: 0,
@@ -580,6 +581,7 @@ UIManager.prototype.showMatch = function(match)
 	win.setSize(600,500);
 	win.center();
 	win.setMovable(true);
+	win.matchId = id;
 	
 	if(!win.matchGalaxySelect)
 	{
@@ -708,7 +710,7 @@ UIManager.prototype.showMatch = function(match)
 	document.getElementById(UI.constants.MATCH_TITLE_ID.replace(UI.constants.PLACEHOLDER, id)).value = match.title;
 	win.matchGalaxySelect.selectById(match.galaxy ? match.galaxy.id : null);
 	document.getElementById(UI.constants.MATCH_SEED_ID.replace(UI.constants.PLACEHOLDER, id)).value = match.seed;
-	win.matchSpeedSelect.select(2);
+	win.matchSpeedSelect.select(match.speed);
 	win.matchStartConditionSelect.selectByValue(match.startCondition);
 	document.getElementById(UI.constants.MATCH_STARTDATE_ID.replace(UI.constants.PLACEHOLDER, id)).value = match.startDate;
 	win.matchStartSystemSelectionEnabledSelect.selectByValue(match.startSystemSelectionEnabled ? "value1" : "value0");
@@ -755,9 +757,6 @@ UIManager.prototype.showMatch = function(match)
 		}
 		win.matchParticipantComboSelect.applySource();
 	}
-	/*
-	<label key="match.participant_selection" class="large"></label><div id="match_participants_source_$" class="match_participants_source long"></div><br/>
-	*/
 	
 	if(match.id != null)
 	{
@@ -793,7 +792,33 @@ UIManager.prototype.showMatch = function(match)
 
 UIManager.prototype.getMatchFromWindow = function(win)
 {
-	// TODO
+	if(win == null)
+		return null;
+	var id = win.matchId;
+	if(id == null)
+		return null;
+
+	var match = {};
+	
+	match.title = document.getElementById(UI.constants.MATCH_TITLE_ID.replace(UI.constants.PLACEHOLDER, id)).value;
+	match.galaxy = win.matchGalaxySelect.value;
+	match.seed = document.getElementById(UI.constants.MATCH_SEED_ID.replace(UI.constants.PLACEHOLDER, id)).value;
+	match.speed = win.matchSpeedSelect.valueIndex;
+	match.startCondition = win.matchStartConditionSelect.value;
+	match.startDate = document.getElementById(UI.constants.MATCH_STARTDATE_ID.replace(UI.constants.PLACEHOLDER, id)).value;
+	match.startSystemSelectionEnabled = (win.matchStartSystemSelectionEnabledSelect.value == "value1");
+	match.startSystemCount = document.getElementById(UI.constants.MATCH_STARTSYSTEMCOUNT_ID.replace(UI.constants.PLACEHOLDER, id)).value;
+	match.startPopulatin = (document.getElementById(UI.constants.MATCH_STARTPOPULATION_ID.replace(UI.constants.PLACEHOLDER, id)).value * 1e9);
+	match.victoryCondition = win.matchVictoryConditionSelect.value;
+	match.victoryParameter = document.getElementById(UI.constants.MATCH_VICTORYPARAMETER_CUSTOM_ID.replace(UI.constants.PLACEHOLDER, id)).value;
+	match.participantsMax = document.getElementById(UI.constants.MATCH_PARTICIPANTSMAX_ID.replace(UI.constants.PLACEHOLDER, id)).value;
+	match.participantsMin = document.getElementById(UI.constants.MATCH_PARTICIPANTSMIN_ID.replace(UI.constants.PLACEHOLDER, id)).value;
+	match.plannedJoinType = win.matchPlannedJoinTypeSelect.value;
+	match.startedJoinType = win.matchStartedJoinTypeSelect.value;
+	
+	// TODO validate
+	
+	return match;
 };
 
 UIManager.prototype.getWindowId = function(contentId, templateNodeId)
