@@ -83,9 +83,12 @@ ComboSelect = function(sourceElement, targetElement)
 	};
 	this.selectSourceByValue = function(values, deselectOthers) {
 		// look for a matching value
+		// suitable for values as array or as single value
 		for(var i = 0; i < this.sourceList.children.length; i++)
 		{
-			if(values.indexOf(this.sourceList.children[i].val) != -1)
+			if(values.indexOf && values.indexOf(this.sourceList.children[i].val) != -1)
+				this.sourceList.children[i].classList.add("selected");
+			else if(!value.indexOf && this.sourceList.children[i].val == values)
 				this.sourceList.children[i].classList.add("selected");
 			else if(deselectOthers)
 				this.sourceList.children[i].classList.remove("selected");
@@ -93,9 +96,12 @@ ComboSelect = function(sourceElement, targetElement)
 	};
 	this.selectSourceById = function(ids, deselectOthers) {
 		// look for a matching value
+		// suitable for ids as array or as single id
 		for(var i = 0; i < this.sourceList.children.length; i++)
 		{
-			if(this.sourceList.children[i].val != null && ids.indexOf(this.sourceList.children[i].val.id) != -1)
+			if(ids.indexOf && this.sourceList.children[i].val != null && ids.indexOf(this.sourceList.children[i].val.id) != -1)
+				this.sourceList.children[i].classList.add("selected");
+			else if(!ids.indexOf && this.sourceList.children[i].val != null && this.sourceList.children[i].val.id == ids)
 				this.sourceList.children[i].classList.add("selected");
 			else if(deselectOthers)
 				this.sourceList.children[i].classList.remove("selected");
@@ -112,9 +118,12 @@ ComboSelect = function(sourceElement, targetElement)
 	};
 	this.selectTargetByValue = function(values, deselectOthers) {
 		// look for a matching value
+		// suitable for values as array or as single value
 		for(var i = 0; i < this.targetList.children.length; i++)
 		{
-			if(values.indexOf(this.targetList.children[i].val) != -1)
+			if(values.indexOf && values.indexOf(this.targetList.children[i].val) != -1)
+				this.targetList.children[i].classList.add("selected");
+			else if(!value.indexOf && this.targetList.children[i].val == values)
 				this.targetList.children[i].classList.add("selected");
 			else if(deselectOthers)
 				this.targetList.children[i].classList.remove("selected");
@@ -122,9 +131,12 @@ ComboSelect = function(sourceElement, targetElement)
 	};
 	this.selectTargetById = function(ids, deselectOthers) {
 		// look for a matching value
+		// suitable for ids as array or as single id
 		for(var i = 0; i < this.targetList.children.length; i++)
 		{
-			if(this.targetList.children[i].val != null && ids.indexOf(this.targetList.children[i].val.id) != -1)
+			if(ids.indexOf && this.targetList.children[i].val != null && ids.indexOf(this.targetList.children[i].val.id) != -1)
+				this.targetList.children[i].classList.add("selected");
+			else if(!ids.indexOf && this.targetList.children[i].val != null && this.targetList.children[i].val.id == ids)
 				this.targetList.children[i].classList.add("selected");
 			else if(deselectOthers)
 				this.targetList.children[i].classList.remove("selected");
