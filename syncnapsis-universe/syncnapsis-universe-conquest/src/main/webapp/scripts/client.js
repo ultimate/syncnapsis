@@ -566,6 +566,7 @@ UIManager.prototype.showMatch = function(match)
 			participantsMax: 5,
 			plannedJoinType: "invitationsOnly",
 			startedJoinType: "none",
+			participants: [],
 		}; // TODO load from local storage
 		titleKey = "menu.match_create";
 		id = "new";
@@ -690,6 +691,7 @@ UIManager.prototype.showMatch = function(match)
 		var sourceID = UI.constants.MATCH_PARTICIPANTS_SOURCE_ID.replace(UI.constants.PLACEHOLDER, id);
 		var targetID = UI.constants.MATCH_PARTICIPANTS_TARGET_ID.replace(UI.constants.PLACEHOLDER, id);
 		win.matchParticipantComboSelect = new ComboSelect(sourceID, targetID);
+		// select participants by empire
 		win.matchParticipantComboSelect.getOptionContent = function(empire) {
 			var content = new Array();
 			content.push("<span class='col_1'>");
@@ -704,7 +706,7 @@ UIManager.prototype.showMatch = function(match)
 	
 	// populate form
 	document.getElementById(UI.constants.MATCH_TITLE_ID.replace(UI.constants.PLACEHOLDER, id)).value = match.title;
-	win.matchGalaxySelect.selectByValue(match.galaxy);
+	win.matchGalaxySelect.selectById(match.galaxy ? match.galaxy.id : null);
 	document.getElementById(UI.constants.MATCH_SEED_ID.replace(UI.constants.PLACEHOLDER, id)).value = match.seed;
 	win.matchSpeedSelect.select(2);
 	win.matchStartConditionSelect.selectByValue(match.startCondition);
@@ -713,21 +715,46 @@ UIManager.prototype.showMatch = function(match)
 	document.getElementById(UI.constants.MATCH_STARTSYSTEMCOUNT_ID.replace(UI.constants.PLACEHOLDER, id)).value = match.startSystemCount;
 	document.getElementById(UI.constants.MATCH_STARTPOPULATION_ID.replace(UI.constants.PLACEHOLDER, id)).value = match.startPopulation / 1e9;
 	win.matchVictoryConditionSelect.selectByValue(match.victoryCondition);
-
 	document.getElementById(UI.constants.MATCH_VICTORYPARAMETER_CUSTOM_ID.replace(UI.constants.PLACEHOLDER, id)).value = match.victoryParameter;
 	win.matchVictoryParameterSelect.selectByValue("custom");
 	for(var o = 0; o < win.matchVictoryParameterSelect.options.length; o++)
 	{
-		console.log("value" + match.victoryParameter + " vs. " + win.matchVictoryParameterSelect.options[o].value);
 		if(win.matchVictoryParameterSelect.options[o].value == "value" + match.victoryParameter)
 			win.matchVictoryParameterSelect.selectByValue(win.matchVictoryParameterSelect.options[o].value);
 	}
-	
 	document.getElementById(UI.constants.MATCH_PARTICIPANTSMAX_ID.replace(UI.constants.PLACEHOLDER, id)).value = match.participantsMax;
 	document.getElementById(UI.constants.MATCH_PARTICIPANTSMIN_ID.replace(UI.constants.PLACEHOLDER, id)).value = match.participantsMin;
 	win.matchPlannedJoinTypeSelect.selectByValue(match.plannedJoinType);
 	win.matchStartedJoinTypeSelect.selectByValue(match.startedJoinType);
-	
+
+	if(match.id == null)
+	{
+		// add current player as creator
+		// use first available empire
+		var playerEmpire = this.currentPlayer.empires[0];
+		win.matchParticipantComboSelect.selectSourceById(playerEmpire.id);
+		win.matchParticipantComboSelect.applySource();
+		// disable creator
+		win.matchParticipantComboSelect.targetList.children[0].classList.add("disabled");
+	}
+	else
+	{
+		var participant;
+		for(var p = 0; p < match.participants.length; p++)
+		{
+			participant = match.participants[p];
+			if(participant != null)
+			{
+				var type = server.entityManager.getType(participant); 
+				// allow both empire and participant
+				if(type == Types.Participant) 
+					win.matchParticipantComboSelect.selectSourceById(participant.empire.id);
+				else if(type == Types.Empire) // participant is empire
+					win.matchParticipantComboSelect.selectSourceById(participant.id);
+			}
+		}
+		win.matchParticipantComboSelect.applySource();
+	}
 	/*
 	<label key="match.participant_selection" class="large"></label><div id="match_participants_source_$" class="match_participants_source long"></div><br/>
 	*/
