@@ -816,7 +816,13 @@ UIManager.prototype.getMatchFromWindow = function(win)
 	match.plannedJoinType = win.matchPlannedJoinTypeSelect.value;
 	match.startedJoinType = win.matchStartedJoinTypeSelect.value;
 	
-	// TODO validate
+	// get participants as empires 
+	// -> MatchManager.create(..) required empire IDs anyway
+	match.empireIds = [];
+	for(var i = 0; i < win.matchParticipantComboSelect.targetList.children.length; i++)
+	{
+		match.empireIds.push(win.matchParticipantComboSelect.targetList.children[i].val.id);
+	}
 	
 	return match;
 };
