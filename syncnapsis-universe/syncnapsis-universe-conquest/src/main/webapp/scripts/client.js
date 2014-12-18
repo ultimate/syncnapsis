@@ -123,6 +123,8 @@ UI.constants.MATCH_PARTICIPANTSMAX_ID = "match_participantsMax_$";
 UI.constants.MATCH_PARTICIPANTSMIN_ID = "match_participantsMin_$";
 UI.constants.MATCH_PARTICIPANTS_SOURCE_ID = "match_participants_source_$";
 UI.constants.MATCH_PARTICIPANTS_TARGET_ID = "match_participants_target_$";
+UI.constants.MATCH_BUTTONS_EXISTING_ID = "match_buttons_existing_$";
+UI.constants.MATCH_BUTTONS_NEW_ID = "match_buttons_new_$";
 
 UI.constants.LOGIN_USERNAME_ID = "login_username";
 UI.constants.LOGIN_PASSWORD_ID = "login_password";
@@ -574,7 +576,7 @@ UIManager.prototype.showMatch = function(match)
 	}
 	else
 	{
-		titleKey = "menu.match_administate";
+		titleKey = "menu.match_administrate";
 		id = match.id;
 	}
 	var win = this.getWindowFromTemplate(id, "content_manage_match", titleKey);
@@ -783,6 +785,18 @@ UIManager.prototype.showMatch = function(match)
 	win.matchStartConditionSelect.setDisabled(true);
 	win.matchStartSystemSelectionEnabledSelect.setDisabled(true);
 	win.matchStartedJoinTypeSelect.setDisabled(true);
+	
+	// show the right button bar
+	if(match.id == null)
+	{
+		document.getElementById(UI.constants.MATCH_BUTTONS_EXISTING_ID.replace(UI.constants.PLACEHOLDER, id)).classList.add("hidden");
+		document.getElementById(UI.constants.MATCH_BUTTONS_NEW_ID.replace(UI.constants.PLACEHOLDER, id)).classList.remove("hidden");
+	}
+	else
+	{
+		document.getElementById(UI.constants.MATCH_BUTTONS_EXISTING_ID.replace(UI.constants.PLACEHOLDER, id)).classList.remove("hidden");
+		document.getElementById(UI.constants.MATCH_BUTTONS_NEW_ID.replace(UI.constants.PLACEHOLDER, id)).classList.add("hidden");
+	}
 
 	// force label update
 	this.updateLabels(win);

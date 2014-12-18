@@ -563,6 +563,11 @@ form>.select.verylong>* {
 	display: flex;
 }
 
+.manage_match .buttons_new.hidden,
+.manage_match .buttons_existing.hidden {
+	display: none;
+}
+
 .manage_match .buttons_new .button,
 .manage_match .buttons_existing .button {
 	flex-grow: 1;
