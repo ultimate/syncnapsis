@@ -847,6 +847,22 @@ UIManager.prototype.getMatchFromWindow = function(win)
 	return match;
 };
 
+UIManager.prototype.createMatch = function(id)
+{
+	var winId = this.getWindowId(id, "content_manage_match");
+	var win = document.getElementById(win);
+	
+	var match = this.getMatchFromWindow(win);
+};
+
+UIManager.prototype.discardMatch = function(id)
+{
+	var winId = this.getWindowId(id, "content_manage_match");
+	var win = document.getElementById(win);
+
+	win.close();
+};
+
 UIManager.prototype.getWindowId = function(contentId, templateNodeId)
 {
 	return "win_" + templateNodeId + "_" + contentId;
@@ -1126,6 +1142,30 @@ UIManager.prototype.updateLabels = function(parent)
 	// TODO selects
 	// static pages
 	document.getElementById(UI.constants.STATIC_FRAME_ID).contentWindow.location.reload(true)
+};
+
+UIManager.prototype.saveDefault = function(type, object)
+{
+	for(var prop in object)
+	{
+		if(typeof(object[prop]) == Reflections.type.FUNCTION)
+			continue;
+		
+		localStorage.setItem(type + "." + prop, object);
+	}
+};
+
+UIManager.prototype.loadDefault = function(type)
+{
+	var object;
+	for(var prop in localStorage)
+	{
+		if(prop.startsWith(type)))
+		{
+			object[prop.substring(type.length)] = localStorage[prop];
+		}
+	}
+	return object;
 };
 
 UIManager.prototype.showLog = function()
