@@ -576,7 +576,7 @@ UIManager.prototype.showMatch = function(match)
 	}
 	else
 	{
-		titleKey = "menu.match_administrate";
+		titleKey = "menu.match";
 		id = match.id;
 	}
 	var win = this.getWindowFromTemplate(id, "content_manage_match", titleKey);
@@ -792,9 +792,15 @@ UIManager.prototype.showMatch = function(match)
 		document.getElementById(UI.constants.MATCH_BUTTONS_EXISTING_ID.replace(UI.constants.PLACEHOLDER, id)).classList.add("hidden");
 		document.getElementById(UI.constants.MATCH_BUTTONS_NEW_ID.replace(UI.constants.PLACEHOLDER, id)).classList.remove("hidden");
 	}
-	else
+	else if(this.currentPlayer != null && this.currentPlayer.id == match.creator.id)
 	{
 		document.getElementById(UI.constants.MATCH_BUTTONS_EXISTING_ID.replace(UI.constants.PLACEHOLDER, id)).classList.remove("hidden");
+		document.getElementById(UI.constants.MATCH_BUTTONS_NEW_ID.replace(UI.constants.PLACEHOLDER, id)).classList.add("hidden");
+	}
+	else
+	{
+		// hide both if current player is not creator (and match is not new)
+		document.getElementById(UI.constants.MATCH_BUTTONS_EXISTING_ID.replace(UI.constants.PLACEHOLDER, id)).classList.add("hidden");
 		document.getElementById(UI.constants.MATCH_BUTTONS_NEW_ID.replace(UI.constants.PLACEHOLDER, id)).classList.add("hidden");
 	}
 
