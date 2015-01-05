@@ -1144,25 +1144,52 @@ UIManager.prototype.updateLabels = function(parent)
 	document.getElementById(UI.constants.STATIC_FRAME_ID).contentWindow.location.reload(true)
 };
 
-UIManager.prototype.saveDefault = function(type, object)
+UIManager.prototype.saveLocalObject = function(key, object)
 {
 	for(var prop in object)
 	{
 		if(typeof(object[prop]) == Reflections.type.FUNCTION)
+		{
 			continue;
-		
-		localStorage.setItem(type + "." + prop, object);
+		}
+		else if(typeof(object[prop]) == Reflections.type.OBJECT)
+		{
+			this.saveLocalObject(key + "." + prop, object[prop]);
+		}
+		else
+		{
+			localStorage.setItem(key + "." + prop, object[prop]);
+		}
 	}
 };
 
-UIManager.prototype.loadDefault = function(type)
+UIManager.prototype.loadLocalObject = function(key)
 {
-	var object;
+	var object = {};
 	for(var prop in localStorage)
 	{
-		if(prop.startsWith(type)))
+		if(prop.startsWith(key + "."))
 		{
-			object[prop.substring(type.length)] = localStorage[prop];
+			var subKey = prop.substring(key.length+1); 
+			if(subKey.contains("."))
+			{
+				var subKey = subKey.substring(0, subKey.indexOf("."));
+				object[subKey] = this.loadLocalObject(key + "." + subKey)
+			}
+			else
+			{
+				var value = localStorage[prop];
+				if(value == "true")
+					object[subKey] = true;
+				else if(value == "false")
+					object[subKey] = false;
+				else if(value == "null")
+					object[subKey] = null;
+				else if(Number(value).toString() == value) // parsing to number successfull
+					object[subKey] = Number(value);
+				else
+					object[subKey] = value;
+			}
 		}
 	}
 	return object;
