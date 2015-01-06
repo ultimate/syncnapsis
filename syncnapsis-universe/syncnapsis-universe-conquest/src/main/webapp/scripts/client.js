@@ -1152,7 +1152,7 @@ UIManager.prototype.saveLocalObject = function(key, object)
 		{
 			continue;
 		}
-		else if(typeof(object[prop]) == Reflections.type.OBJECT)
+		else if(typeof(object[prop]) == Reflections.type.OBJECT && object[prop] != null)
 		{
 			this.saveLocalObject(key + "." + prop, object[prop]);
 		}
