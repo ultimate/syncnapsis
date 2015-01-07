@@ -123,8 +123,7 @@ UI.constants.MATCH_PARTICIPANTSMAX_ID = "match_participantsMax_$";
 UI.constants.MATCH_PARTICIPANTSMIN_ID = "match_participantsMin_$";
 UI.constants.MATCH_PARTICIPANTS_SOURCE_ID = "match_participants_source_$";
 UI.constants.MATCH_PARTICIPANTS_TARGET_ID = "match_participants_target_$";
-UI.constants.MATCH_BUTTONS_EXISTING_ID = "match_buttons_existing_$";
-UI.constants.MATCH_BUTTONS_NEW_ID = "match_buttons_new_$";
+UI.constants.MATCH_BUTTONS_ID = "match_buttons_$";
 
 UI.constants.LOGIN_USERNAME_ID = "login_username";
 UI.constants.LOGIN_PASSWORD_ID = "login_password";
@@ -786,22 +785,37 @@ UIManager.prototype.showMatch = function(match)
 	win.matchStartSystemSelectionEnabledSelect.setDisabled(true);
 	win.matchStartedJoinTypeSelect.setDisabled(true);
 	
-	// show the right button bar
-	if(match.id == null)
+	// show the right buttons
+	var buttons = document.getElementById(UI.constants.MATCH_BUTTONS_ID.replace(UI.constants.PLACEHOLDER, id));
+	for(var i = 0; i < buttons.children.length; i++)
 	{
-		document.getElementById(UI.constants.MATCH_BUTTONS_EXISTING_ID.replace(UI.constants.PLACEHOLDER, id)).classList.add("hidden");
-		document.getElementById(UI.constants.MATCH_BUTTONS_NEW_ID.replace(UI.constants.PLACEHOLDER, id)).classList.remove("hidden");
-	}
-	else if(this.currentPlayer != null && this.currentPlayer.id == match.creator.id)
-	{
-		document.getElementById(UI.constants.MATCH_BUTTONS_EXISTING_ID.replace(UI.constants.PLACEHOLDER, id)).classList.remove("hidden");
-		document.getElementById(UI.constants.MATCH_BUTTONS_NEW_ID.replace(UI.constants.PLACEHOLDER, id)).classList.add("hidden");
-	}
-	else
-	{
-		// hide both if current player is not creator (and match is not new)
-		document.getElementById(UI.constants.MATCH_BUTTONS_EXISTING_ID.replace(UI.constants.PLACEHOLDER, id)).classList.add("hidden");
-		document.getElementById(UI.constants.MATCH_BUTTONS_NEW_ID.replace(UI.constants.PLACEHOLDER, id)).classList.add("hidden");
+		if(match.id == null)
+		{
+			// hide "existing" buttons
+			// show "new" or "neutral" buttons
+			if(buttons.children[i].classList.contains("existing"))
+				buttons.children[i].classList.add("hidden");
+			else
+				buttons.children[i].classList.remove("hidden");
+		}
+		else if(this.currentPlayer != null && this.currentPlayer.id == match.creator.id)
+		{
+			// hide "new" buttons
+			// show "existing" or "neutral" buttons
+			if(buttons.children[i].classList.contains("new"))
+				buttons.children[i].classList.add("hidden");
+			else
+				buttons.children[i].classList.remove("hidden");
+		}
+		else
+		{
+			// hide both if current player is not creator (and match is not new)
+			// only show "neutral" buttons
+			if(buttons.children[i].classList.contains("existing") || buttons.children[i].classList.contains("new")) // hide both buttons
+				buttons.children[i].classList.add("hidden");
+			else
+				buttons.children[i].classList.remove("hidden");
+		}
 	}
 
 	// force label update

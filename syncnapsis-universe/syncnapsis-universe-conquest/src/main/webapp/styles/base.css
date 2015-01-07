@@ -557,26 +557,27 @@ form>.select.verylong>* {
 	left: 30px;
 }
 
-.manage_match .buttons_new,
-.manage_match .buttons_existing {
+.manage_match .buttons {
 	flex-direction: row;
 	display: flex;
+	justify-content: flex-end;
 }
 
-.manage_match .buttons_new.hidden,
-.manage_match .buttons_existing.hidden {
+.manage_match .buttons .button.new.hidden,
+.manage_match .buttons .button.existing.hidden {
 	display: none;
 }
 
-.manage_match .buttons_new .button,
-.manage_match .buttons_existing .button {
+.manage_match .buttons .button.new,
+.manage_match .buttons .button.existing {
 	flex-grow: 1;
 	margin: 5px;
 }
 
-.manage_match .button.icon {
+.manage_match .buttons .button.icon {
 	flex-grow: 0;
 	flex-basis: 20px;
+	margin: 5px;
 }
 
 .frame {

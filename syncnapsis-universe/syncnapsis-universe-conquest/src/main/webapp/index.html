@@ -451,53 +451,46 @@
 
 					<div id="match_message_$" class="form_message"></div>
 					<div id="match_error_$" class="form_error"></div>
-					<div id="match_buttons_new_$" class="buttons_new atbottom centered">
-						<div id="match_plan_$" class="frame button">
-							<a href="javascript: client.uiManager.createMatch('manage_match_$');">
+					<div id="match_buttons_$" class="buttons atbottom centered">
+						<div id="match_plan_$" class="frame button new">
+							<a href="javascript: client.uiManager.createMatch('$');">
 								<label key="menu.match_create"></label>
 							</a>
 						</div>
 						<!-- 
-						<div id="match_plan_$" class="frame button">
-							<a href="javascript: client.uiManager.createMatch('manage_match_$', false);">
+						<div id="match_plan_$" class="frame button new">
+							<a href="javascript: client.uiManager.createMatch('$', false);">
 								<label key="menu.match_plan"></label>
 							</a>
 						</div>
-						<div id="match_start_$" class="frame button">
-							<a href="javascript: client.uiManager.createMatch('manage_match_$', true);">
+						<div id="match_start_$" class="frame button new">
+							<a href="javascript: client.uiManager.createMatch('$', true);">
 								<label key="menu.match_start"></label>
 							</a>
 						</div>
 						 -->
-						<div id="match_discard_$" class="frame button">
-							<a href="javascript: client.uiManager.discardMatch('manage_match_$');">
+						<div id="match_discard_$" class="frame button new">
+							<a href="javascript: client.uiManager.discardMatch('$');">
 								<label key="menu.match_discard"></label>
 							</a>
 						</div>
-						<div id="match_save_as_default_$" class="frame button icon">
-							<a href="javascript: client.uiManager.saveForm('manage_match_$');">
-								[o]
-							</a>
-						</div>
-					</div>
-					<div id="match_buttons_existing_$" class="buttons_existing atbottom centered">
-						<div id="match_start_now_$" class="frame button">
+						<div id="match_start_now_$" class="frame button existing">
 							<a href="javascript: client.uiManager.startMatch();">
 								<label key="menu.match_start_now"></label>
 							</a>
 						</div>
-						<div id="match_update_$" class="frame button">
-							<a href="javascript: client.uiManager.updateMatch('manage_match_$');">
+						<div id="match_update_$" class="frame button existing">
+							<a href="javascript: client.uiManager.updateMatch('$');">
 								<label key="general.apply_changes"></label>
 							</a>
 						</div>
-						<div id="match_cancel_$" class="frame button">
-							<a href="javascript: client.uiManager.cancelMatch('manage_match_$');">
+						<div id="match_cancel_$" class="frame button existing">
+							<a href="javascript: client.uiManager.cancelMatch('$');">
 								<label key="menu.match_cancel"></label>
 							</a>
 						</div>
 						<div id="match_save_as_default_$" class="frame button icon">
-							<a href="javascript: client.uiManager.saveForm('manage_match_$');">
+							<a href="javascript: client.uiManager.saveMatchDefault('$');">
 								[o]
 							</a>
 						</div>
