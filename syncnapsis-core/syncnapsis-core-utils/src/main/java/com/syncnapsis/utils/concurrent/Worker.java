@@ -284,7 +284,7 @@ public abstract class Worker implements Runnable
 					}
 				}
 
-				if(!this.running)
+				if(!isRunning())
 					break;
 			}
 
@@ -336,10 +336,6 @@ public abstract class Worker implements Runnable
 				}
 			}
 		}
-		synchronized(this)
-		{
-			this.notify();
-		}
 	}
 
 	/**
@@ -387,24 +383,72 @@ public abstract class Worker implements Runnable
 	 */
 	public void stop()
 	{
+		this.stop(true);
+	}
+
+	/**
+	 * Stop this worker with or without joining
+	 * 
+	 * @see Worker#isRunning()
+	 * @see Worker#isSuspended()
+	 */
+	protected void stop(boolean join)
+	{
 		synchronized(this)
 		{
 			if(!this.running)
 				throw new IllegalStateException("Worker not running!");
+			logger.debug("stopping worker: join=" + join);
 			this.running = false;
 			this.suspended = false;
 			this.notify(); // in case worker is suspended
+		}
+
+		// Join the inner Thread using a second Thread in order to be able to reset the Worker
+		// afterwards. Otherwise we could not reset the executionCount and thread-variable after
+		// the inner Thread has finished, if this method is called non-blocking (argument
+		// join=false)
+
+		Thread joinThread = new Thread() {
+			public void run()
+			{
+				try
+				{
+					Worker.this.join();
+				}
+				catch(InterruptedException e)
+				{
+					logger.error("thread join interrupted!");
+				}
+				Worker.this.thread = null;
+				Worker.this.executionCount = 0;
+			}
+		};
+		joinThread.start();
+
+		if(join)
+		{
 			try
 			{
-				this.wait();
+				joinThread.join();
 			}
 			catch(InterruptedException e)
 			{
 				logger.error("thread join interrupted!");
 			}
-			this.thread = null;
-			this.executionCount = 0;
 		}
+	}
+
+	/**
+	 * Wait for this Worker to stop
+	 * 
+	 * @throws InterruptedException
+	 */
+	public void join() throws InterruptedException
+	{
+		if(this.thread == null)
+			return; // Worker not started;
+		this.thread.join();
 	}
 
 	/**
