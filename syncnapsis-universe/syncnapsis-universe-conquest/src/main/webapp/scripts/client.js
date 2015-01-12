@@ -864,7 +864,7 @@ UIManager.prototype.getMatchFromWindow = function(win)
 UIManager.prototype.createMatch = function(id)
 {
 	var winId = this.getWindowId(id, "content_manage_match");
-	var win = document.getElementById(win);
+	var win = document.getElementById(winId);
 	
 	var match = this.getMatchFromWindow(win);
 };
@@ -872,9 +872,26 @@ UIManager.prototype.createMatch = function(id)
 UIManager.prototype.discardMatch = function(id)
 {
 	var winId = this.getWindowId(id, "content_manage_match");
-	var win = document.getElementById(win);
+	var win = document.getElementById(winId);
 
 	win.close();
+};
+
+UIManager.prototype.saveMatchDefault = function(id)
+{
+	var winId = this.getWindowId(id, "content_manage_match");
+	var win = document.getElementById(winId);
+	
+	var match = this.getMatchFromWindow(win);
+	
+	// clear references to ID only
+	if(match.galaxy)
+		match.galaxy = {id: match.galaxy.id};
+	
+	console.log("saving match '" + id + "' as default");
+	console.log(match);
+	
+	this.saveLocalObject("match_default", match);
 };
 
 UIManager.prototype.getWindowId = function(contentId, templateNodeId)
@@ -1172,6 +1189,7 @@ UIManager.prototype.saveLocalObject = function(key, object)
 		}
 		else
 		{
+			console.log("saving local object: " + key + "." + prop + " = " + object[prop]);
 			localStorage.setItem(key + "." + prop, object[prop]);
 		}
 	}
