@@ -551,25 +551,30 @@ UIManager.prototype.showMatch = function(match)
 	var id;
 	if(match == null)
 	{
-		match = {
-			j_type: Types.Match,
-			id: null, // new match
-			title: "",
-			creator: this.currentPlayer,
-			speed: 2,
-			seed: new Date().getTime(),
-			startCondition: "immediately",
-			startDate: 0,
-			startSystemSelectionEnabled: false,
-			startSystemCount: 3,
-			startPopulation: 1e10,
-			victoryCondition: "extermination",
-			participantsMin: 2,
-			participantsMax: 5,
-			plannedJoinType: "invitationsOnly",
-			startedJoinType: "none",
-			participants: [],
-		}; // TODO load from local storage
+		match = this.loadLocalObject("match_default");
+		if(match == null) // no default
+		{
+			match = {
+					title: "",
+					speed: 2,
+					seed: new Date().getTime(),
+					startCondition: "immediately",
+					startDate: 0,
+					startSystemSelectionEnabled: false,
+					startSystemCount: 3,
+					startPopulation: 1e10,
+					victoryCondition: "extermination",
+					participantsMin: 2,
+					participantsMax: 5,
+					plannedJoinType: "invitationsOnly",
+					startedJoinType: "none",
+			};
+		}
+		match.id = null; // new match
+		match.j_type = Types.Match;
+		match.creator = this.currentPlayer;
+		match.participants = [];
+		
 		titleKey = "menu.match_create";
 		id = "new";
 	}
@@ -1198,6 +1203,7 @@ UIManager.prototype.saveLocalObject = function(key, object)
 UIManager.prototype.loadLocalObject = function(key)
 {
 	var object = {};
+	var keyFound = false;
 	for(var prop in localStorage)
 	{
 		if(prop.startsWith(key + "."))
@@ -1222,9 +1228,13 @@ UIManager.prototype.loadLocalObject = function(key)
 				else
 					object[subKey] = value;
 			}
+			keyFound = true;
 		}
 	}
-	return object;
+	if(keyFound)
+		return object;
+	else
+		return null;
 };
 
 UIManager.prototype.showLog = function()
