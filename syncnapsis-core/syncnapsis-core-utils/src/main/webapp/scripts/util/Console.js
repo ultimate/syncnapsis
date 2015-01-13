@@ -57,7 +57,7 @@ Console.LEVEL_NAMES = {
 };
 
 //internal Constants
-Console.dateFormat = "yyyy-mm-dd HH:MM:ss.l";
+Console.dateFormat = "yyyy-MM-dd HH:mm:ss.l";
 Console.windowWidth = "800px";
 Console.windowHeight = "400px";
 Console.groupIndent = 4;
