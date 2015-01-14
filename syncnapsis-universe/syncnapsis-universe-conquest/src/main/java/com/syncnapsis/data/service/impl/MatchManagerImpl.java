@@ -232,6 +232,11 @@ public class MatchManagerImpl extends GenericNameManagerImpl<Match, Long> implem
 
 		Galaxy galaxy = galaxyManager.get(galaxyId);
 		Assert.notNull(galaxy, "galaxy with ID " + galaxyId + " not found!");
+		
+		if(startCondition != EnumStartCondition.planned)
+			startDate = null;
+		
+		logger.info("creating match '" + title + "'");
 
 		Match match = new Match();
 		match.setActivated(true);
@@ -332,9 +337,16 @@ public class MatchManagerImpl extends GenericNameManagerImpl<Match, Long> implem
 		{
 			List<String> notPossibleReasons = getMatchStartNotPossibleReasons(match);
 			if(notPossibleReasons.size() == 0)
+			{
 				return performStartMatch(match);
+			}
 			else
+			{
 				getMailer().sendMatchStartFailedNotification(match, notPossibleReasons.get(0));
+				// automatic starting is not possible -> set to manually
+				match.setStartCondition(EnumStartCondition.manually);
+				match = save(match);
+			}
 		}
 		return match;
 	}
@@ -407,8 +419,12 @@ public class MatchManagerImpl extends GenericNameManagerImpl<Match, Long> implem
 		if(notPossibleReasons.size() > 0)
 			throw new IllegalArgumentException("match can not be started at current state: " + notPossibleReasons.get(0));
 
-		Date startDate = match.getStartDate();
-		if(startDate == null)
+		Date startDate;
+		if(match.getStartCondition() == EnumStartCondition.planned)
+		{
+			startDate = match.getStartDate();
+		}
+		else
 		{
 			startDate = new Date(securityManager.getTimeProvider().get());
 			match.setStartDate(startDate);

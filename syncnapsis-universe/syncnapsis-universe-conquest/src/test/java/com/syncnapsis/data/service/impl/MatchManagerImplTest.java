@@ -519,10 +519,11 @@ public class MatchManagerImplTest extends GenericNameManagerImplTestCase<Match, 
 
 		final ExtendedRandom random = new ExtendedRandom(match.getSeed());
 
-		// test without start date // domination
+		// test without start date (manually) // domination
 		int victoryParameter = 70;
 		match.setVictoryParameter(victoryParameter);
 		match.setVictoryCondition(EnumVictoryCondition.domination);
+		match.setStartCondition(EnumStartCondition.manually);
 		match.setState(EnumMatchState.planned);
 		mockContext.checking(new Expectations() {
 			{
@@ -567,6 +568,7 @@ public class MatchManagerImplTest extends GenericNameManagerImplTestCase<Match, 
 		match.setVictoryCondition(EnumVictoryCondition.extermination);
 		Date aStartDate = new Date(4321);
 		match.setStartDate(aStartDate);
+		match.setStartCondition(EnumStartCondition.planned);
 		match.setState(EnumMatchState.planned); // reset state
 		mockContext.checking(new Expectations() {
 			{
@@ -610,6 +612,7 @@ public class MatchManagerImplTest extends GenericNameManagerImplTestCase<Match, 
 		// test the third victory condition // vendetta
 		match.setVictoryCondition(EnumVictoryCondition.vendetta);
 		match.setState(EnumMatchState.planned); // reset state
+		match.setStartCondition(EnumStartCondition.immediately);
 		mockContext.checking(new Expectations() {
 			{
 				oneOf(mockDao).save(match);
@@ -641,7 +644,7 @@ public class MatchManagerImplTest extends GenericNameManagerImplTestCase<Match, 
 		mockContext.assertIsSatisfied();
 		assertNotNull(match);
 		assertNotNull(match.getStartDate());
-		assertEquals(aStartDate, match.getStartDate());
+		assertEquals(new Date(referenceTime), match.getStartDate());
 		assertEquals(UniverseConquestConstants.PARAM_VICTORY_VENDETTA_PARAM_DEFAULT.asInt(), match.getVictoryParameter());
 		assertEquals(calculator.calculateVictoryTimeout(match), match.getVictoryTimeout());
 		int rivals = mockManager.getNumberOfRivals(match);
