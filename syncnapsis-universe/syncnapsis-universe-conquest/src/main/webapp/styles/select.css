@@ -34,7 +34,7 @@
 
 .select.error {
 	border: 1px solid rgba(0,255,255,0.9);
-	background: rgba(255,239,136,1.0);
+	background: rgba(255,40,40,0.9);
 }
 
 .select {
