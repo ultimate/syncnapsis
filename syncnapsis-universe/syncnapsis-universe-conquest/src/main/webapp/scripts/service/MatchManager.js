@@ -22,6 +22,14 @@ MatchManager = function()
 		// return match-list
 		return function(matches) { client.uiManager.onMatchesLoaded(matches); };
 	};
+	
+	this.createMatch = function(title, galaxyId, speed, seedString, startCondition, startDate,
+			startSystemSelectionEnabled, startSystemCount, startPopulation, victoryCondition,
+			victoryParameter, participantsMax, participantsMin, empireIds, plannedJoinType,
+			startedJoinType)
+	{
+		return function(match) { console.log("match '" + match.title + "' created: ID=" + match.id); /* TODO handle result */ };
+	};
 };
 
 MatchManager.prototype = new GenericManager();

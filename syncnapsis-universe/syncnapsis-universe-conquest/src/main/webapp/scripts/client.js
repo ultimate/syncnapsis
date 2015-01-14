@@ -924,8 +924,29 @@ UIManager.prototype.createMatch = function(id)
 	
 	// everything valid -> create match
 	
-//	server.matchManager.createMatch(
-//			);
+
+//	this.createMatch = function(title, galaxyId, speed, seedString, startCondition, startDate,
+//			startSystemSelectionEnabled, startSystemCount, startPopulation, victoryCondition,
+//			victoryParameter, participantsMax, participantsMin, empireIds, plannedJoinType,
+//			startedJoinType)
+	server.matchManager.createMatch(
+			match.title,
+			match.galaxy.id,
+			match.speed,
+			match.seed,
+			match.startCondition,
+			match.startDate,
+			match.startSystemSelectionEnabled,
+			match.startSystemCound,
+			match.startPopulation,
+			match.victoryCondition,
+			match.victoryParameter,
+			match.participantsMax,
+			match.participantsMin,
+			match.empireIds,
+			match.plannedJoinType,
+			match.startedJoinType
+	);
 };
 
 UIManager.prototype.discardMatch = function(id)
