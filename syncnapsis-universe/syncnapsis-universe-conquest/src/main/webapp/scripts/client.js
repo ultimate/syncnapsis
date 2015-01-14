@@ -725,10 +725,17 @@ UIManager.prototype.showMatch = function(match)
 	win.matchVictoryConditionSelect.selectByValue(match.victoryCondition);
 	document.getElementById(UI.constants.MATCH_VICTORYPARAMETER_CUSTOM_ID.replace(UI.constants.PLACEHOLDER, id)).value = match.victoryParameter;
 	win.matchVictoryParameterSelect.selectByValue("custom");
-	for(var o = 0; o < win.matchVictoryParameterSelect.options.length; o++)
+	if(match.victoryParameter)
 	{
-		if(win.matchVictoryParameterSelect.options[o].value == "value" + match.victoryParameter)
-			win.matchVictoryParameterSelect.selectByValue(win.matchVictoryParameterSelect.options[o].value);
+		for(var o = 0; o < win.matchVictoryParameterSelect.options.length; o++)
+		{
+			if(win.matchVictoryParameterSelect.options[o].value == "value" + match.victoryParameter)
+				win.matchVictoryParameterSelect.selectByValue(win.matchVictoryParameterSelect.options[o].value);
+		}
+	}
+	else
+	{
+		win.matchVictoryParameterSelect.select(2);
 	}
 	document.getElementById(UI.constants.MATCH_PARTICIPANTSMAX_ID.replace(UI.constants.PLACEHOLDER, id)).value = match.participantsMax;
 	document.getElementById(UI.constants.MATCH_PARTICIPANTSMIN_ID.replace(UI.constants.PLACEHOLDER, id)).value = match.participantsMin;
@@ -872,6 +879,53 @@ UIManager.prototype.createMatch = function(id)
 	var win = document.getElementById(winId);
 	
 	var match = this.getMatchFromWindow(win);
+	
+	console.log("creating match '" + match.title + "'");
+	
+	// validate input
+	var error = false;
+	if(match.title == null || match.title == "")
+	{
+		this.showErrorMessage(document.getElementById(UI.constants.MATCH_TITLE_ID.replace(UI.constants.PLACEHOLDER, id)), null);
+		error = true;
+	}
+	if(match.galaxy == null)
+	{
+		this.showErrorMessage(document.getElementById(UI.constants.MATCH_GALAXY_SELECT_ID.replace(UI.constants.PLACEHOLDER, id)), null);
+		error = true;
+	}
+	if(match.victoryParameter == null || match.victoryParameter == "")
+	{
+		this.showErrorMessage(document.getElementById(UI.constants.MATCH_VICTORYPARAMETER_SELECT_ID.replace(UI.constants.PLACEHOLDER, id)), null);
+		this.showErrorMessage(document.getElementById(UI.constants.MATCH_VICTORYPARAMETER_CUSTOM_ID.replace(UI.constants.PLACEHOLDER, id)), null);
+		error = true;
+	}
+	if(match.participantsMin > match.participantsMax)
+	{
+		this.showErrorMessage(document.getElementById(UI.constants.MATCH_PARTICIPANTSMIN_ID.replace(UI.constants.PLACEHOLDER, id)), null);
+		this.showErrorMessage(document.getElementById(UI.constants.MATCH_PARTICIPANTSMAX_ID.replace(UI.constants.PLACEHOLDER, id)), null);
+		error = true;
+	}
+	else if(match.empireIds.length > match.participantsMax)
+	{
+		this.showErrorMessage(document.getElementById(UI.constants.MATCH_PARTICIPANTSMAX_ID.replace(UI.constants.PLACEHOLDER, id)), null);
+		this.showErrorMessage(win.matchParticipantComboSelect.targetList, null);
+		error = true;
+	}
+	else if(match.empireIds.length < match.participantsMin)
+	{
+		this.showErrorMessage(document.getElementById(UI.constants.MATCH_PARTICIPANTSMIN_ID.replace(UI.constants.PLACEHOLDER, id)), null);
+		this.showErrorMessage(win.matchParticipantComboSelect.targetList, null);
+		error = true;
+	}
+	
+	if(error)
+		return;
+	
+	// everything valid -> create match
+	
+//	server.matchManager.createMatch(
+//			);
 };
 
 UIManager.prototype.discardMatch = function(id)
