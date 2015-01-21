@@ -851,14 +851,14 @@ UIManager.prototype.getMatchFromWindow = function(win)
 	match.seed = document.getElementById(UI.constants.MATCH_SEED_ID.replace(UI.constants.PLACEHOLDER, id)).value;
 	match.speed = win.matchSpeedSelect.valueIndex;
 	match.startCondition = win.matchStartConditionSelect.value;
-	match.startDate = document.getElementById(UI.constants.MATCH_STARTDATE_ID.replace(UI.constants.PLACEHOLDER, id)).value;
+	match.startDate = Number(document.getElementById(UI.constants.MATCH_STARTDATE_ID.replace(UI.constants.PLACEHOLDER, id)).value);
 	match.startSystemSelectionEnabled = (win.matchStartSystemSelectionEnabledSelect.value == "value1");
-	match.startSystemCount = document.getElementById(UI.constants.MATCH_STARTSYSTEMCOUNT_ID.replace(UI.constants.PLACEHOLDER, id)).value;
-	match.startPopulatin = (document.getElementById(UI.constants.MATCH_STARTPOPULATION_ID.replace(UI.constants.PLACEHOLDER, id)).value * 1e9);
+	match.startSystemCount = Number(document.getElementById(UI.constants.MATCH_STARTSYSTEMCOUNT_ID.replace(UI.constants.PLACEHOLDER, id)).value);
+	match.startPopulation = Number(document.getElementById(UI.constants.MATCH_STARTPOPULATION_ID.replace(UI.constants.PLACEHOLDER, id)).value) * 1e9;
 	match.victoryCondition = win.matchVictoryConditionSelect.value;
-	match.victoryParameter = document.getElementById(UI.constants.MATCH_VICTORYPARAMETER_CUSTOM_ID.replace(UI.constants.PLACEHOLDER, id)).value;
-	match.participantsMax = document.getElementById(UI.constants.MATCH_PARTICIPANTSMAX_ID.replace(UI.constants.PLACEHOLDER, id)).value;
-	match.participantsMin = document.getElementById(UI.constants.MATCH_PARTICIPANTSMIN_ID.replace(UI.constants.PLACEHOLDER, id)).value;
+	match.victoryParameter = Number(document.getElementById(UI.constants.MATCH_VICTORYPARAMETER_CUSTOM_ID.replace(UI.constants.PLACEHOLDER, id)).value);
+	match.participantsMax = Number(document.getElementById(UI.constants.MATCH_PARTICIPANTSMAX_ID.replace(UI.constants.PLACEHOLDER, id)).value);
+	match.participantsMin = Number(document.getElementById(UI.constants.MATCH_PARTICIPANTSMIN_ID.replace(UI.constants.PLACEHOLDER, id)).value);
 	match.plannedJoinType = win.matchPlannedJoinTypeSelect.value;
 	match.startedJoinType = win.matchStartedJoinTypeSelect.value;
 	
@@ -924,7 +924,6 @@ UIManager.prototype.createMatch = function(id)
 	
 	// everything valid -> create match
 	
-
 //	this.createMatch = function(title, galaxyId, speed, seedString, startCondition, startDate,
 //			startSystemSelectionEnabled, startSystemCount, startPopulation, victoryCondition,
 //			victoryParameter, participantsMax, participantsMin, empireIds, plannedJoinType,
@@ -937,7 +936,7 @@ UIManager.prototype.createMatch = function(id)
 			match.startCondition,
 			match.startDate,
 			match.startSystemSelectionEnabled,
-			match.startSystemCound,
+			match.startSystemCount,
 			match.startPopulation,
 			match.victoryCondition,
 			match.victoryParameter,
