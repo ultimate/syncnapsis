@@ -149,7 +149,7 @@ public class LogRPCHandler extends DelegatingRPCHandler
 	 * .service.rpc.RPCCall, java.lang.Object[])
 	 */
 	@Override
-	public Object doRPC(RPCCall call, Object... authorities) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException
+	public Object doRPC(RPCCall call, Object... authorities) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException
 	{
 		Date executionDate = new Date(timeProvider.get());
 		try
@@ -164,6 +164,11 @@ public class LogRPCHandler extends DelegatingRPCHandler
 			throw e;
 		}
 		catch(IllegalArgumentException e)
+		{
+			rpcLogManager.log(call, e, executionDate, userProvider.get(), sessionProvider.get(), authorities);
+			throw e;
+		}
+		catch(NoSuchMethodException e)
 		{
 			rpcLogManager.log(call, e, executionDate, userProvider.get(), sessionProvider.get(), authorities);
 			throw e;

@@ -388,7 +388,7 @@ public class RPCService extends BaseService implements InitializingBean, RPCHand
 	 * rpc.RPCCall, java.lang.Object[])
 	 */
 	@Override
-	public Object doRPC(RPCCall call, Object... authorities) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException
+	public Object doRPC(RPCCall call, Object... authorities) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException
 	{
 		return this.rpcHandler.doRPC(call, authorities);
 	}

@@ -195,6 +195,11 @@ public abstract class RPCFilter extends FilterEngine implements InitializingBean
 				logger.error("Exception doing RPC: " + e.getMessage());
 				resp.sendError(HttpServletResponse.SC_BAD_REQUEST);
 			}
+			catch(NoSuchMethodException e)
+			{
+				logger.error("Exception doing RPC: " + e.getMessage());
+				resp.sendError(HttpServletResponse.SC_NOT_FOUND);
+			}
 			catch(InvocationTargetException e)
 			{
 				logger.error("Exception doing RPC: " + e.getMessage());
@@ -216,7 +221,7 @@ public abstract class RPCFilter extends FilterEngine implements InitializingBean
 	 * @param call - the RPCCall to execute
 	 * @return the invocation result
 	 */
-	protected Object doRPC(RPCCall call) throws IllegalArgumentException, IllegalAccessException, InvocationTargetException
+	protected Object doRPC(RPCCall call) throws IllegalArgumentException, IllegalAccessException, InvocationTargetException, NoSuchMethodException
 	{
 		return rpcHandler.doRPC(call, getAuthorities());
 	}

@@ -35,7 +35,7 @@ public interface RPCHandler
 	 * 
 	 * @return the resut of the RPC
 	 */
-	public Object doRPC(RPCCall call, Object... authorities) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException;
+	public Object doRPC(RPCCall call, Object... authorities) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException;
 
 	/**
 	 * Get a virtual Client-instance for the given target name and the Client represented by the

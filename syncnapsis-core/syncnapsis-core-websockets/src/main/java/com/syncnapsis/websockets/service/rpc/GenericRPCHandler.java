@@ -84,7 +84,7 @@ public abstract class GenericRPCHandler implements RPCHandler, InitializingBean
 	 * rpc.RPCCall)
 	 */
 	@Override
-	public Object doRPC(RPCCall call, Object... authorities) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException
+	public Object doRPC(RPCCall call, Object... authorities) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException
 	{
 		Object target = this.getTarget(call.getObject());
 
@@ -103,6 +103,12 @@ public abstract class GenericRPCHandler implements RPCHandler, InitializingBean
 //				logger.debug("                 " + arg + (arg != null ? " (" + arg.getClass() + ")" : ""));
 //			logger.debug("Method found: " + method);
 //		}
+
+		if(method == null)
+		{
+			logger.error("no method found!!!");
+			throw new NoSuchMethodException("no suitable method '" + call.getMethod() + "' found in '" + call.getObject() + "' for args: " + call.getArgs()); 
+		}
 		
 		call.setInvocationInfo(new InvocationInfo(target, method));
 

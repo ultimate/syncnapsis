@@ -101,6 +101,11 @@ public class ActionFilter extends RPCFilter
 			logger.error("exception doing RPC: " + e.getMessage());
 			result = "exception doing RPC: " + e.getMessage();
 		}
+		catch(NoSuchMethodException e)
+		{
+			logger.error("exception doing RPC: " + e.getMessage());
+			result = "exception doing RPC: " + e.getMessage();
+		}
 		catch(InvocationTargetException e)
 		{
 			logger.error("exception doing RPC: " + e.getCause().getMessage());
