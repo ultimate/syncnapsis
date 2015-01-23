@@ -210,13 +210,13 @@ public class MatchManagerImpl extends GenericNameManagerImpl<Match, Long> implem
 	 * (non-Javadoc)
 	 * @see com.syncnapsis.data.service.MatchManager#createMatch(java.lang.String, long, int,
 	 * java.lang.Long, com.syncnapsis.enums.EnumStartCondition, java.util.Date, boolean, int, int,
-	 * com.syncnapsis.enums.EnumVictoryCondition, int, int, int, java.util.List,
+	 * com.syncnapsis.enums.EnumVictoryCondition, int, int, int, Long[],
 	 * com.syncnapsis.enums.EnumJoinType, com.syncnapsis.enums.EnumJoinType)
 	 */
 	@Override
 	public Match createMatch(String title, long galaxyId, int speed, Long seed, EnumStartCondition startCondition, Date startDate,
 			boolean startSystemSelectionEnabled, int startSystemCount, int startPopulation, EnumVictoryCondition victoryCondition,
-			int victoryParameter, int participantsMax, int participantsMin, List<Long> empireIds, EnumJoinType plannedJoinType,
+			int victoryParameter, int participantsMax, int participantsMin, Long[] empireIds, EnumJoinType plannedJoinType,
 			EnumJoinType startedJoinType)
 	{
 		Assert.isTrue(isAccessible(null, MatchAccessController.OPERATION_CREATE), "no access rights for 'create match'");
@@ -232,10 +232,10 @@ public class MatchManagerImpl extends GenericNameManagerImpl<Match, Long> implem
 
 		Galaxy galaxy = galaxyManager.get(galaxyId);
 		Assert.notNull(galaxy, "galaxy with ID " + galaxyId + " not found!");
-		
+
 		if(startCondition != EnumStartCondition.planned)
 			startDate = null;
-		
+
 		logger.info("creating match '" + title + "'");
 
 		Match match = new Match();
@@ -248,10 +248,11 @@ public class MatchManagerImpl extends GenericNameManagerImpl<Match, Long> implem
 		match.setParticipantsMax(participantsMax);
 		match.setParticipantsMin(participantsMin);
 		// set joining enabled here temporarily otherwise adding participants won't work
-		match.setPlannedJoinType(plannedJoinType); 
-		match.setPlannedJoinType(EnumJoinType.joiningEnabled); 
+		match.setPlannedJoinType(plannedJoinType);
+		match.setPlannedJoinType(EnumJoinType.joiningEnabled);
 		match.setSeed(seed);
 		match.setSpeed(speed);
+		match.setState(EnumMatchState.planned);
 		match.setStartCondition(startCondition);
 		match.setStartDate(startDate);
 		match.setStartedJoinType(startedJoinType);
@@ -277,25 +278,27 @@ public class MatchManagerImpl extends GenericNameManagerImpl<Match, Long> implem
 			if(participantManager.addParticipant(match, empireId) == null)
 				logger.warn("could not add empire " + empireId + " to match " + match.getId());
 		}
-		
+
 		// set real join type now...
 		match.setPlannedJoinType(plannedJoinType);
 		match = save(match);
 
 		HibernateUtil.currentSession().flush();
 
-		
 		return startMatchIfNecessary(get(match.getId()));
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.syncnapsis.data.service.MatchManager#createMatch(java.lang.String, long, int, java.lang.String, com.syncnapsis.enums.EnumStartCondition, java.util.Date, boolean, int, int, com.syncnapsis.enums.EnumVictoryCondition, int, int, int, java.util.List, com.syncnapsis.enums.EnumJoinType, com.syncnapsis.enums.EnumJoinType)
+	 * @see com.syncnapsis.data.service.MatchManager#createMatch(java.lang.String, long, int,
+	 * java.lang.String, com.syncnapsis.enums.EnumStartCondition, java.util.Date, boolean, int, int,
+	 * com.syncnapsis.enums.EnumVictoryCondition, int, int, int, Long[],
+	 * com.syncnapsis.enums.EnumJoinType, com.syncnapsis.enums.EnumJoinType)
 	 */
 	@Override
 	public Match createMatch(String title, long galaxyId, int speed, String seedString, EnumStartCondition startCondition, Date startDate,
 			boolean startSystemSelectionEnabled, int startSystemCount, int startPopulation, EnumVictoryCondition victoryCondition,
-			int victoryParameter, int participantsMax, int participantsMin, List<Long> empireIds, EnumJoinType plannedJoinType,
+			int victoryParameter, int participantsMax, int participantsMin, Long[] empireIds, EnumJoinType plannedJoinType,
 			EnumJoinType startedJoinType)
 	{
 		Long seed = null;
@@ -310,7 +313,8 @@ public class MatchManagerImpl extends GenericNameManagerImpl<Match, Long> implem
 				seed = StringUtil.hashCode64(seedString);
 			}
 		}
-		return createMatch(title, galaxyId, speed, seed, startCondition, startDate, startSystemSelectionEnabled, startSystemCount, startPopulation, victoryCondition, victoryParameter, participantsMax, participantsMin, empireIds, plannedJoinType, startedJoinType);
+		return createMatch(title, galaxyId, speed, seed, startCondition, startDate, startSystemSelectionEnabled, startSystemCount, startPopulation,
+				victoryCondition, victoryParameter, participantsMax, participantsMin, empireIds, plannedJoinType, startedJoinType);
 	}
 
 	/*

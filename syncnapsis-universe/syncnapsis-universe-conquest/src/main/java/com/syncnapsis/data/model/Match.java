@@ -410,7 +410,7 @@ public class Match extends ActivatableInstance<Long> implements Ownable<Player>
 	{
 		return victoryTimeout;
 	}
-	
+
 	/**
 	 * The participants in this match
 	 * 
@@ -646,7 +646,6 @@ public class Match extends ActivatableInstance<Long> implements Ownable<Player>
 		this.victoryTimeout = victoryTimeout;
 	}
 
-
 	/**
 	 * The participants in this match
 	 * 
@@ -778,5 +777,21 @@ public class Match extends ActivatableInstance<Long> implements Ownable<Player>
 		if(victoryTimeout != other.victoryTimeout)
 			return false;
 		return true;
+	}
+
+	@Override
+	public String toString()
+	{
+		StringBuilder builder = new StringBuilder();
+		builder.append("Match [title=").append(title).append(", galaxy=").append(galaxy == null ? null : galaxy.getId()).append(", creator=")
+				.append(creator == null ? null : creator.getId()).append(", creationDate=").append(creationDate).append(", startDate=")
+				.append(startDate).append(", finishedDate=").append(finishedDate).append(", canceledDate=").append(canceledDate).append(", state=")
+				.append(state).append(", speed=").append(speed).append(", seed=").append(seed).append(", startSystemCount=").append(startSystemCount)
+				.append(", startSystemSelectionEnabled=").append(startSystemSelectionEnabled).append(", startPopulation=").append(startPopulation)
+				.append(", plannedJoinType=").append(plannedJoinType).append(", startedJoinType=").append(startedJoinType)
+				.append(", participantsMax=").append(participantsMax).append(", participantsMin=").append(participantsMin)
+				.append(", startCondition=").append(startCondition).append(", victoryCondition=").append(victoryCondition)
+				.append(", victoryParameter=").append(victoryParameter).append(", victoryTimeout=").append(victoryTimeout).append("]");
+		return builder.toString();
 	}
 }

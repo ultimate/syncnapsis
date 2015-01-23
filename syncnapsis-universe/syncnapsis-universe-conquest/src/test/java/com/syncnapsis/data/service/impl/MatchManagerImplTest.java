@@ -126,7 +126,7 @@ public class MatchManagerImplTest extends GenericNameManagerImplTestCase<Match, 
 		final long seed = 123456789;
 		final int speed = 2;
 		final EnumStartCondition startCondition = EnumStartCondition.manually;
-		final Date startDate = new Date(2345);
+		final Date startDate = null;
 		final EnumJoinType startedJoinType = EnumJoinType.none;
 		final int startSystemCount = 2;
 		final int startPopulation = 1000;
@@ -148,6 +148,7 @@ public class MatchManagerImplTest extends GenericNameManagerImplTestCase<Match, 
 		tmpMatch.setPlannedJoinType(EnumJoinType.joiningEnabled);
 		tmpMatch.setSeed(seed);
 		tmpMatch.setSpeed(speed);
+		tmpMatch.setState(EnumMatchState.planned);
 		tmpMatch.setStartCondition(startCondition);
 		tmpMatch.setStartDate(startDate);
 		tmpMatch.setStartedJoinType(startedJoinType);
@@ -165,11 +166,10 @@ public class MatchManagerImplTest extends GenericNameManagerImplTestCase<Match, 
 		// dirty copy match using mapper ;-) 
 		final Match finalMatch = mapper.fromMap(new Match(), mapper.toMap(tmpMatch));
 		finalMatch.setId(matchId);
+		finalMatch.setState(EnumMatchState.planned);
 		finalMatch.setPlannedJoinType(plannedJoinType);
 
-		final List<Long> playerIds = new ArrayList<Long>();
-		playerIds.add(1L);
-		playerIds.add(2L);
+		final Long[] playerIds = new Long[] { 1L, 2L };
 
 		final ExtendedRandom random = new ExtendedRandom(seed);
 
@@ -229,13 +229,13 @@ public class MatchManagerImplTest extends GenericNameManagerImplTestCase<Match, 
 		});
 		mockContext.checking(new Expectations() {
 			{
-				exactly(playerIds.size()).of(mockParticipantManager).addParticipant(with(equal(tmpMatch2)), with(new BaseMatcher<Long>() {
+				exactly(playerIds.length).of(mockParticipantManager).addParticipant(with(equal(tmpMatch2)), with(new BaseMatcher<Long>() {
 					private List<Long>	used	= new LinkedList<Long>();
 
 					@Override
 					public boolean matches(Object arg0)
 					{
-						boolean matches = playerIds.contains(arg0) && !used.contains(arg0);
+						boolean matches = Arrays.asList(playerIds).contains(arg0) && !used.contains(arg0);
 						used.add((Long) arg0);
 						return matches;
 					}
