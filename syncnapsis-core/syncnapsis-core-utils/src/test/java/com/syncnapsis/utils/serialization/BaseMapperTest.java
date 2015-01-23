@@ -62,6 +62,12 @@ public class BaseMapperTest extends LoggerTestCase
 
 		assertEquals(1, (int) mapper.merge(int.class, 1, (Object[]) null));
 		assertEquals(1, (int) mapper.merge(Integer.class, 1, (Object[]) null));
+		
+		assertEquals(new Integer(1), mapper.merge(int.class, 1L, (Object[]) null));
+		assertEquals(new Integer(1), mapper.merge(Integer.class, 1L, (Object[]) null));
+
+		assertEquals(new Integer(1), mapper.merge(int.class, new Long(1), (Object[]) null));
+		assertEquals(new Integer(1), mapper.merge(Integer.class, new Long(1), (Object[]) null));
 
 		assertEquals(1, (int) mapper.merge((Integer) null, 1, (Object[]) null));
 

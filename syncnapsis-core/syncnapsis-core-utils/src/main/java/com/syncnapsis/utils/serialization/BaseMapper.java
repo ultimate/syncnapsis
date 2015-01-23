@@ -368,9 +368,23 @@ public class BaseMapper implements Mapper, InitializingBean
 		}
 		// logger.trace("Number? " + (ClassUtil.isNumber(cls)) + " && " + (prepared instanceof
 		// Number));
-		if(ClassUtil.isNumber(cls) && prepared instanceof Number)
+		if((ClassUtil.isNumber(cls) || cls == char.class || cls == Character.class) && prepared instanceof Number)
 		{
-			return (T) prepared;
+			if(cls == int.class || cls == Integer.class)
+				return (T) (Integer) ((Number) prepared).intValue();
+			else if(cls == long.class || cls == Long.class)
+				return (T) (Long) ((Number) prepared).longValue();
+			else if(cls == double.class || cls == Double.class)
+				return (T) (Double) ((Number) prepared).doubleValue();
+			else if(cls == float.class || cls == Float.class)
+				return (T) (Float) ((Number) prepared).floatValue();
+			else if(cls == byte.class || cls == Byte.class)
+				return (T) (Byte) ((Number) prepared).byteValue();
+			else if(cls == short.class || cls == Short.class)
+				return (T) (Short) ((Number) prepared).shortValue();
+			else if(cls == char.class || cls == Character.class)
+				return (T) (Character) (char) (int) (Integer) ((Number) prepared).intValue();
+			return entity;
 		}
 		// logger.trace("Boolean? " + ((cls == boolean.class || cls == Boolean.class)) + " && " +
 		// (prepared instanceof Boolean));
@@ -380,9 +394,12 @@ public class BaseMapper implements Mapper, InitializingBean
 		}
 		// logger.trace("Character? " + ((cls == char.class || cls == Character.class)) + " && " +
 		// (prepared instanceof Character));
-		if((cls == char.class || cls == Character.class) && prepared instanceof Character)
+		if(cls == char.class || cls == Character.class)
 		{
-			return (T) prepared;
+			if(prepared instanceof Character)
+				return (T) prepared;
+			else if(prepared instanceof Number)
+				return (T) (Character) (char) (int) (Integer) ((Number) prepared).intValue();
 		}
 		if(Date.class.isAssignableFrom(cls) && prepared instanceof Number)
 		{
@@ -455,6 +472,7 @@ public class BaseMapper implements Mapper, InitializingBean
 		int i = 0;
 		for(Object o : collection)
 		{
+			System.out.println("merging to " + newComponentType + ": " + (o != null ? o.getClass() : "") + " " + o);
 			newArray[i++] = merge(newComponentType, o, authorities);
 		}
 		return newArray;
