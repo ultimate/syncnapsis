@@ -446,7 +446,9 @@ public class ParticipantManagerImplTest extends GenericManagerImplTestCase<Parti
 		existing.setJoinedDate(new Date(-referenceTime));
 		existing.setMatch(match);
 		existing.setRank(match.getParticipants().size());
+		existing.setRankDate(new Date(-referenceTime));
 		existing.setRankFinal(false);
+		existing.setRankRawValue(0);
 		existing.setRankValue(0);
 		existing.setStartSystemsSelected(0);
 
@@ -458,8 +460,11 @@ public class ParticipantManagerImplTest extends GenericManagerImplTestCase<Parti
 		expected.setJoinedDate(new Date(referenceTime));
 		expected.setMatch(match);
 		expected.setRank(match.getParticipants().size());
+		expected.setRankDate(new Date(referenceTime));
 		expected.setRankFinal(false);
+		expected.setRankRawValue(0);
 		expected.setRankValue(0);
+		expected.setRivals(new ArrayList<Participant>());
 		expected.setStartSystemsSelected(0);
 
 		// not full (unlimited)

@@ -287,12 +287,16 @@ public class ParticipantManagerImpl extends GenericManagerImpl<Participant, Long
 		participant.setActivated(true);
 		participant.setDestructionDate(null);
 		participant.setDestructionType(null);
-		participant.setMatch(match);
 		participant.setEmpire(empire);
 		participant.setJoinedDate(now);
+		participant.setMatch(match);
 		participant.setRank(getNumberOfParticipants(match));
+		participant.setRankDate(now);
 		participant.setRankFinal(false);
+		participant.setRankRawValue(0);
 		participant.setRankValue(0);
+		participant.setRankVictoryDate(null);
+		participant.setRivals(new ArrayList<Participant>());
 		participant.setStartSystemsSelected(0);
 
 		if(participant.getPopulations() != null)
