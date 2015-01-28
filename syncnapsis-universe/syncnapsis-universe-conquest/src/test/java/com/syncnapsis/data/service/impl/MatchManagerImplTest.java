@@ -71,7 +71,7 @@ public class MatchManagerImplTest extends GenericNameManagerImplTestCase<Match, 
 	private SolarSystemPopulationManager		solarSystemPopulationManager;
 	private SolarSystemInfrastructureManager	solarSystemInfrastructureManager;
 	private PlayerManager						playerManager;
-	
+
 	private BaseMapper							mapper;
 	private BaseGameManager						securityManager;
 	private Calculator							calculator;
@@ -158,12 +158,12 @@ public class MatchManagerImplTest extends GenericNameManagerImplTestCase<Match, 
 		tmpMatch.setTitle(title);
 		tmpMatch.setVictoryCondition(victoryCondition);
 		tmpMatch.setVictoryParameter(victoryParameter);
-		
-		// dirty copy match using mapper ;-) 
+
+		// dirty copy match using mapper ;-)
 		final Match tmpMatch2 = mapper.fromMap(new Match(), mapper.toMap(tmpMatch));
 		tmpMatch2.setId(matchId);
-		
-		// dirty copy match using mapper ;-) 
+
+		// dirty copy match using mapper ;-)
 		final Match finalMatch = mapper.fromMap(new Match(), mapper.toMap(tmpMatch));
 		finalMatch.setId(matchId);
 		finalMatch.setState(EnumMatchState.planned);
@@ -497,17 +497,20 @@ public class MatchManagerImplTest extends GenericNameManagerImplTestCase<Match, 
 		mockManager.setSecurityManager(((MatchManagerImpl) this.mockManager).getSecurityManager());
 		mockManager.setCalculator(calculator);
 
-		int participants = 5;
+		final int participantCount = 5;
+		final int victoryParameter = 70;		
+		
 		final Match match = new Match();
-		match.setParticipants(new ArrayList<Participant>(participants));
+		match.setParticipants(new ArrayList<Participant>(participantCount));
 		Participant p;
-		for(int i = 0; i < participants; i++)
+		for(int i = 0; i < participantCount + 1; i++)
 		{
 			p = new Participant();
 			p.setId((long) i + 1);
 			p.setEmpire(new Empire());
 			p.getEmpire().setId((long) i + 1);
-			p.setActivated(i < participants - 1);
+			p.setActivated(i < participantCount);
+			match.getParticipants().add(p);
 		}
 		Collections.shuffle(match.getParticipants());
 		match.setStartSystemCount(3);
@@ -517,10 +520,27 @@ public class MatchManagerImplTest extends GenericNameManagerImplTestCase<Match, 
 		for(int i = 0; i < match.getStartSystemCount(); i++)
 			populations.add(new SolarSystemPopulation());
 
-		final ExtendedRandom random = new ExtendedRandom(match.getSeed());
+		final ExtendedRandom random = new ExtendedRandom(match.getSeed() + 1);
+		
+		// general expectation
+		mockContext.checking(new Expectations() {
+			{
+				allowing(mockParticipantManager).getNumberOfParticipants(match);
+				will(returnValue(participantCount));
+			}
+		});
+		for(int i = 0; i < participantCount; i++)
+		{
+			final int fi = i;
+			mockContext.checking(new Expectations() {
+				{
+					allowing(mockParticipantManager).get((long) fi + 1);
+					will(returnValue(match.getParticipants().get(fi)));
+				}
+			});
+		}
 
 		// test without start date (manually) // domination
-		int victoryParameter = 70;
 		match.setVictoryParameter(victoryParameter);
 		match.setVictoryCondition(EnumVictoryCondition.domination);
 		match.setStartCondition(EnumStartCondition.manually);
@@ -539,16 +559,16 @@ public class MatchManagerImplTest extends GenericNameManagerImplTestCase<Match, 
 		});
 		mockContext.checking(new Expectations() {
 			{
-				exactly(match.getParticipants().size() - 1).of(mockParticipantManager).randomSelectStartSystems(with(any(Participant.class)),
+				exactly(participantCount).of(mockParticipantManager).randomSelectStartSystems(with(any(Participant.class)),
 						with(equal(random)));
 				will(returnValue(populations));
 			}
 		});
 		mockContext.checking(new Expectations() {
 			{
-				exactly((match.getParticipants().size() - 1) * match.getStartSystemCount()).of(mockSolarSystemPopulationManager).save(
-						with(any(SolarSystemPopulation.class)));
-				will(returnValue(new SolarSystemPopulation()));
+				exactly(participantCount).of(mockParticipantManager).startParticipating(with(any(Participant.class)),
+						with(equal(new Date(referenceTime))));
+				will(new ReturnArgAction(0));
 			}
 		});
 		Match result1 = ((MatchManagerImpl) mockManager).performStartMatch(match);
@@ -565,6 +585,7 @@ public class MatchManagerImplTest extends GenericNameManagerImplTestCase<Match, 
 		}
 
 		// test with start date // extermination
+		match.setVictoryParameter(victoryParameter);
 		match.setVictoryCondition(EnumVictoryCondition.extermination);
 		Date aStartDate = new Date(4321);
 		match.setStartDate(aStartDate);
@@ -584,16 +605,16 @@ public class MatchManagerImplTest extends GenericNameManagerImplTestCase<Match, 
 		});
 		mockContext.checking(new Expectations() {
 			{
-				exactly(match.getParticipants().size() - 1).of(mockParticipantManager).randomSelectStartSystems(with(any(Participant.class)),
+				exactly(participantCount).of(mockParticipantManager).randomSelectStartSystems(with(any(Participant.class)),
 						with(equal(random)));
 				will(returnValue(populations));
 			}
 		});
 		mockContext.checking(new Expectations() {
 			{
-				exactly((match.getParticipants().size() - 1) * match.getStartSystemCount()).of(mockSolarSystemPopulationManager).save(
-						with(any(SolarSystemPopulation.class)));
-				will(returnValue(new SolarSystemPopulation()));
+				exactly(participantCount).of(mockParticipantManager).startParticipating(with(any(Participant.class)),
+						with(equal(match.getStartDate())));
+				will(new ReturnArgAction(0));
 			}
 		});
 		Match result2 = ((MatchManagerImpl) mockManager).performStartMatch(match);
@@ -602,7 +623,7 @@ public class MatchManagerImplTest extends GenericNameManagerImplTestCase<Match, 
 		assertNotNull(match);
 		assertNotNull(match.getStartDate());
 		assertEquals(aStartDate, match.getStartDate());
-		assertEquals(100, match.getVictoryParameter());
+		assertEquals(victoryParameter, match.getVictoryParameter());
 		assertEquals(calculator.calculateVictoryTimeout(match), match.getVictoryTimeout());
 		for(Participant p1 : match.getParticipants())
 		{
@@ -627,16 +648,16 @@ public class MatchManagerImplTest extends GenericNameManagerImplTestCase<Match, 
 		});
 		mockContext.checking(new Expectations() {
 			{
-				exactly(match.getParticipants().size() - 1).of(mockParticipantManager).randomSelectStartSystems(with(any(Participant.class)),
+				exactly(participantCount).of(mockParticipantManager).randomSelectStartSystems(with(any(Participant.class)),
 						with(equal(random)));
 				will(returnValue(populations));
 			}
 		});
 		mockContext.checking(new Expectations() {
 			{
-				exactly((match.getParticipants().size() - 1) * match.getStartSystemCount()).of(mockSolarSystemPopulationManager).save(
-						with(any(SolarSystemPopulation.class)));
-				will(returnValue(new SolarSystemPopulation()));
+				exactly(participantCount).of(mockParticipantManager).startParticipating(with(any(Participant.class)),
+						with(equal(new Date(referenceTime))));
+				will(new ReturnArgAction(0));
 			}
 		});
 		Match result3 = ((MatchManagerImpl) mockManager).performStartMatch(match);
@@ -650,8 +671,16 @@ public class MatchManagerImplTest extends GenericNameManagerImplTestCase<Match, 
 		int rivals = mockManager.getNumberOfRivals(match);
 		for(Participant p1 : match.getParticipants())
 		{
-			assertNotNull(p1.getRivals());
-			assertEquals(rivals, p1.getRivals());
+			logger.debug("checking rivals for participant #" + p1.getId() + " (activated?" + p1.isActivated() + ") rivals:" + (p1.getRivals() == null ? null : p1.getRivals().size()));
+			if(p1.isActivated())
+			{
+				assertNotNull(p1.getRivals());
+				assertEquals(rivals, p1.getRivals().size());
+			}
+			else
+			{
+				assertNull(p1.getRivals());
+			}
 		}
 
 		// test with illegal state
@@ -781,9 +810,12 @@ public class MatchManagerImplTest extends GenericNameManagerImplTestCase<Match, 
 		match.setParticipants(new ArrayList<Participant>(expectedRivals_40.length));
 		match.setVictoryCondition(EnumVictoryCondition.vendetta);
 
+		Participant p;
 		for(int i = 1; i < expectedRivals_40.length; i++)
 		{
-			match.getParticipants().add(new Participant());
+			p = new Participant();
+			p.setActivated(true);
+			match.getParticipants().add(p);
 
 			match.setVictoryParameter(40);
 			assertEquals(expectedRivals_40[i], mockManager.getNumberOfRivals(match));
@@ -1108,10 +1140,10 @@ public class MatchManagerImplTest extends GenericNameManagerImplTestCase<Match, 
 		// domination (not all alone)
 		// putting 2 or more populations into the same system --> reduction in count
 		// part 1 & 0 & 4 sharing system
-		setSameSystem(match.getParticipants(), 1, 0, 0, 0); 
+		setSameSystem(match.getParticipants(), 1, 0, 0, 0);
 		setSameSystem(match.getParticipants(), 1, 0, 4, 0);
 		// part 1 & 0 sharing (another) system
-		setSameSystem(match.getParticipants(), 1, 1, 0, 1); 
+		setSameSystem(match.getParticipants(), 1, 1, 0, 1);
 		// part 1 & 0 sharing (another) system
 		setSameSystem(match.getParticipants(), 1, 2, 0, 2);
 		// --> part 0 => -3

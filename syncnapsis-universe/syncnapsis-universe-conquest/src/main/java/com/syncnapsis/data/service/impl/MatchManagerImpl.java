@@ -244,7 +244,7 @@ public class MatchManagerImpl extends GenericNameManagerImpl<Match, Long> implem
 		match.setCreator(securityManager.getPlayerProvider().get());
 		match.setFinishedDate(null);
 		match.setGalaxy(galaxy);
-		// match.setParticipants(participants);
+		match.setParticipants(new ArrayList<Participant>());
 		match.setParticipantsMax(participantsMax);
 		match.setParticipantsMin(participantsMin);
 		// set joining enabled here temporarily otherwise adding participants won't work
@@ -262,7 +262,7 @@ public class MatchManagerImpl extends GenericNameManagerImpl<Match, Long> implem
 		match.setTitle(title);
 		match.setVictoryCondition(victoryCondition);
 		match.setVictoryParameter(victoryParameter);
-
+		
 		match = save(match);
 
 		// create infrastructures
@@ -346,6 +346,7 @@ public class MatchManagerImpl extends GenericNameManagerImpl<Match, Long> implem
 			}
 			else
 			{
+				logger.info("match start failed: " + notPossibleReasons);
 				getMailer().sendMatchStartFailedNotification(match, notPossibleReasons.get(0));
 				// automatic starting is not possible -> set to manually
 				match.setStartCondition(EnumStartCondition.manually);
@@ -398,12 +399,14 @@ public class MatchManagerImpl extends GenericNameManagerImpl<Match, Long> implem
 	@Override
 	public List<String> getMatchStartNotPossibleReasons(Match match)
 	{
+		int participantCount = participantManager.getNumberOfParticipants(match);
+		
 		List<String> reasons = new ArrayList<String>(5);
 		if(match.getState() != EnumMatchState.planned)
 			reasons.add(UniverseConquestConstants.REASON_ALREADY_STARTED);
-		if(match.getParticipants().size() < match.getParticipantsMin())
+		if(participantCount < match.getParticipantsMin())
 			reasons.add(UniverseConquestConstants.REASON_NOT_ENOUGH_PARTICIPANTS);
-		if(match.getParticipantsMax() > 0 && (match.getParticipants().size() > match.getParticipantsMax()))
+		if(match.getParticipantsMax() > 0 && (participantCount > match.getParticipantsMax()))
 			reasons.add(UniverseConquestConstants.REASON_TOO_MANY_PARTICIPANTS);
 		return reasons;
 	}
@@ -441,10 +444,7 @@ public class MatchManagerImpl extends GenericNameManagerImpl<Match, Long> implem
 				// set during game creation
 				break;
 			case extermination:
-				// allways 100%
-				// TODO make selectable with options?
-				// very easy = 80, easy = 90, medium = 95, hard = 99, very hard = 100
-				match.setVictoryParameter(100);
+				// set during game creation
 				break;
 			case vendetta:
 				// TODO make vendetta percentage selectable?
@@ -542,8 +542,10 @@ public class MatchManagerImpl extends GenericNameManagerImpl<Match, Long> implem
 	@Override
 	public int getNumberOfRivals(Match match)
 	{
+		int participantCount = participantManager.getNumberOfParticipants(match);
+		
 		if(match.getVictoryCondition() == EnumVictoryCondition.vendetta)
-			return (int) Math.ceil((match.getParticipants().size() - 1) * match.getVictoryParameter() / 100.0);
+			return (int) Math.ceil((participantCount - 1) * match.getVictoryParameter() / 100.0);
 		else
 			return 0;
 	}
