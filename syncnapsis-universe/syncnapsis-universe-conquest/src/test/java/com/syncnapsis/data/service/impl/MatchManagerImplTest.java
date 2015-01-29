@@ -71,6 +71,9 @@ public class MatchManagerImplTest extends GenericNameManagerImplTestCase<Match, 
 	private SolarSystemPopulationManager		solarSystemPopulationManager;
 	private SolarSystemInfrastructureManager	solarSystemInfrastructureManager;
 	private PlayerManager						playerManager;
+	
+	private MatchDao							matchDao;
+	private MatchManager						matchManager;
 
 	private BaseMapper							mapper;
 	private BaseGameManager						securityManager;
@@ -148,7 +151,7 @@ public class MatchManagerImplTest extends GenericNameManagerImplTestCase<Match, 
 		tmpMatch.setPlannedJoinType(EnumJoinType.joiningEnabled);
 		tmpMatch.setSeed(seed);
 		tmpMatch.setSpeed(speed);
-		tmpMatch.setState(EnumMatchState.planned);
+		tmpMatch.setState(EnumMatchState.created);
 		tmpMatch.setStartCondition(startCondition);
 		tmpMatch.setStartDate(startDate);
 		tmpMatch.setStartedJoinType(startedJoinType);
@@ -438,6 +441,20 @@ public class MatchManagerImplTest extends GenericNameManagerImplTestCase<Match, 
 
 	public void testGetMatchStartNotPossibleReasons() throws Exception
 	{
+		Match m = matchDao.get(34027L);
+		
+		logger.warn("participantCount: " + participantManager.getNumberOfParticipants(m));
+		logger.warn("match.participantsMin: " + m.getParticipantsMin());
+		logger.warn("match.participantsMax: " + m.getParticipantsMax());
+		logger.warn("matchStartNotPossibleReasons: " + matchManager.getMatchStartNotPossibleReasons(m));
+		
+		
+		
+		
+		
+		
+		
+		
 		Match match = new Match();
 
 		match.setState(EnumMatchState.planned);

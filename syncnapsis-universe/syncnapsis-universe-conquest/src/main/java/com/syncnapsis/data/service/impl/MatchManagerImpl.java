@@ -252,7 +252,7 @@ public class MatchManagerImpl extends GenericNameManagerImpl<Match, Long> implem
 		match.setPlannedJoinType(EnumJoinType.joiningEnabled);
 		match.setSeed(seed);
 		match.setSpeed(speed);
-		match.setState(EnumMatchState.planned);
+		match.setState(EnumMatchState.created);
 		match.setStartCondition(startCondition);
 		match.setStartDate(startDate);
 		match.setStartedJoinType(startedJoinType);

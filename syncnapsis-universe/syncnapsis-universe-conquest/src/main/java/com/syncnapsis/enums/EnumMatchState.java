@@ -22,6 +22,10 @@ package com.syncnapsis.enums;
 public enum EnumMatchState
 {
 	/**
+	 * The match has just been created.
+	 */
+	created,
+	/**
 	 * The match is planned but not yet started
 	 */
 	planned,

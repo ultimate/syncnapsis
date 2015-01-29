@@ -186,6 +186,7 @@ public class ParticipantManagerImpl extends GenericManagerImpl<Participant, Long
 					break;
 			case canceled:
 			case finished:
+			case created:
 				// joining ist not allowed at this state -> return participant if existing
 				return getByMatchAndEmpire(match.getId(), empire.getId());
 		}
@@ -226,6 +227,8 @@ public class ParticipantManagerImpl extends GenericManagerImpl<Participant, Long
 		// check the match state and join type
 		switch(match.getState())
 		{
+			case created:
+				break;
 			case planned:
 				if(match.getPlannedJoinType() != EnumJoinType.none)
 					break;
