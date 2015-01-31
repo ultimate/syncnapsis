@@ -308,9 +308,16 @@ public class ReflectionsUtil
 		if(dotIndex == -1)
 		{
 			if(o instanceof Map)
-				return ((Map<?, ?>) o).get(key);
+			{
+				if(((Map<?, ?>) o).containsKey(key))
+					return ((Map<?, ?>) o).get(key);
+				else
+					throw new NoSuchFieldException(key);
+			}
 			else
+			{
 				return getField(o, key);
+			}
 		}
 		else
 		{

@@ -21,12 +21,12 @@ import com.syncnapsis.tests.annotations.TestExcludesMethods;
 /**
  * @author ultimate
  */
-@TestExcludesMethods({"get*", "set*"})
+@TestExcludesMethods({ "get*", "set*" })
 public class WorkerTest extends LoggerTestCase
 {
 	private static final long	INTERVAL	= 100;
 
-	@TestCoversMethods({ "start", "stop", "suspend", "resume", "work", "run", "is*"})
+	@TestCoversMethods({ "start", "stop", "suspend", "resume", "work", "run", "is*" })
 	public void testLifecycle() throws Exception
 	{
 		long time;
@@ -44,6 +44,7 @@ public class WorkerTest extends LoggerTestCase
 		for(int i = 0; i < 2; i++)
 		{
 			time = worker.getTimeProvider().get();
+			logger.debug("starting...");
 			worker.start();
 
 			Thread.sleep(INTERVAL / 10);
@@ -67,6 +68,7 @@ public class WorkerTest extends LoggerTestCase
 
 			id = worker.lastExecutionId;
 			time = worker.lastExecutionTime;
+			logger.debug("suspending...");
 			worker.suspend();
 			Thread.sleep((long) (INTERVAL * 3.5));
 
@@ -78,6 +80,7 @@ public class WorkerTest extends LoggerTestCase
 			assertEquals(time, worker.lastExecutionTime);
 
 			time = worker.lastExecutionTime;
+			logger.debug("resuming...");
 			worker.resume();
 			Thread.sleep((long) (INTERVAL * 2.5));
 
@@ -90,6 +93,7 @@ public class WorkerTest extends LoggerTestCase
 
 			id = worker.lastExecutionId;
 			time = worker.lastExecutionTime;
+			logger.debug("stopping...");
 			worker.stop();
 
 			assertFalse(worker.isRunning());
@@ -103,7 +107,7 @@ public class WorkerTest extends LoggerTestCase
 		}
 	}
 
-	@TestCoversMethods({"hasWarning", "clearWarning", "getWarningCause"})
+	@TestCoversMethods({ "hasWarning", "clearWarning", "getWarningCause" })
 	public void testOverload() throws Exception
 	{
 		long time;
@@ -135,7 +139,7 @@ public class WorkerTest extends LoggerTestCase
 		Thread.sleep((long) (INTERVAL * 3.5));
 
 		worker.stop();
-		
+
 		assertFalse(worker.isRunning());
 		assertFalse(worker.isSuspended());
 		assertFalse(worker.hasError());
@@ -145,7 +149,7 @@ public class WorkerTest extends LoggerTestCase
 		assertTrue(worker.lastExecutionTime >= time);
 	}
 
-	@TestCoversMethods({"hasError", "clearError", "getErrorCause"})
+	@TestCoversMethods({ "hasError", "clearError", "getErrorCause" })
 	public void testErrorHandling() throws Exception
 	{
 		long time;
@@ -167,7 +171,7 @@ public class WorkerTest extends LoggerTestCase
 		Thread.sleep(INTERVAL);
 
 		worker.stop();
-		
+
 		assertFalse(worker.isRunning());
 		assertFalse(worker.isSuspended());
 		assertTrue(worker.hasError());
@@ -179,10 +183,10 @@ public class WorkerTest extends LoggerTestCase
 
 	private class TestWorker extends Worker
 	{
-		private long		lastExecutionTime	= -1;
-		private long		lastExecutionId		= -1;
-		private long		wait;
-		private Throwable	throwable;
+		public long			lastExecutionTime	= -1;
+		public long			lastExecutionId		= -1;
+		public long			wait;
+		public Throwable	throwable;
 
 		public TestWorker()
 		{
@@ -209,6 +213,46 @@ public class WorkerTest extends LoggerTestCase
 			}
 			if(throwable != null)
 				throw throwable;
+		}
+	}
+
+	@TestCoversMethods("join")
+	public void testEndingSupport() throws Exception
+	{
+		long time;
+		EndingWorker worker = new EndingWorker();
+		assertNotNull(worker.getTimeProvider());
+
+		assertFalse(worker.isRunning());
+		assertFalse(worker.isSuspended());
+		assertFalse(worker.hasError());
+		assertFalse(worker.hasWarning());
+		assertEquals(-1, worker.lastExecutionId);
+		assertEquals(-1, worker.lastExecutionTime);
+
+		time = worker.getTimeProvider().get();
+		worker.start();
+
+		Thread.sleep(INTERVAL);
+
+		worker.join();
+
+		assertFalse(worker.isRunning());
+		assertFalse(worker.isSuspended());
+		assertFalse(worker.hasError());
+		assertFalse(worker.hasWarning());
+		assertTrue(worker.lastExecutionId == 10);
+		assertTrue(worker.lastExecutionTime >= time);
+	}
+
+	private class EndingWorker extends TestWorker
+	{
+		@Override
+		public void work(long executionId) throws Throwable
+		{
+			super.work(executionId);
+			if(executionId == 10)
+				this.stop(false);
 		}
 	}
 }
