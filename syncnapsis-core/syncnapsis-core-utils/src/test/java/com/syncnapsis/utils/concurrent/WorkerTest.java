@@ -216,6 +216,7 @@ public class WorkerTest extends LoggerTestCase
 		}
 	}
 
+	@TestCoversMethods("join")
 	public void testEndingSupport() throws Exception
 	{
 		long time;
