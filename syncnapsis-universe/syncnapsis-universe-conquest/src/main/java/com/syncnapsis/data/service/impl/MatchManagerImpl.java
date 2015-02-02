@@ -279,7 +279,8 @@ public class MatchManagerImpl extends GenericNameManagerImpl<Match, Long> implem
 				logger.warn("could not add empire " + empireId + " to match " + match.getId());
 		}
 
-		// set real join type now...
+		// set real join type & state now...
+		match.setState(EnumMatchState.planned);
 		match.setPlannedJoinType(plannedJoinType);
 		match = save(match);
 
