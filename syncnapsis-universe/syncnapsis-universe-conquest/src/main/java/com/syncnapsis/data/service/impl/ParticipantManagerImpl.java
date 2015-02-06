@@ -307,12 +307,21 @@ public class ParticipantManagerImpl extends GenericManagerImpl<Participant, Long
 			// participant has selected start systems earlier, but has left -> reset them
 			for(SolarSystemPopulation population : participant.getPopulations())
 			{
+				population.setActivated(true); // re-activate
 				population.setDestructionDate(null);
 				population.setDestructionType(null);
 			}
 		}
+		else
+		{
+			participant.setPopulations(new ArrayList<SolarSystemPopulation>());
+		}
 
-		return save(participant);
+		participant = save(participant);
+
+		match.getParticipants().add(participant);
+
+		return participant;
 	}
 
 	/**
@@ -360,16 +369,18 @@ public class ParticipantManagerImpl extends GenericManagerImpl<Participant, Long
 		destroy(participant, destructionType, now);
 		return true;
 	}
-	
+
 	/*
 	 * (non-Javadoc)
-	 * @see com.syncnapsis.data.service.ParticipantManager#getNumberOfParticipants(com.syncnapsis.data.model.Match)
+	 * @see
+	 * com.syncnapsis.data.service.ParticipantManager#getNumberOfParticipants(com.syncnapsis.data
+	 * .model.Match)
 	 */
 	@Override
 	public int getNumberOfParticipants(Match match)
 	{
 		int count = 0;
-		for(Participant p: match.getParticipants())
+		for(Participant p : match.getParticipants())
 		{
 			if(p.isActivated())
 				count++;
@@ -431,13 +442,21 @@ public class ParticipantManagerImpl extends GenericManagerImpl<Participant, Long
 	@Override
 	public Participant startParticipating(Participant participant, Date participationDate)
 	{
-		if(participant.getPopulations().size() < participant.getMatch().getStartSystemCount())
-			throw new IllegalArgumentException("not all start systems selected!");
+		int  populations = 0;
 		long pop = 0;
 		for(SolarSystemPopulation population : participant.getPopulations())
 		{
-			pop += population.getPopulation();
+			if(population.isActivated())
+			{
+				populations++;
+				pop += population.getPopulation();
+			}
 		}
+		
+		logger.debug("population: count=" + populations + " amount=" + pop);
+		
+		if(populations < participant.getMatch().getStartSystemCount())
+			throw new IllegalArgumentException("not all start systems selected!");
 		if(pop < participant.getMatch().getStartPopulation())
 			throw new IllegalArgumentException("not all start population assigned!");
 
@@ -485,6 +504,15 @@ public class ParticipantManagerImpl extends GenericManagerImpl<Participant, Long
 		List<SolarSystemInfrastructure> infrastructures = new ArrayList<SolarSystemInfrastructure>(
 				solarSystemInfrastructureManager.getByMatch(participant.getMatch().getId()));
 
+		if(logger.isDebugEnabled())
+		{
+			logger.debug("available infrastructures:");
+			for(int i = 0; i < infrastructures.size(); i++)
+			{
+				logger.debug(i + ": " + infrastructures.get(i).getId() + " pop=" + infrastructures.get(i).getPopulations());
+			}
+		}
+
 		int startSystems = participant.getMatch().getStartSystemCount();
 		List<SolarSystemPopulation> populations = new ArrayList<SolarSystemPopulation>(startSystems);
 		populations.addAll(participant.getPopulations());
@@ -497,14 +525,27 @@ public class ParticipantManagerImpl extends GenericManagerImpl<Participant, Long
 			centerOfSelection = random.nextEntry(infrastructures).getSolarSystem().getCoords();
 		}
 		sortByDistance(infrastructures, centerOfSelection);
-
+		
+		int selectedPops = 0;
 		long selectedPop = 0;
 		for(SolarSystemPopulation population : participant.getPopulations())
 		{
-			selectedPop += population.getPopulation();
+			if(population.isActivated())
+			{
+				selectedPops++;
+				selectedPop += population.getPopulation();
+			}
 		}
-
+		
 		long remainingPop = participant.getMatch().getStartPopulation() - selectedPop;
+		
+		if(logger.isDebugEnabled())
+		{
+			logger.debug("selectedPops = " + selectedPops);
+			logger.debug("selectedPop  = " + selectedPop);
+			logger.debug("remainingPop = " + remainingPop);
+		}
+		
 		long pop;
 		long maxPop;
 		long avgPopRemaining;
@@ -512,9 +553,9 @@ public class ParticipantManagerImpl extends GenericManagerImpl<Participant, Long
 
 		SolarSystemPopulation population;
 		SolarSystemInfrastructure infrastructure;
-		while(populations.size() < startSystems)
+		while(selectedPops < startSystems)
 		{
-			avgPopRemaining = remainingPop / (startSystems - populations.size());
+			avgPopRemaining = remainingPop / (startSystems - selectedPops);
 			// select a random system / infrastructure
 			do
 			{
@@ -525,9 +566,21 @@ public class ParticipantManagerImpl extends GenericManagerImpl<Participant, Long
 			} while(maxPop < avgPopRemaining); // assure no (almost) unhabitable system is chosen
 			// select a random amount of remaining pop
 			pop = random.nextGaussian(0, 2 * avgPopRemaining);
-			pop = Math.max(pop, maxPop);
+			pop = Math.min(pop, maxPop);
+			pop = Math.min(pop, remainingPop);
 			// reduce remaining pop
+			selectedPops++;
+			selectedPop += pop;
 			remainingPop -= pop;
+
+			if(logger.isDebugEnabled())
+			{
+				logger.debug("creating population @ " + infrastructureIndex + " size=" + pop);
+				logger.debug("selectedPops = " + selectedPops);
+				logger.debug("selectedPop  = " + selectedPop);
+				logger.debug("remainingPop = " + remainingPop);
+			}
+			
 			// select the start system
 			population = solarSystemPopulationManager.selectStartSystem(participant, infrastructure, pop);
 			populations.add(population);
@@ -537,6 +590,8 @@ public class ParticipantManagerImpl extends GenericManagerImpl<Participant, Long
 		// add the remaining pop arbitrary
 		if(remainingPop != 0)
 		{
+			logger.debug("destributing remaining pop...");
+			
 			// randomly traverse all selected populations
 			int[] perm = random.nextPerm(populations.size());
 			for(int i : perm)
@@ -571,13 +626,21 @@ public class ParticipantManagerImpl extends GenericManagerImpl<Participant, Long
 		// save all populations
 		for(SolarSystemPopulation p : populations)
 		{
-			solarSystemPopulationManager.save(p);
+//			if(p.getId() == null)
+//			{
+//				p = solarSystemPopulationManager.save(p);
+//				participant.getPopulations().add(p);
+//			}
+//			else
+//			{
+				solarSystemPopulationManager.save(p);
+//			}
 		}
 
 		// update the participant
 		participant.setStartSystemsSelected(startSystems);
 		save(participant);
-
+		
 		return populations;
 	}
 
