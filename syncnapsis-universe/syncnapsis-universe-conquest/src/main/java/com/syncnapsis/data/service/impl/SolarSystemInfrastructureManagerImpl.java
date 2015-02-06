@@ -14,6 +14,7 @@
  */
 package com.syncnapsis.data.service.impl;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -24,6 +25,7 @@ import com.syncnapsis.data.dao.SolarSystemInfrastructureDao;
 import com.syncnapsis.data.model.Match;
 import com.syncnapsis.data.model.SolarSystem;
 import com.syncnapsis.data.model.SolarSystemInfrastructure;
+import com.syncnapsis.data.model.SolarSystemPopulation;
 import com.syncnapsis.data.service.SolarSystemInfrastructureManager;
 import com.syncnapsis.security.BaseGameManager;
 import com.syncnapsis.utils.data.ExtendedRandom;
@@ -136,6 +138,7 @@ public class SolarSystemInfrastructureManagerImpl extends GenericManagerImpl<Sol
 	{
 		SolarSystemInfrastructure infrastructure = infrastructureGenerator.generate(random, match, system);
 		infrastructure.setLastUpdateDate(new Date(securityManager.getTimeProvider().get()));
+		infrastructure.setPopulations(new ArrayList<SolarSystemPopulation>());
 		return save(infrastructure);
 	}
 }
