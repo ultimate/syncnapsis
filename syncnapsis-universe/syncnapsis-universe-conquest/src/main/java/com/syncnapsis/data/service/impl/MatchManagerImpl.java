@@ -215,7 +215,7 @@ public class MatchManagerImpl extends GenericNameManagerImpl<Match, Long> implem
 	 */
 	@Override
 	public Match createMatch(String title, long galaxyId, int speed, Long seed, EnumStartCondition startCondition, Date startDate,
-			boolean startSystemSelectionEnabled, int startSystemCount, int startPopulation, EnumVictoryCondition victoryCondition,
+			boolean startSystemSelectionEnabled, int startSystemCount, long startPopulation, EnumVictoryCondition victoryCondition,
 			int victoryParameter, int participantsMax, int participantsMin, Long[] empireIds, EnumJoinType plannedJoinType,
 			EnumJoinType startedJoinType)
 	{
@@ -285,8 +285,25 @@ public class MatchManagerImpl extends GenericNameManagerImpl<Match, Long> implem
 		match = save(match);
 
 		HibernateUtil.currentSession().flush();
+		
+		match = get(match.getId());
 
-		return startMatchIfNecessary(get(match.getId()));
+		if(logger.isDebugEnabled())
+		{
+			logger.debug("participants:");
+			for(Participant p: match.getParticipants())
+			{
+				logger.debug(p.getId() + ": user=" + (p.getEmpire() == null ? null : p.getEmpire().getPlayer().getUser().getUsername()) + " activated?" + p.isActivated());
+			}
+			logger.debug("participantCount: " + participantManager.getNumberOfParticipants(match));
+			logger.debug("match.participantsMin: " + match.getParticipantsMin());
+			logger.debug("match.participantsMax: " + match.getParticipantsMax());
+			logger.debug("matchStartNecessary: " +  isStartNecessary(match));
+			logger.debug("matchStartNotPossibleReasons: " + getMatchStartNotPossibleReasons(match));
+			logger.debug("match.startPopulation: " + match.getStartPopulation());
+		}
+
+		return startMatchIfNecessary(match);
 	}
 
 	/*
@@ -298,7 +315,7 @@ public class MatchManagerImpl extends GenericNameManagerImpl<Match, Long> implem
 	 */
 	@Override
 	public Match createMatch(String title, long galaxyId, int speed, String seedString, EnumStartCondition startCondition, Date startDate,
-			boolean startSystemSelectionEnabled, int startSystemCount, int startPopulation, EnumVictoryCondition victoryCondition,
+			boolean startSystemSelectionEnabled, int startSystemCount, long startPopulation, EnumVictoryCondition victoryCondition,
 			int victoryParameter, int participantsMax, int participantsMin, Long[] empireIds, EnumJoinType plannedJoinType,
 			EnumJoinType startedJoinType)
 	{
@@ -471,13 +488,27 @@ public class MatchManagerImpl extends GenericNameManagerImpl<Match, Long> implem
 			assignRivals(participants, numberOfRivals, random);
 
 		match = save(match);
-
+		
 		for(Participant p : participants)
 		{
 			// assign start populations
 			participantManager.randomSelectStartSystems(p, random);
+
+			if(logger.isDebugEnabled())
+			{
+				logger.debug(p.getEmpire().getPlayer().getUser().getUsername() + ":");
+				for(SolarSystemPopulation pop: p.getPopulations())
+					logger.debug(pop.getPopulation() + " @ " + pop.getInfrastructure().getInfrastructure());
+			}
+		}
+
+		HibernateUtil.currentSession().flush();
+		
+		for(Participant p: participants)
+		{
+			HibernateUtil.currentSession().refresh(p);
 			// start participating
-			participantManager.startParticipating(participantManager.get(p.getId()), startDate);
+			participantManager.startParticipating(p, startDate);
 		}
 
 		return get(match.getId());

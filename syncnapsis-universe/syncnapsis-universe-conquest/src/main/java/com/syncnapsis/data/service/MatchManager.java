@@ -96,7 +96,7 @@ public interface MatchManager extends GenericNameManager<Match, Long>
 	 * @return the match created
 	 */
 	public Match createMatch(String title, long galaxyId, int speed, Long seed, EnumStartCondition startCondition, Date startDate,
-			boolean startSystemSelectionEnabled, int startSystemCount, int startPopulation, EnumVictoryCondition victoryCondition,
+			boolean startSystemSelectionEnabled, int startSystemCount, long startPopulation, EnumVictoryCondition victoryCondition,
 			int victoryParameter, int participantsMax, int participantsMin, Long[] empireIds, EnumJoinType plannedJoinType,
 			EnumJoinType startedJoinType);
 	
@@ -123,7 +123,7 @@ public interface MatchManager extends GenericNameManager<Match, Long>
 	 * @return the match created
 	 */
 	public Match createMatch(String title, long galaxyId, int speed, String seed, EnumStartCondition startCondition, Date startDate,
-			boolean startSystemSelectionEnabled, int startSystemCount, int startPopulation, EnumVictoryCondition victoryCondition,
+			boolean startSystemSelectionEnabled, int startSystemCount, long startPopulation, EnumVictoryCondition victoryCondition,
 			int victoryParameter, int participantsMax, int participantsMin, Long[] empireIds, EnumJoinType plannedJoinType,
 			EnumJoinType startedJoinType);
 
