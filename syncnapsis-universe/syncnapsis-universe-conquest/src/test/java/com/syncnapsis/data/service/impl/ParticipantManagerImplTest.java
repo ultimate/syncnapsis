@@ -736,15 +736,19 @@ public class ParticipantManagerImplTest extends GenericManagerImplTestCase<Parti
 		participant.getMatch().setStartSystemCount(populations);
 		participant.getMatch().setStartPopulation(startPopulation);
 		participant.setPopulations(new ArrayList<SolarSystemPopulation>(populations));
+		SolarSystemPopulation pop;
 		for(int i = 0; i < populations; i++)
 		{
-			participant.getPopulations().add(new SolarSystemPopulation());
-			participant.getPopulations().get(i).setPopulation(startPopulation / populations);
+			pop = new SolarSystemPopulation();
+			pop.setActivated(true);
+			pop.setPopulation(startPopulation / populations);
+			participant.getPopulations().add(pop);
 		}
 
 		Date participationDate = new Date(1234);
 
 		final SolarSystemPopulation expected = new SolarSystemPopulation();
+		expected.setActivated(true);
 		expected.setColonizationDate(participationDate);
 		expected.setPopulation(startPopulation / populations);
 		expected.setLastUpdateDate(participationDate);
@@ -942,6 +946,7 @@ public class ParticipantManagerImplTest extends GenericManagerImplTestCase<Parti
 		for(int i = 0; i < systemSelected; i++)
 		{
 			population = new SolarSystemPopulation();
+			population.setActivated(true);
 			population.setParticipant(participant);
 			population.setInfrastructure(random.nextEntry(infrastructures));
 			population.setPopulation((i + 1) * 1000000);
