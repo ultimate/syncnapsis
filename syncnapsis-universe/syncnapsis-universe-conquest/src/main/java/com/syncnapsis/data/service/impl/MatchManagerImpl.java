@@ -506,7 +506,7 @@ public class MatchManagerImpl extends GenericNameManagerImpl<Match, Long> implem
 		
 		for(Participant p: participants)
 		{
-			HibernateUtil.currentSession().refresh(p);
+//			HibernateUtil.currentSession().refresh(p);
 			// start participating
 			participantManager.startParticipating(p, startDate);
 		}

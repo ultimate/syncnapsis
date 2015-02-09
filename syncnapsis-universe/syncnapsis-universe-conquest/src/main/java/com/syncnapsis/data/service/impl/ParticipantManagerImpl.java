@@ -626,18 +626,11 @@ public class ParticipantManagerImpl extends GenericManagerImpl<Participant, Long
 		// save all populations
 		for(SolarSystemPopulation p : populations)
 		{
-//			if(p.getId() == null)
-//			{
-//				p = solarSystemPopulationManager.save(p);
-//				participant.getPopulations().add(p);
-//			}
-//			else
-//			{
-				solarSystemPopulationManager.save(p);
-//			}
+			solarSystemPopulationManager.save(p);
 		}
 
 		// update the participant
+		participant.setPopulations(populations);
 		participant.setStartSystemsSelected(startSystems);
 		save(participant);
 		
