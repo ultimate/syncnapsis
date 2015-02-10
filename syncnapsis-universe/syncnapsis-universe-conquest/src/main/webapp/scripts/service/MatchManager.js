@@ -28,7 +28,7 @@ MatchManager = function()
 			victoryParameter, participantsMax, participantsMin, empireIds, plannedJoinType,
 			startedJoinType)
 	{
-		return function(match) { console.log("match '" + match.title + "' created: ID=" + match.id); /* TODO handle result */ };
+		return function(match) { client.uiManager.onMatchCreated(match); };
 	};
 };
 

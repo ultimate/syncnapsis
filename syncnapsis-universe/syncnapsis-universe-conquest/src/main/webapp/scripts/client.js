@@ -948,6 +948,18 @@ UIManager.prototype.createMatch = function(id)
 	);
 };
 
+UIManager.prototype.onMatchCreated = function(match)
+{
+	// ignore match here since it is pushed by server anyway
+	console.log("match '" + match.title + "' created: ID=" + match.id);
+	
+	// close new match window
+	var winId = this.getWindowId("new", "content_manage_match");
+	var win = document.getElementById(winId);
+
+	win.close();
+};
+
 UIManager.prototype.discardMatch = function(id)
 {
 	var winId = this.getWindowId(id, "content_manage_match");
