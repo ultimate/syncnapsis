@@ -905,6 +905,7 @@ public class ParticipantManagerImplTest extends GenericManagerImplTestCase<Parti
 						SolarSystemInfrastructure infrastructure = (SolarSystemInfrastructure) invocation.getParameter(1);
 						long population = (Long) invocation.getParameter(2);
 						SolarSystemPopulation pop = new SolarSystemPopulation();
+						pop.setActivated(true);
 						pop.setParticipant(participant);
 						pop.setInfrastructure(infrastructure);
 						pop.setPopulation(population);
@@ -942,6 +943,7 @@ public class ParticipantManagerImplTest extends GenericManagerImplTestCase<Parti
 		// check with preselected populations
 		final int systemSelected = 3;
 		participant.setStartSystemsSelected(systemSelected);
+		participant.setPopulations(new ArrayList<SolarSystemPopulation>(systemSelected));
 		SolarSystemPopulation population;
 		for(int i = 0; i < systemSelected; i++)
 		{
@@ -972,6 +974,7 @@ public class ParticipantManagerImplTest extends GenericManagerImplTestCase<Parti
 						SolarSystemInfrastructure infrastructure = (SolarSystemInfrastructure) invocation.getParameter(1);
 						long population = (Long) invocation.getParameter(2);
 						SolarSystemPopulation pop = new SolarSystemPopulation();
+						pop.setActivated(true);
 						pop.setParticipant(participant);
 						pop.setInfrastructure(infrastructure);
 						pop.setPopulation(population);

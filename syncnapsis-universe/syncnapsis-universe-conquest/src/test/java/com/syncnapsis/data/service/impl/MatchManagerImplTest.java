@@ -72,9 +72,6 @@ public class MatchManagerImplTest extends GenericNameManagerImplTestCase<Match, 
 	private SolarSystemInfrastructureManager	solarSystemInfrastructureManager;
 	private PlayerManager						playerManager;
 	
-	private MatchDao							matchDao;
-	private MatchManager						matchManager;
-
 	private BaseMapper							mapper;
 	private BaseGameManager						securityManager;
 	private Calculator							calculator;
@@ -146,6 +143,7 @@ public class MatchManagerImplTest extends GenericNameManagerImplTestCase<Match, 
 		tmpMatch.setCreator(creator);
 		tmpMatch.setFinishedDate(null);
 		tmpMatch.setGalaxy(galaxy);
+		tmpMatch.setParticipants(new ArrayList<Participant>());
 		tmpMatch.setParticipantsMax(participantsMax);
 		tmpMatch.setParticipantsMin(participantsMin);
 		tmpMatch.setPlannedJoinType(EnumJoinType.joiningEnabled);
@@ -165,7 +163,7 @@ public class MatchManagerImplTest extends GenericNameManagerImplTestCase<Match, 
 		// dirty copy match using mapper ;-)
 		final Match tmpMatch2 = mapper.fromMap(new Match(), mapper.toMap(tmpMatch));
 		tmpMatch2.setId(matchId);
-
+		
 		// dirty copy match using mapper ;-)
 		final Match finalMatch = mapper.fromMap(new Match(), mapper.toMap(tmpMatch));
 		finalMatch.setId(matchId);
@@ -262,6 +260,12 @@ public class MatchManagerImplTest extends GenericNameManagerImplTestCase<Match, 
 			{
 				oneOf(mockDao).get(matchId);
 				will(returnValue(finalMatch));
+			}
+		});
+		mockContext.checking(new Expectations() {
+			{
+				allowing(mockParticipantManager).getNumberOfParticipants(with(any(Match.class)));
+				will(returnValue(playerIds.length));
 			}
 		});
 		result = mockManager.createMatch(title, galaxyId, speed, seed, startCondition, startDate, startSystemSelectionEnabled, startSystemCount,
@@ -441,20 +445,6 @@ public class MatchManagerImplTest extends GenericNameManagerImplTestCase<Match, 
 
 	public void testGetMatchStartNotPossibleReasons() throws Exception
 	{
-		Match m = matchDao.get(34027L);
-		
-		logger.warn("participantCount: " + participantManager.getNumberOfParticipants(m));
-		logger.warn("match.participantsMin: " + m.getParticipantsMin());
-		logger.warn("match.participantsMax: " + m.getParticipantsMax());
-		logger.warn("matchStartNotPossibleReasons: " + matchManager.getMatchStartNotPossibleReasons(m));
-		
-		
-		
-		
-		
-		
-		
-		
 		Match match = new Match();
 
 		match.setState(EnumMatchState.planned);
@@ -526,6 +516,10 @@ public class MatchManagerImplTest extends GenericNameManagerImplTestCase<Match, 
 			p.setId((long) i + 1);
 			p.setEmpire(new Empire());
 			p.getEmpire().setId((long) i + 1);
+			p.getEmpire().setPlayer(new Player());
+			p.getEmpire().getPlayer().setUser(new User());
+			p.getEmpire().getPlayer().getUser().setUsername("user" + (i+1));
+			p.setPopulations(new ArrayList<SolarSystemPopulation>());
 			p.setActivated(i < participantCount);
 			match.getParticipants().add(p);
 		}
