@@ -303,7 +303,7 @@ form>.select.verylong>* {
 }
 
 #bar_top,#bar_bottom {
-	width: 500px;
+	width: 600px;
 	margin-top: 1px;
 	margin-bottom: 1px;
 }
@@ -346,13 +346,13 @@ form>.select.verylong>* {
 }
 
 #bar_top #match_select_align {
-	width: 250px;	
+	width: 350px;	
 	height: 17px;
 }
 
 #bar_top #match_select,
 #bar_top #match_select>* {
-	width: 250px;	
+	width: 350px;	
 }
 
 #bar_top #match_select .col_1 {
@@ -362,12 +362,12 @@ form>.select.verylong>* {
 
 #bar_top #match_select .col_2 {
 	position: absolute;
-	left: 30px;
+	left: 45px;
 }
 
 #bar_top #match_select .col_3 {
 	position: absolute;
-	left: 150px;
+	left: 260px;
 }
 
 #bar_top #match_filter_galaxy_select .col_1,
@@ -440,7 +440,7 @@ form>.select.verylong>* {
 
 #bar_bottom>#log {
 	position: absolute;
-	width: 274px;
+	width: 374px;
 }
 
 #bar_bottom #log_menu {
@@ -472,7 +472,7 @@ form>.select.verylong>* {
 	top: 34px;
 	bottom: 0px;
 	overflow: hidden;
-	width: 499px;
+	width: 599px;
 }
 
 #match_rank_table {
@@ -704,6 +704,6 @@ h3 {
 #pinboard_chat,
 #pinboard_events {
 	height: 185px;
-	width: 490px;
+	width: 590px;
 	line-height: 1em;
 }
