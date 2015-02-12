@@ -207,6 +207,10 @@ form > label.unit {
 	width: auto;
 }
 
+form.rightaligned > label.unit {
+	float: right;
+}
+
 form.leftaligned>input,
 form.leftaligned>.select,
 form.leftaligned>.select>*,
@@ -302,6 +306,10 @@ form>.select.verylong>* {
 	overflow: hidden;
 }
 
+#menu #match_victoryParameter_custom_info {
+	width: 133px;
+}
+
 #bar_top,#bar_bottom {
 	width: 600px;
 	margin-top: 1px;
@@ -371,18 +379,21 @@ form>.select.verylong>* {
 }
 
 #bar_top #match_filter_galaxy_select .col_1,
+#menu #match_galaxy_select_info .col_1,
 .manage_match .match_galaxy_select .col_1 {
 	position: absolute;
 	left: 5px;
 }
 
 #bar_top #match_filter_galaxy_select .col_2,
+#menu #match_galaxy_select_info .col_2,
 .manage_match .match_galaxy_select .col_2 {
 	position: absolute;
 	left: 30px;
 }
 
 #bar_top #match_filter_galaxy_select .col_3,
+#menu #match_galaxy_select_info .col_3,
 .manage_match .match_galaxy_select .col_3 {
 	position: absolute;
 	left: 250px;

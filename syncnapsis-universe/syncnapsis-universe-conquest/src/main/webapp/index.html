@@ -203,17 +203,13 @@
 			<div>
 			<div id="menu_1" class="selected">
 				<h3><label key="menu.match"></label></h3>
-				foo<br>
-				bar<br>
-				foo<br>
-				bar<br>
-				foo<br>
-				bar<br>
-				foo<br>
-				bar<br>
-				<br>
-				This is menu #2 with a very long text that should automatically wrap to fill this box.<br>
-				As you can see the surrounding container will be automatically resized to fit best for the content.
+				<form onsubmit="return false;" class="rightaligned">
+					<label key="match.galaxy" for="match_galaxy_select_info"></label><div id="match_galaxy_select_info" class="medium"></div><br/>
+					<label key="match.speed" for="match_speed_select_info"></label><div id="match_speed_select_info" class="medium"></div><br/>
+					<label key="match.startDate" for="match_startDate_info"></label><input id="match_startDate_info" type="datetime" class="medium"/><br/>
+					<label key="match.victoryCondition" for="match_victoryCondition_select_info"></label><div id="match_victoryCondition_select_info" class="medium"></div><br/>
+					<label key="match.victoryParameter" for="match_victoryParameter_custom_info"></label><label key="participant.rankValue" class="unit"></label><input id="match_victoryParameter_custom_info" type="text" class="medium"/><br/>
+				</form>
 			</div>
 			<div id="menu_2" class="">
 				<h3><label key="menu.profile"></label></h3>
