@@ -230,14 +230,7 @@ UIManager = function()
 	};
 	// overwrite onselect
 	// need to do this after populate, since populate overwrites onselect, too
-	this.matchSelect.onselect = function(oldValue, newValue)
-	{
-		console.log("showing match #" + newValue.id);
-		// TODO update 3D-view
-		
-		// save match-ID as last selection
-		localStorage.setItem(UI.constants.KEY_LAST_MATCH_SELECTED, newValue.id);
-	};
+	this.matchSelect.onselect = this.onMatchSelect;
 	
 	// initialize galaxy select for match filter
 	this.matchFilterGalaxySelect = new Select(UI.constants.MATCH_FILTER_GALAXY_SELECT_ID);
@@ -261,6 +254,19 @@ UIManager = function()
 	this.matchFilterStateSelect = new Select(UI.constants.MATCH_FILTER_STATE_SELECT_ID);
 	// populate with enum
 	this.populateEnumSelect(this.matchFilterStateSelect, lang.EnumMatchState, true);
+	
+	// initialize selects for match info
+	this.matchInfoGalaxySelect = new Select(UI.constants.MATCH_GALAXY_SELECT_ID.replace(UI.constants.PLACEHOLDER, "info"));
+	this.matchInfoGalaxySelect.getOptionContent = this.matchFilterGalaxySelect.getOptionContent;
+	this.matchInfoGalaxySelect.setDisabled(true);
+	this.matchInfoSpeedSelect = new Select(UI.constants.MATCH_SPEED_SELECT_ID.replace(UI.constants.PLACEHOLDER, "info"));
+	this.populateEnumSelect(this.matchInfoSpeedSelect, lang.EnumMatchSpeed, false);
+	this.matchInfoSpeedSelect.setDisabled(true);
+	this.matchInfoVictoryConditionSelect = new Select(UI.constants.MATCH_VICTORYCONDITION_SELECT_ID.replace(UI.constants.PLACEHOLDER, "info"));
+	this.populateEnumSelect(this.matchInfoVictoryConditionSelect, lang.EnumVictoryCondition, false);
+	this.matchInfoVictoryConditionSelect.setDisabled(true);
+	document.getElementById(UI.constants.MATCH_STARTDATE_ID.replace(UI.constants.PLACEHOLDER, "info")).disabled = "disabled";
+	document.getElementById(UI.constants.MATCH_VICTORYPARAMETER_CUSTOM_ID.replace(UI.constants.PLACEHOLDER, "info")).disabled = "disabled";
 
 	console.log("initializing Windows");
 
@@ -401,6 +407,7 @@ UIManager.prototype.onGalaxiesLoaded = function(galaxies)
 	console.log("galaxies loaded!");
 	this.galaxies = galaxies;
 	this.populateSelect(this.matchFilterGalaxySelect, galaxies, true);
+	this.populateSelect(this.matchInfoGalaxySelect, galaxies, true);
 };
 
 UIManager.prototype.onEmpiresLoaded = function(empires)
@@ -443,6 +450,15 @@ UIManager.prototype.onMatchesLoaded = function(matches)
 	server.entityManager.loadProperty(matches, "creator.user", function(matches) {
 		console.log("match creators loaded!");
 	});
+};
+
+UIManager.prototype.onMatchSelect = function(oldMatch, newMatch)
+{
+	console.log("showing match #" + newMatch.id);
+	// TODO update 3D-view
+	
+	// save match-ID as last selection
+	localStorage.setItem(UI.constants.KEY_LAST_MATCH_SELECTED, newMatch.id);
 };
 
 UIManager.prototype.filterMatches = function()
