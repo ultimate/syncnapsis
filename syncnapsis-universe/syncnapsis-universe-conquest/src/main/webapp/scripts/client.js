@@ -230,7 +230,12 @@ UIManager = function()
 	};
 	// overwrite onselect
 	// need to do this after populate, since populate overwrites onselect, too
-	this.matchSelect.onselect = this.onMatchSelect;
+	this.matchSelect.onselect = function(uiManager) {
+		return function(oldValue, newValue)
+		{
+			uiManager.onMatchSelect(oldValue, newValue);
+		};
+	} (this);
 	
 	// initialize galaxy select for match filter
 	this.matchFilterGalaxySelect = new Select(UI.constants.MATCH_FILTER_GALAXY_SELECT_ID);
@@ -455,6 +460,16 @@ UIManager.prototype.onMatchesLoaded = function(matches)
 UIManager.prototype.onMatchSelect = function(oldMatch, newMatch)
 {
 	console.log("showing match #" + newMatch.id);
+	this.currentMatch = newMatch;
+	
+	// update info
+	this.matchInfoGalaxySelect.selectById(newMatch.galaxy.id);
+	this.matchInfoSpeedSelect.selectByValue("value" + newMatch.speed);
+	this.matchInfoVictoryConditionSelect.selectByValue(newMatch.victoryCondition);
+	document.getElementById(UI.constants.MATCH_STARTDATE_ID.replace(UI.constants.PLACEHOLDER, "info")).value = newMatch.startDate;
+	document.getElementById(UI.constants.MATCH_VICTORYPARAMETER_CUSTOM_ID.replace(UI.constants.PLACEHOLDER, "info")).value = newMatch.victoryParameter
+	
+	
 	// TODO update 3D-view
 	
 	// save match-ID as last selection
