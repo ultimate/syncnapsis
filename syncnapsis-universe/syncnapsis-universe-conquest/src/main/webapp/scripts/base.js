@@ -57,6 +57,7 @@ connect = function()
 			server.galaxyManager = Proxies.newProxyInstance(GalaxyManager, genericRPCInvocationHandler);
 			server.uiManager = Proxies.newProxyInstance(ServerUIManager, genericRPCInvocationHandler);
 			server.messageManager = Proxies.newProxyInstance(ServerMessageManager, genericRPCInvocationHandler);
+			// TODO ConquestManager
 			server.participantManager = Proxies.newProxyInstance(GenericNameManager, genericRPCInvocationHandler);
 			server.pinboardManager = Proxies.newProxyInstance(GenericNameManager, genericRPCInvocationHandler);
 			// init additional services
@@ -64,6 +65,7 @@ connect = function()
 			// init client-side managers
 			client.uiManager = new UIManager();
 			client.messageManager = new MessageManager();
+			// TODO ConquestManager
 			
 			// set inited
 			server.inited = true;

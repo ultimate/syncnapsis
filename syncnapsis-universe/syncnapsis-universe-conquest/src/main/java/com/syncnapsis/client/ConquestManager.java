@@ -14,7 +14,6 @@
  */
 package com.syncnapsis.client;
 
-
 /**
  * Interface for a ConquestManager offering universe-conquest game related operations.
  * 
@@ -22,4 +21,47 @@ package com.syncnapsis.client;
  */
 public interface ConquestManager
 {
+	/**
+	 * Subscribe the calling client to the given subscription channel and argument.
+	 * 
+	 * @param channel - the name of the subscription channel
+	 * @param argument - the argument for the subscription channel
+	 */
+	public void subscribe(String channel, Object argument);
+
+	/**
+	 * Subscribe the calling client from the given subscription channel and argument.
+	 * 
+	 * @param channel - the name of the subscription channel
+	 * @param argument - the argument for the subscription channel
+	 */
+	public void unsubscribe(String channel, Object argument);
+
+	/**
+	 * Check whether the calling client has subscribed to the given channel and argument.
+	 * 
+	 * @param channel - the name of the subscription channel
+	 * @param argument - the argument for the subscription channel
+	 * @return true or false
+	 */
+	public boolean isUnderSubscription(String channel, Object argument);
+
+	/**
+	 * Get the last value for the subscription channel and the given argument.
+	 * 
+	 * @param channel - the name of the subscription channel
+	 * @param argument - the argument for the subscription channel
+	 * @return the last value for the subscription channel
+	 */
+	public Object getLastValue(String channel, Object argument);
+
+	/**
+	 * Push the given new value for the subscription channel and the given argument to all
+	 * subscribed clients.
+	 * 
+	 * @param channel - the name of the subscription channel
+	 * @param argument - the argument for the subscription channel
+	 * @param value - the new value for the subscription channel
+	 */
+	public void update(String channel, Object argument, Object value);
 }

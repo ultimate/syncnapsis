@@ -1739,3 +1739,5 @@ MessageManager.prototype.updatePinboard = function(pinboardId, messages)
 		}
 	}
 };
+
+// TODO ConquestManager

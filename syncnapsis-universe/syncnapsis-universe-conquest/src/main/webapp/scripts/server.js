@@ -42,3 +42,5 @@ ServerMessageManager.prototype.requestPinboardUpdate = function(pinboardId, mess
 {
 	// stub for server-entity
 };
+
+//TODO ConquestManager
