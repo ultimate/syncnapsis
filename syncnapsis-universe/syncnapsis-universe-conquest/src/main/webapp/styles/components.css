@@ -34,7 +34,7 @@ input[type=text]:disabled,
 input[type=password]:disabled,
 input:disabled, /*too many future type*/
 textarea:disabled {
-	color: rgb(128,128,128);
+	color: rgb(192,192,192);
 }
 
 input[type=text].error,
