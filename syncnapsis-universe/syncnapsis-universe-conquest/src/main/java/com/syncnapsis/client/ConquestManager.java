@@ -14,54 +14,86 @@
  */
 package com.syncnapsis.client;
 
+import java.util.Collection;
+import java.util.List;
+
 /**
- * Interface for a ConquestManager offering universe-conquest game related operations.
+ * Interface for a ConquestManager offering universe-conquest game related operations.<br>
+ * This manager contains support for subscription service with purpose for live updating of the
+ * clients in the context of the matches. It therefore provides functions for
+ * subscribing/unsubscribing to channels and updating and pushing values for those channels.
  * 
  * @author ultimate
  */
 public interface ConquestManager
 {
 	/**
-	 * Subscribe the calling client to the given subscription channel and argument.
+	 * Subscribe the calling client to the given subscription channel.
 	 * 
 	 * @param channel - the name of the subscription channel
-	 * @param argument - the argument for the subscription channel
 	 */
-	public void subscribe(String channel, Object argument);
+	public void subscribe(String channel);
 
 	/**
-	 * Subscribe the calling client from the given subscription channel and argument.
+	 * Subscribe the calling client from the given subscription channel.
 	 * 
 	 * @param channel - the name of the subscription channel
-	 * @param argument - the argument for the subscription channel
 	 */
-	public void unsubscribe(String channel, Object argument);
+	public void unsubscribe(String channel);
 
 	/**
-	 * Check whether the calling client has subscribed to the given channel and argument.
+	 * Check whether the calling client has subscribed to the given channel.
 	 * 
 	 * @param channel - the name of the subscription channel
-	 * @param argument - the argument for the subscription channel
 	 * @return true or false
 	 */
-	public boolean isUnderSubscription(String channel, Object argument);
+	public boolean isUnderSubscription(String channel);
 
 	/**
-	 * Get the last value for the subscription channel and the given argument.
+	 * Get the list of subscribed channels for the calling client.
+	 * 
+	 * @return the list of channel names
+	 */
+	public List<String> getSubscribedChannels();
+
+	/**
+	 * Get the last value for the given subscription channel.
 	 * 
 	 * @param channel - the name of the subscription channel
-	 * @param argument - the argument for the subscription channel
 	 * @return the last value for the subscription channel
 	 */
-	public Object getLastValue(String channel, Object argument);
+	public Object getLastValue(String channel);
 
 	/**
-	 * Push the given new value for the subscription channel and the given argument to all
-	 * subscribed clients.
+	 * Push the given new value for the given subscription channel to all subscribed clients.
 	 * 
 	 * @param channel - the name of the subscription channel
-	 * @param argument - the argument for the subscription channel
 	 * @param value - the new value for the subscription channel
 	 */
-	public void update(String channel, Object argument, Object value);
+	public void update(String channel, Object value);
+
+	/**
+	 * Get the list of available channels
+	 * 
+	 * @return the list of channel names
+	 */
+	public Collection<String> getChannels();
+
+	/**
+	 * Create a new subscription channel with the given name and an initial value.
+	 * 
+	 * @param channel - the name of the subscription channel
+	 * @param initialValue - the initial value for the subscription channel
+	 * @return true if creating the channel was successful, false otherwise (e.g. if the channel
+	 *         already exists)
+	 */
+	public boolean createChannel(String channel, Object initialValue);
+
+	/**
+	 * Check whether this manager has a subscription channel with the given name.
+	 * 
+	 * @param channel - the name of the subscription channel
+	 * @return true or false
+	 */
+	public boolean hasChannel(String channel);
 }
