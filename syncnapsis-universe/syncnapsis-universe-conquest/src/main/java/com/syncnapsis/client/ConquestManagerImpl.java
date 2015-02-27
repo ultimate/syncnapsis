@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.TreeMap;
 
 import org.springframework.util.Assert;
@@ -79,41 +80,91 @@ public class ConquestManagerImpl extends BaseClientManager implements ConquestMa
 		Assert.notNull(matchManager, "matchManager must not be null!");
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see com.syncnapsis.client.ConquestManager#subscribe(java.lang.String)
+	 */
 	@Override
-	public void subscribe(String channel)
+	public boolean subscribe(String channel)
 	{
-		// TODO Auto-generated method stub
-
+		Connection con = getConnectionProvider().get();
+		Channel c = channels.get(channel);
+		if(c == null)
+			return false;
+		synchronized(c)
+		{
+			if(!c.getSubscriptions().contains(con))
+				return c.getSubscriptions().add(con);
+			else
+				return false;
+		}
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see com.syncnapsis.client.ConquestManager#unsubscribe(java.lang.String)
+	 */
 	@Override
-	public void unsubscribe(String channel)
+	public boolean unsubscribe(String channel)
 	{
-		// TODO Auto-generated method stub
-
+		Connection con = getConnectionProvider().get();
+		Channel c = channels.get(channel);
+		if(c == null)
+			return false;
+		synchronized(c)
+		{
+			if(c.getSubscriptions().contains(con))
+				return c.getSubscriptions().remove(con);
+			else
+				return false;
+		}
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see com.syncnapsis.client.ConquestManager#isUnderSubscription(java.lang.String)
+	 */
 	@Override
 	public boolean isUnderSubscription(String channel)
 	{
-		// ((MessageManager) getClientInstance(getBeanName(),
-		// getConnectionProvider().get())).updatePinboard(pinboardId, messages);
-		// TODO Auto-generated method stub
-		return false;
+		Connection con = getConnectionProvider().get();
+		Channel c = channels.get(channel);
+		if(c == null)
+			return false;
+		synchronized(c)
+		{
+			return c.getSubscriptions().contains(con);
+		}
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see com.syncnapsis.client.ConquestManager#getSubscribedChannels()
+	 */
 	@Override
 	public List<String> getSubscribedChannels()
 	{
-		// TODO Auto-generated method stub
-		return null;
+		Connection con = connectionProvider.get();
+		List<String> channelNames = new ArrayList<String>(channels.size());
+		for(Entry<String, Channel> e : channels.entrySet())
+		{
+			if(e.getValue().getSubscriptions().contains(con))
+				channelNames.add(e.getKey());
+		}
+		return channelNames;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see com.syncnapsis.client.ConquestManager#getLastValue(java.lang.String)
+	 */
 	@Override
 	public Object getLastValue(String channel)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		Channel c = channels.get(channel);
+		if(c == null)
+			return null;
+		return c.getValue();
 	}
 
 	/*
@@ -123,18 +174,21 @@ public class ConquestManagerImpl extends BaseClientManager implements ConquestMa
 	@Override
 	public void update(String channel, Object value)
 	{
-		if(!hasChannel(channel))
-			throw new IllegalArgumentException("no such channel!");
-		
 		Channel c = channels.get(channel);
-		
-		for(Connection con: c.getSubscriptions())
-			pushUpdate(c, con);
+		if(c == null)
+			throw new IllegalArgumentException("no such channel!");
+		synchronized(c)
+		{
+			c.setValue(value);
+
+			for(Connection con : c.getSubscriptions())
+				pushUpdate(c, con);
+		}
 	}
-	
+
 	protected void pushUpdate(Channel channel, Connection connection)
 	{
-		// TODO
+		((ConquestManager) getClientInstance(getBeanName(), connection)).update(channel.getName(), channel.getValue());
 	}
 
 	/*
@@ -144,7 +198,10 @@ public class ConquestManagerImpl extends BaseClientManager implements ConquestMa
 	@Override
 	public Collection<String> getChannels()
 	{
-		return channels.keySet();
+		synchronized(channels)
+		{
+			return channels.keySet();
+		}
 	}
 
 	/*
@@ -154,21 +211,14 @@ public class ConquestManagerImpl extends BaseClientManager implements ConquestMa
 	@Override
 	public boolean createChannel(String channel, Object initialValue)
 	{
-		if(hasChannel(channel))
-			return false;
+		synchronized(channels)
+		{
+			if(channels.containsKey(channel))
+				return false;
 
-		channels.put(channel, new Channel(channel, initialValue));
+			channels.put(channel, new Channel(channel, initialValue));
+		}
 		return true;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * @see com.syncnapsis.client.ConquestManager#hasChannel(java.lang.String)
-	 */
-	@Override
-	public boolean hasChannel(String channel)
-	{
-		return channels.containsKey(channel);
 	}
 
 	/**
@@ -225,7 +275,17 @@ public class ConquestManagerImpl extends BaseClientManager implements ConquestMa
 		}
 
 		/**
-		 * The list of subscribed connections for this channel
+		 * The current value for the channel
+		 * 
+		 * @param value - the new current value
+		 */
+		public void setValue(Object value)
+		{
+			this.value = value;
+		}
+
+		/**
+		 * The list of subscribed connections for this channel (as an unmodifiable copy)
 		 * 
 		 * @return subscriptions
 		 */

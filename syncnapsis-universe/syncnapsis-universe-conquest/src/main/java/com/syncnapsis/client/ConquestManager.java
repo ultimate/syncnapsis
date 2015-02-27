@@ -31,15 +31,17 @@ public interface ConquestManager
 	 * Subscribe the calling client to the given subscription channel.
 	 * 
 	 * @param channel - the name of the subscription channel
+	 * @return true if subscribing was successful, false otherwise (e.g. if channel does not exist)
 	 */
-	public void subscribe(String channel);
+	public boolean subscribe(String channel);
 
 	/**
 	 * Subscribe the calling client from the given subscription channel.
 	 * 
 	 * @param channel - the name of the subscription channel
+	 * @return true if unsubscribing was successful, false otherwise (e.g. if channel does not exist)
 	 */
-	public void unsubscribe(String channel);
+	public boolean unsubscribe(String channel);
 
 	/**
 	 * Check whether the calling client has subscribed to the given channel.
@@ -88,12 +90,4 @@ public interface ConquestManager
 	 *         already exists)
 	 */
 	public boolean createChannel(String channel, Object initialValue);
-
-	/**
-	 * Check whether this manager has a subscription channel with the given name.
-	 * 
-	 * @param channel - the name of the subscription channel
-	 * @return true or false
-	 */
-	public boolean hasChannel(String channel);
 }
