@@ -14,15 +14,19 @@
  */
 package com.syncnapsis.client;
 
+import org.jmock.Expectations;
 import org.springframework.mock.web.MockHttpSession;
 
 import com.syncnapsis.data.service.MatchManager;
+import com.syncnapsis.mock.MockConnection;
 import com.syncnapsis.providers.ConnectionProvider;
 import com.syncnapsis.providers.SessionProvider;
 import com.syncnapsis.security.BaseGameManager;
 import com.syncnapsis.tests.BaseSpringContextTestCase;
 import com.syncnapsis.tests.annotations.TestCoversMethods;
 import com.syncnapsis.tests.annotations.TestExcludesMethods;
+import com.syncnapsis.websockets.Connection;
+import com.syncnapsis.websockets.service.rpc.RPCService;
 
 @TestExcludesMethods({ "afterPropertiesSet" })
 public class ConquestManagerImplTest extends BaseSpringContextTestCase
@@ -43,7 +47,44 @@ public class ConquestManagerImplTest extends BaseSpringContextTestCase
 		getAndSetTest(manager, "matchManager", MatchManager.class, matchManager);
 	}
 
-	public void testX()
+	@TestCoversMethods({ "createChannel", "getChannels" })
+	public void testCreateChannel()
+	{
+		ConquestManagerImpl conquestManager = new ConquestManagerImpl();
+		conquestManager.setConnectionProvider(connectionProvider);
+		conquestManager.setSecurityManager(securityManager);
+		conquestManager.setMatchManager(matchManager);
+		conquestManager.setBeanName(beanName);
+
+		final String chA = "chA";
+		final String chB = "chB";
+
+		int valA = 1234;
+		int valB = 5678;
+
+		// check channel list (empty)
+		assertEquals(0, conquestManager.getChannels().size());
+
+		// check there is no initial value
+		assertEquals(null, conquestManager.getLastValue(chA));
+		assertEquals(null, conquestManager.getLastValue(chB));
+
+		// create channels
+		assertTrue(conquestManager.createChannel(chA, valA));
+		assertTrue(conquestManager.createChannel(chB, valB));
+
+		// check channel list (2 channels)
+		assertEquals(2, conquestManager.getChannels().size());
+		assertTrue(conquestManager.getChannels().contains(chA));
+		assertTrue(conquestManager.getChannels().contains(chB));
+
+		// check initial value
+		assertEquals(valA, conquestManager.getLastValue(chA));
+		assertEquals(valB, conquestManager.getLastValue(chB));
+	}
+
+	@TestCoversMethods({ "subscribe", "unsubscribe", "isUnderSubscription", "getSubscribedChannels" })
+	public void testSubscribe()
 	{
 		ConquestManagerImpl conquestManager = new ConquestManagerImpl();
 		conquestManager.setConnectionProvider(connectionProvider);
@@ -52,7 +93,195 @@ public class ConquestManagerImplTest extends BaseSpringContextTestCase
 		conquestManager.setBeanName(beanName);
 
 		sessionProvider.set(new MockHttpSession());
+
+		final Connection con1 = new MockConnection();
+
+		final String chA = "chA";
+		final String chB = "chB";
+
+		int valA = 1234;
+		int valB = 5678;
+
+		connectionProvider.set(con1);
+
+		// channels not existing
+		assertFalse(conquestManager.isUnderSubscription(chA));
+		assertFalse(conquestManager.isUnderSubscription(chB));
+		assertEquals(0, conquestManager.getSubscribedChannels().size());
+		assertFalse(conquestManager.getSubscribedChannels().contains(chA));
+		assertFalse(conquestManager.getSubscribedChannels().contains(chB));
+
+		assertFalse(conquestManager.subscribe(chA));
+		assertFalse(conquestManager.subscribe(chB));
+
+		// create channels (tested separately above)
+		assertTrue(conquestManager.createChannel(chA, valA));
+		assertTrue(conquestManager.createChannel(chB, valB));
+
+		// subscribe chA
+		assertTrue(conquestManager.subscribe(chA));
+
+		assertTrue(conquestManager.isUnderSubscription(chA));
+		assertFalse(conquestManager.isUnderSubscription(chB));
+		assertEquals(1, conquestManager.getSubscribedChannels().size());
+		assertTrue(conquestManager.getSubscribedChannels().contains(chA));
+		assertFalse(conquestManager.getSubscribedChannels().contains(chB));
+
+		// subscribe chA (again)
+		assertFalse(conquestManager.subscribe(chA));
+
+		assertTrue(conquestManager.isUnderSubscription(chA));
+		assertFalse(conquestManager.isUnderSubscription(chB));
+		assertEquals(1, conquestManager.getSubscribedChannels().size());
+		assertTrue(conquestManager.getSubscribedChannels().contains(chA));
+		assertFalse(conquestManager.getSubscribedChannels().contains(chB));
+
+		// subscribe chB
+		assertTrue(conquestManager.subscribe(chB));
+
+		assertTrue(conquestManager.isUnderSubscription(chA));
+		assertTrue(conquestManager.isUnderSubscription(chB));
+		assertEquals(2, conquestManager.getSubscribedChannels().size());
+		assertTrue(conquestManager.getSubscribedChannels().contains(chA));
+		assertTrue(conquestManager.getSubscribedChannels().contains(chB));
+
+		// unsubscribe chA
+		assertTrue(conquestManager.unsubscribe(chA));
+
+		assertFalse(conquestManager.isUnderSubscription(chA));
+		assertTrue(conquestManager.isUnderSubscription(chB));
+		assertEquals(1, conquestManager.getSubscribedChannels().size());
+		assertFalse(conquestManager.getSubscribedChannels().contains(chA));
+		assertTrue(conquestManager.getSubscribedChannels().contains(chB));
+
+		// unsubscribe chA (again)
+		assertFalse(conquestManager.unsubscribe(chA));
+
+		assertFalse(conquestManager.isUnderSubscription(chA));
+		assertTrue(conquestManager.isUnderSubscription(chB));
+		assertEquals(1, conquestManager.getSubscribedChannels().size());
+		assertFalse(conquestManager.getSubscribedChannels().contains(chA));
+		assertTrue(conquestManager.getSubscribedChannels().contains(chB));
+
+		// unsubscribe chB
+		assertTrue(conquestManager.unsubscribe(chB));
+
+		assertFalse(conquestManager.isUnderSubscription(chA));
+		assertFalse(conquestManager.isUnderSubscription(chB));
+		assertEquals(0, conquestManager.getSubscribedChannels().size());
+		assertFalse(conquestManager.getSubscribedChannels().contains(chA));
+		assertFalse(conquestManager.getSubscribedChannels().contains(chB));
+	}
+
+	@TestCoversMethods({ "update", "pushUpdate", "getLastValue" })
+	public void testUpdate()
+	{
+		ConquestManagerImpl conquestManager = new ConquestManagerImpl();
+		conquestManager.setConnectionProvider(connectionProvider);
+		conquestManager.setSecurityManager(securityManager);
+		conquestManager.setMatchManager(matchManager);
+		conquestManager.setBeanName(beanName);
+
+		sessionProvider.set(new MockHttpSession());
+
+		final RPCService mockRPCService = mockContext.mock(RPCService.class);
+		conquestManager.setRpcService(mockRPCService);
+
+		final ConquestManager client1ConquestManager = mockContext.mock(ConquestManager.class, "client1ConquestManager");
+		final ConquestManager client2ConquestManager = mockContext.mock(ConquestManager.class, "client2ConquestManager");
+		final ConquestManager client3ConquestManager = mockContext.mock(ConquestManager.class, "client3ConquestManager");
+
+		final String conquestManagerName = "conquestManager";
+
+		final Connection con1 = new MockConnection();
+		final Connection con2 = new MockConnection();
+		final Connection con3 = new MockConnection();
+
+		final String chA = "chA";
+		final String chB = "chB";
+
+		final int[] valA = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+		final int[] valB = { 9, 8, 7, 6, 5, 4, 3, 2, 1 };
+
+		conquestManager.createChannel(chA, valA[0]);
+		conquestManager.createChannel(chB, valB[0]);
+
+		connectionProvider.set(con1);
+		conquestManager.subscribe(chA);
+
+		connectionProvider.set(con2);
+		conquestManager.subscribe(chA);
+		conquestManager.subscribe(chB);
+
+		connectionProvider.set(con3);
+		conquestManager.subscribe(chB);
+
+		// check channel chA
+		// -> subscribers: con1, con2
+		for(int i = 1; i < valA.length; i++)
+		{
+			final int fi = i;
+			mockContext.checking(new Expectations() {
+				{
+					oneOf(mockRPCService).getClientInstance(conquestManagerName, con1);
+					will(returnValue(client1ConquestManager));
+				}
+			});
+			mockContext.checking(new Expectations() {
+				{
+					oneOf(mockRPCService).getClientInstance(conquestManagerName, con2);
+					will(returnValue(client2ConquestManager));
+				}
+			});
+			mockContext.checking(new Expectations() {
+				{
+					oneOf(client1ConquestManager).update(chA, valA[fi]);
+				}
+			});
+			mockContext.checking(new Expectations() {
+				{
+					oneOf(client2ConquestManager).update(chA, valA[fi]);
+				}
+			});
+			
+			conquestManager.update(chA, valA[fi]);
+			
+			assertEquals(valA[fi], conquestManager.getLastValue(chA));
+			mockContext.assertIsSatisfied();
+		}
 		
-		// TODO
+		// check channel chB
+		// -> subscribers: con2, con3
+		for(int i = 1; i < valB.length; i++)
+		{
+			final int fi = i;
+			mockContext.checking(new Expectations() {
+				{
+					oneOf(mockRPCService).getClientInstance(conquestManagerName, con2);
+					will(returnValue(client2ConquestManager));
+				}
+			});
+			mockContext.checking(new Expectations() {
+				{
+					oneOf(mockRPCService).getClientInstance(conquestManagerName, con3);
+					will(returnValue(client3ConquestManager));
+				}
+			});
+			mockContext.checking(new Expectations() {
+				{
+					oneOf(client2ConquestManager).update(chB, valB[fi]);
+				}
+			});
+			mockContext.checking(new Expectations() {
+				{
+					oneOf(client3ConquestManager).update(chB, valB[fi]);
+				}
+			});
+			
+			conquestManager.update(chB, valB[fi]);
+			
+			assertEquals(valB[fi], conquestManager.getLastValue(chB));
+			mockContext.assertIsSatisfied();
+		}
 	}
 }
