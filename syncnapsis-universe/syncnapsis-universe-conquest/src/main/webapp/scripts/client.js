@@ -1740,4 +1740,15 @@ MessageManager.prototype.updatePinboard = function(pinboardId, messages)
 	}
 };
 
-// TODO ConquestManager
+ConquestManager = function()
+{
+};
+
+// this is the only relevant client function!
+//public void update(String channel, Object value)
+ConquestManager.prototype.update = function(channel, value)
+{
+	console.log("received updated for channel '" + channel + "': " + value);
+	
+	// TODO
+};

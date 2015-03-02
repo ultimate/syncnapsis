@@ -44,3 +44,50 @@ ServerMessageManager.prototype.requestPinboardUpdate = function(pinboardId, mess
 };
 
 //TODO ConquestManager
+
+ServerConquestManager = function()
+{
+};
+
+ServerConquestManager.prototype.subscribe = function(channel)
+{
+	// stub for server-entity
+};
+
+ServerConquestManager.prototype.unsubscribe = function(channel)
+{
+	// stub for server-entity
+};
+
+ServerConquestManager.prototype.isUnderSubscription = function(channel)
+{
+	// stub for server-entity
+};
+
+ServerConquestManager.prototype.getSubscribedChannels = function()
+{
+	// stub for server-entity
+};
+
+ServerConquestManager.prototype.getLastValue = function(channel)
+{
+	// stub for server-entity
+};
+
+ServerConquestManager.prototype.getChannels = function()
+{
+	// stub for server-entity
+};
+
+// for test purposes
+
+ServerConquestManager.prototype.update = function(channel, value)
+{
+	// stub for server-entity
+};
+
+ServerConquestManager.prototype.createChannel = function(channel, initialValue)
+{
+	// stub for server-entity
+};
+
