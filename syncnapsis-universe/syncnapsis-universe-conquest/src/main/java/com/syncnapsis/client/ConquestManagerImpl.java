@@ -94,10 +94,14 @@ public class ConquestManagerImpl extends BaseClientManager implements ConquestMa
 		synchronized(c)
 		{
 			if(!c.getSubscriptions().contains(con))
-				return c.getSubscriptions().add(con);
-			else
-				return false;
+			{
+				if(c.getSubscriptions().add(con))
+				{
+					pushUpdate(c, con);
+				}
+			}
 		}
+		return false;
 	}
 
 	/*
