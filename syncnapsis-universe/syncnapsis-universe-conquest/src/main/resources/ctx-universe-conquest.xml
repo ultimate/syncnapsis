@@ -111,6 +111,13 @@
 		<property name="pinboardManager" ref="pinboardManager" />
 		<property name="pinboardMessageManager" ref="pinboardMessageManager" />
 	</bean>
+	
+	<bean id="conquestManager" class="com.syncnapsis.client.ConquestManagerImpl">
+		<property name="securityManager" ref="securityManager" />
+		<property name="connectionProvider" ref="connectionProvider" />
+		<property name="rpcService" ref="rpcService" />
+		<property name="matchManager" ref="matchManager" />
+	</bean>
 
 	<!-- =================================================================== -->
 	<!-- WebSockets -->
