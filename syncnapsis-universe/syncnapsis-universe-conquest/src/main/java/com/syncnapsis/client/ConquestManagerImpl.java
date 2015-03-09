@@ -21,9 +21,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TreeMap;
 
-import org.springframework.util.Assert;
-
-import com.syncnapsis.data.service.MatchManager;
 import com.syncnapsis.websockets.Connection;
 
 /**
@@ -33,11 +30,6 @@ import com.syncnapsis.websockets.Connection;
  */
 public class ConquestManagerImpl extends BaseClientManager implements ConquestManager
 {
-	/**
-	 * The MatchManager
-	 */
-	protected MatchManager			matchManager;
-
 	protected Map<String, Channel>	channels;
 
 	/**
@@ -47,37 +39,6 @@ public class ConquestManagerImpl extends BaseClientManager implements ConquestMa
 	{
 		super();
 		channels = new TreeMap<String, Channel>();
-	}
-
-	/**
-	 * The MatchManager
-	 * 
-	 * @return matchManager
-	 */
-	public MatchManager getMatchManager()
-	{
-		return matchManager;
-	}
-
-	/**
-	 * The MatchManager
-	 * 
-	 * @param matchManager - the MatchManager
-	 */
-	public void setMatchManager(MatchManager matchManager)
-	{
-		this.matchManager = matchManager;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * @see com.syncnapsis.client.BaseClientManager#afterPropertiesSet()
-	 */
-	@Override
-	public void afterPropertiesSet() throws Exception
-	{
-		super.afterPropertiesSet();
-		Assert.notNull(matchManager, "matchManager must not be null!");
 	}
 
 	/*
@@ -98,6 +59,7 @@ public class ConquestManagerImpl extends BaseClientManager implements ConquestMa
 				if(c.getSubscriptions().add(con))
 				{
 					pushUpdate(c, con);
+					return true;
 				}
 			}
 		}

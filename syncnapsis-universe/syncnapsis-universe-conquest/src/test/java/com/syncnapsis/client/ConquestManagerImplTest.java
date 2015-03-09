@@ -17,7 +17,6 @@ package com.syncnapsis.client;
 import org.jmock.Expectations;
 import org.springframework.mock.web.MockHttpSession;
 
-import com.syncnapsis.data.service.MatchManager;
 import com.syncnapsis.mock.MockConnection;
 import com.syncnapsis.providers.ConnectionProvider;
 import com.syncnapsis.providers.SessionProvider;
@@ -35,17 +34,7 @@ public class ConquestManagerImplTest extends BaseSpringContextTestCase
 	private BaseGameManager		securityManager;
 	private ConnectionProvider	connectionProvider;
 
-	private MatchManager		matchManager;
-
 	private static final String	beanName	= "conquestManager";
-
-	@TestCoversMethods({ "get*", "set*" })
-	public void testGetAndSet() throws Exception
-	{
-		ConquestManagerImpl manager = new ConquestManagerImpl();
-
-		getAndSetTest(manager, "matchManager", MatchManager.class, matchManager);
-	}
 
 	@TestCoversMethods({ "createChannel", "getChannels" })
 	public void testCreateChannel()
@@ -53,7 +42,6 @@ public class ConquestManagerImplTest extends BaseSpringContextTestCase
 		ConquestManagerImpl conquestManager = new ConquestManagerImpl();
 		conquestManager.setConnectionProvider(connectionProvider);
 		conquestManager.setSecurityManager(securityManager);
-		conquestManager.setMatchManager(matchManager);
 		conquestManager.setBeanName(beanName);
 
 		final String chA = "chA";
@@ -89,20 +77,25 @@ public class ConquestManagerImplTest extends BaseSpringContextTestCase
 		ConquestManagerImpl conquestManager = new ConquestManagerImpl();
 		conquestManager.setConnectionProvider(connectionProvider);
 		conquestManager.setSecurityManager(securityManager);
-		conquestManager.setMatchManager(matchManager);
 		conquestManager.setBeanName(beanName);
 
 		sessionProvider.set(new MockHttpSession());
 
+		final RPCService mockRPCService = mockContext.mock(RPCService.class);
+		conquestManager.setRpcService(mockRPCService);
+
 		final Connection con1 = new MockConnection();
+		final ConquestManager client1ConquestManager = mockContext.mock(ConquestManager.class);
 
 		final String chA = "chA";
 		final String chB = "chB";
 
-		int valA = 1234;
-		int valB = 5678;
+		final int valA = 1234;
+		final int valB = 5678;
 
 		connectionProvider.set(con1);
+		
+		// set Expectations for getClientInstance(..)
 
 		// channels not existing
 		assertFalse(conquestManager.isUnderSubscription(chA));
@@ -119,8 +112,20 @@ public class ConquestManagerImplTest extends BaseSpringContextTestCase
 		assertTrue(conquestManager.createChannel(chB, valB));
 
 		// subscribe chA
+		mockContext.checking(new Expectations() {
+			{
+				oneOf(mockRPCService).getClientInstance(beanName, con1);
+				will(returnValue(client1ConquestManager));
+			}
+		});
+		mockContext.checking(new Expectations() {
+			{
+				oneOf(client1ConquestManager).update(chA, valA);
+			}
+		});
 		assertTrue(conquestManager.subscribe(chA));
 
+		mockContext.assertIsSatisfied();
 		assertTrue(conquestManager.isUnderSubscription(chA));
 		assertFalse(conquestManager.isUnderSubscription(chB));
 		assertEquals(1, conquestManager.getSubscribedChannels().size());
@@ -137,8 +142,20 @@ public class ConquestManagerImplTest extends BaseSpringContextTestCase
 		assertFalse(conquestManager.getSubscribedChannels().contains(chB));
 
 		// subscribe chB
+		mockContext.checking(new Expectations() {
+			{
+				oneOf(mockRPCService).getClientInstance(beanName, con1);
+				will(returnValue(client1ConquestManager));
+			}
+		});
+		mockContext.checking(new Expectations() {
+			{
+				oneOf(client1ConquestManager).update(chB, valB);
+			}
+		});
 		assertTrue(conquestManager.subscribe(chB));
 
+		mockContext.assertIsSatisfied();
 		assertTrue(conquestManager.isUnderSubscription(chA));
 		assertTrue(conquestManager.isUnderSubscription(chB));
 		assertEquals(2, conquestManager.getSubscribedChannels().size());
@@ -179,7 +196,6 @@ public class ConquestManagerImplTest extends BaseSpringContextTestCase
 		ConquestManagerImpl conquestManager = new ConquestManagerImpl();
 		conquestManager.setConnectionProvider(connectionProvider);
 		conquestManager.setSecurityManager(securityManager);
-		conquestManager.setMatchManager(matchManager);
 		conquestManager.setBeanName(beanName);
 
 		sessionProvider.set(new MockHttpSession());
@@ -207,13 +223,51 @@ public class ConquestManagerImplTest extends BaseSpringContextTestCase
 		conquestManager.createChannel(chB, valB[0]);
 
 		connectionProvider.set(con1);
+		mockContext.checking(new Expectations() {
+			{
+				oneOf(mockRPCService).getClientInstance(beanName, con1);
+				will(returnValue(client1ConquestManager));
+			}
+		});
+		mockContext.checking(new Expectations() {
+			{
+				oneOf(client1ConquestManager).update(chA, valA[0]);
+			}
+		});
 		conquestManager.subscribe(chA);
 
 		connectionProvider.set(con2);
+		mockContext.checking(new Expectations() {
+			{
+				exactly(2).of(mockRPCService).getClientInstance(beanName, con2);
+				will(returnValue(client2ConquestManager));
+			}
+		});
+		mockContext.checking(new Expectations() {
+			{
+				oneOf(client2ConquestManager).update(chA, valA[0]);
+			}
+		});
+		mockContext.checking(new Expectations() {
+			{
+				oneOf(client2ConquestManager).update(chB, valB[0]);
+			}
+		});
 		conquestManager.subscribe(chA);
 		conquestManager.subscribe(chB);
 
 		connectionProvider.set(con3);
+		mockContext.checking(new Expectations() {
+			{
+				oneOf(mockRPCService).getClientInstance(beanName, con3);
+				will(returnValue(client3ConquestManager));
+			}
+		});
+		mockContext.checking(new Expectations() {
+			{
+				oneOf(client3ConquestManager).update(chB, valB[0]);
+			}
+		});
 		conquestManager.subscribe(chB);
 
 		// check channel chA
