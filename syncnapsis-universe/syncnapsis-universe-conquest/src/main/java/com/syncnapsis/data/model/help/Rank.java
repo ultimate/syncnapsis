@@ -42,11 +42,23 @@ public class Rank
 	protected Date		date;
 
 	/**
-	 * Is the calculated rank rankFinal (not modifiable any more)? The flag will be set on calculation
+	 * The date the rank value reached the victory condition
+	 */
+	protected Date		victoryDate;
+
+	/**
+	 * Is the calculated rank rankFinal (not modifiable any more)? The flag will be set on
+	 * calculation
 	 * when the player is destroyed.
 	 */
-	@Transient // required since getter/setter refer to "final" only, but this is a reserved word
+	@Transient
+	// required since getter/setter refer to "final" only, but this is a reserved word
 	protected boolean	rankFinal;
+
+	/**
+	 * The display name for this rank.
+	 */
+	protected String	displayName;
 
 	/**
 	 * The current rank of this participant/empire within the match
@@ -65,7 +77,7 @@ public class Rank
 	 * 
 	 * @return value
 	 */
-	@Column(nullable = false, name="rankValue")
+	@Column(nullable = false, name = "rankValue")
 	public int getValue()
 	{
 		return value;
@@ -77,7 +89,7 @@ public class Rank
 	 * 
 	 * @return rawValue
 	 */
-	@Column(nullable = false, name="rankRawValue")
+	@Column(nullable = false, name = "rankRawValue")
 	public long getRawValue()
 	{
 		return rawValue;
@@ -89,22 +101,56 @@ public class Rank
 	 * @return date
 	 */
 	@Temporal(TemporalType.TIMESTAMP)
-	@Column(nullable = false, name="rankDate")
+	@Column(nullable = false, name = "rankDate")
 	public Date getDate()
 	{
 		return date;
 	}
 
 	/**
-	 * Is the calculated rank rankFinal (not modifiable any more)? The flag will be set on calculation
+	 * The date the rank value reached the victory condition
+	 * 
+	 * @return victoryDate
+	 */
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(nullable = true, name = "rankVictoryDate")
+	public Date getVictoryDate()
+	{
+		return victoryDate;
+	}
+
+	/**
+	 * Is the calculated rank rankFinal (not modifiable any more)? The flag will be set on
+	 * calculation
 	 * when the player is destroyed.
 	 * 
 	 * @return rankFinal
 	 */
-	@Column(nullable = false, name="rankFinal")
+	@Column(nullable = false, name = "rankFinal")
 	public boolean isFinal()
 	{
 		return rankFinal;
+	}
+
+	/**
+	 * The display name for this rank.
+	 * 
+	 * @return displayName
+	 */
+	@Transient
+	public String getDisplayName()
+	{
+		return displayName;
+	}
+
+	/**
+	 * The display name for this rank.
+	 * 
+	 * @param displayName - the display name
+	 */
+	public void setDisplayName(String displayName)
+	{
+		this.displayName = displayName;
 	}
 
 	/**
@@ -150,7 +196,18 @@ public class Rank
 	}
 
 	/**
-	 * Is the calculated rank rankFinal (not modifiable any more)? The flag will be set on calculation
+	 * The date the rank value reached the victory condition
+	 * 
+	 * @param victoryDate - the date and time
+	 */
+	public void setVictoryDate(Date victoryDate)
+	{
+		this.victoryDate = victoryDate;
+	}
+
+	/**
+	 * Is the calculated rank rankFinal (not modifiable any more)? The flag will be set on
+	 * calculation
 	 * when the player is destroyed.
 	 * 
 	 * @param rankFinal - true or false
