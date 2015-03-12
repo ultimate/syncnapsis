@@ -445,11 +445,11 @@ public class ParticipantManagerImplTest extends GenericManagerImplTestCase<Parti
 		existing.setEmpire(empire);
 		existing.setJoinedDate(new Date(-referenceTime));
 		existing.setMatch(match);
-		existing.setRank(match.getParticipants().size());
-		existing.setRankDate(new Date(-referenceTime));
-		existing.setRankFinal(false);
-		existing.setRankRawValue(0);
-		existing.setRankValue(0);
+		existing.getRank().setRank(match.getParticipants().size());
+		existing.getRank().setDate(new Date(-referenceTime));
+		existing.getRank().setFinal(false);
+		existing.getRank().setRawValue(0);
+		existing.getRank().setValue(0);
 		existing.setStartSystemsSelected(0);
 
 		final Participant expected = new Participant();
@@ -459,11 +459,11 @@ public class ParticipantManagerImplTest extends GenericManagerImplTestCase<Parti
 		expected.setEmpire(empire);
 		expected.setJoinedDate(new Date(referenceTime));
 		expected.setMatch(match);
-		expected.setRank(match.getParticipants().size());
-		expected.setRankDate(new Date(referenceTime));
-		expected.setRankFinal(false);
-		expected.setRankRawValue(0);
-		expected.setRankValue(0);
+		expected.getRank().setRank(match.getParticipants().size());
+		expected.getRank().setDate(new Date(referenceTime));
+		expected.getRank().setFinal(false);
+		expected.getRank().setRawValue(0);
+		expected.getRank().setValue(0);
 		expected.setRivals(new ArrayList<Participant>());
 		expected.setStartSystemsSelected(0);
 
@@ -543,8 +543,8 @@ public class ParticipantManagerImplTest extends GenericManagerImplTestCase<Parti
 		participant.setEmpire(empire);
 		participant.setJoinedDate(new Date(-referenceTime));
 		participant.setMatch(match);
-		participant.setRankFinal(false);
-		participant.setRankValue(0);
+		participant.getRank().setFinal(false);
+		participant.getRank().setValue(0);
 		participant.setStartSystemsSelected(0);
 
 		// not yet participanting
@@ -682,8 +682,8 @@ public class ParticipantManagerImplTest extends GenericManagerImplTestCase<Parti
 		participant.setEmpire(empire);
 		participant.setJoinedDate(new Date(-referenceTime));
 		participant.setMatch(match);
-		participant.setRankFinal(false);
-		participant.setRankValue(0);
+		participant.getRank().setFinal(false);
+		participant.getRank().setValue(0);
 		participant.setStartSystemsSelected(0);
 		participant.setPopulations(new LinkedList<SolarSystemPopulation>());
 		SolarSystemPopulation population;

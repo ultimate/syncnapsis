@@ -20,6 +20,7 @@ import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -34,6 +35,7 @@ import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
 import com.syncnapsis.data.model.base.ActivatableInstance;
+import com.syncnapsis.data.model.help.Rank;
 import com.syncnapsis.enums.EnumDestructionType;
 import com.syncnapsis.enums.EnumVictoryCondition;
 import com.syncnapsis.security.Ownable;
@@ -62,36 +64,7 @@ public class Participant extends ActivatableInstance<Long> implements Ownable<Em
 	/**
 	 * The current rank of this participant/empire within the match
 	 */
-	protected int							rank;
-
-	/**
-	 * The current value being used to determine the rank of this participant/empire within the
-	 * match expressed in percent.
-	 */
-	protected int							rankValue;
-	
-	/**
-	 * THe current value being used to determine the rank of this participant/empire within the
-	 * match as a raw value.
-	 */
-	protected long 							rankRawValue;
-
-	/**
-	 * The date the rank was last calculated
-	 */
-	protected Date							rankDate;
-	
-	/**
-	 * The date the rank value reached the victory condition
-	 */
-	protected Date							rankVictoryDate;
-
-	/**
-	 * Is the calculated rank final (not modifiable any more)? The flag will be set on calculation
-	 * when the player is destroyed.
-	 */
-	protected boolean						rankFinal;
-
+	protected Rank							rank	= new Rank();
 	/**
 	 * The date the participant (empire/player) joined the match
 	 */
@@ -160,70 +133,10 @@ public class Participant extends ActivatableInstance<Long> implements Ownable<Em
 	 * 
 	 * @return rank
 	 */
-	@Column(nullable = false)
-	public int getRank()
+	@Embedded
+	public Rank getRank()
 	{
 		return rank;
-	}
-
-	/**
-	 * The current value being used to determine the rank of this participant/empire within the
-	 * match expressend in percent
-	 * 
-	 * @return rankValue
-	 */
-	@Column(nullable = false)
-	public int getRankValue()
-	{
-		return rankValue;
-	}
-
-	/**
-	 * The current value being used to determine the rank of this participant/empire within the
-	 * match as a raw value.
-	 * 
-	 * @return rankRawValue
-	 */
-	@Column(nullable = false)
-	public long getRankRawValue()
-	{
-		return rankRawValue;
-	}
-
-	/**
-	 * The date the rank was last calculated
-	 * 
-	 * @return rankDate
-	 */
-	@Temporal(TemporalType.TIMESTAMP)
-	@Column(nullable = false)
-	public Date getRankDate()
-	{
-		return rankDate;
-	}
-
-	/**
-	 * The date the rank value reached the victory condition
-	 * 
-	 * @return rankVictoryDate
-	 */
-	@Temporal(TemporalType.TIMESTAMP)
-	@Column(nullable = true)
-	public Date getRankVictoryDate()
-	{
-		return rankVictoryDate;
-	}
-
-	/**
-	 * Is the calculated rank final (not modifiable any more)? The flag will be set on calculation
-	 * when the player is destroyed.
-	 * 
-	 * @return rankFinal
-	 */
-	@Column(nullable = false)
-	public boolean isRankFinal()
-	{
-		return rankFinal;
 	}
 
 	/**
@@ -298,7 +211,7 @@ public class Participant extends ActivatableInstance<Long> implements Ownable<Em
 	{
 		return populations;
 	}
-	
+
 	/*
 	 * (non-Javadoc)
 	 * @see com.syncnapsis.security.Ownable#getOwners()
@@ -345,62 +258,9 @@ public class Participant extends ActivatableInstance<Long> implements Ownable<Em
 	 * 
 	 * @param rank - the rank
 	 */
-	public void setRank(int rank)
+	public void setRank(Rank rank)
 	{
 		this.rank = rank;
-	}
-
-	/**
-	 * The current value being used to determine the rank of this participant/empire within the
-	 * match expressed in percent.
-	 * 
-	 * @param rankValue - the rank value
-	 */
-	public void setRankValue(int rankValue)
-	{
-		this.rankValue = rankValue;
-	}
-
-	/**
-	 * The current value being used to determine the rank of this participant/empire within the
-	 * match as a raw value.
-	 * 
-	 * @param rankRawValue - the rank raw value
-	 */
-	public void setRankRawValue(long rankRawValue)
-	{
-		this.rankRawValue = rankRawValue;
-	}
-
-	/**
-	 * The date the rank was last calculated
-	 * 
-	 * @param rankDate - the date and time
-	 */
-	public void setRankDate(Date rankDate)
-	{
-		this.rankDate = rankDate;
-	}
-
-	/**
-	 * The date the rank value reached the victory condition
-	 * 
-	 * @param rankVictoryDate - the date and time
-	 */
-	public void setRankVictoryDate(Date rankVictoryDate)
-	{
-		this.rankVictoryDate = rankVictoryDate;
-	}
-
-	/**
-	 * Is the calculated rank final (not modifiable any more)? The flag will be set on calculation
-	 * when the player is destroyed.
-	 * 
-	 * @param rankFinal - true or false
-	 */
-	public void setRankFinal(boolean rankFinal)
-	{
-		this.rankFinal = rankFinal;
 	}
 
 	/**
@@ -490,11 +350,7 @@ public class Participant extends ActivatableInstance<Long> implements Ownable<Em
 		result = prime * result + ((empire == null) ? 0 : empire.getId().hashCode());
 		result = prime * result + ((joinedDate == null) ? 0 : joinedDate.hashCode());
 		result = prime * result + ((match == null) ? 0 : match.getId().hashCode());
-		result = prime * result + rank;
-		result = prime * result + ((rankDate == null) ? 0 : rankDate.hashCode());
-		result = prime * result + (rankFinal ? 1231 : 1237);
-		result = prime * result + (int) (rankRawValue ^ (rankRawValue >>> 32));
-		result = prime * result + rankValue;
+		result = prime * result + ((rank == null) ? 0 : rank.hashCode());
 		result = prime * result + startSystemsSelected;
 		return result;
 	}
@@ -543,20 +399,12 @@ public class Participant extends ActivatableInstance<Long> implements Ownable<Em
 		}
 		else if(!match.getId().equals(other.match.getId()))
 			return false;
-		if(rank != other.rank)
-			return false;
-		if(rankDate == null)
+		if(rank == null)
 		{
-			if(other.rankDate != null)
+			if(other.rank != null)
 				return false;
 		}
-		else if(!rankDate.equals(other.rankDate))
-			return false;
-		if(rankFinal != other.rankFinal)
-			return false;
-		if(rankRawValue != other.rankRawValue)
-			return false;
-		if(rankValue != other.rankValue)
+		else if(!rank.equals(other.rank))
 			return false;
 		if(startSystemsSelected != other.startSystemsSelected)
 			return false;
@@ -564,13 +412,13 @@ public class Participant extends ActivatableInstance<Long> implements Ownable<Em
 	}
 
 	/**
-	 * A comparator using {@link Participant#rankValue} to compare entities
+	 * A comparator using {@link Rank#getValue()} to compare entities
 	 */
 	public static final Comparator<Participant>	BY_RANKVALUE	= new Comparator<Participant>() {
 																	@Override
 																	public int compare(Participant o1, Participant o2)
 																	{
-																		return o2.rankValue - o1.rankValue;
+																		return o2.rank.getValue() - o1.rank.getValue();
 																	}
 																};
 	/**

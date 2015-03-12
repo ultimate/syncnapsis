@@ -293,12 +293,12 @@ public class ParticipantManagerImpl extends GenericManagerImpl<Participant, Long
 		participant.setEmpire(empire);
 		participant.setJoinedDate(now);
 		participant.setMatch(match);
-		participant.setRank(getNumberOfParticipants(match));
-		participant.setRankDate(now);
-		participant.setRankFinal(false);
-		participant.setRankRawValue(0);
-		participant.setRankValue(0);
-		participant.setRankVictoryDate(null);
+		participant.getRank().setRank(getNumberOfParticipants(match));
+		participant.getRank().setDate(now);
+		participant.getRank().setFinal(false);
+		participant.getRank().setRawValue(0);
+		participant.getRank().setValue(0);
+		participant.getRank().setVictoryDate(null);
 		participant.setRivals(new ArrayList<Participant>());
 		participant.setStartSystemsSelected(0);
 
@@ -408,7 +408,7 @@ public class ParticipantManagerImpl extends GenericManagerImpl<Participant, Long
 
 		participant.setDestructionType(destructionType);
 		participant.setDestructionDate(destructionDate);
-		// participant.setRankFinal(true); // rank will be finalized on next rank update
+		// participant.getRank().setFinal(true); // rank will be finalized on next rank update
 
 		return save(participant);
 	}

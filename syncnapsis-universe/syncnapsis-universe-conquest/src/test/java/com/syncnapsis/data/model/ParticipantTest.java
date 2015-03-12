@@ -31,11 +31,11 @@ public class ParticipantTest extends LoggerTestCase
 	public void testSort_byRankValue() throws Exception
 	{
 		Participant p1 = new Participant();
-		p1.setRankValue(80);
+		p1.getRank().setValue(80);
 		Participant p2 = new Participant();
-		p2.setRankValue(50);
+		p2.getRank().setValue(50);
 		Participant p3 = new Participant();
-		p3.setRankValue(20);
+		p3.getRank().setValue(20);
 
 		List<Participant> list = new ArrayList<Participant>();
 		list.add(p2);

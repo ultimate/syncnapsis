@@ -44,7 +44,7 @@ public class ParticipantDaoTest extends GenericDaoTestCase<Participant, Long>
 		participant.setEmpire(empireDao.getByName("empire1"));
 		participant.setJoinedDate(new Date(timeProvider.get()));
 		participant.setMatch(matchDao.getAll().get(0));
-		participant.setRank(1);
+		participant.getRank().setRank(1);
 		participant.setRivals(new ArrayList<Participant>());
 		// set individual properties here
 

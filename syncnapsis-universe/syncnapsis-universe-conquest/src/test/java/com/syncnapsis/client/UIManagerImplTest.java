@@ -17,11 +17,13 @@ package com.syncnapsis.client;
 import org.jmock.Expectations;
 import org.springframework.mock.web.MockHttpSession;
 
+import com.syncnapsis.data.service.UserManager;
 import com.syncnapsis.enums.EnumLocale;
 import com.syncnapsis.providers.ConnectionProvider;
 import com.syncnapsis.providers.SessionProvider;
 import com.syncnapsis.security.BaseGameManager;
 import com.syncnapsis.tests.BaseSpringContextTestCase;
+import com.syncnapsis.tests.annotations.TestCoversMethods;
 import com.syncnapsis.tests.annotations.TestExcludesMethods;
 import com.syncnapsis.websockets.Connection;
 import com.syncnapsis.websockets.engine.http.HttpConnection;
@@ -33,6 +35,16 @@ public class UIManagerImplTest extends BaseSpringContextTestCase
 	private SessionProvider		sessionProvider;
 	private BaseGameManager		securityManager;
 	private ConnectionProvider	connectionProvider;
+
+	private UserManager			userManager;
+
+	@TestCoversMethods({ "get*", "set*" })
+	public void testGetAndSet() throws Exception
+	{
+		UIManagerImpl manager = new UIManagerImpl();
+
+		getAndSetTest(manager, "userManager", UserManager.class, userManager);
+	}
 
 	public void testReloadLocale()
 	{
