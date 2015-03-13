@@ -50,7 +50,7 @@ public class ParticipantDaoTest extends GenericDaoTestCase<Participant, Long>
 
 		setEntity(participant);
 
-		setEntityProperty("rank");
+		setEntityProperty("startSystemsSelected");
 		setEntityPropertyValue(2);
 
 		setExistingEntityId(existingId);
