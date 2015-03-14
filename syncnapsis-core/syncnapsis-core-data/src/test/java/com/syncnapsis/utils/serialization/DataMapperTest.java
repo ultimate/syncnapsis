@@ -24,7 +24,7 @@ import com.syncnapsis.data.service.UniversalManager;
 import com.syncnapsis.tests.LoggerTestCase;
 import com.syncnapsis.tests.annotations.TestExcludesMethods;
 
-@TestExcludesMethods({ "get*", "set*", "afterPropertiesSet" })
+@TestExcludesMethods({ "get*", "set*", "afterPropertiesSet", "isExcluded"})
 public class DataMapperTest extends LoggerTestCase
 {
 	@SuppressWarnings("unchecked")
