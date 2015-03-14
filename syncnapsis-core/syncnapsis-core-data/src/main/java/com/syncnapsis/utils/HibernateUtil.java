@@ -195,14 +195,15 @@ public class HibernateUtil implements InitializingBean
 	 * are not really expected to fail (e.g. Integer vs. Long).
 	 * 
 	 * @see ReflectionsUtil#convert(Class, Object)
+	 * @param sessionFactory - the SessionFactory
 	 * @param clazz - the model type (used to determine the required id
 	 * @param id - the given id
 	 * @return the converted id
 	 * @throws ConversionException if conversion fails
 	 */
-	public static Serializable checkIdType(Class<?> clazz, Serializable id)
+	public static Serializable checkIdType(SessionFactory sessionFactory, Class<?> clazz, Serializable id)
 	{
-		Class<? extends Serializable> requiredType = getIdType(clazz);
+		Class<? extends Serializable> requiredType = getIdType(sessionFactory, clazz);
 		if(requiredType.isInstance(id))
 			return id;
 		try
@@ -219,14 +220,15 @@ public class HibernateUtil implements InitializingBean
 	/**
 	 * Get the ID type for an entity class
 	 * 
+	 * @param sessionFactory - the SessionFactory
 	 * @param clazz - the entity class
 	 * @return the ID type
 	 */
 	@SuppressWarnings("unchecked")
-	public static Class<? extends Serializable> getIdType(Class<?> clazz)
+	public static Class<? extends Serializable> getIdType(SessionFactory sessionFactory, Class<?> clazz)
 	{
 		if(!idTypes.containsKey(clazz))
-			idTypes.put(clazz, sessionFactoryUtil.getSessionFactory().getClassMetadata(clazz).getIdentifierType().getReturnedClass());
+			idTypes.put(clazz, sessionFactory.getClassMetadata(clazz).getIdentifierType().getReturnedClass());
 		return idTypes.get(clazz);
 	}
 }

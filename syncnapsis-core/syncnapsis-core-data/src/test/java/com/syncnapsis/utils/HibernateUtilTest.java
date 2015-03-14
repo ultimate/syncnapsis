@@ -15,6 +15,7 @@
 package com.syncnapsis.utils;
 
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 
 import com.syncnapsis.data.model.IntegerModel;
 import com.syncnapsis.data.model.LongModel;
@@ -53,27 +54,31 @@ public class HibernateUtilTest extends BaseSpringContextTestCase
 
 	public void testGetIdType() throws Exception
 	{
-		assertSame(Long.class, HibernateUtil.getIdType(LongModel.class));
-		assertSame(Integer.class, HibernateUtil.getIdType(IntegerModel.class));
-		assertSame(String.class, HibernateUtil.getIdType(StringModel.class));
+		SessionFactory sf = HibernateUtil.getInstance().getSessionFactory();
+		
+		assertSame(Long.class, HibernateUtil.getIdType(sf, LongModel.class));
+		assertSame(Integer.class, HibernateUtil.getIdType(sf, IntegerModel.class));
+		assertSame(String.class, HibernateUtil.getIdType(sf, StringModel.class));
 	}
 
 	@TestCoversMethods({ "checkIdType*" })
 	public void testCheckIdType() throws Exception
 	{
-		assertEquals((Long) 1L, HibernateUtil.checkIdType(LongModel.class, 1L));
-		assertSame(Long.class, HibernateUtil.checkIdType(LongModel.class, 1L).getClass());
+		SessionFactory sf = HibernateUtil.getInstance().getSessionFactory();
+		
+		assertEquals((Long) 1L, HibernateUtil.checkIdType(sf, LongModel.class, 1L));
+		assertSame(Long.class, HibernateUtil.checkIdType(sf, LongModel.class, 1L).getClass());
 
-		assertEquals((Long) 1L, HibernateUtil.checkIdType(LongModel.class, 1));
-		assertSame(Long.class, HibernateUtil.checkIdType(LongModel.class, 1).getClass());
+		assertEquals((Long) 1L, HibernateUtil.checkIdType(sf, LongModel.class, 1));
+		assertSame(Long.class, HibernateUtil.checkIdType(sf, LongModel.class, 1).getClass());
 
-		assertEquals((Integer) 1, HibernateUtil.checkIdType(IntegerModel.class, 1L));
-		assertSame(Integer.class, HibernateUtil.checkIdType(IntegerModel.class, 1L).getClass());
+		assertEquals((Integer) 1, HibernateUtil.checkIdType(sf, IntegerModel.class, 1L));
+		assertSame(Integer.class, HibernateUtil.checkIdType(sf, IntegerModel.class, 1L).getClass());
 
-		assertEquals((Integer) 1, HibernateUtil.checkIdType(IntegerModel.class, 1));
-		assertSame(Integer.class, HibernateUtil.checkIdType(IntegerModel.class, 1).getClass());
+		assertEquals((Integer) 1, HibernateUtil.checkIdType(sf, IntegerModel.class, 1));
+		assertSame(Integer.class, HibernateUtil.checkIdType(sf, IntegerModel.class, 1).getClass());
 
-		assertEquals("1", HibernateUtil.checkIdType(StringModel.class, "1"));
-		assertSame(String.class, HibernateUtil.checkIdType(StringModel.class, "1").getClass());
+		assertEquals("1", HibernateUtil.checkIdType(sf, StringModel.class, "1"));
+		assertSame(String.class, HibernateUtil.checkIdType(sf, StringModel.class, "1").getClass());
 	}
 }

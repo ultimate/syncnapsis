@@ -95,7 +95,7 @@ public class UniversalDaoHibernate extends Bean implements UniversalDao
 	@Override
 	public <T> T get(Class<? extends T> clazz, Serializable id)
 	{
-		id = HibernateUtil.checkIdType(clazz, id);
+		id = HibernateUtil.checkIdType(sessionFactory, clazz, id);
 		T o = (T) currentSession().get(clazz, id);
 		if(o == null)
 			throw new ObjectNotFoundException(id, clazz.getSimpleName());
