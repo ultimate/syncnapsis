@@ -9,6 +9,8 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
+import com.syncnapsis.data.model.base.Model;
+
 /**
  * Entity representing a rank for another entity to be embedded into that class for database
  * storage.
@@ -17,7 +19,7 @@ import javax.persistence.Transient;
  */
 @Embeddable
 @MappedSuperclass
-public class Rank
+public class Rank implements Model
 {
 	/**
 	 * The current rank of this participant/empire within the match
