@@ -61,6 +61,7 @@
 		<constructor-arg ref="participantManager" />
 		<constructor-arg ref="solarSystemPopulationManager" />
 		<constructor-arg ref="solarSystemInfrastructureManager" />
+		<constructor-arg ref="conquestManager" />
 		<property name="calculator" ref="calculator" />
 		<property name="securityManager" ref="securityManager" />
 	</bean>
@@ -116,7 +117,6 @@
 		<property name="securityManager" ref="securityManager" />
 		<property name="connectionProvider" ref="connectionProvider" />
 		<property name="rpcService" ref="rpcService" />
-		<property name="matchManager" ref="matchManager" />
 	</bean>
 
 	<!-- =================================================================== -->

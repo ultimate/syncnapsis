@@ -28,6 +28,7 @@ import org.hamcrest.Description;
 import org.jmock.Expectations;
 import org.springframework.mock.web.MockHttpSession;
 
+import com.syncnapsis.client.ConquestManager;
 import com.syncnapsis.constants.ApplicationBaseConstants;
 import com.syncnapsis.constants.UniverseConquestConstants;
 import com.syncnapsis.data.dao.MatchDao;
@@ -71,7 +72,8 @@ public class MatchManagerImplTest extends GenericNameManagerImplTestCase<Match, 
 	private SolarSystemPopulationManager		solarSystemPopulationManager;
 	private SolarSystemInfrastructureManager	solarSystemInfrastructureManager;
 	private PlayerManager						playerManager;
-	
+	private ConquestManager						conquestManager;
+
 	private BaseMapper							mapper;
 	private BaseGameManager						securityManager;
 	private Calculator							calculator;
@@ -86,7 +88,7 @@ public class MatchManagerImplTest extends GenericNameManagerImplTestCase<Match, 
 		setDaoClass(MatchDao.class);
 		setMockDao(mockContext.mock(MatchDao.class));
 		setMockManager(new MatchManagerImpl(mockDao, galaxyManager, participantManager, solarSystemPopulationManager,
-				solarSystemInfrastructureManager));
+				solarSystemInfrastructureManager, conquestManager));
 
 		BaseGameManager securityManager = new BaseGameManager(this.securityManager);
 		securityManager.setTimeProvider(new MockTimeProvider(referenceTime));
@@ -163,7 +165,7 @@ public class MatchManagerImplTest extends GenericNameManagerImplTestCase<Match, 
 		// dirty copy match using mapper ;-)
 		final Match tmpMatch2 = mapper.fromMap(new Match(), mapper.toMap(tmpMatch));
 		tmpMatch2.setId(matchId);
-		
+
 		// dirty copy match using mapper ;-)
 		final Match finalMatch = mapper.fromMap(new Match(), mapper.toMap(tmpMatch));
 		finalMatch.setId(matchId);
@@ -182,7 +184,7 @@ public class MatchManagerImplTest extends GenericNameManagerImplTestCase<Match, 
 		final SolarSystemInfrastructureManager mockInfrastructureManager = mockContext.mock(SolarSystemInfrastructureManager.class);
 		final ParticipantManager mockParticipantManager = mockContext.mock(ParticipantManager.class);
 		MatchManagerImpl mockManager = new MatchManagerImpl(mockDao, galaxyManager, mockParticipantManager, solarSystemPopulationManager,
-				mockInfrastructureManager);
+				mockInfrastructureManager, conquestManager);
 		mockManager.setSecurityManager(((MatchManagerImpl) this.mockManager).getSecurityManager());
 
 		// expectatins are a bit more complicated here...
@@ -280,7 +282,7 @@ public class MatchManagerImplTest extends GenericNameManagerImplTestCase<Match, 
 		final ThreadLocal<Boolean> performed = new ThreadLocal<Boolean>();
 
 		MatchManagerImpl matchManager = new MatchManagerImpl(mockDao, galaxyManager, participantManager, solarSystemPopulationManager,
-				solarSystemInfrastructureManager) {
+				solarSystemInfrastructureManager, conquestManager) {
 			@Override
 			protected Match performStartMatch(Match match)
 			{
@@ -343,7 +345,7 @@ public class MatchManagerImplTest extends GenericNameManagerImplTestCase<Match, 
 		final ThreadLocal<Boolean> performed = new ThreadLocal<Boolean>();
 
 		MatchManagerImpl matchManager = new MatchManagerImpl(mockDao, galaxyManager, participantManager, solarSystemPopulationManager,
-				solarSystemInfrastructureManager) {
+				solarSystemInfrastructureManager, conquestManager) {
 			@Override
 			protected Match performStartMatch(Match match)
 			{
@@ -500,13 +502,13 @@ public class MatchManagerImplTest extends GenericNameManagerImplTestCase<Match, 
 		final SolarSystemPopulationManager mockSolarSystemPopulationManager = mockContext.mock(SolarSystemPopulationManager.class);
 		final ParticipantManager mockParticipantManager = mockContext.mock(ParticipantManager.class);
 		MatchManagerImpl mockManager = new MatchManagerImpl(mockDao, galaxyManager, mockParticipantManager, mockSolarSystemPopulationManager,
-				solarSystemInfrastructureManager);
+				solarSystemInfrastructureManager, conquestManager);
 		mockManager.setSecurityManager(((MatchManagerImpl) this.mockManager).getSecurityManager());
 		mockManager.setCalculator(calculator);
 
 		final int participantCount = 5;
-		final int victoryParameter = 70;		
-		
+		final int victoryParameter = 70;
+
 		final Match match = new Match();
 		match.setParticipants(new ArrayList<Participant>(participantCount));
 		Participant p;
@@ -518,7 +520,7 @@ public class MatchManagerImplTest extends GenericNameManagerImplTestCase<Match, 
 			p.getEmpire().setId((long) i + 1);
 			p.getEmpire().setPlayer(new Player());
 			p.getEmpire().getPlayer().setUser(new User());
-			p.getEmpire().getPlayer().getUser().setUsername("user" + (i+1));
+			p.getEmpire().getPlayer().getUser().setUsername("user" + (i + 1));
 			p.setPopulations(new ArrayList<SolarSystemPopulation>());
 			p.setActivated(i < participantCount);
 			match.getParticipants().add(p);
@@ -532,7 +534,7 @@ public class MatchManagerImplTest extends GenericNameManagerImplTestCase<Match, 
 			populations.add(new SolarSystemPopulation());
 
 		final ExtendedRandom random = new ExtendedRandom(match.getSeed() + 1);
-		
+
 		// general expectation
 		mockContext.checking(new Expectations() {
 			{
@@ -570,8 +572,7 @@ public class MatchManagerImplTest extends GenericNameManagerImplTestCase<Match, 
 		});
 		mockContext.checking(new Expectations() {
 			{
-				exactly(participantCount).of(mockParticipantManager).randomSelectStartSystems(with(any(Participant.class)),
-						with(equal(random)));
+				exactly(participantCount).of(mockParticipantManager).randomSelectStartSystems(with(any(Participant.class)), with(equal(random)));
 				will(returnValue(populations));
 			}
 		});
@@ -616,8 +617,7 @@ public class MatchManagerImplTest extends GenericNameManagerImplTestCase<Match, 
 		});
 		mockContext.checking(new Expectations() {
 			{
-				exactly(participantCount).of(mockParticipantManager).randomSelectStartSystems(with(any(Participant.class)),
-						with(equal(random)));
+				exactly(participantCount).of(mockParticipantManager).randomSelectStartSystems(with(any(Participant.class)), with(equal(random)));
 				will(returnValue(populations));
 			}
 		});
@@ -659,8 +659,7 @@ public class MatchManagerImplTest extends GenericNameManagerImplTestCase<Match, 
 		});
 		mockContext.checking(new Expectations() {
 			{
-				exactly(participantCount).of(mockParticipantManager).randomSelectStartSystems(with(any(Participant.class)),
-						with(equal(random)));
+				exactly(participantCount).of(mockParticipantManager).randomSelectStartSystems(with(any(Participant.class)), with(equal(random)));
 				will(returnValue(populations));
 			}
 		});
@@ -682,7 +681,8 @@ public class MatchManagerImplTest extends GenericNameManagerImplTestCase<Match, 
 		int rivals = mockManager.getNumberOfRivals(match);
 		for(Participant p1 : match.getParticipants())
 		{
-			logger.debug("checking rivals for participant #" + p1.getId() + " (activated?" + p1.isActivated() + ") rivals:" + (p1.getRivals() == null ? null : p1.getRivals().size()));
+			logger.debug("checking rivals for participant #" + p1.getId() + " (activated?" + p1.isActivated() + ") rivals:"
+					+ (p1.getRivals() == null ? null : p1.getRivals().size()));
 			if(p1.isActivated())
 			{
 				assertNotNull(p1.getRivals());
@@ -936,8 +936,8 @@ public class MatchManagerImplTest extends GenericNameManagerImplTestCase<Match, 
 		for(int i = 0; i < participants; i++)
 		{
 			p = new Participant();
-			p.setRank(i + 1);
-			p.setRankValue((participants - 1 - i) * 10);
+			p.getRank().setRank(i + 1);
+			p.getRank().setValue((participants - 1 - i) * 10);
 			match.getParticipants().add(p);
 		}
 
@@ -959,7 +959,7 @@ public class MatchManagerImplTest extends GenericNameManagerImplTestCase<Match, 
 		// now victory condition will be met
 		match.setVictoryParameter((participants - 1) * 10);
 		match.setVictoryTimeout(0);
-		match.getParticipants().get(0).setRankVictoryDate(new Date(0));
+		match.getParticipants().get(0).getRank().setVictoryDate(new Date(0));
 		assertTrue(mockManager.isVictoryConditionMet(match));
 
 		// check with victory condition met
@@ -997,7 +997,7 @@ public class MatchManagerImplTest extends GenericNameManagerImplTestCase<Match, 
 
 		for(Participant p : match.getParticipants())
 		{
-			assertTrue(p.isRankFinal());
+			assertTrue(p.getRank().isFinal());
 			if(trueForCanceledFalseForFinished)
 			{
 				if(resetToState == EnumMatchState.planned)
@@ -1015,7 +1015,7 @@ public class MatchManagerImplTest extends GenericNameManagerImplTestCase<Match, 
 
 			for(Participant p : match.getParticipants())
 			{
-				p.setRankFinal(false);
+				p.getRank().setFinal(false);
 				p.setActivated(true);
 			}
 		}
@@ -1032,8 +1032,8 @@ public class MatchManagerImplTest extends GenericNameManagerImplTestCase<Match, 
 		for(int i = 0; i < participants; i++)
 		{
 			p = new Participant();
-			p.setRank(i + 1);
-			p.setRankValue((participants - 1 - i) * 10);
+			p.getRank().setRank(i + 1);
+			p.getRank().setValue((participants - 1 - i) * 10);
 			match.getParticipants().add(p);
 		}
 		Collections.shuffle(match.getParticipants());
@@ -1049,7 +1049,7 @@ public class MatchManagerImplTest extends GenericNameManagerImplTestCase<Match, 
 		assertFalse(mockManager.isVictoryConditionMet(match));
 
 		// 1 participant with victory date
-		match.getParticipants().get(0).setRankVictoryDate(new Date(0));
+		match.getParticipants().get(0).getRank().setVictoryDate(new Date(0));
 		match.setVictoryTimeout(0); // no timeout
 		assertTrue(mockManager.isVictoryConditionMet(match));
 		match.setVictoryTimeout(1000); // timeout passed
@@ -1058,8 +1058,8 @@ public class MatchManagerImplTest extends GenericNameManagerImplTestCase<Match, 
 		assertFalse(mockManager.isVictoryConditionMet(match));
 
 		// 2 participants with victory date
-		match.getParticipants().get(0).setRankVictoryDate(new Date(1000));
-		match.getParticipants().get(1).setRankVictoryDate(new Date(0));
+		match.getParticipants().get(0).getRank().setVictoryDate(new Date(1000));
+		match.getParticipants().get(1).getRank().setVictoryDate(new Date(0));
 		match.setVictoryTimeout(0); // no timeout
 		assertTrue(mockManager.isVictoryConditionMet(match));
 		match.setVictoryTimeout(1000); // timeout passed
@@ -1109,8 +1109,8 @@ public class MatchManagerImplTest extends GenericNameManagerImplTestCase<Match, 
 
 		// mark one participant's rank as final
 		int destroyedParticipant = 3;
-		match.getParticipants().get(destroyedParticipant).setRank(5);
-		match.getParticipants().get(destroyedParticipant).setRankFinal(true);
+		match.getParticipants().get(destroyedParticipant).getRank().setRank(5);
+		match.getParticipants().get(destroyedParticipant).getRank().setFinal(true);
 
 		// extermination
 		mockContext.checking(new Expectations() {
@@ -1128,7 +1128,7 @@ public class MatchManagerImplTest extends GenericNameManagerImplTestCase<Match, 
 		checkRank(match.getParticipants(), 3, 5, (int) Math.floor(100.0 * pop3 / totalPop), true, true);
 		checkRank(match.getParticipants(), 4, 2, (int) Math.floor(100.0 * pop4 / totalPop), false, false);
 
-		resetRanks(match.getParticipants(), destroyedParticipant);
+		resetRankss(match.getParticipants(), destroyedParticipant);
 
 		// domination
 		mockContext.checking(new Expectations() {
@@ -1146,7 +1146,7 @@ public class MatchManagerImplTest extends GenericNameManagerImplTestCase<Match, 
 		checkRank(match.getParticipants(), 3, 5, (int) Math.floor(100.0 * 0 / systems), true, true);
 		checkRank(match.getParticipants(), 4, 3, (int) Math.floor(100.0 * 5 / systems), false, false);
 
-		resetRanks(match.getParticipants(), destroyedParticipant);
+		resetRankss(match.getParticipants(), destroyedParticipant);
 
 		// domination (not all alone)
 		// putting 2 or more populations into the same system --> reduction in count
@@ -1175,7 +1175,7 @@ public class MatchManagerImplTest extends GenericNameManagerImplTestCase<Match, 
 		checkRank(match.getParticipants(), 3, 5, (int) Math.floor(100.0 * 0 / systems), true, true);
 		checkRank(match.getParticipants(), 4, 2, (int) Math.floor(100.0 * 4 / systems), false, false);
 
-		resetRanks(match.getParticipants(), destroyedParticipant);
+		resetRankss(match.getParticipants(), destroyedParticipant);
 
 		// vendetta
 		mockContext.checking(new Expectations() {
@@ -1218,16 +1218,16 @@ public class MatchManagerImplTest extends GenericNameManagerImplTestCase<Match, 
 	private void checkRank(List<Participant> participants, int index, int rankExpected, int rankValueExpected, boolean rankFinalExpected,
 			boolean wasFinalBefore)
 	{
-		assertEquals(rankExpected, participants.get(index).getRank());
-		assertEquals(rankValueExpected, participants.get(index).getRankValue());
-		assertEquals(rankFinalExpected, participants.get(index).isRankFinal());
+		assertEquals(rankExpected, participants.get(index).getRank().getRank());
+		assertEquals(rankValueExpected, participants.get(index).getRank().getValue());
+		assertEquals(rankFinalExpected, participants.get(index).getRank().isFinal());
 		if(wasFinalBefore)
-			assertNull(participants.get(index).getRankDate());
+			assertNull(participants.get(index).getRank().getDate());
 		else
-			assertEquals(new Date(referenceTime), participants.get(index).getRankDate());
+			assertEquals(new Date(referenceTime), participants.get(index).getRank().getDate());
 	}
 
-	private void resetRanks(List<Participant> participants, Integer... ignoreIndexes)
+	private void resetRankss(List<Participant> participants, Integer... ignoreIndexes)
 	{
 		List<Integer> ignore = Arrays.asList(ignoreIndexes);
 		Participant p;
@@ -1236,9 +1236,9 @@ public class MatchManagerImplTest extends GenericNameManagerImplTestCase<Match, 
 			if(ignore.contains(i))
 				continue;
 			p = participants.get(i);
-			p.setRankFinal(false);
-			p.setRankValue(0);
-			p.setRank(0);
+			p.getRank().setFinal(false);
+			p.getRank().setValue(0);
+			p.getRank().setRank(0);
 		}
 	}
 

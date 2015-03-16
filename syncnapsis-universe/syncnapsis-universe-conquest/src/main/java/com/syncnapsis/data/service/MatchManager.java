@@ -256,4 +256,17 @@ public interface MatchManager extends GenericNameManager<Match, Long>
 	 * @return the number of rivals
 	 */
 	public int getNumberOfRivals(Match match);
+
+	/**
+	 * Create all necessary channels for the given match.<br>
+	 * Channels might only be created if the match is in a state that requires those channels. Otherwise channels not needed may be omitted.
+	 * @param match - the match to create the channels for
+	 */
+	public void createChannels(Match match);
+	
+	/**
+	 * Update all channels for the given match.
+	 * @param match - the match to update the channels for
+	 */
+	public void updateChannels(Match match);
 }

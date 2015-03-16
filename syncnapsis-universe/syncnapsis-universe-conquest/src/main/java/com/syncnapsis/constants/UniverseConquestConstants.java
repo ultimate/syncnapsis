@@ -162,4 +162,22 @@ public class UniverseConquestConstants
 	 * Reason for match start failed: 'too many participants'
 	 */
 	public static final String				REASON_TOO_MANY_PARTICIPANTS			= "match.tooManyParticipants";
+
+	/**
+	 * Placeholder used for IDs in channel names.
+	 */
+	public static final String				CHANNEL_ID_PLACEHOLDER					= "$";
+	/**
+	 * Channel name for notifying clients when a new match has been created.
+	 */
+	public static final String				CHANNEL_MATCH_CREATED					= "match_created";
+	/**
+	 * Channel name for notifying clients when the rank list of a match was updated.
+	 */
+	public static final String				CHANNEL_MATCH_RANKS						= "match_" + CHANNEL_ID_PLACEHOLDER + "_ranks";
+	/**
+	 * Channel name for notifying clients when the systems of a match were updated (including
+	 * infrastructures and populations).
+	 */
+	public static final String				CHANNEL_MATCH_SYSTEMS					= "match_" + CHANNEL_ID_PLACEHOLDER + "_systems";
 }

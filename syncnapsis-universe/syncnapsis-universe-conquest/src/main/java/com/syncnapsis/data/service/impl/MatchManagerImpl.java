@@ -23,6 +23,7 @@ import java.util.List;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.util.Assert;
 
+import com.syncnapsis.client.ConquestManager;
 import com.syncnapsis.constants.UniverseConquestConstants;
 import com.syncnapsis.data.dao.MatchDao;
 import com.syncnapsis.data.model.Galaxy;
@@ -30,6 +31,7 @@ import com.syncnapsis.data.model.Match;
 import com.syncnapsis.data.model.Participant;
 import com.syncnapsis.data.model.SolarSystem;
 import com.syncnapsis.data.model.SolarSystemPopulation;
+import com.syncnapsis.data.model.help.Rank;
 import com.syncnapsis.data.service.GalaxyManager;
 import com.syncnapsis.data.service.MatchManager;
 import com.syncnapsis.data.service.ParticipantManager;
@@ -76,6 +78,12 @@ public class MatchManagerImpl extends GenericNameManagerImpl<Match, Long> implem
 	 * The SolarSystemInfrastructureManager
 	 */
 	protected SolarSystemInfrastructureManager	solarSystemInfrastructureManager;
+
+	/**
+	 * The ConquestManager
+	 */
+	protected ConquestManager					conquestManager;
+
 	/**
 	 * The {@link Calculator}
 	 */
@@ -96,7 +104,8 @@ public class MatchManagerImpl extends GenericNameManagerImpl<Match, Long> implem
 	 * @param solarSystemInfrastructureManager - the PolarSystemInfrastructureManager
 	 */
 	public MatchManagerImpl(MatchDao matchDao, GalaxyManager galaxyManager, ParticipantManager participantManager,
-			SolarSystemPopulationManager solarSystemPopulationManager, SolarSystemInfrastructureManager solarSystemInfrastructureManager)
+			SolarSystemPopulationManager solarSystemPopulationManager, SolarSystemInfrastructureManager solarSystemInfrastructureManager,
+			ConquestManager conquestManager)
 	{
 		super(matchDao);
 		this.matchDao = matchDao;
@@ -104,6 +113,7 @@ public class MatchManagerImpl extends GenericNameManagerImpl<Match, Long> implem
 		this.participantManager = participantManager;
 		this.solarSystemPopulationManager = solarSystemPopulationManager;
 		this.solarSystemInfrastructureManager = solarSystemInfrastructureManager;
+		this.conquestManager = conquestManager;
 	}
 
 	/*
@@ -115,6 +125,15 @@ public class MatchManagerImpl extends GenericNameManagerImpl<Match, Long> implem
 	{
 		Assert.notNull(calculator, "calculator must not be null!");
 		Assert.notNull(securityManager, "securityManager must not be null!");
+
+		// create general channel(s)
+		conquestManager.createChannel(UniverseConquestConstants.CHANNEL_MATCH_CREATED, null);
+		// create individual match channel(s)
+		List<Match> matches = getAll();
+		for(Match m : matches)
+		{
+			createChannels(m);
+		}
 	}
 
 	/**
@@ -223,10 +242,8 @@ public class MatchManagerImpl extends GenericNameManagerImpl<Match, Long> implem
 		Assert.isTrue(participantsMax == 0 || participantsMax >= participantsMin,
 				"participantsMax must either be 0 or be greater or equals to participantsMin");
 		Assert.isTrue(participantsMin > 0, "participantsMin must be greater than 0");
-		Assert.isTrue(
-				speed >= UniverseConquestConstants.PARAM_MATCH_SPEED_MIN.asInt() && speed <= UniverseConquestConstants.PARAM_MATCH_SPEED_MAX.asInt(),
-				"speed must be between " + UniverseConquestConstants.PARAM_MATCH_SPEED_MIN.asInt() + " and "
-						+ UniverseConquestConstants.PARAM_MATCH_SPEED_MAX.asInt() + " (inclusive)");
+		Assert.isTrue(speed >= UniverseConquestConstants.PARAM_MATCH_SPEED_MIN.asInt() && speed <= UniverseConquestConstants.PARAM_MATCH_SPEED_MAX.asInt(), "speed must be between "
+				+ UniverseConquestConstants.PARAM_MATCH_SPEED_MIN.asInt() + " and " + UniverseConquestConstants.PARAM_MATCH_SPEED_MAX.asInt() + " (inclusive)");
 		Assert.isTrue(startSystemCount > 0, "startSystemCount must be greater than 0");
 		Assert.isTrue(startPopulation > startSystemCount, "startPopulation must be greater than startSystemCount");
 
@@ -262,7 +279,7 @@ public class MatchManagerImpl extends GenericNameManagerImpl<Match, Long> implem
 		match.setTitle(title);
 		match.setVictoryCondition(victoryCondition);
 		match.setVictoryParameter(victoryParameter);
-		
+
 		match = save(match);
 
 		// create infrastructures
@@ -285,20 +302,21 @@ public class MatchManagerImpl extends GenericNameManagerImpl<Match, Long> implem
 		match = save(match);
 
 		HibernateUtil.currentSession().flush();
-		
+
 		match = get(match.getId());
 
 		if(logger.isDebugEnabled())
 		{
 			logger.debug("participants:");
-			for(Participant p: match.getParticipants())
+			for(Participant p : match.getParticipants())
 			{
-				logger.debug(p.getId() + ": user=" + (p.getEmpire() == null ? null : p.getEmpire().getPlayer().getUser().getUsername()) + " activated?" + p.isActivated());
+				logger.debug(p.getId() + ": user=" + (p.getEmpire() == null ? null : p.getEmpire().getPlayer().getUser().getUsername())
+						+ " activated?" + p.isActivated());
 			}
 			logger.debug("participantCount: " + participantManager.getNumberOfParticipants(match));
 			logger.debug("match.participantsMin: " + match.getParticipantsMin());
 			logger.debug("match.participantsMax: " + match.getParticipantsMax());
-			logger.debug("matchStartNecessary: " +  isStartNecessary(match));
+			logger.debug("matchStartNecessary: " + isStartNecessary(match));
 			logger.debug("matchStartNotPossibleReasons: " + getMatchStartNotPossibleReasons(match));
 			logger.debug("match.startPopulation: " + match.getStartPopulation());
 		}
@@ -418,7 +436,7 @@ public class MatchManagerImpl extends GenericNameManagerImpl<Match, Long> implem
 	public List<String> getMatchStartNotPossibleReasons(Match match)
 	{
 		int participantCount = participantManager.getNumberOfParticipants(match);
-		
+
 		List<String> reasons = new ArrayList<String>(5);
 		if(match.getState() != EnumMatchState.planned)
 			reasons.add(UniverseConquestConstants.REASON_ALREADY_STARTED);
@@ -488,7 +506,7 @@ public class MatchManagerImpl extends GenericNameManagerImpl<Match, Long> implem
 			assignRivals(participants, numberOfRivals, random);
 
 		match = save(match);
-		
+
 		for(Participant p : participants)
 		{
 			// assign start populations
@@ -497,16 +515,16 @@ public class MatchManagerImpl extends GenericNameManagerImpl<Match, Long> implem
 			if(logger.isDebugEnabled())
 			{
 				logger.debug(p.getEmpire().getPlayer().getUser().getUsername() + ":");
-				for(SolarSystemPopulation pop: p.getPopulations())
+				for(SolarSystemPopulation pop : p.getPopulations())
 					logger.debug(pop.getPopulation() + " @ " + pop.getInfrastructure().getInfrastructure());
 			}
 		}
 
 		HibernateUtil.currentSession().flush();
-		
-		for(Participant p: participants)
+
+		for(Participant p : participants)
 		{
-//			HibernateUtil.currentSession().refresh(p);
+			// HibernateUtil.currentSession().refresh(p);
 			// start participating
 			participantManager.startParticipating(p, startDate);
 		}
@@ -575,7 +593,7 @@ public class MatchManagerImpl extends GenericNameManagerImpl<Match, Long> implem
 	public int getNumberOfRivals(Match match)
 	{
 		int participantCount = participantManager.getNumberOfParticipants(match);
-		
+
 		if(match.getVictoryCondition() == EnumVictoryCondition.vendetta)
 			return (int) Math.ceil((participantCount - 1) * match.getVictoryParameter() / 100.0);
 		else
@@ -599,7 +617,7 @@ public class MatchManagerImpl extends GenericNameManagerImpl<Match, Long> implem
 		// finalize ranking
 		for(Participant p : match.getParticipants())
 		{
-			p.setRankFinal(true);
+			p.getRank().setFinal(true);
 			if(match.getState() == EnumMatchState.planned)
 				p.setActivated(false);
 			participantManager.save(p);
@@ -632,7 +650,7 @@ public class MatchManagerImpl extends GenericNameManagerImpl<Match, Long> implem
 		// finalize ranking
 		for(Participant p : match.getParticipants())
 		{
-			p.setRankFinal(true);
+			p.getRank().setFinal(true);
 			participantManager.save(p);
 		}
 
@@ -657,13 +675,13 @@ public class MatchManagerImpl extends GenericNameManagerImpl<Match, Long> implem
 
 		for(Participant p : match.getParticipants())
 		{
-			if(p.getRankVictoryDate() != null)
+			if(p.getRank().getVictoryDate() != null)
 			{
 				if(leader == null)
 					leader = p;
-				else if(p.getRankVictoryDate().before(leader.getRankVictoryDate()))
+				else if(p.getRank().getVictoryDate().before(leader.getRank().getVictoryDate()))
 					leader = p;
-				else if(p.getRankVictoryDate().equals(leader.getRankVictoryDate()) && p.getRank() < leader.getRank())
+				else if(p.getRank().getVictoryDate().equals(leader.getRank().getVictoryDate()) && p.getRank().getRank() < leader.getRank().getRank())
 					leader = p;
 			}
 		}
@@ -677,7 +695,7 @@ public class MatchManagerImpl extends GenericNameManagerImpl<Match, Long> implem
 			// victory condition is bound to a timeout
 			long now = securityManager.getTimeProvider().get();
 
-			if(leader.getRankVictoryDate().getTime() + timeout <= now)
+			if(leader.getRank().getVictoryDate().getTime() + timeout <= now)
 				return true; // timeout passed
 			else
 				return false;
@@ -722,7 +740,7 @@ public class MatchManagerImpl extends GenericNameManagerImpl<Match, Long> implem
 					destroyed++;
 
 				// do not update rank, when rank is final (participant already destroyed)
-				if(p.isRankFinal())
+				if(p.getRank().isFinal())
 					continue;
 
 				rankValue = 0;
@@ -772,22 +790,22 @@ public class MatchManagerImpl extends GenericNameManagerImpl<Match, Long> implem
 				}
 
 				// set raw rank value
-				p.setRankRawValue(rankValue);
+				p.getRank().setRawValue(rankValue);
 				// scale rank value to have percent
 				rankValue = (int) Math.floor(100.0 * rankValue / ref);
-				p.setRankValue(rankValue);
+				p.getRank().setValue(rankValue);
 
 				// check victory condition
-				if(p.getRankValue() >= match.getVictoryParameter())
+				if(p.getRank().getValue() >= match.getVictoryParameter())
 				{
 					// participants rank meets victory condition
 					// set victory date if not yet set
-					if(p.getRankVictoryDate() == null)
-						p.setRankVictoryDate(now);
+					if(p.getRank().getVictoryDate() == null)
+						p.getRank().setVictoryDate(now);
 				}
 				else
 				{
-					p.setRankVictoryDate(null);
+					p.getRank().setVictoryDate(null);
 				}
 
 				updatedParticipants.add(p);
@@ -801,28 +819,56 @@ public class MatchManagerImpl extends GenericNameManagerImpl<Match, Long> implem
 		int value = 0;
 		for(Participant p : updatedParticipants)
 		{
-			if(p.getRankValue() != value)
+			if(p.getRank().getValue() != value)
 			{
-				value = p.getRankValue();
+				value = p.getRank().getValue();
 				rank = count + 1;
 			}
 
 			if(p.getDestructionDate() == null)
 			{
 				count++;
-				p.setRank(rank);
+				p.getRank().setRank(rank);
 			}
 			else
 			{
-				p.setRank(match.getParticipants().size() + 1 - destroyed);
-				p.setRankFinal(true);
+				p.getRank().setRank(match.getParticipants().size() + 1 - destroyed);
+				p.getRank().setFinal(true);
 			}
-			p.setRankDate(now);
+			p.getRank().setDate(now);
 
 			participantManager.save(p);
 		}
 
 		return get(match.getId());
+	}
+
+	public void createChannels(Match match)
+	{
+		// if(m.getState() != EnumMatchState.finished && m.getState() != EnumMatchState.canceled)
+		// {
+		// create channel for this match
+		conquestManager.createChannel(
+				UniverseConquestConstants.CHANNEL_MATCH_RANKS.replace(UniverseConquestConstants.CHANNEL_ID_PLACEHOLDER, "" + match.getId()), null);
+		conquestManager.createChannel(
+				UniverseConquestConstants.CHANNEL_MATCH_SYSTEMS.replace(UniverseConquestConstants.CHANNEL_ID_PLACEHOLDER, "" + match.getId()), null);
+		// }
+		updateChannels(match);
+	}
+
+	public void updateChannels(Match match)
+	{
+		List<Rank> ranks = new LinkedList<Rank>();
+		for(Participant p: match.getParticipants())
+		{
+			if(p.isActivated())
+				ranks.add(p.getRank());
+		}
+		
+		conquestManager.update(UniverseConquestConstants.CHANNEL_MATCH_RANKS.replace(UniverseConquestConstants.CHANNEL_ID_PLACEHOLDER, "" + match.getId()), ranks);
+		// TODO push infrastructures
+		// TODO push populations
+		conquestManager.update(UniverseConquestConstants.CHANNEL_MATCH_SYSTEMS.replace(UniverseConquestConstants.CHANNEL_ID_PLACEHOLDER, "" + match.getId()), null);
 	}
 
 	/**
