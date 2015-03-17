@@ -146,16 +146,6 @@ public class Rank implements Model
 	}
 
 	/**
-	 * The display name for this rank.
-	 * 
-	 * @param displayName - the display name
-	 */
-	public void setDisplayName(String displayName)
-	{
-		this.displayName = displayName;
-	}
-
-	/**
 	 * The current rank of this participant/empire within the match
 	 * 
 	 * @param rank - the rank
@@ -217,6 +207,16 @@ public class Rank implements Model
 	public void setFinal(boolean rankFinal)
 	{
 		this.rankFinal = rankFinal;
+	}
+
+	/**
+	 * The display name for this rank.
+	 * 
+	 * @param displayName - the display name
+	 */
+	public void setDisplayName(String displayName)
+	{
+		this.displayName = displayName;
 	}
 
 	/*
