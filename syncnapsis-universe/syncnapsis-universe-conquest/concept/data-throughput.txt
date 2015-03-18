@@ -1,0 +1,68 @@
+DATA ONLY
+
+	fixed:
+		infrastructure:				{id___,xxx,yyy,zzz,size,habi}   => 29 chars
+		
+	push update:																																		100 pops @ 80 inf + 20 moving
+		option 1:
+			population: 			{id___,infr_,part_,colDate_________,pop_________,"buildPriorit","attackPriori"} 		=> 79 chars					100*79 = 7900
+			population (moving): 	+ orig_,progr,storedInf___,																=> 25 chars					20*104 = 2080
+			infrastructure:			{id___,home_,inf_________,[]}															=> 29 chars					80*29  = 2320
+																																								12300
+		option 2:
+			population: 			{infr_,part_,colDate_________,pop_________,"buildPriorit","attackPriori",home} 			=> 73-78 chars				80*78 + 20*73 = 7700
+			population (moving): 	+ orig_,progr,storedInf___,																=> 25 chars					20*98      	  = 1960
+			infrastructure:			{id___,inf_________,[]}																	=> 24 chars					80*24 		  = 1920
+																																									   11580
+		
+		option 3:
+			population w/ infr:		see above + ,inf_________	(if home)													=> 73-97 chars				80*97 + 20*73 = 9220		
+			population (mov):		see above - inf																			=> 25 chars - 13			20*98		  =	1960
+																																									   11180
+		option 4:
+			population w/ infr:		see above + ,inf_________	(if home; but without home flag)							=> 73-92 chars				80*92 + 20*73 = 8820		
+			population (mov):		see above - inf																			=> 25 chars - 13			20*98		  =	1960
+																																									   10780
+	real json:
+	
+			population:		{																											 1 char
+								"id":12345,																								11 chars
+								"j_type":"com.syncnapsis.data.model.SolarSystemPopulation",												59 chars
+								"infrastructure":{"id":12345,"j_type":"com.syncnapsis.data.model.SolarSystemInfrastructure"},			93 chars
+								"participant":{"id":12345,"j_type":"com.syncnapsis.data.model.Participant"},							76 chars
+								"colonizationDate":1234567890123,																		33 chars
+								"population":1234567890123,																				27 chars
+								"buildPriority":"value_____",																			29 chars	??
+								"attackPriority":"value_____",																			30 chars 	??
+								"origin":{"id":12345,"j_type":"com.syncnapsis.data.model.SolarSystemPopulation"},										81 chars
+								"travelProgress":12.345,																								24 chars
+								"storedInfrastructure":123456789012																						36 chars
+							}																											 1 char
+																																		========		========
+																																	   360 chars	   141 chars
+																																	
+																																	100*360 + 20*141 = 38820
+							
+							
+			infrastructure:	{
+								"id":12345,
+								"j_type":"com.syncnapsis.data.model.SolarSystemInfrastructure",
+								"infrastructure":123456789012
+							}
+	
+	initialization:		-> 	list of participants	--> find out who is "me"?
+	update:				->  send pure numbers only: 	populations: 		[[part_id,sys_id,population], ..],
+														movements: 			[[part_id,from_id,to_id,population,progress],..]
+														infrastructures: 	[[sys_id,infrastructure], ..]
+						->  BETTER: send combination of pop+inf:			[sys_id,inf,part1_id,part1_pop,part2_id,part2_pop,...] // first pop = home, sorted by arrival
+																																		~ 1+5+1+12 = 19 chars per pop
+																																		= 100 * 19 = 1900
+																																		+ 80 "headers" of each 1+5+1+12+1 = 20
+																																		= 80*20 = 1600
+														movements separately															~ 1+5+1+5+1+5+12+5+1+1 = 37 chars per movement
+																																		= 20 * 37 = 740
+																																		=> 4240 ~ 4KB
+																																		
+	details:			-> send pop info (e.g. priority, travelProgress)
+						
+										
