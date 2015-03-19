@@ -165,6 +165,11 @@ public class Match extends ActivatableInstance<Long> implements Ownable<Player>
 	 * The participants in this match
 	 */
 	protected List<Participant>		participants;
+	
+	/**
+	 * The infrastructures for this match
+	 */
+	protected List<SolarSystemInfrastructure> infrastructures;
 
 	/**
 	 * The title of this match
@@ -421,6 +426,16 @@ public class Match extends ActivatableInstance<Long> implements Ownable<Player>
 	{
 		return participants;
 	}
+	
+	/**
+	 * The infrastructures for this match
+	 * @return infrastructures
+	 */
+	@OneToMany(mappedBy = "match")
+	public List<SolarSystemInfrastructure> getInfrastructures()
+	{
+		return infrastructures;
+	}
 
 	/*
 	 * (non-Javadoc)
@@ -654,6 +669,16 @@ public class Match extends ActivatableInstance<Long> implements Ownable<Player>
 	public void setParticipants(List<Participant> participants)
 	{
 		this.participants = participants;
+	}
+
+	/**
+	 * The infrastructures for this match
+	 * 
+	 * @param infrastructures - the List of infrastructures
+	 */
+	public void setInfrastructures(List<SolarSystemInfrastructure> infrastructures)
+	{
+		this.infrastructures = infrastructures;
 	}
 
 	/*
