@@ -30,6 +30,7 @@ import com.syncnapsis.data.model.Galaxy;
 import com.syncnapsis.data.model.Match;
 import com.syncnapsis.data.model.Participant;
 import com.syncnapsis.data.model.SolarSystem;
+import com.syncnapsis.data.model.SolarSystemInfrastructure;
 import com.syncnapsis.data.model.SolarSystemPopulation;
 import com.syncnapsis.data.model.help.Rank;
 import com.syncnapsis.data.service.GalaxyManager;
@@ -843,6 +844,11 @@ public class MatchManagerImpl extends GenericNameManagerImpl<Match, Long> implem
 		return get(match.getId());
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see com.syncnapsis.data.service.MatchManager#createChannels(com.syncnapsis.data.model.Match)
+	 */
+	@Override
 	public void createChannels(Match match)
 	{
 		// if(m.getState() != EnumMatchState.finished && m.getState() != EnumMatchState.canceled)
@@ -856,19 +862,65 @@ public class MatchManagerImpl extends GenericNameManagerImpl<Match, Long> implem
 		updateChannels(match);
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see com.syncnapsis.data.service.MatchManager#updateChannels(com.syncnapsis.data.model.Match)
+	 */
+	@Override
 	public void updateChannels(Match match)
 	{
 		List<Rank> ranks = new LinkedList<Rank>();
 		for(Participant p: match.getParticipants())
 		{
 			if(p.isActivated())
+			{
+				p.getRank().setDisplayName(p.getEmpire().getPlayer().getUser().getUsername());
 				ranks.add(p.getRank());
+			}
 		}
 		
 		conquestManager.update(UniverseConquestConstants.CHANNEL_MATCH_RANKS.replace(UniverseConquestConstants.CHANNEL_ID_PLACEHOLDER, "" + match.getId()), ranks);
 		// TODO push infrastructures
 		// TODO push populations
 		conquestManager.update(UniverseConquestConstants.CHANNEL_MATCH_SYSTEMS.replace(UniverseConquestConstants.CHANNEL_ID_PLACEHOLDER, "" + match.getId()), null);
+	}
+	
+	/**
+	 * Create a list representation of the given {@link Match} that is reduced to the following simple format:<br>
+	 * <code><pre>
+	 * [
+	 *   [sys_id, inf_val, part1_id, part1_pop, ... , partn_id, partn_pop ],
+	 *   ... // for each system
+	 * ]
+	 * </pre></code>
+	 * @param match
+	 * @return
+	 */
+	public List<List<Long>> getPopulationList(Match match)
+	{
+		List<List<Long>> populationList = new LinkedList<List<Long>>();
+		List<Long> infEntry;
+		for(SolarSystemInfrastructure inf: match.getInfrastructures())
+		{
+			infEntry = new LinkedList<Long>();
+			infEntry.add(inf.getSolarSystem().getId());
+			infEntry.add(inf.getInfrastructure());
+			for(SolarSystemPopulation pop: inf.getPopulations())
+			{
+				if(pop.isActivated())
+				{
+					infEntry.add(pop.getParticipant().getId());
+					infEntry.add(pop.getPopulation());
+				}
+			}
+			populationList.add(infEntry);
+		}
+		return populationList;
+	}
+	
+	public List<?> getMovementsList(Match match)
+	{
+		return null;
 	}
 
 	/**
