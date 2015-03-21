@@ -18,32 +18,33 @@ import org.hibernate.Transaction;
 import org.springframework.orm.hibernate4.HibernateTransactionManager;
 import org.springframework.transaction.TransactionStatus;
 
-import com.syncnapsis.utils.HibernateUtil;
+import com.syncnapsis.utils.SessionFactoryUtil;
 
 public abstract class BaseDaoTestCase extends BaseSpringContextTestCase
 {
-	private Transaction transaction = null;
-	private HibernateTransactionManager transactionManager;
-	private TransactionStatus transactionStatus = null;
-	
+	private Transaction					transaction			= null;
+	private HibernateTransactionManager	transactionManager;
+	private TransactionStatus			transactionStatus	= null;
+	private SessionFactoryUtil			sessionFactoryUtil	= null;
+
 	@Override
 	protected void setUp() throws Exception
 	{
 		super.setUp();
 		logger.debug("Begin transaction...");
-		startTransaction();	
+		startTransaction();
 	}
-	
+
 	protected void startTransaction()
 	{
-		if(!HibernateUtil.isSessionBound())
-			HibernateUtil.openBoundSession();
+		if(!sessionFactoryUtil.isSessionBound())
+			sessionFactoryUtil.openBoundSession();
 		if(transactionManager != null)
 			transactionStatus = transactionManager.getTransaction(null);
 		else
-			transaction = HibernateUtil.currentSession().beginTransaction();
+			transaction = sessionFactoryUtil.currentSession().beginTransaction();
 	}
-	
+
 	protected void rollbackTransaction()
 	{
 		if(transactionManager != null)
@@ -56,7 +57,7 @@ public abstract class BaseDaoTestCase extends BaseSpringContextTestCase
 			transaction.rollback();
 			transaction = null;
 		}
-		HibernateUtil.closeBoundSession();
+		sessionFactoryUtil.closeBoundSession();
 	}
 
 	/**
@@ -64,9 +65,9 @@ public abstract class BaseDaoTestCase extends BaseSpringContextTestCase
 	 */
 	protected void flush()
 	{
-		HibernateUtil.currentSession().flush();
+		sessionFactoryUtil.currentSession().flush();
 	}
-	
+
 	@Override
 	protected void tearDown() throws Exception
 	{
