@@ -180,4 +180,8 @@ public class UniverseConquestConstants
 	 * infrastructures and populations).
 	 */
 	public static final String				CHANNEL_MATCH_SYSTEMS					= "match_" + CHANNEL_ID_PLACEHOLDER + "_systems";
+	/**
+	 * Channel name for notifying clients when the movements of a match were updated
+	 */
+	public static final String				CHANNEL_MATCH_MOVEMENTS = "match_" + CHANNEL_ID_PLACEHOLDER + "_movements";
 }

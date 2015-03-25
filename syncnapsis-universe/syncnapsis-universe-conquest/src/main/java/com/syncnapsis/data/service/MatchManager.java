@@ -267,6 +267,9 @@ public interface MatchManager extends GenericNameManager<Match, Long>
 	/**
 	 * Update all channels for the given match.
 	 * @param match - the match to update the channels for
+	 * @param updateRanks - send update for the participant's ranks?
+	 * @param updateSystems - send update for systems (including populations and infrastructures)?
+	 * @param updateMovements - send update for movements?
 	 */
-	public void updateChannels(Match match);
+	public void updateChannels(Match match, boolean updateRanks, boolean updateSystems, boolean updateMovements);
 }

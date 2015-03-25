@@ -243,8 +243,10 @@ public class MatchManagerImpl extends GenericNameManagerImpl<Match, Long> implem
 		Assert.isTrue(participantsMax == 0 || participantsMax >= participantsMin,
 				"participantsMax must either be 0 or be greater or equals to participantsMin");
 		Assert.isTrue(participantsMin > 0, "participantsMin must be greater than 0");
-		Assert.isTrue(speed >= UniverseConquestConstants.PARAM_MATCH_SPEED_MIN.asInt() && speed <= UniverseConquestConstants.PARAM_MATCH_SPEED_MAX.asInt(), "speed must be between "
-				+ UniverseConquestConstants.PARAM_MATCH_SPEED_MIN.asInt() + " and " + UniverseConquestConstants.PARAM_MATCH_SPEED_MAX.asInt() + " (inclusive)");
+		Assert.isTrue(
+				speed >= UniverseConquestConstants.PARAM_MATCH_SPEED_MIN.asInt() && speed <= UniverseConquestConstants.PARAM_MATCH_SPEED_MAX.asInt(),
+				"speed must be between " + UniverseConquestConstants.PARAM_MATCH_SPEED_MIN.asInt() + " and "
+						+ UniverseConquestConstants.PARAM_MATCH_SPEED_MAX.asInt() + " (inclusive)");
 		Assert.isTrue(startSystemCount > 0, "startSystemCount must be greater than 0");
 		Assert.isTrue(startPopulation > startSystemCount, "startPopulation must be greater than startSystemCount");
 
@@ -859,18 +861,43 @@ public class MatchManagerImpl extends GenericNameManagerImpl<Match, Long> implem
 		conquestManager.createChannel(
 				UniverseConquestConstants.CHANNEL_MATCH_SYSTEMS.replace(UniverseConquestConstants.CHANNEL_ID_PLACEHOLDER, "" + match.getId()), null);
 		// }
-		updateChannels(match);
+		updateChannels(match, true, true, true);
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.syncnapsis.data.service.MatchManager#updateChannels(com.syncnapsis.data.model.Match)
+	 * @see com.syncnapsis.data.service.MatchManager#updateChannels(com.syncnapsis.data.model.Match,
+	 * boolean, boolean, boolean)
 	 */
 	@Override
-	public void updateChannels(Match match)
+	public void updateChannels(Match match, boolean updateRanks, boolean updateSystems, boolean updateMovements)
+	{
+		Date now = new Date(securityManager.getTimeProvider().get());
+
+		if(updateRanks)
+			conquestManager.update(
+					UniverseConquestConstants.CHANNEL_MATCH_RANKS.replace(UniverseConquestConstants.CHANNEL_ID_PLACEHOLDER, "" + match.getId()),
+					getRankList(match));
+		if(updateSystems)
+			conquestManager.update(
+					UniverseConquestConstants.CHANNEL_MATCH_SYSTEMS.replace(UniverseConquestConstants.CHANNEL_ID_PLACEHOLDER, "" + match.getId()),
+					getPopulationList(match, now));
+		if(updateMovements)
+			conquestManager.update(
+					UniverseConquestConstants.CHANNEL_MATCH_MOVEMENTS.replace(UniverseConquestConstants.CHANNEL_ID_PLACEHOLDER, "" + match.getId()),
+					getMovementsList(match, now));
+	}
+
+	/**
+	 * Get a list of the ranks of all (active) {@link Participant}s.
+	 * 
+	 * @param match - the match to get the list for
+	 * @return the rank list
+	 */
+	public List<Rank> getRankList(Match match)
 	{
 		List<Rank> ranks = new LinkedList<Rank>();
-		for(Participant p: match.getParticipants())
+		for(Participant p : match.getParticipants())
 		{
 			if(p.isActivated())
 			{
@@ -878,49 +905,80 @@ public class MatchManagerImpl extends GenericNameManagerImpl<Match, Long> implem
 				ranks.add(p.getRank());
 			}
 		}
-		
-		conquestManager.update(UniverseConquestConstants.CHANNEL_MATCH_RANKS.replace(UniverseConquestConstants.CHANNEL_ID_PLACEHOLDER, "" + match.getId()), ranks);
-		// TODO push infrastructures
-		// TODO push populations
-		conquestManager.update(UniverseConquestConstants.CHANNEL_MATCH_SYSTEMS.replace(UniverseConquestConstants.CHANNEL_ID_PLACEHOLDER, "" + match.getId()), null);
+		return ranks;
 	}
-	
+
 	/**
-	 * Create a list representation of the given {@link Match} that is reduced to the following simple format:<br>
+	 * Create a list representation of the given {@link Match} that is reduced to the following
+	 * simple format:<br>
 	 * <code><pre>
 	 * [
 	 *   [sys_id, inf_val, part1_id, part1_pop, ... , partn_id, partn_pop ],
 	 *   ... // for each system
 	 * ]
 	 * </pre></code>
-	 * @param match
-	 * @return
+	 * 
+ 	 * @param match - the match to get the list for
+ 	 * @param time - TODO
+	 * @return the population list
 	 */
-	public List<List<Long>> getPopulationList(Match match)
+	public List<List<Long>> getPopulationList(Match match, Date time)
 	{
 		List<List<Long>> populationList = new LinkedList<List<Long>>();
 		List<Long> infEntry;
-		for(SolarSystemInfrastructure inf: match.getInfrastructures())
+		for(SolarSystemInfrastructure inf : match.getInfrastructures())
 		{
 			infEntry = new LinkedList<Long>();
 			infEntry.add(inf.getSolarSystem().getId());
 			infEntry.add(inf.getInfrastructure());
-			for(SolarSystemPopulation pop: inf.getPopulations())
+			for(SolarSystemPopulation pop : inf.getPopulations())
 			{
-				if(pop.isActivated())
+				if(pop.isPresent(time))
 				{
 					infEntry.add(pop.getParticipant().getId());
 					infEntry.add(pop.getPopulation());
 				}
 			}
+			// if(infEntry.size() > 0)
+			// {
+			// TODO only add if there are populations?
 			populationList.add(infEntry);
+			// }
 		}
 		return populationList;
 	}
-	
-	public List<?> getMovementsList(Match match)
+
+	/**
+	 * 
+	 * @param match
+	 * @param time
+	 * @return
+	 */
+	public List<List<Long>> getMovementsList(Match match, Date time)
 	{
-		return null;
+		List<List<Long>> movementsList = new LinkedList<List<Long>>();
+		List<Long> movEntry;
+		for(SolarSystemInfrastructure inf : match.getInfrastructures())
+		{
+			for(SolarSystemPopulation pop : inf.getPopulations())
+			{
+				if(pop.isActivated() && pop.getColonizationDate().after(time))
+				{
+					movEntry = new LinkedList<Long>();
+					movEntry.add(inf.getSolarSystem().getId());
+					movEntry.add(pop.getOrigin().getId());
+					movEntry.add(pop.getParticipant().getId());
+					// movEntry.add(pop.getPopulation());
+					// movEntry.add(pop.getStoredInfrastructure());
+					long totalTravelTime = pop.getColonizationDate().getTime() - pop.getOriginationDate().getTime();
+					long remainingTravelTime = (long) ((1 - pop.getTravelProgress()) * totalTravelTime);
+					movEntry.add(totalTravelTime);
+					movEntry.add(remainingTravelTime);
+					movementsList.add(movEntry);
+				}
+			}
+		}
+		return movementsList;
 	}
 
 	/**
