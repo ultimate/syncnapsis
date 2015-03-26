@@ -66,7 +66,7 @@ import com.syncnapsis.utils.data.ExtendedRandom;
 import com.syncnapsis.utils.serialization.BaseMapper;
 
 @TestCoversClasses({ MatchManager.class, MatchManagerImpl.class })
-@TestExcludesMethods({ "isAccessible", "*etSecurityManager", "afterPropertiesSet", "getMailer", "*etCalculator" })
+@TestExcludesMethods({ "isAccessible", "*etSecurityManager", "getMailer", "*etCalculator" })
 public class MatchManagerImplTest extends GenericNameManagerImplTestCase<Match, Long, MatchManager, MatchDao>
 {
 	private GalaxyManager						galaxyManager;
@@ -96,6 +96,43 @@ public class MatchManagerImplTest extends GenericNameManagerImplTestCase<Match, 
 		securityManager.setTimeProvider(new MockTimeProvider(referenceTime));
 
 		((MatchManagerImpl) mockManager).setSecurityManager(securityManager);
+	}
+
+	public void testAfterPropertiesSet() throws Exception
+	{
+		final List<Match> matches = Arrays.asList(new Match[] { new Match(), new Match(), new Match() });
+		final List<Match> channelsCreated = new ArrayList<Match>();
+
+		final ConquestManager mockConquestManager = mockContext.mock(ConquestManager.class);
+		MatchManagerImpl mockManager = new MatchManagerImpl(mockDao, galaxyManager, participantManager, solarSystemPopulationManager,
+				solarSystemInfrastructureManager, mockConquestManager) {
+			public void createChannels(Match match)
+			{
+				channelsCreated.add(match);
+			}
+		};
+		mockManager.setSecurityManager(securityManager);
+		mockManager.setCalculator(calculator);
+
+		// mockDao must return a match list
+		mockContext.checking(new Expectations() {
+			{
+				oneOf(mockDao).getAll();
+				will(returnValue(matches));
+			}
+		});
+		// expecting "match created" channels to be created
+		mockContext.checking(new Expectations() {
+			{
+				oneOf(mockConquestManager).createChannel(UniverseConquestConstants.CHANNEL_MATCH_CREATED, null);
+				will(returnValue(true));
+			}
+		});
+		
+		mockManager.afterPropertiesSet();
+		mockContext.assertIsSatisfied();
+		
+		assertEquals(channelsCreated, matches);
 	}
 
 	public void testGetByCreator() throws Exception
@@ -181,12 +218,15 @@ public class MatchManagerImplTest extends GenericNameManagerImplTestCase<Match, 
 		securityManager.getSessionProvider().set(new MockHttpSession());
 		securityManager.getPlayerProvider().set(creator);
 
+		final String chCreate = UniverseConquestConstants.CHANNEL_MATCH_CREATED;
+
 		Match result;
 
+		final ConquestManager mockConquestManager = mockContext.mock(ConquestManager.class);
 		final SolarSystemInfrastructureManager mockInfrastructureManager = mockContext.mock(SolarSystemInfrastructureManager.class);
 		final ParticipantManager mockParticipantManager = mockContext.mock(ParticipantManager.class);
 		MatchManagerImpl mockManager = new MatchManagerImpl(mockDao, galaxyManager, mockParticipantManager, solarSystemPopulationManager,
-				mockInfrastructureManager, conquestManager);
+				mockInfrastructureManager, mockConquestManager);
 		mockManager.setSecurityManager(((MatchManagerImpl) this.mockManager).getSecurityManager());
 
 		// expectatins are a bit more complicated here...
@@ -272,13 +312,17 @@ public class MatchManagerImplTest extends GenericNameManagerImplTestCase<Match, 
 				will(returnValue(playerIds.length));
 			}
 		});
+		// check that the "create match" channel has been fired
+		mockContext.checking(new Expectations() {
+			{
+				oneOf(mockConquestManager).update(chCreate, finalMatch);
+			}
+		});
 		result = mockManager.createMatch(title, galaxyId, speed, seed, startCondition, startDate, startSystemSelectionEnabled, startSystemCount,
 				startPopulation, victoryCondition, victoryParameter, participantsMax, participantsMin, playerIds, plannedJoinType, startedJoinType);
 		mockContext.assertIsSatisfied();
 		assertNotNull(result);
 		assertEquals(finalMatch, result);
-
-		// TODO check if create channel was fired
 	}
 
 	public void testStartMatch() throws Exception
