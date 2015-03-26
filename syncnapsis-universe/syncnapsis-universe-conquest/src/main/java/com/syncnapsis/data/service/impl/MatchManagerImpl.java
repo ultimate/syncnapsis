@@ -323,6 +323,8 @@ public class MatchManagerImpl extends GenericNameManagerImpl<Match, Long> implem
 			logger.debug("matchStartNotPossibleReasons: " + getMatchStartNotPossibleReasons(match));
 			logger.debug("match.startPopulation: " + match.getStartPopulation());
 		}
+		
+		conquestManager.update(UniverseConquestConstants.CHANNEL_MATCH_CREATED, match);
 
 		return startMatchIfNecessary(match);
 	}
