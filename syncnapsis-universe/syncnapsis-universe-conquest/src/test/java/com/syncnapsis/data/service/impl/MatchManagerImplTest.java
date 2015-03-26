@@ -1478,7 +1478,7 @@ public class MatchManagerImplTest extends GenericNameManagerImplTestCase<Match, 
 		}
 	}
 
-	@TestCoversMethods({ "getSytemList", "getMovementList" })
+	@TestCoversMethods({ "getSystemList", "getMovementList" })
 	public void testGetLists() throws Exception
 	{
 		/*
