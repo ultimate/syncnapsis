@@ -881,19 +881,18 @@ public class MatchManagerImpl extends GenericNameManagerImpl<Match, Long> implem
 		if(updateSystems)
 			conquestManager.update(
 					UniverseConquestConstants.CHANNEL_MATCH_SYSTEMS.replace(UniverseConquestConstants.CHANNEL_ID_PLACEHOLDER, "" + match.getId()),
-					getPopulationList(match, now));
+					getSystemList(match, now));
 		if(updateMovements)
 			conquestManager.update(
 					UniverseConquestConstants.CHANNEL_MATCH_MOVEMENTS.replace(UniverseConquestConstants.CHANNEL_ID_PLACEHOLDER, "" + match.getId()),
-					getMovementsList(match, now));
+					getMovementList(match, now));
 	}
 
-	/**
-	 * Get a list of the ranks of all (active) {@link Participant}s.
-	 * 
-	 * @param match - the match to get the list for
-	 * @return the rank list
+	/*
+	 * (non-Javadoc)
+	 * @see com.syncnapsis.data.service.MatchManager#getRankList(com.syncnapsis.data.model.Match)
 	 */
+	@Override
 	public List<Rank> getRankList(Match match)
 	{
 		List<Rank> ranks = new LinkedList<Rank>();
@@ -908,21 +907,13 @@ public class MatchManagerImpl extends GenericNameManagerImpl<Match, Long> implem
 		return ranks;
 	}
 
-	/**
-	 * Create a list representation of the given {@link Match} that is reduced to the following
-	 * simple format:<br>
-	 * <code><pre>
-	 * [
-	 *   [sys_id, inf_val, part1_id, part1_pop, ... , partn_id, partn_pop ],
-	 *   ... // for each system
-	 * ]
-	 * </pre></code>
-	 * 
- 	 * @param match - the match to get the list for
- 	 * @param time - TODO
-	 * @return the population list
+	/*
+	 * (non-Javadoc)
+	 * @see com.syncnapsis.data.service.MatchManager#getSystemList(com.syncnapsis.data.model.Match,
+	 * java.util.Date)
 	 */
-	public List<List<Long>> getPopulationList(Match match, Date time)
+	@Override
+	public List<List<Long>> getSystemList(Match match, Date time)
 	{
 		List<List<Long>> populationList = new LinkedList<List<Long>>();
 		List<Long> infEntry;
@@ -948,13 +939,14 @@ public class MatchManagerImpl extends GenericNameManagerImpl<Match, Long> implem
 		return populationList;
 	}
 
-	/**
-	 * 
-	 * @param match
-	 * @param time
-	 * @return
+	/*
+	 * (non-Javadoc)
+	 * @see
+	 * com.syncnapsis.data.service.MatchManager#getMovementList(com.syncnapsis.data.model.Match,
+	 * java.util.Date)
 	 */
-	public List<List<Long>> getMovementsList(Match match, Date time)
+	@Override
+	public List<List<Long>> getMovementList(Match match, Date time)
 	{
 		List<List<Long>> movementsList = new LinkedList<List<Long>>();
 		List<Long> movEntry;

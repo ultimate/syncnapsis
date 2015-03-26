@@ -19,6 +19,7 @@ import java.util.List;
 
 import com.syncnapsis.data.model.Match;
 import com.syncnapsis.data.model.Participant;
+import com.syncnapsis.data.model.help.Rank;
 import com.syncnapsis.enums.EnumJoinType;
 import com.syncnapsis.enums.EnumStartCondition;
 import com.syncnapsis.enums.EnumVictoryCondition;
@@ -99,7 +100,7 @@ public interface MatchManager extends GenericNameManager<Match, Long>
 			boolean startSystemSelectionEnabled, int startSystemCount, long startPopulation, EnumVictoryCondition victoryCondition,
 			int victoryParameter, int participantsMax, int participantsMin, Long[] empireIds, EnumJoinType plannedJoinType,
 			EnumJoinType startedJoinType);
-	
+
 	/**
 	 * Create a new match and start it if the startCondition demands it.<br>
 	 * 
@@ -259,17 +260,52 @@ public interface MatchManager extends GenericNameManager<Match, Long>
 
 	/**
 	 * Create all necessary channels for the given match.<br>
-	 * Channels might only be created if the match is in a state that requires those channels. Otherwise channels not needed may be omitted.
+	 * Channels might only be created if the match is in a state that requires those channels.
+	 * Otherwise channels not needed may be omitted.
+	 * 
 	 * @param match - the match to create the channels for
 	 */
 	public void createChannels(Match match);
-	
+
 	/**
 	 * Update all channels for the given match.
+	 * 
 	 * @param match - the match to update the channels for
 	 * @param updateRanks - send update for the participant's ranks?
 	 * @param updateSystems - send update for systems (including populations and infrastructures)?
 	 * @param updateMovements - send update for movements?
 	 */
 	public void updateChannels(Match match, boolean updateRanks, boolean updateSystems, boolean updateMovements);
+
+	/**
+	 * Get a list of the ranks of all (active) {@link Participant}s.
+	 * 
+	 * @param match - the match to get the list for
+	 * @return the rank list
+	 */
+	public List<Rank> getRankList(Match match);
+
+	/**
+	 * Create a list representation of the given {@link Match} that is reduced to the following
+	 * simple format:<br>
+	 * <code><pre>
+	 * [
+	 *   [sys_id, inf_val, part1_id, part1_pop, ... , partn_id, partn_pop ],
+	 *   ... // for each system
+	 * ]
+	 * </pre></code>
+	 * 
+	 * @param match - the match to get the list for
+	 * @param time - the time for which to create the list
+	 * @return the list of systems (including infrastructure and populations)
+	 */
+	public List<List<Long>> getSystemList(Match match, Date time);
+
+	/**
+	 * 
+	 * @param match - the match to get the list for
+	 * @param time - the time for which to create the list
+	 * @return the list of movements
+	 */
+	public List<List<Long>> getMovementList(Match match, Date time);
 }

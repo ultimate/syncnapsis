@@ -42,6 +42,7 @@ import com.syncnapsis.data.model.SolarSystemInfrastructure;
 import com.syncnapsis.data.model.SolarSystemPopulation;
 import com.syncnapsis.data.model.User;
 import com.syncnapsis.data.model.UserRole;
+import com.syncnapsis.data.model.help.Rank;
 import com.syncnapsis.data.service.GalaxyManager;
 import com.syncnapsis.data.service.MatchManager;
 import com.syncnapsis.data.service.ParticipantManager;
@@ -1268,5 +1269,54 @@ public class MatchManagerImplTest extends GenericNameManagerImplTestCase<Match, 
 			p.setDestructionDate(new Date(referenceTime));
 
 		return p;
+	}
+
+	public void testGetRankList() throws Exception
+	{
+		Match match = new Match();
+		match.setParticipants(new ArrayList<Participant>());
+		
+		int participantCount = 5;
+
+		Participant p;
+		for(int i = 0; i < participantCount; i++)
+		{
+			p = new Participant();
+			p.setRank(new Rank());
+			p.setEmpire(new Empire());
+			p.getEmpire().setPlayer(new Player());
+			p.getEmpire().getPlayer().setUser(new User());
+			p.getEmpire().getPlayer().getUser().setUsername("user" + i);
+			
+			// activate even entries only
+			p.setActivated(i % 2 == 0);
+			
+			match.getParticipants().add(p);
+		}
+		
+		List<Rank> ranks = mockManager.getRankList(match);
+		
+		assertNotNull(ranks);
+		assertEquals((participantCount +1) / 2, ranks.size());
+		
+		// check specific ranks
+		// + check if the display name has been set
+		
+		for(int i = 0; i < ranks.size(); i++)
+		{
+			assertSame(ranks.get(i), match.getParticipants().get(i*2).getRank());
+			assertNotNull(ranks.get(i).getDisplayName());
+			assertEquals("user" + (i*2), ranks.get(i).getDisplayName());
+		}
+	}
+
+	public void testGetSystemList() throws Exception
+	{
+		fail("unimplemented");
+	}
+
+	public void testGetMovementList() throws Exception
+	{
+		fail("unimplemented");
 	}
 }
