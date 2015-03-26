@@ -277,6 +277,8 @@ public class MatchManagerImplTest extends GenericNameManagerImplTestCase<Match, 
 		mockContext.assertIsSatisfied();
 		assertNotNull(result);
 		assertEquals(finalMatch, result);
+
+		// TODO check if create channel was fired
 	}
 
 	public void testStartMatch() throws Exception
@@ -1272,6 +1274,171 @@ public class MatchManagerImplTest extends GenericNameManagerImplTestCase<Match, 
 		return p;
 	}
 
+	public void testCreateChannels() throws Exception
+	{
+		final long matchId = 5678L;
+		final Match match = new Match();
+		match.setId(matchId);
+
+		final List<Rank> rankList = new ArrayList<Rank>();
+		final List<List<Long>> systemList = new ArrayList<List<Long>>();
+		final List<List<Long>> movementList = new ArrayList<List<Long>>();
+
+		final ConquestManager mockConquestManager = mockContext.mock(ConquestManager.class);
+		MatchManagerImpl matchManager = new MatchManagerImpl(mockDao, galaxyManager, participantManager, solarSystemPopulationManager,
+				solarSystemInfrastructureManager, mockConquestManager) {
+			public List<Rank> getRankList(Match match)
+			{
+				return rankList;
+			}
+
+			public List<List<Long>> getSystemList(Match match, Date time)
+			{
+				assertEquals(referenceTime, time.getTime());
+				return systemList;
+			}
+
+			public List<List<Long>> getMovementList(Match match, Date time)
+			{
+				return movementList;
+			}
+		};
+
+		BaseGameManager securityManager = new BaseGameManager(this.securityManager);
+		securityManager.setTimeProvider(new MockTimeProvider(referenceTime));
+		((MatchManagerImpl) matchManager).setSecurityManager(securityManager);
+
+		final String chRanks = UniverseConquestConstants.CHANNEL_MATCH_RANKS.replace(UniverseConquestConstants.CHANNEL_ID_PLACEHOLDER, "" + matchId);
+		final String chSystems = UniverseConquestConstants.CHANNEL_MATCH_SYSTEMS.replace(UniverseConquestConstants.CHANNEL_ID_PLACEHOLDER, ""
+				+ matchId);
+		final String chMovements = UniverseConquestConstants.CHANNEL_MATCH_MOVEMENTS.replace(UniverseConquestConstants.CHANNEL_ID_PLACEHOLDER, ""
+				+ matchId);
+
+		mockContext.checking(new Expectations() {
+			{
+				oneOf(mockConquestManager).createChannel(with(equal(chRanks)), with((Object) null));
+				will(returnValue(true));
+			}
+		});
+		mockContext.checking(new Expectations() {
+			{
+				oneOf(mockConquestManager).createChannel(with(equal(chSystems)), with((Object) null));
+				will(returnValue(true));
+			}
+		});
+		mockContext.checking(new Expectations() {
+			{
+				oneOf(mockConquestManager).createChannel(with(equal(chMovements)), with((Object) null));
+				will(returnValue(true));
+			}
+		});
+		mockContext.checking(new Expectations() {
+			{
+				oneOf(mockConquestManager).update(with(equal(chRanks)), with(same(rankList)));
+			}
+		});
+		mockContext.checking(new Expectations() {
+			{
+				oneOf(mockConquestManager).update(with(equal(chSystems)), with(same(systemList)));
+			}
+		});
+		mockContext.checking(new Expectations() {
+			{
+				oneOf(mockConquestManager).update(with(equal(chMovements)), with(same(movementList)));
+			}
+		});
+
+		matchManager.createChannels(match);
+		mockContext.assertIsSatisfied();
+	}
+
+	public void testUpdateChannels() throws Exception
+	{
+		final long matchId = 5678L;
+		final Match match = new Match();
+		match.setId(matchId);
+
+		final List<Rank> rankList = new ArrayList<Rank>();
+		final List<List<Long>> systemList = new ArrayList<List<Long>>();
+		final List<List<Long>> movementList = new ArrayList<List<Long>>();
+
+		final ConquestManager mockConquestManager = mockContext.mock(ConquestManager.class);
+		MatchManagerImpl matchManager = new MatchManagerImpl(mockDao, galaxyManager, participantManager, solarSystemPopulationManager,
+				solarSystemInfrastructureManager, mockConquestManager) {
+			public List<Rank> getRankList(Match match)
+			{
+				return rankList;
+			}
+
+			public List<List<Long>> getSystemList(Match match, Date time)
+			{
+				assertEquals(referenceTime, time.getTime());
+				return systemList;
+			}
+
+			public List<List<Long>> getMovementList(Match match, Date time)
+			{
+				return movementList;
+			}
+		};
+
+		BaseGameManager securityManager = new BaseGameManager(this.securityManager);
+		securityManager.setTimeProvider(new MockTimeProvider(referenceTime));
+		((MatchManagerImpl) matchManager).setSecurityManager(securityManager);
+
+		final String chRanks = UniverseConquestConstants.CHANNEL_MATCH_RANKS.replace(UniverseConquestConstants.CHANNEL_ID_PLACEHOLDER, "" + matchId);
+		final String chSystems = UniverseConquestConstants.CHANNEL_MATCH_SYSTEMS.replace(UniverseConquestConstants.CHANNEL_ID_PLACEHOLDER, ""
+				+ matchId);
+		final String chMovements = UniverseConquestConstants.CHANNEL_MATCH_MOVEMENTS.replace(UniverseConquestConstants.CHANNEL_ID_PLACEHOLDER, ""
+				+ matchId);
+
+		mockContext.checking(new Expectations() {
+			{
+				oneOf(mockConquestManager).update(with(equal(chRanks)), with(same(rankList)));
+			}
+		});
+
+		matchManager.updateChannels(match, true, false, false);
+		mockContext.assertIsSatisfied();
+
+		mockContext.checking(new Expectations() {
+			{
+				oneOf(mockConquestManager).update(with(equal(chSystems)), with(same(systemList)));
+			}
+		});
+
+		matchManager.updateChannels(match, false, true, false);
+		mockContext.assertIsSatisfied();
+
+		mockContext.checking(new Expectations() {
+			{
+				oneOf(mockConquestManager).update(with(equal(chMovements)), with(same(movementList)));
+			}
+		});
+
+		matchManager.updateChannels(match, false, false, true);
+		mockContext.assertIsSatisfied();
+
+		mockContext.checking(new Expectations() {
+			{
+				oneOf(mockConquestManager).update(with(equal(chRanks)), with(same(rankList)));
+			}
+		});
+		mockContext.checking(new Expectations() {
+			{
+				oneOf(mockConquestManager).update(with(equal(chSystems)), with(same(systemList)));
+			}
+		});
+		mockContext.checking(new Expectations() {
+			{
+				oneOf(mockConquestManager).update(with(equal(chMovements)), with(same(movementList)));
+			}
+		});
+
+		matchManager.updateChannels(match, true, true, true);
+		mockContext.assertIsSatisfied();
+	}
+
 	public void testGetRankList() throws Exception
 	{
 		Match match = new Match();
@@ -1315,7 +1482,7 @@ public class MatchManagerImplTest extends GenericNameManagerImplTestCase<Match, 
 	public void testGetLists() throws Exception
 	{
 		/*
-		 * Create a match usable for the test above
+		 * Create a match
 		 * The match will contain 5 systems / infrastructures of which
 		 * - 2 are unpopulated
 		 * - 2 are populated by a single participant
@@ -1373,7 +1540,7 @@ public class MatchManagerImplTest extends GenericNameManagerImplTestCase<Match, 
 		// now create both lists and check their content
 		List<List<Long>> systemList = mockManager.getSystemList(match, new Date(referenceTime));
 		List<List<Long>> movementList = mockManager.getMovementList(match, new Date(referenceTime));
-		
+
 		System.out.println("LIST RESULTS:");
 		System.out.println(systemList);
 		System.out.println(movementList);
@@ -1382,20 +1549,34 @@ public class MatchManagerImplTest extends GenericNameManagerImplTestCase<Match, 
 		assertNotNull(systemList);
 		assertEquals(5, systemList.size());
 		// check entries
-		assertEquals(Arrays.asList(new Long[] {infs.get(0).getSolarSystem().getId(), infs.get(0).getInfrastructure()}), systemList.get(0));
-		assertEquals(Arrays.asList(new Long[] {infs.get(1).getSolarSystem().getId(), infs.get(1).getInfrastructure(), p10.getParticipant().getId(), p10.getPopulation()}), systemList.get(1));
-		assertEquals(Arrays.asList(new Long[] {infs.get(2).getSolarSystem().getId(), infs.get(2).getInfrastructure(), p21.getParticipant().getId(), p21.getPopulation()}), systemList.get(2));
-		assertEquals(Arrays.asList(new Long[] {infs.get(3).getSolarSystem().getId(), infs.get(3).getInfrastructure(), p31.getParticipant().getId(), p31.getPopulation(), p30.getParticipant().getId(), p30.getPopulation()}), systemList.get(3));
-		assertEquals(Arrays.asList(new Long[] {infs.get(4).getSolarSystem().getId(), infs.get(4).getInfrastructure()}), systemList.get(4));
-		
+		assertEquals(Arrays.asList(new Long[] { infs.get(0).getSolarSystem().getId(), infs.get(0).getInfrastructure() }), systemList.get(0));
+		assertEquals(
+				Arrays.asList(new Long[] { infs.get(1).getSolarSystem().getId(), infs.get(1).getInfrastructure(), p10.getParticipant().getId(),
+						p10.getPopulation() }), systemList.get(1));
+		assertEquals(
+				Arrays.asList(new Long[] { infs.get(2).getSolarSystem().getId(), infs.get(2).getInfrastructure(), p21.getParticipant().getId(),
+						p21.getPopulation() }), systemList.get(2));
+		assertEquals(
+				Arrays.asList(new Long[] { infs.get(3).getSolarSystem().getId(), infs.get(3).getInfrastructure(), p31.getParticipant().getId(),
+						p31.getPopulation(), p30.getParticipant().getId(), p30.getPopulation() }), systemList.get(3));
+		assertEquals(Arrays.asList(new Long[] { infs.get(4).getSolarSystem().getId(), infs.get(4).getInfrastructure() }), systemList.get(4));
+
 		// check movement list
 		assertNotNull(movementList);
 		assertEquals(4, movementList.size());
 		// check entries
-		assertEquals(Arrays.asList(new Long[] {infs.get(0).getSolarSystem().getId(), infs.get(1).getSolarSystem().getId(), m10.getParticipant().getId(), 1000L, 100L}), movementList.get(0));
-		assertEquals(Arrays.asList(new Long[] {infs.get(3).getSolarSystem().getId(), infs.get(1).getSolarSystem().getId(), m13.getParticipant().getId(), 1000L, 200L}), movementList.get(1));
-		assertEquals(Arrays.asList(new Long[] {infs.get(3).getSolarSystem().getId(), infs.get(2).getSolarSystem().getId(), m23.getParticipant().getId(), 1000L, 400L}), movementList.get(2));
-		assertEquals(Arrays.asList(new Long[] {infs.get(4).getSolarSystem().getId(), infs.get(2).getSolarSystem().getId(), m24.getParticipant().getId(), 1000L, 300L}), movementList.get(3));
+		assertEquals(
+				Arrays.asList(new Long[] { infs.get(0).getSolarSystem().getId(), infs.get(1).getSolarSystem().getId(), m10.getParticipant().getId(),
+						1000L, 100L }), movementList.get(0));
+		assertEquals(
+				Arrays.asList(new Long[] { infs.get(3).getSolarSystem().getId(), infs.get(1).getSolarSystem().getId(), m13.getParticipant().getId(),
+						1000L, 200L }), movementList.get(1));
+		assertEquals(
+				Arrays.asList(new Long[] { infs.get(3).getSolarSystem().getId(), infs.get(2).getSolarSystem().getId(), m23.getParticipant().getId(),
+						1000L, 400L }), movementList.get(2));
+		assertEquals(
+				Arrays.asList(new Long[] { infs.get(4).getSolarSystem().getId(), infs.get(2).getSolarSystem().getId(), m24.getParticipant().getId(),
+						1000L, 300L }), movementList.get(3));
 	}
 
 	private SolarSystemPopulation createPopulation(Participant part, SolarSystemInfrastructure inf, SolarSystemPopulation origin, Date colDate)

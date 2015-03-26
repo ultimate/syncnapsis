@@ -860,6 +860,8 @@ public class MatchManagerImpl extends GenericNameManagerImpl<Match, Long> implem
 				UniverseConquestConstants.CHANNEL_MATCH_RANKS.replace(UniverseConquestConstants.CHANNEL_ID_PLACEHOLDER, "" + match.getId()), null);
 		conquestManager.createChannel(
 				UniverseConquestConstants.CHANNEL_MATCH_SYSTEMS.replace(UniverseConquestConstants.CHANNEL_ID_PLACEHOLDER, "" + match.getId()), null);
+		conquestManager.createChannel(
+				UniverseConquestConstants.CHANNEL_MATCH_MOVEMENTS.replace(UniverseConquestConstants.CHANNEL_ID_PLACEHOLDER, "" + match.getId()), null);
 		// }
 		updateChannels(match, true, true, true);
 	}
