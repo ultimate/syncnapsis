@@ -59,6 +59,7 @@ import com.syncnapsis.security.BaseGameManager;
 import com.syncnapsis.security.accesscontrol.MatchAccessController;
 import com.syncnapsis.tests.GenericNameManagerImplTestCase;
 import com.syncnapsis.tests.annotations.TestCoversClasses;
+import com.syncnapsis.tests.annotations.TestCoversMethods;
 import com.syncnapsis.tests.annotations.TestExcludesMethods;
 import com.syncnapsis.universe.Calculator;
 import com.syncnapsis.utils.data.ExtendedRandom;
@@ -1275,7 +1276,7 @@ public class MatchManagerImplTest extends GenericNameManagerImplTestCase<Match, 
 	{
 		Match match = new Match();
 		match.setParticipants(new ArrayList<Participant>());
-		
+
 		int participantCount = 5;
 
 		Participant p;
@@ -1287,36 +1288,129 @@ public class MatchManagerImplTest extends GenericNameManagerImplTestCase<Match, 
 			p.getEmpire().setPlayer(new Player());
 			p.getEmpire().getPlayer().setUser(new User());
 			p.getEmpire().getPlayer().getUser().setUsername("user" + i);
-			
+
 			// activate even entries only
 			p.setActivated(i % 2 == 0);
-			
+
 			match.getParticipants().add(p);
 		}
-		
+
 		List<Rank> ranks = mockManager.getRankList(match);
-		
+
 		assertNotNull(ranks);
-		assertEquals((participantCount +1) / 2, ranks.size());
-		
+		assertEquals((participantCount + 1) / 2, ranks.size());
+
 		// check specific ranks
 		// + check if the display name has been set
-		
+
 		for(int i = 0; i < ranks.size(); i++)
 		{
-			assertSame(ranks.get(i), match.getParticipants().get(i*2).getRank());
+			assertSame(ranks.get(i), match.getParticipants().get(i * 2).getRank());
 			assertNotNull(ranks.get(i).getDisplayName());
-			assertEquals("user" + (i*2), ranks.get(i).getDisplayName());
+			assertEquals("user" + (i * 2), ranks.get(i).getDisplayName());
 		}
 	}
 
-	public void testGetSystemList() throws Exception
+	@TestCoversMethods({ "getSytemList", "getMovementList" })
+	public void testGetLists() throws Exception
 	{
-		fail("unimplemented");
+		/*
+		 * Create a match usable for the test above
+		 * The match will contain 5 systems / infrastructures of which
+		 * - 2 are unpopulated
+		 * - 2 are populated by a single participant
+		 * - 1 is populated by two participants
+		 * plus some movements from each single-participant-systems to
+		 * - the shared system
+		 * - 1 unpopulated system
+		 */
+
+		Match match = new Match();
+
+		// 5 systems / infs
+		List<SolarSystemInfrastructure> infs = new ArrayList<SolarSystemInfrastructure>();
+		for(int i = 0; i < 5; i++)
+		{
+			SolarSystemInfrastructure inf = new SolarSystemInfrastructure();
+			inf.setId(1000L + i);
+			inf.setInfrastructure(9999L * i);
+			inf.setSolarSystem(new SolarSystem());
+			inf.getSolarSystem().setId(2000L + i);
+			inf.setPopulations(new ArrayList<SolarSystemPopulation>());
+			infs.add(inf);
+		}
+		match.setInfrastructures(infs);
+
+		// 2 parts
+		List<Participant> parts = new ArrayList<Participant>();
+		for(int i = 0; i < 2; i++)
+		{
+			Participant p = new Participant();
+			p.setId(3000L + i);
+			p.setPopulations(new ArrayList<SolarSystemPopulation>());
+			parts.add(p);
+		}
+
+		// 3 systems are populated
+		// sys 1 -> part 0
+		SolarSystemPopulation p10 = createPopulation(parts.get(0), infs.get(1), null, new Date(referenceTime - 1000));
+		// sys 2 -> part 1
+		SolarSystemPopulation p21 = createPopulation(parts.get(1), infs.get(2), null, new Date(referenceTime - 1000));
+		// sys 3 -> part 0 & part 1 (part 1 first)
+		SolarSystemPopulation p30 = createPopulation(parts.get(0), infs.get(3), p10, new Date(referenceTime - 400));
+		SolarSystemPopulation p31 = createPopulation(parts.get(1), infs.get(3), p21, new Date(referenceTime - 500));
+
+		// some movements
+		// part 0 : sys 1 -> sys 0
+		SolarSystemPopulation m10 = createPopulation(parts.get(0), infs.get(0), p10, new Date(referenceTime + 100));
+		// part 0 : sys 1 -> sys 3
+		SolarSystemPopulation m13 = createPopulation(parts.get(0), infs.get(3), p10, new Date(referenceTime + 200));
+		// part 1 : sys 2 -> sys 4
+		SolarSystemPopulation m24 = createPopulation(parts.get(1), infs.get(4), p21, new Date(referenceTime + 300));
+		// part 1 : sys 2 -> sys 3
+		SolarSystemPopulation m23 = createPopulation(parts.get(1), infs.get(3), p21, new Date(referenceTime + 400));
+
+		// now create both lists and check their content
+		List<List<Long>> systemList = mockManager.getSystemList(match, new Date(referenceTime));
+		List<List<Long>> movementList = mockManager.getMovementList(match, new Date(referenceTime));
+		
+		System.out.println("LIST RESULTS:");
+		System.out.println(systemList);
+		System.out.println(movementList);
+
+		// check system list
+		assertNotNull(systemList);
+		assertEquals(5, systemList.size());
+		// check entries
+		assertEquals(Arrays.asList(new Long[] {infs.get(0).getSolarSystem().getId(), infs.get(0).getInfrastructure()}), systemList.get(0));
+		assertEquals(Arrays.asList(new Long[] {infs.get(1).getSolarSystem().getId(), infs.get(1).getInfrastructure(), p10.getParticipant().getId(), p10.getPopulation()}), systemList.get(1));
+		assertEquals(Arrays.asList(new Long[] {infs.get(2).getSolarSystem().getId(), infs.get(2).getInfrastructure(), p21.getParticipant().getId(), p21.getPopulation()}), systemList.get(2));
+		assertEquals(Arrays.asList(new Long[] {infs.get(3).getSolarSystem().getId(), infs.get(3).getInfrastructure(), p31.getParticipant().getId(), p31.getPopulation(), p30.getParticipant().getId(), p30.getPopulation()}), systemList.get(3));
+		assertEquals(Arrays.asList(new Long[] {infs.get(4).getSolarSystem().getId(), infs.get(4).getInfrastructure()}), systemList.get(4));
+		
+		// check movement list
+		assertNotNull(movementList);
+		assertEquals(4, movementList.size());
+		// check entries
+		assertEquals(Arrays.asList(new Long[] {infs.get(0).getSolarSystem().getId(), infs.get(1).getSolarSystem().getId(), m10.getParticipant().getId(), 1000L, 100L}), movementList.get(0));
+		assertEquals(Arrays.asList(new Long[] {infs.get(3).getSolarSystem().getId(), infs.get(1).getSolarSystem().getId(), m13.getParticipant().getId(), 1000L, 200L}), movementList.get(1));
+		assertEquals(Arrays.asList(new Long[] {infs.get(3).getSolarSystem().getId(), infs.get(2).getSolarSystem().getId(), m23.getParticipant().getId(), 1000L, 400L}), movementList.get(2));
+		assertEquals(Arrays.asList(new Long[] {infs.get(4).getSolarSystem().getId(), infs.get(2).getSolarSystem().getId(), m24.getParticipant().getId(), 1000L, 300L}), movementList.get(3));
 	}
 
-	public void testGetMovementList() throws Exception
+	private SolarSystemPopulation createPopulation(Participant part, SolarSystemInfrastructure inf, SolarSystemPopulation origin, Date colDate)
 	{
-		fail("unimplemented");
+		SolarSystemPopulation pop = new SolarSystemPopulation();
+		pop.setId(part.getId() * 10 + inf.getId());
+		pop.setActivated(true);
+		pop.setPopulation(pop.getId());
+		pop.setParticipant(part);
+		pop.setInfrastructure(inf);
+		pop.setColonizationDate(colDate);
+		pop.setOriginationDate(new Date(colDate.getTime() - 1000));
+		pop.setOrigin(origin);
+		part.getPopulations().add(pop);
+		inf.getPopulations().add(pop);
+		return pop;
 	}
 }

@@ -922,6 +922,9 @@ public class MatchManagerImpl extends GenericNameManagerImpl<Match, Long> implem
 			infEntry = new LinkedList<Long>();
 			infEntry.add(inf.getSolarSystem().getId());
 			infEntry.add(inf.getInfrastructure());
+			
+			Collections.sort(inf.getPopulations(), SolarSystemPopulation.BY_COLONIZATIONDATE);
+			
 			for(SolarSystemPopulation pop : inf.getPopulations())
 			{
 				if(pop.isPresent(time))
@@ -958,12 +961,12 @@ public class MatchManagerImpl extends GenericNameManagerImpl<Match, Long> implem
 				{
 					movEntry = new LinkedList<Long>();
 					movEntry.add(inf.getSolarSystem().getId());
-					movEntry.add(pop.getOrigin().getId());
+					movEntry.add(pop.getOrigin().getInfrastructure().getSolarSystem().getId());
 					movEntry.add(pop.getParticipant().getId());
 					// movEntry.add(pop.getPopulation());
 					// movEntry.add(pop.getStoredInfrastructure());
 					long totalTravelTime = pop.getColonizationDate().getTime() - pop.getOriginationDate().getTime();
-					long remainingTravelTime = (long) ((1 - pop.getTravelProgress()) * totalTravelTime);
+					long remainingTravelTime = pop.getColonizationDate().getTime() - time.getTime();
 					movEntry.add(totalTravelTime);
 					movEntry.add(remainingTravelTime);
 					movementsList.add(movEntry);
