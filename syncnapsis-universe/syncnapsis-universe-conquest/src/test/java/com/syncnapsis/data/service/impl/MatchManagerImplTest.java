@@ -121,7 +121,7 @@ public class MatchManagerImplTest extends GenericNameManagerImplTestCase<Match, 
 				will(returnValue(matches));
 			}
 		});
-		// expecting "match created" channels to be created
+		// expecting "match created" channel to be created
 		mockContext.checking(new Expectations() {
 			{
 				oneOf(mockConquestManager).createChannel(UniverseConquestConstants.CHANNEL_MATCH_CREATED, null);
