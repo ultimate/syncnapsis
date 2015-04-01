@@ -154,6 +154,12 @@ UI.constants.PINBOARD_EVENTS = "pinboard_events";
 
 UI.constants.PLACEHOLDER = "$";
 UI.constants.PLACEHOLDER_ATTRIBUTES = ["id", "for", "href"];
+// channel constants analog to UniverseConquestConstants
+UI.constants.CHANNEL_ID_PLACEHOLDER	= "$";
+UI.constants.CHANNEL_MATCH_CREATED = "match_created";
+UI.constants.CHANNEL_MATCH_RANKS = "match_" + UI.constants.CHANNEL_ID_PLACEHOLDER + "_ranks";
+UI.constants.CHANNEL_MATCH_SYSTEMS = "match_" + UI.constants.CHANNEL_ID_PLACEHOLDER + "_systems";
+UI.constants.CHANNEL_MATCH_MOVEMENTS = "match_" + UI.constants.CHANNEL_ID_PLACEHOLDER + "_movements";
 
 UIManager = function()
 {
@@ -324,6 +330,9 @@ UIManager = function()
 	// check for the current user
 	server.playerManager.getCurrent();
 	// will login if user found 
+	
+	// subscribe to channel(s)
+	server.conquestManager.subscribe(UI.constants.CHANNEL_MATCH_CREATED);
 
 	this.hideOverlay();
 };
@@ -469,6 +478,8 @@ UIManager.prototype.onMatchSelect = function(oldMatch, newMatch)
 	document.getElementById(UI.constants.MATCH_STARTDATE_ID.replace(UI.constants.PLACEHOLDER, "info")).value = newMatch.startDate;
 	document.getElementById(UI.constants.MATCH_VICTORYPARAMETER_CUSTOM_ID.replace(UI.constants.PLACEHOLDER, "info")).value = newMatch.victoryParameter
 	
+	// TODO subscribe to match channels
+	// TODO unsubscribe previous match channels
 	
 	// TODO update 3D-view
 	
