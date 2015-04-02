@@ -1761,5 +1761,10 @@ ConquestManager.prototype.update = function(channel, value)
 {
 	console.log("received updated for channel '" + channel + "': " + value);
 	
+	if(channel == UI.constants.CHANNEL_MATCH_CREATED)
+	{
+		// a new match was created -> add it to the match list
+	}
+	
 	// TODO
 };
