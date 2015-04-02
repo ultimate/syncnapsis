@@ -451,7 +451,7 @@ UIManager.prototype.onMatchesLoaded = function(matches)
 			var matchIndex = Math.round(Math.random()*uiManager.matchSelect.options.length);
 			for(var o in uiManager.matchSelect.options)
 			{
-				if(uiManager.matchSelect.options[o].id == matchId)
+				if(uiManager.matchSelect.options[o].value.id == matchId)
 				{
 					matchIndex = o;
 					break;
