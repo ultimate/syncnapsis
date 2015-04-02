@@ -14,8 +14,10 @@
  */
 package com.syncnapsis.client;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -56,11 +58,15 @@ public class ConquestManagerImpl extends BaseClientManager implements ConquestMa
 		{
 			if(!c.getSubscriptions().contains(con))
 			{
-				if(c.getSubscriptions().add(con))
+				try
 				{
 					pushUpdate(c, con);
-					return true;
 				}
+				catch(IOException e)
+				{
+					logger.error("could not push update to connection " + con.getId() + ". Maybe it was closed in the meantime.", e);
+				}
+				return c.getSubscriptions().add(con);
 			}
 		}
 		return false;
@@ -147,12 +153,39 @@ public class ConquestManagerImpl extends BaseClientManager implements ConquestMa
 		{
 			c.setValue(value);
 
+			List<Connection> invalidConnections = new LinkedList<Connection>();
 			for(Connection con : c.getSubscriptions())
-				pushUpdate(c, con);
+			{
+				if(con.isOpen())
+				{
+					try
+					{
+						pushUpdate(c, con);
+					}
+					catch(IOException e)
+					{
+						logger.warn("could not push update to connection " + con.getId() + ". Maybe it was closed in the meantime.", e);
+						invalidConnections.add(con);
+					}
+				}
+				else
+				{
+					invalidConnections.add(con);
+				}
+			}
+			c.getSubscriptions().removeAll(invalidConnections);
 		}
 	}
 
-	protected void pushUpdate(Channel channel, Connection connection)
+	/**
+	 * Helper method that pushes an update for the given {@link Channel} to the given
+	 * {@link Connection}
+	 * 
+	 * @param channel - the channel to push the update for
+	 * @param connection - the connection to push the update to
+	 * @throws IOException - if sending the update to the client fails
+	 */
+	protected void pushUpdate(Channel channel, Connection connection) throws IOException
 	{
 		((ConquestManager) getClientInstance(getBeanName(), connection)).update(channel.getName(), channel.getValue());
 	}

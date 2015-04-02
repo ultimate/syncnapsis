@@ -39,7 +39,8 @@ public interface ConquestManager
 	 * Subscribe the calling client from the given subscription channel.
 	 * 
 	 * @param channel - the name of the subscription channel
-	 * @return true if unsubscribing was successful, false otherwise (e.g. if channel does not exist)
+	 * @return true if unsubscribing was successful, false otherwise (e.g. if channel does not
+	 *         exist)
 	 */
 	public boolean unsubscribe(String channel);
 
@@ -67,7 +68,8 @@ public interface ConquestManager
 	public Object getLastValue(String channel);
 
 	/**
-	 * Push the given new value for the given subscription channel to all subscribed clients.
+	 * Push the given new value for the given subscription channel to all subscribed clients
+	 * (server-instance) or to the connection of a specific client (client-instance)
 	 * 
 	 * @param channel - the name of the subscription channel
 	 * @param value - the new value for the subscription channel
