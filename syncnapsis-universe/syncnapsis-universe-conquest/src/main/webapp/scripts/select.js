@@ -164,8 +164,8 @@ Select = function(element)
 
 		for(var i = 0; i < this.options.length; i++)
 		{
-			if(this.options[i].element == null)
-			{
+//			if(this.options[i].element == null)
+//			{
 				this.options[i].element = document.createElement("li");
 				this.options[i].element.innerHTML = this.getOptionContent(this.options[i]);
 				this.list.appendChild(this.options[i].element);
@@ -185,7 +185,7 @@ Select = function(element)
 						select.highlight(i);
 					};
 				} (this, i);
-			}
+//			}
 		}
 	};
 	this.filter = function(matcher) {
