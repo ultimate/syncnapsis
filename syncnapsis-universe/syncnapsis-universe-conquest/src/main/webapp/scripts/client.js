@@ -1774,6 +1774,14 @@ ConquestManager.prototype.update = function(channel, value)
 		select.update();
 		// update labels
 		client.uiManager.updateLabels(select.element);
+		
+		// preload match
+		server.entityManager.loadProperty(value, "participants.empire.player.user", function(match) {
+			console.log("match participants loaded!")
+		});
+		server.entityManager.loadProperty(value, "creator.user", function(match) {
+			console.log("match creator loaded!");
+		});
 	}
 	
 	// TODO
