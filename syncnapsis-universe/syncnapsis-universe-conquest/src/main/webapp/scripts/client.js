@@ -441,10 +441,11 @@ UIManager.prototype.onMatchesLoaded = function(matches)
 	this.populateSelect(this.matchSelect, matches, false);
 	
 	// preload sub-entities for filtering
+	// TODO optimize? this is a lot of data!
 	server.entityManager.loadProperty(matches, "participants.empire.player.user", function(uiManager) {
 		return function(matches) {
 			console.log("matches loaded with properties!");
-			// select last match
+			// show previously selected match (if any, else random)
 			var matchId = localStorage.getItem(UI.constants.KEY_LAST_MATCH_SELECTED);
 			if(matchId != null)
 				matchId = Number(matchId);
@@ -1764,6 +1765,15 @@ ConquestManager.prototype.update = function(channel, value)
 	if(channel == UI.constants.CHANNEL_MATCH_CREATED)
 	{
 		// a new match was created -> add it to the match list
+		console.log("add new match to select: " + value.id);
+		var select = client.uiManager.matchSelect;
+		var option = {};
+		option.value = value;
+		select.options[select.options.length] = option;
+		// update DOM element
+		select.update();
+		// update labels
+		client.uiManager.updateLabels(select.element);
 	}
 	
 	// TODO
