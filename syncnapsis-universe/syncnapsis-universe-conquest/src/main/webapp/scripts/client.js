@@ -479,8 +479,17 @@ UIManager.prototype.onMatchSelect = function(oldMatch, newMatch)
 	document.getElementById(UI.constants.MATCH_STARTDATE_ID.replace(UI.constants.PLACEHOLDER, "info")).value = newMatch.startDate;
 	document.getElementById(UI.constants.MATCH_VICTORYPARAMETER_CUSTOM_ID.replace(UI.constants.PLACEHOLDER, "info")).value = newMatch.victoryParameter
 	
-	// TODO subscribe to match channels
 	// TODO unsubscribe previous match channels
+	if(oldMatch != null && oldMatch.id != null)
+	{
+		server.conquestManager.unsubscribe(UI.constants.CHANNEL_MATCH_RANKS.replace(UI.constants.CHANNEL_ID_PLACEHOLDER, oldMatch.id));
+		server.conquestManager.unsubscribe(UI.constants.CHANNEL_MATCH_SYSTEMS.replace(UI.constants.CHANNEL_ID_PLACEHOLDER, oldMatch.id));
+		server.conquestManager.unsubscribe(UI.constants.CHANNEL_MATCH_MOVEMENTS.replace(UI.constants.CHANNEL_ID_PLACEHOLDER, oldMatch.id));
+	}
+	// TODO subscribe to match channels
+	server.conquestManager.subscribe(UI.constants.CHANNEL_MATCH_RANKS.replace(UI.constants.CHANNEL_ID_PLACEHOLDER, newMatch.id));
+	server.conquestManager.subscribe(UI.constants.CHANNEL_MATCH_SYSTEMS.replace(UI.constants.CHANNEL_ID_PLACEHOLDER, newMatch.id));
+	server.conquestManager.subscribe(UI.constants.CHANNEL_MATCH_MOVEMENTS.replace(UI.constants.CHANNEL_ID_PLACEHOLDER, newMatch.id));
 	
 	// TODO update 3D-view
 	
