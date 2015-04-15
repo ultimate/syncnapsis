@@ -103,7 +103,21 @@
     <filter-mapping>
       	<filter-name>localeFilter</filter-name>
       	<url-pattern>/lang/*</url-pattern>
-    </filter-mapping>	
+    </filter-mapping>
+    
+    <filter>
+        <filter-name>galaxyFilter</filter-name>
+        <filter-class>com.syncnapsis.utils.spring.FilterToBeanProxy</filter-class>
+        <init-param>
+            <param-name>targetBean</param-name>
+            <param-value>galaxyFilter</param-value>
+        </init-param>
+    </filter>
+
+    <filter-mapping>
+      	<filter-name>galaxyFilter</filter-name>
+      	<url-pattern>/galaxy/*</url-pattern>
+    </filter-mapping>		
     
 	<listener>
 		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>

@@ -1,5 +1,7 @@
 package com.syncnapsis.web;
 
+import java.io.File;
+import java.io.FileFilter;
 import java.io.IOException;
 
 import javax.servlet.FilterChain;
@@ -20,29 +22,21 @@ import com.syncnapsis.websockets.engine.FilterEngine;
 public abstract class FilePreparationFilter extends FilterEngine
 {
 	/**
-	 * The file path for which to prepare files.
+	 * An optional {@link FileFilter} defining which files to handle
 	 */
-	protected String	filePath;
-	/**
-	 * The file type for which to prepare files
-	 */
-	protected String	fileType;
+	protected FileFilter fileFilter;
 
 	/**
 	 * Construct a new {@link FilePreparationFilter}
 	 * 
-	 * @param filePath - The file path for which to prepare files.
-	 * @param fileType - The file type for which to prepare files.
+	 * @param fileFilter - An optional {@link FileFilter} defining which files to handle
 	 */
-	public FilePreparationFilter(String filePath, String fileType)
+	public FilePreparationFilter(FileFilter fileFilter)
 	{
 		super();
-		this.filePath = filePath;
-		if(!fileType.startsWith("."))
-			fileType = '.' + fileType;
-		this.fileType = fileType;
+		this.fileFilter = fileFilter;
 	}
-
+	
 	/*
 	 * (non-Javadoc)
 	 * @see javax.servlet.Filter#doFilter(javax.servlet.ServletRequest,
@@ -69,24 +63,34 @@ public abstract class FilePreparationFilter extends FilterEngine
 			return;
 		}
 
-		logger.debug("requesting: " + httpRequest.getServletPath());
+		File file = new File(httpRequest.getServletPath());
 
-		String fullName = httpRequest.getServletPath();
-		if(fullName.startsWith(filePath) && fullName.endsWith(fileType))
+		logger.debug("requesting: " + file.getAbsolutePath());
+		logger.debug("path:   " + file.getPath());
+		logger.debug("parent: " + file.getParent());
+		logger.debug("name:   " + file.getName());
+		
+		if(fileFilter != null && fileFilter.accept(file))
 		{
-			int start = filePath.length();
-			int end = fullName.length() - fileType.length();
-			String fileName =  fullName.substring(start, end);
-			boolean prepared = prepare(fileName);
-			logger.info("file '" + fileName + "' successfully prepared? " + prepared);
+			boolean prepared = prepare(file);
+			if(prepared)
+				logger.info("file '" + file.getAbsolutePath() + "' successfully prepared!");
+			else
+				logger.info("file '" + file.getAbsolutePath() + "' could not be prepared!");
 		}
 		else
 		{
-			logger.debug("file does not match path and type");
+			logger.debug("file does not match the given FileFilter");
 		}
 
 		chain.doFilter(httpRequest, httpResponse);
 	}
-	
-	public abstract boolean prepare(String fileName);
+
+	/**
+	 * Prepare the given file
+	 * 
+	 * @param file - the file to prepare
+	 * @return true if the file was prepared or already was prepared, false otherwise
+	 */
+	public abstract boolean prepare(File file);
 }
