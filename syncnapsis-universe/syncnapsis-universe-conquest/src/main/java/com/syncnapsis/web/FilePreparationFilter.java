@@ -24,7 +24,7 @@ public abstract class FilePreparationFilter extends FilterEngine
 	/**
 	 * An optional {@link FileFilter} defining which files to handle
 	 */
-	protected FileFilter fileFilter;
+	protected FileFilter	fileFilter;
 
 	/**
 	 * Construct a new {@link FilePreparationFilter}
@@ -36,7 +36,7 @@ public abstract class FilePreparationFilter extends FilterEngine
 		super();
 		this.fileFilter = fileFilter;
 	}
-	
+
 	/*
 	 * (non-Javadoc)
 	 * @see javax.servlet.Filter#doFilter(javax.servlet.ServletRequest,
@@ -63,20 +63,27 @@ public abstract class FilePreparationFilter extends FilterEngine
 			return;
 		}
 
-		File file = new File(httpRequest.getServletPath());
-
-		logger.debug("requesting: " + file.getAbsolutePath());
-		logger.debug("path:   " + file.getPath());
-		logger.debug("parent: " + file.getParent());
-		logger.debug("name:   " + file.getName());
+		File realFile = new File(httpRequest.getServletContext().getRealPath(httpRequest.getServletPath()));
+		File servletFile = new File(httpRequest.getServletPath());
 		
-		if(fileFilter != null && fileFilter.accept(file))
+		logger.debug("requesting: " + httpRequest.getServletPath() + " -> " + realFile.getPath());
+		logger.debug("path:   " + realFile.getPath());
+		logger.debug("parent: " + realFile.getParent());
+		logger.debug("name:   " + realFile.getName());
+
+		if(fileFilter != null && fileFilter.accept(servletFile))
 		{
-			boolean prepared = prepare(file);
+			if(!realFile.getParentFile().exists())
+			{
+				logger.debug("creating parent directory...");
+				realFile.getParentFile().mkdirs();
+			}
+
+			boolean prepared = prepare(realFile, servletFile);
 			if(prepared)
-				logger.info("file '" + file.getAbsolutePath() + "' successfully prepared!");
+				logger.info("file '" + realFile.getAbsolutePath() + "' successfully prepared!");
 			else
-				logger.info("file '" + file.getAbsolutePath() + "' could not be prepared!");
+				logger.info("file '" + realFile.getAbsolutePath() + "' could not be prepared!");
 		}
 		else
 		{
@@ -87,10 +94,12 @@ public abstract class FilePreparationFilter extends FilterEngine
 	}
 
 	/**
-	 * Prepare the given file
+	 * Prepare the given file.<br>
+	 * Note: in order to be able the file on the file system it is passed with the real file path
+	 * and with the servlet relative path.
 	 * 
 	 * @param file - the file to prepare
 	 * @return true if the file was prepared or already was prepared, false otherwise
 	 */
-	public abstract boolean prepare(File file);
+	public abstract boolean prepare(File realFile, File servletFile);
 }
