@@ -24,15 +24,30 @@ public class GalaxyFilter extends FilePreparationFilter
 
 	/*
 	 * (non-Javadoc)
-	 * @see com.syncnapsis.web.FilePreparationFilter#prepare(java.io.File)
+	 * @see com.syncnapsis.web.FilePreparationFilter#prepare(java.io.File, java.io.File)
 	 */
 	@Override
-	public boolean prepare(File file)
+	public boolean prepare(File realFile, File servletFile)
 	{
-		logger.info("name: " + file.getName());
-		// TODO Auto-generated method stub
+		logger.info("creating galaxy file: " + realFile.getName());
+
+		String nameWithoutExtension = realFile.getName().substring(0, realFile.getName().length() - EXTENSION.length());
+		Long id = null;
+		try
+		{
+			id = Long.parseLong(nameWithoutExtension);
+		}
+		catch(NumberFormatException e)
+		{
+			logger.error("could not parse file name to galaxy id", e);
+			return false;
+		}
+		
+		
+
 		return false;
 	}
+
 
 	
 	/**
