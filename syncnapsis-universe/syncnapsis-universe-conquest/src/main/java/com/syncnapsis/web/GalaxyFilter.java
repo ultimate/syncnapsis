@@ -1,9 +1,18 @@
 package com.syncnapsis.web;
 
+import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileFilter;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
+import org.springframework.beans.factory.InitializingBean;
+import org.springframework.util.Assert;
+
+import com.syncnapsis.data.model.Galaxy;
+import com.syncnapsis.data.service.GalaxyManager;
 import com.syncnapsis.utils.FileUtil;
+import com.syncnapsis.utils.serialization.JSONGenerator;
 
 /**
  * Filter which checks whether the JSON-file for a galaxy exists when requested and which triggers
@@ -12,8 +21,13 @@ import com.syncnapsis.utils.FileUtil;
  * 
  * @author ultimate
  */
-public class GalaxyFilter extends FilePreparationFilter
+public class GalaxyFilter extends FilePreparationFilter implements InitializingBean
 {
+	/**
+	 * The GalaxyManager
+	 */
+	protected GalaxyManager	galaxyManager;
+
 	/**
 	 * Default Constructor passing this instance as the filter to the super Constructor
 	 */
@@ -22,12 +36,43 @@ public class GalaxyFilter extends FilePreparationFilter
 		super(FILTER);
 	}
 
+	/**
+	 * The GalaxyManager
+	 * 
+	 * @return galaxyManager
+	 */
+	public GalaxyManager getGalaxyManager()
+	{
+		return galaxyManager;
+	}
+
+	/**
+	 * The GalaxyManager
+	 * 
+	 * @param galaxyManager - the GalaxyManager
+	 */
+	public void setGalaxyManager(GalaxyManager galaxyManager)
+	{
+		this.galaxyManager = galaxyManager;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see com.syncnapsis.websockets.service.rpc.RPCFilter#afterPropertiesSet()
+	 */
+	@Override
+	public void afterPropertiesSet() throws Exception
+	{
+		super.afterPropertiesSet();
+		Assert.notNull(galaxyManager, "galaxyManager must not be null");
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * @see com.syncnapsis.web.FilePreparationFilter#prepare(java.io.File, java.io.File)
 	 */
 	@Override
-	public boolean prepare(File realFile, File servletFile)
+	public synchronized boolean prepare(File realFile, File servletFile)
 	{
 		logger.info("creating galaxy file: " + realFile.getName());
 
@@ -42,11 +87,34 @@ public class GalaxyFilter extends FilePreparationFilter
 			logger.error("could not parse file name to galaxy id", e);
 			return false;
 		}
-		
-		
 
-		return false;
+		Galaxy galaxy = galaxyManager.get(id);
+		if(galaxy == null)
+		{
+			logger.error("invalid galaxy id: " + id);
+			return false;
+		}
+		
+		String json = JSONGenerator.toJSON(galaxy);
+		
+		try
+		{
+			BufferedOutputStream os = new BufferedOutputStream(new FileOutputStream(realFile));
+			os.write(json.getBytes());
+			os.flush();
+			os.close();
+		}
+		catch(IOException e)
+		{
+			logger.error("could not write json to file", e);
+			return false;
+		}
+
+		return true;
 	}
+
+
+
 
 
 	

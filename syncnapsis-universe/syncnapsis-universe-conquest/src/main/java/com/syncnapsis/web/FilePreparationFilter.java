@@ -65,7 +65,7 @@ public abstract class FilePreparationFilter extends FilterEngine
 
 		File realFile = new File(httpRequest.getServletContext().getRealPath(httpRequest.getServletPath()));
 		File servletFile = new File(httpRequest.getServletPath());
-		
+
 		logger.debug("requesting: " + httpRequest.getServletPath() + " -> " + realFile.getPath());
 		logger.debug("path:   " + realFile.getPath());
 		logger.debug("parent: " + realFile.getParent());
@@ -73,17 +73,24 @@ public abstract class FilePreparationFilter extends FilterEngine
 
 		if(fileFilter != null && fileFilter.accept(servletFile))
 		{
-			if(!realFile.getParentFile().exists())
+			if(requiresPreparation(realFile, servletFile))
 			{
-				logger.debug("creating parent directory...");
-				realFile.getParentFile().mkdirs();
-			}
+				if(!realFile.getParentFile().exists())
+				{
+					logger.debug("creating parent directory...");
+					realFile.getParentFile().mkdirs();
+				}
 
-			boolean prepared = prepare(realFile, servletFile);
-			if(prepared)
-				logger.info("file '" + realFile.getAbsolutePath() + "' successfully prepared!");
+				boolean prepared = prepare(realFile, servletFile);
+				if(prepared)
+					logger.info("file '" + realFile.getAbsolutePath() + "' successfully prepared!");
+				else
+					logger.info("file '" + realFile.getAbsolutePath() + "' could not be prepared!");
+			}
 			else
-				logger.info("file '" + realFile.getAbsolutePath() + "' could not be prepared!");
+			{
+				logger.debug("file does");
+			}
 		}
 		else
 		{
@@ -94,9 +101,23 @@ public abstract class FilePreparationFilter extends FilterEngine
 	}
 
 	/**
-	 * Prepare the given file.<br>
+	 * Check whether the given files requires preparation.<br>
 	 * Note: in order to be able the file on the file system it is passed with the real file path
-	 * and with the servlet relative path.
+	 * and with the servlet relative path.<br>
+	 * By default this method returns false if the file exists, and true if the file does not exist.
+	 * 
+	 * @param file - the file to prepare
+	 * @return true if the file was prepared or already was prepared, false otherwise
+	 */
+	public boolean requiresPreparation(File realFile, File servletFile)
+	{
+		return !realFile.exists();
+	}
+
+	/**
+	 * Prepare the given file.<br>
+	 * Note: in order to be able to access the file on the file system it is passed with the real
+	 * file path and with the servlet relative path.
 	 * 
 	 * @param file - the file to prepare
 	 * @return true if the file was prepared or already was prepared, false otherwise
