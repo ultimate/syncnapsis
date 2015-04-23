@@ -3,6 +3,7 @@ package com.syncnapsis.utils.serialization;
 import java.util.List;
 
 import com.syncnapsis.data.model.Galaxy;
+import com.syncnapsis.data.model.Match;
 import com.syncnapsis.data.model.SolarSystem;
 import com.syncnapsis.data.model.SolarSystemInfrastructure;
 
@@ -15,13 +16,16 @@ import com.syncnapsis.data.model.SolarSystemInfrastructure;
  */
 public abstract class JSONGenerator
 {
+	/**
+	 * Prevent instantiation
+	 */
 	private JSONGenerator()
 	{
-
 	}
 
 	/**
-	 * Generate the JSON representation for the given {@link List} of {@link SolarSystem}s in the
+	 * Generate the JSON representation for the given {@link Galaxy}'s {@link List} of
+	 * {@link SolarSystem}s in the
 	 * form:<br>
 	 * <code><pre> [
 	 *   [id, x, y, z], // for each solar system
@@ -32,13 +36,14 @@ public abstract class JSONGenerator
 	 * @param solarSystems - the {@link List} of {@link SolarSystem}s
 	 * @return the JSON string
 	 */
-	public static String toJSON(List<SolarSystem> solarSystems)
+	public static String toJSON(Galaxy galaxy)
 	{
 		StringBuilder sb = new StringBuilder();
 
 		sb.append('[');
-		for(SolarSystem sys : solarSystems)
+		for(SolarSystem sys : galaxy.getSolarSystems())
 		{
+			sb.append('[');
 			sb.append(sys.getId());
 			sb.append(',');
 			sb.append(sys.getCoords().getX());
@@ -46,14 +51,16 @@ public abstract class JSONGenerator
 			sb.append(sys.getCoords().getY());
 			sb.append(',');
 			sb.append(sys.getCoords().getZ());
+			sb.append(']');
+			sb.append(',');
 		}
-		sb.append("]");
+		sb.setCharAt(sb.length()-1, ']'); // replace last ',' with a ']'
 
 		return sb.toString();
 	}
 
 	/**
-	 * Generate the JSON representation for the given {@link List} of
+	 * Generate the JSON representation for the given {@link Match}'s {@link List} of
 	 * {@link SolarSystemInfrastructure}s in the
 	 * form:<br>
 	 * <code><pre> [
@@ -62,17 +69,20 @@ public abstract class JSONGenerator
 	 * ]
 	 * </pre></code> (whitespaces included here for better readability only)
 	 * 
-	 * @param solarSystems - the {@link List} of {@link SolarSystem}s
+	 * @param solarSystemInfrastructures - the {@link List} of {@link SolarSystemInfrastructure}s
 	 * @return the JSON string
 	 */
-	public static String toJSON(List<SolarSystemInfrastructure> solarSystemInfrastructures)
+	public static String toJSON(Match match)
 	{
 		StringBuilder sb = new StringBuilder();
 
 		sb.append('[');
-		for(SolarSystemInfrastructure inf : solarSystemInfrastructures)
+		for(SolarSystemInfrastructure inf : match.getInfrastructures())
 		{
+			sb.append('[');
 			sb.append(inf.getId());
+			// sb.append(',');
+			// sb.append(inf.getSolarSystem().getId());
 			sb.append(',');
 			sb.append(inf.getSolarSystem().getCoords().getX());
 			sb.append(',');
@@ -83,8 +93,10 @@ public abstract class JSONGenerator
 			sb.append(inf.getSize());
 			sb.append(',');
 			sb.append(inf.getHabitability());
+			sb.append(']');
+			sb.append(',');
 		}
-		sb.append("]");
+		sb.setCharAt(sb.length()-1, ']'); // replace last ',' with a ']'
 
 		return sb.toString();
 	}
