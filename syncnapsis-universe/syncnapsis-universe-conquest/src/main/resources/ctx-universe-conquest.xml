@@ -227,8 +227,13 @@
     <!-- =================================================================== -->
     <!-- Servlets					                                         -->
     <!-- =================================================================== -->
+    
+    <bean id="openSessionInViewFilter" class="org.springframework.orm.hibernate4.support.OpenSessionInViewFilter">
+    	<property name="sessionFactoryBeanName" value="sessionFactory" />
+    </bean>
 
 	<bean id="galaxyFilter" class="com.syncnapsis.web.GalaxyFilter">
+		<property name="galaxyManager" ref="galaxyManager" />
 	</bean>
 
 </beans>

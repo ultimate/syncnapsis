@@ -106,6 +106,20 @@
     </filter-mapping>
     
     <filter>
+        <filter-name>openSessionInViewFilter</filter-name>
+        <filter-class>com.syncnapsis.utils.spring.FilterToBeanProxy</filter-class>
+        <init-param>
+            <param-name>targetBean</param-name>
+            <param-value>openSessionInViewFilter</param-value>
+        </init-param>
+    </filter>
+
+    <filter-mapping>
+      	<filter-name>openSessionInViewFilter</filter-name>
+      	<url-pattern>/galaxy/*</url-pattern>
+    </filter-mapping>		
+    
+    <filter>
         <filter-name>galaxyFilter</filter-name>
         <filter-class>com.syncnapsis.utils.spring.FilterToBeanProxy</filter-class>
         <init-param>
