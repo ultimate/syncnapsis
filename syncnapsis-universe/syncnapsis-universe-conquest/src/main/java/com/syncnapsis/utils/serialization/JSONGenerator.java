@@ -41,20 +41,27 @@ public abstract class JSONGenerator
 		StringBuilder sb = new StringBuilder();
 
 		sb.append('[');
-		for(SolarSystem sys : galaxy.getSolarSystems())
+		if(galaxy.getSolarSystems() != null && galaxy.getSolarSystems().size() > 0)
 		{
-			sb.append('[');
-			sb.append(sys.getId());
-			sb.append(',');
-			sb.append(sys.getCoords().getX());
-			sb.append(',');
-			sb.append(sys.getCoords().getY());
-			sb.append(',');
-			sb.append(sys.getCoords().getZ());
-			sb.append(']');
-			sb.append(',');
+			for(SolarSystem sys : galaxy.getSolarSystems())
+			{
+				sb.append('[');
+				sb.append(sys.getId());
+				sb.append(',');
+				sb.append(sys.getCoords().getX());
+				sb.append(',');
+				sb.append(sys.getCoords().getY());
+				sb.append(',');
+				sb.append(sys.getCoords().getZ());
+				sb.append(']');
+				sb.append(',');
+			}
+			sb.setCharAt(sb.length() - 1, ']'); // replace last ',' with a ']'
 		}
-		sb.setCharAt(sb.length()-1, ']'); // replace last ',' with a ']'
+		else
+		{
+			sb.append(']');
+		}
 
 		return sb.toString();
 	}
@@ -77,26 +84,33 @@ public abstract class JSONGenerator
 		StringBuilder sb = new StringBuilder();
 
 		sb.append('[');
-		for(SolarSystemInfrastructure inf : match.getInfrastructures())
+		if(match.getInfrastructures() != null && match.getInfrastructures().size() > 0)
 		{
-			sb.append('[');
-			sb.append(inf.getId());
-			// sb.append(',');
-			// sb.append(inf.getSolarSystem().getId());
-			sb.append(',');
-			sb.append(inf.getSolarSystem().getCoords().getX());
-			sb.append(',');
-			sb.append(inf.getSolarSystem().getCoords().getY());
-			sb.append(',');
-			sb.append(inf.getSolarSystem().getCoords().getZ());
-			sb.append(',');
-			sb.append(inf.getSize());
-			sb.append(',');
-			sb.append(inf.getHabitability());
-			sb.append(']');
-			sb.append(',');
+			for(SolarSystemInfrastructure inf : match.getInfrastructures())
+			{
+				sb.append('[');
+				sb.append(inf.getId());
+				// sb.append(',');
+				// sb.append(inf.getSolarSystem().getId());
+				sb.append(',');
+				sb.append(inf.getSolarSystem().getCoords().getX());
+				sb.append(',');
+				sb.append(inf.getSolarSystem().getCoords().getY());
+				sb.append(',');
+				sb.append(inf.getSolarSystem().getCoords().getZ());
+				sb.append(',');
+				sb.append(inf.getSize());
+				sb.append(',');
+				sb.append(inf.getHabitability());
+				sb.append(']');
+				sb.append(',');
+			}
+			sb.setCharAt(sb.length() - 1, ']'); // replace last ',' with a ']'
 		}
-		sb.setCharAt(sb.length()-1, ']'); // replace last ',' with a ']'
+		else
+		{
+			sb.append(']');
+		}
 
 		return sb.toString();
 	}

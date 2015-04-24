@@ -22,9 +22,14 @@ import com.syncnapsis.websockets.engine.FilterEngine;
 public abstract class FilePreparationFilter extends FilterEngine
 {
 	/**
+	 * Parameter name for forcing file preparation
+	 */
+	public static final String	PARAM_FORCE	= "force";
+
+	/**
 	 * An optional {@link FileFilter} defining which files to handle
 	 */
-	protected FileFilter	fileFilter;
+	protected FileFilter		fileFilter;
 
 	/**
 	 * Construct a new {@link FilePreparationFilter}
@@ -66,6 +71,8 @@ public abstract class FilePreparationFilter extends FilterEngine
 		File realFile = new File(httpRequest.getServletContext().getRealPath(httpRequest.getServletPath()));
 		File servletFile = new File(httpRequest.getServletPath());
 
+		boolean forcePreparation = Boolean.valueOf(httpRequest.getParameter(PARAM_FORCE));
+
 		logger.debug("requesting: " + httpRequest.getServletPath() + " -> " + realFile.getPath());
 		logger.debug("path:   " + realFile.getPath());
 		logger.debug("parent: " + realFile.getParent());
@@ -73,7 +80,7 @@ public abstract class FilePreparationFilter extends FilterEngine
 
 		if(fileFilter != null && fileFilter.accept(servletFile))
 		{
-			if(requiresPreparation(realFile, servletFile))
+			if(requiresPreparation(realFile, servletFile) || forcePreparation)
 			{
 				if(!realFile.getParentFile().exists())
 				{
@@ -89,7 +96,7 @@ public abstract class FilePreparationFilter extends FilterEngine
 			}
 			else
 			{
-				logger.debug("file does");
+				logger.debug("file does not need to be prepared - probably already existing");
 			}
 		}
 		else

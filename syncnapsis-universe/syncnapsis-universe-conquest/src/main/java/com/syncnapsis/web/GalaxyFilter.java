@@ -11,6 +11,7 @@ import org.springframework.util.Assert;
 
 import com.syncnapsis.data.model.Galaxy;
 import com.syncnapsis.data.service.GalaxyManager;
+import com.syncnapsis.exceptions.ObjectNotFoundException;
 import com.syncnapsis.utils.FileUtil;
 import com.syncnapsis.utils.serialization.JSONGenerator;
 
@@ -88,15 +89,19 @@ public class GalaxyFilter extends FilePreparationFilter implements InitializingB
 			return false;
 		}
 
-		Galaxy galaxy = galaxyManager.get(id);
-		if(galaxy == null)
+		Galaxy galaxy;
+		try
+		{
+			galaxy = galaxyManager.get(id);
+		}
+		catch(ObjectNotFoundException e)
 		{
 			logger.error("invalid galaxy id: " + id);
 			return false;
 		}
-		
+
 		String json = JSONGenerator.toJSON(galaxy);
-		
+
 		try
 		{
 			BufferedOutputStream os = new BufferedOutputStream(new FileOutputStream(realFile));
@@ -112,9 +117,6 @@ public class GalaxyFilter extends FilePreparationFilter implements InitializingB
 
 		return true;
 	}
-
-
-
 
 
 	

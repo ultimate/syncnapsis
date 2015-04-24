@@ -22,20 +22,27 @@ public class JSONGeneratorTest extends LoggerTestCase
 		SolarSystem sys2 = new SolarSystem();
 		sys2.setId(2L);
 		sys2.setCoords(new Vector.Integer(201, 202, 203));
-		
+
 		SolarSystem sys3 = new SolarSystem();
 		sys3.setId(3L);
 		sys3.setCoords(new Vector.Integer(301, 302, 303));
-		
+
 		Galaxy galaxy = new Galaxy();
 		galaxy.setSolarSystems(Arrays.asList(sys1, sys2, sys3));
-		
+
 		String expected = "[[1,101,102,103],[2,201,202,203],[3,301,302,303]]";
-		
+
 		String json = JSONGenerator.toJSON(galaxy);
+
+		assertEquals(expected, json);
+
+		// test with empty galaxy
+		expected = "[]";
+		json = JSONGenerator.toJSON(new Galaxy());
 		
 		assertEquals(expected, json);
 	}
+
 	@TestCoversMethods("toJSON")
 	public void testToJSON_Match() throws Exception
 	{
@@ -56,7 +63,7 @@ public class JSONGeneratorTest extends LoggerTestCase
 		inf2.setSolarSystem(sys2);
 		inf2.setSize(20);
 		inf2.setHabitability(200);
-		
+
 		SolarSystem sys3 = new SolarSystem();
 		sys3.setId(3L);
 		sys3.setCoords(new Vector.Integer(301, 302, 303));
@@ -65,13 +72,19 @@ public class JSONGeneratorTest extends LoggerTestCase
 		inf3.setSolarSystem(sys3);
 		inf3.setSize(30);
 		inf3.setHabitability(300);
-		
+
 		Match match = new Match();
 		match.setInfrastructures(Arrays.asList(inf1, inf2, inf3));
-		
+
 		String expected = "[[11,101,102,103,10,100],[22,201,202,203,20,200],[33,301,302,303,30,300]]";
-		
+
 		String json = JSONGenerator.toJSON(match);
+
+		assertEquals(expected, json);
+
+		// test with empty match
+		expected = "[]";
+		json = JSONGenerator.toJSON(new Match());
 		
 		assertEquals(expected, json);
 	}
