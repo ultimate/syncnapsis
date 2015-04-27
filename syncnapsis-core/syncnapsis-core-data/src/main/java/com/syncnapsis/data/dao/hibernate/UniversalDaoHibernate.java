@@ -17,7 +17,6 @@ package com.syncnapsis.data.dao.hibernate;
 import java.io.Serializable;
 import java.util.List;
 
-import org.hibernate.ObjectNotFoundException;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -25,6 +24,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.syncnapsis.data.dao.UniversalDao;
+import com.syncnapsis.exceptions.ObjectNotFoundException;
 import com.syncnapsis.utils.HibernateUtil;
 import com.syncnapsis.utils.spring.Bean;
 
@@ -98,7 +98,7 @@ public class UniversalDaoHibernate extends Bean implements UniversalDao
 		id = HibernateUtil.checkIdType(sessionFactory, clazz, id);
 		T o = (T) currentSession().get(clazz, id);
 		if(o == null)
-			throw new ObjectNotFoundException(id, clazz.getSimpleName());
+			throw new ObjectNotFoundException(clazz.getSimpleName(), id != null ? id.toString() : null);
 		return o;
 	}
 

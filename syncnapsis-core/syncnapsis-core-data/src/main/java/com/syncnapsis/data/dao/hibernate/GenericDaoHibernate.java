@@ -19,13 +19,13 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.hibernate.ObjectNotFoundException;
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 
 import com.syncnapsis.data.dao.GenericDao;
 import com.syncnapsis.data.model.base.ActivatableInstance;
 import com.syncnapsis.data.model.base.Identifiable;
+import com.syncnapsis.exceptions.ObjectNotFoundException;
 import com.syncnapsis.utils.HibernateUtil;
 
 /**

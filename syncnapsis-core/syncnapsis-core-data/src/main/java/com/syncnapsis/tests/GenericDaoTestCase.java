@@ -19,11 +19,10 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.hibernate.ObjectNotFoundException;
-
 import com.syncnapsis.data.dao.GenericDao;
 import com.syncnapsis.data.model.base.ActivatableInstance;
 import com.syncnapsis.data.model.base.Identifiable;
+import com.syncnapsis.exceptions.ObjectNotFoundException;
 import com.syncnapsis.tests.annotations.TestCoversMethods;
 
 public abstract class GenericDaoTestCase<T extends Identifiable<PK>, PK extends Serializable> extends BaseDaoTestCase
