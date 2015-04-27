@@ -74,9 +74,6 @@ public abstract class FilePreparationFilter extends FilterEngine
 		boolean forcePreparation = Boolean.valueOf(httpRequest.getParameter(PARAM_FORCE));
 
 		logger.debug("requesting: " + httpRequest.getServletPath() + " -> " + realFile.getPath());
-		logger.debug("path:   " + realFile.getPath());
-		logger.debug("parent: " + realFile.getParent());
-		logger.debug("name:   " + realFile.getName());
 
 		if(fileFilter != null && fileFilter.accept(servletFile))
 		{
