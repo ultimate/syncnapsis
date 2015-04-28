@@ -16,6 +16,8 @@ import com.syncnapsis.data.model.SolarSystemInfrastructure;
  */
 public abstract class JSONGenerator
 {
+	public static String	LINE_SEPARATOR	= "\r\n";
+
 	/**
 	 * Prevent instantiation
 	 */
@@ -36,7 +38,7 @@ public abstract class JSONGenerator
 	 * @param solarSystems - the {@link List} of {@link SolarSystem}s
 	 * @return the JSON string
 	 */
-	public static String toJSON(Galaxy galaxy)
+	public static String toJSON(Galaxy galaxy, boolean format)
 	{
 		StringBuilder sb = new StringBuilder();
 
@@ -45,6 +47,11 @@ public abstract class JSONGenerator
 		{
 			for(SolarSystem sys : galaxy.getSolarSystems())
 			{
+				if(format)
+				{
+					sb.append(LINE_SEPARATOR);
+					sb.append('\t');
+				}
 				sb.append('[');
 				sb.append(sys.getId());
 				sb.append(',');
@@ -56,7 +63,11 @@ public abstract class JSONGenerator
 				sb.append(']');
 				sb.append(',');
 			}
-			sb.setCharAt(sb.length() - 1, ']'); // replace last ',' with a ']'
+			// replace last ","
+			if(format)
+				sb.replace(sb.length()-1, sb.length(), LINE_SEPARATOR + ']');
+			else
+				sb.setCharAt(sb.length()-1, ']');
 		}
 		else
 		{
@@ -79,7 +90,7 @@ public abstract class JSONGenerator
 	 * @param solarSystemInfrastructures - the {@link List} of {@link SolarSystemInfrastructure}s
 	 * @return the JSON string
 	 */
-	public static String toJSON(Match match)
+	public static String toJSON(Match match, boolean format)
 	{
 		StringBuilder sb = new StringBuilder();
 
@@ -88,6 +99,11 @@ public abstract class JSONGenerator
 		{
 			for(SolarSystemInfrastructure inf : match.getInfrastructures())
 			{
+				if(format)
+				{
+					sb.append(LINE_SEPARATOR);
+					sb.append('\t');
+				}
 				sb.append('[');
 				sb.append(inf.getId());
 				// sb.append(',');
@@ -105,7 +121,11 @@ public abstract class JSONGenerator
 				sb.append(']');
 				sb.append(',');
 			}
-			sb.setCharAt(sb.length() - 1, ']'); // replace last ',' with a ']'
+			// replace last ","
+			if(format)
+				sb.replace(sb.length()-1, sb.length(), LINE_SEPARATOR + ']');
+			else
+				sb.setCharAt(sb.length()-1, ']');
 		}
 		else
 		{
