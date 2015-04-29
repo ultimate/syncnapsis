@@ -30,17 +30,15 @@ public class JSONGeneratorTest extends LoggerTestCase
 		Galaxy galaxy = new Galaxy();
 		galaxy.setSolarSystems(Arrays.asList(sys1, sys2, sys3));
 
-		String expected = "[[1,101,102,103],[2,201,202,203],[3,301,302,303]]";
+		String expected1 = "[[1,101,102,103],[2,201,202,203],[3,301,302,303]]";
+		String expected2 = "[\r\n\t[1,101,102,103],\r\n\t[2,201,202,203],\r\n\t[3,301,302,303]\r\n]";
+		String expected3 = "[]";
 
-		String json = JSONGenerator.toJSON(galaxy);
-
-		assertEquals(expected, json);
-
+		assertEquals(expected1, JSONGenerator.toJSON(galaxy, false));
+		assertEquals(expected2, JSONGenerator.toJSON(galaxy, true));
 		// test with empty galaxy
-		expected = "[]";
-		json = JSONGenerator.toJSON(new Galaxy());
-		
-		assertEquals(expected, json);
+		assertEquals(expected3, JSONGenerator.toJSON(new Galaxy(), false));
+		assertEquals(expected3, JSONGenerator.toJSON(new Galaxy(), true));
 	}
 
 	@TestCoversMethods("toJSON")
@@ -76,16 +74,14 @@ public class JSONGeneratorTest extends LoggerTestCase
 		Match match = new Match();
 		match.setInfrastructures(Arrays.asList(inf1, inf2, inf3));
 
-		String expected = "[[11,101,102,103,10,100],[22,201,202,203,20,200],[33,301,302,303,30,300]]";
+		String expected1 = "[[11,101,102,103,10,100],[22,201,202,203,20,200],[33,301,302,303,30,300]]";
+		String expected2 = "[\r\n\t[11,101,102,103,10,100],\r\n\t[22,201,202,203,20,200],\r\n\t[33,301,302,303,30,300]\r\n]";
+		String expected3 = "[]";
 
-		String json = JSONGenerator.toJSON(match);
-
-		assertEquals(expected, json);
-
+		assertEquals(expected1, JSONGenerator.toJSON(match, false));
+		assertEquals(expected2, JSONGenerator.toJSON(match, true));
 		// test with empty match
-		expected = "[]";
-		json = JSONGenerator.toJSON(new Match());
-		
-		assertEquals(expected, json);
+		assertEquals(expected3, JSONGenerator.toJSON(new Match(), false));
+		assertEquals(expected3, JSONGenerator.toJSON(new Match(), true));
 	}
 }
