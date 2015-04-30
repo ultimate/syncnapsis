@@ -9,8 +9,8 @@ import java.io.IOException;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.util.Assert;
 
-import com.syncnapsis.data.model.Galaxy;
-import com.syncnapsis.data.service.GalaxyManager;
+import com.syncnapsis.data.model.Match;
+import com.syncnapsis.data.service.MatchManager;
 import com.syncnapsis.exceptions.ObjectNotFoundException;
 import com.syncnapsis.utils.FileUtil;
 import com.syncnapsis.utils.serialization.JSONGenerator;
@@ -25,9 +25,9 @@ import com.syncnapsis.utils.serialization.JSONGenerator;
 public class GalaxyFilter extends FilePreparationFilter implements InitializingBean
 {
 	/**
-	 * The GalaxyManager
+	 * The MatchManager
 	 */
-	protected GalaxyManager	galaxyManager;
+	protected MatchManager	matchManager;
 
 	/**
 	 * Default Constructor passing this instance as the filter to the super Constructor
@@ -38,23 +38,23 @@ public class GalaxyFilter extends FilePreparationFilter implements InitializingB
 	}
 
 	/**
-	 * The GalaxyManager
+	 * The MatchManager
 	 * 
-	 * @return galaxyManager
+	 * @return matchManager
 	 */
-	public GalaxyManager getGalaxyManager()
+	public MatchManager getMatchManager()
 	{
-		return galaxyManager;
+		return matchManager;
 	}
 
 	/**
-	 * The GalaxyManager
+	 * The MatchManager
 	 * 
-	 * @param galaxyManager - the GalaxyManager
+	 * @param matchManager - the MatchManager
 	 */
-	public void setGalaxyManager(GalaxyManager galaxyManager)
+	public void setMatchManager(MatchManager matchManager)
 	{
-		this.galaxyManager = galaxyManager;
+		this.matchManager = matchManager;
 	}
 
 	/*
@@ -65,7 +65,7 @@ public class GalaxyFilter extends FilePreparationFilter implements InitializingB
 	public void afterPropertiesSet() throws Exception
 	{
 		super.afterPropertiesSet();
-		Assert.notNull(galaxyManager, "galaxyManager must not be null");
+		Assert.notNull(matchManager, "matchManager must not be null");
 	}
 
 	/*
@@ -75,7 +75,7 @@ public class GalaxyFilter extends FilePreparationFilter implements InitializingB
 	@Override
 	public synchronized boolean prepare(File realFile, File servletFile)
 	{
-		logger.info("creating galaxy file: " + realFile.getName());
+		logger.info("creating match-galaxy file: " + realFile.getName());
 
 		String nameWithoutExtension = realFile.getName().substring(0, realFile.getName().length() - EXTENSION.length());
 		Long id = null;
@@ -85,22 +85,22 @@ public class GalaxyFilter extends FilePreparationFilter implements InitializingB
 		}
 		catch(NumberFormatException e)
 		{
-			logger.error("could not parse file name to galaxy id", e);
+			logger.error("could not parse file name to match id", e);
 			return false;
 		}
 
-		Galaxy galaxy;
+		Match match;
 		try
 		{
-			galaxy = galaxyManager.get(id);
+			match = matchManager.get(id);
 		}
 		catch(ObjectNotFoundException e)
 		{
-			logger.error("invalid galaxy id: " + id);
+			logger.error("invalid match id: " + id);
 			return false;
 		}
 
-		String json = JSONGenerator.toJSON(galaxy);
+		String json = JSONGenerator.toJSON(match, false); // TODO use format?
 
 		try
 		{
