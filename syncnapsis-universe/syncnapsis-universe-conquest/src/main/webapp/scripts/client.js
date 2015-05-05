@@ -1742,6 +1742,28 @@ UIManager.prototype.updateLinks = function()
 	}
 };
 
+UIManager.prototype.parseGalaxy = function(json)
+{
+	// TODO use ViewUtil.Galaxy and ViewUtil.System
+	
+	var arr;
+	eval("arr=" + json);
+	var galaxy = {};
+	galaxy.solarSystems = [];
+	var sys;
+	for(var i = 0; i < arr.length; i++)
+	{
+		sys = {
+			id: arr[i][0],
+			x: arr[i][1],
+			y: arr[i][2],
+			z: arr[i][3]
+		};
+		galaxy.solarSystems[galaxy.solarSystems.length] = sys;
+	}
+	return galaxy;
+};
+
 MessageManager = function()
 {
 };
