@@ -37,9 +37,16 @@
 	DependencyManager.register("Proxies", "util/Proxies.js");
 	DependencyManager.register("Reflections", "util/Reflections.js");
 	DependencyManager.register("Strings", "util/Strings.js");
+	// register view-JS
+	DependencyManager.register("View", "view/View.js");
+	DependencyManager.register("ColorModel", "view/ColorModel.js");
+	DependencyManager.register("fragmentshader", "view/fragment.shader", true);
+	DependencyManager.register("vertexshader", "view/vertex.shader", true);
 	// register lib-JS
 	DependencyManager.register("DateFormat", "lib/date.format.js");
 	DependencyManager.register("JSON", "lib/json2.js");
+	DependencyManager.register("THREE", "lib/three.min.js");
+	DependencyManager.register("Stats", "lib/stats.min.js");
 	// register WebSocket-JS
 	DependencyManager.register("WebSockets", "websockets/WebSockets.js");
 	DependencyManager.register("Fallback", "websockets/Fallback.js");
