@@ -1792,6 +1792,9 @@ ConquestManager = function()
 ConquestManager.prototype.update = function(channel, value)
 {
 	console.log("received updated for channel '" + channel + "': " + value);
+
+	if(value == null)
+		return; // value can be null on server restart!
 	
 	if(channel == UI.constants.CHANNEL_MATCH_CREATED)
 	{
