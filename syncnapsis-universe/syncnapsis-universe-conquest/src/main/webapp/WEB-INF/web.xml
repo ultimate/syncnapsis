@@ -191,6 +191,10 @@
 		<mime-type>text/html</mime-type>
 	</mime-mapping>
 	<mime-mapping>
+		<extension>fs</extension>
+		<mime-type>x-shader/x-fragment</mime-type>
+	</mime-mapping>
+	<mime-mapping>
 		<extension>jnlp</extension>
 		<mime-type>application/x-java-jnlp-file</mime-type>
 	</mime-mapping>
@@ -217,6 +221,10 @@
 	<mime-mapping>
 		<extension>txt</extension>
 		<mime-type>text/plain</mime-type>
+	</mime-mapping>
+	<mime-mapping>
+		<extension>vs</extension>
+		<mime-type>x-shader/x-vertex</mime-type>
 	</mime-mapping>
 	<mime-mapping>
 		<extension>xls</extension>

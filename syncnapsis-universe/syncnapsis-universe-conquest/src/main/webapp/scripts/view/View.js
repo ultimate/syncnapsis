@@ -12,9 +12,9 @@
  * You should have received a copy of the GNU General Plublic License along with this program;
  * if not, see <http://www.gnu.org/licenses/>.
  */
-//@requires("vertexshader")
-//@requires("fragmentshader")
 //@requires("THREE")
+//@requires("star-vertexshader")
+//@requires("star-fragmentshader")
 
 var ViewUtil = {};
 
@@ -204,8 +204,8 @@ ViewUtil.GalaxyShader = function(imgPath) {
 		texture:   { type: "t", value: THREE.ImageUtils.loadTexture( imgPath ) },
 	};
 	
-	this.vertexShader = ViewUtil.loadShader( "vertexshader" );
-	this.fragmentShader = ViewUtil.loadShader( "fragmentshader" );
+	this.vertexShader = ViewUtil.loadShader( "star-vertexshader" );
+	this.fragmentShader = ViewUtil.loadShader( "star-fragmentshader" );
 		
 	this.material = new THREE.ShaderMaterial( {
 		uniforms: 		this.uniforms,
