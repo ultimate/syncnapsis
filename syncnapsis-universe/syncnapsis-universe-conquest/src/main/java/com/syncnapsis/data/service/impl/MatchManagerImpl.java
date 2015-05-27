@@ -130,11 +130,13 @@ public class MatchManagerImpl extends GenericNameManagerImpl<Match, Long> implem
 		// create general channel(s)
 		conquestManager.createChannel(UniverseConquestConstants.CHANNEL_MATCH_CREATED, null);
 		// create individual match channel(s)
+		HibernateUtil.openBoundSession();
 		List<Match> matches = getAll();
 		for(Match m : matches)
 		{
 			createChannels(m);
 		}
+		HibernateUtil.closeBoundSession();
 	}
 
 	/**
