@@ -315,18 +315,19 @@ ViewUtil.Galaxy = function(systems) {
 	};
 };
 
-ViewUtil.System = function(x, y, z, size, habitability) {
+ViewUtil.System = function(x, y, z, size, heat) {
 	
 	var animationSpeed 	= 100;
 	this.coords 		= new ViewUtil.AnimatedVector3(new THREE.Vector3(x,y,z), animationSpeed);
-	// db-properties
+	// static properties (unchanged per match)
 	this.size 			= new ViewUtil.AnimatedVariable(size, 0, 1e3, animationSpeed); 
-	this.habitability 	= new ViewUtil.AnimatedVariable(habitability, 0, 1e3, animationSpeed);
+	this.heat 			= new ViewUtil.AnimatedVariable(heat, 0, 1e3, animationSpeed);
+	this.habitability 	= new ViewUtil.AnimatedVariable(0, 	  0, 1e3, animationSpeed);
+	// dynamic properties
 	this.infrastructure = new ViewUtil.AnimatedVariable(0, 0, 1e12, animationSpeed);
 	this.population 	= new ViewUtil.AnimatedVariable(0, 0, 1e12, animationSpeed);
+	this.maxPopulation 	= new ViewUtil.AnimatedVariable(0, 0, 1e12, animationSpeed);
 	// calculated properties
-	this.maxPopulation 	= new ViewUtil.AnimatedVariable(size*habitability, 0, 1e6, animationSpeed);
-	this.heat 			= new ViewUtil.AnimatedVariable(/*size / hab*/, 0, 1, animationSpeed);
 	// additional properties
 	var dispSize = Math.log10(size)/3*(ViewUtil.SYSTEM_SIZE_MAX-ViewUtil.SYSTEM_SIZE_MIN) + ViewUtil.SYSTEM_SIZE_MIN;
 	this.displaySize 	= new ViewUtil.AnimatedVariable(dispSize, ViewUtil.SYSTEM_SIZE_MIN, ViewUtil.SYSTEM_SIZE_MAX, animationSpeed); 
@@ -340,6 +341,7 @@ ViewUtil.System = function(x, y, z, size, habitability) {
 		var y = this.coords.target.y;
 		var z = this.coords.target.z;
 		this.radius = Math.sqrt(x*x + y*y + z*z);
+		 // TODO 
 		this.color.target = this.colorModel.getRGB(this.displaySize.target, this.heat.target, this.radius / this.galaxy.info.maxR);
 	};
 	
@@ -359,8 +361,13 @@ ViewUtil.System = function(x, y, z, size, habitability) {
 			this.galaxy.systemShader.attributes.customColor.value[this.index] = this.color.value;
 			this.galaxy.systemShader.attributes.customColor.needsUpdate = true;	
 		}
-		
+
+		this.size.animate(time);
 		this.heat.animate(time);
+		this.habitability.animate(time);
+		this.infrastructure.animate(time);
+		this.population.animate(time);
+		this.maxPopulation.animate(time)
 		
 		this.firstAnimation = false;
 	};
