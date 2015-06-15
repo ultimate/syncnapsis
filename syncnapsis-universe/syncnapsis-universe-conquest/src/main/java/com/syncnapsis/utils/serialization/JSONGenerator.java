@@ -117,7 +117,9 @@ public abstract class JSONGenerator
 				sb.append(',');
 				sb.append(inf.getSize());
 				sb.append(',');
-				sb.append(inf.getHabitability());
+				sb.append(inf.getHeat());
+				// sb.append(',');
+				// sb.append(inf.getHabitability());
 				sb.append(']');
 				sb.append(',');
 			}
