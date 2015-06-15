@@ -58,12 +58,15 @@ public class SolarSystemInfrastructure extends ActivatableInstance<Long>
 	protected Date							firstColonizationDate;
 
 	/**
-	 * The size of this solar system (in a range from 0 to 100)
+	 * The size of this solar system (in a range from 0 to 1000)
 	 */
 	protected int							size;
-
 	/**
-	 * The habitability of this solar system (in a range from 0 to 100)
+	 * The heat of the star of this solar system (in a range from 0 to 1000)
+	 */
+	protected int							heat;
+	/**
+	 * The habitability of this solar system (in a range from 0 to 1000)
 	 */
 	protected int							habitability;
 
@@ -135,7 +138,7 @@ public class SolarSystemInfrastructure extends ActivatableInstance<Long>
 	}
 
 	/**
-	 * The size of this solar system (in a range from 0 to 100)
+	 * The size of this solar system (in a range from 0 to 1000)
 	 * 
 	 * @return size
 	 */
@@ -144,9 +147,20 @@ public class SolarSystemInfrastructure extends ActivatableInstance<Long>
 	{
 		return size;
 	}
+	
+	/**
+	 * The heat of the star of this solar system (in a range from 0 to 1000)
+	 * 
+	 * @return heat
+	 */
+	@Column(nullable = false)
+	public int getHeat()
+	{
+		return heat;
+	}
 
 	/**
-	 * The habitability of this solar system (in a range from 0 to 100)
+	 * The habitability of this solar system (in a range from 0 to 1000)
 	 * 
 	 * @return habitability
 	 */
@@ -256,7 +270,7 @@ public class SolarSystemInfrastructure extends ActivatableInstance<Long>
 	}
 
 	/**
-	 * The size of this solar system (in a range from 0 to 100)
+	 * The size of this solar system (in a range from 0 to 1000)
 	 * 
 	 * @param size - the size
 	 */
@@ -264,9 +278,19 @@ public class SolarSystemInfrastructure extends ActivatableInstance<Long>
 	{
 		this.size = size;
 	}
+	
+	/**
+	 * The heat of the star of this solar system (in a range from 0 to 1000)
+	 * 
+	 * @param heat - the heat
+	 */
+	public void setHeat(int heat)
+	{
+		this.heat = heat;
+	}
 
 	/**
-	 * The habitability of this solar system (in a range from 0 to 100)
+	 * The habitability of this solar system (in a range from 0 to 1000)
 	 * 
 	 * @param habitability - the habitability
 	 */
@@ -346,6 +370,7 @@ public class SolarSystemInfrastructure extends ActivatableInstance<Long>
 		int result = super.hashCode();
 		result = prime * result + ((firstColonizationDate == null) ? 0 : firstColonizationDate.hashCode());
 		result = prime * result + habitability;
+		result = prime * result + heat;
 		result = prime * result + (int) (infrastructure ^ (infrastructure >>> 32));
 		result = prime * result + ((lastUpdateDate == null) ? 0 : lastUpdateDate.hashCode());
 		result = prime * result + ((match == null) ? 0 : match.getId().hashCode());
@@ -376,6 +401,8 @@ public class SolarSystemInfrastructure extends ActivatableInstance<Long>
 		else if(!firstColonizationDate.equals(other.firstColonizationDate))
 			return false;
 		if(habitability != other.habitability)
+			return false;
+		if(heat != other.heat)
 			return false;
 		if(infrastructure != other.infrastructure)
 			return false;

@@ -713,6 +713,7 @@
 		<column>firstColonizationDate</column>
 		<column>infrastructure</column>
 		<column>size</column>
+		<column>heat</column>
 		<column>habitability</column>
 		<column>lastUpdateDate</column>
 		<row>
@@ -724,6 +725,7 @@
 			<value description="firstColonizationDate">2012-01-01</value>
 			<value description="infrastructure">100</value>
 			<value description="size">1</value>
+			<value description="heat">1</value>
 			<value description="habitability">1</value>
 			<value description="lastUpdateDate">2012-01-01</value>
 		</row>
@@ -736,6 +738,7 @@
 			<value description="firstColonizationDate">2012-01-01</value>
 			<value description="infrastructure">100</value>
 			<value description="size">1</value>
+			<value description="heat">1</value>
 			<value description="habitability">1</value>
 			<value description="lastUpdateDate">2012-01-01</value>
 		</row>
@@ -748,6 +751,7 @@
 			<value description="firstColonizationDate">2012-01-01</value>
 			<value description="infrastructure">100</value>
 			<value description="size">1</value>
+			<value description="heat">1</value>
 			<value description="habitability">1</value>
 			<value description="lastUpdateDate">2012-01-01</value>
 		</row>
@@ -760,6 +764,7 @@
 			<value description="firstColonizationDate">2012-01-01</value>
 			<value description="infrastructure">100</value>
 			<value description="size">1</value>
+			<value description="heat">1</value>
 			<value description="habitability">1</value>
 			<value description="lastUpdateDate">2012-01-01</value>
 		</row>
