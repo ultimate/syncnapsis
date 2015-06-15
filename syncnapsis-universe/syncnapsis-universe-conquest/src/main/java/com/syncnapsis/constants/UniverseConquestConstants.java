@@ -66,6 +66,24 @@ public class UniverseConquestConstants
 	 */
 	public static final Constant<String>	PARAM_SOLARSYSTEM_SIZE_MAX				= new StringConstant("solarsystem.size.max");
 	/**
+	 * The maximum value for the heat of a SolarSystem
+	 * 
+	 * @see SolarSystemInfrastructure#getHeat()
+	 */
+	public static final Constant<String>	PARAM_SOLARSYSTEM_HEAT_MAX				= new StringConstant("solarsystem.heat.max");
+	/**
+	 * The minimum heat for a habitability
+	 */
+	public static final Constant<String>	PARAM_SOLARSYSTEM_HABITABLE_HEAT_MIN	= new StringConstant("solarsystem.habitable.heat.min");
+	/**
+	 * The maximum heat for a habitability
+	 */
+	public static final Constant<String>	PARAM_SOLARSYSTEM_HABITABLE_HEAT_MAX	= new StringConstant("solarsystem.habitable.heat.max");
+	/**
+	 * The factor for calculating the heat distribution within a solar system.
+	 */
+	public static final Constant<String>	PARAM_SOLARSYSTEM_HEAT_FACTOR			= new StringConstant("solarsystem.heat.factor");
+	/**
 	 * The factor for calculating the maximum population of a SolarSystem from the habitability and
 	 * the size in the way <code>habitability*size*factor</code>
 	 */
@@ -183,5 +201,5 @@ public class UniverseConquestConstants
 	/**
 	 * Channel name for notifying clients when the movements of a match were updated
 	 */
-	public static final String				CHANNEL_MATCH_MOVEMENTS = "match_" + CHANNEL_ID_PLACEHOLDER + "_movements";
+	public static final String				CHANNEL_MATCH_MOVEMENTS					= "match_" + CHANNEL_ID_PLACEHOLDER + "_movements";
 }

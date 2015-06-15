@@ -54,108 +54,132 @@
 		</row>
 		<row>
 			<value description="id">104</value>
+			<value description="name">solarsystem.heat.max</value>
+			<value description="value">1000</value>
+			<value description="version">1</value>
+		</row>
+		<row>
+			<value description="id">105</value>
 			<value description="name">solarsystem.population.factor</value>
 			<value description="value">1000000</value>
 			<value description="version">1</value>
 		</row>
 		<row>
-			<value description="id">105</value>
+			<value description="id">106</value>
 			<value description="name">travel.max.factor</value>
 			<value description="value">10</value>
 			<value description="version">1</value>
 		</row>
 		<row>
-			<value description="id">106</value>
+			<value description="id">107</value>
 			<value description="name">travel.exodus.factor</value>
 			<value description="value">20</value>
 			<value description="version">1</value>
 		</row>
 		<row>
-			<value description="id">107</value>
+			<value description="id">108</value>
 			<value description="name">travel.speed.max</value>
 			<value description="value">1000</value>
 			<value description="version">1</value>
 		</row>
 		<row>
-			<value description="id">108</value>
+			<value description="id">109</value>
 			<value description="name">travel.speed.min</value>
 			<value description="value">100</value>
 			<value description="version">1</value>
 		</row>
 		<row>
-			<value description="id">109</value>
+			<value description="id">110</value>
 			<value description="name">match.speed.min</value>
 			<value description="value">0</value>
 			<value description="version">1</value>
 		</row>
 		<row>
-			<value description="id">110</value>
+			<value description="id">111</value>
 			<value description="name">match.speed.max</value>
 			<value description="value">5</value>
 			<value description="version">1</value>
 		</row>
 		<row>
-			<value description="id">111</value>
+			<value description="id">112</value>
 			<value description="name">factor.build</value>
 			<value description="value">0.08</value>
 			<value description="version">1</value>
 		</row>
 		<row>
-			<value description="id">112</value>
+			<value description="id">113</value>
 			<value description="name">factor.attack</value>
 			<value description="value">0.06</value>
 			<value description="version">1</value>
 		</row>
 		<row>
-			<value description="id">113</value>
+			<value description="id">114</value>
 			<value description="name">factor.build.randomize</value>
 			<value description="value">1.1</value>
 			<value description="version">1</value>
 		</row>
 		<row>
-			<value description="id">114</value>
+			<value description="id">115</value>
 			<value description="name">factor.attack.randomize</value>
 			<value description="value">0.25</value>
 			<value description="version">1</value>
 		</row>
 		<row>
-			<value description="id">115</value>
+			<value description="id">116</value>
 			<value description="name">norm.tick.length</value>
 			<value description="value">100</value>
 			<value description="version">1</value>
 		</row>
 		<row>
-			<value description="id">116</value>
+			<value description="id">117</value>
 			<value description="name">travel.time.factor</value>
 			<value description="value">0.7</value>
 			<value description="version">1</value>
 		</row>
 		<row>
-			<value description="id">121</value>
+			<value description="id">118</value>
+			<value description="name">solarsystem.habitable.heat.min</value>
+			<value description="value">0.2</value>
+			<value description="version">1</value>
+		</row>
+		<row>
+			<value description="id">119</value>
+			<value description="name">solarsystem.habitable.heat.max</value>
+			<value description="value">0.8</value>
+			<value description="version">1</value>
+		</row>
+		<row>
+			<value description="id">120</value>
+			<value description="name">solarsystem.heat.factor</value>
+			<value description="value">3.2</value>
+			<value description="version">1</value>
+		</row>
+		<row>
+			<value description="id">191</value>
 			<value description="name">priority.full</value>
 			<value description="value">1.0</value>
 			<value description="version">1</value>
 		</row>
 		<row>
-			<value description="id">122</value>
+			<value description="id">192</value>
 			<value description="name">priority.high</value>
 			<value description="value">0.75</value>
 			<value description="version">1</value>
 		</row>
 		<row>
-			<value description="id">123</value>
+			<value description="id">193</value>
 			<value description="name">priority.medium</value>
 			<value description="value">0.5</value>
 			<value description="version">1</value>
 		</row>
 		<row>
-			<value description="id">124</value>
+			<value description="id">194</value>
 			<value description="name">priority.low</value>
 			<value description="value">0.25</value>
 			<value description="version">1</value>
 		</row>
 		<row>
-			<value description="id">125</value>
+			<value description="id">195</value>
 			<value description="name">priority.none</value>
 			<value description="value">0.0</value>
 			<value description="version">1</value>

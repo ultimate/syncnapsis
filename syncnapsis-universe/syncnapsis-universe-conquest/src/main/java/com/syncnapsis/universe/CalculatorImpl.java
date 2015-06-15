@@ -296,6 +296,46 @@ public class CalculatorImpl implements Calculator
 		return (long) infrastructure.getHabitability() * infrastructure.getSize()
 				* UniverseConquestConstants.PARAM_SOLARSYSTEM_MAX_POPULATION_FACTOR.asLong();
 	}
+	
+	/**
+	 * Calculates the habitability by the following rule:<br>
+	 * <ul>
+	 * <li>planets are equally distributed in a range from [0; size/1000]</li>
+	 * <li>the heat reaching a planet decreases with increasing orbit radius</li>
+	 * <li>heat is distributed throughout the system as followed<br>
+	 * <code>
+	 * heat(r) = heat_factor * star_heat / (r + 1)^2
+	 * </code>
+	 * </li>
+	 * <li>only planets with a heat within a given range are habitable (e.g. [0.2;0.8])</li>
+	 * </ul>
+	 * 
+	 * @see UniverseConquestConstants#PARAM_SOLARSYSTEM_HABITABLE_HEAT_MIN
+	 * @see UniverseConquestConstants#PARAM_SOLARSYSTEM_HABITABLE_HEAT_MAX
+	 */
+	@Override
+	public int calculateHabitability(int size, int heat)
+	{
+		double minHeat = UniverseConquestConstants.PARAM_SOLARSYSTEM_HABITABLE_HEAT_MIN.asDouble();
+		double maxHeat = UniverseConquestConstants.PARAM_SOLARSYSTEM_HABITABLE_HEAT_MAX.asDouble();
+		double heatFactor = UniverseConquestConstants.PARAM_SOLARSYSTEM_HEAT_FACTOR.asDouble();
+		
+		double sizeD = size/UniverseConquestConstants.PARAM_SOLARSYSTEM_SIZE_MAX.asDouble();
+		double heatD = heat/UniverseConquestConstants.PARAM_SOLARSYSTEM_HEAT_MAX.asDouble();
+
+		double minHeatRadius = Math.sqrt(heatFactor * heatD / minHeat) - 1;
+		double maxHeatRadius = Math.sqrt(heatFactor * heatD / maxHeat) - 1;
+		
+		double habitableZoneStart = Math.max(maxHeatRadius, 0.0);
+		double habitableZoneEnd = Math.min(minHeatRadius, sizeD);
+
+		double habitableZone = habitableZoneEnd - habitableZoneStart;
+		if(habitableZone < 0)
+			habitableZone = 0;
+		
+		double habitabilityD = habitableZone / sizeD;
+		return (int) (habitabilityD*1000);
+	}
 
 	/**
 	 * Calculates the maximum travel distance for a moved population based on the formula<br>

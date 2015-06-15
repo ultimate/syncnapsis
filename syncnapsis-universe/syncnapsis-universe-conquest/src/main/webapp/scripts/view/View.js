@@ -315,14 +315,23 @@ ViewUtil.Galaxy = function(systems) {
 	};
 };
 
-ViewUtil.System = function(x, y, z, size, heat) {
+ViewUtil.System = function(x, y, z, size, habitability) {
 	
-	var animationSpeed = 100;
-	this.coords = new ViewUtil.AnimatedVector3(new THREE.Vector3(x,y,z), animationSpeed);
-	this.size = new ViewUtil.AnimatedVariable(size, 10, 30, animationSpeed); 
-	this.heat = new ViewUtil.AnimatedVariable(heat, 0, 1, animationSpeed); 
-	this.color = new ViewUtil.AnimatedColor(new THREE.Color(), animationSpeed);
-	this.colorModel = ViewUtil.ColorModel.white;
+	var animationSpeed 	= 100;
+	this.coords 		= new ViewUtil.AnimatedVector3(new THREE.Vector3(x,y,z), animationSpeed);
+	// db-properties
+	this.size 			= new ViewUtil.AnimatedVariable(size, 0, 1e3, animationSpeed); 
+	this.habitability 	= new ViewUtil.AnimatedVariable(habitability, 0, 1e3, animationSpeed);
+	this.infrastructure = new ViewUtil.AnimatedVariable(0, 0, 1e12, animationSpeed);
+	this.population 	= new ViewUtil.AnimatedVariable(0, 0, 1e12, animationSpeed);
+	// calculated properties
+	this.maxPopulation 	= new ViewUtil.AnimatedVariable(size*habitability, 0, 1e6, animationSpeed);
+	this.heat 			= new ViewUtil.AnimatedVariable(/*size / hab*/, 0, 1, animationSpeed);
+	// additional properties
+	var dispSize = Math.log10(size)/3*(ViewUtil.SYSTEM_SIZE_MAX-ViewUtil.SYSTEM_SIZE_MIN) + ViewUtil.SYSTEM_SIZE_MIN;
+	this.displaySize 	= new ViewUtil.AnimatedVariable(dispSize, ViewUtil.SYSTEM_SIZE_MIN, ViewUtil.SYSTEM_SIZE_MAX, animationSpeed); 
+	this.color 			= new ViewUtil.AnimatedColor(new THREE.Color(), animationSpeed);
+	this.colorModel 	= ViewUtil.ColorModel.white;
 	
 	this.firstAnimation = true;
 	
@@ -331,7 +340,7 @@ ViewUtil.System = function(x, y, z, size, heat) {
 		var y = this.coords.target.y;
 		var z = this.coords.target.z;
 		this.radius = Math.sqrt(x*x + y*y + z*z);
-		this.color.target = this.colorModel.getRGB(this.size.target, this.heat.target, this.radius / this.galaxy.info.maxR);
+		this.color.target = this.colorModel.getRGB(this.displaySize.target, this.heat.target, this.radius / this.galaxy.info.maxR);
 	};
 	
 	this.animate = function(time) {
@@ -340,9 +349,9 @@ ViewUtil.System = function(x, y, z, size, heat) {
 			this.galaxy.systemGeometry.vertices[this.index] = this.coords.value;
 			this.galaxy.systemGeometry.verticesNeedUpdate = true;
 		}
-		if(this.size.animate(time) || this.firstAnimation)
+		if(this.displaySize.animate(time) || this.firstAnimation)
 		{
-			this.galaxy.systemShader.attributes.size.value[this.index] = this.size.value;
+			this.galaxy.systemShader.attributes.size.value[this.index] = this.displaySize.value;
 			this.galaxy.systemShader.attributes.size.needsUpdate = true;	
 		}
 		if(this.color.animate(time) || this.firstAnimation)

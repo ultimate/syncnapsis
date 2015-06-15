@@ -61,8 +61,12 @@ public class CalculatorImplTest extends LoggerTestCase
 					constant.define("1000");
 				else if(constant == UniverseConquestConstants.PARAM_SOLARSYSTEM_SIZE_MAX)
 					constant.define("1000");
+				else if(constant == UniverseConquestConstants.PARAM_SOLARSYSTEM_HEAT_MAX)
+					constant.define("1000");
 				else if(constant == UniverseConquestConstants.PARAM_SOLARSYSTEM_MAX_POPULATION_FACTOR)
 					constant.define("1000000");
+				else if(constant == UniverseConquestConstants.PARAM_SOLARSYSTEM_HEAT_FACTOR)
+					constant.define("3.2");
 				else if(constant == UniverseConquestConstants.PARAM_TRAVEL_MAX_FACTOR)
 					constant.define("10.0");
 				else if(constant == UniverseConquestConstants.PARAM_TRAVEL_EXODUS_FACTOR)
@@ -83,6 +87,10 @@ public class CalculatorImplTest extends LoggerTestCase
 					constant.define("1.1");
 				else if(constant == UniverseConquestConstants.PARAM_NORM_TICK_LENGTH)
 					constant.define("100");
+				else if(constant == UniverseConquestConstants.PARAM_SOLARSYSTEM_HABITABLE_HEAT_MIN)
+					constant.define("0.2");
+				else if(constant == UniverseConquestConstants.PARAM_SOLARSYSTEM_HABITABLE_HEAT_MAX)
+					constant.define("0.8");
 				else if(constant == UniverseConquestConstants.PARAM_PRIORITY_FULL)
 					constant.define("1.0");
 				else if(constant == UniverseConquestConstants.PARAM_PRIORITY_HIGH)
@@ -326,6 +334,87 @@ public class CalculatorImplTest extends LoggerTestCase
 	{
 		assertEquals(12.0, calculator.getMaxPopulationExponent());
 	}
+	
+	public void testCalculateHabitability() throws Exception
+	{
+		int heatStepSize = 10;
+		int heatSteps = UniverseConquestConstants.PARAM_SOLARSYSTEM_HEAT_MAX.asInt()/heatStepSize;
+		int sizeStepSize = 10;
+		int sizeSteps = UniverseConquestConstants.PARAM_SOLARSYSTEM_SIZE_MAX.asInt()/sizeStepSize;
+		
+		int[][] hab = new int[sizeSteps+1][heatSteps+1];
+		
+		for(int heat = 0; heat <= heatSteps; heat++)
+		{
+			for(int size = 0; size <= sizeSteps; size++)
+			{
+				hab[size][heat] = calculator.calculateHabitability(size*sizeStepSize, heat*heatStepSize);
+			}
+		}
+		
+		// PRINT ARRAY FOR DEBUGGING
+		
+		logger.debug("---");
+		for(int heat = 0; heat <= heatSteps; heat++)
+		{
+			System.out.print(heat + "\t|\t");
+			for(int size = 0; size <= sizeSteps; size++)
+			{
+				if(hab[size][heat] >= 1000)
+					System.out.print("1k\t");
+				else
+					System.out.print(hab[size][heat] + "\t");
+			}
+			System.out.println("");
+		}
+		for(int size = 0; size <= sizeSteps+2; size++)
+			System.out.print("--------");
+		System.out.println("");
+		System.out.print("\t\t");
+		for(int size = 0; size <= sizeSteps; size++)
+		{
+			System.out.print(size + "\t");
+		}
+		System.out.println("");
+		
+		// VERIFY
+		
+		// heat = 0 -> hab = 0
+		for(int size = 0; size <= sizeSteps; size++)
+			assertEquals(0, hab[size][0]);
+		// size = 0 -> hab = 0
+		for(int h = 0; h <= heatSteps; h++)
+			assertEquals(0, hab[h][0]);
+		
+		// hab has max somewhere in the middle, continously falling to each side
+		for(int size = 1; size <= sizeSteps; size++)
+		{
+			// find max
+			int hMax = 0;
+			for(int h = 0; h <= heatSteps; h++)
+			{
+				if(hab[size][h] > hab[size][hMax])
+					hMax = h;
+			}
+			// assert max is 1k
+			assertEquals(1000, hab[size][hMax]);
+			
+			// check continously falling
+			for(int h = hMax+1; h <= heatSteps; h++)
+				assertTrue(hab[size][h] <= hab[size][h-1]);
+			for(int h = hMax-1; h >= 0; h--)
+				assertTrue(hab[size][h] <= hab[size][h+1]);
+			
+			// check distribution
+			// h > hMax --> hab[size] >= hab[size-1]
+			for(int h = hMax+1; h <= heatSteps; h++)
+				assertTrue(hab[size][h] >= hab[size-1][h]);
+			// h < hMax --> hab[size] <= hab[size-1]
+			for(int h = hMax-1; h >= 0; h--)
+				assertTrue(hab[size][h] <= hab[size-1][h]);
+		}
+	}
+
 
 	public void testCalculateSize() throws Exception
 	{

@@ -92,6 +92,14 @@ public interface Calculator
 	public long getMaxPopulation(SolarSystemInfrastructure infrastructure);
 
 	/**
+	 * Calculate the habitability of a solar system from it's size and heat.
+	 * @param size - the size of the solar system
+	 * @param heat - the heat of the sun of the given solar system
+	 * @return the habitability
+	 */
+	public int calculateHabitability(int size, int heat);
+	
+	/**
 	 * Calculate the maximum travel distance for the amount population to move away from the origin
 	 * population.<br>
 	 * The distance calculated may be dependent of
