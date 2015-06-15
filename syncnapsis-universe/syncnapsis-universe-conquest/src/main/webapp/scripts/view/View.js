@@ -341,8 +341,14 @@ ViewUtil.System = function(x, y, z, size, heat) {
 		var y = this.coords.target.y;
 		var z = this.coords.target.z;
 		this.radius = Math.sqrt(x*x + y*y + z*z);
-		 // TODO 
-		this.color.target = this.colorModel.getRGB(this.displaySize.target, this.heat.target, this.radius / this.galaxy.info.maxR);
+		this.color.target = this.colorModel.getRGB(	this.size.target / this.size.max,
+													this.heat.target / this.heat.max,
+													this.habitability.target / this.habitability.max, 
+													Math.log10(this.infrastructure.target) / Math.log10(this.infrastructure.max),
+													Math.log10(this.population.target) / Math.log10(this.population.max), 
+													Math.log10(this.maxPopulation.target) / Math.log10(this.maxPopulation.max),
+													this.radius / this.galaxy.info.maxR
+													);
 	};
 	
 	this.animate = function(time) {

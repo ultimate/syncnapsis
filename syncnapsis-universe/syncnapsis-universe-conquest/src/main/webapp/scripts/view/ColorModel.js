@@ -13,39 +13,50 @@
  * if not, see <http://www.gnu.org/licenses/>.
  */
 ColorModel = {
+		// TODO update for more system properties
+	/**
+	 * each ColorModel must be of the following structure:
+	 * {
+	 *   name: "colormodel_x",
+	 *   getRGB: function(size, heat, habitability, infrastructure, population, maxPopulation, radius) {
+	 *   	// calculate RGB
+	 *   	return new THREE.Color(r, g, b);
+	 *   }
+	 * }  
+	 */
 	white: {
 		name: "white",
-		getRGB: function(size, heat, radius) {
+		getRGB: function(size, heat, habitability, infrastructure, population, maxPopulation, radius) {
 			return new THREE.Color(1,1,1);
 		}
 	},	
 	yellowwhite1: {
 		name: "yellowwhite1",
-		getRGB: function(size, heat, radius) {
+		getRGB: function(size, heat, habitability, infrastructure, population, maxPopulation, radius) {
 			return new THREE.Color(1,1,Math.sqrt(heat));
 		}
 	},	
 	yellowwhite2: {
 		name: "yellowwhite2",
-		getRGB: function(size, heat, radius) {
+		getRGB: function(size, heat, habitability, infrastructure, population, maxPopulation, radius) {
 			return new THREE.Color(1,1,heat);
 		}
 	},	
 	yellowwhite3: {
 		name: "yellowwhite3",
-		getRGB: function(size, heat, radius) {
+		getRGB: function(size, heat, habitability, infrastructure, population, maxPopulation, radius) {
 			return new THREE.Color(1,1,Math.pow(heat,2));
 		}
 	},	
 	yellow: {
 		name: "yellow",
-		getRGB: function(size, heat, radius) {
+		getRGB: function(size, heat, habitability, infrastructure, population, maxPopulation, radius) {
 			return new THREE.Color(1,1,0);
 		}
 	},	
 	fullrange1 : {
 		name: "fullrange1",
-		getRGB: function(size, heat, radius) {
+		getRGB: function(size, heat, habitability, infrastructure, population, maxPopulation, radius) {
 			var param = heat;
 			
 			var bound1 = 0.1;
@@ -66,7 +77,7 @@ ColorModel = {
 	},
 	fullrange2 : {
 		name: "fullrange2",
-		getRGB: function(size, heat, radius) {
+		getRGB: function(size, heat, habitability, infrastructure, population, maxPopulation, radius) {
 			var param = heat;
 			
 			var bound1 = 0.1;
@@ -87,7 +98,7 @@ ColorModel = {
 	},
 	partrange1a: {
 		name: "partrange1a",
-		getRGB: function(size, heat, radius) {
+		getRGB: function(size, heat, habitability, infrastructure, population, maxPopulation, radius) {
 			var param = heat;
 			
 			var bound = 0.5;
@@ -100,7 +111,7 @@ ColorModel = {
 	},	
 	partrange1b: {
 		name: "partrange1b",
-		getRGB: function(size, heat, radius) {
+		getRGB: function(size, heat, habitability, infrastructure, population, maxPopulation, radius) {
 			var param = heat;
 			
 			var bound = 0.5;
@@ -113,7 +124,7 @@ ColorModel = {
 	},	
 	partrange1c: {
 		name: "partrange1c",
-		getRGB: function(size, heat, radius) {
+		getRGB: function(size, heat, habitability, infrastructure, population, maxPopulation, radius) {
 			var param = heat;
 			
 			var bound = 0.3;
@@ -126,7 +137,7 @@ ColorModel = {
 	},	
 	partrange1d: {
 		name: "partrange1d",
-		getRGB: function(size, heat, radius) {
+		getRGB: function(size, heat, habitability, infrastructure, population, maxPopulation, radius) {
 			var param = heat;
 			
 			var bound = 0.3;
@@ -139,7 +150,7 @@ ColorModel = {
 	},	
 	partrange2a: {
 		name: "partrange2a",
-		getRGB: function(size, heat, radius) {
+		getRGB: function(size, heat, habitability, infrastructure, population, maxPopulation, radius) {
 			var param = heat;
 			
 			var bound = 0.3;
@@ -153,7 +164,7 @@ ColorModel = {
 	},	
 	partrange2b: {
 		name: "partrange2b",
-		getRGB: function(size, heat, radius) {
+		getRGB: function(size, heat, habitability, infrastructure, population, maxPopulation, radius) {
 			var param = heat;
 			
 			var bound = 0.3;
@@ -167,7 +178,7 @@ ColorModel = {
 	},	
 	orangewhite1: {
 		name: "orangewhite1",
-		getRGB: function(size, heat, radius) {
+		getRGB: function(size, heat, habitability, infrastructure, population, maxPopulation, radius) {
 			var param = heat;
 			var greenStart = 0.6;	
 			return new THREE.Color(1, param*(1-greenStart)+greenStart, param);
@@ -175,7 +186,7 @@ ColorModel = {
 	},	
 	orangewhite2: {
 		name: "orangewhite2",
-		getRGB: function(size, heat, radius) {
+		getRGB: function(size, heat, habitability, infrastructure, population, maxPopulation, radius) {
 			var param = heat;
 			var greenStart = 0.6;	
 			return new THREE.Color(1, Math.sqrt(param*(1-greenStart)+greenStart), Math.sqrt(param));
@@ -183,7 +194,7 @@ ColorModel = {
 	},	
 	fullrange3a : {
 		name: "fullrange3a",
-		getRGB: function(size, heat, radius) {
+		getRGB: function(size, heat, habitability, infrastructure, population, maxPopulation, radius) {
 			var param = heat;
 			
 			var bound1 = 0.3;	
@@ -199,7 +210,7 @@ ColorModel = {
 	},
 	fullrange3b : {
 		name: "fullrange3b",
-		getRGB: function(size, heat, radius) {
+		getRGB: function(size, heat, habitability, infrastructure, population, maxPopulation, radius) {
 			var param = heat;
 			
 			var bound1 = 0.3;	
@@ -215,7 +226,7 @@ ColorModel = {
 	},
 	fullrange4a : {
 		name: "fullrange4a",
-		getRGB: function(size, heat, radius) {
+		getRGB: function(size, heat, habitability, infrastructure, population, maxPopulation, radius) {
 			var param = heat;
 			
 			var bound1 = 0.3;	
@@ -232,7 +243,7 @@ ColorModel = {
 	},
 	fullrange4b : {
 		name: "fullrange4a",
-		getRGB: function(size, heat, radius) {
+		getRGB: function(size, heat, habitability, infrastructure, population, maxPopulation, radius) {
 			var param = heat;
 			
 			var bound1 = 0.3;	
@@ -249,7 +260,7 @@ ColorModel = {
 	},
 	fullrange5a : {
 		name: "fullrange5a",
-		getRGB: function(size, heat, radius) {
+		getRGB: function(size, heat, habitability, infrastructure, population, maxPopulation, radius) {
 			var param = heat;
 			
 			var bound1 = 0.3;	
@@ -267,7 +278,7 @@ ColorModel = {
 	},
 	fullrange5b : {
 		name: "fullrange5b",
-		getRGB: function(size, heat, radius) {
+		getRGB: function(size, heat, habitability, infrastructure, population, maxPopulation, radius) {
 			var param = heat;
 			
 			var bound1 = 0.3;	
@@ -285,7 +296,7 @@ ColorModel = {
 	},
 	fullcolorrange : {
 		name: "fullcolorrange",
-		getRGB: function(size, heat, radius) {
+		getRGB: function(size, heat, habitability, infrastructure, population, maxPopulation, radius) {
 			var param = radius;
 			
 			var bound1 = 1/6;	
@@ -310,28 +321,28 @@ ColorModel = {
 	},
 	bluewhite1 : {
 		name: "bluewhite1",
-		getRGB: function(size, heat, radius) {
+		getRGB: function(size, heat, habitability, infrastructure, population, maxPopulation, radius) {
 			var param = 1-radius;
 			return new THREE.Color(param, param, 1);
 		}
 	},	
 	bluewhite2 : {
 		name: "bluewhite2",
-		getRGB: function(size, heat, radius) {
+		getRGB: function(size, heat, habitability, infrastructure, population, maxPopulation, radius) {
 			var param = 1-radius;
 			return new THREE.Color(Math.pow(param,2), Math.sqrt(param), 1);
 		}
 	},	
 	bluewhite3 : {
 		name: "bluewhite3",
-		getRGB: function(size, heat, radius) {
+		getRGB: function(size, heat, habitability, infrastructure, population, maxPopulation, radius) {
 			var param = 1-radius;
 			return new THREE.Color(Math.sqrt(param), Math.pow(param,2), 1);
 		}
 	},	
 	spectrum1 : {
 		name: "spectrum1",
-		getRGB: function(size, heat, radius) {
+		getRGB: function(size, heat, habitability, infrastructure, population, maxPopulation, radius) {
 			var param = 1-radius;
 			
 			var bound = 0.6;
@@ -348,7 +359,7 @@ ColorModel = {
 	},	
 	spectrum2 : {
 		name: "spectrum2",
-		getRGB: function(size, heat, radius) {
+		getRGB: function(size, heat, habitability, infrastructure, population, maxPopulation, radius) {
 			var param = 1-radius;
 			
 			var bound = 0.6;
@@ -365,7 +376,7 @@ ColorModel = {
 	},
 	spectrum3 : {
 		name: "spectrum3",
-		getRGB: function(size, heat, radius) {
+		getRGB: function(size, heat, habitability, infrastructure, population, maxPopulation, radius) {
 			var param = 1-radius;
 			
 			var bound = 0.6;
