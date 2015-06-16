@@ -211,6 +211,10 @@
 		<mime-type>application/x-javascript</mime-type>
 	</mime-mapping>
 	<mime-mapping>
+		<extension>json</extension>
+		<mime-type>application/x-javascript</mime-type>
+	</mime-mapping>
+	<mime-mapping>
 		<extension>pdf</extension>
 		<mime-type>application/pdf</mime-type>
 	</mime-mapping>

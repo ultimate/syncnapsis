@@ -479,19 +479,21 @@ UIManager.prototype.onMatchSelect = function(oldMatch, newMatch)
 	document.getElementById(UI.constants.MATCH_STARTDATE_ID.replace(UI.constants.PLACEHOLDER, "info")).value = newMatch.startDate;
 	document.getElementById(UI.constants.MATCH_VICTORYPARAMETER_CUSTOM_ID.replace(UI.constants.PLACEHOLDER, "info")).value = newMatch.victoryParameter
 	
-	// TODO unsubscribe previous match channels
+	// unsubscribe previous match channels
 	if(oldMatch != null && oldMatch.id != null)
 	{
 		server.conquestManager.unsubscribe(UI.constants.CHANNEL_MATCH_RANKS.replace(UI.constants.CHANNEL_ID_PLACEHOLDER, oldMatch.id));
 		server.conquestManager.unsubscribe(UI.constants.CHANNEL_MATCH_SYSTEMS.replace(UI.constants.CHANNEL_ID_PLACEHOLDER, oldMatch.id));
 		server.conquestManager.unsubscribe(UI.constants.CHANNEL_MATCH_MOVEMENTS.replace(UI.constants.CHANNEL_ID_PLACEHOLDER, oldMatch.id));
 	}
-	// TODO subscribe to match channels
+	// subscribe to match channels
 	server.conquestManager.subscribe(UI.constants.CHANNEL_MATCH_RANKS.replace(UI.constants.CHANNEL_ID_PLACEHOLDER, newMatch.id));
 	server.conquestManager.subscribe(UI.constants.CHANNEL_MATCH_SYSTEMS.replace(UI.constants.CHANNEL_ID_PLACEHOLDER, newMatch.id));
 	server.conquestManager.subscribe(UI.constants.CHANNEL_MATCH_MOVEMENTS.replace(UI.constants.CHANNEL_ID_PLACEHOLDER, newMatch.id));
 	
-	// TODO update 3D-view
+	// load galaxy info for this match in background
+	// doShowMatch will update 3D-view
+	AJAX.sendRequest("galaxy/" + newMatch.id + ".json", null, HTTP.GET, null, this.doShowMatch, null, this);
 	
 	// save match-ID as last selection
 	localStorage.setItem(UI.constants.KEY_LAST_MATCH_SELECTED, newMatch.id);
@@ -1744,24 +1746,21 @@ UIManager.prototype.updateLinks = function()
 
 UIManager.prototype.parseGalaxy = function(json)
 {
-	// TODO use ViewUtil.Galaxy and ViewUtil.System
-	
 	var arr;
 	eval("arr=" + json);
-	var galaxy = {};
-	galaxy.solarSystems = [];
-	var sys;
+	var systems = [];
 	for(var i = 0; i < arr.length; i++)
 	{
-		sys = {
-			id: arr[i][0],
-			x: arr[i][1],
-			y: arr[i][2],
-			z: arr[i][3]
-		};
-		galaxy.solarSystems[galaxy.solarSystems.length] = sys;
+		//      					     id		    x		   y		  z		     size		heat
+		systems.push(new ViewUtil.System(arr[i][0], arr[i][1], arr[i][2], arr[i][3], arr[i][4], arr[i][5]));
 	}
-	return galaxy;
+	return new ViewUtil.Galaxy(systems);
+};
+
+UIManager.prototype.doShowMatch = function(request)
+{
+	// TODO update 3D-View
+	console.log(request);
 };
 
 MessageManager = function()
@@ -1818,5 +1817,5 @@ ConquestManager.prototype.update = function(channel, value)
 		});
 	}
 	
-	// TODO
+	// TODO other channels
 };

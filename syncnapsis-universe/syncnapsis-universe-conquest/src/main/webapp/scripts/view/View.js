@@ -13,6 +13,7 @@
  * if not, see <http://www.gnu.org/licenses/>.
  */
 //@requires("THREE")
+//@requires("ColorModel")
 //@requires("star-vertexshader")
 //@requires("star-fragmentshader")
 
@@ -315,9 +316,10 @@ ViewUtil.Galaxy = function(systems) {
 	};
 };
 
-ViewUtil.System = function(x, y, z, size, heat) {
+ViewUtil.System = function(id, x, y, z, size, heat) {
 	
 	var animationSpeed 	= 100;
+	this.id 			= id;
 	this.coords 		= new ViewUtil.AnimatedVector3(new THREE.Vector3(x,y,z), animationSpeed);
 	// static properties (unchanged per match)
 	this.size 			= new ViewUtil.AnimatedVariable(size, 0, 1e3, animationSpeed); 
