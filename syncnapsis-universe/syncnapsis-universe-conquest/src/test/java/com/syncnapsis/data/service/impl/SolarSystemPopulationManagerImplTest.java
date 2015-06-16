@@ -1150,5 +1150,15 @@ public class SolarSystemPopulationManagerImplTest extends
 		{
 			return infrastructure.getPopulations();
 		}
+
+		/*
+		 * (non-Javadoc)
+		 * @see com.syncnapsis.universe.Calculator#calculateHabitability(int, int)
+		 */
+		@Override
+		public int calculateHabitability(int size, int heat)
+		{
+			return 0;
+		}
 	}
 }
