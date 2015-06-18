@@ -409,8 +409,8 @@ ViewUtil.EventManager = function(view)
 			var x = event.pageX;
 			var y = event.pageY;
 			
-			this.view.camera.sphere_phi.target = camera.sphere_phi.value - (x-this.lastX)/window.innerWidth * Math.PI * 1.5;
-			this.view.camera.sphere_theta.target = camera.sphere_theta.value + (y-this.lastY)/window.innerHeight * Math.PI * 1.5;
+			this.view.camera.sphere_phi.target = this.view.camera.sphere_phi.value - (x-this.lastX)/window.innerWidth * Math.PI * 1.5;
+			this.view.camera.sphere_theta.target = this.view.camera.sphere_theta.value + (y-this.lastY)/window.innerHeight * Math.PI * 1.5;
 			
 			this.view.camera.sphere_phi.animate(ViewUtil.INSTANT);
 			this.view.camera.sphere_theta.animate(ViewUtil.INSTANT);
@@ -479,9 +479,10 @@ void main() {\
 
 
 
-var View = function(container) {
+var View = function(container, stats) {
 	
 	this.container = container;
+	this.stats = stats;
 	this.canvas = document.createElement("canvas");
 	this.container.appendChild(this.canvas);
 	
@@ -567,17 +568,13 @@ var View = function(container) {
 	this.scene.add(cube);
 	// TODO end
 	
-	this.load = function(sectors, stepSize) {
-		console.log("loading " + sectors.length + " sectors...");
-		if(stepSize == undefined)
-			stepSize = 1;	
-			
+	this.load = function(galaxy) {
+		console.log("loading " + galaxy.systems.length + " systems...");
 		if(this.galaxy != null)
 		{
 			console.log("removing previous galaxy...");
-			// TODO animate?!
-			
 			// remove the old particle system(s)
+			// TODO animate?!
 			if(this.galaxy.systemParticles != null)
 				this.scene.remove(this.galaxy.systemParticles);
 			if(this.galaxy.selectionParticles != null)
@@ -586,30 +583,13 @@ var View = function(container) {
 			delete this.galaxy;
 		}
 		
-		console.log("parsing sectors...");
-		
-		var systems = new Array();
-		var x, y, z, size, heat;
-				
-		for(var s = 0; s < sectors.length; s += stepSize)
-		{			
-			x = sectors[s][0];
-			y = sectors[s][1];
-			z = sectors[s][2];
-			size = Math.random()*(ViewUtil.SYSTEM_SIZE_MAX-ViewUtil.SYSTEM_SIZE_MIN)+ViewUtil.SYSTEM_SIZE_MIN; // TODO
-			heat = Math.random(); // TODO
-			systems[systems.length] = new ViewUtil.System(x, y, z, size, heat);
-		};
-		
-		// create a new galaxy object
-		console.log("creating galaxy...");
-		this.galaxy = new ViewUtil.Galaxy(systems);
+		console.log("adding new galaxy...");
+		this.galaxy = galaxy;
 		// add the new particle system
-		console.log("adding galaxy...");
+		// TODO animate?!
 		this.scene.add(this.galaxy.systemParticles);
 		this.scene.add(this.galaxy.selectionParticles);			
 		
-		// TODO animate?!
 	};
 	
 	this.lastAnimation = new Date().getTime();
@@ -625,6 +605,13 @@ var View = function(container) {
 		
 		this.camera.update();
 		this.renderer.render( this.scene, this.camera.camera );
+	};
+	
+	this.animate = function() {
+		requestAnimationFrame( function(view) { return function() { view.animate() }; }(this) );	
+		this.render();
+		if(this.stats)
+			this.stats.update();	
 	};
 	
 	this.selections = new Array(ViewUtil.SELECTIONS_MAX);
@@ -644,4 +631,4 @@ var View = function(container) {
 			
 	Events.addEventListener(Events.ONRESIZE, Events.wrapEventHandler(this, this.updateSize), window);	
 	Events.fireEvent(window, Events.ONRESIZE);	
-}
+};

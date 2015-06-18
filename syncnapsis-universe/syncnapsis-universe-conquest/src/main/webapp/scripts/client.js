@@ -85,6 +85,7 @@ UI.constants.LOCALE_KEY_TOOLTIP_SUFFIX = "_tooltip";
 UI.constants.LOCALE_STRING_VARIABLE = "lang";
 UI.constants.LOCALE_PREFIX = "EnumLocale.";
 
+UI.constants.VIEW_ID = "view";
 UI.constants.NAV_TABS = "nav";
 UI.constants.NAV_CONTENT = "menu_content";
 UI.constants.LOG_TABS = "log";
@@ -313,6 +314,12 @@ UIManager = function()
 	server.matchManager.getAll(); // load matches
 	server.galaxyManager.getAll(); // load galaxies
 	server.empireManager.getAll(); // load empires
+	
+	console.log("creating 3D-view");
+	this.stats = new Stats();
+	document.body.appendChild( this.stats.domElement );	
+	this.view = new View(document.getElementById(UI.constants.VIEW_ID), this.stats);
+	this.view.animate();
 	
 	console.log("showing UI");
 
