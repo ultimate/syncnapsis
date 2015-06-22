@@ -1766,8 +1766,12 @@ UIManager.prototype.parseGalaxy = function(json)
 
 UIManager.prototype.doShowMatch = function(request)
 {
-	// TODO update 3D-View
 	console.log(request);
+	// parse galaxy
+	var galaxy = this.parseGalaxy(request.responseText);
+	console.log(galaxy);
+	// TODO update 3D-View
+	this.view.load(galaxy);
 };
 
 MessageManager = function()

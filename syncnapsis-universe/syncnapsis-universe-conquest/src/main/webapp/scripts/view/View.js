@@ -399,8 +399,7 @@ ViewUtil.EventManager = function(view)
 	this.handleDragStop = function(event) {
 		this.inDragMode = false;
 		if(this.dragEventCount < 5)
-			//this.handleClick(event);
-			onClick(event);
+			this.handleClick(event);
 	};
 		
 	this.handleDrag = function(event) {
@@ -434,7 +433,7 @@ ViewUtil.EventManager = function(view)
 	};
 	
 	this.handleClick = function(event) {
-		// TODO
+		// TODO copy from test15
 	};
 	
 	Events.addEventListener("mousedown", Events.wrapEventHandler(this, this.handleDragStart), this.view.canvas);
@@ -562,7 +561,7 @@ var View = function(container, stats) {
 	};
 	
 	// TODO for debug only
-	var g = new THREE.CubeGeometry(100,100,100);
+	var g = new THREE.CubeGeometry(10,10,10);
 	var m = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
 	var cube = new THREE.Mesh( g, m );
 	this.scene.add(cube);
