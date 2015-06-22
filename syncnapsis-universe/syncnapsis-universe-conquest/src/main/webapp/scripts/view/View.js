@@ -222,9 +222,10 @@ ViewUtil.GalaxyShader = function(imgPath) {
 ViewUtil.Galaxy = function(systems) {
 
 	this.systems = systems; // TODO think about copying the array?!
+	this.colorModel 	= ViewUtil.ColorModel.white;
 	
 	{ // particles for all systems
-		this.systemShader = new ViewUtil.GalaxyShader("img/star.png");
+		this.systemShader = new ViewUtil.GalaxyShader("images/star.png");
 		
 		this.systemGeometry = new THREE.Geometry();
 		this.systemGeometry.vertices = new Array(this.systems.length); // can't change the amount later!!!
@@ -241,7 +242,7 @@ ViewUtil.Galaxy = function(systems) {
 	}
 	
 	{ // particles for selected system(s)
-		this.selectionShader = new ViewUtil.GalaxyShader("img/circle.png");
+		this.selectionShader = new ViewUtil.GalaxyShader("images/circle.png");
 		this.selectionShader.material.blending = THREE.NormalBlending; // marker must always be in front of view
 		
 		this.selectionGeometry = new THREE.Geometry();
@@ -314,6 +315,14 @@ ViewUtil.Galaxy = function(systems) {
 		this.selectionShader.attributes.size.needsUpdate = true;	
 		this.selectionShader.attributes.customColor.needsUpdate = true;	
 	};
+	
+	this.updateColors = function(colorModel)
+	{
+		if(colorModel)
+			this.colorModel = colorModel;
+		for(i = 0; i < this.systems.length; i++)
+			this.systems[i].updateColor();
+	};
 };
 
 ViewUtil.System = function(id, x, y, z, size, heat) {
@@ -334,7 +343,6 @@ ViewUtil.System = function(id, x, y, z, size, heat) {
 	var dispSize = Math.log10(size)/3*(ViewUtil.SYSTEM_SIZE_MAX-ViewUtil.SYSTEM_SIZE_MIN) + ViewUtil.SYSTEM_SIZE_MIN;
 	this.displaySize 	= new ViewUtil.AnimatedVariable(dispSize, ViewUtil.SYSTEM_SIZE_MIN, ViewUtil.SYSTEM_SIZE_MAX, animationSpeed); 
 	this.color 			= new ViewUtil.AnimatedColor(new THREE.Color(), animationSpeed);
-	this.colorModel 	= ViewUtil.ColorModel.white;
 	
 	this.firstAnimation = true;
 	
@@ -343,7 +351,7 @@ ViewUtil.System = function(id, x, y, z, size, heat) {
 		var y = this.coords.target.y;
 		var z = this.coords.target.z;
 		this.radius = Math.sqrt(x*x + y*y + z*z);
-		this.color.target = this.colorModel.getRGB(	this.size.target / this.size.max,
+		this.color.target = this.galaxy.colorModel.getRGB(	this.size.target / this.size.max,
 													this.heat.target / this.heat.max,
 													this.habitability.target / this.habitability.max, 
 													Math.log10(this.infrastructure.target) / Math.log10(this.infrastructure.max),
@@ -478,7 +486,7 @@ void main() {\
 
 
 
-var View = function(container, stats) {
+var View = function(container, stats, debug) {
 	
 	this.container = container;
 	this.stats = stats;
@@ -560,12 +568,13 @@ var View = function(container, stats) {
 		return size / (2 * Math.tan((camera.camera.fov * Math.PI / 180) / 2) * dist) * this.container.offsetWidth / 2;
 	};
 	
-	// TODO for debug only
-	var g = new THREE.CubeGeometry(10,10,10);
-	var m = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
-	var cube = new THREE.Mesh( g, m );
-	this.scene.add(cube);
-	// TODO end
+	if(debug)
+	{
+		var g = new THREE.CubeGeometry(10,10,10);
+		var m = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
+		var cube = new THREE.Mesh( g, m );
+		this.scene.add(cube);
+	}
 	
 	this.load = function(galaxy) {
 		console.log("loading " + galaxy.systems.length + " systems...");
@@ -607,7 +616,7 @@ var View = function(container, stats) {
 	};
 	
 	this.animate = function() {
-		requestAnimationFrame( function(view) { return function() { view.animate() }; }(this) );	
+		requestAnimationFrame( function(view) { return function() { view.animate() }; }(this) );
 		this.render();
 		if(this.stats)
 			this.stats.update();	

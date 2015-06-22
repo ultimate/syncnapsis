@@ -318,7 +318,7 @@ UIManager = function()
 	console.log("creating 3D-view");
 	this.stats = new Stats();
 	document.body.appendChild( this.stats.domElement );	
-	this.view = new View(document.getElementById(UI.constants.VIEW_ID), this.stats);
+	this.view = new View(document.getElementById(UI.constants.VIEW_ID), this.stats, true);
 	this.view.animate();
 	
 	console.log("showing UI");
