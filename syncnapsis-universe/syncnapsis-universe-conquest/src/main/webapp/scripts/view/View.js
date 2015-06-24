@@ -32,6 +32,9 @@ ViewUtil.AMPLITUDE = 500.0;
 ViewUtil.SYSTEM_SIZE_MIN = 10;
 ViewUtil.SYSTEM_SIZE_MAX = 30;
 ViewUtil.SELECTIONS_MAX = 2;
+ViewUtil.SELECTION_MODE_SCREEN_COORDS = 1;  // acurate but slow
+ViewUtil.SELECTION_MODE_PROJECTION = 2;		// less acurate but fast
+ViewUtil.SELECTION_MODE = ViewUtil.SELECTION_MODE_SCREEN_COORDS;
 	
 ViewUtil.loadShader = function(name) {
 	var index = DependencyManager.indexOf(name);
@@ -301,7 +304,7 @@ ViewUtil.Galaxy = function(systems) {
 			if(this.selections[s])
 			{				
 				this.selectionGeometry.vertices[s] = this.selections[s].coords.value.clone();
-				this.selectionShader.attributes.size.value[s] = this.selections[s].size.value * 1.5;
+				this.selectionShader.attributes.size.value[s] = this.selections[s].displaySize.value * 1.5;
 				this.selectionShader.attributes.customColor.value[s] = ViewUtil.SELECTION_COLOR.clone(); // = this.selections[s].customColor.value;
 			}
 			else
@@ -383,7 +386,7 @@ ViewUtil.System = function(id, x, y, z, size, heat) {
 		this.habitability.animate(time);
 		this.infrastructure.animate(time);
 		this.population.animate(time);
-		this.maxPopulation.animate(time)
+		this.maxPopulation.animate(time);
 		
 		this.firstAnimation = false;
 	};
@@ -396,6 +399,7 @@ ViewUtil.EventManager = function(view)
 	this.lastY = 0;
 	this.inDragMode = false;
 	this.dragEventCount = 0;
+	this.projector = new THREE.Projector();
 		
 	this.handleDragStart = function(event) {
 		this.lastX = event.pageX;
@@ -441,7 +445,89 @@ ViewUtil.EventManager = function(view)
 	};
 	
 	this.handleClick = function(event) {
-		// TODO copy from test15
+		var clickTarget = null;
+		if(ViewUtil.SELECTION_MODE == ViewUtil.SELECTION_MODE_SCREEN_COORDS)
+		{
+			var mouseX = event.clientX;
+			var mouseY = event.clientY;
+		
+			var p;
+			var dist2;
+			var screenCoords;
+			var screenSize;
+			var zMin = 10000000;
+			var distMin = 10000000;
+			
+			for(var i = 0; i < this.view.galaxy.systems.length; i++)
+			{
+				p = this.view.galaxy.systems[i];
+				if(p.size.value == 0)
+					continue;
+					
+				screenCoords = this.view.getScreenCoords(p.coords.value);
+				screenSize = this.view.getScreenSize(p.coords.value, p.displaySize.value);
+				dist2 = (screenCoords.x-mouseX)*(screenCoords.x-mouseX) + (screenCoords.y-mouseY)*(screenCoords.y-mouseY);
+
+				if((dist2 < distMin || (dist2 == distMin && screenCoords.z < zMin)) && dist2 < screenSize*screenSize/4)
+				{
+					zMin = screenCoords.z;
+					distMin = dist2;
+					clickTarget = p;
+				}
+			}
+		}
+		else if(ViewUtil.SELECTION_MODE == ViewUtil.SELECTION_MODE_PROJECTION)
+		{
+			var mouseX = ( event.clientX / window.innerWidth ) * 2 - 1;
+			var mouseY = - ( event.clientY / window.innerHeight ) * 2 + 1;	
+		
+			var vector = new THREE.Vector3( mouseX, mouseY, 1 );				
+			this.projector.unprojectVector( vector, this.view.camera.camera );
+			var ray = new THREE.Ray( this.view.camera.camera.position, vector.sub( this.view.camera.camera.position ).normalize() );
+			var o = ray.origin;
+			var d = ray.direction;
+			var p;
+			var n = new THREE.Vector3(0,0,0); // normal vector to line = (o-p)-((o-p)*d)d // * = dot-product
+			var dist2; // = (|n|)^2 // use square to avoid sqrt
+			var opd; // temp for (o-p)*d
+			var opdMin = 10000000;
+			var dist2Min = 10000000;
+			
+			for(var i = 0; i < this.view.galaxy.systems.length; i++)
+			{
+				p = this.view.galaxy.systems[i].coords.value;
+				size = this.view.galaxy.systems[i].size.value;
+				if(size == 0)
+					continue;
+				
+				opd = (p.x-o.x)*d.x + (p.y-o.y)*d.y + (p.z-o.z)*d.z;
+				// opd is in direction to n (intersection have positive opd)
+				if(opd < 0) // wrong direction (behind the camera)
+					continue;
+				n.x = (o.x - p.x)+opd*d.x;
+				n.y = (o.y - p.y)+opd*d.y;
+				n.z = (o.z - p.z)+opd*d.z;
+				dist2 = (n.x*n.x + n.y*n.y + n.z*n.z);
+				if(opd < opdMin && dist2 <= size*size/4)
+				{
+					opdMin = opd;
+					clickTarget = this.view.galaxy.systems[i];
+				}									
+			}
+		}
+		else
+		{
+			console.error("invalid selection mode");
+		}
+		
+		var clickIndex = 0; // left click 
+		
+		this.view.deselect(clickIndex);
+		if(clickTarget == null)
+			this.view.camera.target.target = new THREE.Vector3(0,0,0);
+		else
+			this.view.camera.target.target = clickTarget.coords.value;
+		this.view.select(clickTarget, clickIndex);
 	};
 	
 	Events.addEventListener("mousedown", Events.wrapEventHandler(this, this.handleDragStart), this.view.canvas);
@@ -565,7 +651,7 @@ var View = function(container, stats, debug) {
 		//var size = system.size.value;
 		var p2 = this.camera.camera.position;
 		var dist = Math.sqrt((p1.x-p2.x)*(p1.x-p2.x) + (p1.y-p2.y)*(p1.y-p2.y) + (p1.z-p2.z)*(p1.z-p2.z));
-		return size / (2 * Math.tan((camera.camera.fov * Math.PI / 180) / 2) * dist) * this.container.offsetWidth / 2;
+		return size / (2 * Math.tan((this.camera.camera.fov * Math.PI / 180) / 2) * dist) * this.container.offsetWidth / 2;
 	};
 	
 	if(debug)
