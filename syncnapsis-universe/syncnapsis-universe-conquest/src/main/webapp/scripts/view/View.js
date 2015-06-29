@@ -28,6 +28,7 @@ ViewUtil.GREEN = new THREE.Color(0,1,0);
 ViewUtil.BLUE = new THREE.Color(0,0,1);
 ViewUtil.SELECTION_COLOR = new THREE.Color(0,1,1);
 ViewUtil.AMPLITUDE = 500.0;
+ViewUtil.INACTIVITY_TIMEOUT = 30000;
 
 ViewUtil.SYSTEM_SIZE_MIN = 10;
 ViewUtil.SYSTEM_SIZE_MAX = 30;
@@ -400,12 +401,35 @@ ViewUtil.EventManager = function(view)
 	this.inDragMode = false;
 	this.dragEventCount = 0;
 	this.projector = new THREE.Projector();
+	this.inactivityTimeout = null;
+	
+	this.inactivityAction = function()
+	{
+		// start camera rotation
+		this.view.camera.sphere_phi.target += 1000000;
+	};
+	
+	this.resetInactivityTimeout = function() 	{
+		// reset timeout
+		if(this.inactivityTimeout)
+			clearTimeout(this.inactivityTimeout);
+		// reset camere rotation
+		this.view.camera.sphere_phi.target = this.view.camera.sphere_phi.value;
+		// set new timeout
+		this.inactivityTimeout = setTimeout(function(eventManager) {
+			return function() {
+				eventManager.inactivityAction();
+			};
+		}(this), ViewUtil.INACTIVITY_TIMEOUT);
+	};
 		
 	this.handleDragStart = function(event) {
 		this.lastX = event.pageX;
 		this.lastY = event.pageY;
 		this.inDragMode = true;
 		this.dragEventCount = 0;
+
+		this.resetInactivityTimeout();
 	};
 		
 	this.handleDragStop = function(event) {
@@ -430,6 +454,8 @@ ViewUtil.EventManager = function(view)
 			this.lastY = y;
 			
 			this.dragEventCount++;
+
+			this.resetInactivityTimeout();
 		}
 	};
 	
@@ -440,6 +466,8 @@ ViewUtil.EventManager = function(view)
 		var delta = Math.max(-1, Math.min(1, (event.wheelDelta || -event.detail)));
 
 		this.view.camera.radius.target -= delta * 100;
+		
+		this.resetInactivityTimeout();
 		
 		return false;			
 	};
