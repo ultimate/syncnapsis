@@ -515,6 +515,16 @@ form>.select.verylong>* {
 	text-align: right;
 }
 
+#match_system_info {
+	position: absolute;
+	left: 0px;
+	top: 0px;
+	bottom: 0px;
+	margin: auto;
+	height: 200px;
+	width: 200px;
+}
+
 .manage_match .match_title {
 	width: 436px;
 }
