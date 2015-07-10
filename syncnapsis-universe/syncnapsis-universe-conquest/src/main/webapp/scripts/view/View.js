@@ -398,6 +398,7 @@ ViewUtil.EventManager = function(view)
 	this.view = view;
 	this.lastX = 0;
 	this.lastY = 0;
+	this.button = 0;
 	this.inDragMode = false;
 	this.dragEventCount = 0;
 	this.projector = new THREE.Projector();
@@ -429,6 +430,9 @@ ViewUtil.EventManager = function(view)
 		this.inDragMode = true;
 		this.dragEventCount = 0;
 
+		// TODO set button
+		console.log(event);
+		
 		this.resetInactivityTimeout();
 	};
 		
@@ -548,7 +552,9 @@ ViewUtil.EventManager = function(view)
 			console.error("invalid selection mode");
 		}
 		
-		var clickIndex = 0; // left click 
+		// TODO handle left and right click
+		console.log(event);
+		var clickIndex = 0;
 		
 		this.view.deselect(clickIndex);
 		if(clickTarget == null)
@@ -562,6 +568,7 @@ ViewUtil.EventManager = function(view)
 	Events.addEventListener("mousemove", Events.wrapEventHandler(this, this.handleDrag), this.view.canvas);
 	Events.addEventListener("mouseup", Events.wrapEventHandler(this, this.handleDragStop), this.view.canvas);
 	Events.addEventListener("DOMMouseScroll", Events.wrapEventHandler(this, this.handleScroll), this.view.canvas);
+	Events.addEventListener("contextmenu", function(e) { e.preventDefault(); return false; }, this.view.canvas);
 };
 
 // for debugging without Request.js - START
