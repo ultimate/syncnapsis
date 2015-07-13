@@ -209,6 +209,15 @@ lang.profile.username			= "Benutzername";
 lang.profile.change_password	= lang.profile.password + " ändern";
 lang.profile.change_email		= lang.profile.email + " ändern";
 
+lang.system = {};
+lang.system.buildPriority		= "";
+lang.system.coords				= "Koordinaten";
+lang.system.infrastructure		= "Infrastruktur";
+lang.system.maxPopulation		= "Max. Bevölkerung";
+lang.system.population			= "Bevölkerung";
+
+/* TODO */
+
 lang.welcome = {};
 lang.welcome.headLine			= "Neuigkeiten:";
 lang.welcome.showOnLoad			= "Dieses Fenster beim Start anzeigen?";
