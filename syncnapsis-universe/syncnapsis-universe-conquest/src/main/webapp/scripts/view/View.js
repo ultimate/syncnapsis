@@ -26,13 +26,14 @@ ViewUtil.BLACK = new THREE.Color(0,0,0);
 ViewUtil.RED = new THREE.Color(1,0,0);
 ViewUtil.GREEN = new THREE.Color(0,1,0);
 ViewUtil.BLUE = new THREE.Color(0,0,1);
-ViewUtil.SELECTION_COLOR = new THREE.Color(0,1,1);
+ViewUtil.SELECTION_COLOR_0 = new THREE.Color(1,0,0);
+ViewUtil.SELECTION_COLOR_1 = new THREE.Color(0,1,1);
 ViewUtil.AMPLITUDE = 500.0;
 ViewUtil.INACTIVITY_TIMEOUT = 30000;
 
 ViewUtil.SYSTEM_SIZE_MIN = 10;
 ViewUtil.SYSTEM_SIZE_MAX = 30;
-ViewUtil.SELECTIONS_MAX = 2;
+ViewUtil.SELECTIONS_MAX = 4;
 ViewUtil.SELECTION_MODE_SCREEN_COORDS = 1;  // acurate but slow
 ViewUtil.SELECTION_MODE_PROJECTION = 2;		// less acurate but fast
 ViewUtil.SELECTION_MODE = ViewUtil.SELECTION_MODE_SCREEN_COORDS;
@@ -287,7 +288,9 @@ ViewUtil.Galaxy = function(systems) {
 	};
 	
 	this.deselect = function(selectionIndex) {
+		var system = this.selections[selectionIndex];
 		this.select(null, selectionIndex);
+		return system;
 	};
 	
 	this.animate = function(time) {
@@ -306,7 +309,10 @@ ViewUtil.Galaxy = function(systems) {
 			{				
 				this.selectionGeometry.vertices[s] = this.selections[s].coords.value.clone();
 				this.selectionShader.attributes.size.value[s] = this.selections[s].displaySize.value * 1.5;
-				this.selectionShader.attributes.customColor.value[s] = ViewUtil.SELECTION_COLOR.clone(); // = this.selections[s].customColor.value;
+				if(s == 0)
+					this.selectionShader.attributes.customColor.value[s] = ViewUtil.SELECTION_COLOR_0.clone();
+				else
+					this.selectionShader.attributes.customColor.value[s] = ViewUtil.SELECTION_COLOR_1.clone();
 			}
 			else
 			{
@@ -398,7 +404,7 @@ ViewUtil.EventManager = function(view)
 	this.view = view;
 	this.lastX = 0;
 	this.lastY = 0;
-	this.button = 0;
+	this.lastEvent = null;
 	this.inDragMode = false;
 	this.dragEventCount = 0;
 	this.projector = new THREE.Projector();
@@ -429,10 +435,7 @@ ViewUtil.EventManager = function(view)
 		this.lastY = event.pageY;
 		this.inDragMode = true;
 		this.dragEventCount = 0;
-
-		// TODO set button
-		console.log(event);
-		
+		this.lastEvent = event; // save event, to be able to determin button and modifiers later
 		this.resetInactivityTimeout();
 	};
 		
@@ -474,6 +477,10 @@ ViewUtil.EventManager = function(view)
 		this.resetInactivityTimeout();
 		
 		return false;			
+	};
+	
+	this.onSelectionChange = function() {
+		// for overriding
 	};
 	
 	this.handleClick = function(event) {
@@ -552,16 +559,59 @@ ViewUtil.EventManager = function(view)
 			console.error("invalid selection mode");
 		}
 		
-		// TODO handle left and right click
-		console.log(event);
-		var clickIndex = 0;
+		// handle left and right click
+		if(this.lastEvent.button == Events.BUTTON_LEFT) // left click
+		{
+			if(this.lastEvent.ctrlKey)
+			{
+				// check if target was selected before
+				var previousIndex = -1;
+				var numberOfSelections = 0;
+				for(var i = 1; i < ViewUtil.SELECTIONS_MAX; i++)
+				{
+					if(this.view.galaxy.selections[i] == clickTarget)
+						previousIndex = i;
+					if(this.view.galaxy.selections[i] != null)
+						numberOfSelections++;
+				}
+				if(previousIndex != -1)
+				{
+					// was selected before -> deselect
+					this.view.deselect(previousIndex);
+					for(var i = previousIndex + 1; i < ViewUtil.SELECTIONS_MAX; i++)
+					{
+						var s = this.view.deselect(i);
+						this.view.select(s, i-1);
+					}
+				}
+				else
+				{
+					// was not selected before -> add to selection if possible
+					if(numberOfSelections+1 < ViewUtil.SELECTIONS_MAX)
+						this.view.select(clickTarget, numberOfSelections+1);
+				}
+			}
+			else
+			{
+				// deselect all
+				for(var i = 1; i < ViewUtil.SELECTIONS_MAX; i++)
+					this.view.deselect(i);
+				this.view.select(clickTarget, 1);
+			}
+		}
+		else if(this.lastEvent.button == Events.BUTTON_RIGHT) // right click
+		{
+			this.view.deselect(0); // right click is always stored at first position
+			this.view.select(clickTarget, 0);
+
+			if(clickTarget == null)
+				this.view.camera.target.target = new THREE.Vector3(0,0,0);
+			else
+				this.view.camera.target.target = clickTarget.coords.value;
+		}
 		
-		this.view.deselect(clickIndex);
-		if(clickTarget == null)
-			this.view.camera.target.target = new THREE.Vector3(0,0,0);
-		else
-			this.view.camera.target.target = clickTarget.coords.value;
-		this.view.select(clickTarget, clickIndex);
+		
+		this.onSelectionChange();
 	};
 	
 	Events.addEventListener("mousedown", Events.wrapEventHandler(this, this.handleDragStart), this.view.canvas);
@@ -743,7 +793,7 @@ var View = function(container, stats, debug) {
 			this.stats.update();	
 	};
 	
-	this.selections = new Array(ViewUtil.SELECTIONS_MAX);
+	//this.selections = new Array(ViewUtil.SELECTIONS_MAX);
 		
 	this.select = function(system, selectionIndex) {
 		return this.galaxy.select(system, selectionIndex);
