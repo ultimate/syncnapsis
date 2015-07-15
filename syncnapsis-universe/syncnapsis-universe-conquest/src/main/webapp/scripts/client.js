@@ -126,6 +126,8 @@ UI.constants.MATCH_PARTICIPANTS_SOURCE_ID = "match_participants_source_$";
 UI.constants.MATCH_PARTICIPANTS_TARGET_ID = "match_participants_target_$";
 UI.constants.MATCH_BUTTONS_ID = "match_buttons_$";
 
+UI.constants.MATCH_SYSTEM_INFO_ID = "match_system_info_$";
+
 UI.constants.LOGIN_USERNAME_ID = "login_username";
 UI.constants.LOGIN_PASSWORD_ID = "login_password";
 
@@ -319,6 +321,12 @@ UIManager = function()
 	this.stats = new Stats();
 	document.body.appendChild( this.stats.domElement );	
 	this.view = new View(document.getElementById(UI.constants.VIEW_ID), this.stats, false);
+	this.view.eventManager.onSelectionChange = function(uiManager) {
+		return function()
+		{
+			uiManager.doShowSelection();
+		};
+	} (this);
 	this.view.animate();
 	
 	console.log("showing UI");
@@ -1770,8 +1778,13 @@ UIManager.prototype.doShowMatch = function(request)
 	// parse galaxy
 	var galaxy = this.parseGalaxy(request.responseText);
 	console.log(galaxy);
-	// TODO update 3D-View
+	// update 3D-View
 	this.view.load(galaxy);
+};
+
+UIManager.prototype.doShowSelection = function()
+{
+	console.log("selection changed");
 };
 
 MessageManager = function()
