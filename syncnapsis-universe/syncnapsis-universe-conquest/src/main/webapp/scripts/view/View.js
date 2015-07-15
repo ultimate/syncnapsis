@@ -800,7 +800,7 @@ var View = function(container, stats, debug) {
 	};
 	
 	this.deselect = function(selectionIndex) {
-		this.galaxy.deselect(selectionIndex);
+		return this.galaxy.deselect(selectionIndex);
 	};	
 	
 	this.eventManager = new ViewUtil.EventManager(this);
