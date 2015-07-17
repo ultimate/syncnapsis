@@ -37,6 +37,9 @@ ViewUtil.SELECTIONS_MAX = 4;
 ViewUtil.SELECTION_MODE_SCREEN_COORDS = 1;  // acurate but slow
 ViewUtil.SELECTION_MODE_PROJECTION = 2;		// less acurate but fast
 ViewUtil.SELECTION_MODE = ViewUtil.SELECTION_MODE_SCREEN_COORDS;
+ViewUtil.SELECTION_ADD = 1;
+ViewUtil.SELECTION_REMOVE = 2;
+ViewUtil.SELECTION_CHANGE = 3;
 	
 ViewUtil.loadShader = function(name) {
 	var index = DependencyManager.indexOf(name);
@@ -353,6 +356,8 @@ ViewUtil.System = function(id, x, y, z, size, heat) {
 	var dispSize = Math.log10(size)/3*(ViewUtil.SYSTEM_SIZE_MAX-ViewUtil.SYSTEM_SIZE_MIN) + ViewUtil.SYSTEM_SIZE_MIN;
 	this.displaySize 	= new ViewUtil.AnimatedVariable(dispSize, ViewUtil.SYSTEM_SIZE_MIN, ViewUtil.SYSTEM_SIZE_MAX, animationSpeed); 
 	this.color 			= new ViewUtil.AnimatedColor(new THREE.Color(), animationSpeed);
+	// other variables
+	this.infoElement 	= null; // a reference to the element displaying the information for the system
 	
 	this.firstAnimation = true;
 	
@@ -479,7 +484,10 @@ ViewUtil.EventManager = function(view)
 		return false;			
 	};
 	
-	this.onSelectionChange = function() {
+	this.onSelect = function(system) {
+		// for overriding
+	};
+	this.onDeselect = function(system) {
 		// for overriding
 	};
 	
@@ -562,7 +570,8 @@ ViewUtil.EventManager = function(view)
 		// handle left and right click
 		if(this.lastEvent.button == Events.BUTTON_LEFT) // left click
 		{
-			if(this.lastEvent.ctrlKey)
+			// TODO check if it was right-click selected before
+			if(this.lastEvent.ctrlKey && clickTarget != null)
 			{
 				// check if target was selected before
 				var previousIndex = -1;
@@ -578,40 +587,63 @@ ViewUtil.EventManager = function(view)
 				{
 					// was selected before -> deselect
 					this.view.deselect(previousIndex);
+					this.onSelectionChange(clickTarget, false, ViewUtil.SELECTION_REMOVE);
 					for(var i = previousIndex + 1; i < ViewUtil.SELECTIONS_MAX; i++)
 					{
 						var s = this.view.deselect(i);
 						this.view.select(s, i-1);
+						if(s != null)
+							this.onSelectionChange(s, false, ViewUtil.SELECTION_CHANGE);
 					}
 				}
 				else
 				{
 					// was not selected before -> add to selection if possible
 					if(numberOfSelections+1 < ViewUtil.SELECTIONS_MAX)
+					{
 						this.view.select(clickTarget, numberOfSelections+1);
+						this.onSelectionChange(clickTarget, false, ViewUtil.SELECTION_ADD);
+					}
 				}
 			}
 			else
 			{
 				// deselect all
 				for(var i = 1; i < ViewUtil.SELECTIONS_MAX; i++)
-					this.view.deselect(i);
-				this.view.select(clickTarget, 1);
+				{
+					var sys = this.view.deselect(i);
+					if(sys != null)
+						this.onSelectionChange(sys, false, ViewUtil.SELECTION_REMOVE);
+				}
+				if(clickTarget != null)
+				{
+					this.view.select(clickTarget, 1);
+					this.onSelectionChange(clickTarget, false, ViewUtil.SELECTION_ADD);
+				}
 			}
 		}
 		else if(this.lastEvent.button == Events.BUTTON_RIGHT) // right click
 		{
-			this.view.deselect(0); // right click is always stored at first position
-			this.view.select(clickTarget, 0);
-
-			if(clickTarget == null)
-				this.view.camera.target.target = new THREE.Vector3(0,0,0);
-			else
-				this.view.camera.target.target = clickTarget.coords.value;
+			// TODO check if it was left-click selected before
+			if(clickTarget != this.view.galaxy.selections[0])
+			{
+				var previousSys = this.view.deselect(0); // right click is always stored at first position
+				this.view.select(clickTarget, 0);
+				
+				if(previousSys != null)
+					this.onSelectionChange(previousSys, true, ViewUtil.SELECTION_REMOVE);
+	
+				if(clickTarget == null)
+				{
+					this.view.camera.target.target = new THREE.Vector3(0,0,0);
+				}
+				else
+				{
+					this.onSelectionChange(clickTarget, true, ViewUtil.SELECTION_ADD);
+					this.view.camera.target.target = clickTarget.coords.value;
+				}
+			}
 		}
-		
-		
-		this.onSelectionChange();
 	};
 	
 	Events.addEventListener("mousedown", Events.wrapEventHandler(this, this.handleDragStart), this.view.canvas);

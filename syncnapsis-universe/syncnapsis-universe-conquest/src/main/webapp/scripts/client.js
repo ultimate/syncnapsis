@@ -126,7 +126,7 @@ UI.constants.MATCH_PARTICIPANTS_SOURCE_ID = "match_participants_source_$";
 UI.constants.MATCH_PARTICIPANTS_TARGET_ID = "match_participants_target_$";
 UI.constants.MATCH_BUTTONS_ID = "match_buttons_$";
 
-UI.constants.MATCH_SYSTEM_INFO_ID = "match_system_info_$";
+UI.constants.MATCH_SYSTEM_INFO_ID = "match_system_info";
 
 UI.constants.LOGIN_USERNAME_ID = "login_username";
 UI.constants.LOGIN_PASSWORD_ID = "login_password";
@@ -322,9 +322,9 @@ UIManager = function()
 	document.body.appendChild( this.stats.domElement );	
 	this.view = new View(document.getElementById(UI.constants.VIEW_ID), this.stats, false);
 	this.view.eventManager.onSelectionChange = function(uiManager) {
-		return function()
+		return function(system, isTarget, changeType)
 		{
-			uiManager.doShowSelection();
+			uiManager.updateSelectionInfo(system, isTarget, changeType);
 		};
 	} (this);
 	this.view.animate();
@@ -1782,9 +1782,47 @@ UIManager.prototype.doShowMatch = function(request)
 	this.view.load(galaxy);
 };
 
-UIManager.prototype.doShowSelection = function()
+UIManager.prototype.updateSelectionInfo = function(system, isTarget, changeType)
 {
-	console.log("selection changed");
+	var info = document.getElementById(UI.constants.MATCH_SYSTEM_INFO_ID);
+	if(changeType == ViewUtil.SELECTION_ADD)
+	{
+		if(system.infoElement) // remove previous element (just to be sure)
+		{
+			console.warn("previous element found");
+			system.infoElement.parentElement.removeChild(system.infoElement);
+		}
+		
+		var element = this.createSystemInfo(system, isTarget);
+		system.infoElement = element;
+		if(isTarget)
+		{
+			info.insertBefore(element, info.firstChild);
+		}
+		else
+		{
+			info.appendChild(element);
+		}
+		
+		// check if target + origin present -> display action
+	}
+	else if(changeType == ViewUtil.SELECTION_REMOVE)
+	{
+		info.removeChild(system.infoElement);
+
+		// check if target + origin present if not -> remove action
+	}
+	else // if(changeType == ViewUtil.SELECTION_CHANGE)
+	{
+		// ignore
+	}
+};
+
+UIManager.prototype.createSystemInfo = function(system, isTarget)
+{
+	var div = document.createElement("div");
+	div.innerHTML = JSON.stringify(system.coords.value);
+	return div;
 };
 
 MessageManager = function()
