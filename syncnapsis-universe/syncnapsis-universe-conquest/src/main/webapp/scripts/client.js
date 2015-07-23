@@ -1784,33 +1784,75 @@ UIManager.prototype.doShowMatch = function(request)
 
 UIManager.prototype.updateSelectionInfo = function(system, isTarget, changeType)
 {
+	var out = [];
+	for(var i = 0; i < this.view.galaxy.selections.length; i++)
+	{
+		if(this.view.galaxy.selections[i])
+		{
+			out.push(JSON.stringify(this.view.galaxy.selections[i].coords.value));
+			if(this.view.galaxy.selections[i].infoElement != null)
+				out.push("E");
+		}
+		else
+		{
+			out.push("{slot empty}");
+		}
+	}
+	console.log(out.join(" "));
+	console.log(changeType + " -> " + JSON.stringify(system.coords.value) + (system.infoElement ? "E" : ""));
+	
+	
 	var info = document.getElementById(UI.constants.MATCH_SYSTEM_INFO_ID);
 	if(changeType == ViewUtil.SELECTION_ADD)
 	{
 		if(system.infoElement) // remove previous element (just to be sure)
 		{
 			console.warn("previous element found");
-			system.infoElement.parentElement.removeChild(system.infoElement);
+			info.removeChild(system.infoElement);
 		}
-		
+
 		var element = this.createSystemInfo(system, isTarget);
-		system.infoElement = element;
+		system.infoElement = element; // store info element
 		if(isTarget)
 		{
-			info.insertBefore(element, info.firstChild);
+			// check if at least one other selection is preset -> display action
+			if(info.children.length > 0)
+			{
+				info.insertBefore(this.createSystemAction(), info.children[0]);
+				info.insertBefore(element, info.children[0]);
+			}
+			else
+			{
+				info.appendChild(element);
+			}
 		}
 		else
 		{
+			// check if target is already selected and this is first selection -> display action
+			if(this.view.galaxy.selections[0] != null && this.view.galaxy.selections[1] == system)
+				info.appendChild(this.createSystemAction());
 			info.appendChild(element);
 		}
 		
-		// check if target + origin present -> display action
 	}
 	else if(changeType == ViewUtil.SELECTION_REMOVE)
 	{
-		info.removeChild(system.infoElement);
-
-		// check if target + origin present if not -> remove action
+		if(system.infoElement) // check just to be sure
+			info.removeChild(system.infoElement);
+		else
+			console.warn("no element found");
+		system.infoElement = null; // reset stored info element
+		// check if the target was removed -> hide action
+		if(isTarget)
+		{
+			if(info.children.length > 0)
+				info.removeChild(info.children[0]);
+		}
+		// check if last other selection was removed -> hide action
+		else if(this.view.galaxy.selections[1] == null) // TODO not working
+		{
+			info.removeChild(info.children[1]);
+		}
 	}
 	else // if(changeType == ViewUtil.SELECTION_CHANGE)
 	{
@@ -1822,6 +1864,13 @@ UIManager.prototype.createSystemInfo = function(system, isTarget)
 {
 	var div = document.createElement("div");
 	div.innerHTML = JSON.stringify(system.coords.value);
+	return div;
+};
+
+UIManager.prototype.createSystemAction = function()
+{
+	var div = document.createElement("div");
+	div.innerHTML = "do something";
 	return div;
 };
 

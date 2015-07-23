@@ -587,7 +587,6 @@ ViewUtil.EventManager = function(view)
 				{
 					// was selected before -> deselect
 					this.view.deselect(previousIndex);
-					this.onSelectionChange(clickTarget, false, ViewUtil.SELECTION_REMOVE);
 					for(var i = previousIndex + 1; i < ViewUtil.SELECTIONS_MAX; i++)
 					{
 						var s = this.view.deselect(i);
@@ -595,6 +594,7 @@ ViewUtil.EventManager = function(view)
 						if(s != null)
 							this.onSelectionChange(s, false, ViewUtil.SELECTION_CHANGE);
 					}
+					this.onSelectionChange(clickTarget, false, ViewUtil.SELECTION_REMOVE);
 				}
 				else
 				{
