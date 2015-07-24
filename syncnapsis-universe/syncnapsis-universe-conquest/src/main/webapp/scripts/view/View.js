@@ -570,19 +570,25 @@ ViewUtil.EventManager = function(view)
 		// handle left and right click
 		if(this.lastEvent.button == Events.BUTTON_LEFT) // left click
 		{
-			// TODO check if it was right-click selected before
+			var previousIndex = -1;
+			var numberOfSelections = 0;
+			for(var i = 0; i < ViewUtil.SELECTIONS_MAX; i++)
+			{
+				if(this.view.galaxy.selections[i] == clickTarget)
+					previousIndex = i;
+				if(i >= 1 && this.view.galaxy.selections[i] != null)
+					numberOfSelections++;
+			}
+			if(clickTarget != null && previousIndex == 0)
+			{
+				// system was right-click selected before
+				// --> selection not possible --> ignore click
+				return;
+			}
+			
 			if(this.lastEvent.ctrlKey && clickTarget != null)
 			{
 				// check if target was selected before
-				var previousIndex = -1;
-				var numberOfSelections = 0;
-				for(var i = 1; i < ViewUtil.SELECTIONS_MAX; i++)
-				{
-					if(this.view.galaxy.selections[i] == clickTarget)
-						previousIndex = i;
-					if(this.view.galaxy.selections[i] != null)
-						numberOfSelections++;
-				}
 				if(previousIndex != -1)
 				{
 					// was selected before -> deselect
@@ -624,7 +630,28 @@ ViewUtil.EventManager = function(view)
 		}
 		else if(this.lastEvent.button == Events.BUTTON_RIGHT) // right click
 		{
-			// TODO check if it was left-click selected before
+			// check if it was left-click selected before
+			var previousIndex = -1;
+			for(var i = 0; i < ViewUtil.SELECTIONS_MAX; i++)
+			{
+				if(this.view.galaxy.selections[i] == clickTarget)
+					previousIndex = i;
+			}
+			if(clickTarget != null && previousIndex > 0)
+			{
+				// system was left-click selected before
+				// --> priorize right-click over left click -> deselect for right-click
+				// was selected before -> deselect
+				this.view.deselect(previousIndex);
+				for(var i = previousIndex + 1; i < ViewUtil.SELECTIONS_MAX; i++)
+				{
+					var s = this.view.deselect(i);
+					this.view.select(s, i-1);
+					if(s != null)
+						this.onSelectionChange(s, false, ViewUtil.SELECTION_CHANGE);
+				}
+				this.onSelectionChange(clickTarget, false, ViewUtil.SELECTION_REMOVE);
+			}
 			if(clickTarget != this.view.galaxy.selections[0])
 			{
 				var previousSys = this.view.deselect(0); // right click is always stored at first position
