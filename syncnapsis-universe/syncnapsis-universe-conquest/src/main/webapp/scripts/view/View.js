@@ -430,7 +430,8 @@ ViewUtil.EventManager = function(view)
 		// set new timeout
 		this.inactivityTimeout = setTimeout(function(eventManager) {
 			return function() {
-				eventManager.inactivityAction();
+				if(!eventManager.inDragMode)
+					eventManager.inactivityAction();
 			};
 		}(this), ViewUtil.INACTIVITY_TIMEOUT);
 	};
@@ -446,6 +447,7 @@ ViewUtil.EventManager = function(view)
 		
 	this.handleDragStop = function(event) {
 		this.inDragMode = false;
+		this.resetInactivityTimeout();
 		if(this.dragEventCount < 5)
 			this.handleClick(event);
 	};
