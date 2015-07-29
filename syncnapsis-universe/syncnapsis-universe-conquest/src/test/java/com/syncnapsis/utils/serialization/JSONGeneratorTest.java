@@ -1,6 +1,7 @@
 package com.syncnapsis.utils.serialization;
 
 import java.util.Arrays;
+import java.util.Collections;
 
 import com.syncnapsis.data.model.Galaxy;
 import com.syncnapsis.data.model.Match;
@@ -34,10 +35,14 @@ public class JSONGeneratorTest extends LoggerTestCase
 		String expected2 = "[\r\n\t[1,101,102,103],\r\n\t[2,201,202,203],\r\n\t[3,301,302,303]\r\n]";
 		String expected3 = "[]";
 
+		Collections.shuffle(galaxy.getSolarSystems());
 		assertEquals(expected1, JSONGenerator.toJSON(galaxy, false));
+		Collections.shuffle(galaxy.getSolarSystems());
 		assertEquals(expected2, JSONGenerator.toJSON(galaxy, true));
 		// test with empty galaxy
+		Collections.shuffle(galaxy.getSolarSystems());
 		assertEquals(expected3, JSONGenerator.toJSON(new Galaxy(), false));
+		Collections.shuffle(galaxy.getSolarSystems());
 		assertEquals(expected3, JSONGenerator.toJSON(new Galaxy(), true));
 	}
 
@@ -51,7 +56,7 @@ public class JSONGeneratorTest extends LoggerTestCase
 		inf1.setId(11L);
 		inf1.setSolarSystem(sys1);
 		inf1.setSize(10);
-		inf1.setHabitability(100);
+		inf1.setHeat(100);
 
 		SolarSystem sys2 = new SolarSystem();
 		sys2.setId(2L);
@@ -60,7 +65,7 @@ public class JSONGeneratorTest extends LoggerTestCase
 		inf2.setId(22L);
 		inf2.setSolarSystem(sys2);
 		inf2.setSize(20);
-		inf2.setHabitability(200);
+		inf2.setHeat(200);
 
 		SolarSystem sys3 = new SolarSystem();
 		sys3.setId(3L);
@@ -69,7 +74,7 @@ public class JSONGeneratorTest extends LoggerTestCase
 		inf3.setId(33L);
 		inf3.setSolarSystem(sys3);
 		inf3.setSize(30);
-		inf3.setHabitability(300);
+		inf3.setHeat(300);
 
 		Match match = new Match();
 		match.setInfrastructures(Arrays.asList(inf1, inf2, inf3));
@@ -78,10 +83,14 @@ public class JSONGeneratorTest extends LoggerTestCase
 		String expected2 = "[\r\n\t[11,101,102,103,10,100],\r\n\t[22,201,202,203,20,200],\r\n\t[33,301,302,303,30,300]\r\n]";
 		String expected3 = "[]";
 
+		Collections.shuffle(match.getInfrastructures());
 		assertEquals(expected1, JSONGenerator.toJSON(match, false));
+		Collections.shuffle(match.getInfrastructures());
 		assertEquals(expected2, JSONGenerator.toJSON(match, true));
 		// test with empty match
+		Collections.shuffle(match.getInfrastructures());
 		assertEquals(expected3, JSONGenerator.toJSON(new Match(), false));
+		Collections.shuffle(match.getInfrastructures());
 		assertEquals(expected3, JSONGenerator.toJSON(new Match(), true));
 	}
 }

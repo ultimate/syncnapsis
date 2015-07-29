@@ -1,5 +1,6 @@
 package com.syncnapsis.utils.serialization;
 
+import java.util.Collections;
 import java.util.List;
 
 import com.syncnapsis.data.model.Galaxy;
@@ -45,6 +46,7 @@ public abstract class JSONGenerator
 		sb.append('[');
 		if(galaxy.getSolarSystems() != null && galaxy.getSolarSystems().size() > 0)
 		{
+			Collections.sort(galaxy.getSolarSystems(), SolarSystem.BY_ID);
 			for(SolarSystem sys : galaxy.getSolarSystems())
 			{
 				if(format)
@@ -97,6 +99,7 @@ public abstract class JSONGenerator
 		sb.append('[');
 		if(match.getInfrastructures() != null && match.getInfrastructures().size() > 0)
 		{
+			Collections.sort(match.getInfrastructures(), SolarSystemInfrastructure.BY_ID);
 			for(SolarSystemInfrastructure inf : match.getInfrastructures())
 			{
 				if(format)

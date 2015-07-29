@@ -14,6 +14,7 @@
  */
 package com.syncnapsis.data.model;
 
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -28,6 +29,7 @@ import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
 import com.syncnapsis.data.model.base.ActivatableInstance;
+import com.syncnapsis.data.model.base.BaseObject;
 
 /**
  * Entity representation of a simple solar system infrastructure.<br>
@@ -147,7 +149,7 @@ public class SolarSystemInfrastructure extends ActivatableInstance<Long>
 	{
 		return size;
 	}
-	
+
 	/**
 	 * The heat of the star of this solar system (in a range from 0 to 1000)
 	 * 
@@ -278,7 +280,7 @@ public class SolarSystemInfrastructure extends ActivatableInstance<Long>
 	{
 		this.size = size;
 	}
-	
+
 	/**
 	 * The heat of the star of this solar system (in a range from 0 to 1000)
 	 * 
@@ -431,4 +433,27 @@ public class SolarSystemInfrastructure extends ActivatableInstance<Long>
 			return false;
 		return true;
 	}
+
+	/**
+	 * A comparator using {@link BaseObject#getId()} to compare entities
+	 */
+	public static final Comparator<SolarSystemInfrastructure>	BY_ID	= new Comparator<SolarSystemInfrastructure>() {
+																			@Override
+																			public int compare(SolarSystemInfrastructure o1,
+																					SolarSystemInfrastructure o2)
+																			{
+																				if(o1.id == null)
+																				{
+																					if(o2.id == null)
+																						return 0;
+																					else
+																						return 1;
+																				}
+																				else if(o2.id == null)
+																				{
+																					return -1;
+																				}
+																				return o1.id.compareTo(o2.id);
+																			}
+																		};
 }

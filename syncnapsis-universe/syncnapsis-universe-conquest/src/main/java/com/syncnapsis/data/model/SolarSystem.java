@@ -14,6 +14,8 @@
  */
 package com.syncnapsis.data.model;
 
+import java.util.Comparator;
+
 import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
@@ -24,6 +26,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import com.syncnapsis.data.model.base.ActivatableInstance;
+import com.syncnapsis.data.model.base.BaseObject;
 import com.syncnapsis.data.model.help.Vector;
 
 /**
@@ -165,4 +168,26 @@ public class SolarSystem extends ActivatableInstance<Long>
 			return false;
 		return true;
 	}
+
+	/**
+	 * A comparator using {@link BaseObject#getId()} to compare entities
+	 */
+	public static final Comparator<SolarSystem>	BY_ID	= new Comparator<SolarSystem>() {
+															@Override
+															public int compare(SolarSystem o1, SolarSystem o2)
+															{
+																if(o1.id == null)
+																{
+																	if(o2.id == null)
+																		return 0;
+																	else
+																		return 1;
+																}
+																else if(o2.id == null)
+																{
+																	return -1;
+																}
+																return o1.id.compareTo(o2.id);
+															}
+														};
 }
