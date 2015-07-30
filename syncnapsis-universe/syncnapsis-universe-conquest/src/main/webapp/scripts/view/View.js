@@ -349,8 +349,9 @@ ViewUtil.System = function(id, x, y, z, size, heat) {
 	this.habitability 	= new ViewUtil.AnimatedVariable(0, 	  0, 1e3, animationSpeed);
 	// dynamic properties
 	this.infrastructure = new ViewUtil.AnimatedVariable(0, 0, 1e12, animationSpeed);
-	this.population 	= new ViewUtil.AnimatedVariable(0, 0, 1e12, animationSpeed);
+	this.totalPopulation= new ViewUtil.AnimatedVariable(0, 0, 1e12, animationSpeed);
 	this.maxPopulation 	= new ViewUtil.AnimatedVariable(0, 0, 1e12, animationSpeed);
+	this.populations	= []; // dynamically updated from JSON array
 	// calculated properties
 	// additional properties
 	var dispSize = Math.log10(size)/3*(ViewUtil.SYSTEM_SIZE_MAX-ViewUtil.SYSTEM_SIZE_MIN) + ViewUtil.SYSTEM_SIZE_MIN;
@@ -370,7 +371,7 @@ ViewUtil.System = function(id, x, y, z, size, heat) {
 													this.heat.target / this.heat.max,
 													this.habitability.target / this.habitability.max, 
 													Math.log10(this.infrastructure.target) / Math.log10(this.infrastructure.max),
-													Math.log10(this.population.target) / Math.log10(this.population.max), 
+													Math.log10(this.totalPopulation.target) / Math.log10(this.totalPopulation.max), 
 													Math.log10(this.maxPopulation.target) / Math.log10(this.maxPopulation.max),
 													this.radius / this.galaxy.info.maxR
 													);
@@ -397,7 +398,7 @@ ViewUtil.System = function(id, x, y, z, size, heat) {
 		this.heat.animate(time);
 		this.habitability.animate(time);
 		this.infrastructure.animate(time);
-		this.population.animate(time);
+		this.totalPopulation.animate(time);
 		this.maxPopulation.animate(time);
 		
 		this.firstAnimation = false;

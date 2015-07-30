@@ -1759,6 +1759,7 @@ UIManager.prototype.updateLinks = function()
 	}
 };
 
+// parse the static galaxy info for a match
 UIManager.prototype.parseGalaxy = function(json)
 {
 	var arr;
@@ -1770,6 +1771,39 @@ UIManager.prototype.parseGalaxy = function(json)
 		systems.push(new ViewUtil.System(arr[i][0], arr[i][1], arr[i][2], arr[i][3], arr[i][4], arr[i][5]));
 	}
 	return new ViewUtil.Galaxy(systems);
+};
+
+// parse the system live update list for a match
+UIManager.prototype.parseSystems = function(json)
+{
+	var arr;
+	eval("arr=" + json);
+	for(var i = 0; i < arr.length; i++)
+	{
+		// arr[i] = [id		inf		id0		pop0	id1		pop1	...]
+		var sys = null;
+		for(var s = 0; s < this.view.galaxy.systems.length; s++)
+		{
+			if(this.view.galaxy.systems[i].id == arr[i][0])
+			{
+				sys = this.view.galaxy.systems[i];
+				break;
+			}
+		}
+		if(sys != null)
+		{
+			sys.infrastructure.target = arr[i][1];
+			sys.populations.length = 0; // clear populations
+			for(var p = 2; p < arr[i].length-1; p += 2)
+			{
+				sys.populations.push({ user: arr[i][p], population: arr[i][p+1] });
+			}
+		}
+		else
+		{
+			console.warn("no matching system found with id " + arr[i][0]);
+		}
+	}
 };
 
 UIManager.prototype.doShowMatch = function(request)
@@ -1851,7 +1885,8 @@ UIManager.prototype.updateSelectionInfo = function(system, isTarget, changeType)
 		// check if last other selection was removed -> hide action
 		else if(this.view.galaxy.selections[1] == null) // TODO not working
 		{
-			info.removeChild(info.children[1]);
+			if(info.children.length > 1)
+				info.removeChild(info.children[info.children.length-1]);
 		}
 	}
 	else // if(changeType == ViewUtil.SELECTION_CHANGE)
@@ -1862,8 +1897,35 @@ UIManager.prototype.updateSelectionInfo = function(system, isTarget, changeType)
 
 UIManager.prototype.createSystemInfo = function(system, isTarget)
 {
+	var pos = system.coords.value;
+	
+	var row = function(cols) {
+		var tr = document.createElement("tr");
+		var td;
+		for(var c = 0; c < cols.length; c++)
+		{
+			td = document.createElement("td");
+			if(cols[c] instanceof HTMLElement || cols[c] instanceof Text)
+				td.appendChild(cols[c]);
+			else
+				td.appendChild(document.createTextNode(cols[c]));
+			tr.appendChild(td);
+		}
+		return tr;
+	};
+
 	var div = document.createElement("div");
-	div.innerHTML = JSON.stringify(system.coords.value);
+	// coordinate table
+	var titleTable = document.createElement("table");
+	titleTable.appendChild(row([pos.x,pos.y,pos.z]));
+	div.appendChild(titleTable);
+	// population table
+	var popTable = document.createElement("table");
+	popTable.appendChild(row(["max",sys.maxPopulation.value,"+-"]));
+	popTable.appendChild(row(["inf",sys.infrastructure.value,"+-"]));
+//	for(var )
+	div.appendChild(popTable);
+	
 	return div;
 };
 
@@ -1927,6 +1989,69 @@ ConquestManager.prototype.update = function(channel, value)
 			console.log("match creator loaded!");
 		});
 	}
+	else if(channel == UI.constants.CHANNEL_MATCH_SYSTEMS)
+	{
+		// update for the system populations and infrastructures received
+		client.uiManager.parseSystems(value);
+	}
 	
 	// TODO other channels
+};
+
+
+
+UIManager.prototype.randomPops = function()
+{
+	var playerIDs = [1, 10, 20];
+	var pops = [];
+	var sys;
+	var sysPops;
+	for(var s = 0; s < this.view.galaxy.systems.length; s++)
+	{
+		sys = this.view.galaxy.systems[s];
+		sysPops = [sys.id];
+		var newInfValue = sys.infrastructure.value + Math.round((Math.random()*2-1)*1e10);
+		if(newInfValue < 0)
+			newInfValue = 0;
+		else if(newInfValue > 1e12)
+			newInfValue = 1e12;
+		sysPops.push(newInfValue);
+		var presentPlayers = [];
+		var newPopValue;
+		// update present players
+		for(var i = 0; i < sys.populations.length; i++)
+		{
+			presentPlayers.push(sys.populations[i].user);
+			newPopValue = sys.populations[i].population + Math.round((Math.random()*2-1)*1e10);
+			if(newPopValue > 1e12)
+				newPopValue = 1e12;
+			if(newPopValue > 0)
+			{
+				sysPops.push(sys.populations[i].user);
+				sysPops.push(newPopValue);
+			}
+		}
+		// randomly add new players
+		for(var i = 0; i < playerIDs.length; i++)
+		{
+			if(presentPlayers.indexOf(playerIDs[i]) == -1)
+			{
+				newPopValue = Math.round((Math.random()*2-1)*1e10);
+			}
+			if(newPopValue > 0)
+			{
+				sysPops.push(playerIDs[i]);
+				sysPops.push(newPopValue);
+			}
+		}
+		pops.push(sysPops);
+	}
+	return pops;
+};
+
+UIManager.prototype.randomPopUpdate = function()
+{
+	var pops = this.randomPops();
+	var json = JSON.stringify(pops);
+	client.conquestManager.update(UI.constants.CHANNEL_MATCH_SYSTEMS, json);
 };
