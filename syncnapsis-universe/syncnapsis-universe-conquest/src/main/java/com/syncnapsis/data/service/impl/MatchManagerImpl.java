@@ -130,13 +130,17 @@ public class MatchManagerImpl extends GenericNameManagerImpl<Match, Long> implem
 		// create general channel(s)
 		conquestManager.createChannel(UniverseConquestConstants.CHANNEL_MATCH_CREATED, null);
 		// create individual match channel(s)
-		HibernateUtil.openBoundSession();
+		// this will create a separate session, since no session is present on startup otherwise
+		boolean sessionAlreadyOpen = HibernateUtil.isSessionBound();
+		if(!sessionAlreadyOpen) // add this check to prevent duplicate session during tests
+			HibernateUtil.openBoundSession();
 		List<Match> matches = getAll();
 		for(Match m : matches)
 		{
 			createChannels(m);
 		}
-		HibernateUtil.closeBoundSession();
+		if(!sessionAlreadyOpen)
+			HibernateUtil.closeBoundSession();
 	}
 
 	/**
@@ -927,25 +931,26 @@ public class MatchManagerImpl extends GenericNameManagerImpl<Match, Long> implem
 		List<Long> infEntry;
 		for(SolarSystemInfrastructure inf : match.getInfrastructures())
 		{
-			infEntry = new LinkedList<Long>();
-			infEntry.add(inf.getSolarSystem().getId());
-			infEntry.add(inf.getInfrastructure());
-			
-			Collections.sort(inf.getPopulations(), SolarSystemPopulation.BY_COLONIZATIONDATE);
-			
-			for(SolarSystemPopulation pop : inf.getPopulations())
+			// only add if population or infrastructure values have changed
+			if(inf.isModified())
 			{
-				if(pop.isPresent(time))
+				infEntry = new LinkedList<Long>();
+				infEntry.add(inf.getSolarSystem().getId());
+				infEntry.add((long) inf.getHabitability());
+				infEntry.add(inf.getInfrastructure());
+				
+				Collections.sort(inf.getPopulations(), SolarSystemPopulation.BY_COLONIZATIONDATE);
+				
+				for(SolarSystemPopulation pop : inf.getPopulations())
 				{
-					infEntry.add(pop.getParticipant().getId());
-					infEntry.add(pop.getPopulation());
+					if(pop.isPresent(time))
+					{
+						infEntry.add(pop.getParticipant().getEmpire().getId());
+						infEntry.add(pop.getPopulation());
+					}
 				}
+				populationList.add(infEntry);
 			}
-			// if(infEntry.size() > 0)
-			// {
-			// TODO only add if there are populations?
-			populationList.add(infEntry);
-			// }
 		}
 		return populationList;
 	}
@@ -970,7 +975,7 @@ public class MatchManagerImpl extends GenericNameManagerImpl<Match, Long> implem
 					movEntry = new LinkedList<Long>();
 					movEntry.add(inf.getSolarSystem().getId());
 					movEntry.add(pop.getOrigin().getInfrastructure().getSolarSystem().getId());
-					movEntry.add(pop.getParticipant().getId());
+					movEntry.add(pop.getParticipant().getEmpire().getId());
 					// movEntry.add(pop.getPopulation());
 					// movEntry.add(pop.getStoredInfrastructure());
 					long totalTravelTime = pop.getColonizationDate().getTime() - pop.getOriginationDate().getTime();
