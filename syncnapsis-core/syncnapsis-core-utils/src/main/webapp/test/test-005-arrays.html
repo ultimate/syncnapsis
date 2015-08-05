@@ -1,0 +1,66 @@
+<html>
+<!--
+ - Syncnapsis Framework - Copyright (c) 2012-2014 ultimate
+ - 
+ - This program is free software; you can redistribute it and/or modify it under the terms of
+ - the GNU General Public License as published by the Free Software Foundation; either version
+ - 3 of the License, or any later version.
+ - 
+ - This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+ - without even the implied warranty of MECHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ - See the GNU General Public License for more details.
+ - 
+ - You should have received a copy of the GNU General Plublic License along with this program;
+ - if not, see <http://www.gnu.org/licenses/>.
+-->
+	<head>	
+		<script type="text/javascript" src="../scripts/util/Arrays.js"></script>
+		<script type="text/javascript">
+			var num_arr = [];
+			var id_arr = [];
+			
+			var compFunc = function(o1, o2)
+			{
+				return o1.id - o2.id;
+			};
+			
+			for(var l = 0; l < 10; l++)
+			{
+				for(var i = 0; i <= 10; i++)
+				{
+					if(i < l)
+					{
+						// expecting to find entry
+						if(num_arr.binaryIndexOf(i) == i)
+							console.log(l + " : " + i + " : num : found > ok");
+						else
+							console.error(l + " : " + i + " : num : not found > not ok");
+						//if(id_arr.binaryIndexOf({id: i}, compFunc) == i)
+						if(id_arr.binaryIndexOfId(i) == i)
+							console.log(l + " : " + i + " : id : found > ok");
+						else
+							console.error(l + " : " + i + " : id : not found > not ok");
+					}
+					else
+					{
+						// entry should not be in arry
+						if(num_arr.binaryIndexOf(i) < 0)
+							console.log(l + " : " + i + " : num : not found > ok");
+						else
+							console.error(l + " : " + i + " : num : found > not ok");
+						//if(id_arr.binaryIndexOf({id: i}, compFunc) < 0)
+						if(id_arr.binaryIndexOfId(i) < 0)
+							console.log(l + " : " + i + " : id : not found > ok");
+						else
+							console.error(l + " : " + i + " : id : found > not ok");
+					}
+				}				
+				num_arr.push(l);
+				id_arr.push({id:l});
+			}
+		</script>
+	</head>
+	<body>
+		asdf
+	</body>
+</html>
