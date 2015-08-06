@@ -1780,23 +1780,18 @@ UIManager.prototype.parseSystems = function(json)
 	eval("arr=" + json);
 	for(var i = 0; i < arr.length; i++)
 	{
-		// arr[i] = [id		inf		id0		pop0	id1		pop1	...]
-		var sys = null;
-		for(var s = 0; s < this.view.galaxy.systems.length; s++)
+		// arr[i] = [id		hab		inf		id0		pop0	id1		pop1	...]
+		var index = this.view.galaxy.systems.binaryIndexOfId(arr[i][0]);
+		if(index >= 0)
 		{
-			if(this.view.galaxy.systems[i].id == arr[i][0])
-			{
-				sys = this.view.galaxy.systems[i];
-				break;
-			}
-		}
-		if(sys != null)
-		{
-			sys.infrastructure.target = arr[i][1];
+			var sys = this.view.galaxy.systems[index];
+			sys.habitability.target = arr[i][1];
+			sys.maxPopulation.target = sys.habitability.target * sys.size.target * 1e6;
+			sys.infrastructure.target = arr[i][2];
 			sys.populations.length = 0; // clear populations
-			for(var p = 2; p < arr[i].length-1; p += 2)
+			for(var p = 3; p < arr[i].length-1; p += 2)
 			{
-				sys.populations.push({ user: arr[i][p], population: arr[i][p+1] });
+				sys.populations.push({ empire: arr[i][p], population: arr[i][p+1] });
 			}
 		}
 		else
@@ -1915,17 +1910,36 @@ UIManager.prototype.createSystemInfo = function(system, isTarget)
 	};
 
 	var div = document.createElement("div");
-	// coordinate table
-	var titleTable = document.createElement("table");
-	titleTable.appendChild(row([pos.x,pos.y,pos.z]));
-	div.appendChild(titleTable);
-	// population table
-	var popTable = document.createElement("table");
-	popTable.appendChild(row(["max",sys.maxPopulation.value,"+-"]));
-	popTable.appendChild(row(["inf",sys.infrastructure.value,"+-"]));
-//	for(var )
-	div.appendChild(popTable);
+	var table = document.createElement("table");
+	if(isTarget)
+	{
+		div.classList.add("red_frame");
+		table.classList.add("target");
+	}
+	else
+	{
+		div.classList.add("frame");
+	}
+	// system title (coordinates)
+	table.appendChild(row(["( " + pos.x + " | " + pos.y + " | " + pos.z + " )"]));
+	table.children[0].children[0].colSpan = 3;
+	// max population & infrastruction
+	table.appendChild(row(["max",Math.round(system.maxPopulation.value),"+-"]));
+	table.appendChild(row(["inf",Math.round(system.infrastructure.value),"+-"]));
+	// populations
+	var username;
+	for(var p = 0; p < system.populations.length; p++)
+	{
+		var index = this.empires.binaryIndexOfId(system.populations[p].empire);
+		if(index >= 0)
+			username = this.empires[index].player.user.username;
+		else
+			username = "unknown user";
+		table.appendChild(row([username, Math.round(system.populations[p].population),"icons"]));
+	}
+	// TODO movements
 	
+	div.appendChild(table);
 	return div;
 };
 
@@ -2000,6 +2014,11 @@ ConquestManager.prototype.update = function(channel, value)
 
 
 
+
+
+
+// TODO for debugging only
+
 UIManager.prototype.randomPops = function()
 {
 	var playerIDs = [1, 10, 20];
@@ -2010,6 +2029,12 @@ UIManager.prototype.randomPops = function()
 	{
 		sys = this.view.galaxy.systems[s];
 		sysPops = [sys.id];
+		var newMaxValue = sys.maxPopulation.value + Math.round((Math.random()*2-1)*1e10);
+		if(newMaxValue < 0)
+			newMaxValue = 0;
+		else if(newMaxValue > 1e12)
+			newMaxValue = 1e12;
+		sysPops.push(newMaxValue);
 		var newInfValue = sys.infrastructure.value + Math.round((Math.random()*2-1)*1e10);
 		if(newInfValue < 0)
 			newInfValue = 0;
@@ -2021,13 +2046,13 @@ UIManager.prototype.randomPops = function()
 		// update present players
 		for(var i = 0; i < sys.populations.length; i++)
 		{
-			presentPlayers.push(sys.populations[i].user);
+			presentPlayers.push(sys.populations[i].empire);
 			newPopValue = sys.populations[i].population + Math.round((Math.random()*2-1)*1e10);
 			if(newPopValue > 1e12)
 				newPopValue = 1e12;
 			if(newPopValue > 0)
 			{
-				sysPops.push(sys.populations[i].user);
+				sysPops.push(sys.populations[i].empire);
 				sysPops.push(newPopValue);
 			}
 		}
@@ -2037,11 +2062,11 @@ UIManager.prototype.randomPops = function()
 			if(presentPlayers.indexOf(playerIDs[i]) == -1)
 			{
 				newPopValue = Math.round((Math.random()*2-1)*1e10);
-			}
-			if(newPopValue > 0)
-			{
-				sysPops.push(playerIDs[i]);
-				sysPops.push(newPopValue);
+				if(newPopValue > 0)
+				{
+					sysPops.push(playerIDs[i]);
+					sysPops.push(newPopValue);
+				}
 			}
 		}
 		pops.push(sysPops);

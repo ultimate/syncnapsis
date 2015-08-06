@@ -525,6 +525,33 @@ form>.select.verylong>* {
 	width: 200px;
 }
 
+#match_system_info div {
+	width: 200px;
+	margin-bottom: 10px;
+}
+
+#match_system_info table {
+	width: 100%;
+}
+
+#match_system_info table.target td {
+	border: 1px solid rgba(255,40,40,0.9);
+}
+
+#match_system_info table tr:nth-child(1) {
+	text-align: center;
+	font-weight: bold;
+}
+
+#match_system_info table td:nth-child(1) {
+	width: 40%;
+	font-weight: bold;
+}
+
+#match_system_info table td:nth-child(3) {
+	width: 20%;
+}
+
 .manage_match .match_title {
 	width: 436px;
 }
@@ -621,6 +648,11 @@ form>.select.verylong>* {
 .frame {
 	border: 1px solid rgba(0, 255, 255, 0.8);
 	background: rgba(0,86,86,0.9);
+}
+
+.red_frame {
+	border: 1px solid rgba(255,40,40,0.9);
+	background: rgba(86,13,13,0.9);
 }
 
 .transparent_frame {

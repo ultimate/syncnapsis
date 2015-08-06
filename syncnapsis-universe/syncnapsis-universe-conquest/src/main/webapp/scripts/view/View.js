@@ -343,14 +343,14 @@ ViewUtil.System = function(id, x, y, z, size, heat) {
 	var animationSpeed 	= 100;
 	this.id 			= id;
 	this.coords 		= new ViewUtil.AnimatedVector3(new THREE.Vector3(x,y,z), animationSpeed);
-	// static properties (unchanged per match)
+	// static properties (unchanged per match (use AnimatedVariable for future expandability only)
 	this.size 			= new ViewUtil.AnimatedVariable(size, 0, 1e3, animationSpeed); 
 	this.heat 			= new ViewUtil.AnimatedVariable(heat, 0, 1e3, animationSpeed);
 	this.habitability 	= new ViewUtil.AnimatedVariable(0, 	  0, 1e3, animationSpeed);
 	// dynamic properties
-	this.infrastructure = new ViewUtil.AnimatedVariable(0, 0, 1e12, animationSpeed);
-	this.totalPopulation= new ViewUtil.AnimatedVariable(0, 0, 1e12, animationSpeed);
-	this.maxPopulation 	= new ViewUtil.AnimatedVariable(0, 0, 1e12, animationSpeed);
+	this.infrastructure = new ViewUtil.AnimatedVariable(0, 0, 1e12, animationSpeed*1e9);
+	this.totalPopulation= new ViewUtil.AnimatedVariable(0, 0, 1e12, animationSpeed*1e9);
+	this.maxPopulation 	= new ViewUtil.AnimatedVariable(0, 0, 1e12, animationSpeed*1e9);
 	this.populations	= []; // dynamically updated from JSON array
 	// calculated properties
 	// additional properties
