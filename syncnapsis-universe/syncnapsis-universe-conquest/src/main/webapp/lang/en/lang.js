@@ -72,6 +72,11 @@ lang.EnumMatchState.active 		= "active";
 lang.EnumMatchState.finished	= "finished";
 lang.EnumMatchState.canceled	= "canceled";
 
+lang.EnumPopulationPriority = {};
+lang.EnumPopulationPriority.balanced		= "balanced";
+lang.EnumPopulationPriority.infrastructure	= "Infrastructure";
+lang.EnumPopulationPriority.population		= "Population";
+
 lang.EnumStartCondition = {};
 lang.EnumStartCondition.immediately	= "immediately";
 lang.EnumStartCondition.manually 	= "manually";
@@ -208,6 +213,11 @@ lang.profile.username			= "Username";
 
 lang.profile.change_password	= "Change " + lang.profile.password;
 lang.profile.change_email		= "Change " + lang.profile.email;
+
+lang.system = {};
+lang.system.buildPriority		= "";
+lang.system.infrastructure		= "Infrastructure";
+lang.system.maxPopulation		= "Max. Capacity";
 
 lang.welcome = {};
 lang.welcome.headLine			= "News:";

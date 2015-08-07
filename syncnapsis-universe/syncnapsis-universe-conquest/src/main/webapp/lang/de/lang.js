@@ -72,6 +72,11 @@ lang.EnumMatchState.active 		= "aktiv";
 lang.EnumMatchState.finished	= "beendet";
 lang.EnumMatchState.canceled	= "abgebrochen";
 
+lang.EnumPopulationPriority = {};
+lang.EnumPopulationPriority.balanced		= "ausbalanciert";
+lang.EnumPopulationPriority.infrastructure	= "Infrastruktur";
+lang.EnumPopulationPriority.population		= "Bevölkerung";
+
 lang.EnumStartCondition = {};
 lang.EnumStartCondition.immediately	= "sofort";
 lang.EnumStartCondition.manually 	= "manuell";
@@ -211,12 +216,8 @@ lang.profile.change_email		= lang.profile.email + " ändern";
 
 lang.system = {};
 lang.system.buildPriority		= "";
-lang.system.coords				= "Koordinaten";
 lang.system.infrastructure		= "Infrastruktur";
-lang.system.maxPopulation		= "Max. Bevölkerung";
-lang.system.population			= "Bevölkerung";
-
-/* TODO */
+lang.system.maxPopulation		= "Max. Kapazität";
 
 lang.welcome = {};
 lang.welcome.headLine			= "Neuigkeiten:";

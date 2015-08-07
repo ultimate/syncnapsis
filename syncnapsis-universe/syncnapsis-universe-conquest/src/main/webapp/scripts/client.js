@@ -224,19 +224,23 @@ UIManager = function()
 	// disable until matches are loaded
 	this.matchSelect.setDisabled(true);
 	// overwrite renderer
-	this.matchSelect.getOptionContent = function(option) {
-		var match = option.value;
-		var content = new Array();
-		// TODO image?
-		content.push("<span class='col_1'>");
-		content.push(match.id);
-		content.push("</span><span class='col_2'>");
-		content.push(match.title);
-		content.push("</span><span class='col_3'>");
-		content.push("(<label key='EnumMatchState." + match.state + "'></label>)"); // TODO localize
-		content.push("</span>");
-		return content.join("");
-	};
+	this.matchSelect.getOptionContent = function(uiManager) {
+		return function(option) {
+			var match = option.value;
+			var content = new Array();
+			// TODO image?
+			content.push("<span class='col_1'>");
+			content.push(match.id);
+			content.push("</span><span class='col_2'>");
+			content.push(match.title);
+			content.push("</span><span class='col_3'>");
+			content.push("(");
+			content.push(uiManager.getLabel("EnumMatchState." + match.state));
+			content.push(")");
+			content.push("</span>");
+			return content.join("");
+		};
+	} (this);
 	// overwrite onselect
 	// need to do this after populate, since populate overwrites onselect, too
 	this.matchSelect.onselect = function(uiManager) {
@@ -1307,6 +1311,13 @@ UIManager.prototype.getLabel = function(key)
 	return buff.join("");
 };
 
+UIManager.prototype.getLabelElement = function(key)
+{
+	var label = document.createElement("label");
+	label.setAttribute("key", key);
+	return label;
+};
+
 UIManager.prototype.updateLabels = function(parent)
 {
 	if(parent == undefined)
@@ -1793,6 +1804,7 @@ UIManager.prototype.parseSystems = function(json)
 			{
 				sys.populations.push({ empire: arr[i][p], population: arr[i][p+1] });
 			}
+			// TODO update system info view if system is currently selected
 		}
 		else
 		{
@@ -1888,6 +1900,8 @@ UIManager.prototype.updateSelectionInfo = function(system, isTarget, changeType)
 	{
 		// ignore
 	}
+	
+	this.updateLabels(info);
 };
 
 UIManager.prototype.createSystemInfo = function(system, isTarget)
@@ -1924,8 +1938,8 @@ UIManager.prototype.createSystemInfo = function(system, isTarget)
 	table.appendChild(row(["( " + pos.x + " | " + pos.y + " | " + pos.z + " )"]));
 	table.children[0].children[0].colSpan = 3;
 	// max population & infrastruction
-	table.appendChild(row(["max",Math.round(system.maxPopulation.value),"+-"]));
-	table.appendChild(row(["inf",Math.round(system.infrastructure.value),"+-"]));
+	table.appendChild(row([this.getLabelElement("system.maxPopulation"),Math.round(system.maxPopulation.value),"+-"]));
+	table.appendChild(row([this.getLabelElement("system.infrastructure"),Math.round(system.infrastructure.value),"+-"]));
 	// populations
 	var username;
 	for(var p = 0; p < system.populations.length; p++)
