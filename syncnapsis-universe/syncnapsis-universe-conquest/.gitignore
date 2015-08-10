@@ -11,5 +11,4 @@
 .settings/
 target/
 logs/
-/src/main/webapp/scripts/lib
 /src/main/webapp/scripts/util
