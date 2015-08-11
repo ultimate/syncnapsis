@@ -120,7 +120,7 @@ body, select {
 
 #stats {			
 	position: absolute;
-	bottom: 0px;
+	bottom: 2px;
 	left: 0px;
 }	
 
@@ -517,7 +517,7 @@ form>.select.verylong>* {
 
 #match_system_info {
 	position: absolute;
-	left: 0px;
+	left: 1px;
 	top: 0px;
 	bottom: 0px;
 	margin: auto;
@@ -526,7 +526,7 @@ form>.select.verylong>* {
 }
 
 #match_system_info div {
-	width: 255px;
+	width: 260px;
 	margin-bottom: 10px;
 }
 
@@ -548,8 +548,13 @@ form>.select.verylong>* {
 	font-weight: bold;
 }
 
+#match_system_info table td:nth-child(2) {
+	text-align: right;
+}
+
 #match_system_info table td:nth-child(3) {
 	width: 20%;
+	text-align: center;
 }
 
 .manage_match .match_title {
