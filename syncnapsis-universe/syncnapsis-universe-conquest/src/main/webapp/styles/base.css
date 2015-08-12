@@ -530,6 +530,34 @@ form>.select.verylong>* {
 	margin-bottom: 10px;
 }
 
+#match_system_info div.button {
+	line-height: 20px;
+}
+
+#match_system_info div.button label:after,
+#match_system_info div.button label:before {
+	background: url('../images/arrow-down.png') no-repeat rgba(0,0,0,0);  /*Adds background-image*/
+	background-position: 1px 4px;  /*Position of the background-image*/
+	content: '00';
+	color: rgba(0,0,0,0);
+	-moz-transform: scaleY(-1);
+	-webkit-transform: scaleY(-1);
+	-o-transform: scaleY(-1);
+	transform: scaleY(-1);
+	-ms-filter: flipv; /*IE*/
+	filter: flipv; /*IE*/
+	margin-left: 4px;
+	margin-right: 4px;
+}
+
+#match_system_info div.button label:after {
+	float: right;
+}
+
+#match_system_info div.button label:before {
+	float: left;
+}
+
 #match_system_info table {
 	width: 100%;
 }

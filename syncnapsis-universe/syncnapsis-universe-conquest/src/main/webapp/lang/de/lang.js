@@ -131,6 +131,8 @@ lang.match.title						= "Titel";
 lang.match.victoryCondition				= "Sieg-Bedingung";
 lang.match.victoryParameter				= "Sieg-Parameter";
 
+lang.match.send_population				= "Angreifen / Siedeln";
+
 lang.message = {};
 lang.message.error						= "Es ist ein Fehler aufgetreten! Bitte versuche es erneut...";
 lang.message.email_update				= "E-Mail-Adress-Änderung angefordert! Bitte folge den Anweisungen in der die zugesendeten e-Mail...";

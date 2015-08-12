@@ -1960,7 +1960,14 @@ UIManager.prototype.createSystemInfo = function(system, isTarget)
 UIManager.prototype.createSystemAction = function()
 {
 	var div = document.createElement("div");
-	div.innerHTML = "do something";
+	var button = document.createElement("div");
+	button.classList.add("frame");
+	button.classList.add("button");
+	var buttonA = document.createElement("a");
+	var label = this.getLabelElement("match.send_population");
+	buttonA.appendChild(label);
+	button.appendChild(buttonA);
+	div.appendChild(button);
 	return div;
 };
 

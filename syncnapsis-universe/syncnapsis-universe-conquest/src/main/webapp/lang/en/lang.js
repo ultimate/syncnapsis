@@ -131,6 +131,8 @@ lang.match.title						= "Title";
 lang.match.victoryCondition				= "Victory condition";
 lang.match.victoryParameter				= "Victory parameter";
 
+lang.match.send_population				= "Attack / Settle";
+
 lang.message = {};
 lang.message.error						= "An error occurred! Please try again...";
 lang.message.email_update				= "E-mail-address update requested! Please follow the instruction in the e-mail sent to you...";
