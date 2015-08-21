@@ -131,8 +131,6 @@ lang.match.title						= "Titel";
 lang.match.victoryCondition				= "Sieg-Bedingung";
 lang.match.victoryParameter				= "Sieg-Parameter";
 
-lang.match.send_population				= "Angreifen / Siedeln";
-
 lang.message = {};
 lang.message.error						= "Es ist ein Fehler aufgetreten! Bitte versuche es erneut...";
 lang.message.email_update				= "E-Mail-Adress-Änderung angefordert! Bitte folge den Anweisungen in der die zugesendeten e-Mail...";
@@ -197,6 +195,28 @@ lang.participant.name			= "Spielername";
 lang.participant.rank			= "Rang";
 lang.participant.rankValue		= "%";
 lang.participant.rankRawValue	= "Punkte";
+
+lang.population = {};
+lang.population.infrastructure	= "Verfügbare Inf.";
+lang.population.population		= "Verfügbare Bev.";
+lang.population.travelSpeed		= "Reise Geschw.";
+lang.population.travelSpeedUnit = "%";
+lang.population.system			= "System";
+
+lang.population.arrivalTime		= "Ankunftszeit";
+lang.population.arriveASAP		= "100%";
+lang.population.arriveSynced	= "Sync";
+//lang.population.arriveASAP	= "Geschwindigkeit maximieren";
+//lang.population.arriveSynced	= "Ankunft synchronisieren";
+lang.population.exodus			= "Kolonie aufgeben";
+lang.population.giveupAll		= "J";
+lang.population.giveupNone		= "N";
+//lang.population.giveupAll		= "Alle aufgeben";
+//lang.population.giveupNone	= "Keine aufgeben";
+lang.population.status			= "Status";
+lang.population.selected		= "Ausgewählte Bev.";
+lang.population.send			= "Angreifen / Siedeln";
+lang.population.total			= "Gesamt-Bevölkerung";
 
 lang.profile = {};
 lang.profile.accountStatus		= "Status";

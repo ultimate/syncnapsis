@@ -131,8 +131,6 @@ lang.match.title						= "Title";
 lang.match.victoryCondition				= "Victory condition";
 lang.match.victoryParameter				= "Victory parameter";
 
-lang.match.send_population				= "Attack / Settle";
-
 lang.message = {};
 lang.message.error						= "An error occurred! Please try again...";
 lang.message.email_update				= "E-mail-address update requested! Please follow the instruction in the e-mail sent to you...";
@@ -197,6 +195,28 @@ lang.participant.name			= "Playername";
 lang.participant.rank			= "Rank";
 lang.participant.rankValue		= "%";
 lang.participant.rankRawValue	= "Points";
+
+lang.population = {};
+lang.population.infrastructure	= "Available inf.";
+lang.population.population		= "Available pop.";
+lang.population.travelSpeed		= "Travel speed";
+lang.population.travelSpeedUnit = "%";
+lang.population.system			= "System";
+
+lang.population.arrivalTime		= "Arrival time";
+lang.population.arriveASAP		= "100%";
+lang.population.arriveSynced	= "Sync";
+//lang.population.arriveASAP	= "Maximize speed";
+//lang.population.arriveSynced	= "Synchronize arrival";
+lang.population.exodus			= "Give up colony";
+lang.population.giveupAll		= "Y";
+lang.population.giveupNone		= "N";
+//lang.population.giveupAll		= "Give up all";
+//lang.population.giveupNone	= "Give up none";
+lang.population.status			= "Status";
+lang.population.selected		= "Selected pop.";
+lang.population.send			= "Attack / Settle";
+lang.population.total			= "Total population";
 
 lang.profile = {};
 lang.profile.accountStatus		= "Status";
