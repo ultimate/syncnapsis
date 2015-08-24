@@ -1964,11 +1964,62 @@ UIManager.prototype.createSystemAction = function()
 	button.classList.add("frame");
 	button.classList.add("button");
 	var buttonA = document.createElement("a");
-	var label = this.getLabelElement("match.send_population");
+	buttonA.onclick = function(uiManager) {
+		return function() {
+			uiManager.showSendPopulation();
+		};
+	} (this);
+	var label = this.getLabelElement("population.send");
 	buttonA.appendChild(label);
 	button.appendChild(buttonA);
 	div.appendChild(button);
 	return div;
+};
+
+UIManager.prototype.showSendPopulation = function()
+{
+	var id = new Date().getTime();
+	// create a new dialog each time
+	var win = this.getWindowFromTemplate(id, "content_match_send_population", "population.send");
+	win.setSize(800,200);
+	win.center();
+	win.setMovable(true);
+	win.dialogId = id;
+	
+	// TODO populate window
+	
+	// force label update
+	this.updateLabels(win);
+	// show window
+	win.setVisible(true);
+};
+
+UIManager.prototype.doSendPopulatino = function(id, cmd)
+{
+	var winId = this.getWindowId(id, "content_match_send_population");
+	var win = document.getElementById(winId);
+	
+	if(cmd == "giveup_all")
+	{
+	
+	}
+	else if(cmd == "giveup_none")
+	{
+	
+	}
+	else if(cmd == "arrive_asap")
+	{
+		
+	}
+	else if(cmd == "arrive_synced")
+	{
+		
+	}
+	else // if(cmd == "send")
+	{
+		// TODO submit
+		
+	}
 };
 
 MessageManager = function()
