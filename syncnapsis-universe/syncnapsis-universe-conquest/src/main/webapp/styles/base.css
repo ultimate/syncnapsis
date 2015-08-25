@@ -540,14 +540,15 @@ form>.select.verylong>* {
 	background-position: 1px 4px;  /*Position of the background-image*/
 	content: '00';
 	color: rgba(0,0,0,0);
+	margin-left: 4px;
+	margin-right: 4px;
+	/* flip the arrow vertically */
 	-moz-transform: scaleY(-1);
 	-webkit-transform: scaleY(-1);
 	-o-transform: scaleY(-1);
 	transform: scaleY(-1);
 	-ms-filter: flipv; /*IE*/
 	filter: flipv; /*IE*/
-	margin-left: 4px;
-	margin-right: 4px;
 }
 
 #match_system_info div.button label:after {
@@ -676,6 +677,47 @@ form>.select.verylong>* {
 	flex-grow: 0;
 	flex-basis: 20px;
 	margin: 5px;
+}
+
+.send_population table {
+	width: 100%;
+}
+
+.send_population table thead,
+.send_population table tfoot {
+	font-weight: bold;
+}
+
+.send_population table tbody td:nth-child(2),
+.send_population table tbody td:nth-child(3),
+.send_population table tbody td:nth-child(4),
+.send_population table tfoot td:nth-child(2),
+.send_population table tfoot td:nth-child(3) {
+	text-align: right;
+}
+
+.send_population table tfoot td:nth-child(4),
+.send_population table tfoot td:nth-child(5),
+.send_population table tfoot td:nth-child(6) {
+	text-align: center;
+}
+
+.send_population .send_speed {
+	width: 60px;
+}
+
+.send_population table tfoot .button {
+	height: 14px;
+	line-height: 14px;
+}
+
+.send_population table tfoot .button.send_giveup {
+	display: inline-block;
+	width: 30px;
+}
+
+.send_population .send_button {
+	margin-top: 10px;
 }
 
 .frame {
