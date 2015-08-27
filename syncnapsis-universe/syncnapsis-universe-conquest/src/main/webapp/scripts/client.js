@@ -125,6 +125,7 @@ UI.constants.MATCH_PARTICIPANTSMIN_ID = "match_participantsMin_$";
 UI.constants.MATCH_PARTICIPANTS_SOURCE_ID = "match_participants_source_$";
 UI.constants.MATCH_PARTICIPANTS_TARGET_ID = "match_participants_target_$";
 UI.constants.MATCH_BUTTONS_ID = "match_buttons_$";
+UI.constants.SEND_SPEED_ID = "send_speed_$";
 
 UI.constants.MATCH_SYSTEM_INFO_ID = "match_system_info";
 
@@ -497,6 +498,9 @@ UIManager.prototype.onMatchSelect = function(oldMatch, newMatch)
 	this.matchInfoVictoryConditionSelect.selectByValue(newMatch.victoryCondition);
 	document.getElementById(UI.constants.MATCH_STARTDATE_ID.replace(UI.constants.PLACEHOLDER, "info")).value = newMatch.startDate;
 	document.getElementById(UI.constants.MATCH_VICTORYPARAMETER_CUSTOM_ID.replace(UI.constants.PLACEHOLDER, "info")).value = newMatch.victoryParameter
+	
+	// fetch galaxy from info (this way we do not need to search by id again)
+	this.currentMatch.galaxy = this.matchInfoGalaxySelect.value;
 	
 	// unsubscribe previous match channels
 	if(oldMatch != null && oldMatch.id != null)
@@ -1986,7 +1990,13 @@ UIManager.prototype.showSendPopulation = function()
 	win.setMovable(true);
 	win.dialogId = id;
 	
-	// TODO populate window
+	for(var i = 0; i < ViewUtil.SELECTIONS_MAX-1; i++)
+	{
+		// TODO populate window
+		
+		// calculate arrival time
+		this.doSendPopulation(id, "update", i);
+	}
 	
 	// force label update
 	this.updateLabels(win);
@@ -1994,7 +2004,7 @@ UIManager.prototype.showSendPopulation = function()
 	win.setVisible(true);
 };
 
-UIManager.prototype.doSendPopulatino = function(id, cmd)
+UIManager.prototype.doSendPopulation = function(id, cmd, row)
 {
 	var winId = this.getWindowId(id, "content_match_send_population");
 	var win = document.getElementById(winId);
@@ -2009,11 +2019,21 @@ UIManager.prototype.doSendPopulatino = function(id, cmd)
 	}
 	else if(cmd == "arrive_asap")
 	{
-		
+		var inputId = UI.constants.MATCH_BUTTONS_ID.replace(UI.constants.PLACEHOLDER, id);
+		var input;
+		for(var i = 0; i < ViewUtil.SELECTIONS_MAX-1; i++)
+		{
+			input = win.getElementById(inputId + "_" + i);
+			input.value = 100;
+		}
 	}
 	else if(cmd == "arrive_synced")
 	{
 		
+	}
+	else if(cmd == "update")
+	{
+		console.log("row: " + row);
 	}
 	else // if(cmd == "send")
 	{
@@ -2082,6 +2102,84 @@ ConquestManager.prototype.update = function(channel, value)
 	}
 	
 	// TODO other channels
+};
+
+ConquestManager.prototype.calculateMaxTravelDistance = function(origin, movedPopulation, exodus)
+{
+	var travelMaxFactor = UniverseConquestConstants.PARAM_TRAVEL_MAX_FACTOR;
+	var travelExodusFactor = UniverseConquestConstants.PARAM_TRAVEL_EXODUS_FACTOR;
+	var maxPopulation =   UniverseConquestConstants.PARAM_SOLARSYSTEM_HABITABILITY_MAX
+						* UniverseConquestConstants.PARAM_SOLARSYSTEM_SIZE_MAX
+						* UniverseConquestConstants.PARAM_SOLARSYSTEM_MAX_POPULATION_FACTOR;
+
+	var infrastructure = origin.infrastructure.value;
+	if(infrastructure == 0)
+		infrastructure = 1;
+
+	var dist = Math.log10(infrastructure / movedPopulation);
+
+	if(exodus)
+		dist = (dist / Math.log10(maxPopulation) + 1) * travelExodusFactor / 2;
+	else
+		dist = (dist / Math.log10(maxPopulation) + 1) * travelMaxFactor / 2;
+
+	return dist * this.currentMatch.galaxy.maxGap;
+};
+
+ConquestManager.prototype.calculateMaxMovablePopulation = function(origin, travelDistance)
+{
+	var travelMaxFactor = UniverseConquestConstants.PARAM_TRAVEL_MAX_FACTOR;
+	var maxPopulation =   UniverseConquestConstants.PARAM_SOLARSYSTEM_HABITABILITY_MAX
+						* UniverseConquestConstants.PARAM_SOLARSYSTEM_SIZE_MAX
+						* UniverseConquestConstants.PARAM_SOLARSYSTEM_MAX_POPULATION_FACTOR;
+
+	var pop = (travelDistance / this.currentMatch.galaxy.maxGap) * 2 / travelMaxFactor - 1;
+	pop = origin.infrastructure.value / Math.pow(10, pop * Math.log10(maxPopulation));
+
+	// TODO get population for the current player only!
+//	if(pop > origin.getPopulation())
+//		pop = origin.getPopulation();
+
+	return Math.floor(pop);
+};
+
+ConquestManager.prototype.calculateTravelTime = function(origin, target, travelSpeed)
+{
+	// see Calculator#calculateTravelTime
+	var stdTravelTime = this.calculateStandardTravelTime(this.currentMatch, travelSpeed);
+	
+	var p1 = origin.coords.value;
+	var p2 = target.coords.value;
+	var dist = Math.sqrt((p1.x-p2.x)*(p1.x-p2.x) + (p1.y-p2.y)*(p1.y-p2.y) + (p1.z-p2.z)*(p1.z-p2.z));
+	
+	var stdDist = this.currentMatch.galaxy.maxGap;
+
+	return ((dist / stdDist) * stdTravelTime); 
+};
+
+ConquestManager.prototype.calculateStandardTravelTime = function(match, travelSpeed)
+{
+	// see Calculator#calculateStandardTravelTime
+	var CORRECTION_TRAVEL_TIME = 100000;
+//	var minSpeed = UniverseConquestConstants.PARAM_TRAVEL_SPEED_MIN;
+//	var maxSpeed = UniverseConquestConstants.PARAM_TRAVEL_SPEED_MAX;
+	var facBuild = UniverseConquestConstants.PARAM_FACTOR_BUILD;
+	var travelTimeFactor = UniverseConquestConstants.PARAM_TRAVEL_TIME_FACTOR;
+	var maxPopulation =   UniverseConquestConstants.PARAM_SOLARSYSTEM_HABITABILITY_MAX
+						* UniverseConquestConstants.PARAM_SOLARSYSTEM_SIZE_MAX
+						* UniverseConquestConstants.PARAM_SOLARSYSTEM_MAX_POPULATION_FACTOR;
+
+//	if(travelSpeed < minSpeed || travelSpeed > maxSpeed)
+//		throw new Error("travelSpeed out of bounds: [" + minSpeed + ", " + maxSpeed + "]");
+
+	var speedFac = Math.pow(10, match.speed);
+	
+	var timeBase = maxPopulation / facBuild;
+	var travelTime = travelTimeFactor * timeBase / CORRECTION_TRAVEL_TIME;
+	travelTime /= (travelSpeed / maxSpeed); // speed in percent
+	travelTime /= speedFac; // match speed
+
+	return travelTime;		
 };
 
 
