@@ -2019,11 +2019,11 @@ UIManager.prototype.doSendPopulation = function(id, cmd, row)
 	}
 	else if(cmd == "arrive_asap")
 	{
-		var inputId = UI.constants.MATCH_BUTTONS_ID.replace(UI.constants.PLACEHOLDER, id);
+		var inputId = UI.constants.SEND_SPEED_ID.replace(UI.constants.PLACEHOLDER, id);
 		var input;
 		for(var i = 0; i < ViewUtil.SELECTIONS_MAX-1; i++)
 		{
-			input = win.getElementById(inputId + "_" + i);
+			input = document.getElementById(inputId + "_" + i);
 			input.value = 100;
 		}
 	}

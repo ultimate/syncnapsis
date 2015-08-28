@@ -716,7 +716,7 @@ form>.select.verylong>* {
 	width: 30px;
 }
 
-.send_population .send_button {
+.send_population #send_button {
 	margin-top: 10px;
 }
 
