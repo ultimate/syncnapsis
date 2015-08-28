@@ -125,6 +125,7 @@ UI.constants.MATCH_PARTICIPANTSMIN_ID = "match_participantsMin_$";
 UI.constants.MATCH_PARTICIPANTS_SOURCE_ID = "match_participants_source_$";
 UI.constants.MATCH_PARTICIPANTS_TARGET_ID = "match_participants_target_$";
 UI.constants.MATCH_BUTTONS_ID = "match_buttons_$";
+UI.constants.SEND_ROW_ID = "send_row_$";
 UI.constants.SEND_SPEED_ID = "send_speed_$";
 
 UI.constants.MATCH_SYSTEM_INFO_ID = "match_system_info";
@@ -1939,7 +1940,7 @@ UIManager.prototype.createSystemInfo = function(system, isTarget)
 		div.classList.add("frame");
 	}
 	// system title (coordinates)
-	table.appendChild(row(["( " + pos.x + " | " + pos.y + " | " + pos.z + " )"]));
+	table.appendChild(row(["(\u00A0" + pos.x + "\u00A0|\u00A0" + pos.y + "\u00A0|\u00A0" + pos.z + "\u00A0)"]));
 	table.children[0].children[0].colSpan = 3;
 	// max population & infrastruction
 	table.appendChild(row([this.getLabelElement("system.maxPopulation"),Math.round(system.maxPopulation.value),"+-"]));
@@ -1990,12 +1991,39 @@ UIManager.prototype.showSendPopulation = function()
 	win.setMovable(true);
 	win.dialogId = id;
 	
+	var rowId = UI.constants.SEND_ROW_ID.replace(UI.constants.PLACEHOLDER, id);
+	var row;
+	var system;
+	var ownPop;
 	for(var i = 0; i < ViewUtil.SELECTIONS_MAX-1; i++)
 	{
-		// TODO populate window
-		
-		// calculate arrival time
-		this.doSendPopulation(id, "update", i);
+		system = this.view.galaxy.selections[i+1];
+		row = document.getElementById(rowId + "_" + i);
+		if(system != null)
+		{
+			console.log("displaying selection #" + i)
+			ownPop = 0;
+			for(var p = 0; p < system.populations.length; p++)
+			{
+				if(system.populations[p].empire == this.currentPlayer.empires[0].id)
+					ownPop = system.populations[p].population;
+			}
+			row.value = system; 
+			row.children[0].innerHTML = "(\u00A0" + system.coords.value.x + "\u00A0|\u00A0" + system.coords.value.y + "\u00A0|\u00A0" + system.coords.value.z + "\u00A0)";
+			row.children[1].innerHTML = system.infrastructure.value;
+			row.children[2].innerHTML = ownPop;
+
+			// TODO disable inputs when ownPop == 0
+
+			// TODO populate window
+			
+			// calculate arrival time
+			this.doSendPopulation(id, "update", i);
+		}
+		else
+		{
+			row.classList.add(UI.constants.HIDDEN_CLASS);
+		}
 	}
 	
 	// force label update
@@ -2029,7 +2057,22 @@ UIManager.prototype.doSendPopulation = function(id, cmd, row)
 	}
 	else if(cmd == "arrive_synced")
 	{
-		
+		var rowId = UI.constants.SEND_ROW_ID.replace(UI.constants.PLACEHOLDER, id);
+		var row;
+		var minDist;
+		var minDistIndex;
+		var speed;
+		// determine nearest system
+		for(var i = 0; i < ViewUtil.SELECTIONS_MAX-1; i++)
+		{
+			// TODO
+		}
+		for(var i = 0; i < ViewUtil.SELECTIONS_MAX-1; i++)
+		{
+			speed = 0;
+			input = document.getElementById(inputId + "_" + i);
+			input.value = speed;
+		}
 	}
 	else if(cmd == "update")
 	{
