@@ -702,6 +702,24 @@ form>.select.verylong>* {
 	text-align: center;
 }
 
+.send_population .send_pop {
+	width: 100px;
+}
+
+.send_population div.send_giveup {
+	margin-bottom: -6px;	
+}
+
+.send_population .send_giveup,
+.send_population .send_giveup>div,
+.send_population .send_giveup>ul {
+	width: 50px;
+}
+
+.send_population .send_giveup>ul {
+	margin-top: 0px;
+}
+
 .send_population .send_speed {
 	width: 60px;
 }

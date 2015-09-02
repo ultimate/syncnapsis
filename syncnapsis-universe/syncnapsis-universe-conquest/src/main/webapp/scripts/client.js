@@ -126,6 +126,7 @@ UI.constants.MATCH_PARTICIPANTS_SOURCE_ID = "match_participants_source_$";
 UI.constants.MATCH_PARTICIPANTS_TARGET_ID = "match_participants_target_$";
 UI.constants.MATCH_BUTTONS_ID = "match_buttons_$";
 UI.constants.SEND_ROW_ID = "send_row_$";
+UI.constants.SEND_GIVEUP_ID = "send_giveup_$";
 UI.constants.SEND_SPEED_ID = "send_speed_$";
 
 UI.constants.MATCH_SYSTEM_INFO_ID = "match_system_info";
@@ -1992,6 +1993,7 @@ UIManager.prototype.showSendPopulation = function()
 	win.dialogId = id;
 	
 	var rowId = UI.constants.SEND_ROW_ID.replace(UI.constants.PLACEHOLDER, id);
+	var giveupId = UI.constants.SEND_GIVEUP_ID.replace(UI.constants.PLACEHOLDER, id);
 	var row;
 	var system;
 	var ownPop;
@@ -2012,8 +2014,19 @@ UIManager.prototype.showSendPopulation = function()
 			row.children[0].innerHTML = "(\u00A0" + system.coords.value.x + "\u00A0|\u00A0" + system.coords.value.y + "\u00A0|\u00A0" + system.coords.value.z + "\u00A0)";
 			row.children[1].innerHTML = system.infrastructure.value;
 			row.children[2].innerHTML = ownPop;
+			row.children[3].children[0].value = ownPop;
+			row.children[3].children[0].max = ownPop;
+			
+			row.giveupSelect = new Select(giveupId + "_" + i);
+			this.populateEnumSelect(row.giveupSelect, lang.EnumYesNo, false);
+			row.giveupSelect.select(0);
 
-			// TODO disable inputs when ownPop == 0
+			if(ownPop == 0)
+			{
+				// TODO disable inputs when ownPop == 0
+				row.children[3].children[0].disabled = "true";
+				row.giveupSelect.setDisabled(true);
+			}
 
 			// TODO populate window
 			
@@ -2037,13 +2050,20 @@ UIManager.prototype.doSendPopulation = function(id, cmd, row)
 	var winId = this.getWindowId(id, "content_match_send_population");
 	var win = document.getElementById(winId);
 	
-	if(cmd == "giveup_all")
+	if(cmd == "giveup_all" || cmd == "giveup_none")
 	{
-	
-	}
-	else if(cmd == "giveup_none")
-	{
-	
+		var index = (cmd == "giveup_all" ? 1 : 0);
+		
+		var rowId = UI.constants.SEND_ROW_ID.replace(UI.constants.PLACEHOLDER, id);
+		var row;
+		for(var i = 0; i < ViewUtil.SELECTIONS_MAX-1; i++)
+		{
+			row = document.getElementById(rowId + "_" + i);
+			if(row.giveupSelect && !row.giveupSelect.isDisabled())
+			{
+				row.giveupSelect.select(index);
+			}
+		}
 	}
 	else if(cmd == "arrive_asap")
 	{
