@@ -1993,6 +1993,7 @@ UIManager.prototype.showSendPopulation = function()
 	win.center();
 	win.setMovable(true);
 	win.dialogId = id;
+	win.target = this.view.galaxy.selections[0];
 	
 	var rowId = UI.constants.SEND_ROW_ID.replace(UI.constants.PLACEHOLDER, id);
 	var giveupId = UI.constants.SEND_GIVEUP_ID.replace(UI.constants.PLACEHOLDER, id);
@@ -2115,12 +2116,20 @@ UIManager.prototype.doSendPopulation = function(id, cmd, rowIndex)
 		var available = 0;
 		var pop = 0;
 		var popInput;
+		var speed;
+		var speedInput;
+		var travelTime;
 		for(var i = 0; i < ViewUtil.SELECTIONS_MAX-1; i++)
 		{
 			row = document.getElementById(rowId + "_" + i);
 			available += Number(row.children[2].innerHTML);
 			popInput = document.getElementById(popId + "_" + i);
 			pop += Number(popInput.value);
+			speedInput = document.getElementById(speedId + "_" + i);
+			speed = Number(speedInput.value);
+			
+			travelTime = client.conquestManager.calculateTravelTime(row.value, win.target, speed);
+			row.children[6].innerHTML = "T -" + travelTime;
 		}
 		
 		console.log("available = " + available);

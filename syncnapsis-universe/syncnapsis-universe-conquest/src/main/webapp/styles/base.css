@@ -696,6 +696,10 @@ form>.select.verylong>* {
 	text-align: right;
 }
 
+.send_population table tfoot td:nth-child(2) {
+	padding-right: 22px;
+}
+
 .send_population table tfoot td:nth-child(4),
 .send_population table tfoot td:nth-child(5),
 .send_population table tfoot td:nth-child(6) {
