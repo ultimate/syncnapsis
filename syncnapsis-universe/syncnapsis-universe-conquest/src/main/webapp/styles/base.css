@@ -704,6 +704,7 @@ form>.select.verylong>* {
 
 .send_population .send_pop {
 	width: 100px;
+	text-align: right;
 }
 
 .send_population div.send_giveup {
@@ -722,6 +723,7 @@ form>.select.verylong>* {
 
 .send_population .send_speed {
 	width: 60px;
+	text-align: right;
 }
 
 .send_population table tfoot .button {

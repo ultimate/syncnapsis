@@ -126,6 +126,8 @@ UI.constants.MATCH_PARTICIPANTS_SOURCE_ID = "match_participants_source_$";
 UI.constants.MATCH_PARTICIPANTS_TARGET_ID = "match_participants_target_$";
 UI.constants.MATCH_BUTTONS_ID = "match_buttons_$";
 UI.constants.SEND_ROW_ID = "send_row_$";
+UI.constants.SEND_POP_ID = "send_pop_$";
+UI.constants.SEND_AVAILABLE_ID = "send_available_$";
 UI.constants.SEND_GIVEUP_ID = "send_giveup_$";
 UI.constants.SEND_SPEED_ID = "send_speed_$";
 
@@ -159,7 +161,7 @@ UI.constants.PINBOARD_CHAT = "pinboard_chat";
 UI.constants.PINBOARD_EVENTS = "pinboard_events";
 
 UI.constants.PLACEHOLDER = "$";
-UI.constants.PLACEHOLDER_ATTRIBUTES = ["id", "for", "href"];
+UI.constants.PLACEHOLDER_ATTRIBUTES = ["id", "for", "href", "onchange"];
 // channel constants analog to UniverseConquestConstants
 UI.constants.CHANNEL_ID_PLACEHOLDER	= "$";
 UI.constants.CHANNEL_MATCH_CREATED = "match_created";
@@ -1997,21 +1999,27 @@ UIManager.prototype.showSendPopulation = function()
 	var row;
 	var system;
 	var ownPop;
+	var ownPopHome;
 	for(var i = 0; i < ViewUtil.SELECTIONS_MAX-1; i++)
 	{
 		system = this.view.galaxy.selections[i+1];
 		row = document.getElementById(rowId + "_" + i);
 		if(system != null)
 		{
-			console.log("displaying selection #" + i)
+			console.log("displaying selection #" + i);
 			ownPop = 0;
 			for(var p = 0; p < system.populations.length; p++)
 			{
 				if(system.populations[p].empire == this.currentPlayer.empires[0].id)
+				{
 					ownPop = system.populations[p].population;
+					ownPopHome = (p == 0);
+					break;
+				}
 			}
 			row.value = system; 
 			row.children[0].innerHTML = "(\u00A0" + system.coords.value.x + "\u00A0|\u00A0" + system.coords.value.y + "\u00A0|\u00A0" + system.coords.value.z + "\u00A0)";
+			//row.children[1].innerHTML = (ownPopHome ? system.infrastructure.value : 0);
 			row.children[1].innerHTML = system.infrastructure.value;
 			row.children[2].innerHTML = ownPop;
 			row.children[3].children[0].value = ownPop;
@@ -2045,16 +2053,21 @@ UIManager.prototype.showSendPopulation = function()
 	win.setVisible(true);
 };
 
-UIManager.prototype.doSendPopulation = function(id, cmd, row)
+UIManager.prototype.doSendPopulation = function(id, cmd, rowIndex)
 {
 	var winId = this.getWindowId(id, "content_match_send_population");
 	var win = document.getElementById(winId);
+
+	var rowId = UI.constants.SEND_ROW_ID.replace(UI.constants.PLACEHOLDER, id);
+	var availableId = UI.constants.SEND_AVAILABLE_ID.replace(UI.constants.PLACEHOLDER, id);
+	var popId = UI.constants.SEND_POP_ID.replace(UI.constants.PLACEHOLDER, id);
+	var giveupId = UI.constants.SEND_GIVEUP_ID.replace(UI.constants.PLACEHOLDER, id);
+	var speedId = UI.constants.SEND_SPEED_ID.replace(UI.constants.PLACEHOLDER, id);
 	
 	if(cmd == "giveup_all" || cmd == "giveup_none")
 	{
 		var index = (cmd == "giveup_all" ? 1 : 0);
 		
-		var rowId = UI.constants.SEND_ROW_ID.replace(UI.constants.PLACEHOLDER, id);
 		var row;
 		for(var i = 0; i < ViewUtil.SELECTIONS_MAX-1; i++)
 		{
@@ -2067,21 +2080,20 @@ UIManager.prototype.doSendPopulation = function(id, cmd, row)
 	}
 	else if(cmd == "arrive_asap")
 	{
-		var inputId = UI.constants.SEND_SPEED_ID.replace(UI.constants.PLACEHOLDER, id);
-		var input;
+		var speedInput;
 		for(var i = 0; i < ViewUtil.SELECTIONS_MAX-1; i++)
 		{
-			input = document.getElementById(inputId + "_" + i);
-			input.value = 100;
+			speedInput = document.getElementById(speedId + "_" + i);
+			speedInput.value = 100;
 		}
 	}
 	else if(cmd == "arrive_synced")
 	{
-		var rowId = UI.constants.SEND_ROW_ID.replace(UI.constants.PLACEHOLDER, id);
 		var row;
 		var minDist;
 		var minDistIndex;
 		var speed;
+		var speedInput;
 		// determine nearest system
 		for(var i = 0; i < ViewUtil.SELECTIONS_MAX-1; i++)
 		{
@@ -2090,13 +2102,32 @@ UIManager.prototype.doSendPopulation = function(id, cmd, row)
 		for(var i = 0; i < ViewUtil.SELECTIONS_MAX-1; i++)
 		{
 			speed = 0;
-			input = document.getElementById(inputId + "_" + i);
-			input.value = speed;
+			speedInput = document.getElementById(speedId + "_" + i);
+			speedInput.value = speed;
 		}
 	}
 	else if(cmd == "update")
 	{
-		console.log("row: " + row);
+		console.log("winId: " + id);
+		console.log("row:   " + rowIndex);
+
+		var row;
+		var available = 0;
+		var pop = 0;
+		var popInput;
+		for(var i = 0; i < ViewUtil.SELECTIONS_MAX-1; i++)
+		{
+			row = document.getElementById(rowId + "_" + i);
+			available += Number(row.children[2].innerHTML);
+			popInput = document.getElementById(popId + "_" + i);
+			pop += Number(popInput.value);
+		}
+		
+		console.log("available = " + available);
+		console.log("selected  = " + pop);
+		
+		document.getElementById(availableId + "_total").innerHTML = available;
+		document.getElementById(popId + "_total").innerHTML = pop;
 	}
 	else // if(cmd == "send")
 	{
