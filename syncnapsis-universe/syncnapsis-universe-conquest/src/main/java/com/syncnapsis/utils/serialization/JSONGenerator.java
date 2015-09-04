@@ -1,12 +1,19 @@
 package com.syncnapsis.utils.serialization;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.syncnapsis.constants.UniverseConquestConstants;
 import com.syncnapsis.data.model.Galaxy;
 import com.syncnapsis.data.model.Match;
 import com.syncnapsis.data.model.SolarSystem;
 import com.syncnapsis.data.model.SolarSystemInfrastructure;
+import com.syncnapsis.utils.constants.Constant;
 
 /**
  * Class for generating the JSON representation for different kind of data (e.g. the
@@ -17,7 +24,14 @@ import com.syncnapsis.data.model.SolarSystemInfrastructure;
  */
 public abstract class JSONGenerator
 {
-	public static String	LINE_SEPARATOR	= "\r\n";
+	/**
+	 * Logger-Instance
+	 */
+	protected transient final static Logger	logger			= LoggerFactory.getLogger(JSONGenerator.class);
+	/**
+	 * The line separator to use
+	 */
+	public static String					LINE_SEPARATOR	= "\r\n";
 
 	/**
 	 * Prevent instantiation
@@ -67,9 +81,9 @@ public abstract class JSONGenerator
 			}
 			// replace last ","
 			if(format)
-				sb.replace(sb.length()-1, sb.length(), LINE_SEPARATOR + ']');
+				sb.replace(sb.length() - 1, sb.length(), LINE_SEPARATOR + ']');
 			else
-				sb.setCharAt(sb.length()-1, ']');
+				sb.setCharAt(sb.length() - 1, ']');
 		}
 		else
 		{
@@ -128,9 +142,9 @@ public abstract class JSONGenerator
 			}
 			// replace last ","
 			if(format)
-				sb.replace(sb.length()-1, sb.length(), LINE_SEPARATOR + ']');
+				sb.replace(sb.length() - 1, sb.length(), LINE_SEPARATOR + ']');
 			else
-				sb.setCharAt(sb.length()-1, ']');
+				sb.setCharAt(sb.length() - 1, ']');
 		}
 		else
 		{
@@ -138,5 +152,75 @@ public abstract class JSONGenerator
 		}
 
 		return sb.toString();
+	}
+
+	/**
+	 * Format the client relevant constants JS-style.
+	 * 
+	 * @return the constants.js content
+	 */
+	public static String createConstantJS()
+	{
+		StringBuilder constants = new StringBuilder();
+		constants.append("var UniverseConquestConstants = {};\n");
+
+		writeConstant(constants, UniverseConquestConstants.class, "PARAM_TRAVEL_MAX_FACTOR", "int");
+		writeConstant(constants, UniverseConquestConstants.class, "PARAM_TRAVEL_EXODUS_FACTOR", "int");
+		writeConstant(constants, UniverseConquestConstants.class, "PARAM_TRAVEL_TIME_FACTOR", "double");
+		writeConstant(constants, UniverseConquestConstants.class, "PARAM_SOLARSYSTEM_HABITABILITY_MAX", "int");
+		writeConstant(constants, UniverseConquestConstants.class, "PARAM_SOLARSYSTEM_SIZE_MAX", "int");
+		writeConstant(constants, UniverseConquestConstants.class, "PARAM_SOLARSYSTEM_MAX_POPULATION_FACTOR", "int");
+		writeConstant(constants, UniverseConquestConstants.class, "PARAM_FACTOR_BUILD", "double");
+
+		return constants.toString();
+	}
+
+	/**
+	 * Add a single line to the constants String.
+	 * 
+	 * @param constants - the builder for creating the constants.js
+	 * @param cls - the class containing the {@link Constant}
+	 * @param constantName - the name of the {@link Constant}
+	 * @param type - the type of the {@link Constant} to use for the constants String
+	 */
+	private static void writeConstant(StringBuilder constants, Class<?> cls, String constantName, String type)
+	{
+		try
+		{
+			Constant<?> constant = (Constant<?>) cls.getField(constantName).get(null);
+			String getterName = "as" + Character.toUpperCase(type.charAt(0)) + type.substring(1);
+			Method valueGetter = Constant.class.getMethod(getterName);
+			constants.append(cls.getSimpleName());
+			constants.append(".");
+			constants.append(constantName);
+			constants.append(" = ");
+			constants.append(valueGetter.invoke(constant));
+			constants.append(";");
+			constants.append(LINE_SEPARATOR);
+		}
+		catch(NoSuchFieldException e)
+		{
+			logger.error("no such constant: " + cls.getSimpleName() + "." + constantName);
+		}
+		catch(IllegalArgumentException e)
+		{
+			logger.error("could not access constant: " + cls.getSimpleName() + "." + constantName);
+		}
+		catch(IllegalAccessException e)
+		{
+			logger.error("could not access constant: " + cls.getSimpleName() + "." + constantName);
+		}
+		catch(SecurityException e)
+		{
+			logger.error("could not access constant: " + cls.getSimpleName() + "." + constantName);
+		}
+		catch(NoSuchMethodException e)
+		{
+			logger.error("illegal constant type: " + type);
+		}
+		catch(InvocationTargetException e)
+		{
+			logger.error("could not get constant '" + type + "' value: " + cls.getSimpleName() + "." + constantName);
+		}
 	}
 }

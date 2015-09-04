@@ -3,6 +3,7 @@ package com.syncnapsis.utils.serialization;
 import java.util.Arrays;
 import java.util.Collections;
 
+import com.syncnapsis.constants.UniverseConquestConstants;
 import com.syncnapsis.data.model.Galaxy;
 import com.syncnapsis.data.model.Match;
 import com.syncnapsis.data.model.SolarSystem;
@@ -10,9 +11,40 @@ import com.syncnapsis.data.model.SolarSystemInfrastructure;
 import com.syncnapsis.data.model.help.Vector;
 import com.syncnapsis.tests.LoggerTestCase;
 import com.syncnapsis.tests.annotations.TestCoversMethods;
+import com.syncnapsis.utils.constants.Constant;
+import com.syncnapsis.utils.constants.ConstantLoader;
 
 public class JSONGeneratorTest extends LoggerTestCase
-{
+{	@Override
+	protected void setUp() throws Exception
+	{
+		super.setUp();
+
+		ConstantLoader<String> constantLoader = new ConstantLoader<String>(String.class) {
+			@Override
+			public void load(Constant<String> constant)
+			{
+				if(constant == UniverseConquestConstants.PARAM_SOLARSYSTEM_HABITABILITY_MAX)
+					constant.define("1000");
+				else if(constant == UniverseConquestConstants.PARAM_SOLARSYSTEM_SIZE_MAX)
+					constant.define("1000");
+				else if(constant == UniverseConquestConstants.PARAM_SOLARSYSTEM_MAX_POPULATION_FACTOR)
+					constant.define("1000000");
+				else if(constant == UniverseConquestConstants.PARAM_TRAVEL_MAX_FACTOR)
+					constant.define("10.0");
+				else if(constant == UniverseConquestConstants.PARAM_TRAVEL_EXODUS_FACTOR)
+					constant.define("20.0");
+				else if(constant == UniverseConquestConstants.PARAM_TRAVEL_TIME_FACTOR)
+					constant.define("0.7");
+				else if(constant == UniverseConquestConstants.PARAM_FACTOR_BUILD)
+					constant.define("0.08");
+			}
+		};
+
+		constantLoader.setConstantClasses(Arrays.asList(new Class<?>[] { UniverseConquestConstants.class }));
+		constantLoader.afterPropertiesSet();
+	}
+
 	@TestCoversMethods("toJSON")
 	public void testToJSON_Galaxy() throws Exception
 	{
@@ -92,5 +124,23 @@ public class JSONGeneratorTest extends LoggerTestCase
 		assertEquals(expected3, JSONGenerator.toJSON(new Match(), false));
 		Collections.shuffle(match.getInfrastructures());
 		assertEquals(expected3, JSONGenerator.toJSON(new Match(), true));
+	}
+	
+	@TestCoversMethods({"createConstantsJS", "writeConstant"})
+	public void testCreateConstantsJS() throws Exception
+	{
+		String constants = JSONGenerator.createConstantJS();
+		
+		logger.debug(constants);
+		
+		// @formatter: off
+		assertTrue(constants.contains("UniverseConquestConstants.PARAM_TRAVEL_MAX_FACTOR = " + UniverseConquestConstants.PARAM_TRAVEL_MAX_FACTOR.asInt() + ";"));
+		assertTrue(constants.contains("UniverseConquestConstants.PARAM_TRAVEL_EXODUS_FACTOR = " + UniverseConquestConstants.PARAM_TRAVEL_EXODUS_FACTOR.asInt() + ";"));
+		assertTrue(constants.contains("UniverseConquestConstants.PARAM_TRAVEL_TIME_FACTOR = " + UniverseConquestConstants.PARAM_TRAVEL_TIME_FACTOR.asDouble() + ";"));
+		assertTrue(constants.contains("UniverseConquestConstants.PARAM_SOLARSYSTEM_HABITABILITY_MAX = " + UniverseConquestConstants.PARAM_SOLARSYSTEM_HABITABILITY_MAX.asInt() + ";"));
+		assertTrue(constants.contains("UniverseConquestConstants.PARAM_SOLARSYSTEM_SIZE_MAX = " + UniverseConquestConstants.PARAM_SOLARSYSTEM_SIZE_MAX.asInt() + ";"));
+		assertTrue(constants.contains("UniverseConquestConstants.PARAM_SOLARSYSTEM_MAX_POPULATION_FACTOR = " + UniverseConquestConstants.PARAM_SOLARSYSTEM_MAX_POPULATION_FACTOR.asInt() + ";"));
+		assertTrue(constants.contains("UniverseConquestConstants.PARAM_FACTOR_BUILD = " + UniverseConquestConstants.PARAM_FACTOR_BUILD.asDouble() + ";"));
+		// @formatter: on
 	}
 }
