@@ -20,6 +20,7 @@
 //@requires("ComboSelect")
 //@requires("Pinboard")
 //@requires("application-base")
+//@requires("constants")
 var UI = {};
 
 UI.constants = {};
@@ -2122,14 +2123,17 @@ UIManager.prototype.doSendPopulation = function(id, cmd, rowIndex)
 		for(var i = 0; i < ViewUtil.SELECTIONS_MAX-1; i++)
 		{
 			row = document.getElementById(rowId + "_" + i);
-			available += Number(row.children[2].innerHTML);
-			popInput = document.getElementById(popId + "_" + i);
-			pop += Number(popInput.value);
-			speedInput = document.getElementById(speedId + "_" + i);
-			speed = Number(speedInput.value);
-			
-			travelTime = client.conquestManager.calculateTravelTime(row.value, win.target, speed);
-			row.children[6].innerHTML = "T -" + travelTime;
+			if(row.value)
+			{
+				available += Number(row.children[2].innerHTML);
+				popInput = document.getElementById(popId + "_" + i);
+				pop += Number(popInput.value);
+				speedInput = document.getElementById(speedId + "_" + i);
+				speed = Number(speedInput.value);
+				
+				travelTime = client.conquestManager.calculateTravelTime(this.currentMatch, row.value, win.target, speed);
+				row.children[6].innerHTML = "T -" + travelTime;
+			}
 		}
 		
 		console.log("available = " + available);
@@ -2246,16 +2250,16 @@ ConquestManager.prototype.calculateMaxMovablePopulation = function(origin, trave
 	return Math.floor(pop);
 };
 
-ConquestManager.prototype.calculateTravelTime = function(origin, target, travelSpeed)
+ConquestManager.prototype.calculateTravelTime = function(match, origin, target, travelSpeed)
 {
 	// see Calculator#calculateTravelTime
-	var stdTravelTime = this.calculateStandardTravelTime(this.currentMatch, travelSpeed);
+	var stdTravelTime = this.calculateStandardTravelTime(match, travelSpeed);
 	
 	var p1 = origin.coords.value;
 	var p2 = target.coords.value;
 	var dist = Math.sqrt((p1.x-p2.x)*(p1.x-p2.x) + (p1.y-p2.y)*(p1.y-p2.y) + (p1.z-p2.z)*(p1.z-p2.z));
 	
-	var stdDist = this.currentMatch.galaxy.maxGap;
+	var stdDist = match.galaxy.maxGap;
 
 	return ((dist / stdDist) * stdTravelTime); 
 };
@@ -2279,7 +2283,8 @@ ConquestManager.prototype.calculateStandardTravelTime = function(match, travelSp
 	
 	var timeBase = maxPopulation / facBuild;
 	var travelTime = travelTimeFactor * timeBase / CORRECTION_TRAVEL_TIME;
-	travelTime /= (travelSpeed / maxSpeed); // speed in percent
+	travelTime /= travelSpeed; // on client side speed already is given in percent
+//	travelTime /= (travelSpeed / maxSpeed); // speed in percent
 	travelTime /= speedFac; // match speed
 
 	return travelTime;		
