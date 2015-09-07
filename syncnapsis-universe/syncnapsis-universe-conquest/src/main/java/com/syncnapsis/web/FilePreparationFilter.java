@@ -75,7 +75,7 @@ public abstract class FilePreparationFilter extends FilterEngine
 
 		logger.debug("requesting: " + httpRequest.getServletPath() + " -> " + realFile.getPath());
 
-		if(fileFilter != null && fileFilter.accept(servletFile))
+		if(fileFilter == null || fileFilter.accept(servletFile))
 		{
 			if(requiresPreparation(realFile, servletFile) || forcePreparation)
 			{

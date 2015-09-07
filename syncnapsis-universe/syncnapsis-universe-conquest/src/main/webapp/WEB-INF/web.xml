@@ -131,6 +131,20 @@
     <filter-mapping>
       	<filter-name>galaxyFilter</filter-name>
       	<url-pattern>/galaxy/*</url-pattern>
+    </filter-mapping>				
+    
+    <filter>
+        <filter-name>constantsFilter</filter-name>
+        <filter-class>com.syncnapsis.utils.spring.FilterToBeanProxy</filter-class>
+        <init-param>
+            <param-name>targetBean</param-name>
+            <param-value>constantsFilter</param-value>
+        </init-param>
+    </filter>
+
+    <filter-mapping>
+      	<filter-name>constantsFilter</filter-name>
+      	<url-pattern>/scripts/constants.js</url-pattern>
     </filter-mapping>		
     
 	<listener>

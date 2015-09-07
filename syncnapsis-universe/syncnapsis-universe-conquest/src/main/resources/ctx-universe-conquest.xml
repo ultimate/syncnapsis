@@ -236,4 +236,7 @@
 		<property name="matchManager" ref="matchManager" />
 	</bean>
 
+	<bean id="constantsFilter" class="com.syncnapsis.web.ConstantsFilter">
+	</bean>
+
 </beans>
