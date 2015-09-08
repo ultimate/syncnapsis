@@ -197,9 +197,9 @@ lang.participant.rankValue		= "%";
 lang.participant.rankRawValue	= "Punkte";
 
 lang.population = {};
-lang.population.infrastructure	= "Verfügbare Inf.";
-lang.population.population		= "Verfügbare Bev.";
-lang.population.travelSpeed		= "Reise Geschw.";
+lang.population.infrastructure	= "Infrastruktur";
+lang.population.population		= "Bevölkerung";
+lang.population.travelSpeed		= "Geschw.";
 lang.population.travelSpeedUnit = "%";
 lang.population.system			= "System";
 
@@ -208,13 +208,13 @@ lang.population.arriveASAP		= "100%";
 lang.population.arriveSynced	= "Sync";
 //lang.population.arriveASAP	= "Geschwindigkeit maximieren";
 //lang.population.arriveSynced	= "Ankunft synchronisieren";
-lang.population.exodus			= "Kolonie aufgeben";
+lang.population.exodus			= "Sys. aufgeben";
 lang.population.giveupAll		= "J";
 lang.population.giveupNone		= "N";
 //lang.population.giveupAll		= "Alle aufgeben";
 //lang.population.giveupNone	= "Keine aufgeben";
 lang.population.status			= "Status";
-lang.population.selected		= "Ausgewählte Bev.";
+lang.population.selected		= "Ausgewählt";
 lang.population.send			= "Angreifen / Siedeln";
 lang.population.total			= "Gesamt-Bevölkerung";
 

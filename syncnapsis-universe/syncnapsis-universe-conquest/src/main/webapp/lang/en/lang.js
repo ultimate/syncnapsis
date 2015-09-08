@@ -197,9 +197,9 @@ lang.participant.rankValue		= "%";
 lang.participant.rankRawValue	= "Points";
 
 lang.population = {};
-lang.population.infrastructure	= "Available inf.";
-lang.population.population		= "Available pop.";
-lang.population.travelSpeed		= "Travel speed";
+lang.population.infrastructure	= "Infrastructure";
+lang.population.population		= "Population";
+lang.population.travelSpeed		= "Speed";
 lang.population.travelSpeedUnit = "%";
 lang.population.system			= "System";
 
@@ -208,13 +208,13 @@ lang.population.arriveASAP		= "100%";
 lang.population.arriveSynced	= "Sync";
 //lang.population.arriveASAP	= "Maximize speed";
 //lang.population.arriveSynced	= "Synchronize arrival";
-lang.population.exodus			= "Give up colony";
+lang.population.exodus			= "Give up sys.";
 lang.population.giveupAll		= "Y";
 lang.population.giveupNone		= "N";
 //lang.population.giveupAll		= "Give up all";
 //lang.population.giveupNone	= "Give up none";
 lang.population.status			= "Status";
-lang.population.selected		= "Selected pop.";
+lang.population.selected		= "Selected";
 lang.population.send			= "Attack / Settle";
 lang.population.total			= "Total population";
 
