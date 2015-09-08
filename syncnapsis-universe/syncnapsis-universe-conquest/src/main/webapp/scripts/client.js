@@ -2036,6 +2036,7 @@ UIManager.prototype.showSendPopulation = function()
 				// TODO disable inputs when ownPop == 0
 				row.children[3].children[0].disabled = "true";
 				row.giveupSelect.setDisabled(true);
+				row.children[5].children[0].disabled = "true";
 			}
 
 			// TODO populate window
@@ -2088,27 +2089,52 @@ UIManager.prototype.doSendPopulation = function(id, cmd, rowIndex)
 			speedInput = document.getElementById(speedId + "_" + i);
 			speedInput.value = 100;
 		}
+		cmd = "update";
 	}
 	else if(cmd == "arrive_synced")
 	{
 		var row;
-		var minDist;
-		var minDistIndex;
+		var refTime = 0;
+		var refIndex;
 		var speed;
 		var speedInput;
 		// determine nearest system
 		for(var i = 0; i < ViewUtil.SELECTIONS_MAX-1; i++)
 		{
-			// TODO
+			row = document.getElementById(rowId + "_" + i);
+			if(row.value)
+			{
+//				speedInput = document.getElementById(speedId + "_" + i);
+//				speed = Number(speedInput.value);
+				speed = 100;
+				var travelTime = client.conquestManager.calculateTravelTime(this.currentMatch, row.value, win.target, speed);
+				if(travelTime > refTime)
+				{
+					refTime = travelTime;
+					refIndex = i;
+				}
+			}
 		}
 		for(var i = 0; i < ViewUtil.SELECTIONS_MAX-1; i++)
 		{
-			speed = 0;
-			speedInput = document.getElementById(speedId + "_" + i);
-			speedInput.value = speed;
+			row = document.getElementById(rowId + "_" + i);
+			if(row.value)
+			{
+				var time100 = client.conquestManager.calculateTravelTime(this.currentMatch, row.value, win.target, 100);
+				if(time100 < refTime)
+					speed = Math.round((100 * time100 / refTime)*10)/10;
+				else
+					speed = 100;
+				speedInput = document.getElementById(speedId + "_" + i);
+				speedInput.value = speed;
+			}
 		}
+		cmd = "update";
 	}
-	else if(cmd == "update")
+	
+	// do not use else if in order to be able to call update after one of the cases above
+	
+	if(cmd == "update")
 	{
 		console.log("winId: " + id);
 		console.log("row:   " + rowIndex);
@@ -2132,7 +2158,7 @@ UIManager.prototype.doSendPopulation = function(id, cmd, rowIndex)
 				speed = Number(speedInput.value);
 				
 				travelTime = client.conquestManager.calculateTravelTime(this.currentMatch, row.value, win.target, speed);
-				row.children[6].innerHTML = "T -" + travelTime;
+				row.children[6].innerHTML = "T -" + travelTime + " ms";
 			}
 		}
 		
@@ -2261,7 +2287,7 @@ ConquestManager.prototype.calculateTravelTime = function(match, origin, target, 
 	
 	var stdDist = match.galaxy.maxGap;
 
-	return ((dist / stdDist) * stdTravelTime); 
+	return Math.round((dist / stdDist) * stdTravelTime); 
 };
 
 ConquestManager.prototype.calculateStandardTravelTime = function(match, travelSpeed)
