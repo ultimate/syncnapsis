@@ -45,7 +45,7 @@ public class ConstantsFilter extends FilePreparationFilter implements Initializi
 	{
 		logger.info("creating constants file: " + realFile.getName());
 
-		String constants = JSONGenerator.createConstantJS();
+		String constants = JSONGenerator.createConstantsJS();
 		try
 		{
 			BufferedOutputStream os = new BufferedOutputStream(new FileOutputStream(realFile));

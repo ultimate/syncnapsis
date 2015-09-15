@@ -129,7 +129,7 @@ public class JSONGeneratorTest extends LoggerTestCase
 	@TestCoversMethods({"createConstantsJS", "writeConstant"})
 	public void testCreateConstantsJS() throws Exception
 	{
-		String constants = JSONGenerator.createConstantJS();
+		String constants = JSONGenerator.createConstantsJS();
 		
 		logger.debug(constants);
 		

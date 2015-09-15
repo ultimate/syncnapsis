@@ -159,7 +159,7 @@ public abstract class JSONGenerator
 	 * 
 	 * @return the constants.js content
 	 */
-	public static String createConstantJS()
+	public static String createConstantsJS()
 	{
 		StringBuilder constants = new StringBuilder();
 		constants.append("var UniverseConquestConstants = {};\n");
