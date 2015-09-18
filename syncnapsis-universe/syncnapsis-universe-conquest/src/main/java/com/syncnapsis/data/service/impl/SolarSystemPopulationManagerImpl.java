@@ -213,13 +213,17 @@ public class SolarSystemPopulationManagerImpl extends GenericManagerImpl<SolarSy
 
 		if(exodus)
 		{
-			if(population != origin.getPopulation())
+			if(population < origin.getPopulation())
 				throw new IllegalArgumentException("exodus requires all population to be moved away!");
 
 			// check if exodus is allowed (only if home population)
 			SolarSystemPopulation homePopulation = getHomePopulation(origin.getInfrastructure(), now);
 			if(!origin.getId().equals(homePopulation.getId()))
 				throw new IllegalArgumentException("exodus only allowed for home population!");
+		}
+		else if(population > origin.getPopulation())
+		{
+			population = origin.getPopulation();
 		}
 
 		double maxDist = calculator.calculateMaxTravelDistance(origin, origin.getPopulation(), exodus);

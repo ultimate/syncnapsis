@@ -32,9 +32,12 @@ public class SolarSystemInfrastructureGeneratorTest extends BaseSpringContextTes
 	{
 		SolarSystemInfrastructureGenerator generator = new SolarSystemInfrastructureGenerator(calculator);
 
-		int habitabilityMax = UniverseConquestConstants.PARAM_SOLARSYSTEM_HABITABILITY_MAX.asInt();
+		int heatMax = UniverseConquestConstants.PARAM_SOLARSYSTEM_HEAT_MAX.asInt();
 		int sizeMax = UniverseConquestConstants.PARAM_SOLARSYSTEM_SIZE_MAX.asInt();
-		long infrastructureMax = habitabilityMax * sizeMax * UniverseConquestConstants.PARAM_SOLARSYSTEM_MAX_POPULATION_FACTOR.asInt();
+		int habitabilityMax = UniverseConquestConstants.PARAM_SOLARSYSTEM_HABITABILITY_MAX.asInt();
+		long absoluteMaxPopulation = calculator.getMaxPopulation();
+		long maxPopulation;
+		int expectedHabitability;
 
 		ExtendedRandom random11 = new ExtendedRandom(1234);
 		ExtendedRandom random12 = new ExtendedRandom(1234);
@@ -47,43 +50,60 @@ public class SolarSystemInfrastructureGeneratorTest extends BaseSpringContextTes
 		SolarSystem solarSystem = new SolarSystem();
 		solarSystem.setId(-1L);
 
-		int[] habitabilities = new int[habitabilityMax + 1];
+		int[] heats = new int[heatMax + 1];
 		int[] sizes = new int[sizeMax + 1];
+		int[] habitabilities = new int[habitabilityMax + 1];
+		int[] maxPopulations = new int[1001];
 		int[] infrastructures = new int[101];
+		
+		int zeroCapacitySystems = 0;
 
-		for(int i = 0; i < 100; i++)
+		for(int i = 0; i < 1000; i++)
 		{
 			infrastructure = generator.generate(random11, match, solarSystem);
 			assertNotNull(infrastructure);
 			assertSame(match, infrastructure.getMatch());
 			assertSame(solarSystem, infrastructure.getSolarSystem());
-			assertTrue(infrastructure.getHabitability() >= 0);
-			assertTrue(infrastructure.getHabitability() <= habitabilityMax);
+			
+			expectedHabitability = calculator.calculateHabitability(infrastructure.getSize(), infrastructure.getHeat());
+			maxPopulation = calculator.getMaxPopulation(infrastructure);			
+			logger.info("maxPop = " + maxPopulation + " / " + absoluteMaxPopulation + " ( " + infrastructure.getSize() + " , " + infrastructure.getHeat() + " , " + infrastructure.getHabitability() + " )");
+
+			assertTrue(infrastructure.getHeat() >= 0);
+			assertTrue(infrastructure.getHeat() <= heatMax);
 			assertTrue(infrastructure.getSize() >= 0);
 			assertTrue(infrastructure.getSize() <= sizeMax);
-			infrastructureMax = (long) infrastructure.getHabitability() * infrastructure.getSize()
-					* UniverseConquestConstants.PARAM_SOLARSYSTEM_MAX_POPULATION_FACTOR.asInt();
-
-			// logger.debug("hab=" + infrastructure.getHabitability() + " size=" +
-			// infrastructure.getSize() + " inf-max=" + infrastructureMax + " inf="
-			// + infrastructure.getInfrastructure());
+			
+			assertEquals(expectedHabitability, infrastructure.getHabitability());
+			
 			assertTrue(infrastructure.getInfrastructure() >= 0);
-			assertTrue(infrastructure.getInfrastructure() <= infrastructureMax);
+			assertTrue(infrastructure.getInfrastructure() <= maxPopulation);
+			assertTrue(infrastructure.getInfrastructure() <= absoluteMaxPopulation );
 
-			habitabilities[infrastructure.getHabitability()]++;
+			heats[infrastructure.getHeat()]++;
 			sizes[infrastructure.getSize()]++;
-			infrastructures[(int) (100 * infrastructure.getInfrastructure() / infrastructureMax)]++;
+			habitabilities[infrastructure.getHabitability()]++;
+			maxPopulations[(int) (100 * maxPopulation / absoluteMaxPopulation )]++;
+			infrastructures[(int) (100 * infrastructure.getInfrastructure() / absoluteMaxPopulation )]++;
+			
+			if(maxPopulation == 0)
+				zeroCapacitySystems++;
 
 			assertTrue(infrastructure.equals(generator.generate(random12, match, solarSystem)));
 			assertFalse(infrastructure.equals(generator.generate(random2, match, solarSystem)));
 		}
 
-		logger.debug("habitability-distribution:");
-		printDistribution(habitabilities, 5, 10);
+		logger.debug("heat-distribution:");
+		printDistribution(heats, 5, 10);
 		logger.debug("size-distribution:");
 		printDistribution(sizes, 5, 10);
+		logger.debug("habitability-distribution:");
+		printDistribution(habitabilities, 5, 10);
+		logger.debug("maxPopulation-distribution:");
+		printDistribution(maxPopulations, 10, 1);
 		logger.debug("infrastructure-distribution:");
-		printDistribution(infrastructures, 5, 1);
+		printDistribution(infrastructures, 10, 1);
+		logger.debug("zero-capacity systems: " + zeroCapacitySystems);
 	}
 
 	public void testGenerate_invalid()

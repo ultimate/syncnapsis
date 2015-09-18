@@ -88,8 +88,17 @@ public class SolarSystemInfrastructureGenerator extends Generator<SolarSystemInf
 		Match match = (Match) args[0];
 		SolarSystem system = (SolarSystem) args[1];
 
-		int size = random.nextGaussian(0, UniverseConquestConstants.PARAM_SOLARSYSTEM_SIZE_MAX.asInt());
-		int heat = random.nextGaussian(0, UniverseConquestConstants.PARAM_SOLARSYSTEM_HEAT_MAX.asInt());
+		int sizeMax = UniverseConquestConstants.PARAM_SOLARSYSTEM_SIZE_MAX.asInt();
+		int heatMax = UniverseConquestConstants.PARAM_SOLARSYSTEM_HEAT_MAX.asInt();
+
+		// option a
+		int size = random.nextGaussian(0, sizeMax);
+		int heat = random.nextGaussian(0, heatMax);
+		
+		// option b (idea: reduce systems with hab = 0
+//		int size = random.nextGaussian(0, sizeMax);
+//		int heat = random.nextGaussian(0, (int)(heatMax - (sizeMax-size)*0.5));
+		
 		int hab = calculator.calculateHabitability(size, heat);
 
 		SolarSystemInfrastructure infrastructure = new SolarSystemInfrastructure();
