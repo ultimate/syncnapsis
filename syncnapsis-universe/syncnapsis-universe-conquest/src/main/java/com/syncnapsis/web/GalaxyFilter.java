@@ -117,22 +117,20 @@ public class GalaxyFilter extends FilePreparationFilter implements InitializingB
 
 		return true;
 	}
-
-
 	
 	/**
 	 * The file extension for the galaxy files.
 	 */
-	private static final String EXTENSION = ".json";
+	public static final String EXTENSION = ".json";
 	/**
 	 * The file path for the galaxy files.
 	 */
-	private static final String PATH = "\\galaxy";
+	public static final String PATH = "\\galaxy";
 	
 	/**
 	 * FileFilter for the galaxy JSON-files
 	 */
-	private static final FileFilter FILTER = new FileFilter() {
+	public static final FileFilter FILTER = new FileFilter() {
 		// @formatter:off
 		
 		/*
