@@ -16,7 +16,7 @@ import com.syncnapsis.tests.annotations.TestExcludesMethods;
 import com.syncnapsis.utils.FileUtil;
 import com.syncnapsis.utils.serialization.JSONGenerator;
 
-@TestExcludesMethods({ "prepare", "requiresPreparation", "doFilter", "afterPropertiesSet"})
+@TestExcludesMethods({ "prepare", "requiresPreparation", "doFilter", "afterPropertiesSet", "*etMatchManager"})
 public class GalaxyFilterTest extends BaseDaoTestCase
 {
 	public void testPrepare() throws Exception
