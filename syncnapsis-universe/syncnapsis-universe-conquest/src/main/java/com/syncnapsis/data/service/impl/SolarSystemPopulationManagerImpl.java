@@ -181,13 +181,14 @@ public class SolarSystemPopulationManagerImpl extends GenericManagerImpl<SolarSy
 	 * (non-Javadoc)
 	 * @see
 	 * com.syncnapsis.data.service.SolarSystemPopulationManager#resettle(com.syncnapsis.data.model
-	 * .SolarSystemPopulation, com.syncnapsis.data.model.SolarSystemInfrastructure, int, boolean)
+	 * .SolarSystemPopulation, com.syncnapsis.data.model.SolarSystemInfrastructure, int, boolean,
+	 * com.syncnapsis.enums.EnumPopulationPriority, com.syncnapsis.enums.EnumPopulationPriority)
 	 */
 	@Override
 	public SolarSystemPopulation resettle(SolarSystemPopulation origin, SolarSystemInfrastructure targetInfrastructure, int travelSpeed,
-			boolean exodus)
+			boolean exodus, EnumPopulationPriority attackPriority, EnumPopulationPriority buildPriority)
 	{
-		return spinoff(origin, targetInfrastructure, travelSpeed, origin.getPopulation(), null, null, exodus);
+		return spinoff(origin, targetInfrastructure, travelSpeed, origin.getPopulation(), attackPriority, buildPriority, exodus);
 	}
 
 	/**

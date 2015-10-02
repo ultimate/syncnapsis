@@ -78,10 +78,12 @@ public interface SolarSystemPopulationManager extends GenericManager<SolarSystem
 	 * @param targetInfrastructure - the infrastruture to travel to
 	 * @param travelSpeed - the speed to travel with (in percent)
 	 * @param exodus - perform exodus on the origin system
+	 * @param attackPriority - the attack priority (if null the origins priority will be used)
+	 * @param buildPriority - the build priority (if null the origins priority will be used)
 	 * @return the newly created SolarSystemPopulation entity
 	 */
 	public SolarSystemPopulation resettle(SolarSystemPopulation origin, SolarSystemInfrastructure targetInfrastructure, int travelSpeed,
-			boolean exodus);
+			boolean exodus, EnumPopulationPriority attackPriority, EnumPopulationPriority buildPriority);
 
 	/**
 	 * Destroy the given population and clean up by setting several properties.<br>

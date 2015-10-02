@@ -357,7 +357,7 @@ public class SolarSystemPopulationManagerImplTest extends
 				will(returnValue(resettledExpected));
 			}
 		});
-		resettled = mockManager.resettle(origin, infrastructure2, speed, false);
+		resettled = mockManager.resettle(origin, infrastructure2, speed, false, null, null);
 		mockContext.assertIsSatisfied();
 		assertNotNull(resettled);
 		assertEquals(resettledExpected, resettled);
@@ -368,7 +368,7 @@ public class SolarSystemPopulationManagerImplTest extends
 		// resettle: home, no exodus, distance too long
 		try
 		{
-			resettled = mockManager.resettle(origin, infrastructure3, speed, false);
+			resettled = mockManager.resettle(origin, infrastructure3, speed, false, null, null);
 			fail("expected Exception not occurred!");
 		}
 		catch(IllegalArgumentException e)
@@ -399,7 +399,7 @@ public class SolarSystemPopulationManagerImplTest extends
 				will(returnValue(infrastructure1));
 			}
 		});
-		resettled = mockManager.resettle(origin, infrastructure3, speed, true);
+		resettled = mockManager.resettle(origin, infrastructure3, speed, true, null, null);
 		mockContext.assertIsSatisfied();
 		assertNotNull(resettled);
 		assertEquals(resettledExpected, resettled);
