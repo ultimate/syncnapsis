@@ -117,6 +117,8 @@
 		<property name="securityManager" ref="securityManager" />
 		<property name="connectionProvider" ref="connectionProvider" />
 		<property name="rpcService" ref="rpcService" />
+		<property name="solarSystemPopulationManager" ref="solarSystemPopulationManager" />
+		<property name="solarSystemInfrastructureManager" ref="solarSystemInfrastructureManager" />
 	</bean>
 
 	<!-- =================================================================== -->

@@ -23,6 +23,13 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TreeMap;
 
+import org.springframework.util.Assert;
+
+import com.syncnapsis.data.model.SolarSystemInfrastructure;
+import com.syncnapsis.data.model.SolarSystemPopulation;
+import com.syncnapsis.data.model.help.Order;
+import com.syncnapsis.data.service.SolarSystemInfrastructureManager;
+import com.syncnapsis.data.service.SolarSystemPopulationManager;
 import com.syncnapsis.websockets.Connection;
 
 /**
@@ -32,7 +39,19 @@ import com.syncnapsis.websockets.Connection;
  */
 public class ConquestManagerImpl extends BaseClientManager implements ConquestManager
 {
-	protected Map<String, Channel>	channels;
+	/**
+	 * The {@link SolarSystemPopulationManager}
+	 */
+	protected SolarSystemPopulationManager		solarSystemPopulationManager;
+	/**
+	 * The {@link SolarSystemInfrastructureManager}
+	 */
+	protected SolarSystemInfrastructureManager	solarSystemInfrastructureManager;
+
+	/**
+	 * The internal list of {@link Channel}s ordered by their channel name
+	 */
+	protected Map<String, Channel>				channels;
 
 	/**
 	 * Default constructor
@@ -41,6 +60,57 @@ public class ConquestManagerImpl extends BaseClientManager implements ConquestMa
 	{
 		super();
 		channels = new TreeMap<String, Channel>();
+	}
+
+	/**
+	 * The {@link SolarSystemPopulationManager}
+	 * 
+	 * @return solarSystemPopulationManager
+	 */
+	public SolarSystemPopulationManager getSolarSystemPopulationManager()
+	{
+		return solarSystemPopulationManager;
+	}
+
+	/**
+	 * The {@link SolarSystemPopulationManager}
+	 * 
+	 * @param solarSystemPopulationManager - the manager
+	 */
+	public void setSolarSystemPopulationManager(SolarSystemPopulationManager solarSystemPopulationManager)
+	{
+		this.solarSystemPopulationManager = solarSystemPopulationManager;
+	}
+
+	/**
+	 * The {@link SolarSystemInfrastructureManager}
+	 * 
+	 * @return solarSystemInfrastructureManager
+	 */
+	public SolarSystemInfrastructureManager getSolarSystemInfrastructureManager()
+	{
+		return solarSystemInfrastructureManager;
+	}
+
+	/**
+	 * The {@link SolarSystemInfrastructureManager}
+	 * 
+	 * @param solarSystemInfrastructureManager - the manager
+	 */
+	public void setSolarSystemInfrastructureManager(SolarSystemInfrastructureManager solarSystemInfrastructureManager)
+	{
+		this.solarSystemInfrastructureManager = solarSystemInfrastructureManager;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see com.syncnapsis.client.BaseClientManager#afterPropertiesSet()
+	 */
+	@Override
+	public void afterPropertiesSet()
+	{
+		Assert.notNull(solarSystemPopulationManager, "solarSystemPopulationManager must not be null!");
+		Assert.notNull(solarSystemInfrastructureManager, "solarSystemInfrastructureManager must not be null!");
 	}
 
 	/*
@@ -292,5 +362,40 @@ public class ConquestManagerImpl extends BaseClientManager implements ConquestMa
 		{
 			return subscriptions;
 		}
+	}
+
+	/**
+	 * Simplified interface for sending multiple populations at once
+	 * 
+	 * @param orders - the list of {@link Order}s
+	 * @return the number of successfully performed orders
+	 */
+	public int sendTroops(List<Order> orders)
+	{
+		int ordersPerformed = 0;
+		SolarSystemPopulation origin;
+		SolarSystemInfrastructure target;
+		@SuppressWarnings("unused")
+		SolarSystemPopulation result;
+		for(Order o : orders)
+		{
+			origin = solarSystemPopulationManager.get(o.getOriginId());
+			target = solarSystemInfrastructureManager.get(o.getTargetId());
+			try
+			{
+				if(o.isExodus())
+					result = solarSystemPopulationManager.resettle(origin, target, o.getTravelSpeed(), true, o.getAttackPriority(),
+							o.getBuildPriority());
+				else
+					result = solarSystemPopulationManager.spinoff(origin, target, o.getTravelSpeed(), o.getPopulation(), o.getAttackPriority(),
+							o.getBuildPriority());
+				ordersPerformed++;
+			}
+			catch(IllegalArgumentException e)
+			{
+				logger.warn("invalid troop order: " + o);
+			}
+		}
+		return ordersPerformed;
 	}
 }
