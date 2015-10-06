@@ -14,9 +14,20 @@
  */
 package com.syncnapsis.client;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.jmock.Expectations;
 import org.springframework.mock.web.MockHttpSession;
 
+import com.syncnapsis.data.model.SolarSystemInfrastructure;
+import com.syncnapsis.data.model.SolarSystemPopulation;
+import com.syncnapsis.data.model.help.Order;
+import com.syncnapsis.data.service.SolarSystemInfrastructureManager;
+import com.syncnapsis.data.service.SolarSystemPopulationManager;
+import com.syncnapsis.enums.EnumPopulationPriority;
 import com.syncnapsis.mock.MockConnection;
 import com.syncnapsis.providers.ConnectionProvider;
 import com.syncnapsis.providers.SessionProvider;
@@ -24,6 +35,7 @@ import com.syncnapsis.security.BaseGameManager;
 import com.syncnapsis.tests.BaseSpringContextTestCase;
 import com.syncnapsis.tests.annotations.TestCoversMethods;
 import com.syncnapsis.tests.annotations.TestExcludesMethods;
+import com.syncnapsis.utils.data.ExtendedRandom;
 import com.syncnapsis.websockets.Connection;
 import com.syncnapsis.websockets.service.rpc.RPCService;
 
@@ -94,7 +106,7 @@ public class ConquestManagerImplTest extends BaseSpringContextTestCase
 		final int valB = 5678;
 
 		connectionProvider.set(con1);
-		
+
 		// set Expectations for getClientInstance(..)
 
 		// channels not existing
@@ -297,13 +309,13 @@ public class ConquestManagerImplTest extends BaseSpringContextTestCase
 					oneOf(client2ConquestManager).update(chA, valA[fi]);
 				}
 			});
-			
+
 			conquestManager.update(chA, valA[fi]);
-			
+
 			assertEquals(valA[fi], conquestManager.getLastValue(chA));
 			mockContext.assertIsSatisfied();
 		}
-		
+
 		// check channel chB
 		// -> subscribers: con2, con3
 		for(int i = 1; i < valB.length; i++)
@@ -331,11 +343,98 @@ public class ConquestManagerImplTest extends BaseSpringContextTestCase
 					oneOf(client3ConquestManager).update(chB, valB[fi]);
 				}
 			});
-			
+
 			conquestManager.update(chB, valB[fi]);
-			
+
 			assertEquals(valB[fi], conquestManager.getLastValue(chB));
 			mockContext.assertIsSatisfied();
 		}
+	}
+
+	public void testSendTroops() throws Exception
+	{
+		ConquestManagerImpl conquestManager = new ConquestManagerImpl();
+		final SolarSystemPopulationManager solarSystemPopulationManager = mockContext.mock(SolarSystemPopulationManager.class);
+		final SolarSystemInfrastructureManager solarSystemInfrastructureManager = mockContext.mock(SolarSystemInfrastructureManager.class);
+		conquestManager.setSolarSystemPopulationManager(solarSystemPopulationManager);
+		conquestManager.setSolarSystemInfrastructureManager(solarSystemInfrastructureManager);
+
+		ExtendedRandom random = new ExtendedRandom(1234);
+
+		final List<Order> orders = new ArrayList<Order>();
+		final Map<Long, SolarSystemPopulation> populations = new HashMap<Long, SolarSystemPopulation>();
+		final Map<Long, SolarSystemInfrastructure> infrastructures = new HashMap<Long, SolarSystemInfrastructure>();
+
+		for(int i = 1; i <= 3; i++)
+		{
+			Order order = new Order();
+			order.setOriginId(100L + i);
+			order.setTargetId(200L + i);
+			order.setPopulation(i * 1000L);
+			order.setTravelSpeed(i * 100);
+			order.setExodus(i % 2 == 0);
+			order.setAttackPriority(random.nextEnum(EnumPopulationPriority.class));
+			order.setBuildPriority(random.nextEnum(EnumPopulationPriority.class));
+
+			orders.add(order);
+			populations.put(order.getOriginId(), new SolarSystemPopulation());
+			infrastructures.put(order.getTargetId(), new SolarSystemInfrastructure());
+		}
+
+		for(Order o : orders)
+		{
+			final Order order = o;
+			mockContext.checking(new Expectations() {
+				{
+					oneOf(solarSystemPopulationManager).get(order.getOriginId());
+					will(returnValue(populations.get(order.getOriginId())));
+				}
+			});
+			mockContext.checking(new Expectations() {
+				{
+					oneOf(solarSystemInfrastructureManager).get(order.getTargetId());
+					will(returnValue(infrastructures.get(order.getTargetId())));
+				}
+			});
+			//@formatter:off
+			if(o.isExodus())
+			{
+				mockContext.checking(new Expectations() {
+					{
+						oneOf(solarSystemPopulationManager).resettle(
+								with(same(populations.get(order.getOriginId()))),
+								with(same(infrastructures.get(order.getTargetId()))),
+								with(equal(order.getTravelSpeed())),
+								with(equal(true)),
+								with(equal(order.getAttackPriority())),
+								with(equal(order.getBuildPriority()))
+							);
+						will(returnValue(new SolarSystemPopulation()));
+					}
+				});
+			}
+			else
+			{
+				mockContext.checking(new Expectations() {
+					{
+						oneOf(solarSystemPopulationManager).spinoff(
+								with(same(populations.get(order.getOriginId()))),
+								with(same(infrastructures.get(order.getTargetId()))),
+								with(equal(order.getTravelSpeed())),
+								with(equal(order.getPopulation())),
+								with(equal(order.getAttackPriority())),
+								with(equal(order.getBuildPriority()))
+							);
+						will(returnValue(new SolarSystemPopulation()));
+					}
+				});
+			}
+			//@formatter:on
+		}
+
+		int result = conquestManager.sendTroops(orders);
+		mockContext.assertIsSatisfied();
+		
+		assertEquals(orders.size(), result);
 	}
 }
