@@ -364,11 +364,9 @@ public class ConquestManagerImpl extends BaseClientManager implements ConquestMa
 		}
 	}
 
-	/**
-	 * Simplified interface for sending multiple populations at once
-	 * 
-	 * @param orders - the list of {@link Order}s
-	 * @return the number of successfully performed orders
+	/*
+	 * (non-Javadoc)
+	 * @see com.syncnapsis.client.ConquestManager#sendTroops(java.util.List)
 	 */
 	public int sendTroops(List<Order> orders)
 	{

@@ -17,6 +17,8 @@ package com.syncnapsis.client;
 import java.util.Collection;
 import java.util.List;
 
+import com.syncnapsis.data.model.help.Order;
+
 /**
  * Interface for a ConquestManager offering universe-conquest game related operations.<br>
  * This manager contains support for subscription service with purpose for live updating of the
@@ -92,4 +94,12 @@ public interface ConquestManager
 	 *         already exists)
 	 */
 	public boolean createChannel(String channel, Object initialValue);
+	
+	/**
+	 * Simplified interface for sending multiple populations at once
+	 * 
+	 * @param orders - the list of {@link Order}s
+	 * @return the number of successfully performed orders
+	 */
+	public int sendTroops(List<Order> orders);
 }
