@@ -2170,8 +2170,36 @@ UIManager.prototype.doSendPopulation = function(id, cmd, rowIndex)
 	}
 	else // if(cmd == "send")
 	{
-		// TODO submit
+		var orders = [];
 		
+		// read form
+		var order;
+		var row;
+		var popInput;
+		var speedInput;
+		for(var i = 0; i < ViewUtil.SELECTIONS_MAX-1; i++)
+		{
+			row = document.getElementById(rowId + "_" + i);
+			if(row.value)
+			{
+				popInput = document.getElementById(popId + "_" + i);
+				speedInput = document.getElementById(speedId + "_" + i);
+				
+				order = {
+					originId: pop.value.id,
+					targetId: ,
+					population: Number(popInput.value),
+					attackPriority: ,
+					buildPriority: ,
+					travelSpeed: Number(speedInput.value),
+					exodus: ,
+				};
+				
+				orders.push(order);
+			}
+		}
+		// submit
+		server.conquestManager.sendTroops(orders);
 	}
 };
 

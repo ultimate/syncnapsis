@@ -91,3 +91,8 @@ ServerConquestManager.prototype.createChannel = function(channel, initialValue)
 	// stub for server-entity
 };
 
+ServerConquestManager.prototype.sendTroops = function(orders)
+{
+	// stub for server-entity
+};
+
