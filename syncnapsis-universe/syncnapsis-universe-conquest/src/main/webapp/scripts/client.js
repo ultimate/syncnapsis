@@ -2187,12 +2187,12 @@ UIManager.prototype.doSendPopulation = function(id, cmd, rowIndex)
 				
 				order = {
 					originId: pop.value.id,
-					targetId: ,
+					targetId: win.target.id,
 					population: Number(popInput.value),
-					attackPriority: ,
-					buildPriority: ,
+					attackPriority: null, // TODO make selectable
+					buildPriority: null,// TODO make selectable
 					travelSpeed: Number(speedInput.value),
-					exodus: ,
+					exodus: row.giveupSelect.value, // TODO convert to boolean
 				};
 				
 				orders.push(order);

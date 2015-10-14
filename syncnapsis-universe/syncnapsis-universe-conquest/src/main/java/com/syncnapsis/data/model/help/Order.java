@@ -11,7 +11,7 @@ import com.syncnapsis.enums.EnumPopulationPriority;
 public class Order
 {
 	/**
-	 * The ID of the origin population
+	 * The ID of the origin infrastructure
 	 */
 	protected long						originId;
 	/**
@@ -48,7 +48,7 @@ public class Order
 	}
 	
 	/**
-	 * The ID of the origin population
+	 * The ID of the origin infrastructure
 	 * 
 	 * @return originId
 	 */
@@ -118,7 +118,7 @@ public class Order
 	}
 
 	/**
-	 * The ID of the origin population
+	 * The ID of the origin infrastructure
 	 * 
 	 * @param originId - the origin ID
 	 */

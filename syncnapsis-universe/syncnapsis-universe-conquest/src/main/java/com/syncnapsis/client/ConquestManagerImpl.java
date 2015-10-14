@@ -17,6 +17,7 @@ package com.syncnapsis.client;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -25,6 +26,7 @@ import java.util.TreeMap;
 
 import org.springframework.util.Assert;
 
+import com.syncnapsis.data.model.Empire;
 import com.syncnapsis.data.model.SolarSystemInfrastructure;
 import com.syncnapsis.data.model.SolarSystemPopulation;
 import com.syncnapsis.data.model.help.Order;
@@ -370,23 +372,46 @@ public class ConquestManagerImpl extends BaseClientManager implements ConquestMa
 	 */
 	public int sendTroops(List<Order> orders)
 	{
+		Date now = new Date(securityManager.getTimeProvider().get());
+		Empire currentEmpire = securityManager.getEmpireProvider().get();
+		if(currentEmpire == null)
+		{
+			logger.warn("user not logged in");
+			return 0;
+		}
+
 		int ordersPerformed = 0;
-		SolarSystemPopulation origin;
-		SolarSystemInfrastructure target;
+		SolarSystemPopulation originPopulation = null;
+		SolarSystemInfrastructure originInfrastructure;
+		SolarSystemInfrastructure targetInfrastructure;
 		@SuppressWarnings("unused")
 		SolarSystemPopulation result;
 		for(Order o : orders)
 		{
-			origin = solarSystemPopulationManager.get(o.getOriginId());
-			target = solarSystemInfrastructureManager.get(o.getTargetId());
+			originInfrastructure = solarSystemInfrastructureManager.get(o.getOriginId());
+			targetInfrastructure = solarSystemInfrastructureManager.get(o.getTargetId());
+			// find matching population
+			for(SolarSystemPopulation pop : originInfrastructure.getPopulations())
+			{
+				if(pop.getParticipant().getEmpire().getId() != currentEmpire.getId())
+					continue;
+				if(!pop.isPresent(now))
+					continue;
+				originPopulation = pop;
+			}
+			if(originPopulation == null)
+			{
+				logger.warn("no population found in infrastructure " + o.getOriginId() + " for empire " + currentEmpire.getId() + " of user '" + currentEmpire.getPlayer().getUser().getUsername() + "'");
+				continue;
+			}
 			try
 			{
 				if(o.isExodus())
-					result = solarSystemPopulationManager.resettle(origin, target, o.getTravelSpeed(), true, o.getAttackPriority(),
-							o.getBuildPriority());
+					result = solarSystemPopulationManager.resettle(originPopulation, targetInfrastructure, o.getTravelSpeed(), true,
+							o.getAttackPriority(), o.getBuildPriority());
 				else
-					result = solarSystemPopulationManager.spinoff(origin, target, o.getTravelSpeed(), o.getPopulation(), o.getAttackPriority(),
-							o.getBuildPriority());
+					result = solarSystemPopulationManager.spinoff(originPopulation, targetInfrastructure, o.getTravelSpeed(), o.getPopulation(),
+							o.getAttackPriority(), o.getBuildPriority());
 				ordersPerformed++;
 			}
 			catch(IllegalArgumentException e)
