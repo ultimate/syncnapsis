@@ -19,6 +19,7 @@ import org.slf4j.LoggerFactory;
 
 import com.syncnapsis.providers.TimeProvider;
 import com.syncnapsis.providers.impl.SystemTimeProvider;
+import com.syncnapsis.utils.MBeanUtil;
 
 /**
  * Implementation of a Worker that periodically performs operations.<br>
@@ -31,7 +32,7 @@ import com.syncnapsis.providers.impl.SystemTimeProvider;
  * 
  * @author ultimate
  */
-public abstract class Worker implements Runnable
+public abstract class Worker implements Runnable, WorkerMXBean
 {
 	/**
 	 * Logger-Instance
@@ -122,6 +123,8 @@ public abstract class Worker implements Runnable
 			throw new IllegalArgumentException("timeProvider must not be null!");
 		this.interval = interval;
 		this.timeProvider = timeProvider;
+		
+		MBeanUtil.registerMBean(this);
 	}
 
 	/**
@@ -231,6 +234,16 @@ public abstract class Worker implements Runnable
 	}
 
 	/**
+	 * The warning that has occurred.
+	 * 
+	 * @param warningCause
+	 */
+	public Throwable getWarningCause()
+	{
+		return warningCause;
+	}
+
+	/**
 	 * Clear the warning-flag and warningCause
 	 * 
 	 * @see Worker#hasWarning()
@@ -243,16 +256,6 @@ public abstract class Worker implements Runnable
 			this.warningFlag = false;
 			this.warningCause = null;
 		}
-	}
-
-	/**
-	 * The warning that has occurred.
-	 * 
-	 * @param warningCause
-	 */
-	public Throwable getWarningCause()
-	{
-		return warningCause;
 	}
 
 	/*
