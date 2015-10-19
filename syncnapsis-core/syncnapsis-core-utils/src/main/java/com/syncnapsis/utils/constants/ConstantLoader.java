@@ -18,6 +18,7 @@ import java.lang.reflect.ParameterizedType;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -58,6 +59,11 @@ public abstract class ConstantLoader<R> extends Bean implements InitializingBean
 	protected List<Constant<R>>				constants;
 
 	/**
+	 * A countdown latch allowing other threads to wait for the constants to be loaded.
+	 */
+	private CountDownLatch					latch;
+
+	/**
 	 * Construct a new ConstantLoader with the given raw type.<br>
 	 * Note: remember to load constants using load(..) after setting the constant classes.
 	 * 
@@ -66,6 +72,7 @@ public abstract class ConstantLoader<R> extends Bean implements InitializingBean
 	public ConstantLoader(Class<R> constantRawType)
 	{
 		this.constantRawType = constantRawType;
+		this.latch = new CountDownLatch(1);
 	}
 
 	/*
@@ -76,6 +83,17 @@ public abstract class ConstantLoader<R> extends Bean implements InitializingBean
 	public void afterPropertiesSet()
 	{
 		load();
+		this.latch.countDown();
+	}
+
+	/**
+	 * Wait for this {@link ConstantLoader} to load the constants before to continue.
+	 * 
+	 * @throws InterruptedException
+	 */
+	public void await() throws InterruptedException
+	{
+		this.latch.await();
 	}
 
 	/**
