@@ -1,15 +1,19 @@
 package com.syncnapsis.universe;
 
 import org.springframework.beans.factory.InitializingBean;
-import org.springframework.util.Assert;
 
 import com.syncnapsis.providers.TimeProvider;
 import com.syncnapsis.utils.concurrent.Worker;
+import com.syncnapsis.utils.constants.ConstantLoader;
 
 /**
  * {@link Worker} implementation for the universe-conquest game.<br>
  * The {@link Worker} will run in a separate Thread and will continuously perform the the necessary
- * step-wise population calculations for the game using the {@link Calculator}.
+ * step-wise population calculations for the game using the {@link Calculator}.<br>
+ * <br>
+ * This worker will start itself after properties are set and after the underlying
+ * {@link ConstantLoader} has finished loading the constants. If no {@link ConstantLoader} is set it
+ * will start immediately.
  * 
  * @author ultimate
  */
@@ -18,37 +22,44 @@ public class UniverseWorker extends Worker implements InitializingBean
 	/**
 	 * The calculator used
 	 */
-	protected Calculator	calculator;
+	protected Calculator		calculator;
+
+	/**
+	 * The {@link ConstantLoader} to wait for before start working
+	 */
+	protected ConstantLoader<?>	constantLoader;
 
 	/**
 	 * Standard Constructor
 	 * 
 	 * @param interval - the interval for executing the calculations
 	 * @param timeProvider - the {@link TimeProvider}
+	 * @param calculator - the {@link Calculator}
 	 */
-	public UniverseWorker(long interval, TimeProvider timeProvider)
+	public UniverseWorker(long interval, TimeProvider timeProvider, Calculator calculator)
 	{
 		super(interval, timeProvider);
-	}
-
-	/**
-	 * The {@link Calculator}
-	 * 
-	 * @return calculator
-	 */
-	public Calculator getCalculator()
-	{
-		return calculator;
-	}
-
-	/**
-	 * The Calculator
-	 * 
-	 * @param calculator
-	 */
-	public void setCalculator(Calculator calculator)
-	{
 		this.calculator = calculator;
+	}
+
+	/**
+	 * The {@link ConstantLoader} to wait for before start working
+	 * 
+	 * @return constantLoader
+	 */
+	public ConstantLoader<?> getConstantLoader()
+	{
+		return constantLoader;
+	}
+
+	/**
+	 * The {@link ConstantLoader} to wait for before start working
+	 * 
+	 * @param constantLoader - the Constant Loader
+	 */
+	public void setConstantLoader(ConstantLoader<?> constantLoader)
+	{
+		this.constantLoader = constantLoader;
 	}
 
 	/*
@@ -58,7 +69,9 @@ public class UniverseWorker extends Worker implements InitializingBean
 	@Override
 	public void afterPropertiesSet() throws Exception
 	{
-		Assert.notNull(calculator, "calculator must not be null!");
+		if(this.constantLoader != null)
+			this.constantLoader.await();
+		this.start();
 	}
 
 	/*
@@ -69,7 +82,7 @@ public class UniverseWorker extends Worker implements InitializingBean
 	public void work(long executionId) throws Throwable
 	{
 		// TODO Auto-generated method stub
-		
+
 		logger.info("UniverseWorker running: #" + executionId);
 	}
 }

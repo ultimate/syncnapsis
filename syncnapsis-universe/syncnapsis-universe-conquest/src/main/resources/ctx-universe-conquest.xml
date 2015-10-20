@@ -171,6 +171,13 @@
 
 	<bean id="calculator" class="com.syncnapsis.universe.CalculatorImpl">
 	</bean>
+	
+	<bean id="worker" class="com.syncnapsis.universe.UniverseWorker" lazy-init="false">
+		<constructor-arg value="100"/>
+		<constructor-arg ref="timeProvider"/>
+		<constructor-arg ref="calculator"/>
+		<property name="constantLoader" ref="constantLoader"/>
+	</bean>
 
 	<bean id="constantLoader" class="com.syncnapsis.utils.constants.ParameterConstantLoader" lazy-init="false">
 		<constructor-arg ref="parameterManager" />
