@@ -379,6 +379,7 @@ public abstract class Worker implements Runnable, WorkerMXBean
 			this.clearWarning();
 			this.thread = new Thread(this);
 			this.thread.start();
+			logger.info("Worker started!");
 		}
 	}
 
@@ -407,6 +408,7 @@ public abstract class Worker implements Runnable, WorkerMXBean
 			logger.debug("stopping worker: join=" + join);
 			this.running = false;
 			this.suspended = false;
+			logger.info("Worker stopped!");
 			this.notify(); // in case worker is suspended
 		}
 
@@ -470,6 +472,7 @@ public abstract class Worker implements Runnable, WorkerMXBean
 			if(!this.running)
 				throw new IllegalStateException("Worker not running!");
 			this.suspended = true;
+			logger.info("Worker suspended!");
 		}
 	}
 
@@ -485,6 +488,7 @@ public abstract class Worker implements Runnable, WorkerMXBean
 			if(!this.running)
 				throw new IllegalStateException("Worker not running!");
 			this.suspended = false;
+			logger.info("Worker resumed!");
 			this.notify();
 		}
 	}
