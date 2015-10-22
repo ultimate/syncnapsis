@@ -16,6 +16,7 @@ package com.syncnapsis.utils.constants;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import com.syncnapsis.tests.LoggerTestCase;
 import com.syncnapsis.tests.annotations.TestCoversClasses;
@@ -82,6 +83,46 @@ public class ConstantLoaderTest extends LoggerTestCase
 		assertEquals(B.class, cl.getConstantClasses().get(1));
 		assertNotNull(cl.getConstants());
 		assertEquals(4, cl.getConstants().size());
+	}
+
+	public void testAwait() throws Exception
+	{
+		final AtomicBoolean loaded = new AtomicBoolean(false);
+
+		final ConstantLoader<String> cl = new ConstantLoader<String>(String.class) {
+			@Override
+			public void load()
+			{
+				super.load();
+				loaded.set(true);
+			}
+			
+			@Override
+			public void load(Constant<String> constant)
+			{
+			}
+		};
+		cl.setConstantClasses(getClass().getName());
+		
+		new Thread() {
+			@Override
+			public void run()
+			{
+				try
+				{
+					Thread.sleep(100);
+				}
+				catch(InterruptedException e)
+				{
+					e.printStackTrace();
+				}
+				cl.load();
+			}
+		}.start();
+		
+		cl.await();
+		
+		assertTrue(loaded.get());
 	}
 
 	public static class A

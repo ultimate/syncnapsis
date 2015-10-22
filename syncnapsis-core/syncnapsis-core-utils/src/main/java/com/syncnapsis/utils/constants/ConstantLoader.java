@@ -83,7 +83,6 @@ public abstract class ConstantLoader<R> extends Bean implements InitializingBean
 	public void afterPropertiesSet()
 	{
 		load();
-		this.latch.countDown();
 	}
 
 	/**
@@ -160,6 +159,7 @@ public abstract class ConstantLoader<R> extends Bean implements InitializingBean
 			this.constants = scanClasses(this.constantClasses, this.constantRawType);
 		for(Constant<R> c : constants)
 			load(c);
+		this.latch.countDown();
 	}
 
 	/**
