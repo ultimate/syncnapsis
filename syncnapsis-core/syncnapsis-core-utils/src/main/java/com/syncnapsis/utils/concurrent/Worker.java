@@ -127,52 +127,41 @@ public abstract class Worker implements Runnable, WorkerMXBean
 		MBeanUtil.registerMBean(this);
 	}
 
-	/**
-	 * Get the (optional) interval for executing {@link Worker#work(long)}.<br>
-	 * If interval is set to 0 the worker will immediately execute {@link Worker#work(long)}
-	 * continuously without delay.
-	 * 
-	 * @see Worker#setInterval(long)
-	 * @return interval
+	/*
+	 * (non-Javadoc)
+	 * @see com.syncnapsis.utils.concurrent.WorkerMXBean#getInterval()
 	 */
+	@Override
 	public long getInterval()
 	{
 		return interval;
 	}
 
-	/**
-	 * Update the (optional) interval for executing {@link Worker#work(long)}.<br>
-	 * If interval is set to 0 the worker will immediately execute {@link Worker#work(long)}
-	 * continuously without delay.<br>
-	 * <b>Note:</b> the interval change will be applied for the execution immediately
-	 * 
-	 * @see Worker#getInterval(long)
-	 * @param interval - the new interval to set
+	/*
+	 * (non-Javadoc)
+	 * @see com.syncnapsis.utils.concurrent.WorkerMXBean#setInterval(long)
 	 */
+	@Override
 	public void setInterval(long interval)
 	{
 		this.interval = interval;
 	}
 
-	/**
-	 * Is this worker currently running?<br>
-	 * <b>Note:</b> will even return true when worker is suspended.
-	 * 
-	 * @see Worker#isSuspended()
-	 * @return running
+	/*
+	 * (non-Javadoc)
+	 * @see com.syncnapsis.utils.concurrent.WorkerMXBean#isRunning()
 	 */
+	@Override
 	public boolean isRunning()
 	{
 		return running;
 	}
 
-	/**
-	 * Is this worker currently suspended?<br>
-	 * <b>Note:</b> will even return true when worker is suspended.
-	 * 
-	 * @see Worker#isSuspended()
-	 * @return suspended
+	/*
+	 * (non-Javadoc)
+	 * @see com.syncnapsis.utils.concurrent.WorkerMXBean#isSuspended()
 	 */
+	@Override
 	public boolean isSuspended()
 	{
 		return suspended;
@@ -188,11 +177,11 @@ public abstract class Worker implements Runnable, WorkerMXBean
 		return timeProvider;
 	}
 
-	/**
-	 * Flag signaling that an error has occurred.
-	 * 
-	 * @return error-flag
+	/*
+	 * (non-Javadoc)
+	 * @see com.syncnapsis.utils.concurrent.WorkerMXBean#hasError()
 	 */
+	@Override
 	public boolean hasError()
 	{
 		return errorFlag;
@@ -207,13 +196,24 @@ public abstract class Worker implements Runnable, WorkerMXBean
 	{
 		return errorCause;
 	}
-
-	/**
-	 * Clear the error-flag and errorCause
-	 * 
-	 * @see Worker#hasError()
-	 * @see Worker#getErrorCause()
+	
+	/*
+	 * (non-Javadoc)
+	 * @see com.syncnapsis.utils.concurrent.WorkerMXBean#getErrorString()
 	 */
+	@Override
+	public String getErrorString()
+	{
+		if(errorCause == null)
+			return null;
+		return errorCause.getClass().getName() + ": " + errorCause.getMessage();
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see com.syncnapsis.utils.concurrent.WorkerMXBean#clearError()
+	 */
+	@Override
 	public void clearError()
 	{
 		synchronized(this)
@@ -223,11 +223,11 @@ public abstract class Worker implements Runnable, WorkerMXBean
 		}
 	}
 
-	/**
-	 * Flag signaling that a warning has occurred.
-	 * 
-	 * @return
+	/*
+	 * (non-Javadoc)
+	 * @see com.syncnapsis.utils.concurrent.WorkerMXBean#hasWarning()
 	 */
+	@Override
 	public boolean hasWarning()
 	{
 		return warningFlag;
@@ -243,12 +243,23 @@ public abstract class Worker implements Runnable, WorkerMXBean
 		return warningCause;
 	}
 
-	/**
-	 * Clear the warning-flag and warningCause
-	 * 
-	 * @see Worker#hasWarning()
-	 * @see Worker#getWarningCause()
+	/*
+	 * (non-Javadoc)
+	 * @see com.syncnapsis.utils.concurrent.WorkerMXBean#getWarningString()
 	 */
+	@Override
+	public String getWarningString()
+	{
+		if(warningCause == null)
+			return null;
+		return warningCause.getClass().getName() + ": " + warningCause.getMessage();
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see com.syncnapsis.utils.concurrent.WorkerMXBean#clearWarning()
+	 */
+	@Override
 	public void clearWarning()
 	{
 		synchronized(this)
@@ -341,28 +352,21 @@ public abstract class Worker implements Runnable, WorkerMXBean
 		}
 	}
 
-	/**
-	 * Start this worker.<br>
-	 * Exactly like <code>worker.start(false);</code>
-	 * 
-	 * @see Worker#start(boolean)
-	 * @see Worker#isRunning()
-	 * @see Worker#isSuspended()
+	/*
+	 * (non-Javadoc)
+	 * @see com.syncnapsis.utils.concurrent.WorkerMXBean#start()
 	 */
+	@Override
 	public void start()
 	{
 		this.start(false);
 	}
 
-	/**
-	 * Start this worker - if desired in suspended state<br>
-	 * Other than calling {@link Worker#start()} and {@link Worker#suspend()} subsequently this call
-	 * will guarantee suspended state from the beginning without any change of the worker to be
-	 * executed before suspend(..) is called.
-	 * 
-	 * @see Worker#start()
-	 * @see Worker#suspend()
+	/*
+	 * (non-Javadoc)
+	 * @see com.syncnapsis.utils.concurrent.WorkerMXBean#start(boolean)
 	 */
+	@Override
 	public void start(boolean suspended)
 	{
 		synchronized(this)
@@ -378,12 +382,11 @@ public abstract class Worker implements Runnable, WorkerMXBean
 		}
 	}
 
-	/**
-	 * Stop this worker
-	 * 
-	 * @see Worker#isRunning()
-	 * @see Worker#isSuspended()
+	/*
+	 * (non-Javadoc)
+	 * @see com.syncnapsis.utils.concurrent.WorkerMXBean#stop()
 	 */
+	@Override
 	public void stop()
 	{
 		this.stop(true);
@@ -470,12 +473,11 @@ public abstract class Worker implements Runnable, WorkerMXBean
 		}
 	}
 
-	/**
-	 * Resume this worker
-	 * 
-	 * @see Worker#isRunning()
-	 * @see Worker#isSuspended()
+	/*
+	 * (non-Javadoc)
+	 * @see com.syncnapsis.utils.concurrent.WorkerMXBean#resume()
 	 */
+	@Override
 	public void resume()
 	{
 		synchronized(this)

@@ -22,9 +22,8 @@ public interface WorkerMXBean
 	/**
 	 * Start this worker - if desired in suspended state<br>
 	 * Other than calling {@link WorkerMXBean#start()} and {@link WorkerMXBean#suspend()}
-	 * subsequently this call
-	 * will guarantee suspended state from the beginning without any change of the worker to be
-	 * executed before suspend(..) is called.
+	 * subsequently this call will guarantee suspended state from the beginning without any change
+	 * of the worker to be executed before suspend(..) is called.
 	 * 
 	 * @see WorkerMXBean#start()
 	 * @see WorkerMXBean#suspend()
@@ -86,8 +85,7 @@ public interface WorkerMXBean
 	public boolean isRunning();
 
 	/**
-	 * Is this worker currently suspended?<br>
-	 * <b>Note:</b> will even return true when worker is suspended.
+	 * Is this worker currently suspended?
 	 * 
 	 * @see WorkerMXBean#isSuspended()
 	 * @return suspended
@@ -104,9 +102,9 @@ public interface WorkerMXBean
 	/**
 	 * The error that has occurred.
 	 * 
-	 * @return errorCause
+	 * @return errorString
 	 */
-	public Throwable getErrorCause();
+	public String getErrorString();
 
 	/**
 	 * Clear the error-flag and errorCause
@@ -126,9 +124,9 @@ public interface WorkerMXBean
 	/**
 	 * The warning that has occurred.
 	 * 
-	 * @param warningCause
+	 * @param warningString
 	 */
-	public Throwable getWarningCause();
+	public String getWarningString();
 
 	/**
 	 * Clear the warning-flag and warningCause
