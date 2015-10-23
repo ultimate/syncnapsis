@@ -1,5 +1,6 @@
 package com.syncnapsis.universe;
 
+import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;
 
 import com.syncnapsis.providers.TimeProvider;
@@ -17,7 +18,7 @@ import com.syncnapsis.utils.constants.ConstantLoader;
  * 
  * @author ultimate
  */
-public class UniverseWorker extends Worker implements InitializingBean
+public class UniverseWorker extends Worker implements InitializingBean, DisposableBean
 {
 	/**
 	 * The calculator used
@@ -72,6 +73,16 @@ public class UniverseWorker extends Worker implements InitializingBean
 		if(this.constantLoader != null)
 			this.constantLoader.await();
 		this.start();
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.springframework.beans.factory.DisposableBean#destroy()
+	 */
+	@Override
+	public void destroy() throws Exception
+	{
+		this.stop();
 	}
 
 	/*
