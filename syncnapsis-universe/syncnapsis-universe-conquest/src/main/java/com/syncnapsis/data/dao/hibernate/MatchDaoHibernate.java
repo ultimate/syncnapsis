@@ -22,6 +22,7 @@ import org.hibernate.SessionFactory;
 
 import com.syncnapsis.data.dao.MatchDao;
 import com.syncnapsis.data.model.Match;
+import com.syncnapsis.enums.EnumMatchState;
 
 /**
  * Dao-Implementation for Hibernate for access to Match
@@ -116,5 +117,16 @@ public class MatchDaoHibernate extends GenericNameDaoHibernate<Match, Long> impl
 		if(canceled)
 			matches.addAll(createQuery("select m from Match m " + where + " AND " + GET_ONLY_CANCELED, id, referenceDate).list());
 		return matches;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * @see com.syncnapsis.data.dao.MatchDao#getByState(com.syncnapsis.enums.EnumMatchState)
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Match> getByState(EnumMatchState state)
+	{
+		return createQuery("select m from Match m where m.state=?", state).list();
 	}
 }

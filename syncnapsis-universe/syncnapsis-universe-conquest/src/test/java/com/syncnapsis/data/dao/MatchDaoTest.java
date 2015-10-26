@@ -22,6 +22,7 @@ import com.syncnapsis.data.dao.hibernate.MatchDaoHibernate;
 import com.syncnapsis.data.model.Match;
 import com.syncnapsis.data.model.Participant;
 import com.syncnapsis.enums.EnumJoinType;
+import com.syncnapsis.enums.EnumMatchState;
 import com.syncnapsis.enums.EnumStartCondition;
 import com.syncnapsis.enums.EnumVictoryCondition;
 import com.syncnapsis.tests.GenericNameDaoTestCase;
@@ -195,6 +196,25 @@ public class MatchDaoTest extends GenericNameDaoTestCase<Match, Long>
 				}
 				assertTrue(found);
 			}
+		}
+	}
+
+	public void testGetByState() throws Exception
+	{
+		getByStateTest(EnumMatchState.created, 0);
+		getByStateTest(EnumMatchState.planned, 2);
+		getByStateTest(EnumMatchState.canceled, 2);
+		getByStateTest(EnumMatchState.active, 3);
+		getByStateTest(EnumMatchState.finished, 3);
+	}
+
+	private void getByStateTest(EnumMatchState state, int expected) throws Exception
+	{
+		List<Match> result = matchDao.getByState(state);
+		assertEquals(2, result.size());
+		for(Match m: result)
+		{
+			assertEquals(state, m.getState());
 		}
 	}
 }

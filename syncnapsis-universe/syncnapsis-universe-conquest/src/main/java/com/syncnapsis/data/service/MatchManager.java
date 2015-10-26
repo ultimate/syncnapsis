@@ -21,6 +21,7 @@ import com.syncnapsis.data.model.Match;
 import com.syncnapsis.data.model.Participant;
 import com.syncnapsis.data.model.help.Rank;
 import com.syncnapsis.enums.EnumJoinType;
+import com.syncnapsis.enums.EnumMatchState;
 import com.syncnapsis.enums.EnumStartCondition;
 import com.syncnapsis.enums.EnumVictoryCondition;
 import com.syncnapsis.utils.data.ExtendedRandom;
@@ -73,6 +74,14 @@ public interface MatchManager extends GenericNameManager<Match, Long>
 	 * @return the list of matches
 	 */
 	public List<Match> getByGalaxy(long galaxyId, boolean planned, boolean active, boolean finished, boolean canceled);
+
+	/**
+	 * Get the list of matches that are in the given {@link EnumMatchState}.
+	 * 
+	 * @param state - the state to search for
+	 * @return the list of matches
+	 */
+	public List<Match> getByState(EnumMatchState state);
 
 	/**
 	 * Create a new match and start it if the startCondition demands it.

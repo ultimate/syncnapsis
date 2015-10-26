@@ -156,6 +156,13 @@ public class MatchManagerImplTest extends GenericNameManagerImplTestCase<Match, 
 		simpleGenericTest(managerCall, daoCall);
 	}
 
+	public void testGetByState() throws Exception
+	{
+		MethodCall managerCall = new MethodCall("getByState", new ArrayList<Match>(), EnumMatchState.active);
+		MethodCall daoCall = new MethodCall("getByState", new ArrayList<Match>(), EnumMatchState.active);
+		simpleGenericTest(managerCall, daoCall);
+	}
+
 	public void testCreateMatch() throws Exception
 	{
 		final Long matchId = 123L;

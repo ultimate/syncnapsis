@@ -18,6 +18,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.syncnapsis.data.model.Match;
+import com.syncnapsis.enums.EnumMatchState;
 
 /**
  * Dao-Interface for access to Match
@@ -70,4 +71,12 @@ public interface MatchDao extends GenericNameDao<Match, Long>
 	 * @return the list of matches
 	 */
 	public List<Match> getByGalaxy(long galaxyId, boolean planned, boolean active, boolean finished, boolean canceled, Date referenceDate);
+
+	/**
+	 * Get the list of matches that are in the given {@link EnumMatchState}.
+	 * 
+	 * @param state - the state to search for
+	 * @return the list of matches
+	 */
+	public List<Match> getByState(EnumMatchState state);
 }

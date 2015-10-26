@@ -231,6 +231,15 @@ public class MatchManagerImpl extends GenericNameManagerImpl<Match, Long> implem
 		Date referenceDate = new Date(securityManager.getTimeProvider().get());
 		return matchDao.getByGalaxy(galaxyId, planned, active, finished, canceled, referenceDate);
 	}
+	
+	/*
+	 * (non-Javadoc)
+	 * @see com.syncnapsis.data.service.MatchManager#getByState(com.syncnapsis.enums.EnumMatchState)
+	 */
+	public List<Match> getByState(EnumMatchState state)
+	{
+		return matchDao.getByState(state);
+	}
 
 	/*
 	 * (non-Javadoc)
