@@ -175,8 +175,9 @@
 	<bean id="worker" class="com.syncnapsis.universe.UniverseWorker" lazy-init="false">
 		<constructor-arg value="100"/>
 		<constructor-arg ref="timeProvider"/>
-		<constructor-arg ref="calculator"/>
 		<property name="constantLoader" ref="constantLoader"/>
+		<property name="matchManager" ref="matchManager"/>
+		<property name="solarSystemPopulationManager" ref="solarSystemPopulationManager"/>
 	</bean>
 
 	<bean id="constantLoader" class="com.syncnapsis.utils.constants.ParameterConstantLoader" lazy-init="false">

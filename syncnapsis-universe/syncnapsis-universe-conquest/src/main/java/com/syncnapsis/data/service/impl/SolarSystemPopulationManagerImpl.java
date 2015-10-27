@@ -522,7 +522,8 @@ public class SolarSystemPopulationManagerImpl extends GenericManagerImpl<SolarSy
 		}
 		else
 		{
-			logger.debug("no home population @ infrastructure " + infrastructure.getId() + " @ time " + now.getTime());
+			if(logger.isDebugEnabled()) // double check for performance
+				logger.debug("no home population @ infrastructure " + infrastructure.getId() + " @ time " + now.getTime());
 		}
 		// return populations
 		return infrastructure.getPopulations();
