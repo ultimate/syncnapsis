@@ -173,11 +173,16 @@
 	</bean>
 	
 	<bean id="worker" class="com.syncnapsis.universe.UniverseWorker" lazy-init="false">
-		<constructor-arg value="100"/>
+		<constructor-arg value="50"/>
 		<constructor-arg ref="timeProvider"/>
 		<property name="constantLoader" ref="constantLoader"/>
+		<property name="sessionFactoryUtil" ref="sessionFactoryUtil"/>
 		<property name="matchManager" ref="matchManager"/>
+		<property name="solarSystemInfrastructureManager" ref="solarSystemInfrastructureManager"/>
 		<property name="solarSystemPopulationManager" ref="solarSystemPopulationManager"/>
+		<property name="rankUpdateInterval" value="20"/>
+		<property name="systemUpdateInterval" value="10"/>
+		<property name="movementUpdateInterval" value="10"/>
 	</bean>
 
 	<bean id="constantLoader" class="com.syncnapsis.utils.constants.ParameterConstantLoader" lazy-init="false">

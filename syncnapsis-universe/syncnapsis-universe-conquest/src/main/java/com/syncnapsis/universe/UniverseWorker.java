@@ -9,9 +9,11 @@ import org.springframework.util.Assert;
 import com.syncnapsis.data.model.Match;
 import com.syncnapsis.data.model.SolarSystemInfrastructure;
 import com.syncnapsis.data.service.MatchManager;
+import com.syncnapsis.data.service.SolarSystemInfrastructureManager;
 import com.syncnapsis.data.service.SolarSystemPopulationManager;
 import com.syncnapsis.enums.EnumMatchState;
 import com.syncnapsis.providers.TimeProvider;
+import com.syncnapsis.utils.SessionFactoryUtil;
 import com.syncnapsis.utils.concurrent.Worker;
 import com.syncnapsis.utils.constants.ConstantLoader;
 import com.syncnapsis.utils.data.ExtendedRandom;
@@ -32,37 +34,47 @@ public class UniverseWorker extends Worker implements InitializingBean, Disposab
 	/**
 	 * The {@link ConstantLoader} to wait for before start working
 	 */
-	protected ConstantLoader<?>				constantLoader;
+	protected ConstantLoader<?>					constantLoader;
+	
+	/**
+	 * The {@link SessionFactoryUtil} used to provide a separate session for this worker
+	 */
+	protected SessionFactoryUtil sessionFactoryUtil;
 
 	/**
 	 * The {@link MatchManager} used to access the list of active matches
 	 */
-	protected MatchManager					matchManager;
+	protected MatchManager						matchManager;
+	/**
+	 * The {@link SolarSystemInfrastructureManager} used to access the list of infrastructures for
+	 * each match
+	 */
+	protected SolarSystemInfrastructureManager	solarSystemInfrastructureManager;
 	/**
 	 * The {@link SolarSystemPopulationManager} used for simulating
 	 */
-	protected SolarSystemPopulationManager	solarSystemPopulationManager;
+	protected SolarSystemPopulationManager		solarSystemPopulationManager;
 
 	/**
 	 * The random number generator used
 	 */
-	protected ExtendedRandom				random;
+	protected ExtendedRandom					random;
 
 	/**
 	 * The interval at which to update the match ranks (measured in periods/ticks).<br>
 	 * Default is 1
 	 */
-	protected int							rankUpdateInterval		= 1;
+	protected int								rankUpdateInterval		= 1;
 	/**
 	 * The interval at which to update the match systems (measured in periods/ticks).<br>
 	 * Default is 1
 	 */
-	protected int							systemUpdateInterval	= 1;
+	protected int								systemUpdateInterval	= 1;
 	/**
 	 * The interval at which to update the match movements (measured in periods/ticks).<br>
 	 * Default is 1
 	 */
-	protected int							movementUpdateInterval	= 1;
+	protected int								movementUpdateInterval	= 1;
 
 	/**
 	 * Standard Constructor
@@ -97,6 +109,26 @@ public class UniverseWorker extends Worker implements InitializingBean, Disposab
 	}
 
 	/**
+	 * The {@link SessionFactoryUtil} used to provide a separate session for this worker
+	 * 
+	 * @return sessionFactoryUtil
+	 */
+	public SessionFactoryUtil getSessionFactoryUtil()
+	{
+		return sessionFactoryUtil;
+	}
+
+	/**
+	 * The {@link SessionFactoryUtil} used to provide a separate session for this worker
+	 * 
+	 * @param sessionFactoryUtil - the session factory util
+	 */
+	public void setSessionFactoryUtil(SessionFactoryUtil sessionFactoryUtil)
+	{
+		this.sessionFactoryUtil = sessionFactoryUtil;
+	}
+
+	/**
 	 * The {@link MatchManager} used to access the list of active matches
 	 * 
 	 * @return matchManager
@@ -114,6 +146,28 @@ public class UniverseWorker extends Worker implements InitializingBean, Disposab
 	public void setMatchManager(MatchManager matchManager)
 	{
 		this.matchManager = matchManager;
+	}
+
+	/**
+	 * The {@link SolarSystemInfrastructureManager} used to access the list of infrastructures for
+	 * each match
+	 * 
+	 * @return solarSystemInfrastructureManager
+	 */
+	public SolarSystemInfrastructureManager getSolarSystemInfrastructureManager()
+	{
+		return solarSystemInfrastructureManager;
+	}
+
+	/**
+	 * The {@link SolarSystemInfrastructureManager} used to access the list of infrastructures for
+	 * each match
+	 * 
+	 * @param solarSystemInfrastructureManager - the SolarSystemInfrastructureManager
+	 */
+	public void setSolarSystemInfrastructureManager(SolarSystemInfrastructureManager solarSystemInfrastructureManager)
+	{
+		this.solarSystemInfrastructureManager = solarSystemInfrastructureManager;
 	}
 
 	/**
@@ -229,11 +283,16 @@ public class UniverseWorker extends Worker implements InitializingBean, Disposab
 	@Override
 	public void afterPropertiesSet() throws Exception
 	{
+		Assert.notNull(solarSystemInfrastructureManager, "solarSystemInfrastructureManager must not be null!");
 		Assert.notNull(solarSystemPopulationManager, "solarSystemPopulationManager must not be null!");
+		Assert.isTrue(rankUpdateInterval > 0, "rankUpdateInterval must be > 0!");
+		Assert.isTrue(systemUpdateInterval > 0, "systemUpdateInterval must be > 0!");
+		Assert.isTrue(movementUpdateInterval > 0, "movementUpdateInterval must be > 0!");
 		if(this.random == null)
 			this.random = new ExtendedRandom();
 		if(this.constantLoader != null)
 			this.constantLoader.await();
+		
 		this.start();
 	}
 
@@ -245,6 +304,22 @@ public class UniverseWorker extends Worker implements InitializingBean, Disposab
 	public void destroy() throws Exception
 	{
 		this.stop();
+		
+	}
+	
+	/*
+	 * (non-Javadoc)
+	 * @see com.syncnapsis.utils.concurrent.Worker#run()
+	 */
+	@Override
+	public void run()
+	{
+		// need to create the session here, since it is bound to the current Thread
+		sessionFactoryUtil.openBoundSession();
+
+		super.run();
+		
+		sessionFactoryUtil.closeBoundSession();
 	}
 
 	/*
@@ -257,22 +332,28 @@ public class UniverseWorker extends Worker implements InitializingBean, Disposab
 		logger.info("UniverseWorker running: #" + executionId);
 
 		// check which channels to update in this execution
+		// this depends on the indivual intervals for the different channels
 		boolean updateRanks = (executionId % rankUpdateInterval == 0);
 		boolean updateSystems = (executionId % systemUpdateInterval == 0);
 		boolean updateMovements = (executionId % movementUpdateInterval == 0);
 
 		// fetch all active matches
 		List<Match> matches = matchManager.getByState(EnumMatchState.active);
+		List<SolarSystemInfrastructure> infrastructures;
 
 		for(Match match : matches)
 		{
+//			infrastructures = solarSystemInfrastructureManager.getByMatch(match.getId());
+			infrastructures = match.getInfrastructures();
 			// simulate population changes for all infrastructures
-			for(SolarSystemInfrastructure infrastructure : match.getInfrastructures())
+			for(SolarSystemInfrastructure infrastructure : infrastructures)
 			{
 				solarSystemPopulationManager.simulate(infrastructure, random);
 			}
 			// update rankings
 			match = matchManager.updateRanking(match);
+			// force flush to database
+			sessionFactoryUtil.currentSession().flush();
 			// push match updates
 			matchManager.updateChannels(match, updateRanks, updateSystems, updateMovements);
 		}

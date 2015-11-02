@@ -603,7 +603,7 @@ public class CalculatorImpl implements Calculator
 			}
 			else if(tick > norm_tick)
 			{
-				logger.warn("cycle " + i + " population " + pop.getId() + " has not been updated since " + tick);
+				logger.warn("cycle " + i + " population " + pop.getId() + " has not been updated for " + tick + " ms");
 			}
 			else
 			{
@@ -699,7 +699,7 @@ public class CalculatorImpl implements Calculator
 						}
 						else if(tick2 > norm_tick)
 						{
-							logger.warn("cycle " + i + " population " + pop.getId() + " has not been updated since " + tick2);
+							logger.warn("cycle " + i + " population " + pop.getId() + " has not been updated for " + tick2 + " ms");
 						}
 						else
 						{
@@ -729,6 +729,7 @@ public class CalculatorImpl implements Calculator
 				delta = -pop.getPopulation();
 //			logger.debug("population " + pop.getId() + " value = " + pop.getPopulation() + " delta = " + delta + " (" + pop.getDelta() + ")");
 			pop.setPopulation(pop.getPopulation() + delta);
+			pop.setLastUpdateDate(time);
 			pop.setModified(true);
 			pop.setDelta(0.0);
 		}
@@ -741,6 +742,7 @@ public class CalculatorImpl implements Calculator
 			infrastructure.setInfrastructure(maxPopulation);
 		else
 			infrastructure.setInfrastructure(infrastructure.getInfrastructure() + delta);
+		infrastructure.setLastUpdateDate(time);
 		infrastructure.setModified(true);
 		infrastructure.setDelta(0.0);
 
