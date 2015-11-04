@@ -1,5 +1,7 @@
 package com.syncnapsis.utils.concurrent;
 
+import java.util.Map;
+
 /**
  * MXBean-Interface for Workers.
  * All relevant Methods for configuring the Workers are declared here.
@@ -100,19 +102,19 @@ public interface WorkerMXBean
 	public boolean hasError();
 
 	/**
-	 * The error that has occurred.
+	 * A history of errors that have occurred (possibly with limited length).
 	 * 
-	 * @return errorString
+	 * @return errorHistory as a {@link Map}
 	 */
-	public String getErrorString();
+	public Map<Long, String> getErrorHistory();
 
 	/**
-	 * Clear the error-flag and errorCause
+	 * Clear the error-flag and errorHistory
 	 * 
 	 * @see WorkerMXBean#hasError()
-	 * @see WorkerMXBean#getErrorCause()
+	 * @see WorkerMXBean#getErrorHistory()
 	 */
-	public void clearError();
+	public void clearErrors();
 
 	/**
 	 * Flag signaling that a warning has occurred.
@@ -122,17 +124,17 @@ public interface WorkerMXBean
 	public boolean hasWarning();
 
 	/**
-	 * The warning that has occurred.
+	 * A history of warnings that have occurred (possibly with limited length).
 	 * 
-	 * @param warningString
+	 * @return warningHistory as a {@link Map}
 	 */
-	public String getWarningString();
+	public Map<Long, String> getWarningHistory();
 
 	/**
-	 * Clear the warning-flag and warningCause
+	 * Clear the warning-flag and warningHistory
 	 * 
 	 * @see WorkerMXBean#hasWarning()
-	 * @see WorkerMXBean#getWarningCause()
+	 * @see WorkerMXBean#getWarningHistory()
 	 */
-	public void clearWarning();
+	public void clearWarnings();
 }
