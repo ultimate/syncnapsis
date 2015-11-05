@@ -39,7 +39,7 @@ import com.syncnapsis.utils.data.ExtendedRandom;
 import com.syncnapsis.websockets.Connection;
 import com.syncnapsis.websockets.service.rpc.RPCService;
 
-@TestExcludesMethods({ "afterPropertiesSet" })
+@TestExcludesMethods({ "*etSolarSystemPopulationManager", "*etSolarSystemInfrastructureManager", "afterPropertiesSet" })
 public class ConquestManagerImplTest extends BaseSpringContextTestCase
 {
 	private SessionProvider		sessionProvider;
