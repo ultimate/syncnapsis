@@ -1,5 +1,6 @@
 package com.syncnapsis.data.model.help;
 
+import com.syncnapsis.data.model.base.Model;
 import com.syncnapsis.enums.EnumPopulationPriority;
 
 /**
@@ -8,7 +9,7 @@ import com.syncnapsis.enums.EnumPopulationPriority;
  * 
  * @author ultimate
  */
-public class Order
+public class Order implements Model
 {
 	/**
 	 * The ID of the origin infrastructure
