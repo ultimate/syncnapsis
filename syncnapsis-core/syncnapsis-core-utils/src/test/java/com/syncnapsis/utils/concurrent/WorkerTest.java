@@ -107,7 +107,7 @@ public class WorkerTest extends LoggerTestCase
 		}
 	}
 
-	@TestCoversMethods({ "hasWarning", "clearWarning", "getWarningCause" })
+	@TestCoversMethods({ "hasWarning", "clearWarnings", "getWarningHistoryQueue", "getWarningQueue" })
 	public void testOverload() throws Exception
 	{
 		long time;
@@ -144,12 +144,13 @@ public class WorkerTest extends LoggerTestCase
 		assertFalse(worker.isSuspended());
 		assertFalse(worker.hasError());
 		assertTrue(worker.hasWarning());
-		assertNotNull(worker.getWarningCause());
+		assertNotNull(worker.getWarningHistoryQueue().peek());
+		assertTrue(worker.getWarningHistoryQueue().peek().getExecutionId() < 3);
 		assertTrue(worker.lastExecutionId < 3);
 		assertTrue(worker.lastExecutionTime >= time);
 	}
 
-	@TestCoversMethods({ "hasError", "clearError", "getErrorCause" })
+	@TestCoversMethods({ "hasError", "clearErrors", "getErrorHistoryQueue", "getErrorQueue" })
 	public void testErrorHandling() throws Exception
 	{
 		long time;
@@ -176,7 +177,8 @@ public class WorkerTest extends LoggerTestCase
 		assertFalse(worker.isSuspended());
 		assertTrue(worker.hasError());
 		assertFalse(worker.hasWarning());
-		assertSame(worker.throwable, worker.getErrorCause());
+		assertSame(worker.throwable, worker.getErrorHistoryQueue().peek().getCause());
+		assertTrue(worker.getErrorHistoryQueue().peek().getExecutionId() < 3);
 		assertTrue(worker.lastExecutionId < 3);
 		assertTrue(worker.lastExecutionTime >= time);
 	}

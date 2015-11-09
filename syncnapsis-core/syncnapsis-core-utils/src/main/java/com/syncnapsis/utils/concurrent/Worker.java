@@ -230,7 +230,7 @@ public abstract class Worker implements Runnable, WorkerMXBean
 	@Override
 	public boolean hasWarning()
 	{
-		return !errorHistory.isEmpty();
+		return !warningHistory.isEmpty();
 	}
 
 	/**
