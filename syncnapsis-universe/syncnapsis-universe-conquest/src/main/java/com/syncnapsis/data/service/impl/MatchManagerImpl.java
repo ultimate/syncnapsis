@@ -47,6 +47,7 @@ import com.syncnapsis.security.accesscontrol.MatchAccessController;
 import com.syncnapsis.universe.Calculator;
 import com.syncnapsis.utils.HibernateUtil;
 import com.syncnapsis.utils.MathUtil;
+import com.syncnapsis.utils.SessionFactoryUtil;
 import com.syncnapsis.utils.StringUtil;
 import com.syncnapsis.utils.data.ExtendedRandom;
 import com.syncnapsis.utils.mail.UniverseConquestMailer;
@@ -96,6 +97,11 @@ public class MatchManagerImpl extends GenericNameManagerImpl<Match, Long> implem
 	protected BaseGameManager					securityManager;
 
 	/**
+	 * The {@link SessionFactoryUtil}
+	 */
+	protected SessionFactoryUtil				sessionFactoryUtil;
+
+	/**
 	 * Standard Constructor
 	 * 
 	 * @param matchDao - MatchDao for database access
@@ -126,21 +132,22 @@ public class MatchManagerImpl extends GenericNameManagerImpl<Match, Long> implem
 	{
 		Assert.notNull(calculator, "calculator must not be null!");
 		Assert.notNull(securityManager, "securityManager must not be null!");
+		Assert.notNull(sessionFactoryUtil, "sessionFactoryUtil must not be null!");
 
 		// create general channel(s)
 		conquestManager.createChannel(UniverseConquestConstants.CHANNEL_MATCH_CREATED, null);
 		// create individual match channel(s)
 		// this will create a separate session, since no session is present on startup otherwise
-		boolean sessionAlreadyOpen = HibernateUtil.isSessionBound();
+		boolean sessionAlreadyOpen = sessionFactoryUtil.isSessionBound();
 		if(!sessionAlreadyOpen) // add this check to prevent duplicate session during tests
-			HibernateUtil.openBoundSession();
+			sessionFactoryUtil.openBoundSession();
 		List<Match> matches = getAll();
 		for(Match m : matches)
 		{
 			createChannels(m);
 		}
 		if(!sessionAlreadyOpen)
-			HibernateUtil.closeBoundSession();
+			sessionFactoryUtil.closeBoundSession();
 	}
 
 	/**
@@ -181,6 +188,26 @@ public class MatchManagerImpl extends GenericNameManagerImpl<Match, Long> implem
 	public void setSecurityManager(BaseGameManager securityManager)
 	{
 		this.securityManager = securityManager;
+	}
+
+	/**
+	 * The {@link SessionFactoryUtil}
+	 * 
+	 * @return sessionFactoryUtil
+	 */
+	public SessionFactoryUtil getSessionFactoryUtil()
+	{
+		return sessionFactoryUtil;
+	}
+
+	/**
+	 * The {@link SessionFactoryUtil}
+	 * 
+	 * @param sessionFactoryUtil - the SessionFactoryUtil
+	 */
+	public void setSessionFactoryUtil(SessionFactoryUtil sessionFactoryUtil)
+	{
+		this.sessionFactoryUtil = sessionFactoryUtil;
 	}
 
 	/**
@@ -231,7 +258,7 @@ public class MatchManagerImpl extends GenericNameManagerImpl<Match, Long> implem
 		Date referenceDate = new Date(securityManager.getTimeProvider().get());
 		return matchDao.getByGalaxy(galaxyId, planned, active, finished, canceled, referenceDate);
 	}
-	
+
 	/*
 	 * (non-Javadoc)
 	 * @see com.syncnapsis.data.service.MatchManager#getByState(com.syncnapsis.enums.EnumMatchState)
@@ -338,11 +365,11 @@ public class MatchManagerImpl extends GenericNameManagerImpl<Match, Long> implem
 			logger.debug("matchStartNotPossibleReasons: " + getMatchStartNotPossibleReasons(match));
 			logger.debug("match.startPopulation: " + match.getStartPopulation());
 		}
-		
+
 		match = startMatchIfNecessary(match);
-		
+
 		conquestManager.update(UniverseConquestConstants.CHANNEL_MATCH_CREATED, match);
-		
+
 		return match;
 	}
 
@@ -879,8 +906,10 @@ public class MatchManagerImpl extends GenericNameManagerImpl<Match, Long> implem
 				UniverseConquestConstants.CHANNEL_MATCH_RANKS.replace(UniverseConquestConstants.CHANNEL_ID_PLACEHOLDER, "" + match.getId()), null);
 		conquestManager.createChannel(
 				UniverseConquestConstants.CHANNEL_MATCH_SYSTEMS.replace(UniverseConquestConstants.CHANNEL_ID_PLACEHOLDER, "" + match.getId()), null);
-		conquestManager.createChannel(
-				UniverseConquestConstants.CHANNEL_MATCH_MOVEMENTS.replace(UniverseConquestConstants.CHANNEL_ID_PLACEHOLDER, "" + match.getId()), null);
+		conquestManager
+				.createChannel(
+						UniverseConquestConstants.CHANNEL_MATCH_MOVEMENTS.replace(UniverseConquestConstants.CHANNEL_ID_PLACEHOLDER,
+								"" + match.getId()), null);
 		// }
 		updateChannels(match, true, true, true);
 	}
@@ -947,9 +976,9 @@ public class MatchManagerImpl extends GenericNameManagerImpl<Match, Long> implem
 				infEntry.add(inf.getSolarSystem().getId());
 				infEntry.add((long) inf.getHabitability());
 				infEntry.add(inf.getInfrastructure());
-				
+
 				Collections.sort(inf.getPopulations(), SolarSystemPopulation.BY_COLONIZATIONDATE);
-				
+
 				for(SolarSystemPopulation pop : inf.getPopulations())
 				{
 					if(pop.isPresent(time))

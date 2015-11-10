@@ -64,6 +64,7 @@
 		<constructor-arg ref="conquestManager" />
 		<property name="calculator" ref="calculator" />
 		<property name="securityManager" ref="securityManager" />
+		<property name="sessionFactoryUtil" ref="sessionFactoryUtil" />
 	</bean>
 
 	<bean id="participantManager" class="com.syncnapsis.data.service.impl.ParticipantManagerImpl">
