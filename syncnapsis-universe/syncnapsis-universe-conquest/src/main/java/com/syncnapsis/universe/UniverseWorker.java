@@ -32,14 +32,14 @@ import com.syncnapsis.utils.data.ExtendedRandom;
 public class UniverseWorker extends Worker implements InitializingBean, DisposableBean
 {
 	/**
-	 * The {@link ConstantLoader} to wait for before start working
+	 * The optional {@link ConstantLoader} to wait for before start working
 	 */
 	protected ConstantLoader<?>					constantLoader;
-	
+
 	/**
-	 * The {@link SessionFactoryUtil} used to provide a separate session for this worker
+	 * The optional {@link SessionFactoryUtil} used to provide a separate session for this worker
 	 */
-	protected SessionFactoryUtil sessionFactoryUtil;
+	protected SessionFactoryUtil				sessionFactoryUtil;
 
 	/**
 	 * The {@link MatchManager} used to access the list of active matches
@@ -89,7 +89,7 @@ public class UniverseWorker extends Worker implements InitializingBean, Disposab
 	}
 
 	/**
-	 * The {@link ConstantLoader} to wait for before start working
+	 * The optional {@link ConstantLoader} to wait for before start working
 	 * 
 	 * @return constantLoader
 	 */
@@ -99,7 +99,7 @@ public class UniverseWorker extends Worker implements InitializingBean, Disposab
 	}
 
 	/**
-	 * The {@link ConstantLoader} to wait for before start working
+	 * The optional {@link ConstantLoader} to wait for before start working
 	 * 
 	 * @param constantLoader - the Constant Loader
 	 */
@@ -109,7 +109,7 @@ public class UniverseWorker extends Worker implements InitializingBean, Disposab
 	}
 
 	/**
-	 * The {@link SessionFactoryUtil} used to provide a separate session for this worker
+	 * The optional {@link SessionFactoryUtil} used to provide a separate session for this worker
 	 * 
 	 * @return sessionFactoryUtil
 	 */
@@ -119,7 +119,7 @@ public class UniverseWorker extends Worker implements InitializingBean, Disposab
 	}
 
 	/**
-	 * The {@link SessionFactoryUtil} used to provide a separate session for this worker
+	 * The optional {@link SessionFactoryUtil} used to provide a separate session for this worker
 	 * 
 	 * @param sessionFactoryUtil - the session factory util
 	 */
@@ -283,6 +283,7 @@ public class UniverseWorker extends Worker implements InitializingBean, Disposab
 	@Override
 	public void afterPropertiesSet() throws Exception
 	{
+		Assert.notNull(matchManager, "matchManager must not be null!");
 		Assert.notNull(solarSystemInfrastructureManager, "solarSystemInfrastructureManager must not be null!");
 		Assert.notNull(solarSystemPopulationManager, "solarSystemPopulationManager must not be null!");
 		Assert.isTrue(rankUpdateInterval > 0, "rankUpdateInterval must be > 0!");
@@ -290,9 +291,11 @@ public class UniverseWorker extends Worker implements InitializingBean, Disposab
 		Assert.isTrue(movementUpdateInterval > 0, "movementUpdateInterval must be > 0!");
 		if(this.random == null)
 			this.random = new ExtendedRandom();
+		if(this.sessionFactoryUtil == null)
+			logger.warn("No SessionFactoryUtil set! No separate session will be opened for this Thread!");
 		if(this.constantLoader != null)
 			this.constantLoader.await();
-		
+
 		this.start();
 	}
 
@@ -304,9 +307,9 @@ public class UniverseWorker extends Worker implements InitializingBean, Disposab
 	public void destroy() throws Exception
 	{
 		this.stop();
-		
+
 	}
-	
+
 	/*
 	 * (non-Javadoc)
 	 * @see com.syncnapsis.utils.concurrent.Worker#run()
@@ -314,12 +317,14 @@ public class UniverseWorker extends Worker implements InitializingBean, Disposab
 	@Override
 	public void run()
 	{
-		// need to create the session here, since it is bound to the current Thread
-		sessionFactoryUtil.openBoundSession();
+		// need to create a session here, since otherwise no session is bound to this Thread
+		if(sessionFactoryUtil != null)
+			sessionFactoryUtil.openBoundSession();
 
 		super.run();
-		
-		sessionFactoryUtil.closeBoundSession();
+
+		if(sessionFactoryUtil != null)
+			sessionFactoryUtil.closeBoundSession();
 	}
 
 	/*
@@ -343,7 +348,7 @@ public class UniverseWorker extends Worker implements InitializingBean, Disposab
 
 		for(Match match : matches)
 		{
-//			infrastructures = solarSystemInfrastructureManager.getByMatch(match.getId());
+			// infrastructures = solarSystemInfrastructureManager.getByMatch(match.getId());
 			infrastructures = match.getInfrastructures();
 			// simulate population changes for all infrastructures
 			for(SolarSystemInfrastructure infrastructure : infrastructures)
