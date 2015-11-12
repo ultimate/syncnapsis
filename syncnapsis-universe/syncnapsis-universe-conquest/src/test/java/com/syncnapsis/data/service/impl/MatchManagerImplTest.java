@@ -62,11 +62,12 @@ import com.syncnapsis.tests.annotations.TestCoversClasses;
 import com.syncnapsis.tests.annotations.TestCoversMethods;
 import com.syncnapsis.tests.annotations.TestExcludesMethods;
 import com.syncnapsis.universe.Calculator;
+import com.syncnapsis.utils.SessionFactoryUtil;
 import com.syncnapsis.utils.data.ExtendedRandom;
 import com.syncnapsis.utils.serialization.BaseMapper;
 
 @TestCoversClasses({ MatchManager.class, MatchManagerImpl.class })
-@TestExcludesMethods({ "isAccessible", "*etSecurityManager", "getMailer", "*etCalculator" })
+@TestExcludesMethods({ "isAccessible", "*etSecurityManager", "getMailer", "*etCalculator", "*etSessionFactoryUtil" })
 public class MatchManagerImplTest extends GenericNameManagerImplTestCase<Match, Long, MatchManager, MatchDao>
 {
 	private GalaxyManager						galaxyManager;
@@ -79,6 +80,7 @@ public class MatchManagerImplTest extends GenericNameManagerImplTestCase<Match, 
 	private BaseMapper							mapper;
 	private BaseGameManager						securityManager;
 	private Calculator							calculator;
+	private SessionFactoryUtil					sessionFactoryUtil;
 
 	private long								referenceTime	= 1234;
 
@@ -113,6 +115,7 @@ public class MatchManagerImplTest extends GenericNameManagerImplTestCase<Match, 
 		};
 		mockManager.setSecurityManager(securityManager);
 		mockManager.setCalculator(calculator);
+		mockManager.setSessionFactoryUtil(sessionFactoryUtil);
 
 		// mockDao must return a match list
 		mockContext.checking(new Expectations() {

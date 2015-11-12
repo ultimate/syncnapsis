@@ -211,7 +211,7 @@ public class MatchDaoTest extends GenericNameDaoTestCase<Match, Long>
 	private void getByStateTest(EnumMatchState state, int expected) throws Exception
 	{
 		List<Match> result = matchDao.getByState(state);
-		assertEquals(2, result.size());
+		assertEquals(expected, result.size());
 		for(Match m: result)
 		{
 			assertEquals(state, m.getState());
