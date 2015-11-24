@@ -358,7 +358,8 @@ public class UniverseWorker extends Worker implements InitializingBean, Disposab
 			// update rankings
 			match = matchManager.updateRanking(match);
 			// force flush to database
-			sessionFactoryUtil.currentSession().flush();
+			if(sessionFactoryUtil != null)
+				sessionFactoryUtil.currentSession().flush();
 			// push match updates
 			matchManager.updateChannels(match, updateRanks, updateSystems, updateMovements);
 		}
