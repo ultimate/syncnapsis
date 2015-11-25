@@ -555,6 +555,7 @@ public class CalculatorImplTest extends LoggerTestCase
 
 	public void testCalculateBuildStrength2()
 	{
+		// test is very expensive so there is an extra option to enable it during development
 		if(testCalculateBuildStrength2)
 		{
 			long maxMaxPopulation = calculator.getMaxPopulation();
@@ -743,6 +744,7 @@ public class CalculatorImplTest extends LoggerTestCase
 			avg1 = 0;
 			for(int i = 0; i < cycles; i++)
 			{
+				pop1.setLastUpdateDate(new Date(0));
 				pop1.setPopulation(popValue * fac);
 				calculator.calculateDeltas(infrastructure, random, new Date(tick));
 				avg1 += (pop1.getPopulation() - popValue * fac);
@@ -768,6 +770,8 @@ public class CalculatorImplTest extends LoggerTestCase
 			avg2 = 0;
 			for(int i = 0; i < cycles; i++)
 			{
+				pop1.setLastUpdateDate(new Date(0));
+				pop2.setLastUpdateDate(new Date(1));
 				pop1.setPopulation(popValue * fac);
 				pop2.setPopulation(popValue);
 				calculator.calculateDeltas(infrastructure, random, new Date(tick));
@@ -788,6 +792,8 @@ public class CalculatorImplTest extends LoggerTestCase
 			avg2 = 0;
 			for(int i = 0; i < cycles; i++)
 			{
+				pop1.setLastUpdateDate(new Date(0));
+				pop2.setLastUpdateDate(new Date(1));
 				pop1.setPopulation(popValue);
 				pop2.setPopulation(popValue * fac);
 				calculator.calculateDeltas(infrastructure, random, new Date(tick));
@@ -817,6 +823,9 @@ public class CalculatorImplTest extends LoggerTestCase
 			avg3 = 0;
 			for(int i = 0; i < cycles; i++)
 			{
+				pop1.setLastUpdateDate(new Date(0));
+				pop2.setLastUpdateDate(new Date(1));
+				pop3.setLastUpdateDate(new Date(2));
 				pop1.setPopulation(popValue * fac);
 				pop2.setPopulation(popValue);
 				pop3.setPopulation(popValue);
@@ -844,6 +853,9 @@ public class CalculatorImplTest extends LoggerTestCase
 			avg3 = 0;
 			for(int i = 0; i < cycles; i++)
 			{
+				pop1.setLastUpdateDate(new Date(0));
+				pop2.setLastUpdateDate(new Date(1));
+				pop3.setLastUpdateDate(new Date(2));
 				pop1.setPopulation(popValue * fac);
 				pop2.setPopulation(popValue);
 				pop3.setPopulation(popValue / fac);
@@ -878,6 +890,9 @@ public class CalculatorImplTest extends LoggerTestCase
 			avg3 = 0;
 			for(int i = 0; i < cycles; i++)
 			{
+				pop1.setLastUpdateDate(new Date(0));
+				pop2.setLastUpdateDate(new Date(1));
+				pop3.setLastUpdateDate(new Date(2));
 				pop1.setPopulation(popValue * fac);
 				pop2.setPopulation(popValue);
 				pop3.setPopulation(popValue / fac);
@@ -905,6 +920,9 @@ public class CalculatorImplTest extends LoggerTestCase
 			avg3 = 0;
 			for(int i = 0; i < cycles; i++)
 			{
+				pop1.setLastUpdateDate(new Date(0));
+				pop2.setLastUpdateDate(new Date(1));
+				pop3.setLastUpdateDate(new Date(2));
 				pop1.setPopulation(popValue);
 				pop2.setPopulation(popValue * fac);
 				pop3.setPopulation(popValue * fac);
@@ -932,6 +950,9 @@ public class CalculatorImplTest extends LoggerTestCase
 			avg3 = 0;
 			for(int i = 0; i < cycles; i++)
 			{
+				pop1.setLastUpdateDate(new Date(0));
+				pop2.setLastUpdateDate(new Date(1));
+				pop3.setLastUpdateDate(new Date(2));
 				pop1.setPopulation(popValue / fac);
 				pop2.setPopulation(popValue * fac);
 				pop3.setPopulation(popValue);

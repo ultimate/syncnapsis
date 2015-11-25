@@ -296,7 +296,7 @@ public class CalculatorImpl implements Calculator
 		return (long) infrastructure.getHabitability() * infrastructure.getSize()
 				* UniverseConquestConstants.PARAM_SOLARSYSTEM_MAX_POPULATION_FACTOR.asLong();
 	}
-	
+
 	/**
 	 * Calculates the habitability by the following rule:<br>
 	 * <ul>
@@ -305,8 +305,7 @@ public class CalculatorImpl implements Calculator
 	 * <li>heat is distributed throughout the system as followed<br>
 	 * <code>
 	 * heat(r) = heat_factor * star_heat / (r + 1)^2
-	 * </code>
-	 * </li>
+	 * </code></li>
 	 * <li>only planets with a heat within a given range are habitable (e.g. [0.2;0.8])</li>
 	 * </ul>
 	 * 
@@ -319,22 +318,22 @@ public class CalculatorImpl implements Calculator
 		double minHeat = UniverseConquestConstants.PARAM_SOLARSYSTEM_HABITABLE_HEAT_MIN.asDouble();
 		double maxHeat = UniverseConquestConstants.PARAM_SOLARSYSTEM_HABITABLE_HEAT_MAX.asDouble();
 		double heatFactor = UniverseConquestConstants.PARAM_SOLARSYSTEM_HEAT_FACTOR.asDouble();
-		
-		double sizeD = size/UniverseConquestConstants.PARAM_SOLARSYSTEM_SIZE_MAX.asDouble();
-		double heatD = heat/UniverseConquestConstants.PARAM_SOLARSYSTEM_HEAT_MAX.asDouble();
+
+		double sizeD = size / UniverseConquestConstants.PARAM_SOLARSYSTEM_SIZE_MAX.asDouble();
+		double heatD = heat / UniverseConquestConstants.PARAM_SOLARSYSTEM_HEAT_MAX.asDouble();
 
 		double minHeatRadius = Math.sqrt(heatFactor * heatD / minHeat) - 1;
 		double maxHeatRadius = Math.sqrt(heatFactor * heatD / maxHeat) - 1;
-		
+
 		double habitableZoneStart = Math.max(maxHeatRadius, 0.0);
 		double habitableZoneEnd = Math.min(minHeatRadius, sizeD);
 
 		double habitableZone = habitableZoneEnd - habitableZoneStart;
 		if(habitableZone < 0)
 			habitableZone = 0;
-		
+
 		double habitabilityD = habitableZone / sizeD;
-		return (int) (habitabilityD*1000);
+		return (int) (habitabilityD * 1000);
 	}
 
 	/**
@@ -396,16 +395,18 @@ public class CalculatorImpl implements Calculator
 	public long calculateTravelTime(SolarSystemInfrastructure origin, SolarSystemInfrastructure target, int travelSpeed)
 	{
 		long stdTravelTime = calculateStandardTravelTime(origin.getMatch(), travelSpeed);
-		
+
 		double dist = MathUtil.distance(origin.getSolarSystem().getCoords(), target.getSolarSystem().getCoords());
 		int stdDist = getStandardTravelDistance(origin.getSolarSystem().getGalaxy());
 
-		return (long) ((dist / stdDist) * stdTravelTime); 
+		return (long) ((dist / stdDist) * stdTravelTime);
 	}
-	
+
 	/*
 	 * (non-Javadoc)
-	 * @see com.syncnapsis.universe.Calculator#calculateStandardTravelTime(com.syncnapsis.data.model.Match, int)
+	 * @see
+	 * com.syncnapsis.universe.Calculator#calculateStandardTravelTime(com.syncnapsis.data.model.
+	 * Match, int)
 	 */
 	@Override
 	public long calculateStandardTravelTime(Match match, int travelSpeed)
@@ -419,18 +420,19 @@ public class CalculatorImpl implements Calculator
 			throw new IllegalArgumentException("travelSpeed out of bounds: [" + minSpeed + ", " + maxSpeed + "]");
 
 		double speedFac = getSpeedFactor(match.getSpeed());
-		
+
 		double timeBase = getMaxPopulation() / facBuild;
 		double travelTime = travelTimeFactor * timeBase / CORRECTION_TRAVEL_TIME;
 		travelTime /= (travelSpeed / maxSpeed); // speed in percent
 		travelTime /= speedFac; // match speed
 
-		return (long) travelTime;		
+		return (long) travelTime;
 	}
-	
+
 	/*
 	 * (non-Javadoc)
-	 * @see com.syncnapsis.universe.Calculator#calculateVictoryTimeout(com.syncnapsis.data.model.Match)
+	 * @see
+	 * com.syncnapsis.universe.Calculator#calculateVictoryTimeout(com.syncnapsis.data.model.Match)
 	 */
 	@Override
 	public long calculateVictoryTimeout(Match match)
@@ -439,9 +441,9 @@ public class CalculatorImpl implements Calculator
 		{
 			int maxTravelSpeed = UniverseConquestConstants.PARAM_TRAVEL_SPEED_MAX.asInt();
 			double timeoutFactor = match.getVictoryCondition().getTimeoutFactor();
-			
+
 			long stdTravelTime = calculateStandardTravelTime(match, maxTravelSpeed);
-			
+
 			return (long) (stdTravelTime * timeoutFactor);
 		}
 		else
@@ -574,14 +576,17 @@ public class CalculatorImpl implements Calculator
 				presentPopulations.add(pop);
 			}
 		}
-		// logger.debug("time: " + time.getTime());
-		// logger.debug("speed: " + infrastructure.getMatch().getSpeed() + " (" + speedFactor +
-		// "x)");
-		// logger.debug("infrastructure: " + infrastructure.getInfrastructure());
-		// logger.debug("total population: " + totalPopulation);
-		// logger.debug("max population: " + maxPopulation);
-		// logger.debug("home population: " + infrastructure.getHomePopulation().getId());
-		
+
+		if(logger.isTraceEnabled())
+		{
+			logger.trace("time: " + time.getTime());
+			logger.trace("speed: " + infrastructure.getMatch().getSpeed() + " (" + speedFactor + "x)");
+			logger.trace("infrastructure: " + infrastructure.getInfrastructure());
+			logger.trace("total population: " + totalPopulation);
+			logger.trace("max population: " + maxPopulation);
+			logger.trace("home population: " + infrastructure.getHomePopulation().getId());
+		}
+
 		// second loop
 		// - determine build and attack strengths
 		// - calculate anti attack (current pop is attacker; attack strength is splitted)
@@ -593,8 +598,11 @@ public class CalculatorImpl implements Calculator
 			b = calculateBuildStrength(speedFactor, pop.getPopulation(), maxPopulation);
 			a = calculateAttackStrength(speedFactor, pop.getPopulation());
 
-//			logger.debug("cycle " + i + " population " + pop.getId() + " a = " + a + " b = " + b + " delta = " + pop.getDelta() + " deltaInf = "
-//					+ infrastructure.getDelta());
+			if(logger.isTraceEnabled())
+			{
+				logger.trace("cycle " + i + " population " + pop.getId() + " a = " + a + " b = " + b + " delta = " + pop.getDelta() + " deltaInf = "
+						+ infrastructure.getDelta());
+			}
 
 			if(tick < norm_tick)
 			{
@@ -610,8 +618,11 @@ public class CalculatorImpl implements Calculator
 				// tick = norm_tick
 			}
 
-//			logger.debug("cycle " + i + " population " + pop.getId() + " a = " + a + " b = " + b + " delta = " + pop.getDelta() + " deltaInf = "
-//					+ infrastructure.getDelta());
+			if(logger.isTraceEnabled())
+			{
+				logger.trace("cycle " + i + " population " + pop.getId() + " a = " + a + " b = " + b + " delta = " + pop.getDelta() + " deltaInf = "
+						+ infrastructure.getDelta());
+			}
 
 			if(random != null)
 			{
@@ -621,15 +632,21 @@ public class CalculatorImpl implements Calculator
 					a *= random.nextGaussian(1 - randomization_attack, 1 + randomization_attack);
 			}
 
-//			logger.debug("cycle " + i + " population " + pop.getId() + " a = " + a + " b = " + b + " delta = " + pop.getDelta() + " deltaInf = "
-//					+ infrastructure.getDelta());
+			if(logger.isTraceEnabled())
+			{
+				logger.trace("cycle " + i + " population " + pop.getId() + " a = " + a + " b = " + b + " delta = " + pop.getDelta() + " deltaInf = "
+						+ infrastructure.getDelta());
+			}
 
 			if(pop == infrastructure.getHomePopulation())
 			{
-//				logger.debug("cycle " + i + " population " + pop.getId() + " is home...");
 				b *= calculateInfrastructureBuildInfluence(pop.getPopulation(), infrastructure.getInfrastructure());
-//				logger.debug("cycle " + i + " population " + pop.getId() + " a = " + a + " b = " + b + " delta = " + pop.getDelta() + " deltaInf = "
-//						+ infrastructure.getDelta());
+				if(logger.isTraceEnabled())
+				{
+					logger.trace("cycle " + i + " population " + pop.getId() + " is home...");
+					logger.trace("cycle " + i + " population " + pop.getId() + " a = " + a + " b = " + b + " delta = " + pop.getDelta()
+							+ " deltaInf = " + infrastructure.getDelta());
+				}
 				// split build strength by priority
 				switch(pop.getBuildPriority())
 				{
@@ -676,8 +693,11 @@ public class CalculatorImpl implements Calculator
 						break;
 				}
 			}
-//			logger.debug("cycle " + i + " population " + pop.getId() + " a = " + a + " b = " + b + " delta = " + pop.getDelta() + " deltaInf = "
-//					+ infrastructure.getDelta());
+			if(logger.isTraceEnabled())
+			{
+				logger.trace("cycle " + i + " population " + pop.getId() + " a = " + a + " b = " + b + " delta = " + pop.getDelta() + " deltaInf = "
+						+ infrastructure.getDelta());
+			}
 			// distribute attack strength on other populations
 			// (weighted by their amount of population)
 			otherPopulation = totalPopulation - pop.getPopulation();
@@ -708,13 +728,19 @@ public class CalculatorImpl implements Calculator
 						pop2.setDelta(pop2.getDelta() - delta2);
 					}
 
-//					logger.debug("cycle " + i + " population " + infrastructure.getPopulations().get(j).getId() + ": delta = " + pop2.getDelta());
+					if(logger.isTraceEnabled())
+					{
+						logger.trace("cycle " + i + " population " + infrastructure.getPopulations().get(j).getId() + ": delta = " + pop2.getDelta());
+					}
 				}
 			}
 			else
 			{
 				// no attack to handle - pop all alone
-//				logger.debug("cycle " + i + " population " + pop.getId() + " all alone: delta = " + pop.getDelta());
+				if(logger.isTraceEnabled())
+				{
+					logger.trace("cycle " + i + " population " + pop.getId() + " all alone: delta = " + pop.getDelta());
+				}
 			}
 		}
 		// third loop
@@ -727,7 +753,10 @@ public class CalculatorImpl implements Calculator
 			delta = Math.round(pop.getDelta());
 			if(pop.getPopulation() + delta < 0)
 				delta = -pop.getPopulation();
-//			logger.debug("population " + pop.getId() + " value = " + pop.getPopulation() + " delta = " + delta + " (" + pop.getDelta() + ")");
+			if(logger.isTraceEnabled())
+			{
+				logger.trace("population " + pop.getId() + " value = " + pop.getPopulation() + " delta = " + delta + " (" + pop.getDelta() + ")");
+			}
 			pop.setPopulation(pop.getPopulation() + delta);
 			pop.setLastUpdateDate(time);
 			pop.setModified(true);
