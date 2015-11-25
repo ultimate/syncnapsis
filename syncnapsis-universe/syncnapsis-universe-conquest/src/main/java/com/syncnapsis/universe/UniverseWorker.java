@@ -307,7 +307,6 @@ public class UniverseWorker extends Worker implements InitializingBean, Disposab
 	public void destroy() throws Exception
 	{
 		this.stop();
-
 	}
 
 	/*
