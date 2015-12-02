@@ -385,7 +385,7 @@ public abstract class Worker implements Runnable, WorkerMXBean
 			{
 				synchronized(this)
 				{
-					Throwable t = new Throwable("can't keep up interval of" + interval + "ms with execution time: " + duration + "ms");
+					Throwable t = new Throwable("can't keep up interval of " + interval + "ms with execution time: " + duration + "ms");
 					this.warningHistory.add(new HistoryEntry(executionCount, t));
 					logger.warn("execution #" + executionCount + ": " + t.getMessage());
 				}
