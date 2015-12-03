@@ -15,22 +15,32 @@
 package com.syncnapsis.client;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpSession;
+
 import org.jmock.Expectations;
 import org.springframework.mock.web.MockHttpSession;
 
+import com.syncnapsis.data.model.Empire;
+import com.syncnapsis.data.model.Participant;
+import com.syncnapsis.data.model.Player;
 import com.syncnapsis.data.model.SolarSystemInfrastructure;
 import com.syncnapsis.data.model.SolarSystemPopulation;
+import com.syncnapsis.data.model.User;
 import com.syncnapsis.data.model.help.Order;
 import com.syncnapsis.data.service.SolarSystemInfrastructureManager;
 import com.syncnapsis.data.service.SolarSystemPopulationManager;
 import com.syncnapsis.enums.EnumPopulationPriority;
 import com.syncnapsis.mock.MockConnection;
+import com.syncnapsis.mock.MockTimeProvider;
 import com.syncnapsis.providers.ConnectionProvider;
 import com.syncnapsis.providers.SessionProvider;
+import com.syncnapsis.providers.TimeProvider;
 import com.syncnapsis.security.BaseGameManager;
 import com.syncnapsis.tests.BaseSpringContextTestCase;
 import com.syncnapsis.tests.annotations.TestCoversMethods;
@@ -353,17 +363,40 @@ public class ConquestManagerImplTest extends BaseSpringContextTestCase
 
 	public void testSendTroops() throws Exception
 	{
+		final long referenceTime = 1234;
+		
+		final SolarSystemPopulationManager mockSolarSystemPopulationManager = mockContext.mock(SolarSystemPopulationManager.class);
+		final SolarSystemInfrastructureManager mockSolarSystemInfrastructureManager = mockContext.mock(SolarSystemInfrastructureManager.class);
+		final TimeProvider mockTimeProvider = new MockTimeProvider(referenceTime);
+		final BaseGameManager mockSecurityManager = new BaseGameManager(securityManager);
+		mockSecurityManager.setTimeProvider(mockTimeProvider);
+		
 		ConquestManagerImpl conquestManager = new ConquestManagerImpl();
-		final SolarSystemPopulationManager solarSystemPopulationManager = mockContext.mock(SolarSystemPopulationManager.class);
-		final SolarSystemInfrastructureManager solarSystemInfrastructureManager = mockContext.mock(SolarSystemInfrastructureManager.class);
-		conquestManager.setSolarSystemPopulationManager(solarSystemPopulationManager);
-		conquestManager.setSolarSystemInfrastructureManager(solarSystemInfrastructureManager);
+		conquestManager.setSolarSystemPopulationManager(mockSolarSystemPopulationManager);
+		conquestManager.setSolarSystemInfrastructureManager(mockSolarSystemInfrastructureManager);
+		conquestManager.setSecurityManager(securityManager);
 
 		ExtendedRandom random = new ExtendedRandom(1234);
 
 		final List<Order> orders = new ArrayList<Order>();
 		final Map<Long, SolarSystemPopulation> populations = new HashMap<Long, SolarSystemPopulation>();
 		final Map<Long, SolarSystemInfrastructure> infrastructures = new HashMap<Long, SolarSystemInfrastructure>();
+
+		// @formatter:off
+		final Empire empire1 = new Empire(); empire1.setId(1L);
+		final Empire empire2 = new Empire(); empire2.setId(2L);
+		final Participant participant1 = new Participant(); participant1.setId(1L); participant1.setEmpire(empire1);
+		final Participant participant2 = new Participant(); participant2.setId(2L); participant2.setEmpire(empire2);
+		// @formatter:on
+		
+		//
+		empire1.setPlayer(new Player());
+		empire1.getPlayer().setUser(new User());
+		empire1.getPlayer().getUser().setUsername("test");
+		
+		HttpSession session = new MockHttpSession();
+		securityManager.getSessionProvider().set(session);
+		securityManager.getEmpireProvider().set(empire1);
 
 		for(int i = 1; i <= 3; i++)
 		{
@@ -375,10 +408,26 @@ public class ConquestManagerImplTest extends BaseSpringContextTestCase
 			order.setExodus(i % 2 == 0);
 			order.setAttackPriority(random.nextEnum(EnumPopulationPriority.class));
 			order.setBuildPriority(random.nextEnum(EnumPopulationPriority.class));
-
 			orders.add(order);
-			populations.put(order.getOriginId(), new SolarSystemPopulation());
-			infrastructures.put(order.getTargetId(), new SolarSystemInfrastructure());
+			
+			SolarSystemPopulation population1 = new SolarSystemPopulation();
+			population1.setParticipant(participant1);
+			population1.setColonizationDate(new Date(referenceTime-100*i));
+			population1.setActivated(true);
+			SolarSystemPopulation population2 = new SolarSystemPopulation();
+			population2.setParticipant(participant2);
+			population2.setColonizationDate(new Date(referenceTime-100*i));
+			population2.setActivated(true);
+			
+			SolarSystemInfrastructure originInfrastructure = new SolarSystemInfrastructure();
+			originInfrastructure.setPopulations(Arrays.asList(population1, population2));
+			
+			SolarSystemInfrastructure targetInfrastructure = new SolarSystemInfrastructure();
+			targetInfrastructure.setPopulations(new ArrayList<SolarSystemPopulation>());
+
+			populations.put(order.getOriginId(), population1);
+			infrastructures.put(order.getOriginId(), originInfrastructure);
+			infrastructures.put(order.getTargetId(), targetInfrastructure);
 		}
 
 		for(Order o : orders)
@@ -386,13 +435,13 @@ public class ConquestManagerImplTest extends BaseSpringContextTestCase
 			final Order order = o;
 			mockContext.checking(new Expectations() {
 				{
-					oneOf(solarSystemPopulationManager).get(order.getOriginId());
-					will(returnValue(populations.get(order.getOriginId())));
+					oneOf(mockSolarSystemInfrastructureManager).get(order.getOriginId());
+					will(returnValue(infrastructures.get(order.getOriginId())));
 				}
 			});
 			mockContext.checking(new Expectations() {
 				{
-					oneOf(solarSystemInfrastructureManager).get(order.getTargetId());
+					oneOf(mockSolarSystemInfrastructureManager).get(order.getTargetId());
 					will(returnValue(infrastructures.get(order.getTargetId())));
 				}
 			});
@@ -401,7 +450,7 @@ public class ConquestManagerImplTest extends BaseSpringContextTestCase
 			{
 				mockContext.checking(new Expectations() {
 					{
-						oneOf(solarSystemPopulationManager).resettle(
+						oneOf(mockSolarSystemPopulationManager).resettle(
 								with(same(populations.get(order.getOriginId()))),
 								with(same(infrastructures.get(order.getTargetId()))),
 								with(equal(order.getTravelSpeed())),
@@ -417,7 +466,7 @@ public class ConquestManagerImplTest extends BaseSpringContextTestCase
 			{
 				mockContext.checking(new Expectations() {
 					{
-						oneOf(solarSystemPopulationManager).spinoff(
+						oneOf(mockSolarSystemPopulationManager).spinoff(
 								with(same(populations.get(order.getOriginId()))),
 								with(same(infrastructures.get(order.getTargetId()))),
 								with(equal(order.getTravelSpeed())),
