@@ -496,6 +496,11 @@ ViewUtil.EventManager = function(view)
 	
 	this.handleClick = function(event) {
 		var clickTarget = null;
+		if(!this.view || !this.view.galaxy)
+		{
+			// do not handle clicks when galaxy is not loaded
+			return;
+		}
 		if(ViewUtil.SELECTION_MODE == ViewUtil.SELECTION_MODE_SCREEN_COORDS)
 		{
 			var mouseX = event.clientX;
