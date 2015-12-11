@@ -118,6 +118,8 @@ public class SessionBasedProvider<T> implements Provider<T>, InitializingBean
 	@Override
 	public T get()
 	{
+		if(sessionProvider.get() == null)
+			return null;
 		return (T) sessionProvider.get().getAttribute(attributeName);
 	}
 
@@ -128,6 +130,8 @@ public class SessionBasedProvider<T> implements Provider<T>, InitializingBean
 	@Override
 	public void set(T t) throws UnsupportedOperationException
 	{
+		if(sessionProvider.get() == null)
+			throw new IllegalStateException("no session set!");
 		sessionProvider.get().setAttribute(attributeName, t);
 	}
 }

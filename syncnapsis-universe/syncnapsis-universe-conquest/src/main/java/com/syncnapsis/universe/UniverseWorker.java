@@ -333,7 +333,7 @@ public class UniverseWorker extends Worker implements InitializingBean, Disposab
 	@Override
 	public void work(long executionId) throws Throwable
 	{
-		logger.info("UniverseWorker running: #" + executionId);
+		logger.debug("UniverseWorker running: #" + executionId);
 
 		// check which channels to update in this execution
 		// this depends on the indivual intervals for the different channels
