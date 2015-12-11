@@ -463,6 +463,7 @@ UIManager.prototype.onEmpiresLoaded = function(empires)
 UIManager.prototype.onMatchesLoaded = function(matches)
 {
 	console.log("matches loaded!");
+	// this.matches = matches; // tmp for debugging only
 	this.populateSelect(this.matchSelect, matches, false);
 	
 	// preload sub-entities for filtering
@@ -475,7 +476,7 @@ UIManager.prototype.onMatchesLoaded = function(matches)
 			if(matchId != null)
 				matchId = Number(matchId);
 			var matchIndex = Math.round(Math.random()*uiManager.matchSelect.options.length);
-			for(var o in uiManager.matchSelect.options)
+			for(var o = 0; o < uiManager.matchSelect.options.length; o++)
 			{
 				if(uiManager.matchSelect.options[o].value.id == matchId)
 				{
@@ -2230,7 +2231,7 @@ ConquestManager = function()
 //public void update(String channel, Object value)
 ConquestManager.prototype.update = function(channel, value)
 {
-	console.log("received updated for channel '" + channel + "': " + value);
+	//console.log("received updated for channel '" + channel + "': " + value);
 
 	if(value == null)
 		return; // value can be null on server restart!
