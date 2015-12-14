@@ -22,6 +22,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.hamcrest.BaseMatcher;
 import org.hamcrest.Description;
@@ -229,6 +230,7 @@ public class MatchManagerImplTest extends GenericNameManagerImplTestCase<Match, 
 		securityManager.getPlayerProvider().set(creator);
 
 		final String chCreate = UniverseConquestConstants.CHANNEL_MATCH_CREATED;
+		final AtomicInteger createChannelsCalled = new AtomicInteger(0);
 
 		Match result;
 
@@ -236,7 +238,12 @@ public class MatchManagerImplTest extends GenericNameManagerImplTestCase<Match, 
 		final SolarSystemInfrastructureManager mockInfrastructureManager = mockContext.mock(SolarSystemInfrastructureManager.class);
 		final ParticipantManager mockParticipantManager = mockContext.mock(ParticipantManager.class);
 		MatchManagerImpl mockManager = new MatchManagerImpl(mockDao, galaxyManager, mockParticipantManager, solarSystemPopulationManager,
-				mockInfrastructureManager, mockConquestManager);
+				mockInfrastructureManager, mockConquestManager) {
+			public void createChannels(Match match)
+			{
+				createChannelsCalled.incrementAndGet();
+			}
+		};
 		mockManager.setSecurityManager(((MatchManagerImpl) this.mockManager).getSecurityManager());
 
 		// expectatins are a bit more complicated here...
@@ -333,6 +340,7 @@ public class MatchManagerImplTest extends GenericNameManagerImplTestCase<Match, 
 		mockContext.assertIsSatisfied();
 		assertNotNull(result);
 		assertEquals(finalMatch, result);
+		assertEquals(1, createChannelsCalled.get());
 	}
 
 	public void testStartMatch() throws Exception

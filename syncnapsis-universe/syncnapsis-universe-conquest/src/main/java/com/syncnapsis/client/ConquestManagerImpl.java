@@ -220,7 +220,7 @@ public class ConquestManagerImpl extends BaseClientManager implements ConquestMa
 	{
 		Channel c = channels.get(channel);
 		if(c == null)
-			throw new IllegalArgumentException("no such channel!");
+			throw new IllegalArgumentException("no such channel: '" + channel + "'");
 		synchronized(c)
 		{
 			c.setValue(value);

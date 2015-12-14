@@ -347,8 +347,9 @@ public class MatchManagerImpl extends GenericNameManagerImpl<Match, Long> implem
 		match = save(match);
 
 		HibernateUtil.currentSession().flush();
-
+		
 		match = get(match.getId());
+		createChannels(match); // create channels for the new match
 
 		if(logger.isDebugEnabled())
 		{
