@@ -567,6 +567,7 @@ public class CalculatorImpl implements Calculator
 
 		// first loop
 		// - determine total present population
+		// - clear modified flag
 		for(int i = 0; i < infrastructure.getPopulations().size(); i++)
 		{
 			pop = infrastructure.getPopulations().get(i);
