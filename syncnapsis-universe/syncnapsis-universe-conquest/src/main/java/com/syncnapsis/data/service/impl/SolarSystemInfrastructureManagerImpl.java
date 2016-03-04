@@ -139,6 +139,9 @@ public class SolarSystemInfrastructureManagerImpl extends GenericManagerImpl<Sol
 		SolarSystemInfrastructure infrastructure = infrastructureGenerator.generate(random, match, system);
 		infrastructure.setLastUpdateDate(new Date(securityManager.getTimeProvider().get()));
 		infrastructure.setPopulations(new ArrayList<SolarSystemPopulation>());
-		return save(infrastructure);
+		infrastructure = save(infrastructure);
+		
+		match.getInfrastructures().add(infrastructure);
+		return infrastructure;
 	}
 }

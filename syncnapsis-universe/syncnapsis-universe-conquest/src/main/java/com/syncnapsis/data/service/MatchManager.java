@@ -299,8 +299,8 @@ public interface MatchManager extends GenericNameManager<Match, Long>
 	 * simple format:<br>
 	 * <code><pre>
 	 * [
-	 *   [sys_id, inf_val, part1_id, part1_pop, ... , partn_id, partn_pop ],
-	 *   ... // for each system
+	 *   [inf_id, inf_val, part1_id, part1_pop, ... , partn_id, partn_pop ],
+	 *   ... // for each infrastructure/system
 	 * ]
 	 * </pre></code>
 	 * 

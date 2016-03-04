@@ -122,7 +122,7 @@ public abstract class JSONGenerator
 					sb.append('\t');
 				}
 				sb.append('[');
-				sb.append(inf.getId());
+				sb.append(inf.getSolarSystem().getId());
 				// sb.append(',');
 				// sb.append(inf.getSolarSystem().getId());
 				sb.append(',');

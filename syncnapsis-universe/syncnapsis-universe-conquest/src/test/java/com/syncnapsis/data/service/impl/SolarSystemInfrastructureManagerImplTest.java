@@ -69,6 +69,7 @@ public class SolarSystemInfrastructureManagerImplTest extends
 
 		final ExtendedRandom random = new ExtendedRandom();
 		final Match match = new Match();
+		match.setInfrastructures(new ArrayList<SolarSystemInfrastructure>());
 		final SolarSystem system = new SolarSystem();
 		final SolarSystemInfrastructure infrastructure = new SolarSystemInfrastructure();
 
@@ -88,5 +89,7 @@ public class SolarSystemInfrastructureManagerImplTest extends
 		SolarSystemInfrastructure result = mockManager.initialize(match, system, random);
 		assertSame(infrastructure, result);
 		assertEquals(new Date(referenceTime), result.getLastUpdateDate());
+		assertEquals(1, match.getInfrastructures().size());
+		assertSame(infrastructure, match.getInfrastructures().get(0));
 	}
 }

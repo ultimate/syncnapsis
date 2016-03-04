@@ -1795,14 +1795,16 @@ UIManager.prototype.parseGalaxy = function(json)
 };
 
 // parse the system live update list for a match
-UIManager.prototype.parseSystems = function(json)
+UIManager.prototype.parseSystems = function(arr)
 {
-	var arr;
-	eval("arr=" + json);
+//	var arr;
+//	eval("arr=" + json);
+//	console.log(arr);
 	for(var i = 0; i < arr.length; i++)
 	{
 		// arr[i] = [id		hab		inf		id0		pop0	id1		pop1	...]
 		var index = this.view.galaxy.systems.binaryIndexOfId(arr[i][0]);
+		console.log("system with id " + arr[i][0] + " found @ index " + index);
 		if(index >= 0)
 		{
 			var sys = this.view.galaxy.systems[index];
@@ -1814,13 +1816,24 @@ UIManager.prototype.parseSystems = function(json)
 			{
 				sys.populations.push({ empire: arr[i][p], population: arr[i][p+1] });
 			}
-			// TODO update system info view if system is currently selected
+
+			if(sys.infoElement != null)
+			{
+				// update system info view if system is currently selected
+				var target = sys.infoElement.classList.contains("red_frame");
+				var newInfo = this.createSystemInfo(sys, target);
+				sys.infoElement.removeChild(sys.infoElement.firstChild);
+				sys.infoElement.appendChild(newInfo.firstChild);
+			}
 		}
 		else
 		{
-			console.warn("no matching system found with id " + arr[i][0]);
+			console.warn("system with id " + arr[i][0] + " not found");
 		}
 	}
+	
+	var info = document.getElementById(UI.constants.MATCH_SYSTEM_INFO_ID);
+	this.updateLabels(info);
 };
 
 UIManager.prototype.doShowMatch = function(request)
@@ -1944,6 +1957,8 @@ UIManager.prototype.createSystemInfo = function(system, isTarget)
 	{
 		div.classList.add("frame");
 	}
+	// system id
+	div.id = UI.constants.MATCH_SYSTEM_INFO_ID + "_" + system.id;
 	// system title (coordinates)
 	table.appendChild(row(["(\u00A0" + pos.x + "\u00A0|\u00A0" + pos.y + "\u00A0|\u00A0" + pos.z + "\u00A0)"]));
 	table.children[0].children[0].colSpan = 3;
@@ -2187,7 +2202,7 @@ UIManager.prototype.doSendPopulation = function(id, cmd, rowIndex)
 				speedInput = document.getElementById(speedId + "_" + i);
 				
 				order = {
-					originId: pop.value.id,
+					originId: popId,
 					targetId: win.target.id,
 					population: Number(popInput.value),
 					attackPriority: null, // TODO make selectable
@@ -2201,6 +2216,7 @@ UIManager.prototype.doSendPopulation = function(id, cmd, rowIndex)
 		}
 		// submit
 		server.conquestManager.sendTroops(orders);
+		console.log("troop send order submitted!");
 	}
 };
 
@@ -2231,7 +2247,9 @@ ConquestManager = function()
 //public void update(String channel, Object value)
 ConquestManager.prototype.update = function(channel, value)
 {
-	//console.log("received updated for channel '" + channel + "': " + value);
+	console.log("received updated for channel '" + channel + "': " + value);
+	console.log(typeof(value));
+	console.log(value);
 
 	if(value == null)
 		return; // value can be null on server restart!
@@ -2257,8 +2275,9 @@ ConquestManager.prototype.update = function(channel, value)
 			console.log("match creator loaded!");
 		});
 	}
-	else if(channel == UI.constants.CHANNEL_MATCH_SYSTEMS)
+	else if(channel == UI.constants.CHANNEL_MATCH_SYSTEMS.replace(UI.constants.CHANNEL_ID_PLACEHOLDER, client.uiManager.currentMatch.id))
 	{
+		//console.log("population update");
 		// update for the system populations and infrastructures received
 		client.uiManager.parseSystems(value);
 	}
