@@ -567,6 +567,7 @@ public class CalculatorImpl implements Calculator
 
 		// first loop
 		// - determine total present population
+		// - clear modified flag
 		for(int i = 0; i < infrastructure.getPopulations().size(); i++)
 		{
 			pop = infrastructure.getPopulations().get(i);
@@ -611,7 +612,8 @@ public class CalculatorImpl implements Calculator
 			}
 			else if(tick > norm_tick)
 			{
-				logger.warn("cycle " + i + " population " + pop.getId() + " has not been updated for " + tick + " ms");
+				if(logger.isTraceEnabled())
+					logger.warn("cycle " + i + " population " + pop.getId() + " has not been updated for " + tick + " ms");
 			}
 			else
 			{
@@ -719,7 +721,8 @@ public class CalculatorImpl implements Calculator
 						}
 						else if(tick2 > norm_tick)
 						{
-							logger.warn("cycle " + i + " population " + pop.getId() + " has not been updated for " + tick2 + " ms");
+							if(logger.isTraceEnabled())
+								logger.warn("cycle " + i + " population " + pop.getId() + " has not been updated for " + tick2 + " ms");
 						}
 						else
 						{

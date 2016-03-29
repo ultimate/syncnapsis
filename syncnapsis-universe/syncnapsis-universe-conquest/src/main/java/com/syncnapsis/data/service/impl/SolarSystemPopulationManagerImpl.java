@@ -497,6 +497,14 @@ public class SolarSystemPopulationManagerImpl extends GenericManagerImpl<SolarSy
 		Date now = new Date(securityManager.getTimeProvider().get());
 		// merge populations before calculating deltas
 		merge(infrastructure, now);
+		// clear modified flag and previous delta
+		infrastructure.setDelta(0.0);
+		infrastructure.setModified(false);
+		for(SolarSystemPopulation pop : infrastructure.getPopulations())
+		{
+			pop.setDelta(0.0);
+			pop.setModified(false);
+		}
 		// determine the home population and set it temporarily for the infrastructure
 		infrastructure.setHomePopulation(getHomePopulation(infrastructure, now));
 		if(infrastructure.getHomePopulation() != null)
@@ -511,19 +519,16 @@ public class SolarSystemPopulationManagerImpl extends GenericManagerImpl<SolarSy
 					if(pop.getPopulation() == 0)
 						destroy(pop, EnumDestructionType.destroyed, now);
 					pop = save(pop);
-					pop.setDelta(0.0);
-					pop.setModified(false);
 				}
 			}
 			// save infrastructure
 			infrastructure = solarSystemInfrastructureManager.save(infrastructure);
-			infrastructure.setDelta(0.0);
-			infrastructure.setModified(false);
+			// do not reset modified here: need information for updating channels 
 		}
 		else
 		{
-			if(logger.isDebugEnabled()) // double check for performance
-				logger.debug("no home population @ infrastructure " + infrastructure.getId() + " @ time " + now.getTime());
+			if(logger.isTraceEnabled()) // double check for performance
+				logger.trace("no home population @ infrastructure " + infrastructure.getId() + " @ time " + now.getTime());
 		}
 		// return populations
 		return infrastructure.getPopulations();
