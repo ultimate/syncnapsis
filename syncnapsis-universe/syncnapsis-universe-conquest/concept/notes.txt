@@ -1,0 +1,37 @@
+next steps:
+
+update viewutil.system for size and habitability 
+
+
+		A
+hab	1.0	+                  
+		|                  
+		+                  
+		|                  
+	0.5	+                  
+		|                  
+		+                  
+		|                  
+	----+---|---|---|---|->
+		|	   0.5     1.0	
+		|			   size
+		
+		
+		
+size = 1.0			-> 	 hab = heat
+size = 0.5			->   hab = -3*(heat - 0,5)^2 + 1,0
+size = 0.0			->   hab = 1-heat
+
+	a*x^3	+	b*y^3	+	c*x^2	+	d*y^2	+	e*x		+	f*y		+	g	+	h*x^2*y	+	i*y^2*x	+	j*x*y 	= z
+
+1																			g										= 1
+2	a*0,125 +				c*0,25	+				e*0,5				+	g										= 0,25
+3				b*0,125	+				d*0,25				+	f*0,5	+	g										= 0,5
+4	a*0,125	+	b*0,125	+	c*0,25	+	d*0,25	+	e*0,5	+	f*0,5	+	g	+	h*0,125	+	y*0,125	+	j*0,25	= 1
+
+
+habi = (heat-size)^2 + 1
+
+
+
+	
