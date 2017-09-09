@@ -1,0 +1,20 @@
+Evolution
+- man startet bei 0-0-0-0
+- Tech. o. Gebäude geben Punkte mit Summe = 0
+- Requirements werden pro Rasse mit minPoints und maxPoints festgelegt
+- wird eine Rasse hinzugefügt hat der (einmalig) die Wahl
+-- so weiter machen (Punkte werden normal verrechnet)
+-- Komplette Verteilung neu berechnen (es könnte so eine neue Klassifikation entstehen und er könnte evtl. andere Sachen bauen)
+-- man hat 1 Woche Zeit sich zu entscheiden (oder bis zur nächsten Entwicklung)
+
+Bauen
+- Bauzeit in % der ursprünglichen Bauzeit in produzierenden Gebäuden/Schiffen
+- Bauzeit in "Universumsjahren" -> bei min Builders
+- max Builders + min Builders
+- Builder bauen gleichzeit etwas, es geht so schneller
+
+Ressourcen
+- Rohstoffe haben Platzfaktor (= wieviel Platz nimmt 1 Einheit im Lager weg)
+- Lager hat Gesamtkapazität (nicht Kapa pro Rohstoff; gilt auch für Schiffe)
+- Man kann pro Rohstoff festlegen, wieviel Platz er max belegen soll (Überschuss geht verloren, es bleibt aber Platz für andere)
+- Rohstoffe lagern benötigt bestimmte Technologien (z. B. Energiezellen um Energie zu speichern)
