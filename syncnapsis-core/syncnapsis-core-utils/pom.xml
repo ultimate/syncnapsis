@@ -197,7 +197,7 @@
 		<vecmath.version>1.3.1</vecmath.version>
 
 		<!-- Spring-Dependencies -->
-		<spring.version>3.1.2.RELEASE</spring.version> <!-- 01.01.2013 -->
+		<spring.version>5.2.4.RELEASE</spring.version> <!-- 01.01.2013 -->
 
 		<!-- Testing dependency versions -->
 		<jmock.version>2.5.1</jmock.version>
