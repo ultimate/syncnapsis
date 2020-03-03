@@ -190,7 +190,7 @@
 
 		<!-- Web-Dependencies -->
 		<javamail.version>1.4.4</javamail.version> <!-- 19.01.2012 -->
-		<jackson.version>2.0.1</jackson.version> <!-- 02.05.2012 -->
+		<jackson.version>2.9.10.1</jackson.version> <!-- 02.05.2012 -->
 		
 		<!-- Utils-Dependencies -->
 		<commons.lang.version>2.6</commons.lang.version> <!-- 19.01.2012 -->
