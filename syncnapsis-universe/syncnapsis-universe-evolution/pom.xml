@@ -82,6 +82,13 @@
 			<version>${slf4j.version}</version>
 		</dependency>
 		<!-- BASE - END -->
+		<!-- EXCEL - START -->
+		<dependency>
+		    <groupId>org.apache.poi</groupId>
+		    <artifactId>poi</artifactId>
+		    <version>${apache.poi.version}</version>
+		</dependency>				
+		<!-- EXCEL - END -->
 	</dependencies>
 
 	<profiles>
@@ -297,5 +304,7 @@
 		
 		<!-- used to fix hibernate-plugin-dtd-bug -->
 		<hibernate.version>4.0.1.Final</hibernate.version> <!-- 19.01.2012 -->
+		
+		<apache.poi.version>4.1.2</apache.poi.version>
 	</properties>
 </project>
