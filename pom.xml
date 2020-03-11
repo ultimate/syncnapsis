@@ -188,23 +188,23 @@
 	<repositories>
 		<repository>
 			<id>central</id>
-			<url>http://repo1.maven.org/maven2</url>
+			<url>https://repo1.maven.org/maven2</url>
 		</repository>
 		<repository>
 			<id>mvnrepository.com</id>
-			<url>http://mvnrepository.com</url>
+			<url>https://mvnrepository.com</url>
 		</repository>
 		<repository>
 			<id>maven2-repository.dev.java.net</id>
-			<url>http://download.java.net/maven/2</url>
+			<url>https://download.java.net/maven/2</url>
 		</repository>
 		<repository>
 			<id>glassfish-repository.dev.java.net</id>
-			<url>http://download.java.net/maven/glassfish</url>
+			<url>https://download.java.net/maven/glassfish</url>
 		</repository>
 		<repository>
 			<id>appfuse</id>
-			<url>http://static.appfuse.org/repository</url>
+			<url>https://static.appfuse.org/repository</url>
 		</repository>
 	</repositories>
 
